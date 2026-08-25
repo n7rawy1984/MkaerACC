@@ -1,0 +1,350 @@
+# Maker Contracting Accounting System — Project Handoff
+
+**Read this file and `PROJECT_ROADMAP.md` fully before writing any code.** This file is the complete orientation for a new Claude/AI/developer session. It should be enough, on its own, to understand what the system is, why it exists, what's actually implemented, what's known-incomplete, and what to do next.
+
+Repository: `https://github.com/n7rawy1984/MkaerACC` · Local path: `/media/nagham/msn4ever/www.downloadly.ir/Maker`
+
+---
+
+## 1. Project Summary
+
+**Maker Contracting Accounting System** — a purpose-built accounting system for a small/medium UAE contracting company, replacing a set of disconnected Excel/PDF records. It is not a generic expense tracker: it exists to model real contracting-industry accounting — project cost centers, custodian cash advances and settlements, supplier payables, subcontractor progress certificates and retention, and eventually payroll/WPS, client contracts, and financial statements.
+
+## 2. Business Context
+
+The company previously tracked project expenses, supplier bills, cash handed to custodians (Bareq, Sobhi), owner-paid costs, and subcontractor activity across disconnected spreadsheets for projects including Al Nakhil Building, Al Zorah, and Ajman Office. Historical 2025/2026 data exists and will eventually be imported (Phase 2D) — through a staging/review process, never a direct dump into the live ledger. Owners are A. Rahim and Majid; Bareq is Manager/Custodian; Sobhi is Custodian.
+
+## 3. Current Status
+
+- **Phase 1 (Core Accounting MVP)** — Completed.
+- **Phase 2A (Custody Settlements + Subcontractor Certificates)** — Completed.
+- **Phase 2B.1 (Project Core + Company + Treasury Foundation)** — Completed.
+- **Phase 2B.1A (Treasury Integration & Project Guard Completion)** — Completed.
+- **Phase 2B.2 (Subcontractor Operationalization)** — Completed.
+- **Phase 2B.3 (Arabic / English Foundation)** — Not started. This is the immediate next task.
+
+See `PROJECT_ROADMAP.md` for the full phase breakdown, binding decisions, and decision log.
+
+## 4. Technology Stack (verified from `package.json`)
+
+- React 19, TypeScript ~6.0, Vite 8
+- Tailwind CSS 4 (via `@tailwindcss/postcss`)
+- React Router 7 (`react-router-dom`)
+- Recharts 3 (Dashboard charts only)
+- lucide-react (icons)
+- `oxlint` for linting
+- **No backend. No authentication. No Supabase.** Persistence is `localStorage`, wrapped behind a repository abstraction specifically so a future cloud/DB migration doesn't require rewriting business logic (see §8).
+
+## 5. Repository Structure
+
+```
+src/
+  domain/          # Pure types and money math — no React, no storage
+    types.ts        # All domain models (Project, Party, Expense, Advance, Journal, Phase 2A models…)
+    money.ts         # Decimal-safe helpers: toCents/fromCents/round2/addMoney/subtractMoney/calcVat/formatAED
+    utils.ts         # indexById, formatDate
+  accounting/       # The posting engine and all balance/query logic — the accounting "brain"
+    chartOfAccounts.ts   # ACCOUNTS map + CHART_OF_ACCOUNTS seed list
+    postingEngine.ts      # post* functions — the ONLY place journal entries are constructed
+    ledger.ts             # Balance/aggregate queries over journal entries (read-only, pure)
+    certificateCalc.ts    # Subcontractor certificate waterfall math + validation guards
+  storage/          # Persistence abstraction
+    storageDriver.ts      # LocalStorageDriver (StorageDriver interface)
+    repository.ts          # Generic Repository<T> (CRUD over a StorageDriver)
+    database.ts             # db = { projects, parties, expenses, treasuryAccounts, ... } — all repositories wired up
+    migrations.ts            # ensurePhase2B1Migrated() + ensurePhase2B1AMigrated() (dedicated per-treasury GL accounts) + ensurePhase2B2Migrated() (Party.status backfill + contract-dimension backfill on historical journal lines) — all idempotent
+  state/
+    AppDataContext.tsx    # React context: loads all repos into state, exposes add*/update*/approve*/finalize* actions
+  seed/
+    seedData.ts            # Demo/seed dataset + ensureSeeded() + ensurePhase2ASeeded() + resetDemoData()
+  pages/            # One file per route (see §6 routing) — includes Companies.tsx, Treasury.tsx since Phase 2B.1; SubcontractorDetail.tsx since Phase 2B.2
+  components/       # Forms and shared UI (components/ui/ for primitives) — includes ProjectForm, CompanyForm, TreasuryAccountForm since Phase 2B.1; SubcontractorForm, SubcontractForm since Phase 2B.2
+  App.tsx            # Route table
+  main.tsx            # Entry point, wraps App in BrowserRouter
+```
+
+## 6. Important Files
+
+| File | Why it matters |
+|---|---|
+| `src/domain/types.ts` | Every domain model. Read this first to know what exists. |
+| `src/domain/money.ts` | All money math MUST go through here — never raw float arithmetic on currency. |
+| `src/accounting/postingEngine.ts` | Every journal entry in the system is built by one of the `post*` functions here. `isBalanced`/`UnbalancedJournalError` enforce balance. |
+| `src/accounting/ledger.ts` | Every balance shown anywhere in the UI (custodian balance, supplier payable, project cost, subcontractor retention…) is derived here from journal entries — never stored/cached as a mutable number. |
+| `src/accounting/chartOfAccounts.ts` | The fixed GL account list. Party-specific sub-balances are carried via `JournalLine.partyId`, not by minting one account per party. |
+| `src/storage/database.ts` | `db` — the single object exposing every repository. `isDatabaseEmpty()`, `clearAll()`. |
+| `src/storage/migrations.ts` | `ensurePhase2B1Migrated()` — backward-compatible patcher for pre-2B.1 `Company`/`Project`/`AdvanceTransaction` records and the one-time `TreasuryAccount` seed. `ensurePhase2B1AMigrated()` — mints each pre-2B.1A treasury account its own dedicated GL account. `ensurePhase2B2Migrated()` — backfills `Party.status`, backfills `SubcontractorPaymentTransaction.contractId` from its certificate, and backfills the `contractId` dimension onto historical subcontractor-related journal lines wherever their source document resolves it with certainty. All idempotent; none ever rewrite a `JournalEntry`'s debit/credit amounts. |
+| `src/state/AppDataContext.tsx` | The only place UI code touches `db` and `post*` together — every `add*`/`update*`/`approve*`/`finalize*` action here loads data, calls a posting function, persists, and refreshes React state. |
+| `src/seed/seedData.ts` | Demo data + the seed entry points (`ensureSeeded`, `ensurePhase2ASeeded`) + `resetDemoData`. |
+| `src/App.tsx` | Route table — the authoritative list of what pages exist. |
+| `src/components/layout/Sidebar.tsx` | The authoritative nav list (and the "Reset Demo Data" action). |
+
+Routes (from `App.tsx`): `/` (Dashboard), `/company`, `/projects`, `/projects/:id`, `/treasury`, `/expenses`, `/advances`, `/suppliers`, `/subcontractors` (subcontractor master list), `/subcontractors/:id` (subcontractor profile — **Phase 2B.2, new**), `/subcontracts/:id` (contract workspace — **Phase 2B.2, moved from `/subcontractors/:id`**), `/people` (Owners & Custodians), `/journal`.
+
+## 7. Domain Model (verified from `src/domain/types.ts`)
+
+**Phase 1 models**: `Party` (`id, name, type, phone?, taxRegistrationNumber?, contactPerson?, notes?`; `PartyType = OWNER|CUSTODIAN|SUPPLIER|EMPLOYEE|SUBCONTRACTOR|OTHER`), `ExpenseCategory`, `Account`, `ExpenseTransaction`, `SupplierPaymentTransaction`, `JournalEntry`/`JournalLine`.
+
+**Phase 2A models**: `CustodySettlement` (DRAFT/SETTLED, `selectedExpenseIds`, cash-return fields), `Subcontract` (`originalContractValue, approvedVariations, retentionPercent` — revised value is *computed*, never stored), `SubcontractorAdvance`, `SubcontractorCertificate` (full waterfall fields — see §11), `CertificateDeduction`, `SubcontractorPaymentTransaction`.
+
+**Phase 2B.2 model additions** (see §11 for the full accounting picture):
+- `Party` gained `code?, email?, address?, status? (PartyStatus = ACTIVE|INACTIVE)`. Generic on every party type (not duplicated per type); `status: undefined` is treated as `ACTIVE` everywhere and gets explicitly backfilled by `ensurePhase2B2Migrated()`. Only the Subcontractor UI currently exposes `status` as an editable field.
+- `JournalLine` gained `contractId?: ID` — an additive dimension alongside `partyId`/`projectId`, set on every line a subcontractor-related posting function produces. Absent on every non-subcontractor line.
+- `SubcontractorPaymentTransaction` gained `contractId?: ID` — always set going forward (derived from `certificate.contractId` at creation time in `addSubcontractorPayment`); optional only so pre-2B.2 records without a resolvable contract link stay valid.
+- No new fields were added to `Subcontract` itself — every field Phase 2B.2's New/Edit Subcontract form needed (`contractNumber, scopeOfWork, originalContractValue, approvedVariations, retentionPercent, startDate, endDate, status, notes`) already existed from Phase 2A.
+
+**Phase 2B.1 models**:
+- `Company`: `id, code, name, legalName?, trn?, address?, status (ACTIVE|INACTIVE), notes?, createdAt, updatedAt`.
+- `Project`: `id, code, name, companyId, status, location?, client?, contractNumber?, originalContractValue?, startDate?, expectedCompletionDate?, budget?, notes?, dedicatedBankAccountId?, dedicatedCashBoxId?, createdAt, updatedAt`. `ProjectStatus = PLANNING|ACTIVE|ON_HOLD|COMPLETED|CLOSED`. Note: the field is `code`, not `projectCode` — kept the Phase 1 name, see Decision Log.
+- `TreasuryAccount`: `id, companyId, projectId?, code, name, type (CASH|PETTY_CASH|BANK|PROJECT_CASH_BOX|PROJECT_BANK), glAccountId, status (ACTIVE|INACTIVE), bankName?, accountReference?, notes?, createdAt, updatedAt`. As of Phase 2B.1A, `glAccountId` points to a **dedicated** `Account` minted for this specific treasury account (not a shared pooled one) — see §8.
+- `AdvanceTransaction` (reworked): `id, date, custodianId, amount, projectId?, fundingSourceType ("TREASURY"|"OWNER_CURRENT"), fundingSourceId, paymentMethod, reference?, notes?`. The old `fromPartyId` field is gone.
+
+**Phase 2B.1A additions**: `ExpenseTransaction`, `SupplierPaymentTransaction`, `SubcontractorAdvance`, and `SubcontractorPaymentTransaction` each gained an optional `treasuryAccountId?: ID`, set only when their type/sourceType is `"TREASURY"`. `CustodySettlement` gained `cashReturnTreasuryAccountId?: ID`, same rule. Every one of these type unions (`PaidFromType`, `SupplierPaymentSourceType`, `SubcontractorFundingSourceType`, `SubcontractorPaymentSourceType`, `CashReturnDestinationType`) now includes `"TREASURY"` plus its original members — `"CASH"`/`"BANK"` remain in each union as **legacy-only** values (never produced by any form after this phase, but still valid/postable so historical records keep working). See §9 for exactly how `treasuryAccountId` resolves during posting.
+
+`ExpenseTransaction.advanceId?` — optional, purely informational link to a specific `AdvanceTransaction`; the custodian's real balance is always the pooled total across all their advances, never per-advance.
+
+## 8. Chart of Accounts / Accounting Architecture
+
+Fixed GL accounts (`src/accounting/chartOfAccounts.ts`):
+
+| Code | Account | Type | Party-scoped? |
+|---|---|---|---|
+| 1000 | Cash on Hand | ASSET | |
+| 1100 | Bank Account | ASSET | |
+| 1200 | Advance / Custody Account | ASSET | ✓ |
+| 1210 | Subcontractor Advance | ASSET | ✓ |
+| 1300 | Input VAT Recoverable | ASSET | |
+| 2100 | Accounts Payable - Suppliers | LIABILITY | ✓ |
+| 2110 | Subcontractor Retention Payable | LIABILITY | ✓ |
+| 2120 | Subcontractor Accounts Payable | LIABILITY | ✓ |
+| 2200 | Owner Current Account | LIABILITY | ✓ |
+| 4100/4110/4120 | Recovery - Company Materials / Backcharges / Other | INCOME | |
+| 5000 | Project Costs | EXPENSE | |
+| 5010 | Project Cost - Subcontractors | EXPENSE | |
+| 5100 | Company Expenses | EXPENSE | |
+
+Party-scoped accounts don't get one GL account per party — they carry `partyId` on the `JournalLine`; per-party balances are derived on read (`ledger.ts`). This keeps the chart of accounts small while still supporting full sub-ledgers.
+
+**Treasury accounts (Phase 2B.1A) each get their own dedicated GL account.** Creating a treasury account (`addTreasuryAccount` in `state/AppDataContext.tsx`, via `createTreasuryGlAccount()`) mints a brand-new `Account` under the cash family (`1000 Cash on Hand`, for types `CASH`/`PETTY_CASH`/`PROJECT_CASH_BOX`) or the bank family (`1100 Bank Account`, for types `BANK`/`PROJECT_BANK`), with a sequential code like `1000-001 Main Cash`, `1000-002 Petty Cash`, `1100-001 Main Bank`. That new account's id becomes the treasury account's `glAccountId`, permanently — `updateTreasuryAccount` never touches it, even if the treasury account's name/type/company changes later. `accounting/ledger.ts: treasuryAccountBalance(entries, glAccountId)` computes a live, journal-derived balance for one treasury account (debit-normal, like any asset) — the Treasury screen (`pages/Treasury.tsx`) shows this per row, never a cached number.
+
+**Legacy pooled `1000`/`1100` GL accounts are retained forever, untouched.** Every transaction posted before a treasury account got its dedicated GL account (either before Phase 2B.1A shipped, or before an existing browser install's one-time `ensurePhase2B1AMigrated()` migration ran) stays posted against the shared pooled account exactly as it was. This means: a treasury account's balance is only fully accurate for activity from that migration point forward. Fresh installs / "Reset Demo Data" don't have this caveat — `seed/seedData.ts` seeds `TREASURY_GL_ACCOUNTS` (three dedicated accounts, fixed ids) from the very first boot, so even the demo data's Main Bank / Petty Cash figures are individually accurate.
+
+**Persistence architecture**: `StorageDriver` (interface) → `LocalStorageDriver` (current impl) → `Repository<T>` (generic CRUD) → `db` (one repository per entity). Business/accounting code (`accounting/`, `state/AppDataContext.tsx`) only talks to `db` and the `post*` functions — never to `localStorage` directly. This is the seam a future Supabase/Postgres migration would replace, without touching `accounting/` or the pages/components.
+
+## 9. Implemented Accounting Flows
+
+Money math always goes through `domain/money.ts` (`toCents`/`fromCents`/`addMoney`/`subtractMoney`/`round2`/`calcVat`) — journal balance is checked in integer cents (`postingEngine.ts: isBalanced`).
+
+**Centralized funding-source resolution (Phase 2B.1A).** Six flows below (Advance, Expense, Supplier Payment, Subcontractor Advance, Subcontractor Payment, Custody Cash Return) all need to turn a user's pick — a treasury account, a custodian, or an owner — into a GL account (and party, if the account is party-scoped) to actually post against. Instead of five copies of the same lookup, `state/AppDataContext.tsx` has one `resolveFundingSource(type, id, ctx)` helper (`type` is `"TREASURY" | "OWNER_CURRENT" | "CUSTODIAN"`) that: looks up the treasury account or party, checks it's active, and — for treasury accounts — checks it belongs to the transaction's project (if the account is project-specific) and to the same company as the transaction's project (if one is selected). It returns a small `ResolvedFundingSource = { glAccountId, partyId? }` (defined in `accounting/postingEngine.ts`) that every `post*` function below takes as a parameter — the posting engine itself never imports `db` or does any lookup; it just builds the line. `CUSTODIAN`/`OWNER` legacy-shaped call sites and the new `TREASURY` option both flow through the exact same resolver.
+
+### Custodian funding (`postAdvance`)
+```
+Dr Advance/Custody Account (custodian, project dimension)
+Cr [resolved.glAccountId] (resolved.partyId if party-scoped)
+```
+`resolveFundingSource("OWNER_CURRENT", ...)` → `ACCOUNTS.OWNER_CURRENT`, party-scoped to the owner. `resolveFundingSource("TREASURY", ...)` → that treasury account's own dedicated GL account (see §8), not party-scoped. Project is a dimension on both lines in every case — the credited account itself is never a project. The Advance form (`components/AdvanceForm.tsx`) presents a single grouped "Funding Source" `<select>` — a "Treasury" group (active, project/company-eligible treasury accounts) and an "Owners" group (dynamic list of `OWNER` parties).
+
+### Custodian-paid / Owner-paid / Treasury-paid expense (`postExpense`, `paidFromType: "CUSTODIAN" | "OWNER" | "TREASURY"`)
+```
+Dr Project Cost / Company Expense
+Dr Input VAT (if any)
+Cr [resolved.glAccountId] (resolved.partyId if party-scoped)
+```
+Same `resolveFundingSource()` call as Advance, keyed off `paidFromPartyId` (CUSTODIAN/OWNER) or `treasuryAccountId` (TREASURY). `CASH`/`BANK` remain as legacy-only cases in the switch, posting straight to the pooled `ACCOUNTS.CASH`/`ACCOUNTS.BANK` — kept only so a pre-2B.1A `ExpenseTransaction` (there are two in the seed data, `exp_014`/`exp_015`) still posts/re-renders correctly; the Expense form never produces them anymore.
+
+### Supplier credit purchase (`paidFromType: "SUPPLIER_CREDIT"`)
+```
+Dr Project Cost / Company Expense
+Dr Input VAT (if any)
+Cr Accounts Payable - Suppliers
+```
+Unchanged by Phase 2B.1A — no funding source involved, cost goes straight to a payable.
+
+### Supplier payment (`postSupplierPayment`)
+```
+Dr Accounts Payable - Suppliers
+Cr [resolved.glAccountId] (resolved.partyId if party-scoped)  — TREASURY / CUSTODIAN / OWNER
+   — or —
+Cr Cash / Bank (pooled, legacy)                                 — CASH / BANK
+```
+Never re-creates project cost. Not guarded against a closed project (see §14) — settling an existing payable isn't treated as "new cost."
+
+### Custody settlement cash return (`postCashReturn`)
+Only posted when a settlement with `cashReturnAmount > 0` is finalized — grouping expenses into a settlement itself posts nothing.
+```
+Dr [resolved.glAccountId] (resolved.partyId if party-scoped)  — TREASURY / OWNER
+   — or —
+Dr Cash / Bank (pooled, legacy)                                 — CASH / BANK
+Cr Advance/Custody Account (custodian)
+```
+
+### Subcontractor advance (`postSubcontractorAdvance`)
+```
+Dr Subcontractor Advance (subcontractor, project, contract)
+Cr [resolved.glAccountId] (resolved.partyId if party-scoped; project, contract)  — TREASURY / OWNER / CUSTODIAN
+   — or —
+Cr Cash / Bank (pooled, legacy; project, contract)               — CASH / BANK
+```
+Asset, not cost, until recovered through a certificate. **Phase 2B.2**: every line also carries `contractId: advance.contractId` — `SubcontractorAdvance` already stored `contractId` from Phase 2A, so no new parameter was needed on the posting function, only the extra dimension on the lines it builds.
+
+### Subcontractor payment (`postSubcontractorPayment`)
+```
+Dr Subcontractor Accounts Payable (project, contract)
+Cr [resolved.glAccountId] (resolved.partyId if party-scoped; project, contract)  — TREASURY / CUSTODIAN / OWNER
+   — or —
+Cr Cash / Bank (pooled, legacy; project, contract)                                — CASH / BANK
+```
+Scoped to one `certificateId` (not pooled across a subcontractor's certificates) specifically so certificate status (`APPROVED → PARTIALLY_PAID → PAID`) can be tracked per certificate. Never touches project cost, certified amount, or retention. Not guarded against a closed project, same reasoning as Supplier payment (but **is** guarded against a `CLOSED` contract being used to create a *new* payable — see §11; the payment itself, settling an existing payable, is never blocked). **Phase 2B.2 signature change**: `postSubcontractorPayment(payment, projectId, resolved, journalId, reference)` — gained a `projectId` parameter (the certificate's project, resolved by the caller and never stored redundantly on the payment record) so the payable debit line can carry a project dimension too, which it never did before 2B.2. Every line also carries `contractId: payment.contractId`.
+
+### Subcontractor certificate approval (`postCertificateApproval`) — DRAFT posts nothing
+```
+Dr Project Cost - Subcontractors           (grossCurrentValue; project, contract)
+Dr Input VAT                                (vatAmount, only if valid + tax-invoice-backed; project, contract)
+   Cr Subcontractor Retention Payable       (retentionAmount, if > 0; project, contract)
+   Cr Subcontractor Advance                 (advanceRecovery, if > 0; project, contract)
+   Cr [mapped deduction account per line]   (each CertificateDeduction; project, contract)
+   Cr Subcontractor Accounts Payable        (netPayable — the balancing remainder; project, contract)
+```
+Approval is one-shot: `approveCertificate()` throws if `status !== "DRAFT"`. After approval, the form locks all accounting-relevant fields. **Phase 2B.2**: every line also carries `contractId: certificate.contractId` — `SubcontractorCertificate` already stored `contractId`, so (like the advance) no new parameter was needed, only the extra dimension.
+
+## 10. Custody / Advances
+
+Page: `pages/Advances.tsx`. Per custodian: Total Funds Received, Total Expenses Charged, Cash Returned, Current Custody Balance (all derived live from journal entries via `ledger.ts`), Open Advances count, Last Settlement Date, plus expandable Advances / Expenses Charged / Settlements sub-lists. "New Advance" (`components/AdvanceForm.tsx`) posts immediately, capturing Custodian, Project/Purpose (optional, filtered to non-`CLOSED` projects), and Funding Source (Treasury account or Owner Current Account — see §9); `addAdvance` guards against a closed project id and an inactive/missing/out-of-scope treasury account via `resolveFundingSource()` and `assertProjectAcceptsTransactions()`, throwing an error the form surfaces via `submitError`. "New Settlement" creates a DRAFT (`CustodySettlementForm`) that groups already-posted expenses — finalizing it (`finalizeCustodySettlement`) validates (expenses belong to the right custodian, not already claimed by another finalized settlement, return amount ≤ current balance) and posts only the cash-return line, if any. As of Phase 2B.1A the cash-return destination (`CashReturnDestinationType = TREASURY|OWNER|CASH|BANK`) supports picking a specific treasury account (`CustodySettlementForm`'s "Return Destination" + "Cash / Bank Account" fields); `CASH`/`BANK` remain legacy-only for pre-2B.1A finalized settlements, which were never rewritten.
+
+## 11. Subcontractors (Phase 2A + Phase 2B.2)
+
+**Subcontractor master** (Phase 2B.2): `Party.type === "SUBCONTRACTOR"` remains the single source of truth — no separate `Subcontractor` entity was introduced. `pages/Subcontractors.tsx` is now the **subcontractor master list** — one row per subcontractor party, showing Active Contracts, Projects, Certified To Date, Outstanding Payable, Retention Held, and Advance Balance, all live-derived (never cached) — plus a "New Subcontractor" action (`components/SubcontractorForm.tsx`). `AppDataContext.addSubcontractor`/`updateSubcontractor` validate a required name and an optional code unique among subcontractors. Subcontractors support create/edit/deactivate only — **no delete** (same pattern as Company, see Decision Log): an inactive subcontractor (`status: "INACTIVE"`) keeps its full history everywhere but can't be assigned a new contract until reactivated (enforced in `addSubcontract`/`updateSubcontract` and filtered out of the New Subcontract form's subcontractor dropdown, except the one already assigned when editing).
+
+`pages/SubcontractorDetail.tsx` (route `/subcontractors/:id`, **new in Phase 2B.2**) is the subcontractor profile: master info, Edit Subcontractor action, the same aggregate stats as the master list row, and a list of its contracts with a "New Subcontract" action (`components/SubcontractForm.tsx`).
+
+**Subcontract (contract) master** (Phase 2B.2): New/Edit Subcontract UI, reachable from the subcontractor profile or the contract workspace's "Edit Contract" action. `AppDataContext.addSubcontract`/`updateSubcontract` validate: project exists and isn't `CLOSED` (`assertProjectAcceptsTransactions`); subcontractor is `ACTIVE`; contract number required and unique **per project** (the smallest uniqueness rule consistent with the seed data's `SC-<PROJECT>-<SEQ>` numbering); `originalContractValue ≥ 0`; revised value (`original + approvedVariations`) can't go negative; retention 0–100. Once a contract has any accounting activity (`subcontractHasActivity()` — any advance/certificate/payment/journal line tagged with its id), `subcontractorId`/`projectId`/`contractNumber` lock, and the revised value can't be edited below work already certified (`contractCertifiedCost`); everything else (scope, dates, retention, variations, status, notes) stays editable. `deleteSubcontract` mirrors `deleteProject`: blocked once the contract has activity, allowed for a genuinely empty one.
+
+`pages/SubcontractDetail.tsx` (route **`/subcontracts/:id`** — moved here in Phase 2B.2, was `/subcontractors/:id`) is the **Contract Workspace** — the operational home for one subcontract: master info + Edit Contract; Contract Value (Revised/Certified/Remaining); Financial Position (Advance Paid/Recovered/Balance, Retention Held, Payable Created/Outstanding); a unified chronological "Contract Activity" feed merging advances, certificates, and payments; and inline actions (New Advance, New Certificate, Record Payment). A `CLOSED` contract disables New Advance/New Certificate (data-layer guard `assertContractAcceptsTransactions()`, mirrored as disabled buttons) but leaves Record Payment reachable, mirroring the Project `CLOSED`/payment exception. Record Payment is a picker over the contract's certificates that still have an outstanding balance — the underlying payment model is still certificate-scoped (see below), this is a UI convenience, not a new data shape.
+
+Certificate waterfall (`accounting/certificateCalc.ts: calcCertificate`):
+
+```
+Current Work        = Work Value To Date − Previous Certified Work
+Gross Current Value  = Current Work + Current Variations
+Net Before VAT       = Gross − Retention − Advance Recovery − Σ Deductions
+Net Payable          = Net Before VAT + VAT
+```
+
+`validateCertificate` enforces: current work ≥ 0; certified-to-date can't exceed the contract's revised value unless a variation on this certificate covers the excess; retention 0–100% and ≥ 0 resulting amount; advance recovery ≤ live available advance balance **for that contract** (Phase 2B.2 — see below); deduction amounts ≥ 0; net payable ≥ 0; if VAT > 0, `taxInvoiceReceived` + number + date are required. Every `CertificateDeduction` must have an `accountId` mapped from a small fixed set (`DEDUCTION_ACCOUNT_IDS`) before approval. "Previous Certified Work" already defaulted to the latest prior certificate **on the same contract** (`CertificateForm.tsx` filters `priorCertificates` by `contractId`) since Phase 2A — this was already correct and needed no change.
+
+### Contract-scoped accounting (Phase 2B.2 — the core fix)
+
+Before this phase, subcontractor payable/retention/advance balances in `ledger.ts` were scoped by `subcontractorId` (+ optional `projectId`), not `contractId` — correct only because the seed data gave each subcontractor exactly one contract. This is fixed:
+
+- `JournalLine` gained an **additive, optional `contractId` dimension** (`domain/types.ts`) alongside the existing `partyId`/`projectId`. No new GL account was minted per contract — dimensional tracking was preferred over account explosion, per the phase's binding direction.
+- Every subcontractor-related posting function (`postSubcontractorAdvance`, `postCertificateApproval`, `postSubcontractorPayment` in `accounting/postingEngine.ts`) now tags every line it produces with `contractId`. `SubcontractorAdvance` and `SubcontractorCertificate` already stored `contractId` from Phase 2A, so those two functions needed no new parameter. `SubcontractorPaymentTransaction` did **not** have `contractId` — it gained one (optional, always populated going forward from `certificate.contractId` when a payment is created), and `postSubcontractorPayment` gained a `projectId` parameter (the certificate's project, passed by the caller, never stored redundantly on the payment record) so its lines could carry a project dimension too (which they never did before this phase).
+- `accounting/ledger.ts` gained contract-scoped query functions: `contractAdvancePaid`, `contractAdvanceRecovered`, `contractAdvanceBalance`, `contractRetentionHeld`, `contractPayableCreated`, `contractPayableBalance`, `contractCertifiedCost` — each filtered strictly by `contractId`, all built on a shared `accountTotals()` helper (raw debit/credit totals) that `accountBalance()` now composes from.
+- `approveCertificate()`'s advance-recovery ceiling and `CertificateForm.tsx`'s live "available advance balance" hint were switched from `subcontractorAdvanceBalance(entries, subcontractorId, projectId)` to `contractAdvanceBalance(entries, contract.id)` — two contracts for the same subcontractor, even on the same project, can no longer share an advance balance.
+- The **old party-scoped functions were not removed** — `subcontractorPayableBalance`, `subcontractorRetentionHeld`, `subcontractorAdvanceBalance` (called with no project filter) now serve exactly as the **subcontractor-level aggregate**, since `partyId` is still tagged on every line regardless of contract. This is what powers the master list / subcontractor profile totals, and is *by construction* the sum across that subcontractor's contracts (verified live — see §21).
+- `pages/ProjectDetail.tsx`'s subcontractor payable/retention totals were switched from summing the party-scoped functions per contract (a latent double-count risk if one subcontractor ever had two contracts on the same project) to summing `contractPayableBalance`/`contractRetentionHeld` per contract — now correct by construction.
+
+### Historical migration
+
+`ensurePhase2B2Migrated()` (`storage/migrations.ts`, additive, idempotent, runs after the three earlier migrations on every boot):
+1. Backfills `Party.status = "ACTIVE"` wherever unset.
+2. Backfills `SubcontractorPaymentTransaction.contractId` from the certificate it already references (`certificateId → certificate.contractId`).
+3. Backfills the `contractId` dimension onto every already-posted `SUBCONTRACTOR_ADVANCE`/`SUBCONTRACTOR_CERTIFICATE`/`SUBCONTRACTOR_PAYMENT` journal entry, resolving the contract from its source document.
+
+**No monetary amount is ever changed** by this migration — only dimension metadata is added, and only where the source document makes the contract determination certain. An entry whose source record can't be found is left exactly as it was; it simply never appears in a contract-scoped query and remains readable only through the party-level aggregate ("legacy party-scoped activity" — a permanent, accepted fallback, same posture as the Phase 2B.1A treasury-account migration). On this codebase's actual data (seed dataset + this phase's own live testing) every subcontractor-related record was deterministically mappable; the fallback path exists for safety but was never actually exercised.
+
+## 12. Projects
+
+`Project` is a real operational master record (Phase 2B.1). `pages/Projects.tsx` has a "New Project" action (opens `components/ProjectForm.tsx`), status and company filters, and a company column. `pages/ProjectDetail.tsx` has an "Edit Project" action using the same form, plus (Phase 2B.1A) an amber banner when `status === "CLOSED"` explaining that new operational activity is blocked while historical activity stays visible. `AppDataContext`: `addProject`/`updateProject` validate a required name, a valid company, and a project code that's unique within that company; once a project has any accounting activity (`projectHasActivity()` checks expenses, advances, settlements, subcontracts, and journal lines by `projectId`), `updateProject` refuses to change `code` or `companyId`. `deleteProject` throws if the project has any activity — a genuinely empty, never-used project can be deleted. `assertProjectAcceptsTransactions(projectId)` (Phase 2B.1A) throws if the project is `CLOSED`; it's called from `addExpense`, `addAdvance`, `addCustodySettlement`, `addSubcontractorAdvance`, `addCertificateDraft`, `updateCertificateDraft`, and `approveCertificate` — see §14 for what it does *not* cover. All cost/VAT figures (`totalProjectCost`, `directExpenseCost`, `subcontractorCertifiedCost`, `totalInputVat`, etc.) are unchanged, still derived live from `ledger.ts`.
+
+## 13. Demo Data
+
+`src/seed/seedData.ts`. Company: "Al Rahim & Majid Contracting LLC" (`code: "CO-001"`, `status: "ACTIVE"`, timestamps). Parties: owners A. Rahim, Majid; custodians Bareq, Sobhi; 5 suppliers; subcontractors Al Falah MEP Contracting, Gulf Steel Works. Projects: Al Nakhil Building, Al Zorah, Ajman Office (each carries `companyId`, `createdAt`, `updatedAt`). Treasury accounts: Main Cash, Petty Cash, Main Bank — each with its own dedicated GL account baked directly into the seed (`TREASURY_GL_ACCOUNTS`: `1000-001`, `1000-002`, `1100-001`), so even a fresh install / "Reset Demo Data" has individually-accurate treasury balances from the start (Phase 2B.1A). 15 seeded expenses, 3 advances (`adv_001` owner-funded, `adv_002` Main-Bank-funded, `adv_003` owner-funded, tagged with its Al Zorah project id), 2 subcontracts, 1 subcontractor advance, 3 certificates (1 DRAFT, 2 APPROVED — covering retention, advance recovery, and a mapped deduction), 1 partial subcontractor payment. Two seeded expenses (`exp_014`, `exp_015`) deliberately still use the legacy `paidFromType: "CASH"`/`"BANK"` values, to keep exercising that backward-compatibility path.
+
+`ensureSeeded()` runs once on a genuinely empty install. `ensurePhase2ASeeded()` is a **separate, additive, idempotent migration** — gated on `subcontracts` being empty — that backfills the Phase 2A chart-of-accounts entries, the two subcontractor parties, and the subcontractor demo dataset onto an *existing* Phase 1 install without touching real data already there. `ensurePhase2B1Migrated()` then backfills `Company`/`Project`/`AdvanceTransaction` shapes and seeds the three baseline treasury accounts for pre-2B.1 installs; `ensurePhase2B1AMigrated()` runs last and mints each of those a dedicated GL account (see §8). All four run on every app boot (`AppDataContext.tsx` module top level); `resetDemoData()` wipes everything (`clearAll()`) and reseeds from scratch. **This demo data is not approved opening balances** — see Binding Decision #11 in the roadmap.
+
+## 14. Known Limitations
+
+See `PROJECT_ROADMAP.md` → "Known Gaps" for the full, current list. Headline items after Phase 2B.2: `CASH`/`BANK` remain valid legacy-only values on every funding-source-type union (never produced by any form, kept for historical records); a treasury account's balance is only fully accurate for activity posted after its dedicated GL account existed — pre-migration activity stays attributed to the shared pooled `1000`/`1100` account, permanently, by design; the CLOSED-project guard covers new Expense/Advance/Settlement-draft/Subcontractor-Advance/Certificate-draft+approval but not Supplier Payment, Subcontractor Payment, or finalizing an already-existing draft settlement; no Company or Subcontractor deletion (create/edit/deactivate only, by design); Subcontractor Payment is still fundamentally certificate-scoped (the contract workspace's "Record Payment" is a certificate picker, not a new pooled-payment model); contract-dimension backfill on historical journal lines is deterministic-only (an unresolvable entry stays party-scoped-only, permanently, never guessed); no i18n/Arabic; no backend/auth (by design).
+
+## 15. Binding Product Decisions
+
+Full list with dates in `PROJECT_ROADMAP.md` → Decision Log. The two most load-bearing for any new code:
+
+- **Project is a dimension, not a treasury account.** Never credit "Project X" as if it were a cash account; a real Project Cash Box/Bank Account, if it exists, is a distinct treasury entity.
+- **Funding source ≠ owner by default.** Implemented across Advance, Expense, Supplier Payment, Subcontractor Advance, Subcontractor Payment, and Custody Cash Return (Phase 2B.1 + 2B.1A) via the shared `resolveFundingSource()` helper. `CASH`/`BANK` remain valid only as legacy values for records that predate this — no form produces them anymore.
+
+## 16. Current Roadmap
+
+See `PROJECT_ROADMAP.md` in full. Summary: Phase 1 ✅ → Phase 2A ✅ → Phase 2B.1 ✅ → Phase 2B.1A ✅ → Phase 2B.2 ✅ → **2B.3 (i18n, next)** → 2C (Payroll/WPS) → 2D (historical import) → Phase 3 (client contracts) → 3B (revenue accounting) → Phase 4 (financial reporting) → future infrastructure (Supabase/auth).
+
+## 17. Immediate Next Task
+
+**Phase 2B.3 — Arabic / English Foundation & Completion.** Not started. Only begin it when explicitly asked to resume product development. See `PROJECT_ROADMAP.md` → "Later Phases" for scope (i18n architecture, RTL/LTR support, language toggle, full translation pass).
+
+## 18. Deferred Work
+
+Retention release workflow, client/owner-side progress certificates and revenue recognition, payroll/WPS accounting design, multi-company consolidation, authentication/multi-user/roles, settlement reversal/void workflows. None of these should be designed opportunistically inside an unrelated task — see roadmap for sequencing.
+
+## 19. Run / Build Instructions
+
+```bash
+npm install
+npm run dev        # Vite dev server, default http://localhost:5173
+npm run build       # tsc -b && vite build — must be clean before considering work done
+npm run preview     # serve the production build locally
+npm run lint         # oxlint
+```
+No environment variables, no backend to start, no database to provision. Data lives in the browser's `localStorage` under keys prefixed `cas:v1:...`. "Reset Demo Data" in the sidebar footer wipes and reseeds everything (confirmation-gated).
+
+## 20. Development Rules
+
+1. **All posted journal entries must balance** — enforced by `isBalanced`/`UnbalancedJournalError` in `postingEngine.ts`. Never bypass this.
+2. **Money math uses the existing decimal-safe helpers** (`domain/money.ts`) — never raw `+`/`-`/`*` on currency floats.
+3. **Draft business documents do not affect the GL** unless a phase explicitly designs otherwise (certificates, settlements: DRAFT = no journal entry).
+4. **Payments never duplicate previously recognized project cost** (Supplier Payment, Subcontractor Payment both debit a payable, never re-debit cost).
+5. **Advances are balance-sheet movements, not expenses** — never post an advance to an expense/cost account.
+6. **Subcontractor advances are not project cost** until a certificate recovers them.
+7. **Custody settlement grouping never reposts already-posted expenses** — only the cash-return line (if any) generates a new journal entry.
+8. **Project is a dimension/cost center, not automatically a treasury (cash/bank) account.**
+9. **Record the actual funding source** for every cash movement — don't default to a convenient placeholder.
+10. **VAT is never recognized without the appropriate supporting-document rule** (see the certificate tax-invoice guard as the working example).
+11. **Historical imports require a review/deduplication stage** — never write raw import rows straight into `journalEntries`.
+12. **Do not generate financial statements from incomplete books.**
+
+Also: no Debit/Credit pickers in normal user-facing forms (Journal is the only place raw accounting entries are displayed); business logic stays inside `accounting/` and `state/AppDataContext.tsx`, never inlined into page components; every new repository/field must be additive and migration-safe (see `ensurePhase2ASeeded` as the working pattern) — never wipe existing `localStorage` data as a side effect of a new feature.
+
+## 21. Testing Expectations
+
+There is no automated test suite (no `*.test.ts` files, no test runner configured) — verification so far has been: `npm run build` must be clean (zero TypeScript errors), `npm run lint` (oxlint) must show no new warnings, plus live, browser-driven functional testing (headless Chromium via Playwright, launched ad hoc — not checked into the repo) exercising each new flow end-to-end with hand-calculated expected numbers, checking `console` for zero errors, and confirming persistence across a page reload.
+
+Phase 2B.1's verification run (after a full "Reset Demo Data"): created a real project (`PRJ-2026-001`, "Demo New Contract") through the new UI; gave it a AED 10,000 Main-Bank-funded advance to Bareq and confirmed Project Cost stayed exactly `AED 0.00`; posted a AED 2,000 + 5% VAT expense against it from Bareq's custody and confirmed Project Cost became exactly `AED 2,000.00`; returned AED 1,000 from Bareq to Main Cash via a finalized custody settlement and confirmed Bareq's custody balance dropped by exactly 1,000 while Project Cost stayed at `AED 2,000.00`; reloaded the browser and confirmed all of the above persisted. Bareq's custody balance was independently hand-reconciled against the full seed ledger at every step (35,000 in seeded advances − 26,150 in seeded charges + 10,000 new advance − 2,100 new expense − 1,000 cash return = 15,750, which is exactly what the UI showed). Regression-spot-checked afterward: Dashboard, the pre-existing Al Nakhil project's total cost (unchanged), an owner-paid expense, a supplier payment, a new subcontractor draft certificate through approval, the Journal page, and the Suppliers/Subcontractors pages — all with zero `console` errors throughout the whole run.
+
+Phase 2B.1A's verification run (after a full "Reset Demo Data", then a new "Treasury Verification Project" created through the UI): every one of the six numbered scenario tests was run and hand-reconciled against the Treasury screen's live balances —
+- Test 1: AED 10,000 advance, Main Bank → Bareq. Main Bank's dedicated balance moved by exactly −10,000; Main Cash and Petty Cash stayed at `AED 0.00`; Project Cost stayed `AED 0.00`.
+- Test 2: AED 1,000 + 5% VAT expense, Petty Cash. Petty Cash moved by exactly −1,050; Main Cash and Main Bank were unaffected by this step; Project Cost became exactly `AED 1,000.00`.
+- Test 3: a supplier-credit purchase followed by a AED 2,000 supplier payment from Main Bank. Main Bank moved by exactly −2,000; Project Cost stayed at exactly `AED 1,000.00` (payment does not add cost).
+- Test 4: Bareq returns AED 500 to Main Cash via a finalized custody settlement. Main Cash moved by exactly +500; Petty Cash and Main Bank were unaffected.
+- Test 5: AED 3,000 subcontractor advance, Main Bank, against Al Falah MEP's contract. Main Bank moved by exactly −3,000; the unrelated Al Nakhil project's Total Cost stayed at exactly `AED 122,200.00`.
+- Test 6: AED 2,500 subcontractor payment, Main Bank, against certificate `PC-AN-01-01`. Main Bank moved by exactly −2,500; Retention Held on that contract stayed exactly unchanged before/after.
+- Closed-project guard: set "Treasury Verification Project" to `CLOSED` via Edit Project, confirmed the amber closed-project banner appeared on both `ProjectDetail` and `SubcontractDetail`, and confirmed the Expense form's Project dropdown no longer lists it (so a user cannot select it to attempt a new expense).
+- Regression-spot-checked afterward, with zero `console` errors throughout: Dashboard (including a hard page reload), Company page, Owners & Custodians, Journal, and the pre-existing Al Zorah project's total cost (unchanged at `AED 19,050.00`).
+
+Phase 2B.2's verification run (after a full "Reset Demo Data", driven headlessly via Playwright/Chromium against the real UI — no seed data or manual `localStorage` editing):
+
+- **New Subcontractor From Zero (mandatory)**: created "Multi Contract Testing LLC" through the UI → reloaded → confirmed it persisted → created a contract for it → reloaded → confirmed the contract persisted → added a AED 10,000 advance → created a draft certificate (Work Value 40,000, Advance Recovery 5,000, 10% retention) and confirmed, before approval, Certified To Date / Retention Held / Outstanding Payable all read exactly `AED 0.00` and Remaining Value stayed the full `AED 100,000.00` (draft posts nothing) → approved it → confirmed Certified To Date became `AED 40,000.00`, Retention Held `AED 4,000.00`, Outstanding Payable `AED 31,000.00` → recorded a AED 15,000 partial payment and confirmed Outstanding Payable became exactly `AED 16,000.00`.
+- **Multi-Contract Isolation (mandatory)**: same subcontractor, two contracts — Contract A (`MCT-A`, Al Nakhil Building, AED 100,000) and Contract B (`MCT-B`, Al Zorah, AED 200,000). Contract A: AED 10,000 advance, certificate (gross 40,000, retention 4,000, advance recovery 5,000, net payable 31,000), AED 15,000 payment. Contract B: AED 20,000 advance, certificate (gross 60,000, retention 6,000, advance recovery 2,000, net payable 52,000), AED 25,000 payment. Hand-reconciled: Contract A showed Advance Balance `5,000.00` (10,000 − 5,000), Retention `4,000.00`, Outstanding Payable `16,000.00` (31,000 − 15,000), Certified `40,000.00`, Remaining `60,000.00` — **before and after** Contract B's activity was posted, byte-for-byte identical, confirming zero cross-contamination. Contract B independently showed Advance Balance `18,000.00`, Retention `6,000.00`, Outstanding Payable `27,000.00`, Certified `60,000.00`, Remaining `140,000.00`. Subcontractor-level aggregate for "Multi Contract Testing LLC" showed Certified `100,000.00` (40,000+60,000), Payable `43,000.00` (16,000+27,000), Retention `10,000.00` (4,000+6,000), Advance Balance `23,000.00` (5,000+18,000) — exactly the sum of its two contracts. Project A (Al Nakhil Building)'s total cost increased by exactly 40,000 (Contract A's certified work only); Project B (Al Zorah)'s total cost increased by exactly 60,000 (Contract B's only) — neither project's cost picked up the other contract's figure.
+- **Guard rails**: closing Contract A's seeded contract (`SC-AN-01`) via Edit Contract → confirmed "New Advance"/"New Certificate" became disabled while "Record Payment" stayed reachable (settling an existing payable on a `CLOSED` contract remains allowed) → reopened it. Confirmed a `CLOSED` project (Ajman Office) is absent from the New Subcontract form's Project dropdown entirely (same pattern as the Expense form). Deactivated a subcontractor (Gulf Steel Works) and confirmed its "New Subcontract" action became disabled on its own profile while its existing contract (`SC-AZ-01`) remained fully visible.
+- Zero `console` errors throughout every scenario above.
+- Regression-spot-checked afterward, with zero `console` errors: Dashboard, Journal, Company, Cash & Banks, Expenses, Advances & Settlements, Suppliers, Owners & Custodians, and the subcontractor master list (all pre-existing seeded subcontractors — Al Falah MEP Contracting, Gulf Steel Works — still showed correct aggregate figures after the ledger-function changes).
+- `npm run build` (`tsc -b && vite build`) and `npm run lint` (oxlint) both clean — zero errors, zero new warnings (the two pre-existing `only-export-components` fast-refresh warnings, present before this phase, are unchanged).
+
+Any future phase should be verified the same way before being marked "Completed" in the roadmap: build clean, lint clean, flow tested live with real numbers, no console errors, persists after reload, and existing flows re-checked for regressions.
+
+## 22. Handoff Checklist for New Sessions
+
+- [ ] Read `PROJECT_ROADMAP.md` in full (Binding Decisions, Completed, Current/Next Phase, Known Gaps, Decision Log).
+- [ ] Read this file in full.
+- [ ] Confirm current repo state matches what's documented here — inspect, don't assume (files move; this doc can drift).
+- [ ] Check `git log` / `git status` for anything not yet reflected here.
+- [ ] Before writing code: identify which files in §5/§6 the task actually touches; don't restructure working modules.
+- [ ] After completing a phase or making a binding decision: update **both** `PROJECT_ROADMAP.md` (phase status, next action, decision log, known gaps) and this file (implementation state, new files/models, changed accounting rules, limitations, immediate next task). A feature is only "Completed" once it exists and has been verified running — not merely planned.

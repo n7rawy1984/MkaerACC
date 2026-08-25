@@ -1,7 +1,9 @@
 import { NavLink } from "react-router-dom";
 import {
   LayoutDashboard,
+  Briefcase,
   Building2,
+  Landmark,
   Receipt,
   Wallet,
   Truck,
@@ -15,7 +17,9 @@ import { resetDemoData } from "../../seed/seedData";
 
 const NAV_ITEMS = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard, end: true },
+  { to: "/company", label: "Company", icon: Briefcase },
   { to: "/projects", label: "Projects", icon: Building2 },
+  { to: "/treasury", label: "Cash & Banks", icon: Landmark },
   { to: "/expenses", label: "Expenses", icon: Receipt },
   { to: "/advances", label: "Advances & Settlements", icon: Wallet },
   { to: "/suppliers", label: "Suppliers", icon: Truck },

@@ -10,7 +10,7 @@ import { CustodySettlementForm } from "../components/CustodySettlementForm";
 import { formatAED } from "../domain/money";
 import { formatDate, indexById } from "../domain/utils";
 import { cashReturnedByCustodian, custodianBalance, lastSettlementDate } from "../accounting/ledger";
-import type { Party } from "../domain/types";
+import type { AdvanceTransaction, Party } from "../domain/types";
 
 function CustodianPanel({ custodian }: { custodian: Party }) {
   const {
@@ -19,11 +19,19 @@ function CustodianPanel({ custodian }: { custodian: Party }) {
     custodySettlements,
     journalEntries,
     parties,
+    treasuryAccounts,
     finalizeCustodySettlement,
     discardDraftSettlement,
   } = useAppData();
   const [open, setOpen] = useState(false);
   const partiesById = useMemo(() => indexById(parties), [parties]);
+  const treasuryById = useMemo(() => indexById(treasuryAccounts), [treasuryAccounts]);
+
+  function fundingSourceLabel(a: AdvanceTransaction): string {
+    return a.fundingSourceType === "OWNER_CURRENT"
+      ? partiesById[a.fundingSourceId]?.name ?? "Owner"
+      : treasuryById[a.fundingSourceId]?.name ?? "Treasury";
+  }
 
   const custodianAdvances = useMemo(
     () => advances.filter((a) => a.custodianId === custodian.id).sort((a, b) => (a.date < b.date ? 1 : -1)),
@@ -122,7 +130,7 @@ function CustodianPanel({ custodian }: { custodian: Party }) {
               {custodianAdvances.map((a) => (
                 <div key={a.id} className="flex items-center justify-between text-sm">
                   <span className="text-slate-600">
-                    {formatDate(a.date)} · {partiesById[a.fromPartyId]?.name}
+                    {formatDate(a.date)} · {fundingSourceLabel(a)}
                     {a.reference ? ` · ${a.reference}` : ""}
                   </span>
                   <span className="font-medium text-slate-900">{formatAED(a.amount)}</span>
@@ -191,12 +199,19 @@ function CustodianPanel({ custodian }: { custodian: Party }) {
 }
 
 export function Advances() {
-  const { parties, advances } = useAppData();
+  const { parties, advances, treasuryAccounts } = useAppData();
   const [showAdvanceForm, setShowAdvanceForm] = useState(false);
   const [settlementCustodianId, setSettlementCustodianId] = useState<string | null>(null);
 
   const custodians = useMemo(() => parties.filter((p) => p.type === "CUSTODIAN"), [parties]);
   const partiesById = useMemo(() => indexById(parties), [parties]);
+  const treasuryById = useMemo(() => indexById(treasuryAccounts), [treasuryAccounts]);
+
+  function fundingSourceLabel(a: (typeof advances)[number]): string {
+    return a.fundingSourceType === "OWNER_CURRENT"
+      ? (partiesById[a.fundingSourceId]?.name ?? "Owner")
+      : (treasuryById[a.fundingSourceId]?.name ?? "Treasury");
+  }
 
   const recentAdvances = useMemo(() => [...advances].sort((a, b) => (a.date < b.date ? 1 : -1)), [advances]);
 
@@ -240,7 +255,7 @@ export function Advances() {
             <div key={a.id} className="flex items-center justify-between px-5 py-3.5">
               <div>
                 <p className="text-sm font-medium text-slate-800">
-                  {partiesById[a.fromPartyId]?.name} &rarr; {partiesById[a.custodianId]?.name}
+                  {fundingSourceLabel(a)} &rarr; {partiesById[a.custodianId]?.name}
                 </p>
                 <p className="text-xs text-slate-400">
                   {formatDate(a.date)}

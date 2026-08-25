@@ -15,6 +15,7 @@ import type {
   SubcontractorCertificate,
   SubcontractorPaymentTransaction,
   SupplierPaymentTransaction,
+  TreasuryAccount,
 } from "../domain/types";
 
 const driver = new LocalStorageDriver("cas");
@@ -52,6 +53,9 @@ export const db = {
     driver,
     `${SCHEMA_VERSION}:subcontractorPayments`,
   ),
+
+  // Phase 2B.1
+  treasuryAccounts: new Repository<TreasuryAccount>(driver, `${SCHEMA_VERSION}:treasuryAccounts`),
 };
 
 export function isDatabaseEmpty(): boolean {

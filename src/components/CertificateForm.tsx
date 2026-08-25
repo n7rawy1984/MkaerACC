@@ -6,7 +6,7 @@ import { Badge } from "../components/ui/Badge";
 import { formatAED } from "../domain/money";
 import { formatDate } from "../domain/utils";
 import { calcCertificate, validateCertificate } from "../accounting/certificateCalc";
-import { certificatePaidAmount, subcontractorAdvanceBalance } from "../accounting/ledger";
+import { certificatePaidAmount, contractAdvanceBalance } from "../accounting/ledger";
 import { ACCOUNTS, DEDUCTION_ACCOUNT_IDS } from "../accounting/chartOfAccounts";
 import { SubcontractorPaymentForm } from "./SubcontractorPaymentForm";
 import type { CertificateDeduction, DeductionType, SubcontractorCertificate, VatMode } from "../domain/types";
@@ -109,9 +109,7 @@ export function CertificateForm({
     [workValueToDate, previousCertifiedWork, currentVariationAmount, retentionPercent, advanceRecovery, JSON.stringify(parsedDeductionAmounts), vatMode, manualVatAmount],
   );
 
-  const availableAdvanceBalance = contract
-    ? subcontractorAdvanceBalance(journalEntries, contract.subcontractorId, contract.projectId)
-    : 0;
+  const availableAdvanceBalance = contract ? contractAdvanceBalance(journalEntries, contract.id) : 0;
   const revisedContractValue = contract ? contract.originalContractValue + contract.approvedVariations : 0;
 
   const alreadyPaid = certificate ? certificatePaidAmount(subcontractorPayments, certificate.id) : 0;

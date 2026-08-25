@@ -12,8 +12,14 @@ import { inputClassName } from "../components/ui/Field";
 
 const ALL = "ALL";
 
+const PAID_FROM_LABEL: Record<string, string> = {
+  SUPPLIER_CREDIT: "Supplier Credit",
+  CASH: "Legacy Cash",
+  BANK: "Legacy Bank",
+};
+
 export function Expenses() {
-  const { expenses, projects, categories, parties } = useAppData();
+  const { expenses, projects, categories, parties, treasuryAccounts } = useAppData();
   const [showForm, setShowForm] = useState(false);
   const [search, setSearch] = useState("");
   const [projectFilter, setProjectFilter] = useState(ALL);
@@ -24,7 +30,18 @@ export function Expenses() {
   const projectsById = useMemo(() => indexById(projects), [projects]);
   const categoriesById = useMemo(() => indexById(categories), [categories]);
   const partiesById = useMemo(() => indexById(parties), [parties]);
+  const treasuryById = useMemo(() => indexById(treasuryAccounts), [treasuryAccounts]);
   const suppliers = useMemo(() => parties.filter((p) => p.type === "SUPPLIER"), [parties]);
+
+  function paidFromLabel(e: (typeof expenses)[number]): string {
+    if (e.paidFromType === "CUSTODIAN" || e.paidFromType === "OWNER") {
+      return partiesById[e.paidFromPartyId ?? ""]?.name ?? e.paidFromType;
+    }
+    if (e.paidFromType === "TREASURY") {
+      return treasuryById[e.treasuryAccountId ?? ""]?.name ?? "Treasury";
+    }
+    return PAID_FROM_LABEL[e.paidFromType] ?? e.paidFromType;
+  }
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -128,9 +145,7 @@ export function Expenses() {
                   {categoriesById[e.categoryId]?.name}
                   {e.supplierId && ` · ${partiesById[e.supplierId]?.name ?? ""}`}
                   {" · Paid via "}
-                  {e.paidFromType === "CUSTODIAN" || e.paidFromType === "OWNER"
-                    ? partiesById[e.paidFromPartyId ?? ""]?.name ?? e.paidFromType
-                    : e.paidFromType.replace("_", " ")}
+                  {paidFromLabel(e)}
                 </p>
               </div>
               <div className="text-right shrink-0 pl-4">

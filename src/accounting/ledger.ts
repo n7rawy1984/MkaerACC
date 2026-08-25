@@ -10,18 +10,19 @@ import { ACCOUNTS } from "./chartOfAccounts";
 
 type NormalSide = "DEBIT" | "CREDIT";
 
-/**
- * Balance of an account, optionally scoped to one party (custodian, owner,
- * or supplier) and/or one project, expressed on its natural side. Assets
- * and expenses read naturally as debit balances; liabilities read
- * naturally as credit balances.
- */
-function accountBalance(
+interface AccountTotals {
+  debit: number;
+  credit: number;
+}
+
+/** Raw debit/credit totals for an account, optionally scoped by party, project, and/or contract
+ * (Phase 2B.2) dimension. Exposed separately from accountBalance so callers that need the gross
+ * one-sided total (e.g. "Advance Paid" vs. "Advance Recovered") don't have to net them themselves. */
+function accountTotals(
   entries: JournalEntry[],
   accountId: string,
-  normalSide: NormalSide,
-  opts: { partyId?: string; projectId?: string } = {},
-): number {
+  opts: { partyId?: string; projectId?: string; contractId?: string } = {},
+): AccountTotals {
   let debit = 0;
   let credit = 0;
   for (const entry of entries) {
@@ -29,16 +30,41 @@ function accountBalance(
       if (l.accountId !== accountId) continue;
       if (opts.partyId && l.partyId !== opts.partyId) continue;
       if (opts.projectId && l.projectId !== opts.projectId) continue;
+      if (opts.contractId && l.contractId !== opts.contractId) continue;
       debit = addMoney(debit, l.debit);
       credit = addMoney(credit, l.credit);
     }
   }
+  return { debit, credit };
+}
+
+/**
+ * Balance of an account, optionally scoped to one party (custodian, owner,
+ * or supplier), one project, and/or one subcontract (Phase 2B.2), expressed
+ * on its natural side. Assets and expenses read naturally as debit
+ * balances; liabilities read naturally as credit balances.
+ */
+function accountBalance(
+  entries: JournalEntry[],
+  accountId: string,
+  normalSide: NormalSide,
+  opts: { partyId?: string; projectId?: string; contractId?: string } = {},
+): number {
+  const { debit, credit } = accountTotals(entries, accountId, opts);
   return normalSide === "DEBIT" ? subtractMoney(debit, credit) : subtractMoney(credit, debit);
 }
 
 /** Remaining custody balance still held by a custodian (advances minus expenses charged). */
 export function custodianBalance(entries: JournalEntry[], custodianPartyId: string): number {
   return accountBalance(entries, ACCOUNTS.ADVANCE_CUSTODY, "DEBIT", { partyId: custodianPartyId });
+}
+
+/** Live balance of one treasury account, derived from the journal lines posted to its own GL
+ * account (see Phase 2B.1A) — never from a cached/stored total. Cash/Bank are debit-normal assets.
+ * For a treasury account still on a shared/legacy GL account, this returns that account's whole
+ * pooled balance (see TreasuryAccount migration notes in storage/migrations.ts). */
+export function treasuryAccountBalance(entries: JournalEntry[], glAccountId: string): number {
+  return accountBalance(entries, glAccountId, "DEBIT");
 }
 
 export function totalOpenCustodianAdvances(entries: JournalEntry[], custodianPartyIds: string[]): number {
@@ -203,6 +229,58 @@ export function certificatePaidAmount(
   return payments
     .filter((p) => p.certificateId === certificateId)
     .reduce((sum, p) => addMoney(sum, p.amount), 0);
+}
+
+// ============================================================================
+// PHASE 2B.2 — Contract-scoped subcontractor accounting
+//
+// Every subcontractor-related journal line now carries a contractId dimension
+// (see domain/types.ts JournalLine, accounting/postingEngine.ts) alongside the
+// existing partyId dimension. These functions scope strictly by contractId so
+// two contracts belonging to the same subcontractor never blend — the
+// subcontractorId-only functions above remain valid as the PARTY-level
+// aggregate (sum across all of that subcontractor's contracts), since partyId
+// is still tagged on every line regardless of contract.
+//
+// A line with no contractId (a historical entry whose contract could not be
+// determined with certainty during migration — see storage/migrations.ts) is
+// excluded from every function below and only shows up in the party-level
+// aggregate — "legacy party-scoped activity", by design, never guessed at.
+// ============================================================================
+
+/** Total advances paid to a subcontractor under one specific contract (gross, before recovery). */
+export function contractAdvancePaid(entries: JournalEntry[], contractId: string): number {
+  return accountTotals(entries, ACCOUNTS.SUBCONTRACTOR_ADVANCE, { contractId }).debit;
+}
+
+/** Total of that contract's advance recovered back through certificates so far. */
+export function contractAdvanceRecovered(entries: JournalEntry[], contractId: string): number {
+  return accountTotals(entries, ACCOUNTS.SUBCONTRACTOR_ADVANCE, { contractId }).credit;
+}
+
+/** Unrecovered advance balance for one contract — Advance Paid minus Advance Recovered. */
+export function contractAdvanceBalance(entries: JournalEntry[], contractId: string): number {
+  return accountBalance(entries, ACCOUNTS.SUBCONTRACTOR_ADVANCE, "DEBIT", { contractId });
+}
+
+/** Retention currently held against one contract. */
+export function contractRetentionHeld(entries: JournalEntry[], contractId: string): number {
+  return accountBalance(entries, ACCOUNTS.SUBCONTRACTOR_RETENTION_PAYABLE, "CREDIT", { contractId });
+}
+
+/** Total payable ever created (credited) for one contract by approved certificates, before payments. */
+export function contractPayableCreated(entries: JournalEntry[], contractId: string): number {
+  return accountTotals(entries, ACCOUNTS.SUBCONTRACTOR_PAYABLE, { contractId }).credit;
+}
+
+/** Outstanding payable for one contract — Payable Created minus Payments Made against it. */
+export function contractPayableBalance(entries: JournalEntry[], contractId: string): number {
+  return accountBalance(entries, ACCOUNTS.SUBCONTRACTOR_PAYABLE, "CREDIT", { contractId });
+}
+
+/** Certified work (Project Cost - Subcontractors) recognized for one contract — APPROVED certificates only. */
+export function contractCertifiedCost(entries: JournalEntry[], contractId: string): number {
+  return accountBalance(entries, ACCOUNTS.PROJECT_COST_SUBCONTRACTORS, "DEBIT", { contractId });
 }
 
 // ============================================================================

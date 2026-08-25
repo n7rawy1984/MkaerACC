@@ -53,13 +53,27 @@ function line(accountId: string, opts: Partial<JournalLine> = {}): JournalLine {
 }
 
 /**
- * Expense transaction posting covers three of the spec's transaction types
- * depending on paidFromType: custodian-funded, owner-paid, and supplier
- * credit purchase all flow through here since the only thing that changes
- * is the credit side.
+ * A fully-resolved funding/payment source, ready to post as one journal
+ * line: which GL account to hit, and which party (if any) to scope it to.
+ * Callers resolve this in AppDataContext (see resolveFundingSource there,
+ * Phase 2B.1A) — the posting engine stays pure and never touches storage.
+ */
+export interface ResolvedFundingSource {
+  glAccountId: string;
+  partyId?: string;
+}
+
+/**
+ * Expense transaction posting covers several of the spec's transaction types
+ * depending on paidFromType: custodian-funded, owner-paid, treasury-funded,
+ * and supplier credit purchase all flow through here since the only thing
+ * that changes is the credit side. `resolved` is required for CUSTODIAN,
+ * OWNER, and TREASURY; legacy CASH/BANK records (pre-2B.1A, no longer
+ * produced by the Expense form) and SUPPLIER_CREDIT don't need it.
  */
 export function postExpense(
   expense: ExpenseTransaction,
+  resolved: ResolvedFundingSource | undefined,
   journalId: string,
   reference: string,
 ): JournalEntry {
@@ -74,19 +88,12 @@ export function postExpense(
 
   switch (expense.paidFromType) {
     case "CUSTODIAN":
-      lines.push(
-        line(ACCOUNTS.ADVANCE_CUSTODY, {
-          credit: expense.totalAmount,
-          partyId: expense.paidFromPartyId,
-          projectId: expense.projectId,
-        }),
-      );
-      break;
     case "OWNER":
+    case "TREASURY":
       lines.push(
-        line(ACCOUNTS.OWNER_CURRENT, {
+        line(resolved!.glAccountId, {
           credit: expense.totalAmount,
-          partyId: expense.paidFromPartyId,
+          partyId: resolved!.partyId,
           projectId: expense.projectId,
         }),
       );
@@ -100,10 +107,10 @@ export function postExpense(
         }),
       );
       break;
-    case "CASH":
+    case "CASH": // legacy — no longer produced by the Expense form, see TREASURY
       lines.push(line(ACCOUNTS.CASH, { credit: expense.totalAmount, projectId: expense.projectId }));
       break;
-    case "BANK":
+    case "BANK": // legacy — no longer produced by the Expense form, see TREASURY
       lines.push(line(ACCOUNTS.BANK, { credit: expense.totalAmount, projectId: expense.projectId }));
       break;
   }
@@ -119,9 +126,16 @@ export function postExpense(
   );
 }
 
-/** Advance / funding: an owner (or the company) hands cash custody to a custodian. */
+/**
+ * Advance / funding: cash custody is handed to a custodian. The credit side
+ * is whatever funding source the caller resolved (a treasury account's own
+ * GL account, or Owner Current Account, party-scoped — see
+ * AppDataContext.resolveFundingSource). Project is always just a dimension
+ * on both lines — never the credited account itself.
+ */
 export function postAdvance(
   advance: AdvanceTransaction,
+  resolved: ResolvedFundingSource,
   journalId: string,
   reference: string,
 ): JournalEntry {
@@ -131,9 +145,9 @@ export function postAdvance(
       partyId: advance.custodianId,
       projectId: advance.projectId,
     }),
-    line(ACCOUNTS.OWNER_CURRENT, {
+    line(resolved.glAccountId, {
       credit: advance.amount,
-      partyId: advance.fromPartyId,
+      partyId: resolved.partyId,
       projectId: advance.projectId,
     }),
   ];
@@ -149,9 +163,11 @@ export function postAdvance(
   );
 }
 
-/** Supplier payment settles Accounts Payable from cash, bank, a custodian, or an owner. */
+/** Supplier payment settles Accounts Payable from a treasury account, a custodian, or an owner.
+ * `resolved` is required for TREASURY/CUSTODIAN/OWNER; legacy CASH/BANK records don't need it. */
 export function postSupplierPayment(
   payment: SupplierPaymentTransaction,
+  resolved: ResolvedFundingSource | undefined,
   journalId: string,
   reference: string,
 ): JournalEntry {
@@ -160,21 +176,16 @@ export function postSupplierPayment(
   ];
 
   switch (payment.sourceType) {
-    case "CASH":
+    case "TREASURY":
+    case "CUSTODIAN":
+    case "OWNER":
+      lines.push(line(resolved!.glAccountId, { credit: payment.amount, partyId: resolved!.partyId }));
+      break;
+    case "CASH": // legacy
       lines.push(line(ACCOUNTS.CASH, { credit: payment.amount }));
       break;
-    case "BANK":
+    case "BANK": // legacy
       lines.push(line(ACCOUNTS.BANK, { credit: payment.amount }));
-      break;
-    case "CUSTODIAN":
-      lines.push(
-        line(ACCOUNTS.ADVANCE_CUSTODY, { credit: payment.amount, partyId: payment.sourcePartyId }),
-      );
-      break;
-    case "OWNER":
-      lines.push(
-        line(ACCOUNTS.OWNER_CURRENT, { credit: payment.amount, partyId: payment.sourcePartyId }),
-      );
       break;
   }
 
@@ -196,28 +207,26 @@ export function postSupplierPayment(
 /**
  * A custody settlement's only accounting effect is returning unused cash —
  * the expenses it groups were already posted individually and must never be
- * posted again here. Called once, when a settlement is finalized.
+ * posted again here. Called once, when a settlement is finalized. `resolved`
+ * is required for TREASURY/OWNER; legacy CASH/BANK records don't need it.
  */
 export function postCashReturn(
   settlement: CustodySettlement,
+  resolved: ResolvedFundingSource | undefined,
   journalId: string,
   reference: string,
 ): JournalEntry {
   const lines: JournalLine[] = [];
 
   switch (settlement.cashReturnDestinationType) {
-    case "BANK":
+    case "TREASURY":
+    case "OWNER":
+      lines.push(line(resolved!.glAccountId, { debit: settlement.cashReturnAmount, partyId: resolved!.partyId }));
+      break;
+    case "BANK": // legacy
       lines.push(line(ACCOUNTS.BANK, { debit: settlement.cashReturnAmount }));
       break;
-    case "OWNER":
-      lines.push(
-        line(ACCOUNTS.OWNER_CURRENT, {
-          debit: settlement.cashReturnAmount,
-          partyId: settlement.cashReturnOwnerId,
-        }),
-      );
-      break;
-    case "CASH":
+    case "CASH": // legacy
     default:
       lines.push(line(ACCOUNTS.CASH, { debit: settlement.cashReturnAmount }));
       break;
@@ -248,11 +257,13 @@ export function postCashReturn(
 
 /** Subcontractor advance is an asset — never project cost until a certificate recovers it.
  * subcontractorId/projectId come from the advance's contract (SubcontractorAdvance itself only
- * stores contractId, so the caller resolves and passes these dimensions). */
+ * stores contractId, so the caller resolves and passes these dimensions). `resolved` is required
+ * for TREASURY/OWNER/CUSTODIAN; legacy CASH/BANK records don't need it. */
 export function postSubcontractorAdvance(
   advance: SubcontractorAdvance,
   subcontractorId: string,
   projectId: string,
+  resolved: ResolvedFundingSource | undefined,
   journalId: string,
   reference: string,
 ): JournalEntry {
@@ -261,24 +272,29 @@ export function postSubcontractorAdvance(
       debit: advance.amount,
       partyId: subcontractorId,
       projectId,
+      contractId: advance.contractId,
     }),
   ];
 
   switch (advance.paymentSourceType) {
-    case "BANK":
-      lines.push(line(ACCOUNTS.BANK, { credit: advance.amount }));
-      break;
+    case "TREASURY":
     case "OWNER":
-      lines.push(line(ACCOUNTS.OWNER_CURRENT, { credit: advance.amount, partyId: advance.paymentSourcePartyId }));
-      break;
     case "CUSTODIAN":
       lines.push(
-        line(ACCOUNTS.ADVANCE_CUSTODY, { credit: advance.amount, partyId: advance.paymentSourcePartyId }),
+        line(resolved!.glAccountId, {
+          credit: advance.amount,
+          partyId: resolved!.partyId,
+          projectId,
+          contractId: advance.contractId,
+        }),
       );
       break;
-    case "CASH":
+    case "BANK": // legacy
+      lines.push(line(ACCOUNTS.BANK, { credit: advance.amount, projectId, contractId: advance.contractId }));
+      break;
+    case "CASH": // legacy
     default:
-      lines.push(line(ACCOUNTS.CASH, { credit: advance.amount }));
+      lines.push(line(ACCOUNTS.CASH, { credit: advance.amount, projectId, contractId: advance.contractId }));
       break;
   }
 
@@ -307,11 +323,18 @@ export function postCertificateApproval(
     line(ACCOUNTS.PROJECT_COST_SUBCONTRACTORS, {
       debit: certificate.grossCurrentValue,
       projectId: certificate.projectId,
+      contractId: certificate.contractId,
     }),
   ];
 
   if (certificate.vatAmount > 0) {
-    lines.push(line(ACCOUNTS.INPUT_VAT, { debit: certificate.vatAmount, projectId: certificate.projectId }));
+    lines.push(
+      line(ACCOUNTS.INPUT_VAT, {
+        debit: certificate.vatAmount,
+        projectId: certificate.projectId,
+        contractId: certificate.contractId,
+      }),
+    );
   }
 
   if (certificate.retentionAmount > 0) {
@@ -320,6 +343,7 @@ export function postCertificateApproval(
         credit: certificate.retentionAmount,
         partyId: certificate.subcontractorId,
         projectId: certificate.projectId,
+        contractId: certificate.contractId,
       }),
     );
   }
@@ -330,6 +354,7 @@ export function postCertificateApproval(
         credit: certificate.advanceRecovery,
         partyId: certificate.subcontractorId,
         projectId: certificate.projectId,
+        contractId: certificate.contractId,
       }),
     );
   }
@@ -340,6 +365,7 @@ export function postCertificateApproval(
         credit: deduction.amount,
         partyId: certificate.subcontractorId,
         projectId: certificate.projectId,
+        contractId: certificate.contractId,
       }),
     );
   }
@@ -349,6 +375,7 @@ export function postCertificateApproval(
       credit: certificate.netPayable,
       partyId: certificate.subcontractorId,
       projectId: certificate.projectId,
+      contractId: certificate.contractId,
     }),
   );
 
@@ -363,31 +390,45 @@ export function postCertificateApproval(
   );
 }
 
-/** Settling the payable never changes Project Cost, certified amount, or retention. */
+/** Settling the payable never changes Project Cost, certified amount, or retention. `resolved`
+ * is required for TREASURY/CUSTODIAN/OWNER; legacy CASH/BANK records don't need it. `projectId` is
+ * the certificate's project (Phase 2B.2) — dimension only, never stored redundantly on the payment
+ * record itself. `payment.contractId` (also Phase 2B.2) tags both lines when known. */
 export function postSubcontractorPayment(
   payment: SubcontractorPaymentTransaction,
+  projectId: string | undefined,
+  resolved: ResolvedFundingSource | undefined,
   journalId: string,
   reference: string,
 ): JournalEntry {
   const lines: JournalLine[] = [
-    line(ACCOUNTS.SUBCONTRACTOR_PAYABLE, { debit: payment.amount, partyId: payment.subcontractorId }),
+    line(ACCOUNTS.SUBCONTRACTOR_PAYABLE, {
+      debit: payment.amount,
+      partyId: payment.subcontractorId,
+      projectId,
+      contractId: payment.contractId,
+    }),
   ];
 
   switch (payment.sourceType) {
-    case "BANK":
-      lines.push(line(ACCOUNTS.BANK, { credit: payment.amount }));
-      break;
+    case "TREASURY":
     case "CUSTODIAN":
+    case "OWNER":
       lines.push(
-        line(ACCOUNTS.ADVANCE_CUSTODY, { credit: payment.amount, partyId: payment.sourcePartyId }),
+        line(resolved!.glAccountId, {
+          credit: payment.amount,
+          partyId: resolved!.partyId,
+          projectId,
+          contractId: payment.contractId,
+        }),
       );
       break;
-    case "OWNER":
-      lines.push(line(ACCOUNTS.OWNER_CURRENT, { credit: payment.amount, partyId: payment.sourcePartyId }));
+    case "BANK": // legacy
+      lines.push(line(ACCOUNTS.BANK, { credit: payment.amount, projectId, contractId: payment.contractId }));
       break;
-    case "CASH":
+    case "CASH": // legacy
     default:
-      lines.push(line(ACCOUNTS.CASH, { credit: payment.amount }));
+      lines.push(line(ACCOUNTS.CASH, { credit: payment.amount, projectId, contractId: payment.contractId }));
       break;
   }
 

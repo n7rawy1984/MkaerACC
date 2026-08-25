@@ -9,6 +9,7 @@
 // ============================================================================
 
 import type {
+  Account,
   AdvanceTransaction,
   Company,
   ExpenseCategory,
@@ -19,6 +20,7 @@ import type {
   SubcontractorAdvance,
   SubcontractorCertificate,
   SubcontractorPaymentTransaction,
+  TreasuryAccount,
 } from "../domain/types";
 import { calcVat } from "../domain/money";
 import { clearAll, db, isDatabaseEmpty } from "../storage/database";
@@ -34,10 +36,60 @@ import { calcCertificate } from "../accounting/certificateCalc";
 
 const COMPANY: Company = {
   id: "company_main",
+  code: "CO-001",
   name: "Al Rahim & Majid Contracting LLC",
   trn: "100123456700003",
   address: "Sharjah, United Arab Emirates",
+  status: "ACTIVE",
+  createdAt: "2026-06-01T00:00:00.000Z",
+  updatedAt: "2026-06-01T00:00:00.000Z",
 };
+
+// Phase 2B.1A: each seeded treasury account gets its own dedicated GL account
+// (not the pooled 1000/1100 control accounts) so Main Cash, Petty Cash, and
+// Main Bank are independently traceable from a fresh install / demo reset —
+// see accounting/chartOfAccounts.ts and PROJECT_ROADMAP.md Phase 2B.1A.
+const TREASURY_GL_ACCOUNTS: Account[] = [
+  { id: "acc_treasury_main_cash", code: "1000-001", name: "Main Cash", type: "ASSET", parentId: ACCOUNTS.CASH },
+  { id: "acc_treasury_petty_cash", code: "1000-002", name: "Petty Cash", type: "ASSET", parentId: ACCOUNTS.CASH },
+  { id: "acc_treasury_main_bank", code: "1100-001", name: "Main Bank", type: "ASSET", parentId: ACCOUNTS.BANK },
+];
+
+const TREASURY_ACCOUNTS: TreasuryAccount[] = [
+  {
+    id: "treasury_main_cash",
+    companyId: COMPANY.id,
+    code: "CASH-01",
+    name: "Main Cash",
+    type: "CASH",
+    glAccountId: "acc_treasury_main_cash",
+    status: "ACTIVE",
+    createdAt: "2026-06-01T00:00:00.000Z",
+    updatedAt: "2026-06-01T00:00:00.000Z",
+  },
+  {
+    id: "treasury_petty_cash",
+    companyId: COMPANY.id,
+    code: "CASH-02",
+    name: "Petty Cash",
+    type: "PETTY_CASH",
+    glAccountId: "acc_treasury_petty_cash",
+    status: "ACTIVE",
+    createdAt: "2026-06-01T00:00:00.000Z",
+    updatedAt: "2026-06-01T00:00:00.000Z",
+  },
+  {
+    id: "treasury_main_bank",
+    companyId: COMPANY.id,
+    code: "BANK-01",
+    name: "Main Bank",
+    type: "BANK",
+    glAccountId: "acc_treasury_main_bank",
+    status: "ACTIVE",
+    createdAt: "2026-06-01T00:00:00.000Z",
+    updatedAt: "2026-06-01T00:00:00.000Z",
+  },
+];
 
 const PARTIES: Party[] = [
   { id: "owner_rahim", name: "A. Rahim", type: "OWNER" },
@@ -62,6 +114,7 @@ const SUBCONTRACTOR_PARTIES: Party[] = [
     taxRegistrationNumber: "100987654300003",
     contactPerson: "Eng. Yousef Hamdan",
     phone: "+971-50-123-4567",
+    status: "ACTIVE",
   },
   {
     id: "sub_gulf_steel",
@@ -70,6 +123,7 @@ const SUBCONTRACTOR_PARTIES: Party[] = [
     taxRegistrationNumber: "100876543200003",
     contactPerson: "Hassan Al Marri",
     phone: "+971-50-765-4321",
+    status: "ACTIVE",
   },
 ];
 
@@ -78,31 +132,40 @@ const PROJECTS: Project[] = [
     id: "proj_alnakhil",
     code: "AN-01",
     name: "Al Nakhil Building",
+    companyId: COMPANY.id,
     status: "ACTIVE",
     location: "Sharjah",
     client: "Al Nakhil Real Estate",
     startDate: "2026-06-01",
     budget: 400000,
+    createdAt: "2026-06-01T00:00:00.000Z",
+    updatedAt: "2026-06-01T00:00:00.000Z",
   },
   {
     id: "proj_alzorah",
     code: "AZ-01",
     name: "Al Zorah",
+    companyId: COMPANY.id,
     status: "ACTIVE",
     location: "Ajman",
     client: "Al Zorah Development",
     startDate: "2026-06-15",
     budget: 350000,
+    createdAt: "2026-06-15T00:00:00.000Z",
+    updatedAt: "2026-06-15T00:00:00.000Z",
   },
   {
     id: "proj_ajman",
     code: "AJ-01",
     name: "Ajman Office",
+    companyId: COMPANY.id,
     status: "ACTIVE",
     location: "Ajman",
     client: "Internal / HQ Fit-out",
     startDate: "2026-07-20",
     budget: 60000,
+    createdAt: "2026-07-20T00:00:00.000Z",
+    updatedAt: "2026-07-20T00:00:00.000Z",
   },
 ];
 
@@ -119,9 +182,11 @@ const CATEGORIES: ExpenseCategory[] = [
 interface SeedAdvanceInput {
   id: string;
   date: string;
-  fromPartyId: string;
+  fundingSourceType: AdvanceTransaction["fundingSourceType"];
+  fundingSourceId: string;
   custodianId: string;
   amount: number;
+  projectId?: string;
   reference: string;
 }
 
@@ -129,7 +194,8 @@ const ADVANCES_SEED: SeedAdvanceInput[] = [
   {
     id: "adv_001",
     date: "2026-06-05",
-    fromPartyId: "owner_rahim",
+    fundingSourceType: "OWNER_CURRENT",
+    fundingSourceId: "owner_rahim",
     custodianId: "custodian_bareq",
     amount: 20000,
     reference: "Initial custody funding",
@@ -137,16 +203,19 @@ const ADVANCES_SEED: SeedAdvanceInput[] = [
   {
     id: "adv_002",
     date: "2026-07-01",
-    fromPartyId: "owner_rahim",
+    fundingSourceType: "TREASURY",
+    fundingSourceId: "treasury_main_bank",
     custodianId: "custodian_bareq",
     amount: 15000,
-    reference: "Top-up funding",
+    reference: "Top-up funding from Main Bank",
   },
   {
     id: "adv_003",
     date: "2026-07-10",
-    fromPartyId: "owner_majid",
+    fundingSourceType: "OWNER_CURRENT",
+    fundingSourceId: "owner_majid",
     custodianId: "custodian_sobhi",
+    projectId: "proj_alzorah",
     amount: 10000,
     reference: "Custody funding for Al Zorah",
   },
@@ -514,6 +583,7 @@ const SUBCONTRACTOR_PAYMENTS_SEED: SubcontractorPaymentTransaction[] = [
     date: "2026-08-01",
     subcontractorId: "sub_alfalah_mep",
     certificateId: "cert_001",
+    contractId: "contract_alfalah_nakhil",
     amount: 20000,
     sourceType: "BANK",
     reference: "Partial certificate payment",
@@ -540,7 +610,10 @@ function seedDemoData(): void {
   db.parties.replaceAll([...PARTIES, ...SUBCONTRACTOR_PARTIES]);
   db.projects.replaceAll(PROJECTS);
   db.categories.replaceAll(CATEGORIES);
-  db.accounts.replaceAll(CHART_OF_ACCOUNTS);
+  db.accounts.replaceAll([...CHART_OF_ACCOUNTS, ...TREASURY_GL_ACCOUNTS]);
+  db.treasuryAccounts.replaceAll(TREASURY_ACCOUNTS);
+
+  const treasuryById = Object.fromEntries(TREASURY_ACCOUNTS.map((t) => [t.id, t]));
 
   const advances: AdvanceTransaction[] = [];
   const expenses: ExpenseTransaction[] = [];
@@ -550,14 +623,20 @@ function seedDemoData(): void {
     const advance: AdvanceTransaction = {
       id: a.id,
       date: a.date,
-      fromPartyId: a.fromPartyId,
+      fundingSourceType: a.fundingSourceType,
+      fundingSourceId: a.fundingSourceId,
       custodianId: a.custodianId,
       amount: a.amount,
+      projectId: a.projectId,
       paymentMethod: "TRANSFER",
       reference: a.reference,
     };
     advances.push(advance);
-    journalEntries.push(postAdvance(advance, seedJournalId(), `ADV-${a.id.slice(-3)}`));
+    const resolved =
+      a.fundingSourceType === "TREASURY"
+        ? { glAccountId: treasuryById[a.fundingSourceId]?.glAccountId ?? ACCOUNTS.BANK }
+        : { glAccountId: ACCOUNTS.OWNER_CURRENT, partyId: a.fundingSourceId };
+    journalEntries.push(postAdvance(advance, resolved, seedJournalId(), `ADV-${a.id.slice(-3)}`));
   }
 
   for (const e of EXPENSES_SEED) {
@@ -580,7 +659,13 @@ function seedDemoData(): void {
       status: "POSTED",
     };
     expenses.push(expense);
-    journalEntries.push(postExpense(expense, seedJournalId(), `EXP-${e.id.slice(-3)}`));
+    const resolved =
+      e.paidFromType === "CUSTODIAN"
+        ? { glAccountId: ACCOUNTS.ADVANCE_CUSTODY, partyId: e.paidFromPartyId }
+        : e.paidFromType === "OWNER"
+          ? { glAccountId: ACCOUNTS.OWNER_CURRENT, partyId: e.paidFromPartyId }
+          : undefined;
+    journalEntries.push(postExpense(expense, resolved, seedJournalId(), `EXP-${e.id.slice(-3)}`));
   }
 
   db.advances.replaceAll(advances);
@@ -613,6 +698,7 @@ function seedPhase2ADemoData(): void {
         a,
         contract.subcontractorId,
         contract.projectId,
+        undefined, // legacy "BANK" seed value — posts directly, no resolution needed
         phase2ASeedJournalId(),
         `SADV-${a.id.slice(-3)}`,
       ),
@@ -673,8 +759,10 @@ function seedPhase2ADemoData(): void {
   const payments: SubcontractorPaymentTransaction[] = [];
   for (const p of SUBCONTRACTOR_PAYMENTS_SEED) {
     payments.push(p);
+    const projectId = p.contractId ? contractsById[p.contractId]?.projectId : undefined;
     db.journalEntries.create(
-      postSubcontractorPayment(p, phase2ASeedJournalId(), `SPAY-${p.id.slice(-3)}`),
+      // legacy "BANK" seed value — posts directly, no resolution needed
+      postSubcontractorPayment(p, projectId, undefined, phase2ASeedJournalId(), `SPAY-${p.id.slice(-3)}`),
     );
   }
   db.subcontractorPayments.replaceAll(payments);

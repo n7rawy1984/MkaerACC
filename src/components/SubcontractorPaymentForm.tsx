@@ -14,9 +14,16 @@ export function SubcontractorPaymentForm({
   certificate: SubcontractorCertificate;
   onDone: () => void;
 }) {
-  const { parties, subcontractorPayments, addSubcontractorPayment } = useAppData();
+  const { parties, subcontractorPayments, treasuryAccounts, addSubcontractorPayment } = useAppData();
   const owners = useMemo(() => parties.filter((p) => p.type === "OWNER"), [parties]);
   const custodians = useMemo(() => parties.filter((p) => p.type === "CUSTODIAN"), [parties]);
+  const eligibleTreasuryAccounts = useMemo(
+    () =>
+      treasuryAccounts.filter(
+        (t) => t.status === "ACTIVE" && (!t.projectId || t.projectId === certificate.projectId),
+      ),
+    [treasuryAccounts, certificate.projectId],
+  );
 
   const alreadyPaid = useMemo(
     () => certificatePaidAmount(subcontractorPayments, certificate.id),
@@ -26,13 +33,15 @@ export function SubcontractorPaymentForm({
 
   const [date, setDate] = useState(today());
   const [amount, setAmount] = useState(outstanding.toFixed(2));
-  const [sourceType, setSourceType] = useState<SubcontractorPaymentSourceType>("BANK");
+  const [sourceType, setSourceType] = useState<SubcontractorPaymentSourceType>("TREASURY");
   const [sourcePartyId, setSourcePartyId] = useState("");
+  const [treasuryAccountId, setTreasuryAccountId] = useState(eligibleTreasuryAccounts[0]?.id ?? "");
   const [reference, setReference] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitError, setSubmitError] = useState("");
 
   const needsParty = sourceType === "OWNER" || sourceType === "CUSTODIAN";
+  const needsTreasury = sourceType === "TREASURY";
   const partyOptions = sourceType === "OWNER" ? owners : custodians;
 
   function validate(): Record<string, string> {
@@ -41,6 +50,7 @@ export function SubcontractorPaymentForm({
     if (!Number.isFinite(n) || n <= 0) e.amount = "Enter an amount greater than zero";
     else if (n > outstanding + 0.01) e.amount = `Cannot exceed the outstanding balance (${formatAED(outstanding)})`;
     if (needsParty && !sourcePartyId) e.sourcePartyId = "Select who paid";
+    if (needsTreasury && !treasuryAccountId) e.treasuryAccountId = "Select the cash/bank account";
     return e;
   }
 
@@ -57,6 +67,7 @@ export function SubcontractorPaymentForm({
       amount: Number(amount),
       sourceType,
       sourcePartyId: needsParty ? sourcePartyId : undefined,
+      treasuryAccountId: needsTreasury ? treasuryAccountId : undefined,
       reference: reference.trim() || undefined,
     };
     try {
@@ -99,12 +110,24 @@ export function SubcontractorPaymentForm({
           }}
           className={inputClassName}
         >
-          <option value="BANK">Company Bank</option>
-          <option value="CASH">Company Cash</option>
-          <option value="OWNER">Owner Directly</option>
+          <option value="TREASURY">Cash / Bank (Treasury)</option>
+          <option value="OWNER">Owner Current Account</option>
           <option value="CUSTODIAN">Custodian</option>
         </select>
       </Field>
+
+      {needsTreasury && (
+        <Field label="Cash / Bank Account" required error={errors.treasuryAccountId}>
+          <select value={treasuryAccountId} onChange={(e) => setTreasuryAccountId(e.target.value)} className={inputClassName}>
+            <option value="">Select…</option>
+            {eligibleTreasuryAccounts.map((t) => (
+              <option key={t.id} value={t.id}>
+                {t.name}
+              </option>
+            ))}
+          </select>
+        </Field>
+      )}
 
       {needsParty && (
         <Field label={sourceType === "OWNER" ? "Owner" : "Custodian"} required error={errors.sourcePartyId}>

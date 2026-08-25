@@ -1,28 +1,38 @@
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
 import type {
   Account,
+  AdvanceFundingSourceType,
   AdvanceTransaction,
   CashReturnDestinationType,
   CertificateDeduction,
   Company,
+  CompanyStatus,
   CustodySettlement,
   ExpenseCategory,
   ExpenseTransaction,
   JournalEntry,
   Party,
+  PartyStatus,
   Project,
+  ProjectStatus,
   Subcontract,
   SubcontractorAdvance,
   SubcontractorCertificate,
   SubcontractorFundingSourceType,
   SubcontractorPaymentSourceType,
   SubcontractorPaymentTransaction,
+  SubcontractStatus,
   SupplierPaymentTransaction,
+  TreasuryAccount,
+  TreasuryAccountStatus,
+  TreasuryAccountType,
   VatMode,
 } from "../domain/types";
 import { addMoney, calcVat, formatAED, subtractMoney } from "../domain/money";
 import { db, newId } from "../storage/database";
 import { ensurePhase2ASeeded, ensureSeeded } from "../seed/seedData";
+import { ensurePhase2B1Migrated, ensurePhase2B1AMigrated, ensurePhase2B2Migrated } from "../storage/migrations";
+import { ACCOUNTS } from "../accounting/chartOfAccounts";
 import {
   postAdvance,
   postCashReturn,
@@ -31,12 +41,21 @@ import {
   postSubcontractorAdvance,
   postSubcontractorPayment,
   postSupplierPayment,
+  type ResolvedFundingSource,
 } from "../accounting/postingEngine";
 import { calcCertificate, validateCertificate } from "../accounting/certificateCalc";
-import { certificatePaidAmount, custodianBalance, subcontractorAdvanceBalance } from "../accounting/ledger";
+import {
+  certificatePaidAmount,
+  contractAdvanceBalance,
+  contractCertifiedCost,
+  custodianBalance,
+} from "../accounting/ledger";
 
 ensureSeeded();
 ensurePhase2ASeeded();
+ensurePhase2B1Migrated();
+ensurePhase2B1AMigrated();
+ensurePhase2B2Migrated();
 
 interface AppData {
   companies: Company[];
@@ -53,6 +72,7 @@ interface AppData {
   subcontractorAdvances: SubcontractorAdvance[];
   subcontractorCertificates: SubcontractorCertificate[];
   subcontractorPayments: SubcontractorPaymentTransaction[];
+  treasuryAccounts: TreasuryAccount[];
 }
 
 export interface NewExpenseInput {
@@ -67,6 +87,7 @@ export interface NewExpenseInput {
   manualVatAmount?: number;
   paidFromType: ExpenseTransaction["paidFromType"];
   paidFromPartyId?: string;
+  treasuryAccountId?: string;
   advanceId?: string;
   paymentMethod: ExpenseTransaction["paymentMethod"];
   hasInvoice: boolean;
@@ -75,13 +96,59 @@ export interface NewExpenseInput {
 
 export interface NewAdvanceInput {
   date: string;
-  fromPartyId: string;
   custodianId: string;
   amount: number;
   projectId?: string;
+  fundingSourceType: AdvanceFundingSourceType;
+  fundingSourceId: string;
   paymentMethod: AdvanceTransaction["paymentMethod"];
   reference?: string;
   notes?: string;
+}
+
+export interface NewCompanyInput {
+  code: string;
+  name: string;
+  legalName?: string;
+  trn?: string;
+  address?: string;
+  notes?: string;
+}
+
+export interface UpdateCompanyInput extends NewCompanyInput {
+  status: CompanyStatus;
+}
+
+export interface NewProjectInput {
+  code: string;
+  name: string;
+  companyId: string;
+  status: ProjectStatus;
+  location?: string;
+  client?: string;
+  contractNumber?: string;
+  originalContractValue?: number;
+  startDate?: string;
+  expectedCompletionDate?: string;
+  budget?: number;
+  notes?: string;
+  dedicatedBankAccountId?: string;
+  dedicatedCashBoxId?: string;
+}
+
+export interface NewTreasuryAccountInput {
+  companyId: string;
+  projectId?: string;
+  code: string;
+  name: string;
+  type: TreasuryAccountType;
+  bankName?: string;
+  accountReference?: string;
+  notes?: string;
+}
+
+export interface UpdateTreasuryAccountInput extends NewTreasuryAccountInput {
+  status: TreasuryAccountStatus;
 }
 
 export interface NewSupplierPaymentInput {
@@ -90,6 +157,7 @@ export interface NewSupplierPaymentInput {
   amount: number;
   sourceType: SupplierPaymentTransaction["sourceType"];
   sourcePartyId?: string;
+  treasuryAccountId?: string;
   reference?: string;
   notes?: string;
 }
@@ -103,6 +171,36 @@ export interface NewCustodySettlementInput {
   cashReturnAmount: number;
   cashReturnDestinationType?: CashReturnDestinationType;
   cashReturnOwnerId?: string;
+  cashReturnTreasuryAccountId?: string;
+}
+
+export interface NewSubcontractorInput {
+  name: string;
+  code?: string;
+  taxRegistrationNumber?: string;
+  contactPerson?: string;
+  phone?: string;
+  email?: string;
+  address?: string;
+  notes?: string;
+}
+
+export interface UpdateSubcontractorInput extends NewSubcontractorInput {
+  status: PartyStatus;
+}
+
+export interface NewSubcontractInput {
+  projectId: string;
+  subcontractorId: string;
+  contractNumber: string;
+  scopeOfWork: string;
+  originalContractValue: number;
+  approvedVariations: number;
+  retentionPercent: number;
+  startDate?: string;
+  endDate?: string;
+  status: SubcontractStatus;
+  notes?: string;
 }
 
 export interface NewSubcontractorAdvanceInput {
@@ -111,6 +209,7 @@ export interface NewSubcontractorAdvanceInput {
   amount: number;
   paymentSourceType: SubcontractorFundingSourceType;
   paymentSourcePartyId?: string;
+  treasuryAccountId?: string;
   paymentMethod: AdvanceTransaction["paymentMethod"];
   reference?: string;
   notes?: string;
@@ -140,6 +239,7 @@ export interface NewSubcontractorPaymentInput {
   amount: number;
   sourceType: SubcontractorPaymentSourceType;
   sourcePartyId?: string;
+  treasuryAccountId?: string;
   reference?: string;
   notes?: string;
 }
@@ -148,11 +248,27 @@ interface AppDataContextValue extends AppData {
   addExpense: (input: NewExpenseInput) => void;
   addAdvance: (input: NewAdvanceInput) => void;
   addSupplierPayment: (input: NewSupplierPaymentInput) => void;
-  addProject: (input: Omit<Project, "id">) => void;
+
+  addCompany: (input: NewCompanyInput) => void;
+  updateCompany: (id: string, input: UpdateCompanyInput) => void;
+
+  addProject: (input: NewProjectInput) => void;
+  updateProject: (id: string, input: NewProjectInput) => void;
+  deleteProject: (id: string) => void;
+
+  addTreasuryAccount: (input: NewTreasuryAccountInput) => void;
+  updateTreasuryAccount: (id: string, input: UpdateTreasuryAccountInput) => void;
 
   addCustodySettlement: (input: NewCustodySettlementInput) => void;
   discardDraftSettlement: (id: string) => void;
   finalizeCustodySettlement: (id: string) => void;
+
+  addSubcontractor: (input: NewSubcontractorInput) => void;
+  updateSubcontractor: (id: string, input: UpdateSubcontractorInput) => void;
+
+  addSubcontract: (input: NewSubcontractInput) => void;
+  updateSubcontract: (id: string, input: NewSubcontractInput) => void;
+  deleteSubcontract: (id: string) => void;
 
   addSubcontractorAdvance: (input: NewSubcontractorAdvanceInput) => void;
   addCertificateDraft: (input: CertificateFormInput) => void;
@@ -179,7 +295,132 @@ function loadAll(): AppData {
     subcontractorAdvances: db.subcontractorAdvances.getAll(),
     subcontractorCertificates: db.subcontractorCertificates.getAll(),
     subcontractorPayments: db.subcontractorPayments.getAll(),
+    treasuryAccounts: db.treasuryAccounts.getAll(),
   };
+}
+
+/** Cash-family types share the "1000 Cash on Hand" root, bank-family types share
+ * "1100 Bank Account" — every treasury account still gets its own dedicated child GL
+ * account under one of these two roots (Phase 2B.1A), e.g. "1000-002 · Petty Cash". */
+function treasuryFamilyRootAccountId(type: TreasuryAccountType): string {
+  return type === "BANK" || type === "PROJECT_BANK" ? ACCOUNTS.BANK : ACCOUNTS.CASH;
+}
+
+/**
+ * Mints a brand-new, dedicated GL account for one treasury account — called once, at
+ * treasury-account creation time, and never again (see updateTreasuryAccount, which
+ * deliberately never touches glAccountId, so historical postings never change meaning).
+ * Codes are sequential per family, e.g. "1000-001 Main Cash", "1000-002 Petty Cash",
+ * "1100-001 Main Bank" — see PROJECT_ROADMAP.md Phase 2B.1A.
+ */
+function createTreasuryGlAccount(name: string, type: TreasuryAccountType): Account {
+  const rootId = treasuryFamilyRootAccountId(type);
+  const rootCode = db.accounts.getById(rootId)?.code ?? "1000";
+  const siblings = db.accounts.getAll().filter((a) => a.code.startsWith(`${rootCode}-`));
+  const nextSeq = siblings.reduce((max, a) => Math.max(max, Number(a.code.split("-")[1]) || 0), 0) + 1;
+  const account: Account = {
+    id: newId("acc"),
+    code: `${rootCode}-${String(nextSeq).padStart(3, "0")}`,
+    name,
+    type: "ASSET",
+    parentId: rootId,
+  };
+  db.accounts.create(account);
+  return account;
+}
+
+/** The three kinds of "where did the money come from/go to" shared across custodian
+ * advances, expenses, supplier payments, subcontractor advances/payments, and custody
+ * cash returns. Centralizing resolution here (Phase 2B.1A) avoids repeating the same
+ * treasury lookup/validation five times across AppDataContext — see PROJECT_ROADMAP.md. */
+type GenericFundingSourceType = "TREASURY" | "OWNER_CURRENT" | "CUSTODIAN";
+
+interface FundingContext {
+  /** The project the transaction is being posted against, if any — used to enforce that a
+   * project-specific treasury account can only be used for its own project (Phase 2B.1A). */
+  projectId?: string;
+  /** The company of that project, if any — used to enforce that a treasury account belongs
+   * to the same company as the project it's being used for. */
+  companyId?: string;
+}
+
+/** Resolves a funding-source selection into the GL account (and party, if control-account-
+ * scoped) to post against — validating existence, active status, and project/company scope
+ * along the way. Never called for legacy CASH/BANK values (those post directly in the
+ * posting engine, unchanged, for backward compatibility). */
+function resolveFundingSource(
+  type: GenericFundingSourceType,
+  id: string,
+  ctx: FundingContext = {},
+): ResolvedFundingSource {
+  if (type === "OWNER_CURRENT") {
+    const party = db.parties.getById(id);
+    if (!party || party.type !== "OWNER") throw new Error("Select a valid owner.");
+    return { glAccountId: ACCOUNTS.OWNER_CURRENT, partyId: id };
+  }
+  if (type === "CUSTODIAN") {
+    const party = db.parties.getById(id);
+    if (!party || party.type !== "CUSTODIAN") throw new Error("Select a valid custodian.");
+    return { glAccountId: ACCOUNTS.ADVANCE_CUSTODY, partyId: id };
+  }
+  const treasury = db.treasuryAccounts.getById(id);
+  if (!treasury) throw new Error("Funding source not found.");
+  if (treasury.status !== "ACTIVE") throw new Error("This treasury account is inactive.");
+  if (treasury.projectId && treasury.projectId !== ctx.projectId) {
+    throw new Error("This treasury account is dedicated to a different project and cannot be used here.");
+  }
+  if (ctx.companyId && treasury.companyId !== ctx.companyId) {
+    throw new Error("This treasury account belongs to a different company than the selected project.");
+  }
+  return { glAccountId: treasury.glAccountId };
+}
+
+/** A CLOSED project must not accept any new operational financial transaction (Phase
+ * 2B.1A) — COMPLETED is deliberately not blocked (work may be done while accounting
+ * close-out is still in progress). Historical transactions remain fully readable. */
+function assertProjectAcceptsTransactions(projectId?: string): void {
+  if (!projectId) return;
+  const project = db.projects.getById(projectId);
+  if (project && project.status === "CLOSED") {
+    throw new Error("This project is closed and cannot accept new financial transactions. Reopen it first.");
+  }
+}
+
+/** A CLOSED subcontract must not accept a new advance or certificate (Phase 2B.2) — COMPLETED is
+ * deliberately not blocked, mirroring the Project CLOSED/COMPLETED distinction. Settling an
+ * already-recognized payable (a payment) remains allowed even on a CLOSED contract. */
+function assertContractAcceptsTransactions(contractId: string): void {
+  const contract = db.subcontracts.getById(contractId);
+  if (contract && contract.status === "CLOSED") {
+    throw new Error("This subcontract is closed and cannot accept new financial transactions. Reopen it first.");
+  }
+}
+
+/** True once a contract has any real accounting activity — used to lock its identity fields
+ * (subcontractor, project, contract number) and block destructive deletion (Phase 2B.2, mirrors
+ * the Project activity-guard pattern from Phase 2B.1). */
+function subcontractHasActivity(contractId: string): boolean {
+  return (
+    db.subcontractorAdvances.getAll().some((a) => a.contractId === contractId) ||
+    db.subcontractorCertificates.getAll().some((c) => c.contractId === contractId) ||
+    db.subcontractorPayments.getAll().some((p) => p.contractId === contractId) ||
+    db.journalEntries.getAll().some((e) => e.lines.some((l) => l.contractId === contractId))
+  );
+}
+
+function validateContractNumber(contractNumber: string, projectId: string, excludeId?: string): string {
+  const trimmed = contractNumber.trim();
+  if (!trimmed) throw new Error("Contract number is required.");
+  const duplicate = db.subcontracts
+    .getAll()
+    .some(
+      (c) =>
+        c.id !== excludeId &&
+        c.projectId === projectId &&
+        c.contractNumber.trim().toLowerCase() === trimmed.toLowerCase(),
+    );
+  if (duplicate) throw new Error(`Contract number "${trimmed}" is already used on this project.`);
+  return trimmed;
 }
 
 function buildCertificateFromInput(
@@ -236,6 +477,8 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
 
   const addExpense = useCallback(
     (input: NewExpenseInput) => {
+      assertProjectAcceptsTransactions(input.projectId);
+
       const vat = calcVat({
         netAmount: input.netAmount,
         vatMode: input.vatMode,
@@ -254,13 +497,28 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
         totalAmount: vat.totalAmount,
         paidFromType: input.paidFromType,
         paidFromPartyId: input.paidFromPartyId,
+        treasuryAccountId: input.treasuryAccountId,
         advanceId: input.advanceId,
         paymentMethod: input.paymentMethod,
         hasInvoice: input.hasInvoice,
         notes: input.notes,
         status: "POSTED",
       };
-      const journalEntry = postExpense(expense, newId("je"), `EXP-${expense.id.slice(-6)}`);
+
+      let resolved: ResolvedFundingSource | undefined;
+      const projectCompanyId = input.projectId ? db.projects.getById(input.projectId)?.companyId : undefined;
+      if (input.paidFromType === "CUSTODIAN") {
+        resolved = resolveFundingSource("CUSTODIAN", input.paidFromPartyId!);
+      } else if (input.paidFromType === "OWNER") {
+        resolved = resolveFundingSource("OWNER_CURRENT", input.paidFromPartyId!);
+      } else if (input.paidFromType === "TREASURY") {
+        resolved = resolveFundingSource("TREASURY", input.treasuryAccountId!, {
+          projectId: input.projectId,
+          companyId: projectCompanyId,
+        });
+      }
+
+      const journalEntry = postExpense(expense, resolved, newId("je"), `EXP-${expense.id.slice(-6)}`);
       db.expenses.create(expense);
       db.journalEntries.create(journalEntry);
       refresh();
@@ -270,18 +528,28 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
 
   const addAdvance = useCallback(
     (input: NewAdvanceInput) => {
+      assertProjectAcceptsTransactions(input.projectId);
+
+      const projectCompanyId = input.projectId ? db.projects.getById(input.projectId)?.companyId : undefined;
+      const resolved = resolveFundingSource(
+        input.fundingSourceType === "TREASURY" ? "TREASURY" : "OWNER_CURRENT",
+        input.fundingSourceId,
+        { projectId: input.projectId, companyId: projectCompanyId },
+      );
+
       const advance: AdvanceTransaction = {
         id: newId("adv"),
         date: input.date,
-        fromPartyId: input.fromPartyId,
         custodianId: input.custodianId,
         amount: input.amount,
         projectId: input.projectId,
+        fundingSourceType: input.fundingSourceType,
+        fundingSourceId: input.fundingSourceId,
         paymentMethod: input.paymentMethod,
         reference: input.reference,
         notes: input.notes,
       };
-      const journalEntry = postAdvance(advance, newId("je"), `ADV-${advance.id.slice(-6)}`);
+      const journalEntry = postAdvance(advance, resolved, newId("je"), `ADV-${advance.id.slice(-6)}`);
       db.advances.create(advance);
       db.journalEntries.create(journalEntry);
       refresh();
@@ -291,6 +559,15 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
 
   const addSupplierPayment = useCallback(
     (input: NewSupplierPaymentInput) => {
+      let resolved: ResolvedFundingSource | undefined;
+      if (input.sourceType === "TREASURY") {
+        resolved = resolveFundingSource("TREASURY", input.treasuryAccountId!);
+      } else if (input.sourceType === "CUSTODIAN") {
+        resolved = resolveFundingSource("CUSTODIAN", input.sourcePartyId!);
+      } else if (input.sourceType === "OWNER") {
+        resolved = resolveFundingSource("OWNER_CURRENT", input.sourcePartyId!);
+      }
+
       const payment: SupplierPaymentTransaction = {
         id: newId("pay"),
         date: input.date,
@@ -298,10 +575,11 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
         amount: input.amount,
         sourceType: input.sourceType,
         sourcePartyId: input.sourcePartyId,
+        treasuryAccountId: input.treasuryAccountId,
         reference: input.reference,
         notes: input.notes,
       };
-      const journalEntry = postSupplierPayment(payment, newId("je"), `PAY-${payment.id.slice(-6)}`);
+      const journalEntry = postSupplierPayment(payment, resolved, newId("je"), `PAY-${payment.id.slice(-6)}`);
       db.supplierPayments.create(payment);
       db.journalEntries.create(journalEntry);
       refresh();
@@ -309,9 +587,258 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     [refresh],
   );
 
+  // ---------------------------------------------------------------------
+  // Companies
+  // ---------------------------------------------------------------------
+
+  const addCompany = useCallback(
+    (input: NewCompanyInput) => {
+      const code = input.code.trim();
+      if (!code) throw new Error("Company code is required.");
+      const duplicate = db.companies.getAll().some((c) => c.code.trim().toLowerCase() === code.toLowerCase());
+      if (duplicate) throw new Error(`Company code "${code}" is already in use.`);
+
+      const now = new Date().toISOString();
+      const company: Company = {
+        id: newId("company"),
+        code,
+        name: input.name.trim(),
+        legalName: input.legalName?.trim() || undefined,
+        trn: input.trn?.trim() || undefined,
+        address: input.address?.trim() || undefined,
+        status: "ACTIVE",
+        notes: input.notes?.trim() || undefined,
+        createdAt: now,
+        updatedAt: now,
+      };
+      db.companies.create(company);
+      refresh();
+    },
+    [refresh],
+  );
+
+  const updateCompany = useCallback(
+    (id: string, input: UpdateCompanyInput) => {
+      const existing = db.companies.getById(id);
+      if (!existing) throw new Error("Company not found.");
+      const code = input.code.trim();
+      if (!code) throw new Error("Company code is required.");
+      const duplicate = db.companies
+        .getAll()
+        .some((c) => c.id !== id && c.code.trim().toLowerCase() === code.toLowerCase());
+      if (duplicate) throw new Error(`Company code "${code}" is already in use.`);
+
+      db.companies.update(id, {
+        code,
+        name: input.name.trim(),
+        legalName: input.legalName?.trim() || undefined,
+        trn: input.trn?.trim() || undefined,
+        address: input.address?.trim() || undefined,
+        status: input.status,
+        notes: input.notes?.trim() || undefined,
+        updatedAt: new Date().toISOString(),
+      });
+      refresh();
+    },
+    [refresh],
+  );
+
+  // ---------------------------------------------------------------------
+  // Projects
+  // ---------------------------------------------------------------------
+
+  function validateProjectCode(code: string, companyId: string, excludeId?: string): string {
+    const trimmed = code.trim();
+    if (!trimmed) throw new Error("Project code is required.");
+    const duplicate = db.projects
+      .getAll()
+      .some(
+        (p) =>
+          p.id !== excludeId &&
+          p.companyId === companyId &&
+          p.code.trim().toLowerCase() === trimmed.toLowerCase(),
+      );
+    if (duplicate) throw new Error(`Project code "${trimmed}" is already used in this company.`);
+    return trimmed;
+  }
+
+  /** True once a project has any real accounting or contract activity — used to
+   * lock its identity fields and block destructive deletion (Phase 2B.1 rule). */
+  function projectHasActivity(projectId: string): boolean {
+    return (
+      db.expenses.getAll().some((e) => e.projectId === projectId) ||
+      db.advances.getAll().some((a) => a.projectId === projectId) ||
+      db.custodySettlements.getAll().some((s) => s.projectId === projectId) ||
+      db.subcontracts.getAll().some((c) => c.projectId === projectId) ||
+      db.journalEntries.getAll().some((e) => e.lines.some((l) => l.projectId === projectId))
+    );
+  }
+
   const addProject = useCallback(
-    (input: Omit<Project, "id">) => {
-      db.projects.create({ id: newId("proj"), ...input });
+    (input: NewProjectInput) => {
+      if (!input.name.trim()) throw new Error("Project name is required.");
+      const company = db.companies.getById(input.companyId);
+      if (!company) throw new Error("Select a valid company.");
+      const code = validateProjectCode(input.code, input.companyId);
+
+      const now = new Date().toISOString();
+      const project: Project = {
+        id: newId("proj"),
+        code,
+        name: input.name.trim(),
+        companyId: input.companyId,
+        status: input.status,
+        location: input.location?.trim() || undefined,
+        client: input.client?.trim() || undefined,
+        contractNumber: input.contractNumber?.trim() || undefined,
+        originalContractValue: input.originalContractValue,
+        startDate: input.startDate || undefined,
+        expectedCompletionDate: input.expectedCompletionDate || undefined,
+        budget: input.budget,
+        notes: input.notes?.trim() || undefined,
+        dedicatedBankAccountId: input.dedicatedBankAccountId || undefined,
+        dedicatedCashBoxId: input.dedicatedCashBoxId || undefined,
+        createdAt: now,
+        updatedAt: now,
+      };
+      db.projects.create(project);
+      refresh();
+    },
+    [refresh],
+  );
+
+  const updateProject = useCallback(
+    (id: string, input: NewProjectInput) => {
+      const existing = db.projects.getById(id);
+      if (!existing) throw new Error("Project not found.");
+      if (!input.name.trim()) throw new Error("Project name is required.");
+
+      const hasActivity = projectHasActivity(id);
+      if (hasActivity && (input.code !== existing.code || input.companyId !== existing.companyId)) {
+        throw new Error(
+          "This project already has accounting activity — its project code and company cannot be changed.",
+        );
+      }
+
+      const company = db.companies.getById(input.companyId);
+      if (!company) throw new Error("Select a valid company.");
+      const code = validateProjectCode(input.code, input.companyId, id);
+
+      db.projects.update(id, {
+        code,
+        name: input.name.trim(),
+        companyId: input.companyId,
+        status: input.status,
+        location: input.location?.trim() || undefined,
+        client: input.client?.trim() || undefined,
+        contractNumber: input.contractNumber?.trim() || undefined,
+        originalContractValue: input.originalContractValue,
+        startDate: input.startDate || undefined,
+        expectedCompletionDate: input.expectedCompletionDate || undefined,
+        budget: input.budget,
+        notes: input.notes?.trim() || undefined,
+        dedicatedBankAccountId: input.dedicatedBankAccountId || undefined,
+        dedicatedCashBoxId: input.dedicatedCashBoxId || undefined,
+        updatedAt: new Date().toISOString(),
+      });
+      refresh();
+    },
+    [refresh],
+  );
+
+  const deleteProject = useCallback(
+    (id: string) => {
+      if (projectHasActivity(id)) {
+        throw new Error("This project has accounting activity and cannot be deleted. Close it instead.");
+      }
+      db.projects.remove(id);
+      refresh();
+    },
+    [refresh],
+  );
+
+  // ---------------------------------------------------------------------
+  // Treasury accounts
+  // ---------------------------------------------------------------------
+
+  const addTreasuryAccount = useCallback(
+    (input: NewTreasuryAccountInput) => {
+      const code = input.code.trim();
+      if (!code) throw new Error("Treasury account code is required.");
+      if (!input.name.trim()) throw new Error("Treasury account name is required.");
+      const company = db.companies.getById(input.companyId);
+      if (!company) throw new Error("Select a valid company.");
+      if (input.projectId) {
+        const project = db.projects.getById(input.projectId);
+        if (!project) throw new Error("Select a valid project.");
+        if (project.companyId !== input.companyId) {
+          throw new Error("A project-specific treasury account must belong to the project's own company.");
+        }
+      }
+      const duplicate = db.treasuryAccounts
+        .getAll()
+        .some((t) => t.companyId === input.companyId && t.code.trim().toLowerCase() === code.toLowerCase());
+      if (duplicate) throw new Error(`Treasury account code "${code}" is already in use for this company.`);
+
+      const glAccount = createTreasuryGlAccount(input.name.trim(), input.type);
+      const now = new Date().toISOString();
+      const account: TreasuryAccount = {
+        id: newId("treasury"),
+        companyId: input.companyId,
+        projectId: input.projectId || undefined,
+        code,
+        name: input.name.trim(),
+        type: input.type,
+        glAccountId: glAccount.id,
+        status: "ACTIVE",
+        bankName: input.bankName?.trim() || undefined,
+        accountReference: input.accountReference?.trim() || undefined,
+        notes: input.notes?.trim() || undefined,
+        createdAt: now,
+        updatedAt: now,
+      };
+      db.treasuryAccounts.create(account);
+      refresh();
+    },
+    [refresh],
+  );
+
+  const updateTreasuryAccount = useCallback(
+    (id: string, input: UpdateTreasuryAccountInput) => {
+      const existing = db.treasuryAccounts.getById(id);
+      if (!existing) throw new Error("Treasury account not found.");
+      const code = input.code.trim();
+      if (!code) throw new Error("Treasury account code is required.");
+      if (!input.name.trim()) throw new Error("Treasury account name is required.");
+      if (input.projectId) {
+        const project = db.projects.getById(input.projectId);
+        if (!project) throw new Error("Select a valid project.");
+        if (project.companyId !== input.companyId) {
+          throw new Error("A project-specific treasury account must belong to the project's own company.");
+        }
+      }
+      const duplicate = db.treasuryAccounts
+        .getAll()
+        .some(
+          (t) => t.id !== id && t.companyId === input.companyId && t.code.trim().toLowerCase() === code.toLowerCase(),
+        );
+      if (duplicate) throw new Error(`Treasury account code "${code}" is already in use for this company.`);
+
+      // glAccountId is deliberately never touched here — it's fixed at creation time
+      // (Phase 2B.1A) so editing a treasury account's name/type/company never changes
+      // the meaning of transactions already posted against its GL account.
+      db.treasuryAccounts.update(id, {
+        companyId: input.companyId,
+        projectId: input.projectId || undefined,
+        code,
+        name: input.name.trim(),
+        type: input.type,
+        status: input.status,
+        bankName: input.bankName?.trim() || undefined,
+        accountReference: input.accountReference?.trim() || undefined,
+        notes: input.notes?.trim() || undefined,
+        updatedAt: new Date().toISOString(),
+      });
       refresh();
     },
     [refresh],
@@ -323,6 +850,8 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
 
   const addCustodySettlement = useCallback(
     (input: NewCustodySettlementInput) => {
+      assertProjectAcceptsTransactions(input.projectId);
+
       const settlementNumber = `STL-${String(db.custodySettlements.getAll().length + 1).padStart(3, "0")}`;
       const settlement: CustodySettlement = {
         id: newId("settle"),
@@ -336,6 +865,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
         cashReturnAmount: input.cashReturnAmount,
         cashReturnDestinationType: input.cashReturnDestinationType,
         cashReturnOwnerId: input.cashReturnOwnerId,
+        cashReturnTreasuryAccountId: input.cashReturnTreasuryAccountId,
         createdAt: new Date().toISOString(),
       };
       db.custodySettlements.create(settlement);
@@ -389,7 +919,19 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
 
       let journalEntryId: string | undefined;
       if (settlement.cashReturnAmount > 0) {
-        const entry = postCashReturn(settlement, newId("je"), `STL-${settlement.id.slice(-6)}`);
+        const projectCompanyId = settlement.projectId
+          ? db.projects.getById(settlement.projectId)?.companyId
+          : undefined;
+        let resolved: ResolvedFundingSource | undefined;
+        if (settlement.cashReturnDestinationType === "TREASURY") {
+          resolved = resolveFundingSource("TREASURY", settlement.cashReturnTreasuryAccountId!, {
+            projectId: settlement.projectId,
+            companyId: projectCompanyId,
+          });
+        } else if (settlement.cashReturnDestinationType === "OWNER") {
+          resolved = resolveFundingSource("OWNER_CURRENT", settlement.cashReturnOwnerId!);
+        }
+        const entry = postCashReturn(settlement, resolved, newId("je"), `STL-${settlement.id.slice(-6)}`);
         db.journalEntries.create(entry);
         journalEntryId = entry.id;
       }
@@ -405,13 +947,212 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
   );
 
   // ---------------------------------------------------------------------
-  // Subcontractors
+  // Subcontractors — master data (Party.type === "SUBCONTRACTOR")
+  // ---------------------------------------------------------------------
+
+  const addSubcontractor = useCallback(
+    (input: NewSubcontractorInput) => {
+      if (!input.name.trim()) throw new Error("Subcontractor name is required.");
+      const code = input.code?.trim() || undefined;
+      if (code) {
+        const duplicate = db.parties
+          .getAll()
+          .some((p) => p.type === "SUBCONTRACTOR" && p.code?.trim().toLowerCase() === code.toLowerCase());
+        if (duplicate) throw new Error(`Subcontractor code "${code}" is already in use.`);
+      }
+
+      const party: Party = {
+        id: newId("sub"),
+        type: "SUBCONTRACTOR",
+        name: input.name.trim(),
+        code,
+        taxRegistrationNumber: input.taxRegistrationNumber?.trim() || undefined,
+        contactPerson: input.contactPerson?.trim() || undefined,
+        phone: input.phone?.trim() || undefined,
+        email: input.email?.trim() || undefined,
+        address: input.address?.trim() || undefined,
+        notes: input.notes?.trim() || undefined,
+        status: "ACTIVE",
+      };
+      db.parties.create(party);
+      refresh();
+    },
+    [refresh],
+  );
+
+  const updateSubcontractor = useCallback(
+    (id: string, input: UpdateSubcontractorInput) => {
+      const existing = db.parties.getById(id);
+      if (!existing || existing.type !== "SUBCONTRACTOR") throw new Error("Subcontractor not found.");
+      if (!input.name.trim()) throw new Error("Subcontractor name is required.");
+      const code = input.code?.trim() || undefined;
+      if (code) {
+        const duplicate = db.parties
+          .getAll()
+          .some(
+            (p) => p.id !== id && p.type === "SUBCONTRACTOR" && p.code?.trim().toLowerCase() === code.toLowerCase(),
+          );
+        if (duplicate) throw new Error(`Subcontractor code "${code}" is already in use.`);
+      }
+
+      db.parties.update(id, {
+        name: input.name.trim(),
+        code,
+        taxRegistrationNumber: input.taxRegistrationNumber?.trim() || undefined,
+        contactPerson: input.contactPerson?.trim() || undefined,
+        phone: input.phone?.trim() || undefined,
+        email: input.email?.trim() || undefined,
+        address: input.address?.trim() || undefined,
+        notes: input.notes?.trim() || undefined,
+        status: input.status,
+      });
+      refresh();
+    },
+    [refresh],
+  );
+
+  // ---------------------------------------------------------------------
+  // Subcontracts (contracts) — Phase 2B.2
+  // ---------------------------------------------------------------------
+
+  const addSubcontract = useCallback(
+    (input: NewSubcontractInput) => {
+      const project = db.projects.getById(input.projectId);
+      if (!project) throw new Error("Select a valid project.");
+      assertProjectAcceptsTransactions(input.projectId);
+
+      const subcontractor = db.parties.getById(input.subcontractorId);
+      if (!subcontractor || subcontractor.type !== "SUBCONTRACTOR") throw new Error("Select a valid subcontractor.");
+      if (subcontractor.status === "INACTIVE") {
+        throw new Error("This subcontractor is inactive and cannot be assigned a new contract. Reactivate it first.");
+      }
+
+      const contractNumber = validateContractNumber(input.contractNumber, input.projectId);
+      if (!input.scopeOfWork.trim()) throw new Error("Scope of work is required.");
+      if (input.originalContractValue < 0) throw new Error("Original contract value cannot be negative.");
+      if (addMoney(input.originalContractValue, input.approvedVariations) < 0) {
+        throw new Error("Approved variations cannot reduce the revised contract value below zero.");
+      }
+      if (input.retentionPercent < 0 || input.retentionPercent > 100) {
+        throw new Error("Retention percent must be between 0 and 100.");
+      }
+
+      const contract: Subcontract = {
+        id: newId("contract"),
+        projectId: input.projectId,
+        subcontractorId: input.subcontractorId,
+        contractNumber,
+        scopeOfWork: input.scopeOfWork.trim(),
+        originalContractValue: input.originalContractValue,
+        approvedVariations: input.approvedVariations,
+        retentionPercent: input.retentionPercent,
+        startDate: input.startDate || undefined,
+        endDate: input.endDate || undefined,
+        status: input.status,
+        notes: input.notes?.trim() || undefined,
+      };
+      db.subcontracts.create(contract);
+      refresh();
+    },
+    [refresh],
+  );
+
+  const updateSubcontract = useCallback(
+    (id: string, input: NewSubcontractInput) => {
+      const existing = db.subcontracts.getById(id);
+      if (!existing) throw new Error("Contract not found.");
+
+      const hasActivity = subcontractHasActivity(id);
+      if (
+        hasActivity &&
+        (input.subcontractorId !== existing.subcontractorId ||
+          input.projectId !== existing.projectId ||
+          input.contractNumber.trim() !== existing.contractNumber)
+      ) {
+        throw new Error(
+          "This contract already has accounting activity — its subcontractor, project, and contract number cannot be changed.",
+        );
+      }
+
+      const project = db.projects.getById(input.projectId);
+      if (!project) throw new Error("Select a valid project.");
+      const subcontractor = db.parties.getById(input.subcontractorId);
+      if (!subcontractor || subcontractor.type !== "SUBCONTRACTOR") throw new Error("Select a valid subcontractor.");
+      if (!hasActivity && subcontractor.status === "INACTIVE") {
+        throw new Error("This subcontractor is inactive and cannot be assigned a new contract. Reactivate it first.");
+      }
+
+      const contractNumber = validateContractNumber(input.contractNumber, input.projectId, id);
+      if (!input.scopeOfWork.trim()) throw new Error("Scope of work is required.");
+      if (input.originalContractValue < 0) throw new Error("Original contract value cannot be negative.");
+      const revisedValue = addMoney(input.originalContractValue, input.approvedVariations);
+      if (revisedValue < 0) {
+        throw new Error("Approved variations cannot reduce the revised contract value below zero.");
+      }
+      if (hasActivity) {
+        const certifiedToDate = contractCertifiedCost(db.journalEntries.getAll(), id);
+        if (revisedValue < certifiedToDate - 0.01) {
+          throw new Error(
+            `Revised contract value (${formatAED(revisedValue)}) cannot be reduced below work already certified (${formatAED(certifiedToDate)}).`,
+          );
+        }
+      }
+      if (input.retentionPercent < 0 || input.retentionPercent > 100) {
+        throw new Error("Retention percent must be between 0 and 100.");
+      }
+
+      db.subcontracts.update(id, {
+        projectId: input.projectId,
+        subcontractorId: input.subcontractorId,
+        contractNumber,
+        scopeOfWork: input.scopeOfWork.trim(),
+        originalContractValue: input.originalContractValue,
+        approvedVariations: input.approvedVariations,
+        retentionPercent: input.retentionPercent,
+        startDate: input.startDate || undefined,
+        endDate: input.endDate || undefined,
+        status: input.status,
+        notes: input.notes?.trim() || undefined,
+      });
+      refresh();
+    },
+    [refresh],
+  );
+
+  const deleteSubcontract = useCallback(
+    (id: string) => {
+      if (subcontractHasActivity(id)) {
+        throw new Error("This contract has accounting activity and cannot be deleted. Close it instead.");
+      }
+      db.subcontracts.remove(id);
+      refresh();
+    },
+    [refresh],
+  );
+
+  // ---------------------------------------------------------------------
+  // Subcontractor advances, certificates, payments
   // ---------------------------------------------------------------------
 
   const addSubcontractorAdvance = useCallback(
     (input: NewSubcontractorAdvanceInput) => {
       const contract = db.subcontracts.getById(input.contractId);
       if (!contract) throw new Error("Contract not found.");
+      assertProjectAcceptsTransactions(contract.projectId);
+      assertContractAcceptsTransactions(contract.id);
+
+      let resolved: ResolvedFundingSource | undefined;
+      if (input.paymentSourceType === "TREASURY") {
+        const projectCompanyId = db.projects.getById(contract.projectId)?.companyId;
+        resolved = resolveFundingSource("TREASURY", input.treasuryAccountId!, {
+          projectId: contract.projectId,
+          companyId: projectCompanyId,
+        });
+      } else if (input.paymentSourceType === "CUSTODIAN") {
+        resolved = resolveFundingSource("CUSTODIAN", input.paymentSourcePartyId!);
+      } else if (input.paymentSourceType === "OWNER") {
+        resolved = resolveFundingSource("OWNER_CURRENT", input.paymentSourcePartyId!);
+      }
 
       const advance: SubcontractorAdvance = {
         id: newId("subadv"),
@@ -420,6 +1161,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
         amount: input.amount,
         paymentSourceType: input.paymentSourceType,
         paymentSourcePartyId: input.paymentSourcePartyId,
+        treasuryAccountId: input.treasuryAccountId,
         paymentMethod: input.paymentMethod,
         reference: input.reference,
         notes: input.notes,
@@ -428,6 +1170,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
         advance,
         contract.subcontractorId,
         contract.projectId,
+        resolved,
         newId("je"),
         `SADV-${advance.id.slice(-6)}`,
       );
@@ -440,6 +1183,10 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
 
   const addCertificateDraft = useCallback(
     (input: CertificateFormInput) => {
+      const contract = db.subcontracts.getById(input.contractId);
+      if (!contract) throw new Error("Contract not found.");
+      assertProjectAcceptsTransactions(contract.projectId);
+      assertContractAcceptsTransactions(contract.id);
       const certificate = buildCertificateFromInput(input, newId("cert"), "DRAFT");
       db.subcontractorCertificates.create(certificate);
       refresh();
@@ -452,6 +1199,8 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
       const existing = db.subcontractorCertificates.getById(id);
       if (!existing) throw new Error("Certificate not found.");
       if (existing.status !== "DRAFT") throw new Error("Only draft certificates can be edited.");
+      assertProjectAcceptsTransactions(existing.projectId);
+      assertContractAcceptsTransactions(existing.contractId);
       const updated = buildCertificateFromInput(input, id, "DRAFT");
       db.subcontractorCertificates.update(id, updated);
       refresh();
@@ -464,12 +1213,16 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
       const cert = db.subcontractorCertificates.getById(id);
       if (!cert) throw new Error("Certificate not found.");
       if (cert.status !== "DRAFT") throw new Error("This certificate has already been approved.");
+      assertProjectAcceptsTransactions(cert.projectId);
 
       const contract = db.subcontracts.getById(cert.contractId);
       if (!contract) throw new Error("Contract not found.");
+      assertContractAcceptsTransactions(contract.id);
 
       const entries = db.journalEntries.getAll();
-      const availableAdvanceBalance = subcontractorAdvanceBalance(entries, cert.subcontractorId, cert.projectId);
+      // Contract-scoped (Phase 2B.2), not party+project-scoped — two contracts for the same
+      // subcontractor must never share an advance balance, even on the same project.
+      const availableAdvanceBalance = contractAdvanceBalance(entries, contract.id);
       const revisedContractValue = addMoney(contract.originalContractValue, contract.approvedVariations);
       const deductionAmounts = cert.deductionLines.map((d) => d.amount);
 
@@ -538,18 +1291,39 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
         );
       }
 
+      let resolved: ResolvedFundingSource | undefined;
+      if (input.sourceType === "TREASURY") {
+        const projectCompanyId = db.projects.getById(cert.projectId)?.companyId;
+        resolved = resolveFundingSource("TREASURY", input.treasuryAccountId!, {
+          projectId: cert.projectId,
+          companyId: projectCompanyId,
+        });
+      } else if (input.sourceType === "CUSTODIAN") {
+        resolved = resolveFundingSource("CUSTODIAN", input.sourcePartyId!);
+      } else if (input.sourceType === "OWNER") {
+        resolved = resolveFundingSource("OWNER_CURRENT", input.sourcePartyId!);
+      }
+
       const payment: SubcontractorPaymentTransaction = {
         id: newId("subpay"),
         date: input.date,
         subcontractorId: cert.subcontractorId,
         certificateId: input.certificateId,
+        contractId: cert.contractId,
         amount: input.amount,
         sourceType: input.sourceType,
         sourcePartyId: input.sourcePartyId,
+        treasuryAccountId: input.treasuryAccountId,
         reference: input.reference,
         notes: input.notes,
       };
-      const entry = postSubcontractorPayment(payment, newId("je"), `SPAY-${payment.id.slice(-6)}`);
+      const entry = postSubcontractorPayment(
+        payment,
+        cert.projectId,
+        resolved,
+        newId("je"),
+        `SPAY-${payment.id.slice(-6)}`,
+      );
       db.subcontractorPayments.create(payment);
       db.journalEntries.create(entry);
 
@@ -568,10 +1342,21 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
       addExpense,
       addAdvance,
       addSupplierPayment,
+      addCompany,
+      updateCompany,
       addProject,
+      updateProject,
+      deleteProject,
+      addTreasuryAccount,
+      updateTreasuryAccount,
       addCustodySettlement,
       discardDraftSettlement,
       finalizeCustodySettlement,
+      addSubcontractor,
+      updateSubcontractor,
+      addSubcontract,
+      updateSubcontract,
+      deleteSubcontract,
       addSubcontractorAdvance,
       addCertificateDraft,
       updateCertificateDraft,
@@ -583,10 +1368,21 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
       addExpense,
       addAdvance,
       addSupplierPayment,
+      addCompany,
+      updateCompany,
       addProject,
+      updateProject,
+      deleteProject,
+      addTreasuryAccount,
+      updateTreasuryAccount,
       addCustodySettlement,
       discardDraftSettlement,
       finalizeCustodySettlement,
+      addSubcontractor,
+      updateSubcontractor,
+      addSubcontract,
+      updateSubcontract,
+      deleteSubcontract,
       addSubcontractorAdvance,
       addCertificateDraft,
       updateCertificateDraft,

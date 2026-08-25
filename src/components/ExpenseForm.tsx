@@ -8,10 +8,11 @@ import type { PaidFromType, PaymentMethod, VatMode } from "../domain/types";
 const today = () => new Date().toISOString().slice(0, 10);
 
 export function ExpenseForm({ onDone }: { onDone: () => void }) {
-  const { projects, parties, categories, advances, addExpense } = useAppData();
+  const { projects, parties, categories, advances, treasuryAccounts, addExpense } = useAppData();
   const owners = useMemo(() => parties.filter((p) => p.type === "OWNER"), [parties]);
   const custodians = useMemo(() => parties.filter((p) => p.type === "CUSTODIAN"), [parties]);
   const suppliers = useMemo(() => parties.filter((p) => p.type === "SUPPLIER"), [parties]);
+  const openProjects = useMemo(() => projects.filter((p) => p.status !== "CLOSED"), [projects]);
 
   const [date, setDate] = useState(today());
   const [projectId, setProjectId] = useState("");
@@ -24,11 +25,28 @@ export function ExpenseForm({ onDone }: { onDone: () => void }) {
   const [manualVatAmount, setManualVatAmount] = useState("");
   const [paidFromType, setPaidFromType] = useState<PaidFromType>("CUSTODIAN");
   const [paidFromPartyId, setPaidFromPartyId] = useState("");
+  const [treasuryAccountId, setTreasuryAccountId] = useState("");
   const [advanceId, setAdvanceId] = useState("");
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("CASH");
   const [hasInvoice, setHasInvoice] = useState(false);
   const [notes, setNotes] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitError, setSubmitError] = useState("");
+
+  const selectedProject = projects.find((p) => p.id === projectId);
+
+  // Company-wide treasury accounts are always eligible; project-specific ones only
+  // for their own project — never another project's dedicated cash box (Phase 2B.1A).
+  const eligibleTreasuryAccounts = useMemo(
+    () =>
+      treasuryAccounts.filter((t) => {
+        if (t.status !== "ACTIVE") return false;
+        if (selectedProject && t.companyId !== selectedProject.companyId) return false;
+        if (t.projectId && t.projectId !== projectId) return false;
+        return true;
+      }),
+    [treasuryAccounts, selectedProject, projectId],
+  );
 
   const custodianAdvances = useMemo(
     () =>
@@ -50,6 +68,11 @@ export function ExpenseForm({ onDone }: { onDone: () => void }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paidFromPartyId]);
 
+  useEffect(() => {
+    setTreasuryAccountId(eligibleTreasuryAccounts[0]?.id ?? "");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paidFromType, projectId]);
+
   const net = Number(netAmount);
   const vatPreview = calcVat({
     netAmount: Number.isFinite(net) ? net : 0,
@@ -60,6 +83,7 @@ export function ExpenseForm({ onDone }: { onDone: () => void }) {
   const partyOptions = paidFromType === "CUSTODIAN" ? custodians : paidFromType === "OWNER" ? owners : [];
   const needsParty = paidFromType === "CUSTODIAN" || paidFromType === "OWNER";
   const needsSupplier = paidFromType === "SUPPLIER_CREDIT";
+  const needsTreasury = paidFromType === "TREASURY";
 
   function validate(): Record<string, string> {
     const e: Record<string, string> = {};
@@ -72,6 +96,7 @@ export function ExpenseForm({ onDone }: { onDone: () => void }) {
     }
     if (needsParty && !paidFromPartyId) e.paidFromPartyId = "Select who paid";
     if (needsSupplier && !supplierId) e.supplierId = "Select the supplier";
+    if (needsTreasury && !treasuryAccountId) e.treasuryAccountId = "Select the cash/bank account";
     if (hasInvoice && !invoiceNumber.trim()) e.invoiceNumber = "Enter the invoice number";
     return e;
   }
@@ -80,6 +105,7 @@ export function ExpenseForm({ onDone }: { onDone: () => void }) {
     ev.preventDefault();
     const validation = validate();
     setErrors(validation);
+    setSubmitError("");
     if (Object.keys(validation).length > 0) return;
 
     const input: NewExpenseInput = {
@@ -94,13 +120,18 @@ export function ExpenseForm({ onDone }: { onDone: () => void }) {
       manualVatAmount: vatMode === "MANUAL" ? Number(manualVatAmount) : undefined,
       paidFromType,
       paidFromPartyId: needsParty ? paidFromPartyId : undefined,
+      treasuryAccountId: needsTreasury ? treasuryAccountId : undefined,
       advanceId: paidFromType === "CUSTODIAN" && advanceId ? advanceId : undefined,
       paymentMethod,
       hasInvoice,
       notes: notes.trim() || undefined,
     };
-    addExpense(input);
-    onDone();
+    try {
+      addExpense(input);
+      onDone();
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : "Could not save this expense.");
+    }
   }
 
   return (
@@ -133,7 +164,7 @@ export function ExpenseForm({ onDone }: { onDone: () => void }) {
         <Field label="Project (optional)">
           <select value={projectId} onChange={(e) => setProjectId(e.target.value)} className={inputClassName}>
             <option value="">— Company expense —</option>
-            {projects.map((p) => (
+            {openProjects.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.name}
               </option>
@@ -200,16 +231,13 @@ export function ExpenseForm({ onDone }: { onDone: () => void }) {
               const next = e.target.value as PaidFromType;
               setPaidFromType(next);
               setPaidFromPartyId("");
-              if (next === "CASH") setPaymentMethod("CASH");
-              if (next === "BANK") setPaymentMethod("BANK");
             }}
             className={inputClassName}
           >
             <option value="CUSTODIAN">Custodian Advance</option>
-            <option value="OWNER">Owner (paid directly)</option>
+            <option value="OWNER">Owner Current Account</option>
             <option value="SUPPLIER_CREDIT">Supplier Credit (pay later)</option>
-            <option value="CASH">Company Cash</option>
-            <option value="BANK">Company Bank</option>
+            <option value="TREASURY">Cash / Bank (Treasury)</option>
           </select>
         </Field>
         {needsParty ? (
@@ -227,6 +255,21 @@ export function ExpenseForm({ onDone }: { onDone: () => void }) {
               {partyOptions.map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.name}
+                </option>
+              ))}
+            </select>
+          </Field>
+        ) : needsTreasury ? (
+          <Field label="Cash / Bank Account" required error={errors.treasuryAccountId}>
+            <select
+              value={treasuryAccountId}
+              onChange={(e) => setTreasuryAccountId(e.target.value)}
+              className={inputClassName}
+            >
+              <option value="">Select…</option>
+              {eligibleTreasuryAccounts.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.name}
                 </option>
               ))}
             </select>
@@ -302,6 +345,8 @@ export function ExpenseForm({ onDone }: { onDone: () => void }) {
           rows={2}
         />
       </Field>
+
+      {submitError && <p className="text-xs text-rose-500">{submitError}</p>}
 
       <div className="flex justify-end gap-2 pt-2">
         <button

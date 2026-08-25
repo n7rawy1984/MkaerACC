@@ -5,25 +5,74 @@
 
 export type ID = string;
 
-export type ProjectStatus = "ACTIVE" | "ON_HOLD" | "COMPLETED" | "CANCELLED";
+export type ProjectStatus = "PLANNING" | "ACTIVE" | "ON_HOLD" | "COMPLETED" | "CLOSED";
+
+export type CompanyStatus = "ACTIVE" | "INACTIVE";
 
 export interface Company {
   id: ID;
+  code: string;
   name: string;
+  legalName?: string;
   trn?: string;
   address?: string;
+  status: CompanyStatus;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Project {
   id: ID;
   code: string;
   name: string;
+  companyId: ID;
   status: ProjectStatus;
   location?: string;
   client?: string;
-  startDate: string;
+  contractNumber?: string;
+  originalContractValue?: number;
+  startDate?: string;
+  expectedCompletionDate?: string;
   budget?: number;
   notes?: string;
+  /** Optional dedicated treasury accounts for this project — see TreasuryAccount. Most
+   * projects have neither; funding still flows through the company's shared treasury. */
+  dedicatedBankAccountId?: ID;
+  dedicatedCashBoxId?: ID;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ============================================================================
+// PHASE 2B.1 — Treasury Foundation
+// ============================================================================
+
+export type TreasuryAccountType = "CASH" | "PETTY_CASH" | "BANK" | "PROJECT_CASH_BOX" | "PROJECT_BANK";
+export type TreasuryAccountStatus = "ACTIVE" | "INACTIVE";
+
+/**
+ * A named, selectable funding source (Main Cash, Petty Cash, Main Bank, or a
+ * project-specific box/account). Every treasury account maps to one of the
+ * existing pooled GL control accounts (Cash or Bank) via glAccountId — this
+ * phase introduces treasury accounts as real master data and as the funding
+ * source for custodian advances, without splitting the chart of accounts
+ * into one GL account per treasury account (see accounting/chartOfAccounts.ts).
+ */
+export interface TreasuryAccount {
+  id: ID;
+  companyId: ID;
+  projectId?: ID;
+  code: string;
+  name: string;
+  type: TreasuryAccountType;
+  glAccountId: ID;
+  status: TreasuryAccountStatus;
+  bankName?: string;
+  accountReference?: string;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export type PartyType =
@@ -34,14 +83,24 @@ export type PartyType =
   | "SUBCONTRACTOR"
   | "OTHER";
 
+export type PartyStatus = "ACTIVE" | "INACTIVE";
+
 export interface Party {
   id: ID;
+  code?: string;
   name: string;
   type: PartyType;
   phone?: string;
+  email?: string;
+  address?: string;
   taxRegistrationNumber?: string;
   contactPerson?: string;
   notes?: string;
+  /** Phase 2B.2 — optional; undefined is treated as ACTIVE (backward-compatible default) for
+   * every pre-existing party record. Only Subcontractors currently expose editable status in the
+   * UI (an inactive subcontractor keeps full accounting history but cannot be selected for a new
+   * subcontract), but the field is generic on Party rather than duplicated per type. */
+  status?: PartyStatus;
 }
 
 export interface ExpenseCategory {
@@ -64,7 +123,9 @@ export interface Account {
   requiresParty?: boolean;
 }
 
-export type PaidFromType = "CUSTODIAN" | "OWNER" | "CASH" | "BANK" | "SUPPLIER_CREDIT";
+/** CASH/BANK are legacy values (Phase 2B.1A no longer produces them from the Expense form —
+ * see TREASURY) kept only so historical ExpenseTransaction records remain valid and readable. */
+export type PaidFromType = "CUSTODIAN" | "OWNER" | "TREASURY" | "CASH" | "BANK" | "SUPPLIER_CREDIT";
 
 export type PaymentMethod = "CASH" | "BANK" | "TRANSFER" | "CHEQUE" | "OTHER";
 
@@ -85,6 +146,8 @@ export interface ExpenseTransaction {
   totalAmount: number;
   paidFromType: PaidFromType;
   paidFromPartyId?: ID;
+  /** Set only when paidFromType is TREASURY — the specific TreasuryAccount used. */
+  treasuryAccountId?: ID;
   /** Optional link to the specific AdvanceTransaction this custodian spend draws down. Purely
    * informational — the custodian's balance is always the pooled total, never per-advance. */
   advanceId?: ID;
@@ -94,19 +157,29 @@ export interface ExpenseTransaction {
   status: ExpenseStatus;
 }
 
+/** Where a custodian advance's cash actually came from — a treasury account
+ * (company/project cash or bank) or an owner's personal funds (owner current
+ * account). This is the "Funding Source" concept from Phase 2B.1: it is
+ * always distinct from the Project dimension, which only records which job
+ * the advance was given for, never where the GL money physically sits. */
+export type AdvanceFundingSourceType = "TREASURY" | "OWNER_CURRENT";
+
 export interface AdvanceTransaction {
   id: ID;
   date: string;
-  fromPartyId: ID;
   custodianId: ID;
   amount: number;
   projectId?: ID;
+  fundingSourceType: AdvanceFundingSourceType;
+  /** TreasuryAccount id when fundingSourceType is TREASURY, Party (OWNER) id when OWNER_CURRENT. */
+  fundingSourceId: ID;
   paymentMethod: PaymentMethod;
   reference?: string;
   notes?: string;
 }
 
-export type SupplierPaymentSourceType = "CASH" | "BANK" | "CUSTODIAN" | "OWNER";
+/** CASH/BANK are legacy values, kept only for historical records — see TREASURY. */
+export type SupplierPaymentSourceType = "TREASURY" | "CUSTODIAN" | "OWNER" | "CASH" | "BANK";
 
 export interface SupplierPaymentTransaction {
   id: ID;
@@ -115,6 +188,8 @@ export interface SupplierPaymentTransaction {
   amount: number;
   sourceType: SupplierPaymentSourceType;
   sourcePartyId?: ID;
+  /** Set only when sourceType is TREASURY — the specific TreasuryAccount used. */
+  treasuryAccountId?: ID;
   reference?: string;
   notes?: string;
 }
@@ -135,6 +210,12 @@ export interface JournalLine {
   credit: number;
   projectId?: ID;
   partyId?: ID;
+  /** Phase 2B.2 — the Subcontract (contract) this line belongs to, when applicable. Additive
+   * dimension alongside partyId/projectId so subcontractor payable/retention/advance balances can
+   * be scoped per contract, not just per subcontractor party — see accounting/ledger.ts. Absent on
+   * every non-subcontractor line, and on subcontractor-related lines whose historical contract
+   * could not be determined with certainty during migration ("legacy party-scoped activity"). */
+  contractId?: ID;
 }
 
 export interface JournalEntry {
@@ -152,7 +233,8 @@ export interface JournalEntry {
 // ============================================================================
 
 export type SettlementStatus = "DRAFT" | "SETTLED";
-export type CashReturnDestinationType = "CASH" | "BANK" | "OWNER";
+/** CASH/BANK are legacy values, kept only for historical/finalized records — see TREASURY. */
+export type CashReturnDestinationType = "TREASURY" | "OWNER" | "CASH" | "BANK";
 
 /**
  * A settlement is a reconciliation/document grouping over expenses already
@@ -172,6 +254,8 @@ export interface CustodySettlement {
   cashReturnAmount: number;
   cashReturnDestinationType?: CashReturnDestinationType;
   cashReturnOwnerId?: ID;
+  /** Set only when cashReturnDestinationType is TREASURY — the specific TreasuryAccount used. */
+  cashReturnTreasuryAccountId?: ID;
   createdAt: string;
   settledAt?: string;
   /** Journal entry for the cash return, set only once, on finalization. */
@@ -199,7 +283,8 @@ export interface Subcontract {
   notes?: string;
 }
 
-export type SubcontractorFundingSourceType = "CASH" | "BANK" | "OWNER" | "CUSTODIAN";
+/** CASH/BANK are legacy values, kept only for historical records — see TREASURY. */
+export type SubcontractorFundingSourceType = "TREASURY" | "OWNER" | "CUSTODIAN" | "CASH" | "BANK";
 
 /** An advance to a subcontractor is an asset (recoverable through future
  * certificates) — it is never project cost until a certificate recovers it. */
@@ -210,6 +295,8 @@ export interface SubcontractorAdvance {
   amount: number;
   paymentSourceType: SubcontractorFundingSourceType;
   paymentSourcePartyId?: ID;
+  /** Set only when paymentSourceType is TREASURY — the specific TreasuryAccount used. */
+  treasuryAccountId?: ID;
   paymentMethod: PaymentMethod;
   reference?: string;
   notes?: string;
@@ -268,7 +355,8 @@ export interface SubcontractorCertificate {
   approvedAt?: string;
 }
 
-export type SubcontractorPaymentSourceType = "CASH" | "BANK" | "CUSTODIAN" | "OWNER";
+/** CASH/BANK are legacy values, kept only for historical records — see TREASURY. */
+export type SubcontractorPaymentSourceType = "TREASURY" | "CUSTODIAN" | "OWNER" | "CASH" | "BANK";
 
 /** Payments are scoped to one certificate (not pooled per subcontractor) so
  * that certificate payment status (PARTIALLY_PAID / PAID) can be tracked. */
@@ -277,9 +365,16 @@ export interface SubcontractorPaymentTransaction {
   date: string;
   subcontractorId: ID;
   certificateId: ID;
+  /** Phase 2B.2 — derived from the certificate's contract at creation time (contractId is
+   * immutable on a certificate, so this is a safe denormalization for contract-scoped display and
+   * journal-line tagging). Optional only so pre-2B.2 historical records without a known contract
+   * link stay valid — backfilled deterministically wherever possible, see storage/migrations.ts. */
+  contractId?: ID;
   amount: number;
   sourceType: SubcontractorPaymentSourceType;
   sourcePartyId?: ID;
+  /** Set only when sourceType is TREASURY — the specific TreasuryAccount used. */
+  treasuryAccountId?: ID;
   reference?: string;
   notes?: string;
 }

@@ -9,9 +9,11 @@ import type { CashReturnDestinationType } from "../domain/types";
 const today = () => new Date().toISOString().slice(0, 10);
 
 export function CustodySettlementForm({ custodianId, onDone }: { custodianId: string; onDone: () => void }) {
-  const { parties, projects, expenses, custodySettlements, journalEntries, addCustodySettlement } = useAppData();
+  const { parties, projects, expenses, custodySettlements, journalEntries, treasuryAccounts, addCustodySettlement } =
+    useAppData();
   const owners = useMemo(() => parties.filter((p) => p.type === "OWNER"), [parties]);
   const custodian = parties.find((p) => p.id === custodianId);
+  const openProjects = useMemo(() => projects.filter((p) => p.status !== "CLOSED"), [projects]);
 
   const claimedExpenseIds = useMemo(
     () => new Set(custodySettlements.flatMap((s) => s.selectedExpenseIds)),
@@ -33,10 +35,24 @@ export function CustodySettlementForm({ custodianId, onDone }: { custodianId: st
   const [projectId, setProjectId] = useState("");
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [cashReturnAmount, setCashReturnAmount] = useState("");
-  const [cashReturnDestinationType, setCashReturnDestinationType] = useState<CashReturnDestinationType>("CASH");
+  const [cashReturnDestinationType, setCashReturnDestinationType] = useState<CashReturnDestinationType>("TREASURY");
   const [cashReturnOwnerId, setCashReturnOwnerId] = useState(owners[0]?.id ?? "");
+  const [cashReturnTreasuryAccountId, setCashReturnTreasuryAccountId] = useState("");
   const [notes, setNotes] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitError, setSubmitError] = useState("");
+
+  const selectedProject = projects.find((p) => p.id === projectId);
+  const eligibleTreasuryAccounts = useMemo(
+    () =>
+      treasuryAccounts.filter((t) => {
+        if (t.status !== "ACTIVE") return false;
+        if (selectedProject && t.companyId !== selectedProject.companyId) return false;
+        if (t.projectId && t.projectId !== projectId) return false;
+        return true;
+      }),
+    [treasuryAccounts, selectedProject, projectId],
+  );
 
   const selectedTotal = useMemo(
     () =>
@@ -69,6 +85,9 @@ export function CustodySettlementForm({ custodianId, onDone }: { custodianId: st
     if (returnAmount > 0 && cashReturnDestinationType === "OWNER" && !cashReturnOwnerId) {
       e.cashReturnOwnerId = "Select which owner receives the cash";
     }
+    if (returnAmount > 0 && cashReturnDestinationType === "TREASURY" && !cashReturnTreasuryAccountId) {
+      e.cashReturnTreasuryAccountId = "Select the cash/bank account";
+    }
     return e;
   }
 
@@ -76,6 +95,7 @@ export function CustodySettlementForm({ custodianId, onDone }: { custodianId: st
     ev.preventDefault();
     const validation = validate();
     setErrors(validation);
+    setSubmitError("");
     if (Object.keys(validation).length > 0) return;
 
     const input: NewCustodySettlementInput = {
@@ -87,9 +107,15 @@ export function CustodySettlementForm({ custodianId, onDone }: { custodianId: st
       cashReturnAmount: returnAmount,
       cashReturnDestinationType: returnAmount > 0 ? cashReturnDestinationType : undefined,
       cashReturnOwnerId: returnAmount > 0 && cashReturnDestinationType === "OWNER" ? cashReturnOwnerId : undefined,
+      cashReturnTreasuryAccountId:
+        returnAmount > 0 && cashReturnDestinationType === "TREASURY" ? cashReturnTreasuryAccountId : undefined,
     };
-    addCustodySettlement(input);
-    onDone();
+    try {
+      addCustodySettlement(input);
+      onDone();
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : "Could not save this settlement.");
+    }
   }
 
   return (
@@ -112,7 +138,7 @@ export function CustodySettlementForm({ custodianId, onDone }: { custodianId: st
         <Field label="Project (optional)">
           <select value={projectId} onChange={(e) => setProjectId(e.target.value)} className={inputClassName}>
             <option value="">— All projects —</option>
-            {projects.map((p) => (
+            {openProjects.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.name}
               </option>
@@ -170,13 +196,29 @@ export function CustodySettlementForm({ custodianId, onDone }: { custodianId: st
               onChange={(e) => setCashReturnDestinationType(e.target.value as CashReturnDestinationType)}
               className={inputClassName}
             >
-              <option value="CASH">Company Cash</option>
-              <option value="BANK">Company Bank</option>
+              <option value="TREASURY">Cash / Bank (Treasury)</option>
               <option value="OWNER">Owner Directly</option>
             </select>
           </Field>
         )}
       </div>
+
+      {returnAmount > 0 && cashReturnDestinationType === "TREASURY" && (
+        <Field label="Cash / Bank Account" required error={errors.cashReturnTreasuryAccountId}>
+          <select
+            value={cashReturnTreasuryAccountId}
+            onChange={(e) => setCashReturnTreasuryAccountId(e.target.value)}
+            className={inputClassName}
+          >
+            <option value="">Select…</option>
+            {eligibleTreasuryAccounts.map((t) => (
+              <option key={t.id} value={t.id}>
+                {t.name}
+              </option>
+            ))}
+          </select>
+        </Field>
+      )}
 
       {returnAmount > 0 && cashReturnDestinationType === "OWNER" && (
         <Field label="Owner" required error={errors.cashReturnOwnerId}>
@@ -202,6 +244,8 @@ export function CustodySettlementForm({ custodianId, onDone }: { custodianId: st
         This creates a <span className="font-semibold text-slate-700">draft</span> settlement. Review it, then
         finalize it from the Advances &amp; Settlements page — a finalized settlement can no longer be edited.
       </div>
+
+      {submitError && <p className="text-xs text-rose-500">{submitError}</p>}
 
       <div className="flex justify-end gap-2 pt-2">
         <button

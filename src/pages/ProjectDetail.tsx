@@ -1,32 +1,36 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, ArrowRight, HardHat } from "lucide-react";
+import { ArrowLeft, ArrowRight, HardHat, Pencil } from "lucide-react";
 import { useAppData } from "../state/AppDataContext";
 import { PageHeader } from "../components/layout/AppShell";
 import { Card, CardHeader } from "../components/ui/Card";
 import { Badge } from "../components/ui/Badge";
 import { StatCard } from "../components/ui/StatCard";
+import { Modal } from "../components/ui/Modal";
+import { ProjectForm } from "../components/ProjectForm";
 import { formatAED } from "../domain/money";
 import { formatDate, indexById } from "../domain/utils";
 import { Receipt, FileWarning, Landmark, Hash, ListChecks } from "lucide-react";
 import {
+  contractPayableBalance,
+  contractRetentionHeld,
   costByCategory,
   directExpenseCost,
   expensesWithoutInvoice,
   subcontractorCertifiedCost,
-  subcontractorPayableBalance,
-  subcontractorRetentionHeld,
   totalInputVat,
   totalProjectCost,
 } from "../accounting/ledger";
 
 export function ProjectDetail() {
   const { id } = useParams<{ id: string }>();
-  const { projects, expenses, categories, journalEntries, subcontracts, parties } = useAppData();
+  const { projects, companies, expenses, categories, journalEntries, subcontracts, parties } = useAppData();
+  const [showEditForm, setShowEditForm] = useState(false);
 
   const project = projects.find((p) => p.id === id);
   const categoriesById = useMemo(() => indexById(categories), [categories]);
   const partiesById = useMemo(() => indexById(parties), [parties]);
+  const companiesById = useMemo(() => indexById(companies), [companies]);
 
   const projectExpenses = useMemo(
     () => expenses.filter((e) => e.projectId === id).sort((a, b) => (a.date < b.date ? 1 : -1)),
@@ -44,21 +48,15 @@ export function ProjectDetail() {
   );
   const directCost = useMemo(() => directExpenseCost(journalEntries, id), [journalEntries, id]);
   const subCertifiedCost = useMemo(() => subcontractorCertifiedCost(journalEntries, id), [journalEntries, id]);
+  // Contract-scoped (Phase 2B.2), summed per contract on this project — never party-scoped, so two
+  // contracts for the same subcontractor on this project can never double-count each other.
   const subPayables = useMemo(
-    () =>
-      projectSubcontracts.reduce(
-        (sum, c) => sum + subcontractorPayableBalance(journalEntries, c.subcontractorId),
-        0,
-      ),
+    () => projectSubcontracts.reduce((sum, c) => sum + contractPayableBalance(journalEntries, c.id), 0),
     [projectSubcontracts, journalEntries],
   );
   const subRetention = useMemo(
-    () =>
-      projectSubcontracts.reduce(
-        (sum, c) => sum + subcontractorRetentionHeld(journalEntries, c.subcontractorId, id),
-        0,
-      ),
-    [projectSubcontracts, journalEntries, id],
+    () => projectSubcontracts.reduce((sum, c) => sum + contractRetentionHeld(journalEntries, c.id), 0),
+    [projectSubcontracts, journalEntries],
   );
 
   if (!project) {
@@ -82,8 +80,26 @@ export function ProjectDetail() {
       </Link>
       <PageHeader
         title={project.name}
-        subtitle={`${project.code} · ${project.client ?? "—"} · ${project.location ?? "—"} · started ${formatDate(project.startDate)}`}
+        subtitle={`${project.code} · ${companiesById[project.companyId]?.name ?? "—"} · ${project.client ?? "—"} · ${project.location ?? "—"}${
+          project.startDate ? ` · started ${formatDate(project.startDate)}` : ""
+        }${project.contractNumber ? ` · Contract ${project.contractNumber}` : ""}`}
+        action={
+          <button
+            onClick={() => setShowEditForm(true)}
+            className="flex items-center gap-2 rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50"
+          >
+            <Pencil size={15} /> Edit Project
+          </button>
+        }
       />
+
+      {project.status === "CLOSED" && (
+        <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">
+          This project is closed — it cannot accept new expenses, advances, subcontractor advances, or
+          certificates. Reopen it (Edit Project → Status) to resume operational activity. Historical activity
+          below remains fully visible.
+        </div>
+      )}
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <StatCard
@@ -149,7 +165,7 @@ export function ProjectDetail() {
             {projectSubcontracts.map((c) => (
               <Link
                 key={c.id}
-                to={`/subcontractors/${c.id}`}
+                to={`/subcontracts/${c.id}`}
                 className="flex items-center justify-between px-5 py-3 hover:bg-slate-50"
               >
                 <div className="flex items-center gap-3">
@@ -207,6 +223,12 @@ export function ProjectDetail() {
           </div>
         </Card>
       </div>
+
+      {showEditForm && (
+        <Modal title="Edit Project" onClose={() => setShowEditForm(false)} width="max-w-2xl">
+          <ProjectForm project={project} onDone={() => setShowEditForm(false)} />
+        </Modal>
+      )}
     </div>
   );
 }

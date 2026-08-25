@@ -12,18 +12,25 @@ export function SupplierPaymentForm({
   supplierId: string;
   onDone: () => void;
 }) {
-  const { parties, addSupplierPayment } = useAppData();
+  const { parties, treasuryAccounts, addSupplierPayment } = useAppData();
   const owners = useMemo(() => parties.filter((p) => p.type === "OWNER"), [parties]);
   const custodians = useMemo(() => parties.filter((p) => p.type === "CUSTODIAN"), [parties]);
+  const activeTreasuryAccounts = useMemo(
+    () => treasuryAccounts.filter((t) => t.status === "ACTIVE" && !t.projectId),
+    [treasuryAccounts],
+  );
 
   const [date, setDate] = useState(today());
   const [amount, setAmount] = useState("");
-  const [sourceType, setSourceType] = useState<SupplierPaymentSourceType>("BANK");
+  const [sourceType, setSourceType] = useState<SupplierPaymentSourceType>("TREASURY");
   const [sourcePartyId, setSourcePartyId] = useState("");
+  const [treasuryAccountId, setTreasuryAccountId] = useState(activeTreasuryAccounts[0]?.id ?? "");
   const [reference, setReference] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitError, setSubmitError] = useState("");
 
   const needsParty = sourceType === "CUSTODIAN" || sourceType === "OWNER";
+  const needsTreasury = sourceType === "TREASURY";
   const partyOptions = sourceType === "CUSTODIAN" ? custodians : owners;
 
   function validate(): Record<string, string> {
@@ -31,6 +38,7 @@ export function SupplierPaymentForm({
     const n = Number(amount);
     if (!Number.isFinite(n) || n <= 0) e.amount = "Enter an amount greater than zero";
     if (needsParty && !sourcePartyId) e.sourcePartyId = "Select who paid";
+    if (needsTreasury && !treasuryAccountId) e.treasuryAccountId = "Select the cash/bank account";
     return e;
   }
 
@@ -38,6 +46,7 @@ export function SupplierPaymentForm({
     ev.preventDefault();
     const validation = validate();
     setErrors(validation);
+    setSubmitError("");
     if (Object.keys(validation).length > 0) return;
 
     const input: NewSupplierPaymentInput = {
@@ -46,10 +55,15 @@ export function SupplierPaymentForm({
       amount: Number(amount),
       sourceType,
       sourcePartyId: needsParty ? sourcePartyId : undefined,
+      treasuryAccountId: needsTreasury ? treasuryAccountId : undefined,
       reference: reference.trim() || undefined,
     };
-    addSupplierPayment(input);
-    onDone();
+    try {
+      addSupplierPayment(input);
+      onDone();
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : "Could not record this payment.");
+    }
   }
 
   return (
@@ -80,12 +94,24 @@ export function SupplierPaymentForm({
           }}
           className={inputClassName}
         >
-          <option value="BANK">Company Bank</option>
-          <option value="CASH">Company Cash</option>
+          <option value="TREASURY">Cash / Bank (Treasury)</option>
           <option value="CUSTODIAN">Custodian</option>
-          <option value="OWNER">Owner</option>
+          <option value="OWNER">Owner Current Account</option>
         </select>
       </Field>
+
+      {needsTreasury && (
+        <Field label="Cash / Bank Account" required error={errors.treasuryAccountId}>
+          <select value={treasuryAccountId} onChange={(e) => setTreasuryAccountId(e.target.value)} className={inputClassName}>
+            <option value="">Select…</option>
+            {activeTreasuryAccounts.map((t) => (
+              <option key={t.id} value={t.id}>
+                {t.name}
+              </option>
+            ))}
+          </select>
+        </Field>
+      )}
 
       {needsParty && (
         <Field label={sourceType === "CUSTODIAN" ? "Custodian" : "Owner"} required error={errors.sourcePartyId}>
@@ -103,6 +129,8 @@ export function SupplierPaymentForm({
       <Field label="Reference (optional)">
         <input value={reference} onChange={(e) => setReference(e.target.value)} className={inputClassName} />
       </Field>
+
+      {submitError && <p className="text-xs text-rose-500">{submitError}</p>}
 
       <div className="flex justify-end gap-2 pt-2">
         <button
