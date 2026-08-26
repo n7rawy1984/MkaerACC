@@ -127,12 +127,13 @@ LocalStorage remains an explicit demo/development adapter. Production mode never
 - ✅ Phase 2B.3 — Arabic / English i18n + RTL
 - ✅ Production Data Foundation P0 — Production Architecture Freeze *(documentation/decisions only; no backend implemented)*
 - ✅ Production Data Foundation P1 — Supabase Environments + Migration Foundation *(repository/CLI foundation; no remote projects or business schema)*
+- ◐ Production Data Foundation P2 — Auth, Profiles, Memberships and Roles *(implemented and repository-verified; database/remote authorization verification deferred)*
 
 Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 
 ## Current Phase
 
-### ➡ Phase 2C — Production Data Foundation *(P0–P1 complete; P2 next)*
+### ➡ Phase 2C — Production Data Foundation *(P0–P1 complete; P2 implemented pending Development verification)*
 
 #### ✅ P0 — Production Architecture Freeze
 
@@ -147,11 +148,14 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 - Repository lifecycle verified with CLI version/init/migration creation and config parsing. Local migration application is deferred because this machine has neither Docker nor Podman; remote verification is deferred because no project/credentials exist.
 - Existing frontend build and lint remain successful; secret-pattern and diff checks pass. The application still uses only the localStorage adapter.
 
-#### ➡ P2 — Auth, Profiles, Memberships and Roles *(next; not started)*
+#### ◐ P2 — Auth, Profiles, Memberships and Roles *(implemented; remote verification pending)*
 
-- Supabase Auth login/logout/session refresh; admin-created/invited users only.
-- Add profiles, active/inactive users, company memberships, role assignment and optional project access.
-- Persist locale in profiles after login; verify deactivation revokes access.
+- Added a timestamped migration for Auth-triggered profiles, the minimum P2 company identity parent, active/inactive memberships, all frozen roles, central role-permission mappings, and a private platform-admin registry.
+- Added least-privilege RLS/GRANTs and fixed-search-path helpers for active user, membership, role, and permission checks. Browser users can read only their own identity/membership and active member companies; they cannot mutate security configuration.
+- `SYSTEM_ADMIN` does not bypass tenant membership in browser queries. Cross-company administration is reserved for a trusted service pathway, with MFA and immutable audit still required operationally.
+- Public signup is disabled in local config; the equivalent hosted Development Auth setting must be verified manually. Invitation lifecycle and the complete remote negative-test matrix are documented in `docs/P2_AUTHORIZATION.md`.
+- Project access is deliberately deferred to P3's real project parent. Frontend Auth/profile-locale cutover is deferred to avoid attaching current localStorage demo books to an unverified production identity.
+- Build, lint, diff and repository/CLI static checks pass. No Docker/Podman or linked Development project exists, so migration execution, generated types, Auth/RLS tests, and deactivation tests remain **DEFERRED**. P2 is not marked complete until those pass.
 
 #### P3 — Core Schema and Master Data
 
@@ -236,7 +240,8 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 
 - Production Data Foundation moved ahead of Payroll/WPS and historical import.
 - P0 Production Architecture Freeze completed as documentation/decision work only.
-- P1 migration/tooling foundation completed without creating a remote project or business schema; P2 is now the next implementation task.
+- P1 migration/tooling foundation completed without creating a remote project or business schema.
+- P2 identity/authorization migration was implemented on 2026-08-27. Completion remains pending remote Development migration and authorization-matrix verification; P3 must not begin before that gate is resolved.
 - Supabase Auth/PostgreSQL/Storage selected. PostgreSQL RPCs are the ledger transaction boundary; Edge Functions are optional external orchestration, not the accounting commit boundary.
 - Company membership plus optional project restriction is authoritative through RLS/database commands.
 - `BIGINT` AED minor units selected.
@@ -245,4 +250,4 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 
 ---
 
-*Only P0–P1 of Production Data Foundation are complete. P2–P10 remain planned/not implemented. Do not start Payroll/WPS or bulk historical import until all Foundation exit criteria pass.*
+*P0–P1 are complete. P2 is implemented but not marked complete until Development database/Auth/RLS verification passes. P3–P10 have not started. Do not start Payroll/WPS or bulk historical import until all Foundation exit criteria pass.*

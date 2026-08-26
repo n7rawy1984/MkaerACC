@@ -1,6 +1,6 @@
 # Maker Contracting Accounting System
 
-React/Vite frontend for a UAE contracting accounting system. The current application still uses the localStorage demo adapter. Production Supabase integration is being introduced in controlled batches; P1 establishes tooling and migrations only.
+React/Vite frontend for a UAE contracting accounting system. The current application still uses the localStorage demo adapter. Production Supabase integration is being introduced in controlled batches; P2 now provides the versioned Auth/profile/company-membership/role foundation, pending database verification on a Development project.
 
 ## Frontend
 
@@ -90,6 +90,8 @@ Copy `.env.example` to an ignored environment-specific local file only when need
 - Staging receives only test/rehearsal data intentionally loaded for that environment.
 - Production never automatically receives demo companies, projects, transactions, historical frontend seed data, or opening balances.
 
-## Scope boundary
+## P2 identity boundary
 
-P1 contains no Auth profiles/memberships, business tables, RLS policies, accounting RPCs, Storage buckets, data migration, or frontend repository changes. See `PROJECT_ROADMAP.md` and `PROJECT_HANDOFF.md` before continuing with P2.
+P2 adds the Auth-linked profile lifecycle, a minimum company identity parent, memberships, frozen roles, centrally mapped permissions, authorization helpers, and a least-privilege RLS baseline. Operational details and the Development authorization test matrix are in `docs/P2_AUTHORIZATION.md`.
+
+The frontend remains the localStorage demo application: it does not consume Supabase credentials or imply that demo books belong to an authenticated company. P2 does not add projects, accounting tables/RPCs, Storage buckets, data migration, or the P3 business master-data schema.

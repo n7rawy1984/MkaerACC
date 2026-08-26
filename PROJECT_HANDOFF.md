@@ -24,7 +24,7 @@ The company previously tracked project expenses, supplier bills, cash handed to 
 - **Phase 2B.3 (Arabic / English Foundation & Completion)** — Completed.
 - **Phase 2C / P0 (Production Architecture Freeze)** — Completed as documentation/decision work only. No backend capability was implemented.
 - **Phase 2C / P1 (Supabase Environments + Migration Foundation)** — Completed and repository-verified; no remote project or business schema was created.
-- **Phase 2C / P2 (Auth, Profiles, Memberships and Roles)** — Not started. This is the immediate next implementation task.
+- **Phase 2C / P2 (Auth, Profiles, Memberships and Roles)** — Implemented in migrations and repository-verified; remote Development database/Auth/RLS verification is deferred, so it is not marked complete.
 - **Payroll + WPS** — Confirmed next functional module after Production Data Foundation.
 
 See `PROJECT_ROADMAP.md` for the full phase breakdown, binding decisions, and decision log.
@@ -94,7 +94,8 @@ supabase/
 | `src/i18n/en.ts` / `src/i18n/ar.ts` | Every UI string in the app, keyed identically in both files (TypeScript enforces this). New UI text always adds a key here first, in both files, never inline English. |
 | `src/i18n/I18nContext.tsx` | `useT()` — the hook every page/component calls for translated strings; also owns locale persistence and the RTL `dir` side effect. |
 | `supabase/config.toml` | P1 CLI/local configuration. No remote project identity or credential is committed. |
-| `supabase/migrations/` | Canonical versioned SQL history. P1 contains only a schema-free foundation migration. |
+| `supabase/migrations/` | Canonical versioned SQL history. P1 is schema-free; P2 adds the identity and authorization foundation. |
+| `docs/P2_AUTHORIZATION.md` | P2 provisioning/system-admin design, authoritative active/inactive rules, frontend boundary, and remote Development authorization test matrix. |
 | `.env.example` | Public placeholder convention only; explicitly warns that every `VITE_*` value is browser-visible. |
 | `README.md` | Exact frontend and database migration workflow, environment promotion, secrets, and seed rules. |
 
@@ -440,9 +441,9 @@ Foundation schema includes import batch/source row/fingerprint/review provenance
 
 ## 17. Current Roadmap and Immediate Next Task
 
-Phase 1 ✅ → 2A ✅ → 2B.1 ✅ → 2B.1A ✅ → 2B.2 ✅ → 2B.3 ✅ → **2C/P0 Production Architecture Freeze ✅** → **2C/P1 Supabase Environments + Migration Foundation ✅** → **2C/P2 Auth, Profiles, Memberships and Roles (next; not started)** → P3–P10 Foundation → 2D Payroll/WPS → 2E Historical Import/Opening Balances → Phase 3 Client Contracts/Certificates/Receivables → 3B Revenue Accounting → Phase 4 Reporting.
+Phase 1 ✅ → 2A ✅ → 2B.1 ✅ → 2B.1A ✅ → 2B.2 ✅ → 2B.3 ✅ → **2C/P0 Production Architecture Freeze ✅** → **2C/P1 Supabase Environments + Migration Foundation ✅** → **2C/P2 Auth, Profiles, Memberships and Roles ◐ (implemented; Development verification pending)** → P3–P10 Foundation → 2D Payroll/WPS → 2E Historical Import/Opening Balances → Phase 3 Client Contracts/Certificates/Receivables → 3B Revenue Accounting → Phase 4 Reporting.
 
-P2 is the next implementation task. Do not begin it without a new explicit task, and do not begin Payroll or bulk import until Foundation exit criteria pass.
+The exact next task is to provision/link an approved remote Development Supabase project, apply the canonical migrations, verify hosted public-signup configuration, and execute every P2 authorization test in `docs/P2_AUTHORIZATION.md`. If all pass, generate supported TypeScript database types and mark P2 complete. Do not start P3 until this P2 verification gate is resolved.
 
 ## 18. Remaining External Deployment Decisions
 
@@ -488,7 +489,27 @@ No environment variables, no backend to start, no database to provision. Data li
 
 Also: no Debit/Credit pickers in normal user-facing forms (Journal is the only place raw accounting entries are displayed); business logic is never inlined into page components. During Production Data Foundation, pure calculations remain in `accounting/` while authoritative validation/posting moves from `AppDataContext` to database commands. Schema changes are versioned, additive where practical, migration-safe, and must never wipe existing local or production data as a feature side effect.
 
-## 22. Testing Expectations
+## 22. P2 Identity and Authorization Implementation (2026-08-27)
+
+P2 is implemented in `supabase/migrations/20260827120000_p2_auth_profiles_memberships_roles.sql`, but remains **partial** because this machine has neither Docker/Podman nor a linked remote Development project. The migration has not been executed against PostgreSQL, and hosted Auth/RLS behavior has not been claimed as verified.
+
+- **Profiles:** `public.profiles` is a 1:1, delete-restricted child of `auth.users`, containing only display name, email snapshot, `ACTIVE|INACTIVE` status, `en|ar` locale and timestamps. An `AFTER INSERT` Auth trigger creates it in the Auth transaction, normalizing untrusted metadata and copying no credentials. A user can select only their own profile and cannot write it directly.
+- **Minimum company parent:** `public.companies` contains only `id`, `code`, `name`, status and timestamps. This is explicitly the P2 authorization parent; P3 extends it rather than creating or duplicating another company table.
+- **Memberships:** `public.company_memberships` carries company, Auth user, frozen role, status and actor/timestamp columns. A partial unique index prevents two active memberships for one user/company while preserving inactive history. Browser roles can select only their own membership rows and receive no INSERT/UPDATE/DELETE grants or policies.
+- **Roles/permissions:** all seven frozen roles are a PostgreSQL enum. Ten stable permissions are rows in `permissions`, with the role mapping in protected `role_permissions`. `certificate.approve_post` maps only to `ACCOUNTING_ADMIN`, not `ACCOUNTANT` or `SYSTEM_ADMIN`. `SYSTEM_ADMIN` is limited to `company.manage`/`users.manage`. The mapping is server-owned; no browser write path exists.
+- **Active rule:** normal company access requires an authenticated caller, `ACTIVE` profile, `ACTIVE` membership, and `ACTIVE` company. `is_active_user`, `is_company_member`, `has_company_role`, and `has_permission` are stable `SECURITY DEFINER` helpers with an empty fixed search path and minimal authenticated EXECUTE grants. They derive the actor from `auth.uid()`.
+- **RLS/privileges:** every P2 public table has RLS forced. Profiles and memberships expose only the caller's row(s); companies require active membership; permission definitions require an active profile; role mappings are available only through `has_permission`. `anon` receives no table/function privileges. Security tables have no direct browser mutation grants.
+- **System admin:** the browser-visible `SYSTEM_ADMIN` role never bypasses company membership. The separate `private.system_administrators` registry has no browser schema/table access and is reserved for an explicit trusted service/Edge Function pathway with MFA and P7 audit. No service credential enters the browser.
+- **Invitations:** no public signup is enabled in local config. Hosted environments must separately disable the Auth provider's signup setting. Admin create/invite remains a trusted server/operator operation; the exact lifecycle and partial-failure handling are documented in `docs/P2_AUTHORIZATION.md`.
+- **Project access:** deferred to P3 because the production project parent does not exist. P3 must add an FK-backed assignment model; no dummy project table was created.
+- **Frontend:** deliberately unchanged. Accounting continues through the localStorage demo adapter and locale remains local. A login shell without a verified backend would misleadingly associate local demo books with a real tenant; Auth/session UI and profile-locale synchronization are deferred to the async integration boundary.
+- **Types:** generation is deferred until the migration is successfully applied to a Development database; no fake generated schema is maintained.
+
+Repository verification covers migration ordering/content review, no linked-project state, no container runtime, CLI availability/config parsing where the sandbox permits, build, lint, diff checks and secret scanning. All nine remote security scenarios (invite, profile trigger, allowed membership read, tenant isolation, self-elevation denial, inactive membership, inactive profile, certificate permission, anonymous denial) remain DEFERRED and are listed individually in `docs/P2_AUTHORIZATION.md`.
+
+Exact next task: link an approved remote **Development** project, apply both canonical migrations, verify hosted signup is disabled, run the synthetic authorization matrix, generate TypeScript types, and only then mark P2 complete. Do not start P3 before resolving this gate.
+
+## 23. Testing Expectations
 
 There is no automated test suite (no `*.test.ts` files, no test runner configured) — verification so far has been: `npm run build` must be clean (zero TypeScript errors), `npm run lint` (oxlint) must show no new warnings, plus live, browser-driven functional testing (headless Chromium via Playwright, launched ad hoc — not checked into the repo) exercising each new flow end-to-end with hand-calculated expected numbers, checking `console` for zero errors, and confirming persistence across a page reload.
 
@@ -524,7 +545,7 @@ Phase 2B.3's verification run (Playwright/headless Chromium, after a full "Reset
 
 Any future phase should be verified the same way before being marked "Completed" in the roadmap: build clean, lint clean, flow tested live with real numbers, no console errors, persists after reload, and existing flows re-checked for regressions.
 
-## 23. Handoff Checklist for New Sessions
+## 24. Handoff Checklist for New Sessions
 
 - [ ] Read `PROJECT_ROADMAP.md` in full (Binding Decisions, Completed, Current/Next Phase, Known Gaps, Decision Log).
 - [ ] Read this file in full.
