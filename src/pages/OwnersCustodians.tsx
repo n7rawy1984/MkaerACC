@@ -7,6 +7,7 @@ import { formatAED } from "../domain/money";
 import { formatDate } from "../domain/utils";
 import { ACCOUNTS } from "../accounting/chartOfAccounts";
 import { custodianBalance, ownerCurrentBalance, partyLedger } from "../accounting/ledger";
+import { useT } from "../i18n/I18nContext";
 import type { Party } from "../domain/types";
 
 function PersonCard({
@@ -30,6 +31,7 @@ function PersonCard({
   journalEntries: ReturnType<typeof useAppData>["journalEntries"];
   icon: typeof Wallet;
 }) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const lines = useMemo(
     () => (open ? partyLedger(journalEntries, accountId, party.id, normalSide) : []),
@@ -63,7 +65,9 @@ function PersonCard({
       </button>
       {open && (
         <div className="divide-y divide-slate-100 border-t border-slate-100">
-          {lines.length === 0 && <p className="px-5 py-4 text-sm text-slate-400">No ledger activity yet.</p>}
+          {lines.length === 0 && (
+            <p className="px-5 py-4 text-sm text-slate-400">{t("people.noLedgerActivity")}</p>
+          )}
           {lines.map((l, i) => {
             const isIncrease = normalSide === "DEBIT" ? l.debit > 0 : l.credit > 0;
             const amount = isIncrease
@@ -85,7 +89,7 @@ function PersonCard({
                   <p className="text-slate-600">
                     {isIncrease ? increaseLabel : decreaseLabel} {formatAED(amount)}
                   </p>
-                  <p className="text-xs font-medium text-slate-500">Balance {formatAED(l.balance)}</p>
+                  <p className="text-xs font-medium text-slate-500">{t("people.balance", { amount: formatAED(l.balance) })}</p>
                 </div>
               </div>
             );
@@ -97,31 +101,30 @@ function PersonCard({
 }
 
 export function OwnersCustodians() {
+  const t = useT();
   const { parties, journalEntries } = useAppData();
   const owners = useMemo(() => parties.filter((p) => p.type === "OWNER"), [parties]);
   const custodians = useMemo(() => parties.filter((p) => p.type === "CUSTODIAN"), [parties]);
 
   return (
     <div>
-      <PageHeader title="Owners & Custodians" subtitle="Each person's balance with the company, in plain terms" />
+      <PageHeader title={t("people.title")} subtitle={t("people.subtitle")} />
 
       <div className="space-y-6">
         <div>
-          <h2 className="text-sm font-semibold text-slate-900">Owners</h2>
-          <p className="text-xs text-slate-400">
-            Amount the company currently owes each owner for expenses or cash advances they funded personally
-          </p>
+          <h2 className="text-sm font-semibold text-slate-900">{t("people.ownersHeader")}</h2>
+          <p className="text-xs text-slate-400">{t("people.ownersSubtitle")}</p>
           <div className="mt-3 space-y-3">
             {owners.map((o) => (
               <PersonCard
                 key={o.id}
                 party={o}
                 balance={ownerCurrentBalance(journalEntries, o.id)}
-                balanceLabel="Owed to owner"
+                balanceLabel={t("people.owedToOwner")}
                 accountId={ACCOUNTS.OWNER_CURRENT}
                 normalSide="CREDIT"
-                increaseLabel="Owed"
-                decreaseLabel="Settled"
+                increaseLabel={t("people.owed")}
+                decreaseLabel={t("people.settled")}
                 journalEntries={journalEntries}
                 icon={HandCoins}
               />
@@ -130,19 +133,19 @@ export function OwnersCustodians() {
         </div>
 
         <div>
-          <h2 className="text-sm font-semibold text-slate-900">Custodians</h2>
-          <p className="text-xs text-slate-400">Cash advanced to each custodian, minus what they've spent so far</p>
+          <h2 className="text-sm font-semibold text-slate-900">{t("people.custodiansHeader")}</h2>
+          <p className="text-xs text-slate-400">{t("people.custodiansSubtitle")}</p>
           <div className="mt-3 space-y-3">
             {custodians.map((c) => (
               <PersonCard
                 key={c.id}
                 party={c}
                 balance={custodianBalance(journalEntries, c.id)}
-                balanceLabel="Balance held"
+                balanceLabel={t("people.balanceHeld")}
                 accountId={ACCOUNTS.ADVANCE_CUSTODY}
                 normalSide="DEBIT"
-                increaseLabel="Received"
-                decreaseLabel="Spent"
+                increaseLabel={t("people.received")}
+                decreaseLabel={t("people.spent")}
                 journalEntries={journalEntries}
                 icon={Wallet}
               />

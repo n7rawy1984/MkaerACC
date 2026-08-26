@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useAppData, type NewAdvanceInput } from "../state/AppDataContext";
 import { Field, inputClassName } from "./ui/Field";
+import { useT } from "../i18n/I18nContext";
 import type { AdvanceFundingSourceType, PaymentMethod } from "../domain/types";
 
 const today = () => new Date().toISOString().slice(0, 10);
@@ -17,6 +18,7 @@ function decodeFundingSource(value: string): { type: AdvanceFundingSourceType; i
 }
 
 export function AdvanceForm({ onDone }: { onDone: () => void }) {
+  const t = useT();
   const { parties, projects, treasuryAccounts, addAdvance } = useAppData();
   const owners = useMemo(() => parties.filter((p) => p.type === "OWNER"), [parties]);
   const custodians = useMemo(() => parties.filter((p) => p.type === "CUSTODIAN"), [parties]);
@@ -59,11 +61,11 @@ export function AdvanceForm({ onDone }: { onDone: () => void }) {
 
   function validate(): Record<string, string> {
     const e: Record<string, string> = {};
-    if (!date) e.date = "Required";
-    if (!custodianId) e.custodianId = "Required";
-    if (!fundingSource) e.fundingSource = "Select where the cash is coming from";
+    if (!date) e.date = t("common.required");
+    if (!custodianId) e.custodianId = t("common.required");
+    if (!fundingSource) e.fundingSource = t("advanceForm.fundingSourceHint");
     const n = Number(amount);
-    if (!Number.isFinite(n) || n <= 0) e.amount = "Enter an amount greater than zero";
+    if (!Number.isFinite(n) || n <= 0) e.amount = t("common.enterAmountGreaterThanZero");
     return e;
   }
 
@@ -76,7 +78,7 @@ export function AdvanceForm({ onDone }: { onDone: () => void }) {
 
     const decoded = decodeFundingSource(fundingSource);
     if (!decoded) {
-      setErrors({ fundingSource: "Select where the cash is coming from" });
+      setErrors({ fundingSource: t("advanceForm.fundingSourceHint") });
       return;
     }
 
@@ -95,17 +97,17 @@ export function AdvanceForm({ onDone }: { onDone: () => void }) {
       addAdvance(input);
       onDone();
     } catch (err) {
-      setSubmitError(err instanceof Error ? err.message : "Could not record this advance.");
+      setSubmitError(err instanceof Error ? err.message : t("advanceForm.saveError"));
     }
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Date" required error={errors.date}>
+        <Field label={t("common.date")} required error={errors.date}>
           <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className={inputClassName} />
         </Field>
-        <Field label="Amount (AED)" required error={errors.amount}>
+        <Field label={t("common.amountAed")} required error={errors.amount}>
           <input
             type="number"
             min="0"
@@ -119,7 +121,7 @@ export function AdvanceForm({ onDone }: { onDone: () => void }) {
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <Field label="To (Custodian)" required error={errors.custodianId}>
+        <Field label={t("advanceForm.toCustodian")} required error={errors.custodianId}>
           <select value={custodianId} onChange={(e) => setCustodianId(e.target.value)} className={inputClassName}>
             {custodians.map((c) => (
               <option key={c.id} value={c.id}>
@@ -128,9 +130,9 @@ export function AdvanceForm({ onDone }: { onDone: () => void }) {
             ))}
           </select>
         </Field>
-        <Field label="Project / Purpose (optional)">
+        <Field label={t("advanceForm.projectPurposeOptional")}>
           <select value={projectId} onChange={(e) => setProjectId(e.target.value)} className={inputClassName}>
-            <option value="">— General —</option>
+            <option value="">{t("advanceForm.generalPurpose")}</option>
             {openProjects.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.name}
@@ -140,23 +142,23 @@ export function AdvanceForm({ onDone }: { onDone: () => void }) {
         </Field>
       </div>
 
-      <Field label="Funding Source" required error={errors.fundingSource}>
+      <Field label={t("advanceForm.fundingSource")} required error={errors.fundingSource}>
         <select value={fundingSource} onChange={(e) => setFundingSource(e.target.value)} className={inputClassName}>
-          <option value="">Select…</option>
+          <option value="">{t("common.selectEllipsis")}</option>
           {eligibleTreasuryAccounts.length > 0 && (
-            <optgroup label="Treasury">
-              {eligibleTreasuryAccounts.map((t) => (
-                <option key={t.id} value={encodeFundingSource("TREASURY", t.id)}>
-                  {t.name}
+            <optgroup label={t("advanceForm.treasuryGroup")}>
+              {eligibleTreasuryAccounts.map((account) => (
+                <option key={account.id} value={encodeFundingSource("TREASURY", account.id)}>
+                  {account.name}
                 </option>
               ))}
             </optgroup>
           )}
           {owners.length > 0 && (
-            <optgroup label="Owners">
+            <optgroup label={t("advanceForm.ownersGroup")}>
               {owners.map((o) => (
                 <option key={o.id} value={encodeFundingSource("OWNER_CURRENT", o.id)}>
-                  {o.name} (Current Account)
+                  {t("advanceForm.ownerCurrentAccountSuffix", { name: o.name })}
                 </option>
               ))}
             </optgroup>
@@ -164,25 +166,25 @@ export function AdvanceForm({ onDone }: { onDone: () => void }) {
         </select>
       </Field>
 
-      <Field label="Payment Method">
+      <Field label={t("advanceForm.paymentMethod")}>
         <select
           value={paymentMethod}
           onChange={(e) => setPaymentMethod(e.target.value as PaymentMethod)}
           className={inputClassName}
         >
-          <option value="CASH">Cash</option>
-          <option value="BANK">Bank</option>
-          <option value="TRANSFER">Transfer</option>
-          <option value="CHEQUE">Cheque</option>
-          <option value="OTHER">Other</option>
+          <option value="CASH">{t("paymentMethod.CASH")}</option>
+          <option value="BANK">{t("paymentMethod.BANK")}</option>
+          <option value="TRANSFER">{t("paymentMethod.TRANSFER")}</option>
+          <option value="CHEQUE">{t("paymentMethod.CHEQUE")}</option>
+          <option value="OTHER">{t("paymentMethod.OTHER")}</option>
         </select>
       </Field>
 
-      <Field label="Reference (optional)">
+      <Field label={t("common.referenceOptional")}>
         <input value={reference} onChange={(e) => setReference(e.target.value)} className={inputClassName} />
       </Field>
 
-      <Field label="Notes (optional)">
+      <Field label={t("common.notesOptional")}>
         <textarea value={notes} onChange={(e) => setNotes(e.target.value)} className={inputClassName} rows={2} />
       </Field>
 
@@ -194,13 +196,13 @@ export function AdvanceForm({ onDone }: { onDone: () => void }) {
           onClick={onDone}
           className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50"
         >
-          Cancel
+          {t("common.cancel")}
         </button>
         <button
           type="submit"
           className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800"
         >
-          Save Advance
+          {t("advanceForm.saveButton")}
         </button>
       </div>
     </form>

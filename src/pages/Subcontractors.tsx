@@ -14,8 +14,10 @@ import {
   subcontractorPayableBalance,
   subcontractorRetentionHeld,
 } from "../accounting/ledger";
+import { useT } from "../i18n/I18nContext";
 
 export function Subcontractors() {
+  const t = useT();
   const { parties, subcontracts, journalEntries } = useAppData();
   const navigate = useNavigate();
   const [showForm, setShowForm] = useState(false);
@@ -45,14 +47,14 @@ export function Subcontractors() {
   return (
     <div>
       <PageHeader
-        title="Subcontractors"
-        subtitle={`${subcontractors.length} subcontractors across ${subcontracts.length} contracts`}
+        title={t("subcontractors.title")}
+        subtitle={t("subcontractors.subtitle", { count: subcontractors.length, contracts: subcontracts.length })}
         action={
           <button
             onClick={() => setShowForm(true)}
             className="flex items-center gap-2 rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800"
           >
-            <Plus size={16} /> New Subcontractor
+            <Plus size={16} /> {t("subcontractors.newSubcontractor")}
           </button>
         }
       />
@@ -62,20 +64,20 @@ export function Subcontractors() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-slate-100 text-left text-xs font-medium uppercase tracking-wide text-slate-400">
-                <th className="px-5 py-2.5 font-medium">Subcontractor</th>
-                <th className="px-3 py-2.5 text-right font-medium">Active Contracts</th>
-                <th className="px-3 py-2.5 text-right font-medium">Projects</th>
-                <th className="px-3 py-2.5 text-right font-medium">Certified To Date</th>
-                <th className="px-3 py-2.5 text-right font-medium">Outstanding Payable</th>
-                <th className="px-3 py-2.5 text-right font-medium">Retention Held</th>
-                <th className="px-5 py-2.5 text-right font-medium">Advance Balance</th>
+                <th className="px-5 py-2.5 font-medium">{t("subcontractors.colSubcontractor")}</th>
+                <th className="px-3 py-2.5 text-right font-medium">{t("subcontractors.colActiveContracts")}</th>
+                <th className="px-3 py-2.5 text-right font-medium">{t("subcontractors.colProjects")}</th>
+                <th className="px-3 py-2.5 text-right font-medium">{t("subcontractors.colCertifiedToDate")}</th>
+                <th className="px-3 py-2.5 text-right font-medium">{t("subcontractors.colOutstandingPayable")}</th>
+                <th className="px-3 py-2.5 text-right font-medium">{t("subcontractors.colRetentionHeld")}</th>
+                <th className="px-5 py-2.5 text-right font-medium">{t("subcontractors.colAdvanceBalance")}</th>
               </tr>
             </thead>
             <tbody>
               {rows.length === 0 && (
                 <tr>
                   <td colSpan={7} className="px-5 py-8 text-center text-sm text-slate-400">
-                    No subcontractors yet.
+                    {t("subcontractors.noneYet")}
                   </td>
                 </tr>
               )}
@@ -94,7 +96,7 @@ export function Subcontractors() {
                         <div className="flex items-center gap-2">
                           <p className="font-semibold text-slate-900">{row.subcontractor.name}</p>
                           <Badge tone={row.subcontractor.status === "INACTIVE" ? "slate" : "green"}>
-                            {row.subcontractor.status ?? "ACTIVE"}
+                            {t(row.subcontractor.status === "INACTIVE" ? "common.inactive" : "common.active")}
                           </Badge>
                         </div>
                         {row.subcontractor.contactPerson && (
@@ -127,7 +129,7 @@ export function Subcontractors() {
       </Card>
 
       {showForm && (
-        <Modal title="New Subcontractor" onClose={() => setShowForm(false)}>
+        <Modal title={t("subcontractors.newSubcontractor")} onClose={() => setShowForm(false)}>
           <SubcontractorForm onDone={() => setShowForm(false)} />
         </Modal>
       )}

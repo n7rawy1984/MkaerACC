@@ -9,6 +9,8 @@ import { calcCertificate, validateCertificate } from "../accounting/certificateC
 import { certificatePaidAmount, contractAdvanceBalance } from "../accounting/ledger";
 import { ACCOUNTS, DEDUCTION_ACCOUNT_IDS } from "../accounting/chartOfAccounts";
 import { SubcontractorPaymentForm } from "./SubcontractorPaymentForm";
+import { useT } from "../i18n/I18nContext";
+import type { TranslationKey } from "../i18n/en";
 import type { CertificateDeduction, DeductionType, SubcontractorCertificate, VatMode } from "../domain/types";
 
 const today = () => new Date().toISOString().slice(0, 10);
@@ -17,6 +19,19 @@ const DEDUCTION_TYPE_DEFAULT_ACCOUNT: Record<DeductionType, string> = {
   COMPANY_MATERIALS: ACCOUNTS.DEDUCTION_COMPANY_MATERIALS,
   BACKCHARGE: ACCOUNTS.DEDUCTION_BACKCHARGE,
   OTHER: ACCOUNTS.DEDUCTION_OTHER,
+};
+
+const DEDUCTION_TYPE_KEY: Record<DeductionType, TranslationKey> = {
+  COMPANY_MATERIALS: "certificateForm.deductionType.COMPANY_MATERIALS",
+  BACKCHARGE: "certificateForm.deductionType.BACKCHARGE",
+  OTHER: "certificateForm.deductionType.OTHER",
+};
+
+const CERT_STATUS_KEY: Record<string, TranslationKey> = {
+  DRAFT: "certificateStatus.DRAFT",
+  APPROVED: "certificateStatus.APPROVED",
+  PARTIALLY_PAID: "certificateStatus.PARTIALLY_PAID",
+  PAID: "certificateStatus.PAID",
 };
 
 let deductionCounter = 0;
@@ -34,6 +49,7 @@ export function CertificateForm({
   certificate?: SubcontractorCertificate;
   onDone: () => void;
 }) {
+  const t = useT();
   const {
     subcontracts,
     subcontractorCertificates,
@@ -176,7 +192,10 @@ export function CertificateForm({
   function handleSaveDraft(ev: React.FormEvent) {
     ev.preventDefault();
     if (!certificateNumber.trim() || !workValueToDate) {
-      setErrors({ certificateNumber: !certificateNumber.trim() ? "Required" : "", workValueToDate: !workValueToDate ? "Required" : "" });
+      setErrors({
+        certificateNumber: !certificateNumber.trim() ? t("common.required") : "",
+        workValueToDate: !workValueToDate ? t("common.required") : "",
+      });
       return;
     }
     setErrors({});
@@ -189,7 +208,7 @@ export function CertificateForm({
       }
       onDone();
     } catch (err) {
-      setActionError(err instanceof Error ? err.message : "Could not save this certificate.");
+      setActionError(err instanceof Error ? err.message : t("certificateForm.saveError"));
     }
   }
 
@@ -204,11 +223,11 @@ export function CertificateForm({
       approveCertificate(certificate.id);
       onDone();
     } catch (err) {
-      setActionError(err instanceof Error ? err.message : "Could not approve this certificate.");
+      setActionError(err instanceof Error ? err.message : t("certificateForm.approveError"));
     }
   }
 
-  if (!contract) return <p className="text-sm text-slate-400">Contract not found.</p>;
+  if (!contract) return <p className="text-sm text-slate-400">{t("certificateForm.contractNotFound")}</p>;
 
   return (
     <div className="space-y-4">
@@ -216,16 +235,18 @@ export function CertificateForm({
         <div className="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2">
           <div className="flex items-center gap-2 text-xs text-slate-500">
             <Badge tone={certificate?.status === "PAID" ? "green" : certificate?.status === "PARTIALLY_PAID" ? "amber" : "blue"}>
-              {certificate?.status}
+              {certificate ? t(CERT_STATUS_KEY[certificate.status]) : ""}
             </Badge>
-            Approved {certificate?.approvedAt ? formatDate(certificate.approvedAt) : ""} — accounting fields are locked
+            {t("certificateForm.approvedOnLocked", {
+              date: certificate?.approvedAt ? formatDate(certificate.approvedAt) : "",
+            })}
           </div>
         </div>
       )}
 
       <form onSubmit={handleSaveDraft} className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
-          <Field label="Certificate Number" required error={errors.certificateNumber}>
+          <Field label={t("certificateForm.certificateNumber")} required error={errors.certificateNumber}>
             <input
               value={certificateNumber}
               onChange={(e) => setCertificateNumber(e.target.value)}
@@ -233,7 +254,7 @@ export function CertificateForm({
               disabled={isLocked}
             />
           </Field>
-          <Field label="Certificate Date" required>
+          <Field label={t("certificateForm.certificateDate")} required>
             <input
               type="date"
               value={certificateDate}
@@ -245,7 +266,7 @@ export function CertificateForm({
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <Field label="Work Value To Date (AED)" required error={errors.workValueToDate}>
+          <Field label={t("certificateForm.workValueToDateAed")} required error={errors.workValueToDate}>
             <input
               type="number"
               min="0"
@@ -256,7 +277,7 @@ export function CertificateForm({
               disabled={isLocked}
             />
           </Field>
-          <Field label="Previous Certified Work (AED)">
+          <Field label={t("certificateForm.previousCertifiedWorkAed")}>
             <input
               type="number"
               min="0"
@@ -270,7 +291,7 @@ export function CertificateForm({
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <Field label="Current Variations (AED)" error={errors.currentVariationAmount}>
+          <Field label={t("certificateForm.currentVariationsAed")} error={errors.currentVariationAmount}>
             <input
               type="number"
               step="0.01"
@@ -280,7 +301,7 @@ export function CertificateForm({
               disabled={isLocked}
             />
           </Field>
-          <Field label="Retention Percent (%)" error={errors.retentionPercent}>
+          <Field label={t("certificateForm.retentionPercent")} error={errors.retentionPercent}>
             <input
               type="number"
               min="0"
@@ -294,7 +315,7 @@ export function CertificateForm({
           </Field>
         </div>
 
-        <Field label="Advance Recovery (AED)" error={errors.advanceRecovery}>
+        <Field label={t("certificateForm.advanceRecoveryAed")} error={errors.advanceRecovery}>
           <input
             type="number"
             min="0"
@@ -306,30 +327,32 @@ export function CertificateForm({
           />
         </Field>
         <p className="-mt-2 text-xs text-slate-400">
-          Available advance balance for this contract: {formatAED(availableAdvanceBalance)}
+          {t("certificateForm.availableAdvanceBalanceHint", { amount: formatAED(availableAdvanceBalance) })}
         </p>
 
         <div>
           <div className="mb-1.5 flex items-center justify-between">
-            <p className="text-xs font-medium text-slate-600">Deductions (optional)</p>
+            <p className="text-xs font-medium text-slate-600">{t("certificateForm.deductionsTitle")}</p>
             {!isLocked && (
               <button
                 type="button"
                 onClick={addDeductionLine}
                 className="flex items-center gap-1 text-xs font-medium text-slate-500 hover:text-slate-900"
               >
-                <Plus size={13} /> Add line
+                <Plus size={13} /> {t("certificateForm.addLine")}
               </button>
             )}
           </div>
-          {deductionLines.length === 0 && <p className="text-xs text-slate-400">No deductions on this certificate.</p>}
+          {deductionLines.length === 0 && (
+            <p className="text-xs text-slate-400">{t("certificateForm.noDeductions")}</p>
+          )}
           <div className="space-y-2">
             {deductionLines.map((d) => (
               <div key={d.id} className="grid grid-cols-12 gap-2 rounded-lg border border-slate-200 p-2">
                 <input
                   value={d.description}
                   onChange={(e) => updateDeductionLine(d.id, { description: e.target.value })}
-                  placeholder="Description"
+                  placeholder={t("certificateForm.deductionDescriptionPlaceholder")}
                   className={`${inputClassName} col-span-5`}
                   disabled={isLocked}
                 />
@@ -342,16 +365,18 @@ export function CertificateForm({
                   className={`${inputClassName} col-span-3`}
                   disabled={isLocked}
                 >
-                  <option value="COMPANY_MATERIALS">Company Materials</option>
-                  <option value="BACKCHARGE">Backcharge</option>
-                  <option value="OTHER">Other</option>
+                  {(Object.keys(DEDUCTION_TYPE_KEY) as DeductionType[]).map((type) => (
+                    <option key={type} value={type}>
+                      {t(DEDUCTION_TYPE_KEY[type])}
+                    </option>
+                  ))}
                 </select>
                 <select
                   value={d.accountId}
                   onChange={(e) => updateDeductionLine(d.id, { accountId: e.target.value })}
                   className={`${inputClassName} col-span-3`}
                   disabled={isLocked}
-                  title="Mapped account"
+                  title={t("certificateForm.deductionsTitle")}
                 >
                   {DEDUCTION_ACCOUNT_IDS.map((id) => (
                     <option key={id} value={id}>
@@ -375,7 +400,7 @@ export function CertificateForm({
                     onClick={() => removeDeductionLine(d.id)}
                     className="col-span-12 flex items-center justify-end gap-1 text-xs text-rose-500 hover:text-rose-700"
                   >
-                    <Trash2 size={12} /> Remove
+                    <Trash2 size={12} /> {t("certificateForm.remove")}
                   </button>
                 )}
               </div>
@@ -384,20 +409,20 @@ export function CertificateForm({
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <Field label="VAT">
+          <Field label={t("field.vat")}>
             <select
               value={vatMode}
               onChange={(e) => setVatMode(e.target.value as VatMode)}
               className={inputClassName}
               disabled={isLocked}
             >
-              <option value="ZERO">No VAT</option>
-              <option value="AUTO_5">Auto 5%</option>
-              <option value="MANUAL">Manual amount</option>
+              <option value="ZERO">{t("vatMode.ZERO")}</option>
+              <option value="AUTO_5">{t("vatMode.AUTO_5")}</option>
+              <option value="MANUAL">{t("vatMode.MANUAL")}</option>
             </select>
           </Field>
           {vatMode === "MANUAL" && (
-            <Field label="VAT Amount (AED)">
+            <Field label={t("field.vatAmountAed")}>
               <input
                 type="number"
                 min="0"
@@ -413,9 +438,7 @@ export function CertificateForm({
 
         {calc.vatAmount > 0 && (
           <div className="space-y-3 rounded-lg border border-amber-200 bg-amber-50 p-3">
-            <p className="text-xs font-medium text-amber-800">
-              VAT requires a supporting supplier tax invoice
-            </p>
+            <p className="text-xs font-medium text-amber-800">{t("certificateForm.vatRequiresInvoice")}</p>
             <label className="flex items-center gap-2 text-sm text-slate-700">
               <input
                 type="checkbox"
@@ -424,11 +447,11 @@ export function CertificateForm({
                 className="h-4 w-4 rounded border-slate-300"
                 disabled={isLocked}
               />
-              Tax invoice received
+              {t("certificateForm.taxInvoiceReceived")}
             </label>
             {errors.taxInvoiceReceived && <p className="text-xs text-rose-500">{errors.taxInvoiceReceived}</p>}
             <div className="grid grid-cols-2 gap-3">
-              <Field label="Tax Invoice Number" error={errors.taxInvoiceNumber}>
+              <Field label={t("certificateForm.taxInvoiceNumber")} error={errors.taxInvoiceNumber}>
                 <input
                   value={taxInvoiceNumber}
                   onChange={(e) => setTaxInvoiceNumber(e.target.value)}
@@ -436,7 +459,7 @@ export function CertificateForm({
                   disabled={isLocked}
                 />
               </Field>
-              <Field label="Tax Invoice Date" error={errors.taxInvoiceDate}>
+              <Field label={t("certificateForm.taxInvoiceDate")} error={errors.taxInvoiceDate}>
                 <input
                   type="date"
                   value={taxInvoiceDate}
@@ -449,7 +472,7 @@ export function CertificateForm({
           </div>
         )}
 
-        <Field label="Notes (optional)">
+        <Field label={t("common.notesOptional")}>
           <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
@@ -461,17 +484,17 @@ export function CertificateForm({
 
         {/* Calculation waterfall — always visible, never hidden */}
         <div className="space-y-1 rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm">
-          <Row label="Work Value To Date" value={Number(workValueToDate) || 0} />
-          <Row label="Previous Certified" value={-(Number(previousCertifiedWork) || 0)} />
-          <Row label="Current Work" value={calc.currentWorkValue} bold />
-          <Row label="Current Variations" value={Number(currentVariationAmount) || 0} prefix="+" />
-          <Row label="Gross Current Certificate" value={calc.grossCurrentValue} bold divider />
-          <Row label="Retention" value={-calc.retentionAmount} />
-          <Row label="Advance Recovery" value={-(Number(advanceRecovery) || 0)} />
-          <Row label="Other Deductions" value={-calc.totalDeductions} />
-          <Row label="Net Before VAT" value={calc.netBeforeVat} bold divider />
-          <Row label="VAT" value={calc.vatAmount} prefix="+" />
-          <Row label="Net Payable" value={calc.netPayable} bold big divider />
+          <Row label={t("certificateForm.rowWorkValueToDate")} value={Number(workValueToDate) || 0} />
+          <Row label={t("certificateForm.rowPreviousCertified")} value={-(Number(previousCertifiedWork) || 0)} />
+          <Row label={t("certificateForm.rowCurrentWork")} value={calc.currentWorkValue} bold />
+          <Row label={t("certificateForm.rowCurrentVariations")} value={Number(currentVariationAmount) || 0} prefix="+" />
+          <Row label={t("certificateForm.rowGrossCurrentCertificate")} value={calc.grossCurrentValue} bold divider />
+          <Row label={t("certificateForm.rowRetention")} value={-calc.retentionAmount} />
+          <Row label={t("certificateForm.rowAdvanceRecovery")} value={-(Number(advanceRecovery) || 0)} />
+          <Row label={t("certificateForm.rowOtherDeductions")} value={-calc.totalDeductions} />
+          <Row label={t("certificateForm.rowNetBeforeVat")} value={calc.netBeforeVat} bold divider />
+          <Row label={t("certificateForm.rowVat")} value={calc.vatAmount} prefix="+" />
+          <Row label={t("certificateForm.rowNetPayable")} value={calc.netPayable} bold big divider />
         </div>
 
         {errors.netPayable && <p className="text-xs text-rose-500">{errors.netPayable}</p>}
@@ -485,13 +508,13 @@ export function CertificateForm({
               onClick={onDone}
               className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50"
             >
-              Cancel
+              {t("common.cancel")}
             </button>
             <button
               type="submit"
               className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50"
             >
-              Save Draft
+              {t("certificateForm.saveDraft")}
             </button>
             {isEditing && (
               <button
@@ -499,7 +522,7 @@ export function CertificateForm({
                 onClick={handleApprove}
                 className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800"
               >
-                Approve
+                {t("certificateForm.approve")}
               </button>
             )}
           </div>
@@ -509,14 +532,14 @@ export function CertificateForm({
       {isLocked && certificate && (
         <div className="border-t border-slate-100 pt-4">
           <div className="mb-2 flex items-center justify-between">
-            <p className="text-sm font-semibold text-slate-900">Payments</p>
+            <p className="text-sm font-semibold text-slate-900">{t("certificateForm.paymentsTitle")}</p>
             {outstanding > 0.01 && !showPaymentForm && (
               <button
                 type="button"
                 onClick={() => setShowPaymentForm(true)}
                 className="rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-slate-800"
               >
-                Record Payment
+                {t("contractWorkspace.recordPayment")}
               </button>
             )}
           </div>
@@ -535,10 +558,10 @@ export function CertificateForm({
                   </div>
                 ))}
               {subcontractorPayments.filter((p) => p.certificateId === certificate.id).length === 0 && (
-                <p className="text-xs text-slate-400">No payments recorded yet.</p>
+                <p className="text-xs text-slate-400">{t("certificateForm.noPaymentsYet")}</p>
               )}
               <div className="mt-2 flex items-center justify-between border-t border-slate-100 pt-2 font-semibold">
-                <span className="text-slate-600">Outstanding</span>
+                <span className="text-slate-600">{t("certificateForm.outstanding")}</span>
                 <span className="text-slate-900">{formatAED(Math.max(0, outstanding))}</span>
               </div>
             </div>

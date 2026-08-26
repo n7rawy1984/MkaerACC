@@ -1,17 +1,20 @@
 import { useMemo, useState } from "react";
 import { useAppData, type NewTreasuryAccountInput } from "../state/AppDataContext";
 import { Field, inputClassName } from "./ui/Field";
+import { useT } from "../i18n/I18nContext";
+import type { TranslationKey } from "../i18n/en";
 import type { TreasuryAccount, TreasuryAccountStatus, TreasuryAccountType } from "../domain/types";
 
-const TYPE_LABELS: Record<TreasuryAccountType, string> = {
-  CASH: "Cash",
-  PETTY_CASH: "Petty Cash",
-  BANK: "Bank",
-  PROJECT_CASH_BOX: "Project Cash Box",
-  PROJECT_BANK: "Project Bank Account",
+const TYPE_KEY: Record<TreasuryAccountType, TranslationKey> = {
+  CASH: "treasuryType.CASH",
+  PETTY_CASH: "treasuryType.PETTY_CASH",
+  BANK: "treasuryType.BANK",
+  PROJECT_CASH_BOX: "treasuryType.PROJECT_CASH_BOX",
+  PROJECT_BANK: "treasuryType.PROJECT_BANK",
 };
 
 export function TreasuryAccountForm({ account, onDone }: { account?: TreasuryAccount; onDone: () => void }) {
+  const t = useT();
   const { companies, projects, accounts, addTreasuryAccount, updateTreasuryAccount } = useAppData();
   const activeCompanies = useMemo(() => companies.filter((c) => c.status === "ACTIVE"), [companies]);
   const isEdit = Boolean(account);
@@ -34,9 +37,9 @@ export function TreasuryAccountForm({ account, onDone }: { account?: TreasuryAcc
 
   function validate(): Record<string, string> {
     const e: Record<string, string> = {};
-    if (!code.trim()) e.code = "Required";
-    if (!name.trim()) e.name = "Required";
-    if (!companyId) e.companyId = "Select a company";
+    if (!code.trim()) e.code = t("common.required");
+    if (!name.trim()) e.name = t("common.required");
+    if (!companyId) e.companyId = t("treasury.form.selectCompany");
     return e;
   }
 
@@ -63,14 +66,14 @@ export function TreasuryAccountForm({ account, onDone }: { account?: TreasuryAcc
       else addTreasuryAccount(input);
       onDone();
     } catch (err) {
-      setSubmitError(err instanceof Error ? err.message : "Could not save this treasury account.");
+      setSubmitError(err instanceof Error ? err.message : t("treasury.form.saveError"));
     }
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Company" required error={errors.companyId}>
+        <Field label={t("treasury.form.company")} required error={errors.companyId}>
           <select
             value={companyId}
             onChange={(e) => {
@@ -86,9 +89,9 @@ export function TreasuryAccountForm({ account, onDone }: { account?: TreasuryAcc
             ))}
           </select>
         </Field>
-        <Field label="Project (optional — leave blank for a company-wide account)">
+        <Field label={t("treasury.form.project")}>
           <select value={projectId} onChange={(e) => setProjectId(e.target.value)} className={inputClassName}>
-            <option value="">— Company-wide —</option>
+            <option value="">{t("treasury.form.companyWide")}</option>
             {companyProjects.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.name}
@@ -99,66 +102,65 @@ export function TreasuryAccountForm({ account, onDone }: { account?: TreasuryAcc
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Code" required error={errors.code}>
-          <input value={code} onChange={(e) => setCode(e.target.value)} className={inputClassName} placeholder="e.g. BANK-01" />
+        <Field label={t("treasury.form.code")} required error={errors.code}>
+          <input
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            className={inputClassName}
+            placeholder={t("treasury.form.codePlaceholder")}
+          />
         </Field>
-        <Field label="Name" required error={errors.name}>
-          <input value={name} onChange={(e) => setName(e.target.value)} className={inputClassName} placeholder="e.g. Main Bank" />
+        <Field label={t("treasury.form.name")} required error={errors.name}>
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className={inputClassName}
+            placeholder={t("treasury.form.namePlaceholder")}
+          />
         </Field>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Type" required>
+        <Field label={t("treasury.form.type")} required>
           <select value={type} onChange={(e) => setType(e.target.value as TreasuryAccountType)} className={inputClassName}>
-            {(Object.keys(TYPE_LABELS) as TreasuryAccountType[]).map((t) => (
-              <option key={t} value={t}>
-                {TYPE_LABELS[t]}
+            {(Object.keys(TYPE_KEY) as TreasuryAccountType[]).map((option) => (
+              <option key={option} value={option}>
+                {t(TYPE_KEY[option])}
               </option>
             ))}
           </select>
         </Field>
         {isEdit && (
-          <Field label="Status">
+          <Field label={t("common.status")}>
             <select value={status} onChange={(e) => setStatus(e.target.value as TreasuryAccountStatus)} className={inputClassName}>
-              <option value="ACTIVE">Active</option>
-              <option value="INACTIVE">Inactive</option>
+              <option value="ACTIVE">{t("common.active")}</option>
+              <option value="INACTIVE">{t("common.inactive")}</option>
             </select>
           </Field>
         )}
       </div>
 
       <div className="rounded-lg bg-slate-50 px-3 py-2 text-xs text-slate-500">
-        {isEdit && glAccount ? (
-          <>
-            Posts to its own dedicated GL account{" "}
-            <span className="font-semibold text-slate-700">
-              {glAccount.code} · {glAccount.name}
-            </span>
-            . This never changes after creation, even if you edit the type below.
-          </>
-        ) : (
-          <>
-            A new, dedicated GL account will be created automatically for this treasury account — under{" "}
-            <span className="font-semibold text-slate-700">
-              {type === "BANK" || type === "PROJECT_BANK" ? "1100 Bank Account" : "1000 Cash on Hand"}
-            </span>
-            . You never pick Debit/Credit accounts directly.
-          </>
-        )}
+        {isEdit && glAccount
+          ? t("treasury.form.dedicatedGlHint", { code: glAccount.code, name: glAccount.name })
+          : t("treasury.form.newGlHint", {
+              rootAccount:
+                type === "BANK" || type === "PROJECT_BANK" ? "1100 Bank Account" : "1000 Cash on Hand",
+            })}
       </div>
 
       {isBankType && (
         <div className="grid grid-cols-2 gap-4">
-          <Field label="Bank Name (optional)">
+          <Field label={t("treasury.form.bankName")}>
             <input value={bankName} onChange={(e) => setBankName(e.target.value)} className={inputClassName} />
           </Field>
-          <Field label="Account Reference (optional)">
+          <Field label={t("treasury.form.accountReference")}>
             <input value={accountReference} onChange={(e) => setAccountReference(e.target.value)} className={inputClassName} />
           </Field>
         </div>
       )}
 
-      <Field label="Notes (optional)">
+      <Field label={t("common.notesOptional")}>
         <textarea value={notes} onChange={(e) => setNotes(e.target.value)} className={inputClassName} rows={2} />
       </Field>
 
@@ -170,13 +172,13 @@ export function TreasuryAccountForm({ account, onDone }: { account?: TreasuryAcc
           onClick={onDone}
           className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50"
         >
-          Cancel
+          {t("common.cancel")}
         </button>
         <button
           type="submit"
           className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800"
         >
-          {isEdit ? "Save Changes" : "Create Treasury Account"}
+          {isEdit ? t("common.saveChanges") : t("treasury.form.createButton")}
         </button>
       </div>
     </form>

@@ -4,11 +4,13 @@ import { Field, inputClassName } from "./ui/Field";
 import { formatAED } from "../domain/money";
 import { formatDate } from "../domain/utils";
 import { custodianBalance } from "../accounting/ledger";
+import { useT } from "../i18n/I18nContext";
 import type { CashReturnDestinationType } from "../domain/types";
 
 const today = () => new Date().toISOString().slice(0, 10);
 
 export function CustodySettlementForm({ custodianId, onDone }: { custodianId: string; onDone: () => void }) {
+  const t = useT();
   const { parties, projects, expenses, custodySettlements, journalEntries, treasuryAccounts, addCustodySettlement } =
     useAppData();
   const owners = useMemo(() => parties.filter((p) => p.type === "OWNER"), [parties]);
@@ -75,18 +77,18 @@ export function CustodySettlementForm({ custodianId, onDone }: { custodianId: st
 
   function validate(): Record<string, string> {
     const e: Record<string, string> = {};
-    if (!settlementDate) e.settlementDate = "Required";
+    if (!settlementDate) e.settlementDate = t("common.required");
     if (cashReturnAmount && (returnAmount < 0 || Number.isNaN(returnAmount))) {
-      e.cashReturnAmount = "Enter a valid amount";
+      e.cashReturnAmount = t("common.enterAmountGreaterThanZero");
     }
     if (returnAmount > balance + 0.01) {
-      e.cashReturnAmount = `Cannot return more than the current balance (${formatAED(balance)})`;
+      e.cashReturnAmount = t("settlementForm.cannotExceedBalance", { balance: formatAED(balance) });
     }
     if (returnAmount > 0 && cashReturnDestinationType === "OWNER" && !cashReturnOwnerId) {
-      e.cashReturnOwnerId = "Select which owner receives the cash";
+      e.cashReturnOwnerId = t("settlementForm.selectOwnerRecipient");
     }
     if (returnAmount > 0 && cashReturnDestinationType === "TREASURY" && !cashReturnTreasuryAccountId) {
-      e.cashReturnTreasuryAccountId = "Select the cash/bank account";
+      e.cashReturnTreasuryAccountId = t("common.selectCashBankAccount");
     }
     return e;
   }
@@ -114,20 +116,18 @@ export function CustodySettlementForm({ custodianId, onDone }: { custodianId: st
       addCustodySettlement(input);
       onDone();
     } catch (err) {
-      setSubmitError(err instanceof Error ? err.message : "Could not save this settlement.");
+      setSubmitError(err instanceof Error ? err.message : t("settlementForm.saveError"));
     }
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="rounded-lg bg-slate-50 px-3 py-2 text-xs text-slate-500">
-        Reconciling <span className="font-semibold text-slate-700">{custodian?.name}</span> — current balance{" "}
-        <span className="font-semibold text-slate-700">{formatAED(balance)}</span>. This groups expenses already
-        posted; it does not create new expense entries.
+        {t("settlementForm.reconciling", { name: custodian?.name ?? "", balance: formatAED(balance) })}
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Settlement Date" required error={errors.settlementDate}>
+        <Field label={t("settlementForm.settlementDate")} required error={errors.settlementDate}>
           <input
             type="date"
             value={settlementDate}
@@ -135,9 +135,9 @@ export function CustodySettlementForm({ custodianId, onDone }: { custodianId: st
             className={inputClassName}
           />
         </Field>
-        <Field label="Project (optional)">
+        <Field label={t("settlementForm.projectOptional")}>
           <select value={projectId} onChange={(e) => setProjectId(e.target.value)} className={inputClassName}>
-            <option value="">— All projects —</option>
+            <option value="">{t("settlementForm.allProjects")}</option>
             {openProjects.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.name}
@@ -149,13 +149,11 @@ export function CustodySettlementForm({ custodianId, onDone }: { custodianId: st
 
       <div>
         <p className="mb-1.5 text-xs font-medium text-slate-600">
-          Expenses to include ({selectedIds.size} selected, {formatAED(selectedTotal)})
+          {t("settlementForm.expensesToInclude", { count: selectedIds.size, total: formatAED(selectedTotal) })}
         </p>
         <div className="max-h-48 overflow-y-auto rounded-lg border border-slate-200">
           {availableExpenses.length === 0 && (
-            <p className="px-3 py-4 text-sm text-slate-400">
-              No unclaimed expenses for this custodian — everything has already been settled.
-            </p>
+            <p className="px-3 py-4 text-sm text-slate-400">{t("settlementForm.noUnclaimedExpenses")}</p>
           )}
           {availableExpenses.map((e) => (
             <label
@@ -178,7 +176,7 @@ export function CustodySettlementForm({ custodianId, onDone }: { custodianId: st
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Cash Returned (optional)" error={errors.cashReturnAmount}>
+        <Field label={t("settlementForm.cashReturnedOptional")} error={errors.cashReturnAmount}>
           <input
             type="number"
             min="0"
@@ -190,30 +188,30 @@ export function CustodySettlementForm({ custodianId, onDone }: { custodianId: st
           />
         </Field>
         {returnAmount > 0 && (
-          <Field label="Return Destination">
+          <Field label={t("settlementForm.returnDestination")}>
             <select
               value={cashReturnDestinationType}
               onChange={(e) => setCashReturnDestinationType(e.target.value as CashReturnDestinationType)}
               className={inputClassName}
             >
-              <option value="TREASURY">Cash / Bank (Treasury)</option>
-              <option value="OWNER">Owner Directly</option>
+              <option value="TREASURY">{t("settlementForm.returnDestinationTreasury")}</option>
+              <option value="OWNER">{t("settlementForm.returnDestinationOwner")}</option>
             </select>
           </Field>
         )}
       </div>
 
       {returnAmount > 0 && cashReturnDestinationType === "TREASURY" && (
-        <Field label="Cash / Bank Account" required error={errors.cashReturnTreasuryAccountId}>
+        <Field label={t("common.cashBankAccount")} required error={errors.cashReturnTreasuryAccountId}>
           <select
             value={cashReturnTreasuryAccountId}
             onChange={(e) => setCashReturnTreasuryAccountId(e.target.value)}
             className={inputClassName}
           >
-            <option value="">Select…</option>
-            {eligibleTreasuryAccounts.map((t) => (
-              <option key={t.id} value={t.id}>
-                {t.name}
+            <option value="">{t("common.selectEllipsis")}</option>
+            {eligibleTreasuryAccounts.map((account) => (
+              <option key={account.id} value={account.id}>
+                {account.name}
               </option>
             ))}
           </select>
@@ -221,7 +219,7 @@ export function CustodySettlementForm({ custodianId, onDone }: { custodianId: st
       )}
 
       {returnAmount > 0 && cashReturnDestinationType === "OWNER" && (
-        <Field label="Owner" required error={errors.cashReturnOwnerId}>
+        <Field label={t("common.owner")} required error={errors.cashReturnOwnerId}>
           <select
             value={cashReturnOwnerId}
             onChange={(e) => setCashReturnOwnerId(e.target.value)}
@@ -236,14 +234,11 @@ export function CustodySettlementForm({ custodianId, onDone }: { custodianId: st
         </Field>
       )}
 
-      <Field label="Notes (optional)">
+      <Field label={t("common.notesOptional")}>
         <textarea value={notes} onChange={(e) => setNotes(e.target.value)} className={inputClassName} rows={2} />
       </Field>
 
-      <div className="rounded-lg bg-slate-50 px-3 py-2 text-xs text-slate-500">
-        This creates a <span className="font-semibold text-slate-700">draft</span> settlement. Review it, then
-        finalize it from the Advances &amp; Settlements page — a finalized settlement can no longer be edited.
-      </div>
+      <div className="rounded-lg bg-slate-50 px-3 py-2 text-xs text-slate-500">{t("settlementForm.draftHint")}</div>
 
       {submitError && <p className="text-xs text-rose-500">{submitError}</p>}
 
@@ -253,13 +248,13 @@ export function CustodySettlementForm({ custodianId, onDone }: { custodianId: st
           onClick={onDone}
           className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50"
         >
-          Cancel
+          {t("common.cancel")}
         </button>
         <button
           type="submit"
           className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800"
         >
-          Save Draft Settlement
+          {t("settlementForm.saveButton")}
         </button>
       </div>
     </form>

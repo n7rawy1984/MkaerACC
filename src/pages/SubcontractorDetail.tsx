@@ -20,6 +20,8 @@ import {
   subcontractorRetentionHeld,
 } from "../accounting/ledger";
 import { FileCheck2, Landmark, ListChecks, Wallet } from "lucide-react";
+import { useT } from "../i18n/I18nContext";
+import type { TranslationKey } from "../i18n/en";
 import type { SubcontractStatus } from "../domain/types";
 
 const STATUS_TONE: Record<SubcontractStatus, "green" | "slate" | "amber"> = {
@@ -28,7 +30,14 @@ const STATUS_TONE: Record<SubcontractStatus, "green" | "slate" | "amber"> = {
   CLOSED: "slate",
 };
 
+const STATUS_KEY: Record<SubcontractStatus, TranslationKey> = {
+  ACTIVE: "subcontractStatus.ACTIVE",
+  COMPLETED: "subcontractStatus.COMPLETED",
+  CLOSED: "subcontractStatus.CLOSED",
+};
+
 export function SubcontractorDetail() {
+  const t = useT();
   const { id } = useParams<{ id: string }>();
   const { parties, subcontracts, projects, journalEntries } = useAppData();
   const navigate = useNavigate();
@@ -47,9 +56,9 @@ export function SubcontractorDetail() {
     return (
       <div>
         <Link to="/subcontractors" className="text-sm text-slate-500 hover:text-slate-900">
-          &larr; Back to subcontractors
+          &larr; {t("subcontractorDetail.backToSubcontractors")}
         </Link>
-        <p className="mt-4 text-sm text-slate-500">Subcontractor not found.</p>
+        <p className="mt-4 text-sm text-slate-500">{t("subcontractorDetail.notFound")}</p>
       </div>
     );
   }
@@ -65,7 +74,7 @@ export function SubcontractorDetail() {
         to="/subcontractors"
         className="mb-3 inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-900"
       >
-        <ArrowLeft size={14} /> Back to subcontractors
+        <ArrowLeft size={14} className="rtl:-scale-x-100" /> {t("subcontractorDetail.backToSubcontractors")}
       </Link>
       <PageHeader
         title={subcontractor.name}
@@ -73,7 +82,9 @@ export function SubcontractorDetail() {
           subcontractor.code,
           subcontractor.contactPerson,
           subcontractor.phone,
-          subcontractor.taxRegistrationNumber ? `TRN ${subcontractor.taxRegistrationNumber}` : undefined,
+          subcontractor.taxRegistrationNumber
+            ? t("company.trn", { trn: subcontractor.taxRegistrationNumber })
+            : undefined,
         ]
           .filter(Boolean)
           .join(" · ") || "—"}
@@ -83,14 +94,14 @@ export function SubcontractorDetail() {
               onClick={() => setShowEditForm(true)}
               className="flex items-center gap-2 rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50"
             >
-              <Pencil size={15} /> Edit Subcontractor
+              <Pencil size={15} /> {t("subcontractorDetail.editSubcontractor")}
             </button>
             <button
               onClick={() => setShowContractForm(true)}
               disabled={subcontractor.status === "INACTIVE"}
               className="flex items-center gap-2 rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              <Plus size={16} /> New Subcontract
+              <Plus size={16} /> {t("subcontractorDetail.newSubcontract")}
             </button>
           </div>
         }
@@ -98,23 +109,35 @@ export function SubcontractorDetail() {
 
       {subcontractor.status === "INACTIVE" && (
         <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">
-          This subcontractor is inactive — its accounting history remains fully visible, but it cannot
-          be assigned a new subcontract until reactivated (Edit Subcontractor → Status).
+          {t("subcontractorDetail.inactiveBanner")}
         </div>
       )}
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Certified To Date" value={certifiedToDate} icon={FileCheck2} />
-        <StatCard label="Outstanding Payable" value={payable} icon={ListChecks} tone={payable > 0 ? "warning" : "default"} />
-        <StatCard label="Retention Held" value={retention} icon={Landmark} />
-        <StatCard label="Advance Balance" value={advanceBalance} icon={Wallet} hint="Recoverable, across all contracts" />
+        <StatCard label={t("dashboard.totalCertified")} value={certifiedToDate} icon={FileCheck2} />
+        <StatCard
+          label={t("dashboard.outstandingPayable")}
+          value={payable}
+          icon={ListChecks}
+          tone={payable > 0 ? "warning" : "default"}
+        />
+        <StatCard label={t("dashboard.retentionHeld")} value={retention} icon={Landmark} />
+        <StatCard
+          label={t("subcontractors.colAdvanceBalance")}
+          value={advanceBalance}
+          icon={Wallet}
+          hint={t("subcontractorDetail.advanceBalanceHint")}
+        />
       </div>
 
       <Card className="mt-6">
-        <CardHeader title="Subcontracts" subtitle={`${contracts.length} contracts`} />
+        <CardHeader
+          title={t("subcontractorDetail.contractsTitle")}
+          subtitle={t("subcontractorDetail.contractCount", { count: contracts.length })}
+        />
         <div className="divide-y divide-slate-100">
           {contracts.length === 0 && (
-            <p className="px-5 py-8 text-center text-sm text-slate-400">No subcontracts recorded yet.</p>
+            <p className="px-5 py-8 text-center text-sm text-slate-400">{t("subcontractorDetail.noContractsYet")}</p>
           )}
           {contracts.map((c) => (
             <button
@@ -129,7 +152,7 @@ export function SubcontractorDetail() {
                 <div>
                   <div className="flex items-center gap-2">
                     <p className="text-sm font-medium text-slate-800">{c.contractNumber}</p>
-                    <Badge tone={STATUS_TONE[c.status]}>{c.status}</Badge>
+                    <Badge tone={STATUS_TONE[c.status]}>{t(STATUS_KEY[c.status])}</Badge>
                   </div>
                   <p className="text-xs text-slate-400">
                     {projectsById[c.projectId]?.name ?? "—"} · {c.scopeOfWork}
@@ -142,11 +165,13 @@ export function SubcontractorDetail() {
                     {formatAED(c.originalContractValue + c.approvedVariations)}
                   </p>
                   <p className="text-xs text-slate-400">
-                    Payable {formatAED(contractPayableBalance(journalEntries, c.id))} · Retention{" "}
-                    {formatAED(contractRetentionHeld(journalEntries, c.id))}
+                    {t("subcontractorDetail.payableRetentionLine", {
+                      payable: formatAED(contractPayableBalance(journalEntries, c.id)),
+                      retention: formatAED(contractRetentionHeld(journalEntries, c.id)),
+                    })}
                   </p>
                 </div>
-                <ArrowRight size={14} className="text-slate-300" />
+                <ArrowRight size={14} className="text-slate-300 rtl:-scale-x-100" />
               </div>
             </button>
           ))}
@@ -154,13 +179,17 @@ export function SubcontractorDetail() {
       </Card>
 
       {showEditForm && (
-        <Modal title="Edit Subcontractor" onClose={() => setShowEditForm(false)}>
+        <Modal title={t("subcontractorDetail.editSubcontractorModalTitle")} onClose={() => setShowEditForm(false)}>
           <SubcontractorForm subcontractor={subcontractor} onDone={() => setShowEditForm(false)} />
         </Modal>
       )}
 
       {showContractForm && (
-        <Modal title="New Subcontract" onClose={() => setShowContractForm(false)} width="max-w-2xl">
+        <Modal
+          title={t("subcontractorDetail.newSubcontractModalTitle")}
+          onClose={() => setShowContractForm(false)}
+          width="max-w-2xl"
+        >
           <SubcontractForm defaultSubcontractorId={subcontractor.id} onDone={() => setShowContractForm(false)} />
         </Modal>
       )}

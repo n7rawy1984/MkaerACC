@@ -21,8 +21,10 @@ import {
   totalInputVat,
   totalProjectCost,
 } from "../accounting/ledger";
+import { useT } from "../i18n/I18nContext";
 
 export function ProjectDetail() {
+  const t = useT();
   const { id } = useParams<{ id: string }>();
   const { projects, companies, expenses, categories, journalEntries, subcontracts, parties } = useAppData();
   const [showEditForm, setShowEditForm] = useState(false);
@@ -63,9 +65,9 @@ export function ProjectDetail() {
     return (
       <div>
         <Link to="/projects" className="text-sm text-slate-500 hover:text-slate-900">
-          &larr; Back to projects
+          &larr; {t("project.backToProjects")}
         </Link>
-        <p className="mt-4 text-sm text-slate-500">Project not found.</p>
+        <p className="mt-4 text-sm text-slate-500">{t("project.notFound")}</p>
       </div>
     );
   }
@@ -76,88 +78,94 @@ export function ProjectDetail() {
         to="/projects"
         className="mb-3 inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-900"
       >
-        <ArrowLeft size={14} /> Back to projects
+        <ArrowLeft size={14} className="rtl:-scale-x-100" /> {t("project.backToProjects")}
       </Link>
       <PageHeader
         title={project.name}
         subtitle={`${project.code} · ${companiesById[project.companyId]?.name ?? "—"} · ${project.client ?? "—"} · ${project.location ?? "—"}${
-          project.startDate ? ` · started ${formatDate(project.startDate)}` : ""
-        }${project.contractNumber ? ` · Contract ${project.contractNumber}` : ""}`}
+          project.startDate ? ` · ${formatDate(project.startDate)}` : ""
+        }${project.contractNumber ? ` · ${project.contractNumber}` : ""}`}
         action={
           <button
             onClick={() => setShowEditForm(true)}
             className="flex items-center gap-2 rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50"
           >
-            <Pencil size={15} /> Edit Project
+            <Pencil size={15} /> {t("project.editProject")}
           </button>
         }
       />
 
       {project.status === "CLOSED" && (
         <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">
-          This project is closed — it cannot accept new expenses, advances, subcontractor advances, or
-          certificates. Reopen it (Edit Project → Status) to resume operational activity. Historical activity
-          below remains fully visible.
+          {t("project.closedBanner")}
         </div>
       )}
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <StatCard
-          label="Total Cost"
+          label={t("project.totalCost")}
           value={cost}
           icon={Receipt}
           hint={
             projectSubcontracts.length > 0
-              ? `Direct ${formatAED(directCost)} + Subcontractor ${formatAED(subCertifiedCost)}`
+              ? t("project.directPlusSubHint", { direct: formatAED(directCost), sub: formatAED(subCertifiedCost) })
               : undefined
           }
         />
-        <StatCard label="Input VAT" value={vat} icon={Landmark} />
+        <StatCard label={t("project.inputVat")} value={vat} icon={Landmark} />
         <StatCard
-          label="Transactions"
+          label={t("project.transactions")}
           value={projectExpenses.length}
           format="count"
           icon={ListChecks}
-          hint="Expenses posted to this project"
+          hint={t("project.transactionsHint")}
         />
         <StatCard
-          label="Expenses Without Invoice"
+          label={t("project.expensesWithoutInvoice")}
           value={noInvoice.reduce((s, e) => s + e.totalAmount, 0)}
           icon={FileWarning}
           tone="danger"
-          hint={`${noInvoice.length} of ${projectExpenses.length} transactions`}
+          hint={t("project.expensesWithoutInvoiceHint", {
+            withoutCount: noInvoice.length,
+            totalCount: projectExpenses.length,
+          })}
         />
         <StatCard
-          label="Budget"
+          label={t("project.budget")}
           value={project.budget ?? 0}
           icon={Hash}
           tone={project.budget && cost > project.budget ? "danger" : "default"}
           hint={
             project.budget
-              ? `${((cost / project.budget) * 100).toFixed(0)}% used${cost > project.budget ? " — over budget" : ""}`
-              : "No budget set"
+              ? t(cost > project.budget ? "project.budgetOverBudgetHint" : "project.budgetUsedHint", {
+                  percent: ((cost / project.budget) * 100).toFixed(0),
+                })
+              : t("project.noBudgetSet")
           }
         />
       </div>
 
       {projectSubcontracts.length > 0 && (
         <Card className="mt-6">
-          <CardHeader title="Subcontractors on this Project" subtitle="Certified cost, payable, and retention" />
+          <CardHeader
+            title={t("project.subcontractorsOnProjectTitle")}
+            subtitle={t("project.subcontractorsOnProjectSubtitle")}
+          />
           <div className="grid grid-cols-2 gap-4 border-b border-slate-100 px-5 py-4 sm:grid-cols-4">
             <div>
-              <p className="text-xs text-slate-400">Direct Expenses</p>
+              <p className="text-xs text-slate-400">{t("project.directExpenses")}</p>
               <p className="text-sm font-semibold text-slate-900">{formatAED(directCost)}</p>
             </div>
             <div>
-              <p className="text-xs text-slate-400">Subcontractor Certified Cost</p>
+              <p className="text-xs text-slate-400">{t("project.subcontractorCertifiedCost")}</p>
               <p className="text-sm font-semibold text-slate-900">{formatAED(subCertifiedCost)}</p>
             </div>
             <div>
-              <p className="text-xs text-slate-400">Subcontractor Payables</p>
+              <p className="text-xs text-slate-400">{t("project.subcontractorPayables")}</p>
               <p className="text-sm font-semibold text-slate-900">{formatAED(subPayables)}</p>
             </div>
             <div>
-              <p className="text-xs text-slate-400">Retention Held</p>
+              <p className="text-xs text-slate-400">{t("dashboard.retentionHeld")}</p>
               <p className="text-sm font-semibold text-slate-900">{formatAED(subRetention)}</p>
             </div>
           </div>
@@ -177,7 +185,7 @@ export function ProjectDetail() {
                     <p className="text-xs text-slate-400">{c.contractNumber} · {c.scopeOfWork}</p>
                   </div>
                 </div>
-                <ArrowRight size={14} className="text-slate-300" />
+                <ArrowRight size={14} className="text-slate-300 rtl:-scale-x-100" />
               </Link>
             ))}
           </div>
@@ -186,10 +194,10 @@ export function ProjectDetail() {
 
       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-5">
         <Card className="lg:col-span-2">
-          <CardHeader title="Cost by Category" subtitle="Net of VAT" />
+          <CardHeader title={t("project.costByCategoryTitle")} subtitle={t("project.costByCategorySubtitle")} />
           <div className="divide-y divide-slate-100">
             {categoryBreakdown.length === 0 && (
-              <p className="px-5 py-6 text-sm text-slate-400">No expenses yet.</p>
+              <p className="px-5 py-6 text-sm text-slate-400">{t("project.noExpensesYet")}</p>
             )}
             {categoryBreakdown.map((row) => (
               <div key={row.categoryId} className="flex items-center justify-between px-5 py-3">
@@ -201,10 +209,10 @@ export function ProjectDetail() {
         </Card>
 
         <Card className="lg:col-span-3">
-          <CardHeader title="Recent Expenses" />
+          <CardHeader title={t("project.recentExpensesTitle")} />
           <div className="divide-y divide-slate-100">
             {projectExpenses.length === 0 && (
-              <p className="px-5 py-6 text-sm text-slate-400">No expenses recorded for this project.</p>
+              <p className="px-5 py-6 text-sm text-slate-400">{t("project.noExpensesRecorded")}</p>
             )}
             {projectExpenses.slice(0, 10).map((e) => (
               <div key={e.id} className="flex items-center justify-between px-5 py-3">
@@ -216,7 +224,7 @@ export function ProjectDetail() {
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-semibold text-slate-900">{formatAED(e.totalAmount)}</p>
-                  {!e.hasInvoice && <Badge tone="amber">No invoice</Badge>}
+                  {!e.hasInvoice && <Badge tone="amber">{t("badge.noInvoice")}</Badge>}
                 </div>
               </div>
             ))}
@@ -225,7 +233,7 @@ export function ProjectDetail() {
       </div>
 
       {showEditForm && (
-        <Modal title="Edit Project" onClose={() => setShowEditForm(false)} width="max-w-2xl">
+        <Modal title={t("project.editProject")} onClose={() => setShowEditForm(false)} width="max-w-2xl">
           <ProjectForm project={project} onDone={() => setShowEditForm(false)} />
         </Modal>
       )}

@@ -19,6 +19,7 @@ import { Badge } from "../components/ui/Badge";
 import { formatAED } from "../domain/money";
 import { formatDate, indexById } from "../domain/utils";
 import { DemoDataBadge } from "../components/ui/DemoDataBadge";
+import { useT } from "../i18n/I18nContext";
 import {
   costByCategory,
   costByProject,
@@ -35,6 +36,7 @@ import {
 const CATEGORICAL = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#4a3aa7"];
 
 export function Dashboard() {
+  const t = useT();
   const { projects, parties, categories, expenses, journalEntries, subcontracts, subcontractorCertificates } =
     useAppData();
 
@@ -102,44 +104,42 @@ export function Dashboard() {
 
   return (
     <div>
-      <PageHeader
-        title="Dashboard"
-        subtitle="Live totals, calculated automatically from posted transactions"
-        action={<DemoDataBadge />}
-      />
+      <PageHeader title={t("dashboard.title")} subtitle={t("dashboard.subtitle")} action={<DemoDataBadge />} />
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <StatCard label="Total Project Costs" value={totalCost} icon={Receipt} />
+        <StatCard label={t("dashboard.totalProjectCosts")} value={totalCost} icon={Receipt} />
         <StatCard
-          label="Cash With Custodians"
+          label={t("dashboard.cashWithCustodians")}
           value={openAdvances}
           icon={Wallet}
           hint={
             custodians.length > 0
-              ? `Held by ${custodians.map((c) => c.name).join(", ")}`
-              : "No custodians recorded"
+              ? t("dashboard.heldBy", { names: custodians.map((c) => c.name).join(", ") })
+              : t("dashboard.noCustodiansRecorded")
           }
         />
-        <StatCard label="Supplier Payables" value={payables} icon={Truck} tone="warning" />
+        <StatCard label={t("dashboard.supplierPayables")} value={payables} icon={Truck} tone="warning" />
         <StatCard
-          label="Expenses Without Invoice"
+          label={t("dashboard.expensesWithoutInvoice")}
           value={noInvoiceTotal}
           icon={FileWarning}
           tone="danger"
-          hint={`${noInvoice.length} transaction${noInvoice.length === 1 ? "" : "s"}`}
+          hint={t(noInvoice.length === 1 ? "dashboard.transactionCount" : "dashboard.transactionCountPlural", {
+            count: noInvoice.length,
+          })}
         />
-        <StatCard label="Input VAT" value={inputVat} icon={Landmark} />
+        <StatCard label={t("dashboard.inputVat")} value={inputVat} icon={Landmark} />
         <StatCard
-          label="Owner Current Accounts"
+          label={t("dashboard.ownerCurrentAccounts")}
           value={owners.reduce((sum, o) => sum + ownerCurrentBalance(journalEntries, o.id), 0)}
           icon={HandCoins}
-          hint="Total owed to owners"
+          hint={t("dashboard.owedToOwnersHint")}
         />
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
         <Card>
-          <CardHeader title="Project Cost" subtitle="Net cost posted per project" />
+          <CardHeader title={t("dashboard.projectCostChartTitle")} subtitle={t("dashboard.projectCostChartSubtitle")} />
           <div className="h-72 px-4 py-4">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={projectCostData} margin={{ top: 8, right: 8, left: 8, bottom: 8 }}>
@@ -173,7 +173,10 @@ export function Dashboard() {
         </Card>
 
         <Card>
-          <CardHeader title="Project Cost Breakdown" subtitle="By expense category, net of VAT" />
+          <CardHeader
+            title={t("dashboard.projectCostBreakdownTitle")}
+            subtitle={t("dashboard.projectCostBreakdownSubtitle")}
+          />
           <div className="h-72 px-4 py-4">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
@@ -212,11 +215,11 @@ export function Dashboard() {
       {subcontracts.length > 0 && (
         <Card className="mt-6">
           <CardHeader
-            title="Subcontractors Summary"
-            subtitle="Certified progress, payables, and retention across all subcontracts"
+            title={t("dashboard.subcontractorsSummaryTitle")}
+            subtitle={t("dashboard.subcontractorsSummarySubtitle")}
             action={
               <Link to="/subcontractors" className="text-xs font-medium text-slate-500 hover:text-slate-900">
-                View all
+                {t("common.viewAll")}
               </Link>
             }
           />
@@ -226,7 +229,7 @@ export function Dashboard() {
                 <FileCheck2 size={16} />
               </div>
               <div>
-                <p className="text-xs text-slate-400">Total Certified</p>
+                <p className="text-xs text-slate-400">{t("dashboard.totalCertified")}</p>
                 <p className="text-sm font-semibold text-slate-900">{formatAED(totalCertified)}</p>
               </div>
             </div>
@@ -235,7 +238,7 @@ export function Dashboard() {
                 <Truck size={16} />
               </div>
               <div>
-                <p className="text-xs text-slate-400">Outstanding Payable</p>
+                <p className="text-xs text-slate-400">{t("dashboard.outstandingPayable")}</p>
                 <p className="text-sm font-semibold text-slate-900">{formatAED(subcontractorPayables)}</p>
               </div>
             </div>
@@ -244,7 +247,7 @@ export function Dashboard() {
                 <Landmark size={16} />
               </div>
               <div>
-                <p className="text-xs text-slate-400">Retention Held</p>
+                <p className="text-xs text-slate-400">{t("dashboard.retentionHeld")}</p>
                 <p className="text-sm font-semibold text-slate-900">{formatAED(retentionHeld)}</p>
               </div>
             </div>
@@ -253,7 +256,7 @@ export function Dashboard() {
                 <Hammer size={16} />
               </div>
               <div>
-                <p className="text-xs text-slate-400">Active Subcontracts</p>
+                <p className="text-xs text-slate-400">{t("dashboard.activeSubcontracts")}</p>
                 <p className="text-sm font-semibold text-slate-900">{activeSubcontracts}</p>
               </div>
             </div>
@@ -264,16 +267,16 @@ export function Dashboard() {
       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-5">
         <Card className="lg:col-span-3">
           <CardHeader
-            title="Recent Expenses"
+            title={t("dashboard.recentExpenses")}
             action={
               <Link to="/expenses" className="text-xs font-medium text-slate-500 hover:text-slate-900">
-                View all
+                {t("common.viewAll")}
               </Link>
             }
           />
           <div className="divide-y divide-slate-100">
             {recentExpenses.length === 0 && (
-              <p className="px-5 py-6 text-sm text-slate-400">No transactions yet.</p>
+              <p className="px-5 py-6 text-sm text-slate-400">{t("dashboard.noTransactionsYet")}</p>
             )}
             {recentExpenses.map((e) => (
               <div key={e.id} className="flex items-center justify-between px-5 py-3">
@@ -288,7 +291,7 @@ export function Dashboard() {
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-semibold text-slate-900">{formatAED(e.totalAmount)}</p>
-                  {!e.hasInvoice && <Badge tone="amber">No invoice</Badge>}
+                  {!e.hasInvoice && <Badge tone="amber">{t("badge.noInvoice")}</Badge>}
                 </div>
               </div>
             ))}
@@ -296,10 +299,13 @@ export function Dashboard() {
         </Card>
 
         <Card className="lg:col-span-2">
-          <CardHeader title="Expenses Without Invoice" subtitle="Follow-up required before month-end" />
+          <CardHeader
+            title={t("dashboard.expensesWithoutInvoiceTitle")}
+            subtitle={t("dashboard.expensesWithoutInvoiceSubtitle")}
+          />
           <div className="divide-y divide-slate-100">
             {noInvoice.length === 0 && (
-              <p className="px-5 py-6 text-sm text-slate-400">All expenses have invoices.</p>
+              <p className="px-5 py-6 text-sm text-slate-400">{t("dashboard.allExpensesHaveInvoices")}</p>
             )}
             {noInvoice.slice(0, 8).map((e) => (
               <div key={e.id} className="flex items-center justify-between px-5 py-3">

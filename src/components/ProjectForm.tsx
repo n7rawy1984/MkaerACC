@@ -1,9 +1,11 @@
 import { useMemo, useState } from "react";
 import { useAppData, type NewProjectInput } from "../state/AppDataContext";
 import { Field, inputClassName } from "./ui/Field";
+import { useT } from "../i18n/I18nContext";
 import type { Project, ProjectStatus } from "../domain/types";
 
 export function ProjectForm({ project, onDone }: { project?: Project; onDone: () => void }) {
+  const t = useT();
   const { companies, treasuryAccounts, addProject, updateProject } = useAppData();
   const activeCompanies = useMemo(() => companies.filter((c) => c.status === "ACTIVE"), [companies]);
   const isEdit = Boolean(project);
@@ -50,11 +52,12 @@ export function ProjectForm({ project, onDone }: { project?: Project; onDone: ()
 
   function validate(): Record<string, string> {
     const e: Record<string, string> = {};
-    if (!code.trim()) e.code = "Required";
-    if (!name.trim()) e.name = "Required";
-    if (!companyId) e.companyId = "Select a company";
-    if (originalContractValue && Number(originalContractValue) < 0) e.originalContractValue = "Must be zero or more";
-    if (budget && Number(budget) < 0) e.budget = "Must be zero or more";
+    if (!code.trim()) e.code = t("common.required");
+    if (!name.trim()) e.name = t("common.required");
+    if (!companyId) e.companyId = t("project.form.selectCompany");
+    if (originalContractValue && Number(originalContractValue) < 0)
+      e.originalContractValue = t("project.form.mustBeZeroOrMore");
+    if (budget && Number(budget) < 0) e.budget = t("project.form.mustBeZeroOrMore");
     return e;
   }
 
@@ -87,19 +90,24 @@ export function ProjectForm({ project, onDone }: { project?: Project; onDone: ()
       else addProject(input);
       onDone();
     } catch (err) {
-      setSubmitError(err instanceof Error ? err.message : "Could not save this project.");
+      setSubmitError(err instanceof Error ? err.message : t("project.form.saveError"));
     }
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Project Code" required error={errors.code}>
-          <input value={code} onChange={(e) => setCode(e.target.value)} className={inputClassName} placeholder="e.g. PRJ-2026-001" />
+        <Field label={t("project.form.code")} required error={errors.code}>
+          <input
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            className={inputClassName}
+            placeholder={t("project.form.codePlaceholder")}
+          />
         </Field>
-        <Field label="Company" required error={errors.companyId}>
+        <Field label={t("project.form.company")} required error={errors.companyId}>
           <select value={companyId} onChange={(e) => setCompanyId(e.target.value)} className={inputClassName}>
-            {activeCompanies.length === 0 && <option value="">No active companies</option>}
+            {activeCompanies.length === 0 && <option value="">{t("project.form.noActiveCompanies")}</option>}
             {activeCompanies.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.name}
@@ -109,36 +117,36 @@ export function ProjectForm({ project, onDone }: { project?: Project; onDone: ()
         </Field>
       </div>
 
-      <Field label="Project Name" required error={errors.name}>
+      <Field label={t("project.form.name")} required error={errors.name}>
         <input value={name} onChange={(e) => setName(e.target.value)} className={inputClassName} />
       </Field>
 
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Client / Project Owner (optional)">
+        <Field label={t("project.form.client")}>
           <input value={client} onChange={(e) => setClient(e.target.value)} className={inputClassName} />
         </Field>
-        <Field label="Location (optional)">
+        <Field label={t("project.form.location")}>
           <input value={location} onChange={(e) => setLocation(e.target.value)} className={inputClassName} />
         </Field>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Contract Number (optional)">
+        <Field label={t("project.form.contractNumber")}>
           <input value={contractNumber} onChange={(e) => setContractNumber(e.target.value)} className={inputClassName} />
         </Field>
-        <Field label="Status" required>
+        <Field label={t("common.status")} required>
           <select value={status} onChange={(e) => setStatus(e.target.value as ProjectStatus)} className={inputClassName}>
-            <option value="PLANNING">Planning</option>
-            <option value="ACTIVE">Active</option>
-            <option value="ON_HOLD">On Hold</option>
-            <option value="COMPLETED">Completed</option>
-            <option value="CLOSED">Closed</option>
+            <option value="PLANNING">{t("projectStatus.PLANNING")}</option>
+            <option value="ACTIVE">{t("projectStatus.ACTIVE")}</option>
+            <option value="ON_HOLD">{t("projectStatus.ON_HOLD")}</option>
+            <option value="COMPLETED">{t("projectStatus.COMPLETED")}</option>
+            <option value="CLOSED">{t("projectStatus.CLOSED")}</option>
           </select>
         </Field>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Original Contract Value (AED, optional)" error={errors.originalContractValue}>
+        <Field label={t("project.form.originalContractValue")} error={errors.originalContractValue}>
           <input
             type="number"
             min="0"
@@ -149,7 +157,7 @@ export function ProjectForm({ project, onDone }: { project?: Project; onDone: ()
             placeholder="0.00"
           />
         </Field>
-        <Field label="Budget (AED, optional)" error={errors.budget}>
+        <Field label={t("project.form.budget")} error={errors.budget}>
           <input
             type="number"
             min="0"
@@ -163,10 +171,10 @@ export function ProjectForm({ project, onDone }: { project?: Project; onDone: ()
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Start Date (optional)">
+        <Field label={t("project.form.startDate")}>
           <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className={inputClassName} />
         </Field>
-        <Field label="Expected Completion Date (optional)">
+        <Field label={t("project.form.expectedCompletionDate")}>
           <input
             type="date"
             value={expectedCompletionDate}
@@ -178,30 +186,30 @@ export function ProjectForm({ project, onDone }: { project?: Project; onDone: ()
 
       {(bankOptions.length > 0 || cashOptions.length > 0) && (
         <div className="grid grid-cols-2 gap-4">
-          <Field label="Dedicated Bank Account (optional)">
+          <Field label={t("project.form.dedicatedBankAccount")}>
             <select
               value={dedicatedBankAccountId}
               onChange={(e) => setDedicatedBankAccountId(e.target.value)}
               className={inputClassName}
             >
-              <option value="">— None —</option>
-              {bankOptions.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.name}
+              <option value="">{t("common.none")}</option>
+              {bankOptions.map((account) => (
+                <option key={account.id} value={account.id}>
+                  {account.name}
                 </option>
               ))}
             </select>
           </Field>
-          <Field label="Dedicated Cash Box (optional)">
+          <Field label={t("project.form.dedicatedCashBox")}>
             <select
               value={dedicatedCashBoxId}
               onChange={(e) => setDedicatedCashBoxId(e.target.value)}
               className={inputClassName}
             >
-              <option value="">— None —</option>
-              {cashOptions.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.name}
+              <option value="">{t("common.none")}</option>
+              {cashOptions.map((account) => (
+                <option key={account.id} value={account.id}>
+                  {account.name}
                 </option>
               ))}
             </select>
@@ -209,7 +217,7 @@ export function ProjectForm({ project, onDone }: { project?: Project; onDone: ()
         </div>
       )}
 
-      <Field label="Notes (optional)">
+      <Field label={t("common.notesOptional")}>
         <textarea value={notes} onChange={(e) => setNotes(e.target.value)} className={inputClassName} rows={2} />
       </Field>
 
@@ -221,13 +229,13 @@ export function ProjectForm({ project, onDone }: { project?: Project; onDone: ()
           onClick={onDone}
           className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50"
         >
-          Cancel
+          {t("common.cancel")}
         </button>
         <button
           type="submit"
           className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800"
         >
-          {isEdit ? "Save Changes" : "Create Project"}
+          {isEdit ? t("common.saveChanges") : t("project.form.createButton")}
         </button>
       </div>
     </form>

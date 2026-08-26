@@ -3,11 +3,13 @@ import { useAppData, type NewExpenseInput } from "../state/AppDataContext";
 import { Field, inputClassName } from "./ui/Field";
 import { calcVat, formatAED } from "../domain/money";
 import { formatDate } from "../domain/utils";
+import { useT } from "../i18n/I18nContext";
 import type { PaidFromType, PaymentMethod, VatMode } from "../domain/types";
 
 const today = () => new Date().toISOString().slice(0, 10);
 
 export function ExpenseForm({ onDone }: { onDone: () => void }) {
+  const t = useT();
   const { projects, parties, categories, advances, treasuryAccounts, addExpense } = useAppData();
   const owners = useMemo(() => parties.filter((p) => p.type === "OWNER"), [parties]);
   const custodians = useMemo(() => parties.filter((p) => p.type === "CUSTODIAN"), [parties]);
@@ -87,17 +89,17 @@ export function ExpenseForm({ onDone }: { onDone: () => void }) {
 
   function validate(): Record<string, string> {
     const e: Record<string, string> = {};
-    if (!date) e.date = "Required";
-    if (!categoryId) e.categoryId = "Required";
-    if (!description.trim()) e.description = "Required";
-    if (!Number.isFinite(net) || net <= 0) e.netAmount = "Enter an amount greater than zero";
+    if (!date) e.date = t("common.required");
+    if (!categoryId) e.categoryId = t("common.required");
+    if (!description.trim()) e.description = t("common.required");
+    if (!Number.isFinite(net) || net <= 0) e.netAmount = t("common.enterAmountGreaterThanZero");
     if (vatMode === "MANUAL" && (!manualVatAmount || Number(manualVatAmount) < 0)) {
-      e.manualVatAmount = "Enter a VAT amount";
+      e.manualVatAmount = t("expenseForm.enterVatAmount");
     }
-    if (needsParty && !paidFromPartyId) e.paidFromPartyId = "Select who paid";
-    if (needsSupplier && !supplierId) e.supplierId = "Select the supplier";
-    if (needsTreasury && !treasuryAccountId) e.treasuryAccountId = "Select the cash/bank account";
-    if (hasInvoice && !invoiceNumber.trim()) e.invoiceNumber = "Enter the invoice number";
+    if (needsParty && !paidFromPartyId) e.paidFromPartyId = t("common.selectWhoPaid");
+    if (needsSupplier && !supplierId) e.supplierId = t("expenseForm.selectSupplier");
+    if (needsTreasury && !treasuryAccountId) e.treasuryAccountId = t("common.selectCashBankAccount");
+    if (hasInvoice && !invoiceNumber.trim()) e.invoiceNumber = t("expenseForm.enterInvoiceNumber");
     return e;
   }
 
@@ -130,17 +132,17 @@ export function ExpenseForm({ onDone }: { onDone: () => void }) {
       addExpense(input);
       onDone();
     } catch (err) {
-      setSubmitError(err instanceof Error ? err.message : "Could not save this expense.");
+      setSubmitError(err instanceof Error ? err.message : t("expenseForm.saveError"));
     }
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Date" required error={errors.date}>
+        <Field label={t("common.date")} required error={errors.date}>
           <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className={inputClassName} />
         </Field>
-        <Field label="Category" required error={errors.categoryId}>
+        <Field label={t("expenseForm.category")} required error={errors.categoryId}>
           <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} className={inputClassName}>
             {categories.map((c) => (
               <option key={c.id} value={c.id}>
@@ -151,19 +153,19 @@ export function ExpenseForm({ onDone }: { onDone: () => void }) {
         </Field>
       </div>
 
-      <Field label="Description" required error={errors.description}>
+      <Field label={t("expenseForm.description")} required error={errors.description}>
         <input
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           className={inputClassName}
-          placeholder="e.g. Cement & blocks purchase"
+          placeholder={t("expenseForm.descriptionPlaceholder")}
         />
       </Field>
 
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Project (optional)">
+        <Field label={t("expenseForm.projectOptional")}>
           <select value={projectId} onChange={(e) => setProjectId(e.target.value)} className={inputClassName}>
-            <option value="">— Company expense —</option>
+            <option value="">{t("expenseForm.companyExpense")}</option>
             {openProjects.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.name}
@@ -171,7 +173,11 @@ export function ExpenseForm({ onDone }: { onDone: () => void }) {
             ))}
           </select>
         </Field>
-        <Field label={needsSupplier ? "Supplier" : "Supplier (optional)"} required={needsSupplier} error={errors.supplierId}>
+        <Field
+          label={needsSupplier ? t("expenseForm.supplier") : t("expenseForm.supplierOptional")}
+          required={needsSupplier}
+          error={errors.supplierId}
+        >
           <select value={supplierId} onChange={(e) => setSupplierId(e.target.value)} className={inputClassName}>
             <option value="">—</option>
             {suppliers.map((s) => (
@@ -184,7 +190,7 @@ export function ExpenseForm({ onDone }: { onDone: () => void }) {
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Net Amount (AED)" required error={errors.netAmount}>
+        <Field label={t("expenseForm.netAmountAed")} required error={errors.netAmount}>
           <input
             type="number"
             min="0"
@@ -195,17 +201,17 @@ export function ExpenseForm({ onDone }: { onDone: () => void }) {
             placeholder="0.00"
           />
         </Field>
-        <Field label="VAT">
+        <Field label={t("field.vat")}>
           <select value={vatMode} onChange={(e) => setVatMode(e.target.value as VatMode)} className={inputClassName}>
-            <option value="ZERO">No VAT</option>
-            <option value="AUTO_5">Auto 5%</option>
-            <option value="MANUAL">Manual amount</option>
+            <option value="ZERO">{t("vatMode.ZERO")}</option>
+            <option value="AUTO_5">{t("vatMode.AUTO_5")}</option>
+            <option value="MANUAL">{t("vatMode.MANUAL")}</option>
           </select>
         </Field>
       </div>
 
       {vatMode === "MANUAL" && (
-        <Field label="VAT Amount (AED)" required error={errors.manualVatAmount}>
+        <Field label={t("field.vatAmountAed")} required error={errors.manualVatAmount}>
           <input
             type="number"
             min="0"
@@ -219,12 +225,15 @@ export function ExpenseForm({ onDone }: { onDone: () => void }) {
       )}
 
       <div className="rounded-lg bg-slate-50 px-3 py-2 text-xs text-slate-500">
-        Net {vatPreview.netAmount.toFixed(2)} + VAT {vatPreview.vatAmount.toFixed(2)} = Total{" "}
-        <span className="font-semibold text-slate-700">{vatPreview.totalAmount.toFixed(2)} AED</span>
+        {t("expenseForm.vatPreview", {
+          net: vatPreview.netAmount.toFixed(2),
+          vat: vatPreview.vatAmount.toFixed(2),
+          total: vatPreview.totalAmount.toFixed(2),
+        })}
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Paid From" required>
+        <Field label={t("common.paidFrom")} required>
           <select
             value={paidFromType}
             onChange={(e) => {
@@ -234,15 +243,15 @@ export function ExpenseForm({ onDone }: { onDone: () => void }) {
             }}
             className={inputClassName}
           >
-            <option value="CUSTODIAN">Custodian Advance</option>
-            <option value="OWNER">Owner Current Account</option>
-            <option value="SUPPLIER_CREDIT">Supplier Credit (pay later)</option>
-            <option value="TREASURY">Cash / Bank (Treasury)</option>
+            <option value="CUSTODIAN">{t("expenseForm.paidFromCustodian")}</option>
+            <option value="OWNER">{t("expenseForm.paidFromOwner")}</option>
+            <option value="SUPPLIER_CREDIT">{t("expenseForm.paidFromSupplierCredit")}</option>
+            <option value="TREASURY">{t("expenseForm.paidFromTreasury")}</option>
           </select>
         </Field>
         {needsParty ? (
           <Field
-            label={paidFromType === "CUSTODIAN" ? "Custodian" : "Owner"}
+            label={paidFromType === "CUSTODIAN" ? t("expenseForm.custodian") : t("common.owner")}
             required
             error={errors.paidFromPartyId}
           >
@@ -251,7 +260,7 @@ export function ExpenseForm({ onDone }: { onDone: () => void }) {
               onChange={(e) => setPaidFromPartyId(e.target.value)}
               className={inputClassName}
             >
-              <option value="">Select…</option>
+              <option value="">{t("common.selectEllipsis")}</option>
               {partyOptions.map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.name}
@@ -260,16 +269,16 @@ export function ExpenseForm({ onDone }: { onDone: () => void }) {
             </select>
           </Field>
         ) : needsTreasury ? (
-          <Field label="Cash / Bank Account" required error={errors.treasuryAccountId}>
+          <Field label={t("common.cashBankAccount")} required error={errors.treasuryAccountId}>
             <select
               value={treasuryAccountId}
               onChange={(e) => setTreasuryAccountId(e.target.value)}
               className={inputClassName}
             >
-              <option value="">Select…</option>
-              {eligibleTreasuryAccounts.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.name}
+              <option value="">{t("common.selectEllipsis")}</option>
+              {eligibleTreasuryAccounts.map((account) => (
+                <option key={account.id} value={account.id}>
+                  {account.name}
                 </option>
               ))}
             </select>
@@ -277,31 +286,30 @@ export function ExpenseForm({ onDone }: { onDone: () => void }) {
         ) : paidFromType === "SUPPLIER_CREDIT" ? (
           <div className="flex items-end">
             <p className="rounded-lg bg-slate-50 px-3 py-2 text-xs text-slate-500">
-              No payment now — added to the supplier&rsquo;s outstanding balance. Settle it later from the
-              Suppliers page.
+              {t("expenseForm.supplierCreditHint")}
             </p>
           </div>
         ) : (
-          <Field label="Payment Method">
+          <Field label={t("advanceForm.paymentMethod")}>
             <select
               value={paymentMethod}
               onChange={(e) => setPaymentMethod(e.target.value as PaymentMethod)}
               className={inputClassName}
             >
-              <option value="CASH">Cash</option>
-              <option value="BANK">Bank</option>
-              <option value="TRANSFER">Transfer</option>
-              <option value="CHEQUE">Cheque</option>
-              <option value="OTHER">Other</option>
+              <option value="CASH">{t("paymentMethod.CASH")}</option>
+              <option value="BANK">{t("paymentMethod.BANK")}</option>
+              <option value="TRANSFER">{t("paymentMethod.TRANSFER")}</option>
+              <option value="CHEQUE">{t("paymentMethod.CHEQUE")}</option>
+              <option value="OTHER">{t("paymentMethod.OTHER")}</option>
             </select>
           </Field>
         )}
       </div>
 
       {paidFromType === "CUSTODIAN" && paidFromPartyId && custodianAdvances.length > 0 && (
-        <Field label="Advance (optional)">
+        <Field label={t("expenseForm.advanceOptional")}>
           <select value={advanceId} onChange={(e) => setAdvanceId(e.target.value)} className={inputClassName}>
-            <option value="">— Pooled custody balance —</option>
+            <option value="">{t("expenseForm.pooledCustodyBalance")}</option>
             {custodianAdvances.map((a) => (
               <option key={a.id} value={a.id}>
                 {formatDate(a.date)} · {formatAED(a.amount)}
@@ -320,7 +328,7 @@ export function ExpenseForm({ onDone }: { onDone: () => void }) {
             onChange={(e) => setHasInvoice(e.target.checked)}
             className="h-4 w-4 rounded border-slate-300"
           />
-          Has invoice
+          {t("expenseForm.hasInvoice")}
         </label>
         {hasInvoice && (
           <div className="flex-1">
@@ -328,7 +336,7 @@ export function ExpenseForm({ onDone }: { onDone: () => void }) {
               value={invoiceNumber}
               onChange={(e) => setInvoiceNumber(e.target.value)}
               className={inputClassName}
-              placeholder="Invoice number"
+              placeholder={t("expenseForm.invoiceNumberPlaceholder")}
             />
             {errors.invoiceNumber && (
               <span className="mt-1 block text-xs text-rose-500">{errors.invoiceNumber}</span>
@@ -337,7 +345,7 @@ export function ExpenseForm({ onDone }: { onDone: () => void }) {
         )}
       </div>
 
-      <Field label="Notes (optional)">
+      <Field label={t("common.notesOptional")}>
         <textarea
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
@@ -354,13 +362,13 @@ export function ExpenseForm({ onDone }: { onDone: () => void }) {
           onClick={onDone}
           className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50"
         >
-          Cancel
+          {t("common.cancel")}
         </button>
         <button
           type="submit"
           className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800"
         >
-          Save Expense
+          {t("expenseForm.saveButton")}
         </button>
       </div>
     </form>

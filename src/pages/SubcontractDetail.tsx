@@ -25,6 +25,8 @@ import {
   contractRetentionHeld,
 } from "../accounting/ledger";
 import { FileCheck2, Hash, Landmark, ListChecks, Receipt } from "lucide-react";
+import { useT } from "../i18n/I18nContext";
+import type { TranslationKey } from "../i18n/en";
 import type { CertificateStatus } from "../domain/types";
 
 const CERT_STATUS_TONE: Record<CertificateStatus, "slate" | "blue" | "amber" | "green"> = {
@@ -32,6 +34,13 @@ const CERT_STATUS_TONE: Record<CertificateStatus, "slate" | "blue" | "amber" | "
   APPROVED: "blue",
   PARTIALLY_PAID: "amber",
   PAID: "green",
+};
+
+const CERT_STATUS_KEY: Record<CertificateStatus, TranslationKey> = {
+  DRAFT: "certificateStatus.DRAFT",
+  APPROVED: "certificateStatus.APPROVED",
+  PARTIALLY_PAID: "certificateStatus.PARTIALLY_PAID",
+  PAID: "certificateStatus.PAID",
 };
 
 type ActivityKind = "ADVANCE" | "CERTIFICATE" | "PAYMENT";
@@ -47,6 +56,7 @@ interface ActivityRow {
 }
 
 export function SubcontractDetail() {
+  const t = useT();
   const { id } = useParams<{ id: string }>();
   const {
     subcontracts,
@@ -99,7 +109,14 @@ export function SubcontractDetail() {
   const activity: ActivityRow[] = useMemo(() => {
     const rows: ActivityRow[] = [];
     for (const a of advances) {
-      rows.push({ key: a.id, date: a.date, kind: "ADVANCE", reference: a.reference ?? "Subcontractor Advance", amount: a.amount, status: "POSTED" });
+      rows.push({
+        key: a.id,
+        date: a.date,
+        kind: "ADVANCE",
+        reference: a.reference ?? t("contractWorkspace.defaultAdvanceReference"),
+        amount: a.amount,
+        status: "POSTED",
+      });
     }
     for (const c of certificates) {
       rows.push({
@@ -113,18 +130,26 @@ export function SubcontractDetail() {
       });
     }
     for (const p of payments) {
-      rows.push({ key: p.id, date: p.date, kind: "PAYMENT", reference: p.reference ?? "Subcontractor Payment", amount: p.amount, status: "PAID" });
+      rows.push({
+        key: p.id,
+        date: p.date,
+        kind: "PAYMENT",
+        reference: p.reference ?? t("contractWorkspace.defaultPaymentReference"),
+        amount: p.amount,
+        status: "PAID",
+      });
     }
     return rows.sort((x, y) => (x.date < y.date ? 1 : -1));
-  }, [advances, certificates, payments]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [advances, certificates, payments, t]);
 
   if (!contract || !subcontractor) {
     return (
       <div>
         <Link to="/subcontractors" className="text-sm text-slate-500 hover:text-slate-900">
-          &larr; Back to subcontractors
+          &larr; {t("subcontractorDetail.backToSubcontractors")}
         </Link>
-        <p className="mt-4 text-sm text-slate-500">Contract not found.</p>
+        <p className="mt-4 text-sm text-slate-500">{t("contractWorkspace.notFound")}</p>
       </div>
     );
   }
@@ -157,7 +182,7 @@ export function SubcontractDetail() {
         to={`/subcontractors/${subcontractor.id}`}
         className="mb-3 inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-900"
       >
-        <ArrowLeft size={14} /> Back to {subcontractor.name}
+        <ArrowLeft size={14} className="rtl:-scale-x-100" /> {t("contractWorkspace.backTo", { name: subcontractor.name })}
       </Link>
       <PageHeader
         title={`${contract.contractNumber} · ${subcontractor.name}`}
@@ -168,14 +193,14 @@ export function SubcontractDetail() {
               onClick={() => setShowEditForm(true)}
               className="flex items-center gap-2 rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50"
             >
-              <Pencil size={15} /> Edit Contract
+              <Pencil size={15} /> {t("contractWorkspace.editContract")}
             </button>
             {eligibleForPayment.length > 0 && (
               <button
                 onClick={handleRecordPaymentClick}
                 className="flex items-center gap-2 rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50"
               >
-                <Receipt size={16} /> Record Payment
+                <Receipt size={16} /> {t("contractWorkspace.recordPayment")}
               </button>
             )}
             <button
@@ -183,14 +208,14 @@ export function SubcontractDetail() {
               disabled={isClosed || projectClosed}
               className="flex items-center gap-2 rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              <Wallet size={16} /> New Advance
+              <Wallet size={16} /> {t("contractWorkspace.newAdvance")}
             </button>
             <button
               onClick={() => setShowCertificateForm(true)}
               disabled={isClosed || projectClosed}
               className="flex items-center gap-2 rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              <Plus size={16} /> New Certificate
+              <Plus size={16} /> {t("contractWorkspace.newCertificate")}
             </button>
           </div>
         }
@@ -198,43 +223,69 @@ export function SubcontractDetail() {
 
       {projectClosed && (
         <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">
-          {project?.name} is closed — new advances and certificates cannot be created against it until it's
-          reopened. Historical activity below remains fully visible.
+          {t("contractWorkspace.projectClosedBanner", { project: project?.name ?? "" })}
         </div>
       )}
       {!projectClosed && isClosed && (
         <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">
-          This subcontract is closed — new advances and certificates are blocked. Settling an existing
-          payable via payment remains allowed. Historical activity below remains fully visible.
+          {t("contractWorkspace.contractClosedBanner")}
         </div>
       )}
 
-      <div className="mb-1.5 text-xs font-medium uppercase tracking-wide text-slate-400">Contract Value</div>
+      <div className="mb-1.5 text-xs font-medium uppercase tracking-wide text-slate-400">
+        {t("contractWorkspace.contractValueSection")}
+      </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <StatCard label="Revised Contract" value={revisedValue} icon={Hash} hint={`Original ${formatAED(contract.originalContractValue)} + Variations ${formatAED(contract.approvedVariations)}`} />
-        <StatCard label="Certified To Date" value={certifiedToDate} icon={FileCheck2} />
-        <StatCard label="Remaining Value" value={remainingValue} icon={Receipt} />
+        <StatCard
+          label={t("contractWorkspace.revisedContract")}
+          value={revisedValue}
+          icon={Hash}
+          hint={t("contractWorkspace.revisedContractHint", {
+            original: formatAED(contract.originalContractValue),
+            variations: formatAED(contract.approvedVariations),
+          })}
+        />
+        <StatCard label={t("contractWorkspace.certifiedToDate")} value={certifiedToDate} icon={FileCheck2} />
+        <StatCard label={t("contractWorkspace.remainingValue")} value={remainingValue} icon={Receipt} />
       </div>
 
-      <div className="mt-5 mb-1.5 text-xs font-medium uppercase tracking-wide text-slate-400">Financial Position</div>
+      <div className="mt-5 mb-1.5 text-xs font-medium uppercase tracking-wide text-slate-400">
+        {t("contractWorkspace.financialPositionSection")}
+      </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Advance Paid" value={advancePaid} icon={Wallet} hint={`Recovered ${formatAED(advanceRecovered)}`} />
-        <StatCard label="Advance Balance" value={advanceBalance} icon={Wallet} hint="Unrecovered" />
-        <StatCard label="Retention Held" value={retentionHeld} icon={Landmark} />
         <StatCard
-          label="Outstanding Payable"
+          label={t("contractWorkspace.advancePaid")}
+          value={advancePaid}
+          icon={Wallet}
+          hint={t("contractWorkspace.advancePaidHint", { amount: formatAED(advanceRecovered) })}
+        />
+        <StatCard
+          label={t("contractWorkspace.advanceBalance")}
+          value={advanceBalance}
+          icon={Wallet}
+          hint={t("contractWorkspace.advanceBalanceHint")}
+        />
+        <StatCard label={t("contractWorkspace.retentionHeld")} value={retentionHeld} icon={Landmark} />
+        <StatCard
+          label={t("contractWorkspace.outstandingPayable")}
           value={outstandingPayable}
           icon={ListChecks}
           tone={outstandingPayable > 0 ? "warning" : "default"}
-          hint={`Created ${formatAED(payableCreated)} − Paid ${formatAED(paymentsMade)}`}
+          hint={t("contractWorkspace.outstandingPayableHint", {
+            created: formatAED(payableCreated),
+            paid: formatAED(paymentsMade),
+          })}
         />
       </div>
 
       <Card className="mt-6">
-        <CardHeader title="Contract Activity" subtitle={`${activity.length} entries — advances, certificates, and payments`} />
+        <CardHeader
+          title={t("contractWorkspace.activityTitle")}
+          subtitle={t("contractWorkspace.activitySubtitle", { count: activity.length })}
+        />
         <div className="divide-y divide-slate-100">
           {activity.length === 0 && (
-            <p className="px-5 py-8 text-center text-sm text-slate-400">No activity recorded on this contract yet.</p>
+            <p className="px-5 py-8 text-center text-sm text-slate-400">{t("contractWorkspace.noActivityYet")}</p>
           )}
           {activity.map((row) => (
             <div
@@ -244,7 +295,7 @@ export function SubcontractDetail() {
             >
               <div className="flex items-center gap-3">
                 <Badge tone={row.kind === "CERTIFICATE" ? "blue" : row.kind === "ADVANCE" ? "amber" : "green"}>
-                  {row.kind === "CERTIFICATE" ? "Certificate" : row.kind === "ADVANCE" ? "Advance" : "Payment"}
+                  {t(`contractWorkspace.activityKind.${row.kind}` as TranslationKey)}
                 </Badge>
                 <div>
                   <p className="text-sm font-medium text-slate-800">{row.reference}</p>
@@ -254,7 +305,9 @@ export function SubcontractDetail() {
               <div className="text-right">
                 <p className="text-sm font-semibold text-slate-900">{formatAED(row.amount)}</p>
                 {row.kind === "CERTIFICATE" && (
-                  <Badge tone={CERT_STATUS_TONE[row.status as CertificateStatus]}>{row.status.replace("_", " ")}</Badge>
+                  <Badge tone={CERT_STATUS_TONE[row.status as CertificateStatus]}>
+                    {t(CERT_STATUS_KEY[row.status as CertificateStatus])}
+                  </Badge>
                 )}
               </div>
             </div>
@@ -263,20 +316,24 @@ export function SubcontractDetail() {
       </Card>
 
       {showEditForm && (
-        <Modal title="Edit Contract" onClose={() => setShowEditForm(false)} width="max-w-2xl">
+        <Modal title={t("contractWorkspace.editContractModalTitle")} onClose={() => setShowEditForm(false)} width="max-w-2xl">
           <SubcontractForm contract={contract} onDone={() => setShowEditForm(false)} />
         </Modal>
       )}
 
       {showCertificateForm && (
-        <Modal title="New Progress Certificate" onClose={() => setShowCertificateForm(false)} width="max-w-2xl">
+        <Modal
+          title={t("contractWorkspace.newCertificateModalTitle")}
+          onClose={() => setShowCertificateForm(false)}
+          width="max-w-2xl"
+        >
           <CertificateForm contractId={contract.id} onDone={() => setShowCertificateForm(false)} />
         </Modal>
       )}
 
       {editingCertificate && (
         <Modal
-          title={`Certificate ${editingCertificate.certificateNumber}`}
+          title={t("contractWorkspace.certificateModalTitle", { number: editingCertificate.certificateNumber })}
           onClose={() => setEditingCertificateId(null)}
           width="max-w-2xl"
         >
@@ -289,13 +346,13 @@ export function SubcontractDetail() {
       )}
 
       {showAdvanceForm && (
-        <Modal title="New Subcontractor Advance" onClose={() => setShowAdvanceForm(false)}>
+        <Modal title={t("contractWorkspace.newAdvanceModalTitle")} onClose={() => setShowAdvanceForm(false)}>
           <SubcontractorAdvanceForm contractId={contract.id} onDone={() => setShowAdvanceForm(false)} />
         </Modal>
       )}
 
       {showPaymentPicker && (
-        <Modal title="Select Certificate to Pay" onClose={() => setShowPaymentPicker(false)}>
+        <Modal title={t("contractWorkspace.selectCertificateModalTitle")} onClose={() => setShowPaymentPicker(false)}>
           <div className="space-y-2">
             {eligibleForPayment.map(({ certificate, outstanding }) => (
               <button
@@ -307,7 +364,9 @@ export function SubcontractDetail() {
                 className="flex w-full items-center justify-between rounded-lg border border-slate-200 px-3 py-2.5 text-left hover:bg-slate-50"
               >
                 <span className="text-sm font-medium text-slate-800">{certificate.certificateNumber}</span>
-                <span className="text-sm font-semibold text-slate-900">{formatAED(outstanding)} outstanding</span>
+                <span className="text-sm font-semibold text-slate-900">
+                  {t("contractWorkspace.outstandingSuffix", { amount: formatAED(outstanding) })}
+                </span>
               </button>
             ))}
           </div>
@@ -315,7 +374,10 @@ export function SubcontractDetail() {
       )}
 
       {payingCertificate && (
-        <Modal title={`Record Payment · ${payingCertificate.certificateNumber}`} onClose={() => setPayingCertificateId(null)}>
+        <Modal
+          title={t("contractWorkspace.recordPaymentModalTitle", { number: payingCertificate.certificateNumber })}
+          onClose={() => setPayingCertificateId(null)}
+        >
           <SubcontractorPaymentForm certificate={payingCertificate} onDone={() => setPayingCertificateId(null)} />
         </Modal>
       )}

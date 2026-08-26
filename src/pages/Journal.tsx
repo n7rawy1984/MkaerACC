@@ -8,22 +8,25 @@ import { formatAED } from "../domain/money";
 import { formatDate, indexById } from "../domain/utils";
 import { isBalanced } from "../accounting/postingEngine";
 import { inputClassName } from "../components/ui/Field";
+import { useT } from "../i18n/I18nContext";
+import type { TranslationKey } from "../i18n/en";
 import type { JournalSourceType } from "../domain/types";
 
-const SOURCE_LABEL: Record<JournalSourceType, string> = {
-  EXPENSE: "Expense",
-  ADVANCE: "Advance",
-  SUPPLIER_PAYMENT: "Supplier Payment",
-  CUSTODY_SETTLEMENT: "Custody Settlement",
-  SUBCONTRACTOR_ADVANCE: "Subcontractor Advance",
-  SUBCONTRACTOR_CERTIFICATE: "Subcontractor Certificate",
-  SUBCONTRACTOR_PAYMENT: "Subcontractor Payment",
-  MANUAL: "Manual",
+const SOURCE_KEY: Record<JournalSourceType, TranslationKey> = {
+  EXPENSE: "journal.source.EXPENSE",
+  ADVANCE: "journal.source.ADVANCE",
+  SUPPLIER_PAYMENT: "journal.source.SUPPLIER_PAYMENT",
+  CUSTODY_SETTLEMENT: "journal.source.CUSTODY_SETTLEMENT",
+  SUBCONTRACTOR_ADVANCE: "journal.source.SUBCONTRACTOR_ADVANCE",
+  SUBCONTRACTOR_CERTIFICATE: "journal.source.SUBCONTRACTOR_CERTIFICATE",
+  SUBCONTRACTOR_PAYMENT: "journal.source.SUBCONTRACTOR_PAYMENT",
+  MANUAL: "journal.source.MANUAL",
 };
 
 const ALL = "ALL";
 
 export function Journal() {
+  const t = useT();
   const { journalEntries, accounts, parties, projects } = useAppData();
   const [sourceFilter, setSourceFilter] = useState<JournalSourceType | typeof ALL>(ALL);
 
@@ -41,10 +44,7 @@ export function Journal() {
 
   return (
     <div>
-      <PageHeader
-        title="Journal"
-        subtitle={`${journalEntries.length} posted entries · every entry is balanced (debits = credits) by construction`}
-      />
+      <PageHeader title={t("journal.title")} subtitle={t("journal.subtitle", { count: journalEntries.length })} />
 
       <div className="mb-4">
         <select
@@ -52,21 +52,21 @@ export function Journal() {
           onChange={(e) => setSourceFilter(e.target.value as JournalSourceType | typeof ALL)}
           className={`${inputClassName} w-56`}
         >
-          <option value={ALL}>All source types</option>
-          <option value="EXPENSE">Expense</option>
-          <option value="ADVANCE">Advance</option>
-          <option value="SUPPLIER_PAYMENT">Supplier Payment</option>
-          <option value="CUSTODY_SETTLEMENT">Custody Settlement</option>
-          <option value="SUBCONTRACTOR_ADVANCE">Subcontractor Advance</option>
-          <option value="SUBCONTRACTOR_CERTIFICATE">Subcontractor Certificate</option>
-          <option value="SUBCONTRACTOR_PAYMENT">Subcontractor Payment</option>
+          <option value={ALL}>{t("journal.allSourceTypes")}</option>
+          <option value="EXPENSE">{t("journal.source.EXPENSE")}</option>
+          <option value="ADVANCE">{t("journal.source.ADVANCE")}</option>
+          <option value="SUPPLIER_PAYMENT">{t("journal.source.SUPPLIER_PAYMENT")}</option>
+          <option value="CUSTODY_SETTLEMENT">{t("journal.source.CUSTODY_SETTLEMENT")}</option>
+          <option value="SUBCONTRACTOR_ADVANCE">{t("journal.source.SUBCONTRACTOR_ADVANCE")}</option>
+          <option value="SUBCONTRACTOR_CERTIFICATE">{t("journal.source.SUBCONTRACTOR_CERTIFICATE")}</option>
+          <option value="SUBCONTRACTOR_PAYMENT">{t("journal.source.SUBCONTRACTOR_PAYMENT")}</option>
         </select>
       </div>
 
       <div className="space-y-4">
         {entries.length === 0 && (
           <Card>
-            <p className="px-5 py-8 text-center text-sm text-slate-400">No journal entries yet.</p>
+            <p className="px-5 py-8 text-center text-sm text-slate-400">{t("journal.noEntriesYet")}</p>
           </Card>
         )}
         {entries.map((entry) => {
@@ -78,27 +78,27 @@ export function Journal() {
               <div className="flex items-center justify-between border-b border-slate-100 px-5 py-3">
                 <div className="flex items-center gap-3">
                   <p className="text-sm font-semibold text-slate-900">{entry.reference}</p>
-                  <Badge tone="slate">{SOURCE_LABEL[entry.sourceType]}</Badge>
+                  <Badge tone="slate">{t(SOURCE_KEY[entry.sourceType])}</Badge>
                   <span className="text-xs text-slate-400">{entry.description}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="text-xs text-slate-400">{formatDate(entry.date)}</span>
                   {balanced ? (
                     <span className="flex items-center gap-1 text-xs font-medium text-emerald-600">
-                      <CheckCircle2 size={14} /> Balanced
+                      <CheckCircle2 size={14} /> {t("journal.balanced")}
                     </span>
                   ) : (
-                    <Badge tone="red">Unbalanced</Badge>
+                    <Badge tone="red">{t("journal.unbalanced")}</Badge>
                   )}
                 </div>
               </div>
               <table className="w-full text-sm">
                 <thead>
                   <tr className="text-left text-xs uppercase tracking-wide text-slate-400">
-                    <th className="px-5 py-2 font-medium">Account</th>
-                    <th className="px-5 py-2 font-medium">Dimension</th>
-                    <th className="px-5 py-2 text-right font-medium">Debit</th>
-                    <th className="px-5 py-2 text-right font-medium">Credit</th>
+                    <th className="px-5 py-2 font-medium">{t("journal.colAccount")}</th>
+                    <th className="px-5 py-2 font-medium">{t("journal.colDimension")}</th>
+                    <th className="px-5 py-2 text-right font-medium">{t("journal.colDebit")}</th>
+                    <th className="px-5 py-2 text-right font-medium">{t("journal.colCredit")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -122,7 +122,7 @@ export function Journal() {
                   ))}
                   <tr className="border-t border-slate-200 font-semibold">
                     <td className="px-5 py-2 text-slate-500" colSpan={2}>
-                      Total
+                      {t("journal.total")}
                     </td>
                     <td className="px-5 py-2 text-right text-slate-900">{formatAED(debitTotal)}</td>
                     <td className="px-5 py-2 text-right text-slate-900">{formatAED(creditTotal)}</td>

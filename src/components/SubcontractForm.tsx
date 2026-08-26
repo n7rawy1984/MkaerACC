@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { useAppData, type NewSubcontractInput } from "../state/AppDataContext";
 import { Field, inputClassName } from "./ui/Field";
+import { useT } from "../i18n/I18nContext";
 import type { Subcontract, SubcontractStatus } from "../domain/types";
 
 export function SubcontractForm({
@@ -14,6 +15,7 @@ export function SubcontractForm({
   defaultSubcontractorId?: string;
   onDone: () => void;
 }) {
+  const t = useT();
   const { companies, projects, parties, addSubcontract, updateSubcontract } = useAppData();
   const isEdit = Boolean(contract);
 
@@ -48,14 +50,16 @@ export function SubcontractForm({
 
   function validate(): Record<string, string> {
     const e: Record<string, string> = {};
-    if (!projectId) e.projectId = "Select a project";
-    if (!subcontractorId) e.subcontractorId = "Select a subcontractor";
-    if (!contractNumber.trim()) e.contractNumber = "Required";
-    if (!scopeOfWork.trim()) e.scopeOfWork = "Required";
+    if (!projectId) e.projectId = t("subcontractForm.selectProject");
+    if (!subcontractorId) e.subcontractorId = t("subcontractForm.selectSubcontractor");
+    if (!contractNumber.trim()) e.contractNumber = t("common.required");
+    if (!scopeOfWork.trim()) e.scopeOfWork = t("common.required");
     const value = Number(originalContractValue);
-    if (!originalContractValue || Number.isNaN(value) || value < 0) e.originalContractValue = "Must be zero or more";
+    if (!originalContractValue || Number.isNaN(value) || value < 0)
+      e.originalContractValue = t("project.form.mustBeZeroOrMore");
     const retention = Number(retentionPercent);
-    if (Number.isNaN(retention) || retention < 0 || retention > 100) e.retentionPercent = "Must be between 0 and 100";
+    if (Number.isNaN(retention) || retention < 0 || retention > 100)
+      e.retentionPercent = t("subcontractForm.mustBeBetween0And100");
     return e;
   }
 
@@ -85,14 +89,14 @@ export function SubcontractForm({
       else addSubcontract(input);
       onDone();
     } catch (err) {
-      setSubmitError(err instanceof Error ? err.message : "Could not save this contract.");
+      setSubmitError(err instanceof Error ? err.message : t("subcontractForm.saveError"));
     }
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Company" required>
+        <Field label={t("subcontractForm.company")} required>
           <select
             value={companyId}
             onChange={(e) => {
@@ -108,9 +112,9 @@ export function SubcontractForm({
             ))}
           </select>
         </Field>
-        <Field label="Project" required error={errors.projectId}>
+        <Field label={t("subcontractForm.project")} required error={errors.projectId}>
           <select value={projectId} onChange={(e) => setProjectId(e.target.value)} className={inputClassName}>
-            <option value="">Select…</option>
+            <option value="">{t("common.selectEllipsis")}</option>
             {companyProjects.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.name} ({p.code})
@@ -120,37 +124,37 @@ export function SubcontractForm({
         </Field>
       </div>
 
-      <Field label="Subcontractor" required error={errors.subcontractorId}>
+      <Field label={t("subcontractForm.subcontractor")} required error={errors.subcontractorId}>
         <select value={subcontractorId} onChange={(e) => setSubcontractorId(e.target.value)} className={inputClassName}>
-          <option value="">Select…</option>
+          <option value="">{t("common.selectEllipsis")}</option>
           {eligibleSubcontractors.map((s) => (
             <option key={s.id} value={s.id}>
               {s.name}
-              {s.status === "INACTIVE" ? " (Inactive)" : ""}
+              {s.status === "INACTIVE" ? t("subcontractForm.inactiveSuffix") : ""}
             </option>
           ))}
         </select>
       </Field>
 
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Contract Number" required error={errors.contractNumber}>
+        <Field label={t("subcontractForm.contractNumber")} required error={errors.contractNumber}>
           <input
             value={contractNumber}
             onChange={(e) => setContractNumber(e.target.value)}
             className={inputClassName}
-            placeholder="e.g. SC-AN-02"
+            placeholder={t("subcontractForm.contractNumberPlaceholder")}
           />
         </Field>
-        <Field label="Status" required>
+        <Field label={t("common.status")} required>
           <select value={status} onChange={(e) => setStatus(e.target.value as SubcontractStatus)} className={inputClassName}>
-            <option value="ACTIVE">Active</option>
-            <option value="COMPLETED">Completed</option>
-            <option value="CLOSED">Closed</option>
+            <option value="ACTIVE">{t("subcontractStatus.ACTIVE")}</option>
+            <option value="COMPLETED">{t("subcontractStatus.COMPLETED")}</option>
+            <option value="CLOSED">{t("subcontractStatus.CLOSED")}</option>
           </select>
         </Field>
       </div>
 
-      <Field label="Scope of Work" required error={errors.scopeOfWork}>
+      <Field label={t("subcontractForm.scopeOfWork")} required error={errors.scopeOfWork}>
         <textarea
           value={scopeOfWork}
           onChange={(e) => setScopeOfWork(e.target.value)}
@@ -160,7 +164,7 @@ export function SubcontractForm({
       </Field>
 
       <div className="grid grid-cols-3 gap-4">
-        <Field label="Original Value (AED)" required error={errors.originalContractValue}>
+        <Field label={t("subcontractForm.originalValueAed")} required error={errors.originalContractValue}>
           <input
             type="number"
             min="0"
@@ -171,7 +175,7 @@ export function SubcontractForm({
             placeholder="0.00"
           />
         </Field>
-        <Field label="Approved Variations (AED)">
+        <Field label={t("subcontractForm.approvedVariationsAed")}>
           <input
             type="number"
             step="0.01"
@@ -180,7 +184,7 @@ export function SubcontractForm({
             className={inputClassName}
           />
         </Field>
-        <Field label="Retention (%)" required error={errors.retentionPercent}>
+        <Field label={t("subcontractForm.retentionPercent")} required error={errors.retentionPercent}>
           <input
             type="number"
             min="0"
@@ -194,15 +198,15 @@ export function SubcontractForm({
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Start Date (optional)">
+        <Field label={t("subcontractForm.startDateOptional")}>
           <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className={inputClassName} />
         </Field>
-        <Field label="Expected End Date (optional)">
+        <Field label={t("subcontractForm.expectedEndDateOptional")}>
           <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className={inputClassName} />
         </Field>
       </div>
 
-      <Field label="Notes (optional)">
+      <Field label={t("common.notesOptional")}>
         <textarea value={notes} onChange={(e) => setNotes(e.target.value)} className={inputClassName} rows={2} />
       </Field>
 
@@ -214,13 +218,13 @@ export function SubcontractForm({
           onClick={onDone}
           className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50"
         >
-          Cancel
+          {t("common.cancel")}
         </button>
         <button
           type="submit"
           className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800"
         >
-          {isEdit ? "Save Changes" : "Create Subcontract"}
+          {isEdit ? t("common.saveChanges") : t("subcontractForm.createButton")}
         </button>
       </div>
     </form>

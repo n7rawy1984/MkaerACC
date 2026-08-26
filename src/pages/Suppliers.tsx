@@ -9,6 +9,7 @@ import { SupplierPaymentForm } from "../components/SupplierPaymentForm";
 import { formatAED } from "../domain/money";
 import { formatDate } from "../domain/utils";
 import { supplierPayableBalance } from "../accounting/ledger";
+import { useT } from "../i18n/I18nContext";
 import type { Party } from "../domain/types";
 
 function SupplierRow({
@@ -20,6 +21,7 @@ function SupplierRow({
   balance: number;
   onPay: () => void;
 }) {
+  const t = useT();
   const { expenses, supplierPayments } = useAppData();
   const [open, setOpen] = useState(false);
 
@@ -56,14 +58,19 @@ function SupplierRow({
           <div>
             <p className="text-sm font-semibold text-slate-900">{supplier.name}</p>
             <p className="text-xs text-slate-400">
-              {purchases.length} purchase{purchases.length === 1 ? "" : "s"}
-              {payments.length > 0 && ` · ${payments.length} payment${payments.length === 1 ? "" : "s"}`}
+              {t(purchases.length === 1 ? "suppliers.purchaseCount" : "suppliers.purchaseCountPlural", {
+                count: purchases.length,
+              })}
+              {payments.length > 0 &&
+                ` · ${t(payments.length === 1 ? "suppliers.paymentCount" : "suppliers.paymentCountPlural", {
+                  count: payments.length,
+                })}`}
             </p>
           </div>
         </div>
         <div className="flex items-center gap-4">
           <div className="text-right">
-            <p className="text-xs text-slate-400">Outstanding Balance</p>
+            <p className="text-xs text-slate-400">{t("suppliers.outstandingBalance")}</p>
             <p className="text-sm font-semibold text-slate-900">{formatAED(balance)}</p>
           </div>
           {balance > 0 ? (
@@ -75,10 +82,10 @@ function SupplierRow({
               }}
               className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-white"
             >
-              Record Payment
+              {t("suppliers.recordPayment")}
             </button>
           ) : (
-            <Badge tone="green">Settled</Badge>
+            <Badge tone="green">{t("suppliers.settled")}</Badge>
           )}
           {open ? <ChevronUp size={16} className="text-slate-400" /> : <ChevronDown size={16} className="text-slate-400" />}
         </div>
@@ -87,19 +94,21 @@ function SupplierRow({
       {open && (
         <div className="border-t border-slate-100 bg-slate-50/50 px-5 py-3">
           {purchases.length === 0 && payments.length === 0 && (
-            <p className="py-2 text-sm text-slate-400">No transactions recorded for this supplier yet.</p>
+            <p className="py-2 text-sm text-slate-400">{t("suppliers.noTransactionsYet")}</p>
           )}
           {purchases.length > 0 && (
             <div className="mb-3">
-              <p className="mb-1.5 text-xs font-medium uppercase tracking-wide text-slate-400">Purchases</p>
+              <p className="mb-1.5 text-xs font-medium uppercase tracking-wide text-slate-400">
+                {t("suppliers.purchasesHeader")}
+              </p>
               <div className="space-y-1.5">
                 {purchases.map((p) => (
                   <div key={p.id} className="flex items-center justify-between text-sm">
                     <span className="text-slate-600">
                       {formatDate(p.date)} · {p.description}
                       {!p.hasInvoice && (
-                        <span className="ml-2">
-                          <Badge tone="amber">No invoice</Badge>
+                        <span className="ms-2">
+                          <Badge tone="amber">{t("badge.noInvoice")}</Badge>
                         </span>
                       )}
                     </span>
@@ -111,12 +120,14 @@ function SupplierRow({
           )}
           {payments.length > 0 && (
             <div>
-              <p className="mb-1.5 text-xs font-medium uppercase tracking-wide text-slate-400">Payments Made</p>
+              <p className="mb-1.5 text-xs font-medium uppercase tracking-wide text-slate-400">
+                {t("suppliers.paymentsMadeHeader")}
+              </p>
               <div className="space-y-1.5">
                 {payments.map((p) => (
                   <div key={p.id} className="flex items-center justify-between text-sm">
                     <span className="text-slate-600">
-                      {formatDate(p.date)} · {p.reference || "Payment"}
+                      {formatDate(p.date)} · {p.reference || t("common.payment")}
                     </span>
                     <span className="font-medium text-emerald-700">− {formatAED(p.amount)}</span>
                   </div>
@@ -131,6 +142,7 @@ function SupplierRow({
 }
 
 export function Suppliers() {
+  const t = useT();
   const { parties, journalEntries } = useAppData();
   const [payingSupplierId, setPayingSupplierId] = useState<string | null>(null);
 
@@ -149,10 +161,7 @@ export function Suppliers() {
 
   return (
     <div>
-      <PageHeader
-        title="Suppliers"
-        subtitle="Who we owe, and what we've bought and paid so far — click a supplier to see details"
-      />
+      <PageHeader title={t("suppliers.title")} subtitle={t("suppliers.subtitle")} />
 
       <Card>
         <div className="divide-y divide-slate-100">
@@ -168,7 +177,10 @@ export function Suppliers() {
       </Card>
 
       {payingSupplier && (
-        <Modal title={`Record Payment · ${payingSupplier.name}`} onClose={() => setPayingSupplierId(null)}>
+        <Modal
+          title={t("suppliers.paymentModalTitle", { name: payingSupplier.name })}
+          onClose={() => setPayingSupplierId(null)}
+        >
           <SupplierPaymentForm supplierId={payingSupplier.id} onDone={() => setPayingSupplierId(null)} />
         </Modal>
       )}

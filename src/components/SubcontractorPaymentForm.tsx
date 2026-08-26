@@ -3,6 +3,7 @@ import { useAppData, type NewSubcontractorPaymentInput } from "../state/AppDataC
 import { Field, inputClassName } from "./ui/Field";
 import { formatAED, subtractMoney } from "../domain/money";
 import { certificatePaidAmount } from "../accounting/ledger";
+import { useT } from "../i18n/I18nContext";
 import type { SubcontractorCertificate, SubcontractorPaymentSourceType } from "../domain/types";
 
 const today = () => new Date().toISOString().slice(0, 10);
@@ -14,6 +15,7 @@ export function SubcontractorPaymentForm({
   certificate: SubcontractorCertificate;
   onDone: () => void;
 }) {
+  const t = useT();
   const { parties, subcontractorPayments, treasuryAccounts, addSubcontractorPayment } = useAppData();
   const owners = useMemo(() => parties.filter((p) => p.type === "OWNER"), [parties]);
   const custodians = useMemo(() => parties.filter((p) => p.type === "CUSTODIAN"), [parties]);
@@ -47,10 +49,11 @@ export function SubcontractorPaymentForm({
   function validate(): Record<string, string> {
     const e: Record<string, string> = {};
     const n = Number(amount);
-    if (!Number.isFinite(n) || n <= 0) e.amount = "Enter an amount greater than zero";
-    else if (n > outstanding + 0.01) e.amount = `Cannot exceed the outstanding balance (${formatAED(outstanding)})`;
-    if (needsParty && !sourcePartyId) e.sourcePartyId = "Select who paid";
-    if (needsTreasury && !treasuryAccountId) e.treasuryAccountId = "Select the cash/bank account";
+    if (!Number.isFinite(n) || n <= 0) e.amount = t("common.enterAmountGreaterThanZero");
+    else if (n > outstanding + 0.01)
+      e.amount = t("subcontractorPaymentForm.cannotExceedOutstanding", { amount: formatAED(outstanding) });
+    if (needsParty && !sourcePartyId) e.sourcePartyId = t("common.selectWhoPaid");
+    if (needsTreasury && !treasuryAccountId) e.treasuryAccountId = t("common.selectCashBankAccount");
     return e;
   }
 
@@ -74,22 +77,25 @@ export function SubcontractorPaymentForm({
       addSubcontractorPayment(input);
       onDone();
     } catch (err) {
-      setSubmitError(err instanceof Error ? err.message : "Could not record this payment.");
+      setSubmitError(err instanceof Error ? err.message : t("subcontractorPaymentForm.saveError"));
     }
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="rounded-lg bg-slate-50 px-3 py-2 text-xs text-slate-500">
-        Net payable {formatAED(certificate.netPayable)} — already paid {formatAED(alreadyPaid)} — outstanding{" "}
-        <span className="font-semibold text-slate-700">{formatAED(outstanding)}</span>
+        {t("subcontractorPaymentForm.summaryLine", {
+          net: formatAED(certificate.netPayable),
+          paid: formatAED(alreadyPaid),
+          outstanding: formatAED(outstanding),
+        })}
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Date" required>
+        <Field label={t("common.date")} required>
           <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className={inputClassName} />
         </Field>
-        <Field label="Amount (AED)" required error={errors.amount}>
+        <Field label={t("common.amountAed")} required error={errors.amount}>
           <input
             type="number"
             min="0"
@@ -101,7 +107,7 @@ export function SubcontractorPaymentForm({
         </Field>
       </div>
 
-      <Field label="Paid From" required>
+      <Field label={t("common.paidFrom")} required>
         <select
           value={sourceType}
           onChange={(e) => {
@@ -110,19 +116,19 @@ export function SubcontractorPaymentForm({
           }}
           className={inputClassName}
         >
-          <option value="TREASURY">Cash / Bank (Treasury)</option>
-          <option value="OWNER">Owner Current Account</option>
-          <option value="CUSTODIAN">Custodian</option>
+          <option value="TREASURY">{t("common.paidFromTreasury")}</option>
+          <option value="OWNER">{t("common.ownerCurrentAccount")}</option>
+          <option value="CUSTODIAN">{t("common.custodian")}</option>
         </select>
       </Field>
 
       {needsTreasury && (
-        <Field label="Cash / Bank Account" required error={errors.treasuryAccountId}>
+        <Field label={t("common.cashBankAccount")} required error={errors.treasuryAccountId}>
           <select value={treasuryAccountId} onChange={(e) => setTreasuryAccountId(e.target.value)} className={inputClassName}>
-            <option value="">Select…</option>
-            {eligibleTreasuryAccounts.map((t) => (
-              <option key={t.id} value={t.id}>
-                {t.name}
+            <option value="">{t("common.selectEllipsis")}</option>
+            {eligibleTreasuryAccounts.map((account) => (
+              <option key={account.id} value={account.id}>
+                {account.name}
               </option>
             ))}
           </select>
@@ -130,9 +136,9 @@ export function SubcontractorPaymentForm({
       )}
 
       {needsParty && (
-        <Field label={sourceType === "OWNER" ? "Owner" : "Custodian"} required error={errors.sourcePartyId}>
+        <Field label={sourceType === "OWNER" ? t("common.owner") : t("common.custodian")} required error={errors.sourcePartyId}>
           <select value={sourcePartyId} onChange={(e) => setSourcePartyId(e.target.value)} className={inputClassName}>
-            <option value="">Select…</option>
+            <option value="">{t("common.selectEllipsis")}</option>
             {partyOptions.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.name}
@@ -142,7 +148,7 @@ export function SubcontractorPaymentForm({
         </Field>
       )}
 
-      <Field label="Reference (optional)">
+      <Field label={t("common.referenceOptional")}>
         <input value={reference} onChange={(e) => setReference(e.target.value)} className={inputClassName} />
       </Field>
 
@@ -154,13 +160,13 @@ export function SubcontractorPaymentForm({
           onClick={onDone}
           className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50"
         >
-          Cancel
+          {t("common.cancel")}
         </button>
         <button
           type="submit"
           className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800"
         >
-          Save Payment
+          {t("supplierPaymentForm.saveButton")}
         </button>
       </div>
     </form>

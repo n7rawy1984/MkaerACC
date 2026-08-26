@@ -21,7 +21,8 @@ The company previously tracked project expenses, supplier bills, cash handed to 
 - **Phase 2B.1 (Project Core + Company + Treasury Foundation)** — Completed.
 - **Phase 2B.1A (Treasury Integration & Project Guard Completion)** — Completed.
 - **Phase 2B.2 (Subcontractor Operationalization)** — Completed.
-- **Phase 2B.3 (Arabic / English Foundation)** — Not started. This is the immediate next task.
+- **Phase 2B.3 (Arabic / English Foundation & Completion)** — Completed.
+- **Phase 2C (Payroll + WPS)** — Not started. This is the immediate next task.
 
 See `PROJECT_ROADMAP.md` for the full phase breakdown, binding decisions, and decision log.
 
@@ -57,11 +58,17 @@ src/
     AppDataContext.tsx    # React context: loads all repos into state, exposes add*/update*/approve*/finalize* actions
   seed/
     seedData.ts            # Demo/seed dataset + ensureSeeded() + ensurePhase2ASeeded() + resetDemoData()
+  i18n/             # Translation dictionaries + locale/RTL context — Phase 2B.3
+    en.ts                   # English dictionary, source of the TranslationKey type
+    ar.ts                    # Arabic dictionary, typed against TranslationKey (build fails if a key is missing)
+    I18nContext.tsx           # I18nProvider, useI18n(), useT() — locale state, localStorage persistence, dir/lang side effect
   pages/            # One file per route (see §6 routing) — includes Companies.tsx, Treasury.tsx since Phase 2B.1; SubcontractorDetail.tsx since Phase 2B.2
   components/       # Forms and shared UI (components/ui/ for primitives) — includes ProjectForm, CompanyForm, TreasuryAccountForm since Phase 2B.1; SubcontractorForm, SubcontractForm since Phase 2B.2
   App.tsx            # Route table
-  main.tsx            # Entry point, wraps App in BrowserRouter
+  main.tsx            # Entry point, wraps App in I18nProvider + BrowserRouter
 ```
+
+`vercel.json` (repo root, Phase 2B.3): SPA rewrite (`/(.*) → /index.html`) so a direct load or refresh of any client-side route works on Vercel's static hosting.
 
 ## 6. Important Files
 
@@ -77,7 +84,9 @@ src/
 | `src/state/AppDataContext.tsx` | The only place UI code touches `db` and `post*` together — every `add*`/`update*`/`approve*`/`finalize*` action here loads data, calls a posting function, persists, and refreshes React state. |
 | `src/seed/seedData.ts` | Demo data + the seed entry points (`ensureSeeded`, `ensurePhase2ASeeded`) + `resetDemoData`. |
 | `src/App.tsx` | Route table — the authoritative list of what pages exist. |
-| `src/components/layout/Sidebar.tsx` | The authoritative nav list (and the "Reset Demo Data" action). |
+| `src/components/layout/Sidebar.tsx` | The authoritative nav list, the "Reset Demo Data" action, and (Phase 2B.3) the EN/عربي language toggle. |
+| `src/i18n/en.ts` / `src/i18n/ar.ts` | Every UI string in the app, keyed identically in both files (TypeScript enforces this). New UI text always adds a key here first, in both files, never inline English. |
+| `src/i18n/I18nContext.tsx` | `useT()` — the hook every page/component calls for translated strings; also owns locale persistence and the RTL `dir` side effect. |
 
 Routes (from `App.tsx`): `/` (Dashboard), `/company`, `/projects`, `/projects/:id`, `/treasury`, `/expenses`, `/advances`, `/suppliers`, `/subcontractors` (subcontractor master list), `/subcontractors/:id` (subcontractor profile — **Phase 2B.2, new**), `/subcontracts/:id` (contract workspace — **Phase 2B.2, moved from `/subcontractors/:id`**), `/people` (Owners & Custodians), `/journal`.
 
@@ -167,7 +176,7 @@ Cr [resolved.glAccountId] (resolved.partyId if party-scoped)  — TREASURY / CUS
    — or —
 Cr Cash / Bank (pooled, legacy)                                 — CASH / BANK
 ```
-Never re-creates project cost. Not guarded against a closed project (see §14) — settling an existing payable isn't treated as "new cost."
+Never re-creates project cost. Not guarded against a closed project (see §15) — settling an existing payable isn't treated as "new cost."
 
 ### Custody settlement cash return (`postCashReturn`)
 Only posted when a settlement with `cashReturnAmount > 0` is finalized — grouping expenses into a settlement itself posts nothing.
@@ -240,7 +249,7 @@ Before this phase, subcontractor payable/retention/advance balances in `ledger.t
 - Every subcontractor-related posting function (`postSubcontractorAdvance`, `postCertificateApproval`, `postSubcontractorPayment` in `accounting/postingEngine.ts`) now tags every line it produces with `contractId`. `SubcontractorAdvance` and `SubcontractorCertificate` already stored `contractId` from Phase 2A, so those two functions needed no new parameter. `SubcontractorPaymentTransaction` did **not** have `contractId` — it gained one (optional, always populated going forward from `certificate.contractId` when a payment is created), and `postSubcontractorPayment` gained a `projectId` parameter (the certificate's project, passed by the caller, never stored redundantly on the payment record) so its lines could carry a project dimension too (which they never did before this phase).
 - `accounting/ledger.ts` gained contract-scoped query functions: `contractAdvancePaid`, `contractAdvanceRecovered`, `contractAdvanceBalance`, `contractRetentionHeld`, `contractPayableCreated`, `contractPayableBalance`, `contractCertifiedCost` — each filtered strictly by `contractId`, all built on a shared `accountTotals()` helper (raw debit/credit totals) that `accountBalance()` now composes from.
 - `approveCertificate()`'s advance-recovery ceiling and `CertificateForm.tsx`'s live "available advance balance" hint were switched from `subcontractorAdvanceBalance(entries, subcontractorId, projectId)` to `contractAdvanceBalance(entries, contract.id)` — two contracts for the same subcontractor, even on the same project, can no longer share an advance balance.
-- The **old party-scoped functions were not removed** — `subcontractorPayableBalance`, `subcontractorRetentionHeld`, `subcontractorAdvanceBalance` (called with no project filter) now serve exactly as the **subcontractor-level aggregate**, since `partyId` is still tagged on every line regardless of contract. This is what powers the master list / subcontractor profile totals, and is *by construction* the sum across that subcontractor's contracts (verified live — see §21).
+- The **old party-scoped functions were not removed** — `subcontractorPayableBalance`, `subcontractorRetentionHeld`, `subcontractorAdvanceBalance` (called with no project filter) now serve exactly as the **subcontractor-level aggregate**, since `partyId` is still tagged on every line regardless of contract. This is what powers the master list / subcontractor profile totals, and is *by construction* the sum across that subcontractor's contracts (verified live — see §22).
 - `pages/ProjectDetail.tsx`'s subcontractor payable/retention totals were switched from summing the party-scoped functions per contract (a latent double-count risk if one subcontractor ever had two contracts on the same project) to summing `contractPayableBalance`/`contractRetentionHeld` per contract — now correct by construction.
 
 ### Historical migration
@@ -254,7 +263,7 @@ Before this phase, subcontractor payable/retention/advance balances in `ledger.t
 
 ## 12. Projects
 
-`Project` is a real operational master record (Phase 2B.1). `pages/Projects.tsx` has a "New Project" action (opens `components/ProjectForm.tsx`), status and company filters, and a company column. `pages/ProjectDetail.tsx` has an "Edit Project" action using the same form, plus (Phase 2B.1A) an amber banner when `status === "CLOSED"` explaining that new operational activity is blocked while historical activity stays visible. `AppDataContext`: `addProject`/`updateProject` validate a required name, a valid company, and a project code that's unique within that company; once a project has any accounting activity (`projectHasActivity()` checks expenses, advances, settlements, subcontracts, and journal lines by `projectId`), `updateProject` refuses to change `code` or `companyId`. `deleteProject` throws if the project has any activity — a genuinely empty, never-used project can be deleted. `assertProjectAcceptsTransactions(projectId)` (Phase 2B.1A) throws if the project is `CLOSED`; it's called from `addExpense`, `addAdvance`, `addCustodySettlement`, `addSubcontractorAdvance`, `addCertificateDraft`, `updateCertificateDraft`, and `approveCertificate` — see §14 for what it does *not* cover. All cost/VAT figures (`totalProjectCost`, `directExpenseCost`, `subcontractorCertifiedCost`, `totalInputVat`, etc.) are unchanged, still derived live from `ledger.ts`.
+`Project` is a real operational master record (Phase 2B.1). `pages/Projects.tsx` has a "New Project" action (opens `components/ProjectForm.tsx`), status and company filters, and a company column. `pages/ProjectDetail.tsx` has an "Edit Project" action using the same form, plus (Phase 2B.1A) an amber banner when `status === "CLOSED"` explaining that new operational activity is blocked while historical activity stays visible. `AppDataContext`: `addProject`/`updateProject` validate a required name, a valid company, and a project code that's unique within that company; once a project has any accounting activity (`projectHasActivity()` checks expenses, advances, settlements, subcontracts, and journal lines by `projectId`), `updateProject` refuses to change `code` or `companyId`. `deleteProject` throws if the project has any activity — a genuinely empty, never-used project can be deleted. `assertProjectAcceptsTransactions(projectId)` (Phase 2B.1A) throws if the project is `CLOSED`; it's called from `addExpense`, `addAdvance`, `addCustodySettlement`, `addSubcontractorAdvance`, `addCertificateDraft`, `updateCertificateDraft`, and `approveCertificate` — see §15 for what it does *not* cover. All cost/VAT figures (`totalProjectCost`, `directExpenseCost`, `subcontractorCertifiedCost`, `totalInputVat`, etc.) are unchanged, still derived live from `ledger.ts`.
 
 ## 13. Demo Data
 
@@ -262,30 +271,44 @@ Before this phase, subcontractor payable/retention/advance balances in `ledger.t
 
 `ensureSeeded()` runs once on a genuinely empty install. `ensurePhase2ASeeded()` is a **separate, additive, idempotent migration** — gated on `subcontracts` being empty — that backfills the Phase 2A chart-of-accounts entries, the two subcontractor parties, and the subcontractor demo dataset onto an *existing* Phase 1 install without touching real data already there. `ensurePhase2B1Migrated()` then backfills `Company`/`Project`/`AdvanceTransaction` shapes and seeds the three baseline treasury accounts for pre-2B.1 installs; `ensurePhase2B1AMigrated()` runs last and mints each of those a dedicated GL account (see §8). All four run on every app boot (`AppDataContext.tsx` module top level); `resetDemoData()` wipes everything (`clearAll()`) and reseeds from scratch. **This demo data is not approved opening balances** — see Binding Decision #11 in the roadmap.
 
-## 14. Known Limitations
+## 14. Internationalization (i18n / RTL) — Phase 2B.3
 
-See `PROJECT_ROADMAP.md` → "Known Gaps" for the full, current list. Headline items after Phase 2B.2: `CASH`/`BANK` remain valid legacy-only values on every funding-source-type union (never produced by any form, kept for historical records); a treasury account's balance is only fully accurate for activity posted after its dedicated GL account existed — pre-migration activity stays attributed to the shared pooled `1000`/`1100` account, permanently, by design; the CLOSED-project guard covers new Expense/Advance/Settlement-draft/Subcontractor-Advance/Certificate-draft+approval but not Supplier Payment, Subcontractor Payment, or finalizing an already-existing draft settlement; no Company or Subcontractor deletion (create/edit/deactivate only, by design); Subcontractor Payment is still fundamentally certificate-scoped (the contract workspace's "Record Payment" is a certificate picker, not a new pooled-payment model); contract-dimension backfill on historical journal lines is deterministic-only (an unresolvable entry stays party-scoped-only, permanently, never guessed); no i18n/Arabic; no backend/auth (by design).
+`src/i18n/` (new, Phase 2B.3): `en.ts` and `ar.ts` each export a flat, dot-namespaced `Record<TranslationKey, string>` (`TranslationKey = keyof typeof en`, so `ar.ts` is typed against it — a missing Arabic key is a TypeScript build error, never a silent runtime gap), organized in sections that mirror the screens they serve (`dashboard.*`, `subcontractForm.*`, `contractWorkspace.*`, etc. — ~330 keys total). `I18nContext.tsx` exports `I18nProvider` (wraps the app in `main.tsx`, above `BrowserRouter`), `useI18n()` (`{ locale, setLocale, dir, t }`), and `useT()` (the `t` function alone — what almost every page/component actually imports). `t(key, vars?)` supports `{placeholder}` interpolation and falls back English → raw key if a lookup ever misses at runtime (defensive only; the type system prevents this in anything that compiles).
 
-## 15. Binding Product Decisions
+**Persistence**: `localStorage["cas:v1:locale"]` — same `cas:v1:` namespace as every other stored key even though locale is a UI preference, not accounting data. Read once on `I18nProvider` mount, written on every `setLocale()`; defaults to `"en"` if unset/unreadable.
+
+**RTL/LTR**: `I18nProvider` sets `document.documentElement.lang`/`.dir` from the active locale. Tailwind CSS 4's logical-property utilities and `rtl:` variant do the rest: `Sidebar.tsx` uses `border-e` instead of `border-r` (flips to the correct side under `dir="rtl"`, and the sidebar itself flips via flexbox row reversal); `Expenses.tsx`'s search icon/input use `start-3`/`ps-9` instead of `left-3`/`pl-9`; a row gap in the same file uses `ps-4` instead of `pl-4`; `Suppliers.tsx` uses `ms-2` instead of `ml-2`. Every directional navigation icon (`ArrowLeft` on "Back to…" links, `ArrowRight` as a list-row chevron — `ProjectDetail.tsx`, `SubcontractorDetail.tsx`, `SubcontractDetail.tsx`, `Projects.tsx`) has `className="rtl:-scale-x-100"` so it mirrors instead of pointing the wrong way in Arabic. **Numbers and currency (`formatAED`, all counts) always render in Western Arabic/Latin digits in both locales** — a deliberate, permanent choice matching standard practice for financial UIs (including Arabic-locale accounting software) so AED figures are never ambiguous.
+
+**Language toggle**: `Sidebar.tsx` footer — a two-button `EN | عربي` switch (`aria-pressed` on the active button), next to the existing "Currency: AED" / "Reset Demo Data" footer content.
+
+**Coverage**: every page (`Dashboard`, `Companies`, `Projects`, `ProjectDetail`, `Treasury`, `Expenses`, `Advances`, `Suppliers`, `Subcontractors`, `SubcontractorDetail`, `SubcontractDetail`, `OwnersCustodians`, `Journal`) and every form/shared component (`CompanyForm`, `ProjectForm`, `TreasuryAccountForm`, `ExpenseForm`, `AdvanceForm`, `CustodySettlementForm`, `SupplierPaymentForm`, `SubcontractorForm`, `SubcontractForm`, `CertificateForm`, `SubcontractorAdvanceForm`, `SubcontractorPaymentForm`, `Sidebar`, `DemoDataBadge`, `Modal`) renders every static string — titles, subtitles, table headers, stat-card labels, status/badge text, buttons, field labels, placeholders, empty states, validation-error messages — through `t()`. Dynamic data (party/project/company/category names, dates, currency amounts, user-entered free text) is never translated — this is standard and correct for an accounting system, not a gap.
+
+**Not touched by this phase, on purpose**: `accounting/`, `state/AppDataContext.tsx`, `storage/` — Phase 2B.3 is presentation-layer only; no business logic, validation rule, or posting behavior changed. Verified live (see §22) with the same categories of accounting regression run in every prior phase, confirming identical numbers before/after.
+
+## 15. Known Limitations
+
+See `PROJECT_ROADMAP.md` → "Known Gaps" for the full, current list. Headline items after Phase 2B.3: `CASH`/`BANK` remain valid legacy-only values on every funding-source-type union (never produced by any form, kept for historical records); a treasury account's balance is only fully accurate for activity posted after its dedicated GL account existed — pre-migration activity stays attributed to the shared pooled `1000`/`1100` account, permanently, by design; the CLOSED-project guard covers new Expense/Advance/Settlement-draft/Subcontractor-Advance/Certificate-draft+approval but not Supplier Payment, Subcontractor Payment, or finalizing an already-existing draft settlement; no Company or Subcontractor deletion (create/edit/deactivate only, by design); Subcontractor Payment is still fundamentally certificate-scoped (the contract workspace's "Record Payment" is a certificate picker, not a new pooled-payment model); contract-dimension backfill on historical journal lines is deterministic-only (an unresolvable entry stays party-scoped-only, permanently, never guessed); no backend/auth (by design). **i18n (Phase 2B.3)**: dynamic data (party/project/category names, free-text notes) is never translated, by design — only chart category names, party notes, and similar free-text fields shown as fallback labels (e.g. a custodian's `notes` field, shown when set, instead of a translated "Custodian"/"Owner" label) can appear in English inside an otherwise-Arabic screen; locale/RTL preference is per-browser (`localStorage`), not per-user, consistent with this app having no accounts/backend.
+
+## 16. Binding Product Decisions
 
 Full list with dates in `PROJECT_ROADMAP.md` → Decision Log. The two most load-bearing for any new code:
 
 - **Project is a dimension, not a treasury account.** Never credit "Project X" as if it were a cash account; a real Project Cash Box/Bank Account, if it exists, is a distinct treasury entity.
 - **Funding source ≠ owner by default.** Implemented across Advance, Expense, Supplier Payment, Subcontractor Advance, Subcontractor Payment, and Custody Cash Return (Phase 2B.1 + 2B.1A) via the shared `resolveFundingSource()` helper. `CASH`/`BANK` remain valid only as legacy values for records that predate this — no form produces them anymore.
 
-## 16. Current Roadmap
+## 17. Current Roadmap
 
-See `PROJECT_ROADMAP.md` in full. Summary: Phase 1 ✅ → Phase 2A ✅ → Phase 2B.1 ✅ → Phase 2B.1A ✅ → Phase 2B.2 ✅ → **2B.3 (i18n, next)** → 2C (Payroll/WPS) → 2D (historical import) → Phase 3 (client contracts) → 3B (revenue accounting) → Phase 4 (financial reporting) → future infrastructure (Supabase/auth).
+See `PROJECT_ROADMAP.md` in full. Summary: Phase 1 ✅ → Phase 2A ✅ → Phase 2B.1 ✅ → Phase 2B.1A ✅ → Phase 2B.2 ✅ → Phase 2B.3 ✅ → **2C (Payroll/WPS, next)** → 2D (historical import) → Phase 3 (client contracts) → 3B (revenue accounting) → Phase 4 (financial reporting) → future infrastructure (Supabase/auth).
 
-## 17. Immediate Next Task
+## 18. Immediate Next Task
 
-**Phase 2B.3 — Arabic / English Foundation & Completion.** Not started. Only begin it when explicitly asked to resume product development. See `PROJECT_ROADMAP.md` → "Later Phases" for scope (i18n architecture, RTL/LTR support, language toggle, full translation pass).
+**Phase 2C — Payroll + WPS.** Not started. Only begin it when explicitly asked to resume product development. See `PROJECT_ROADMAP.md` → "Later Phases" for scope (employee master, salary structure, allowances/deductions/overtime, payroll period, project allocation, payroll posting, salary payable, WPS payment, payroll register) — model carefully from the actual historical WPS files when this phase starts, don't design the accounting from assumptions.
 
-## 18. Deferred Work
+## 19. Deferred Work
 
 Retention release workflow, client/owner-side progress certificates and revenue recognition, payroll/WPS accounting design, multi-company consolidation, authentication/multi-user/roles, settlement reversal/void workflows. None of these should be designed opportunistically inside an unrelated task — see roadmap for sequencing.
 
-## 19. Run / Build Instructions
+## 20. Run / Build Instructions
 
 ```bash
 npm install
@@ -296,7 +319,7 @@ npm run lint         # oxlint
 ```
 No environment variables, no backend to start, no database to provision. Data lives in the browser's `localStorage` under keys prefixed `cas:v1:...`. "Reset Demo Data" in the sidebar footer wipes and reseeds everything (confirmation-gated).
 
-## 20. Development Rules
+## 21. Development Rules
 
 1. **All posted journal entries must balance** — enforced by `isBalanced`/`UnbalancedJournalError` in `postingEngine.ts`. Never bypass this.
 2. **Money math uses the existing decimal-safe helpers** (`domain/money.ts`) — never raw `+`/`-`/`*` on currency floats.
@@ -310,10 +333,11 @@ No environment variables, no backend to start, no database to provision. Data li
 10. **VAT is never recognized without the appropriate supporting-document rule** (see the certificate tax-invoice guard as the working example).
 11. **Historical imports require a review/deduplication stage** — never write raw import rows straight into `journalEntries`.
 12. **Do not generate financial statements from incomplete books.**
+13. **Every new user-visible string goes through `t()`, added to both `i18n/en.ts` and `i18n/ar.ts`** (Phase 2B.3) — never inline English (or any) text in a page/component. `ar.ts`'s `Record<TranslationKey, string>` typing already makes a missing Arabic key a build error, so this is enforced, not just a convention. Dynamic data (names, dates, amounts, free text) is never translated.
 
 Also: no Debit/Credit pickers in normal user-facing forms (Journal is the only place raw accounting entries are displayed); business logic stays inside `accounting/` and `state/AppDataContext.tsx`, never inlined into page components; every new repository/field must be additive and migration-safe (see `ensurePhase2ASeeded` as the working pattern) — never wipe existing `localStorage` data as a side effect of a new feature.
 
-## 21. Testing Expectations
+## 22. Testing Expectations
 
 There is no automated test suite (no `*.test.ts` files, no test runner configured) — verification so far has been: `npm run build` must be clean (zero TypeScript errors), `npm run lint` (oxlint) must show no new warnings, plus live, browser-driven functional testing (headless Chromium via Playwright, launched ad hoc — not checked into the repo) exercising each new flow end-to-end with hand-calculated expected numbers, checking `console` for zero errors, and confirming persistence across a page reload.
 
@@ -338,9 +362,18 @@ Phase 2B.2's verification run (after a full "Reset Demo Data", driven headlessly
 - Regression-spot-checked afterward, with zero `console` errors: Dashboard, Journal, Company, Cash & Banks, Expenses, Advances & Settlements, Suppliers, Owners & Custodians, and the subcontractor master list (all pre-existing seeded subcontractors — Al Falah MEP Contracting, Gulf Steel Works — still showed correct aggregate figures after the ledger-function changes).
 - `npm run build` (`tsc -b && vite build`) and `npm run lint` (oxlint) both clean — zero errors, zero new warnings (the two pre-existing `only-export-components` fast-refresh warnings, present before this phase, are unchanged).
 
+Phase 2B.3's verification run (Playwright/headless Chromium, after a full "Reset Demo Data"):
+
+- **Locale switch + RTL**: confirmed `document.documentElement.dir`/`.lang` are `ltr`/`en` by default; clicking "عربي" flips both to `rtl`/`ar` immediately, with all ten sidebar nav labels and the active page's `<h1>` re-rendering in Arabic. Confirmed every one of the app's ten top-level routes (`/`, `/company`, `/projects`, `/treasury`, `/expenses`, `/advances`, `/suppliers`, `/subcontractors`, `/people`, `/journal`) plus the subcontractor profile and contract workspace drill-downs render fully in Arabic with zero `console` errors.
+- **Persistence**: reloaded the browser after switching to Arabic — `dir` stayed `rtl` and `localStorage["cas:v1:locale"]` read back `"ar"`.
+- **RTL layout, visually confirmed via screenshot**: sidebar renders on the right edge (border + flexbox both flip correctly), the "Back to …" arrow icon mirrors to point right, stat cards/badges/buttons all flow start-to-end correctly, and all AED figures render in Latin digits in both locales (by design).
+- **Accounting regression** (same categories of check as every prior phase, to confirm the presentation-only refactor changed zero business logic): posted a new AED 5,000 custodian advance from Main Bank; posted a new AED 1,000 + Auto-5% VAT expense against Al Nakhil Building from Bareq's custody; drafted and approved a new certificate on the seeded Al Falah MEP contract (`SC-AN-01`, Work Value To Date 120,000) and hand-reconciled the result exactly: Certified To Date `120,000.00`, Retention Held `12,000.00` (prior `9,500.00` + this certificate's `2,500.00`), Outstanding Payable `74,950.00` (Created `94,950.00` − Paid `20,000.00`) — identical, character-for-character, before and after a hard page reload. Zero `console` errors across the entire run, in both locales.
+- `npm run build` and `npm run lint` both clean throughout — zero errors, only the two pre-existing `only-export-components` warnings plus the same pattern newly appearing (expected, not a defect) on `i18n/I18nContext.tsx` for the same reason it already applied to `AppDataContext.tsx`/`Field.tsx`.
+- **Vercel SPA rewrite**: verified locally (a Node static server replicating Vercel's documented rewrite-only-if-no-matching-file behavior) that `/expenses`, `/projects`, `/projects/:id`, `/subcontractors`, `/journal`, and `/` all return `200` with `index.html`'s content under the new `vercel.json`, while an actual built asset (`/assets/*.js`) still resolves directly rather than being swallowed by the catch-all rewrite. Without `vercel.json`, the same requests returned `404` (reproduced and confirmed before adding the fix).
+
 Any future phase should be verified the same way before being marked "Completed" in the roadmap: build clean, lint clean, flow tested live with real numbers, no console errors, persists after reload, and existing flows re-checked for regressions.
 
-## 22. Handoff Checklist for New Sessions
+## 23. Handoff Checklist for New Sessions
 
 - [ ] Read `PROJECT_ROADMAP.md` in full (Binding Decisions, Completed, Current/Next Phase, Known Gaps, Decision Log).
 - [ ] Read this file in full.

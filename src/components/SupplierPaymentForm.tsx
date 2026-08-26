@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { useAppData, type NewSupplierPaymentInput } from "../state/AppDataContext";
 import { Field, inputClassName } from "./ui/Field";
+import { useT } from "../i18n/I18nContext";
 import type { SupplierPaymentSourceType } from "../domain/types";
 
 const today = () => new Date().toISOString().slice(0, 10);
@@ -12,6 +13,7 @@ export function SupplierPaymentForm({
   supplierId: string;
   onDone: () => void;
 }) {
+  const t = useT();
   const { parties, treasuryAccounts, addSupplierPayment } = useAppData();
   const owners = useMemo(() => parties.filter((p) => p.type === "OWNER"), [parties]);
   const custodians = useMemo(() => parties.filter((p) => p.type === "CUSTODIAN"), [parties]);
@@ -36,9 +38,9 @@ export function SupplierPaymentForm({
   function validate(): Record<string, string> {
     const e: Record<string, string> = {};
     const n = Number(amount);
-    if (!Number.isFinite(n) || n <= 0) e.amount = "Enter an amount greater than zero";
-    if (needsParty && !sourcePartyId) e.sourcePartyId = "Select who paid";
-    if (needsTreasury && !treasuryAccountId) e.treasuryAccountId = "Select the cash/bank account";
+    if (!Number.isFinite(n) || n <= 0) e.amount = t("common.enterAmountGreaterThanZero");
+    if (needsParty && !sourcePartyId) e.sourcePartyId = t("common.selectWhoPaid");
+    if (needsTreasury && !treasuryAccountId) e.treasuryAccountId = t("common.selectCashBankAccount");
     return e;
   }
 
@@ -62,17 +64,17 @@ export function SupplierPaymentForm({
       addSupplierPayment(input);
       onDone();
     } catch (err) {
-      setSubmitError(err instanceof Error ? err.message : "Could not record this payment.");
+      setSubmitError(err instanceof Error ? err.message : t("supplierPaymentForm.saveError"));
     }
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Date" required>
+        <Field label={t("common.date")} required>
           <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className={inputClassName} />
         </Field>
-        <Field label="Amount (AED)" required error={errors.amount}>
+        <Field label={t("common.amountAed")} required error={errors.amount}>
           <input
             type="number"
             min="0"
@@ -85,7 +87,7 @@ export function SupplierPaymentForm({
         </Field>
       </div>
 
-      <Field label="Paid From" required>
+      <Field label={t("common.paidFrom")} required>
         <select
           value={sourceType}
           onChange={(e) => {
@@ -94,19 +96,19 @@ export function SupplierPaymentForm({
           }}
           className={inputClassName}
         >
-          <option value="TREASURY">Cash / Bank (Treasury)</option>
-          <option value="CUSTODIAN">Custodian</option>
-          <option value="OWNER">Owner Current Account</option>
+          <option value="TREASURY">{t("common.paidFromTreasury")}</option>
+          <option value="CUSTODIAN">{t("common.custodian")}</option>
+          <option value="OWNER">{t("common.ownerCurrentAccount")}</option>
         </select>
       </Field>
 
       {needsTreasury && (
-        <Field label="Cash / Bank Account" required error={errors.treasuryAccountId}>
+        <Field label={t("common.cashBankAccount")} required error={errors.treasuryAccountId}>
           <select value={treasuryAccountId} onChange={(e) => setTreasuryAccountId(e.target.value)} className={inputClassName}>
-            <option value="">Select…</option>
-            {activeTreasuryAccounts.map((t) => (
-              <option key={t.id} value={t.id}>
-                {t.name}
+            <option value="">{t("common.selectEllipsis")}</option>
+            {activeTreasuryAccounts.map((account) => (
+              <option key={account.id} value={account.id}>
+                {account.name}
               </option>
             ))}
           </select>
@@ -114,9 +116,9 @@ export function SupplierPaymentForm({
       )}
 
       {needsParty && (
-        <Field label={sourceType === "CUSTODIAN" ? "Custodian" : "Owner"} required error={errors.sourcePartyId}>
+        <Field label={sourceType === "CUSTODIAN" ? t("common.custodian") : t("common.owner")} required error={errors.sourcePartyId}>
           <select value={sourcePartyId} onChange={(e) => setSourcePartyId(e.target.value)} className={inputClassName}>
-            <option value="">Select…</option>
+            <option value="">{t("common.selectEllipsis")}</option>
             {partyOptions.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.name}
@@ -126,7 +128,7 @@ export function SupplierPaymentForm({
         </Field>
       )}
 
-      <Field label="Reference (optional)">
+      <Field label={t("common.referenceOptional")}>
         <input value={reference} onChange={(e) => setReference(e.target.value)} className={inputClassName} />
       </Field>
 
@@ -138,13 +140,13 @@ export function SupplierPaymentForm({
           onClick={onDone}
           className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50"
         >
-          Cancel
+          {t("common.cancel")}
         </button>
         <button
           type="submit"
           className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800"
         >
-          Save Payment
+          {t("supplierPaymentForm.saveButton")}
         </button>
       </div>
     </form>

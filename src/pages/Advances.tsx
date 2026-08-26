@@ -10,9 +10,11 @@ import { CustodySettlementForm } from "../components/CustodySettlementForm";
 import { formatAED } from "../domain/money";
 import { formatDate, indexById } from "../domain/utils";
 import { cashReturnedByCustodian, custodianBalance, lastSettlementDate } from "../accounting/ledger";
+import { useT } from "../i18n/I18nContext";
 import type { AdvanceTransaction, Party } from "../domain/types";
 
 function CustodianPanel({ custodian }: { custodian: Party }) {
+  const t = useT();
   const {
     advances,
     expenses,
@@ -29,8 +31,8 @@ function CustodianPanel({ custodian }: { custodian: Party }) {
 
   function fundingSourceLabel(a: AdvanceTransaction): string {
     return a.fundingSourceType === "OWNER_CURRENT"
-      ? partiesById[a.fundingSourceId]?.name ?? "Owner"
-      : treasuryById[a.fundingSourceId]?.name ?? "Treasury";
+      ? partiesById[a.fundingSourceId]?.name ?? t("common.owner")
+      : treasuryById[a.fundingSourceId]?.name ?? t("advanceForm.treasuryGroup");
   }
 
   const custodianAdvances = useMemo(
@@ -59,16 +61,16 @@ function CustodianPanel({ custodian }: { custodian: Party }) {
   const lastSettled = lastSettlementDate(custodySettlements, custodian.id);
 
   function handleFinalize(id: string) {
-    if (!window.confirm("Finalize this settlement? It cannot be edited afterward.")) return;
+    if (!window.confirm(t("advances.confirmFinalize"))) return;
     try {
       finalizeCustodySettlement(id);
     } catch (err) {
-      window.alert(err instanceof Error ? err.message : "Could not finalize this settlement.");
+      window.alert(err instanceof Error ? err.message : t("advances.finalizeError"));
     }
   }
 
   function handleDiscard(id: string) {
-    if (!window.confirm("Discard this draft settlement?")) return;
+    if (!window.confirm(t("advances.confirmDiscard"))) return;
     discardDraftSettlement(id);
   }
 
@@ -93,29 +95,29 @@ function CustodianPanel({ custodian }: { custodian: Party }) {
         </div>
         <div className="grid grid-cols-3 gap-3 text-center sm:grid-cols-6">
           <div>
-            <p className="text-xs text-slate-400">Total Received</p>
+            <p className="text-xs text-slate-400">{t("advances.totalReceived")}</p>
             <p className="text-sm font-semibold text-slate-900">{formatAED(given)}</p>
           </div>
           <div>
-            <p className="text-xs text-slate-400">Expenses Charged</p>
+            <p className="text-xs text-slate-400">{t("advances.expensesCharged")}</p>
             <p className="text-sm font-semibold text-slate-900">{formatAED(charged)}</p>
           </div>
           <div>
-            <p className="text-xs text-slate-400">Cash Returned</p>
+            <p className="text-xs text-slate-400">{t("advances.cashReturned")}</p>
             <p className="text-sm font-semibold text-slate-900">{formatAED(returned)}</p>
           </div>
           <div>
-            <p className="text-xs text-slate-400">Current Balance</p>
+            <p className="text-xs text-slate-400">{t("advances.currentBalance")}</p>
             <p className={`text-sm font-semibold ${balance < 0 ? "text-rose-600" : "text-emerald-600"}`}>
               {formatAED(balance)}
             </p>
           </div>
           <div>
-            <p className="text-xs text-slate-400">Open Advances</p>
+            <p className="text-xs text-slate-400">{t("advances.openAdvances")}</p>
             <p className="text-sm font-semibold text-slate-900">{custodianAdvances.length}</p>
           </div>
           <div>
-            <p className="text-xs text-slate-400">Last Settlement</p>
+            <p className="text-xs text-slate-400">{t("advances.lastSettlement")}</p>
             <p className="text-sm font-semibold text-slate-900">{lastSettled ? formatDate(lastSettled) : "—"}</p>
           </div>
         </div>
@@ -124,8 +126,12 @@ function CustodianPanel({ custodian }: { custodian: Party }) {
       {open && (
         <div className="space-y-4 border-t border-slate-100 px-5 py-4">
           <div>
-            <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-slate-400">Advances</p>
-            {custodianAdvances.length === 0 && <p className="text-sm text-slate-400">None recorded yet.</p>}
+            <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-slate-400">
+              {t("advances.sectionAdvances")}
+            </p>
+            {custodianAdvances.length === 0 && (
+              <p className="text-sm text-slate-400">{t("advances.noneRecordedYet")}</p>
+            )}
             <div className="space-y-1">
               {custodianAdvances.map((a) => (
                 <div key={a.id} className="flex items-center justify-between text-sm">
@@ -140,8 +146,12 @@ function CustodianPanel({ custodian }: { custodian: Party }) {
           </div>
 
           <div>
-            <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-slate-400">Expenses Charged</p>
-            {custodianExpenses.length === 0 && <p className="text-sm text-slate-400">None recorded yet.</p>}
+            <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-slate-400">
+              {t("advances.sectionExpensesCharged")}
+            </p>
+            {custodianExpenses.length === 0 && (
+              <p className="text-sm text-slate-400">{t("advances.noneRecordedYet")}</p>
+            )}
             <div className="max-h-40 space-y-1 overflow-y-auto">
               {custodianExpenses.map((e) => (
                 <div key={e.id} className="flex items-center justify-between text-sm">
@@ -155,19 +165,26 @@ function CustodianPanel({ custodian }: { custodian: Party }) {
           </div>
 
           <div>
-            <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-slate-400">Settlements</p>
-            {custodianSettlements.length === 0 && <p className="text-sm text-slate-400">No settlements yet.</p>}
+            <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-slate-400">
+              {t("advances.sectionSettlements")}
+            </p>
+            {custodianSettlements.length === 0 && (
+              <p className="text-sm text-slate-400">{t("advances.noSettlementsYet")}</p>
+            )}
             <div className="space-y-2">
               {custodianSettlements.map((s) => (
                 <div key={s.id} className="flex items-center justify-between rounded-lg border border-slate-100 px-3 py-2 text-sm">
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="font-medium text-slate-800">{s.settlementNumber}</span>
-                      <Badge tone={s.status === "SETTLED" ? "green" : "slate"}>{s.status}</Badge>
+                      <Badge tone={s.status === "SETTLED" ? "green" : "slate"}>
+                        {t(s.status === "SETTLED" ? "settlementStatus.SETTLED" : "settlementStatus.DRAFT")}
+                      </Badge>
                     </div>
                     <p className="text-xs text-slate-400">
-                      {formatDate(s.settlementDate)} · {s.selectedExpenseIds.length} expenses
-                      {s.cashReturnAmount > 0 && ` · Returned ${formatAED(s.cashReturnAmount)}`}
+                      {formatDate(s.settlementDate)} · {t("advances.expensesCount", { count: s.selectedExpenseIds.length })}
+                      {s.cashReturnAmount > 0 &&
+                        ` · ${t("advances.returnedAmount", { amount: formatAED(s.cashReturnAmount) })}`}
                     </p>
                   </div>
                   {s.status === "DRAFT" && (
@@ -177,14 +194,14 @@ function CustodianPanel({ custodian }: { custodian: Party }) {
                         onClick={() => handleDiscard(s.id)}
                         className="rounded-lg border border-slate-300 px-2.5 py-1 text-xs font-medium text-slate-500 hover:bg-slate-50"
                       >
-                        Discard
+                        {t("advances.discard")}
                       </button>
                       <button
                         type="button"
                         onClick={() => handleFinalize(s.id)}
                         className="rounded-lg bg-slate-900 px-2.5 py-1 text-xs font-medium text-white hover:bg-slate-800"
                       >
-                        Finalize
+                        {t("advances.finalize")}
                       </button>
                     </div>
                   )}
@@ -199,6 +216,7 @@ function CustodianPanel({ custodian }: { custodian: Party }) {
 }
 
 export function Advances() {
+  const t = useT();
   const { parties, advances, treasuryAccounts } = useAppData();
   const [showAdvanceForm, setShowAdvanceForm] = useState(false);
   const [settlementCustodianId, setSettlementCustodianId] = useState<string | null>(null);
@@ -209,8 +227,8 @@ export function Advances() {
 
   function fundingSourceLabel(a: (typeof advances)[number]): string {
     return a.fundingSourceType === "OWNER_CURRENT"
-      ? (partiesById[a.fundingSourceId]?.name ?? "Owner")
-      : (treasuryById[a.fundingSourceId]?.name ?? "Treasury");
+      ? (partiesById[a.fundingSourceId]?.name ?? t("common.owner"))
+      : (treasuryById[a.fundingSourceId]?.name ?? t("advanceForm.treasuryGroup"));
   }
 
   const recentAdvances = useMemo(() => [...advances].sort((a, b) => (a.date < b.date ? 1 : -1)), [advances]);
@@ -218,8 +236,8 @@ export function Advances() {
   return (
     <div>
       <PageHeader
-        title="Advances & Settlements"
-        subtitle="How much cash each custodian is holding right now, what they've spent, and what's been reconciled"
+        title={t("advances.title")}
+        subtitle={t("advances.subtitle")}
         action={
           <div className="flex gap-2">
             <button
@@ -227,13 +245,13 @@ export function Advances() {
               disabled={custodians.length === 0}
               className="flex items-center gap-2 rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 disabled:opacity-50"
             >
-              <FileCheck2 size={16} /> New Settlement
+              <FileCheck2 size={16} /> {t("advances.newSettlement")}
             </button>
             <button
               onClick={() => setShowAdvanceForm(true)}
               className="flex items-center gap-2 rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800"
             >
-              <Plus size={16} /> New Advance
+              <Plus size={16} /> {t("advances.newAdvance")}
             </button>
           </div>
         }
@@ -246,10 +264,10 @@ export function Advances() {
       </div>
 
       <Card className="mt-6">
-        <CardHeader title="Advance History" subtitle={`${advances.length} advances recorded`} />
+        <CardHeader title={t("advances.historyTitle")} subtitle={t("advances.historyCount", { count: advances.length })} />
         <div className="divide-y divide-slate-100">
           {recentAdvances.length === 0 && (
-            <p className="px-5 py-8 text-center text-sm text-slate-400">No advances recorded yet.</p>
+            <p className="px-5 py-8 text-center text-sm text-slate-400">{t("advances.noAdvancesRecorded")}</p>
           )}
           {recentAdvances.map((a) => (
             <div key={a.id} className="flex items-center justify-between px-5 py-3.5">
@@ -269,20 +287,20 @@ export function Advances() {
       </Card>
 
       {showAdvanceForm && (
-        <Modal title="New Cash Advance" onClose={() => setShowAdvanceForm(false)}>
+        <Modal title={t("advances.newAdvanceModalTitle")} onClose={() => setShowAdvanceForm(false)}>
           <AdvanceForm onDone={() => setShowAdvanceForm(false)} />
         </Modal>
       )}
 
       {settlementCustodianId && (
         <Modal
-          title={`New Settlement · ${partiesById[settlementCustodianId]?.name ?? ""}`}
+          title={t("advances.newSettlementModalTitle", { name: partiesById[settlementCustodianId]?.name ?? "" })}
           onClose={() => setSettlementCustodianId(null)}
           width="max-w-2xl"
         >
           {custodians.length > 1 && (
             <div className="mb-4">
-              <label className="mb-1 block text-xs font-medium text-slate-600">Custodian</label>
+              <label className="mb-1 block text-xs font-medium text-slate-600">{t("advances.custodianLabel")}</label>
               <select
                 value={settlementCustodianId}
                 onChange={(e) => setSettlementCustodianId(e.target.value)}
