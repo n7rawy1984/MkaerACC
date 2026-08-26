@@ -126,25 +126,28 @@ LocalStorage remains an explicit demo/development adapter. Production mode never
 - ✅ Phase 2B.2 — Subcontractor Operationalization + Contract Dimension
 - ✅ Phase 2B.3 — Arabic / English i18n + RTL
 - ✅ Production Data Foundation P0 — Production Architecture Freeze *(documentation/decisions only; no backend implemented)*
+- ✅ Production Data Foundation P1 — Supabase Environments + Migration Foundation *(repository/CLI foundation; no remote projects or business schema)*
 
 Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 
 ## Current Phase
 
-### ➡ Phase 2C — Production Data Foundation *(P0 complete; backend implementation not started)*
+### ➡ Phase 2C — Production Data Foundation *(P0–P1 complete; P2 next)*
 
 #### ✅ P0 — Production Architecture Freeze
 
 - The architecture, ownership, permission, posting, reversal, numbering, money, environment, audit, attachment and cutover decisions below are frozen.
 - Completion means the design is approved and documented only. No Supabase environment, migration, Auth, table, RLS policy, RPC or Storage bucket exists yet.
 
-#### ➡ P1 — Supabase Environments + Migration Foundation *(next implementation task; not started)*
+#### ✅ P1 — Supabase Environments + Migration Foundation
 
-- Separate development and production Supabase projects; add staging for rehearsal/go-live when multiple testers or real imports begin.
-- Version SQL migrations in source control and promote the same set dev → staging → production.
-- Keep demo seeds development-only; establish secrets, backup/export/restore and rollback runbooks.
+- Added the pinned project-local Supabase CLI, official `supabase/config.toml`, timestamped forward-only migration directory, safe environment example/ignore rules, and exact developer workflow.
+- Frozen separate remote Development/Staging/Production projects with one canonical migration history promoted in that order. No remote project was provisioned because region/plan/data-location decisions and credentials remain external.
+- Automatic database seeding is disabled. The P1 migration is intentionally schema-free and creates no business/demo data.
+- Repository lifecycle verified with CLI version/init/migration creation and config parsing. Local migration application is deferred because this machine has neither Docker nor Podman; remote verification is deferred because no project/credentials exist.
+- Existing frontend build and lint remain successful; secret-pattern and diff checks pass. The application still uses only the localStorage adapter.
 
-#### P2 — Auth, Profiles, Memberships and Roles
+#### ➡ P2 — Auth, Profiles, Memberships and Roles *(next; not started)*
 
 - Supabase Auth login/logout/session refresh; admin-created/invited users only.
 - Add profiles, active/inactive users, company memberships, role assignment and optional project access.
@@ -232,7 +235,8 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 ## Decision Log Addendum — 2026-08-26
 
 - Production Data Foundation moved ahead of Payroll/WPS and historical import.
-- P0 Production Architecture Freeze completed as documentation/decision work only; P1 is now the next implementation task.
+- P0 Production Architecture Freeze completed as documentation/decision work only.
+- P1 migration/tooling foundation completed without creating a remote project or business schema; P2 is now the next implementation task.
 - Supabase Auth/PostgreSQL/Storage selected. PostgreSQL RPCs are the ledger transaction boundary; Edge Functions are optional external orchestration, not the accounting commit boundary.
 - Company membership plus optional project restriction is authoritative through RLS/database commands.
 - `BIGINT` AED minor units selected.
@@ -241,4 +245,4 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 
 ---
 
-*Production Data Foundation is planned, not implemented. Do not start Payroll/WPS or bulk historical import until its exit criteria pass.*
+*Only P0–P1 of Production Data Foundation are complete. P2–P10 remain planned/not implemented. Do not start Payroll/WPS or bulk historical import until all Foundation exit criteria pass.*

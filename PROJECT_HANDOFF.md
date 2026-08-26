@@ -23,7 +23,8 @@ The company previously tracked project expenses, supplier bills, cash handed to 
 - **Phase 2B.2 (Subcontractor Operationalization)** — Completed.
 - **Phase 2B.3 (Arabic / English Foundation & Completion)** — Completed.
 - **Phase 2C / P0 (Production Architecture Freeze)** — Completed as documentation/decision work only. No backend capability was implemented.
-- **Phase 2C / P1 (Supabase Environments + Migration Foundation)** — Not started. This is the immediate next implementation task.
+- **Phase 2C / P1 (Supabase Environments + Migration Foundation)** — Completed and repository-verified; no remote project or business schema was created.
+- **Phase 2C / P2 (Auth, Profiles, Memberships and Roles)** — Not started. This is the immediate next implementation task.
 - **Payroll + WPS** — Confirmed next functional module after Production Data Foundation.
 
 See `PROJECT_ROADMAP.md` for the full phase breakdown, binding decisions, and decision log.
@@ -36,7 +37,7 @@ See `PROJECT_ROADMAP.md` for the full phase breakdown, binding decisions, and de
 - Recharts 3 (Dashboard charts only)
 - lucide-react (icons)
 - `oxlint` for linting
-- **Currently no backend, authentication, or Supabase implementation.** Persistence is `localStorage`. The approved next phase migrates production data to Supabase/PostgreSQL/Auth; the current abstraction helps isolate persistence but is not a drop-in production adapter (see Production Data Foundation Architecture below).
+- **Supabase CLI/migration foundation now exists, but there is still no running backend, authentication, remote project, or production schema.** Application persistence remains `localStorage`. The current abstraction helps isolate persistence but is not a drop-in production adapter (see Production Data Foundation Architecture below).
 
 ## 5. Repository Structure
 
@@ -68,6 +69,9 @@ src/
   components/       # Forms and shared UI (components/ui/ for primitives) — includes ProjectForm, CompanyForm, TreasuryAccountForm since Phase 2B.1; SubcontractorForm, SubcontractForm since Phase 2B.2
   App.tsx            # Route table
   main.tsx            # Entry point, wraps App in I18nProvider + BrowserRouter
+supabase/
+  config.toml         # Official local CLI configuration; automatic DB seeding disabled
+  migrations/        # One canonical forward-only migration history for Dev → Staging → Production
 ```
 
 `vercel.json` (repo root, Phase 2B.3): SPA rewrite (`/(.*) → /index.html`) so a direct load or refresh of any client-side route works on Vercel's static hosting.
@@ -89,6 +93,10 @@ src/
 | `src/components/layout/Sidebar.tsx` | The authoritative nav list, the "Reset Demo Data" action, and (Phase 2B.3) the EN/عربي language toggle. |
 | `src/i18n/en.ts` / `src/i18n/ar.ts` | Every UI string in the app, keyed identically in both files (TypeScript enforces this). New UI text always adds a key here first, in both files, never inline English. |
 | `src/i18n/I18nContext.tsx` | `useT()` — the hook every page/component calls for translated strings; also owns locale persistence and the RTL `dir` side effect. |
+| `supabase/config.toml` | P1 CLI/local configuration. No remote project identity or credential is committed. |
+| `supabase/migrations/` | Canonical versioned SQL history. P1 contains only a schema-free foundation migration. |
+| `.env.example` | Public placeholder convention only; explicitly warns that every `VITE_*` value is browser-visible. |
+| `README.md` | Exact frontend and database migration workflow, environment promotion, secrets, and seed rules. |
 
 Routes (from `App.tsx`): `/` (Dashboard), `/company`, `/projects`, `/projects/:id`, `/treasury`, `/expenses`, `/advances`, `/suppliers`, `/subcontractors` (subcontractor master list), `/subcontractors/:id` (subcontractor profile — **Phase 2B.2, new**), `/subcontracts/:id` (contract workspace — **Phase 2B.2, moved from `/subcontractors/:id`**), `/people` (Owners & Custodians), `/journal`.
 
@@ -320,7 +328,28 @@ Frozen outcomes:
 - Development, Staging and Production are separate Supabase projects. Production has no demo seeds, service secrets in browsers, or localStorage accounting fallback.
 - Auth is invite/admin-created only. SYSTEM_ADMIN is audited break-glass/server administration, not a browser RLS bypass; routine access still requires company membership.
 - Audit is append-only and transaction-coupled. Attachments are private, company-scoped, signed-access and versioned/superseded.
-- P1–P10 order is frozen; P1 is next. Payroll follows completed Foundation; historical 2025/2026 import follows Payroll.
+- P1–P10 order is frozen; P1 is complete and P2 is next. Payroll follows completed Foundation; historical 2025/2026 import follows Payroll.
+
+### P1 — Supabase Environments + Migration Foundation completed 2026-08-26
+
+Implemented repository foundation only:
+
+- Added `supabase@2.115.0` as a pinned project dev dependency (`package.json`/lockfile), plus working `db:version` and `db:new` scripts. No global CLI dependency is assumed.
+- Initialized the official `supabase/config.toml` layout. Local ports target the Vite development origin, public/anonymous signup is disabled in configuration, and `db.seed.enabled = false`.
+- Added `supabase/migrations/20260826193204_p1_migration_foundation.sql`. It intentionally creates no extension, schema, table, role, RLS policy, function, bucket, user or demo record; it documents conventions and establishes timestamped forward-only history.
+- Added `.env.example` with public placeholders only and expanded root `.gitignore` to exclude real `.env*` files while retaining the example. Privileged database/service/management secrets are forbidden under `VITE_*`.
+- Replaced the Vite template README with the exact CLI/migration workflow: one migration history promoted Development → Staging → Production, corrective forward migrations for shared environments, environment-safe linking, production approval, and no dashboard-only schema drift.
+- Separate remote Development, Staging and Production projects remain the deployment design. None was created or linked in P1 because credentials do not exist and Production region/plan/data-location decisions remain external.
+- Seed policy is fail-safe: automatic SQL seed is disabled; frontend `src/seed/seedData.ts` remains localStorage-only and is not connected to Supabase. Production never receives it automatically.
+- Frontend code, Vercel rewrite and localStorage repositories were not changed. No partial Supabase data path exists.
+
+Verification reality:
+
+- **Repository/CLI verified:** clean start at commit `48dc6ec`; project-local CLI reports `2.115.0`; `supabase init` and `supabase migration new` completed; config parsing reached local lifecycle startup; the timestamped migration exists and contains no business/demo SQL.
+- **Local database not applied:** `supabase start` was attempted and accurately failed because neither Docker nor Podman is installed/on PATH. No container runtime was installed and no local reset/status/application is claimed.
+- **Remote not verified:** no Development/Staging/Production project was created, linked or migrated; no credentials were available. Remote lifecycle validation belongs after approved provisioning.
+- **Application/repository checks:** `npm run build` passed (only Vite's existing large-chunk advisory); `npm run lint` passed with the four existing `react/only-export-components` warnings; `git diff --check` passed. Installation audit reported zero vulnerabilities.
+- **Secret review:** credential-shaped token/URL/password patterns were scanned across every P1 file and produced no matches. Only empty public placeholders exist in `.env.example`; no real environment file is present or tracked.
 
 ### Architecture assessment and boundary
 
@@ -411,9 +440,9 @@ Foundation schema includes import batch/source row/fingerprint/review provenance
 
 ## 17. Current Roadmap and Immediate Next Task
 
-Phase 1 ✅ → 2A ✅ → 2B.1 ✅ → 2B.1A ✅ → 2B.2 ✅ → 2B.3 ✅ → **2C/P0 Production Architecture Freeze ✅ (documents only)** → **2C/P1 Supabase Environments + Migration Foundation (next; not started)** → P2–P10 Foundation → 2D Payroll/WPS → 2E Historical Import/Opening Balances → Phase 3 Client Contracts/Certificates/Receivables → 3B Revenue Accounting → Phase 4 Reporting.
+Phase 1 ✅ → 2A ✅ → 2B.1 ✅ → 2B.1A ✅ → 2B.2 ✅ → 2B.3 ✅ → **2C/P0 Production Architecture Freeze ✅** → **2C/P1 Supabase Environments + Migration Foundation ✅** → **2C/P2 Auth, Profiles, Memberships and Roles (next; not started)** → P3–P10 Foundation → 2D Payroll/WPS → 2E Historical Import/Opening Balances → Phase 3 Client Contracts/Certificates/Receivables → 3B Revenue Accounting → Phase 4 Reporting.
 
-P1 is the next implementation task. Do not implement it as part of P0, and do not begin Payroll or bulk import until Foundation exit criteria pass.
+P2 is the next implementation task. Do not begin it without a new explicit task, and do not begin Payroll or bulk import until Foundation exit criteria pass.
 
 ## 18. Remaining External Deployment Decisions
 

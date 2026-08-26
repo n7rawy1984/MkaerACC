@@ -1,32 +1,95 @@
-# React + TypeScript + Vite
+# Maker Contracting Accounting System
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+React/Vite frontend for a UAE contracting accounting system. The current application still uses the localStorage demo adapter. Production Supabase integration is being introduced in controlled batches; P1 establishes tooling and migrations only.
 
-Currently, two official plugins are available:
+## Frontend
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install
+npm run dev
+npm run build
+npm run lint
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+The existing Vercel SPA rewrite remains in `vercel.json`.
+
+## Supabase CLI
+
+The CLI is pinned as a development dependency, so use the repository version:
+
+```bash
+npx supabase --version
+```
+
+Do not depend on an untracked global CLI.
+
+## Canonical migration workflow
+
+Migrations in `supabase/migrations/` are the only schema history. They are forward-only, timestamped, committed to Git, and promoted unchanged:
+
+```text
+Development → Staging → Production
+```
+
+Create a migration:
+
+```bash
+npm run db:new -- descriptive_name
+```
+
+Edit the generated SQL, review it, and test it against a disposable local database or the linked remote Development project. Never make a dashboard-only schema change; if an emergency/manual change occurs, immediately capture and review the equivalent migration before any promotion.
+
+Rollback in shared environments means a new corrective forward migration. `db reset` is only for disposable local Development data.
+
+### Local Development database
+
+The local Supabase stack requires a running Docker-compatible container runtime:
+
+```bash
+npx supabase start
+npx supabase migration list --local
+npx supabase db reset
+npx supabase stop
+```
+
+`db reset` rebuilds the disposable local database from committed migrations. P1 disables `db.seed`, so it does not load frontend demo data. If Docker is unavailable, do not run or claim local database verification; use a separately provisioned remote Development project once its credentials are approved.
+
+### Remote environments
+
+Development, Staging, and Production are separate Supabase projects. Never create Production until region, data-location expectations, plan, backups/PITR, RPO, and RTO are confirmed.
+
+Authenticate and link one environment at a time without committing credentials:
+
+```bash
+npx supabase login
+npx supabase link --project-ref <environment-project-ref>
+npx supabase migration list --linked
+npx supabase db push --dry-run
+npx supabase db push
+```
+
+Use a clean checkout/CI job per environment so a stale local link cannot target the wrong project. Apply and verify Development first, then Staging. Production requires explicit approval, backup confirmation, reviewed dry-run output, and post-migration checks.
+
+Supabase stores local link state under ignored `supabase/.temp/`. Access tokens, database passwords, service-role keys, and project references must remain in developer/CI secret storage.
+
+## Environment variables and secrets
+
+Copy `.env.example` to an ignored environment-specific local file only when needed. The current frontend does not consume Supabase variables.
+
+- `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` are public browser configuration intended for future P6 integration.
+- Every `VITE_*` value is browser-visible.
+- Database passwords, management access tokens, secret/service-role keys, and other privileged credentials must never use a `VITE_*` name or enter the frontend bundle.
+- Vercel will eventually receive only public browser variables. Privileged values belong exclusively in protected server/CI secrets.
+- Production must fail explicitly if required database configuration is unavailable after P6; it must never fall back to localStorage accounting.
+
+## Seed policy
+
+`supabase/config.toml` has automatic database seeding disabled.
+
+- Development/Test may gain a separate, explicitly invoked synthetic seed later.
+- Staging receives only test/rehearsal data intentionally loaded for that environment.
+- Production never automatically receives demo companies, projects, transactions, historical frontend seed data, or opening balances.
+
+## Scope boundary
+
+P1 contains no Auth profiles/memberships, business tables, RLS policies, accounting RPCs, Storage buckets, data migration, or frontend repository changes. See `PROJECT_ROADMAP.md` and `PROJECT_HANDOFF.md` before continuing with P2.

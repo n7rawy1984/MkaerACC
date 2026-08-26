@@ -1,0 +1,17 @@
+-- P1 migration foundation.
+--
+-- Intentionally creates no business objects. Its purpose is to establish
+-- the canonical, forward-only Supabase migration history before P2 Auth or
+-- P3 production master-data tables exist.
+--
+-- Production conventions for future migrations:
+--   * snake_case SQL names and UUID primary keys
+--   * timestamptz audit timestamps
+--   * BIGINT AED minor units; never floating-point money
+--   * direct company_id on financially important tenant-owned tables
+--   * server-generated human references
+--   * RLS enabled before a table is exposed to browser roles
+--   * immutable posted accounting records and journals
+--
+-- No extensions are enabled here. PostgreSQL has native UUID storage and
+-- Supabase already provides the platform facilities later phases will use.
