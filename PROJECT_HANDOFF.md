@@ -12,7 +12,7 @@ Repository: `https://github.com/n7rawy1984/MkaerACC` · Local path: `/media/nagh
 
 ## 2. Business Context
 
-The company previously tracked project expenses, supplier bills, cash handed to custodians (Bareq, Sobhi), owner-paid costs, and subcontractor activity across disconnected spreadsheets for projects including Al Nakhil Building, Al Zorah, and Ajman Office. Historical 2025/2026 data exists and will eventually be imported (Phase 2D) — through a staging/review process, never a direct dump into the live ledger. Owners are A. Rahim and Majid; Bareq is Manager/Custodian; Sobhi is Custodian.
+The company previously tracked project expenses, supplier bills, cash handed to custodians (Bareq, Sobhi), owner-paid costs, and subcontractor activity across disconnected spreadsheets for projects including Al Nakhil Building, Al Zorah, and Ajman Office. Historical 2025/2026 data exists and will eventually be imported (now Phase 2E) — through a staging/review process, never a direct dump into the live ledger. Owners are A. Rahim and Majid; Bareq is Manager/Custodian; Sobhi is Custodian.
 
 ## 3. Current Status
 
@@ -22,7 +22,9 @@ The company previously tracked project expenses, supplier bills, cash handed to 
 - **Phase 2B.1A (Treasury Integration & Project Guard Completion)** — Completed.
 - **Phase 2B.2 (Subcontractor Operationalization)** — Completed.
 - **Phase 2B.3 (Arabic / English Foundation & Completion)** — Completed.
-- **Phase 2C (Payroll + WPS)** — Not started. This is the immediate next task.
+- **Phase 2C / P0 (Production Architecture Freeze)** — Completed as documentation/decision work only. No backend capability was implemented.
+- **Phase 2C / P1 (Supabase Environments + Migration Foundation)** — Not started. This is the immediate next implementation task.
+- **Payroll + WPS** — Confirmed next functional module after Production Data Foundation.
 
 See `PROJECT_ROADMAP.md` for the full phase breakdown, binding decisions, and decision log.
 
@@ -34,7 +36,7 @@ See `PROJECT_ROADMAP.md` for the full phase breakdown, binding decisions, and de
 - Recharts 3 (Dashboard charts only)
 - lucide-react (icons)
 - `oxlint` for linting
-- **No backend. No authentication. No Supabase.** Persistence is `localStorage`, wrapped behind a repository abstraction specifically so a future cloud/DB migration doesn't require rewriting business logic (see §8).
+- **Currently no backend, authentication, or Supabase implementation.** Persistence is `localStorage`. The approved next phase migrates production data to Supabase/PostgreSQL/Auth; the current abstraction helps isolate persistence but is not a drop-in production adapter (see Production Data Foundation Architecture below).
 
 ## 5. Repository Structure
 
@@ -138,7 +140,7 @@ Party-scoped accounts don't get one GL account per party — they carry `partyId
 
 **Legacy pooled `1000`/`1100` GL accounts are retained forever, untouched.** Every transaction posted before a treasury account got its dedicated GL account (either before Phase 2B.1A shipped, or before an existing browser install's one-time `ensurePhase2B1AMigrated()` migration ran) stays posted against the shared pooled account exactly as it was. This means: a treasury account's balance is only fully accurate for activity from that migration point forward. Fresh installs / "Reset Demo Data" don't have this caveat — `seed/seedData.ts` seeds `TREASURY_GL_ACCOUNTS` (three dedicated accounts, fixed ids) from the very first boot, so even the demo data's Main Bank / Petty Cash figures are individually accurate.
 
-**Persistence architecture**: `StorageDriver` (interface) → `LocalStorageDriver` (current impl) → `Repository<T>` (generic CRUD) → `db` (one repository per entity). Business/accounting code (`accounting/`, `state/AppDataContext.tsx`) only talks to `db` and the `post*` functions — never to `localStorage` directly. This is the seam a future Supabase/Postgres migration would replace, without touching `accounting/` or the pages/components.
+**Persistence architecture**: `StorageDriver` (interface) → `LocalStorageDriver` → synchronous, cached, collection-wide `Repository<T>` → `db`. This is useful isolation for demo storage, but it cannot simply be replaced by Supabase: network access is asynchronous; production reads must be scoped/paginated; and accounting writes require multi-table database transactions. `AppDataContext` currently combines validation, ID generation, posting and several sequential repository writes, so it must be split into async queries and atomic domain commands. Pure calculators and posting rules can remain client/domain-side as previews and executable specifications, but PostgreSQL is authoritative.
 
 ## 9. Implemented Accounting Flows
 
@@ -287,26 +289,146 @@ Before this phase, subcontractor payable/retention/advance balances in `ledger.t
 
 ## 15. Known Limitations
 
-See `PROJECT_ROADMAP.md` → "Known Gaps" for the full, current list. Headline items after Phase 2B.3: `CASH`/`BANK` remain valid legacy-only values on every funding-source-type union (never produced by any form, kept for historical records); a treasury account's balance is only fully accurate for activity posted after its dedicated GL account existed — pre-migration activity stays attributed to the shared pooled `1000`/`1100` account, permanently, by design; the CLOSED-project guard covers new Expense/Advance/Settlement-draft/Subcontractor-Advance/Certificate-draft+approval but not Supplier Payment, Subcontractor Payment, or finalizing an already-existing draft settlement; no Company or Subcontractor deletion (create/edit/deactivate only, by design); Subcontractor Payment is still fundamentally certificate-scoped (the contract workspace's "Record Payment" is a certificate picker, not a new pooled-payment model); contract-dimension backfill on historical journal lines is deterministic-only (an unresolvable entry stays party-scoped-only, permanently, never guessed); no backend/auth (by design). **i18n (Phase 2B.3)**: dynamic data (party/project/category names, free-text notes) is never translated, by design — only chart category names, party notes, and similar free-text fields shown as fallback labels (e.g. a custodian's `notes` field, shown when set, instead of a translated "Custodian"/"Owner" label) can appear in English inside an otherwise-Arabic screen; locale/RTL preference is per-browser (`localStorage`), not per-user, consistent with this app having no accounts/backend.
+- Production still has no backend/auth/RLS/audit/atomic transaction boundary; localStorage remains the only implemented persistence.
+- `AppDataContext` writes a business row, journal and status in separate synchronous operations. A quota/browser failure can leave partial state; concurrent users are impossible; authorization is absent.
+- The generic repository loads and rewrites whole collections, caches indefinitely, has no query/filter/pagination/concurrency contract, and is synchronous. It is not a viable direct Supabase adapter.
+- Most current local business documents lack a direct `companyId`; company is inferred through project where present. P0 resolved the production rule: financially important records receive mandatory direct `company_id`, while ambiguous local rows go to migration review rather than inferred tenant ownership.
+- Legacy pooled `CASH`/`BANK` postings and deterministic-only contract backfills must not be reinterpreted by guess.
+- Existing lifecycle coverage is uneven: certificates have Draft/Approved/Paid variants, settlements Draft/Settled, expenses Posted/Void, while advances/payments post immediately. Production must preserve meanings and add reversal rather than force one enum everywhere.
+- Current money values are JavaScript numbers protected by integer-cent helper comparisons; production persistence must eliminate float representation.
+- Current IDs are browser-generated non-cryptographic strings and references derived from slices/counts; production needs UUIDs and concurrency-safe company-scoped numbering.
+- Dynamic/free-text data is intentionally untranslated. Locale is browser-scoped until profiles exist.
 
-## 16. Binding Product Decisions
+## 16. Production Data Foundation Architecture — Approved, Not Implemented
 
-Full list with dates in `PROJECT_ROADMAP.md` → Decision Log. The two most load-bearing for any new code:
+### Production Architecture Freeze — P0 completed 2026-08-26
 
-- **Project is a dimension, not a treasury account.** Never credit "Project X" as if it were a cash account; a real Project Cash Box/Bank Account, if it exists, is a distinct treasury entity.
-- **Funding source ≠ owner by default.** Implemented across Advance, Expense, Supplier Payment, Subcontractor Advance, Subcontractor Payment, and Custody Cash Return (Phase 2B.1 + 2B.1A) via the shared `resolveFundingSource()` helper. `CASH`/`BANK` remain valid only as legacy values for records that predate this — no form produces them anymore.
+`PROJECT_ROADMAP.md` → **Production Architecture Freeze — P0 Approved** is the canonical, detailed freeze. P0 approved the architecture only; the running application remains the localStorage SPA described above.
 
-## 17. Current Roadmap
+Frozen outcomes:
 
-See `PROJECT_ROADMAP.md` in full. Summary: Phase 1 ✅ → Phase 2A ✅ → Phase 2B.1 ✅ → Phase 2B.1A ✅ → Phase 2B.2 ✅ → Phase 2B.3 ✅ → **2C (Payroll/WPS, next)** → 2D (historical import) → Phase 3 (client contracts) → 3B (revenue accounting) → Phase 4 (financial reporting) → future infrastructure (Supabase/auth).
+- Company is mandatory on tenant-owned operational/accounting data; project is nullable only for real company-level activity. No fake general project.
+- Project remains the job/cost dimension; TreasuryAccount remains the source/destination of cash and owns its dedicated GL.
+- Permission keys sit behind roles. Certificate accounting approval requires `certificate.approve_post`, initially granted only to `ACCOUNTING_ADMIN`; `ACCOUNTANT` can prepare/review.
+- Project managers see assigned-project operations, cost summaries, relevant parties/contracts/certificates/attachments, but not company GL, unrelated treasury, owner accounts, payroll, users or other projects.
+- Posted accounting fields and journals are immutable. All eight current posted-flow categories use linked, dimension-preserving, idempotent reversal plus a new correcting document when needed.
+- PostgreSQL allocates company/type/year human references atomically; UUID PKs remain independent.
+- Money is `BIGINT` AED minor units. Percentage inputs use integer basis points, full-precision rational/`NUMERIC` intermediates and one round-half-away-from-zero conversion per posted component.
+- Posting RPC balance validation plus a deferred database constraint trigger provide cross-row enforcement; browser clients cannot mutate journals.
+- Financial commands require idempotency UUIDs/request hashes, unique source postings, posted-journal links, state predicates and locks.
+- Ambiguous pooled legacy Cash/Bank stays provenance-preserved and unresolved until evidence supports an approved mapping.
+- Development, Staging and Production are separate Supabase projects. Production has no demo seeds, service secrets in browsers, or localStorage accounting fallback.
+- Auth is invite/admin-created only. SYSTEM_ADMIN is audited break-glass/server administration, not a browser RLS bypass; routine access still requires company membership.
+- Audit is append-only and transaction-coupled. Attachments are private, company-scoped, signed-access and versioned/superseded.
+- P1–P10 order is frozen; P1 is next. Payroll follows completed Foundation; historical 2025/2026 import follows Payroll.
 
-## 18. Immediate Next Task
+### Architecture assessment and boundary
 
-**Phase 2C — Payroll + WPS.** Not started. Only begin it when explicitly asked to resume product development. See `PROJECT_ROADMAP.md` → "Later Phases" for scope (employee master, salary structure, allowances/deductions/overtime, payroll period, project allocation, payroll posting, salary payable, WPS payment, payroll register) — model carefully from the actual historical WPS files when this phase starts, don't design the accounting from assumptions.
+Keep React/Vite, i18n, UI workflows, pure domain types/calculators, certificate waterfall rules, ledger query semantics, chart/accounting mappings, and the posting engine's scenarios as client previews and regression specifications. Move authorization, authoritative validation, ID/reference allocation, lifecycle transitions, funding resolution, balance-sensitive checks, document+journal persistence, reversal, and audit into PostgreSQL transactions.
+
+Use Supabase directly for authenticated reads governed by RLS and for non-accounting draft/master-data writes where policies allow. Use PostgreSQL RPCs for every accounting command. Edge Functions are optional for privileged administration, email/invitations, malware scanning, or external integrations; they must call the same database command and must not split document and journal work across network calls. A separate application server is not justified yet.
+
+### Proposed PostgreSQL schema
+
+All primary keys are UUID. Timestamps are `timestamptz`; business dates are `date`. Mutable rows carry `created_by/at`, `updated_by/at`; lifecycle rows also carry `approved_by/at`, `posted_by/at`, and reversal references as applicable. Operational financial rows carry a non-null `company_id` even when also derivable, with composite foreign keys/triggers validating consistency.
+
+| Area | Tables and important relationships |
+|---|---|
+| Identity/security | `profiles(user_id -> auth.users, display_name, locale, status)`; `company_memberships(company_id, user_id, role, status)`; `project_access(company_id, project_id, user_id)` only for project-restricted roles |
+| Masters | `companies`; `projects(company_id)`; `parties(company_id, type, status)`; `expense_categories(company_id nullable for controlled global seeds)`; `accounts(company_id, parent_id, requires_party)`; `treasury_accounts(company_id, project_id nullable, gl_account_id unique, status)` |
+| Direct/custody | `expenses`; `advances`; `custody_settlements`; junction `custody_settlement_expenses(settlement_id, expense_id)` with uniqueness preventing one finalized expense in multiple settlements |
+| Suppliers | `supplier_payments` linked to supplier party, company and optional project/source dimensions. Supplier credit purchases remain expenses with supplier/payable semantics; no unnecessary invoice table is introduced yet |
+| Subcontracts | `subcontracts(company_id, project_id, subcontractor_id)`; `subcontractor_advances`; `subcontractor_certificates`; `certificate_deductions`; `subcontractor_payments(certificate_id, contract_id)` |
+| Ledger | `journal_entries(company_id, source_type, source_id, status, idempotency_key, reversal_of_id)`; `journal_lines(journal_entry_id, line_no, account_id, amount_minor, side, project_id, party_id, subcontract_id)`. A debit/credit-column variant is acceptable, but both cannot be positive |
+| Documents/audit | `attachments(company_id, project_id, entity_type, entity_id, bucket, object_path, original_name, mime_type, size_bytes, checksum, status)`; append-only `audit_log(company_id, actor_id, action, entity_type/id, before_data, after_data, request_id, occurred_at)` |
+| Future import | `import_batches(company_id, source_file, checksum, status, imported_by, approved_by/at)`; `import_rows(batch_id, source_sheet, source_row, source_reference, raw_data, normalized_data, fingerprint, review_status, review_notes)`. Operational rows later receive nullable `import_batch_id/source_row_id` |
+
+Do not create separate Owner, Custodian, Supplier, Employee or Subcontractor tables yet: `parties.type` remains the established master. Payroll may add an employee extension only when its real attributes are known.
+
+### Database constraints and journal integrity
+
+- Company codes and account codes are unique in the chosen scope; project codes are unique per company; subcontract numbers remain unique per project.
+- Composite keys/FKs or constraint triggers ensure project, party, treasury, account, subcontract and document all belong to the journal/document company.
+- Project-specific treasury must reference a project in the same company. Its dedicated GL account is unique/permanent. Status changes never rewrite history; inactive treasury is rejected by new posting commands.
+- Store amounts as non-negative `BIGINT` fils. Choose this over `NUMERIC(18,2)` because the existing invariant is integer-cent arithmetic, AED currently has two minor digits, sums/comparisons are exact, and RPC/TypeScript boundaries avoid decimal-string ambiguity. If multi-currency/minor-unit variability becomes real, revisit deliberately.
+- Journal entries are created as a complete unit inside posting functions. A deferred constraint trigger verifies at transaction end that each POSTED journal has at least two lines, valid line shapes, and sum(debit)=sum(credit)>0.
+- Unique `(company_id, source_type, source_id)` for live/original postings and unique `(company_id, idempotency_key)` prevent duplicate posting. Retry returns the existing result only when the request fingerprint matches; key reuse with different input fails.
+- Normal roles receive SELECT only on posted journals. Revoke direct INSERT/UPDATE/DELETE on journal/audit tables; only tightly scoped command functions and migration service roles write them.
+- Posted journal entries/lines are immutable. Reversal creates a new entry with opposite lines and links both entries; it never modifies original amounts/dimensions.
+
+### Authentication, roles, and permissions
+
+Supabase Auth supplies email/password or approved enterprise login later. Administrators invite users; there is no anonymous/public signup. The frontend listens for token refresh/sign-out, clears company-scoped query caches when identity/company changes, and does not use localStorage accounting data after production cutover. Disabled profile or membership is rejected by both RLS helpers and RPCs.
+
+| Role | Practical initial capability |
+|---|---|
+| `SYSTEM_ADMIN` | Platform/bootstrap administration across companies through a controlled server/service path; not a routine accounting role |
+| `ACCOUNTING_ADMIN` | Company-wide view; masters; approve/post/reverse; manage company members/roles; no cross-company access |
+| `ACCOUNTANT` | Company accounting view; create/edit/review drafts; post allowed routine documents and payments; no certificate approval initially and no user management. A later explicit permission grant may expand this |
+| `PROJECT_MANAGER` | Assigned-project operational view; create project drafts/supporting documents; no arbitrary posting, journals outside assigned projects, treasury administration, or user management |
+| `DATA_ENTRY` / `PROCUREMENT` | Create/edit permitted drafts and supplier/project source data; view limited operational records; cannot approve/post/reverse/manage users |
+| `MANAGEMENT_VIEWER` | Read-only company reporting and approved/posted documents; no mutation |
+
+Use this small role enum initially, with RPC helper functions translating roles to actions. Do not build a general permission-builder UI. UI hides/disables unavailable actions, but RLS/RPC checks remain authoritative.
+
+### RLS strategy
+
+- Every policy begins with an active `company_memberships` check. Company ID is derived inside commands from trusted parent rows, never accepted blindly from the browser.
+- Project-restricted members must additionally match `project_access`; company-wide accounting/admin/viewer roles bypass the project restriction only within their member company.
+- Master data SELECT follows company/project visibility. Controlled CREATE/UPDATE requires role and active state; identity/company fields lock after activity.
+- Draft documents allow creator/role-appropriate updates. Approval/post/reversal occurs only via RPC. Posted rows are SELECT-only.
+- Journals are readable only when membership/project visibility permits all intended reporting; direct client mutations have no policies/grants.
+- `audit_log` is readable only to authorized accounting admins/auditors and insertable only by trusted functions. Nobody receives client DELETE.
+- Security-definer helpers/functions set a safe fixed `search_path`, qualify objects, verify `auth.uid()`, and are granted only to intended authenticated roles. Service-role keys never ship to the browser.
+
+### Atomic posting command
+
+Example `post_expense(payload, idempotency_key)`: authenticate; resolve active membership/role; lock/check idempotency; derive company from project or explicit authorized company context; validate project/party/category/treasury and company consistency; recalculate VAT and totals in minor units; reject inactive/closed sources; allocate IDs/reference; insert the business document; build mapped journal lines; validate dimensions and balance; insert entry/lines; mark the document POSTED with actor/time; write audit; commit and return IDs. Any error rolls back. Certificate approval locks the draft certificate, contract and relevant advance/payment state before recalculation so two concurrent approvals/recoveries cannot overspend an advance. Settlement finalization locks the settlement and selected expense links. Payments lock the payable/certificate scope to prevent overpayment.
+
+### Audit trail
+
+Business tables hold current actor/timestamps for convenient reporting. An append-only audit event records create/edit/approval/post/reversal/status and membership/role changes, including safe before/after JSON, request/idempotency correlation and actor. Sensitive secrets/file URLs are excluded. Audit is written in the same transaction as the change. Corrections retain original and reversal/correcting links; financial rows are never hard-deleted.
+
+### Private document storage
+
+Use private buckets separated at least by environment (one private accounting-documents bucket per project is unnecessary). Object paths start with trusted company UUID, then optional project UUID, entity type/entity UUID and random file UUID; metadata is authoritative. Upload initialization/finalization validates membership, project scope, MIME/size/checksum and role. Reads use short-lived signed URLs after authorization. Storage policies validate the company path plus membership; document-state rules restrict replacement/deletion. Posted-document attachments are versioned/superseded, not silently overwritten. Never store public URLs.
+
+### Environments, backup and recovery
+
+Use separate Supabase Development, Staging and Production projects from P1. Staging is required for Auth/RLS, migration and cutover rehearsal. SQL migrations are immutable/versioned/reviewed and promoted unchanged in order; emergency fixes become new migrations. Demo seed scripts are dev-only and fail closed in production.
+
+Before Production project creation, confirm region/data-location expectations, plan, automated backup/PITR availability and accepted RPO/RTO. Initial recommendation—not a legal/company commitment—is the nearest acceptable region, managed daily backups, PITR if affordable, RPO ≤24 hours without PITR or about 15 minutes with PITR, RTO ≤8 business hours, encrypted monthly logical exports and quarterly non-production restore tests reconciled by counts and trial balance.
+
+### LocalStorage migration
+
+The current abstraction helps enumerate entities but is not directly portable. First refactor read/query contracts and command contracts; then add a Supabase implementation. Preserve LocalStorage as an explicit demo adapter only.
+
+Migration tooling exports every `cas:v1:*` collection plus schema/app version, timestamp, record counts, hashes and source browser identifier without modifying it. Import to staging using an `import_batch`; normalize money to minor units; validate referential integrity, company ownership, duplicate fingerprints, journal balance, unique source posting and project/party/contract dimensions. Produce exceptions for missing company/project, legacy pooled treasury attribution and unresolved contract dimensions—never guess. An accounting admin reviews and promotes a batch atomically. Reconcile per-entity counts, per-company trial balance, control-account party/contract balances and source-to-journal links. Keep the export and staging batch; cut over only after a rehearsal and write freeze.
+
+### Historical 2025/2026 readiness
+
+Foundation schema includes import batch/source row/fingerprint/review provenance, but no importer is implemented now. Suggested review states remain `READY`, `NEEDS_REVIEW`, `POSSIBLE_DUPLICATE`, `MISSING_PROJECT`, `MISSING_SUPPLIER`, `INVALID_VAT`, `APPROVED`, plus `REJECTED`. Large history and opening balances wait until Foundation is live and verified.
+
+## 17. Current Roadmap and Immediate Next Task
+
+Phase 1 ✅ → 2A ✅ → 2B.1 ✅ → 2B.1A ✅ → 2B.2 ✅ → 2B.3 ✅ → **2C/P0 Production Architecture Freeze ✅ (documents only)** → **2C/P1 Supabase Environments + Migration Foundation (next; not started)** → P2–P10 Foundation → 2D Payroll/WPS → 2E Historical Import/Opening Balances → Phase 3 Client Contracts/Certificates/Receivables → 3B Revenue Accounting → Phase 4 Reporting.
+
+P1 is the next implementation task. Do not implement it as part of P0, and do not begin Payroll or bulk import until Foundation exit criteria pass.
+
+## 18. Remaining External Deployment Decisions
+
+Only these require provider/company/legal/plan information and remain outside the architecture freeze:
+
+1. Supabase region after confirming company/legal expectations for UAE data location.
+2. Subscription plan and the automated-backup/PITR features actually available on that plan.
+3. Company-approved RPO, RTO, backup/export retention and responsible recovery owners.
+4. Final identity policy details such as required MFA and approved email domains, while no-public-signup remains binding.
+
+Inventorying real localStorage datasets is required operational work in P9, not an unresolved architecture decision. Ambiguous pooled cash/bank treatment is already frozen: preserve provenance and review; never guess.
 
 ## 19. Deferred Work
 
-Retention release workflow, client/owner-side progress certificates and revenue recognition, payroll/WPS accounting design, multi-company consolidation, authentication/multi-user/roles, settlement reversal/void workflows. None of these should be designed opportunistically inside an unrelated task — see roadmap for sequencing.
+Payroll/WPS implementation (confirmed immediately after Foundation), bulk historical import/opening balances, retention release, client certificates/receivables/revenue recognition, consolidation, and complex legacy corrections. Public signup and offline multi-master accounting are not planned.
 
 ## 20. Run / Build Instructions
 
@@ -335,7 +457,7 @@ No environment variables, no backend to start, no database to provision. Data li
 12. **Do not generate financial statements from incomplete books.**
 13. **Every new user-visible string goes through `t()`, added to both `i18n/en.ts` and `i18n/ar.ts`** (Phase 2B.3) — never inline English (or any) text in a page/component. `ar.ts`'s `Record<TranslationKey, string>` typing already makes a missing Arabic key a build error, so this is enforced, not just a convention. Dynamic data (names, dates, amounts, free text) is never translated.
 
-Also: no Debit/Credit pickers in normal user-facing forms (Journal is the only place raw accounting entries are displayed); business logic stays inside `accounting/` and `state/AppDataContext.tsx`, never inlined into page components; every new repository/field must be additive and migration-safe (see `ensurePhase2ASeeded` as the working pattern) — never wipe existing `localStorage` data as a side effect of a new feature.
+Also: no Debit/Credit pickers in normal user-facing forms (Journal is the only place raw accounting entries are displayed); business logic is never inlined into page components. During Production Data Foundation, pure calculations remain in `accounting/` while authoritative validation/posting moves from `AppDataContext` to database commands. Schema changes are versioned, additive where practical, migration-safe, and must never wipe existing local or production data as a feature side effect.
 
 ## 22. Testing Expectations
 
