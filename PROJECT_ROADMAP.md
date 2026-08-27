@@ -129,12 +129,13 @@ LocalStorage remains an explicit demo/development adapter. Production mode never
 - ✅ Production Data Foundation P1 — Supabase Environments + Migration Foundation *(repository/CLI foundation; no remote projects or business schema)*
 - ✅ Production Data Foundation P2 — Auth, Profiles, Memberships and Roles *(Development-applied and remotely verified with synthetic data)*
 - ✅ Production Data Foundation P3 — Core Production Schema and Master Data *(Development-applied and remotely verified with synthetic data)*
+- ✅ Production Data Foundation P4 — RLS and Authorization *(Development-applied and remotely verified with synthetic Auth/RLS matrix)*
 
 Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 
 ## Current Phase
 
-### ➡ Phase 2C — Production Data Foundation *(P0–P3 complete; P4 next)*
+### ➡ Phase 2C — Production Data Foundation *(P0–P4 complete; P5 next)*
 
 #### ✅ P0 — Production Architecture Freeze
 
@@ -167,15 +168,15 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 - Money is `BIGINT` minor units and retention is integer basis points. Stable per-company `accounts.system_key` values replace account-name or hardcoded-UUID resolution for future P5 commands.
 - Composite foreign keys and fixed-search-path validation triggers enforce company/project/party/account/treasury/subcontract consistency, active subcontractor/open-project creation rules, permanent one-to-one treasury GL identity, and restrictive deletion behavior.
 - Case-insensitive uniqueness is global for company code, company-scoped for project/party/category/account/treasury codes and system keys, and project-scoped for subcontract numbers.
-- Every P3 table has forced RLS, conservative active-membership reads, no anon/browser writes, and server-only SELECT/INSERT/UPDATE with DELETE withheld. Full P4 permission/project policy expansion remains deferred.
+- Every P3 table shipped with forced RLS, conservative active-membership reads, no anon/browser writes, and server-only SELECT/INSERT/UPDATE with DELETE withheld. P4 subsequently replaced that baseline with the completed role/project policy model below.
 - Applied `20260829120000` only to `MakerACC-Development`. The complete synthetic constraint/master-data matrix and tenant-isolation smoke test passed; final dry-run is current, database lint is clean, generated types are refreshed, and the localStorage frontend/build/lint remain unchanged.
 
-#### P4 — RLS and Authorization
+#### ✅ P4 — RLS and Authorization
 
-- Enable RLS on all exposed tables and Storage objects.
-- Enforce membership, role, project scope and document-state rules.
-- Deny direct journal/audit/posted-document mutation.
-- Test ID guessing, inactive users and privilege escalation across companies/projects.
+- Added forced, role-aware RLS for all currently exposed public tables and an FK-backed active project-assignment model. Storage, journals, audit, and posted documents do not exist yet and were not pulled forward from later phases.
+- Enforced active profile/company/membership, role and Project Manager assignment scope; added narrow master-data permissions, immutable tenant ownership, and browser mutation boundaries.
+- Preserved `SYSTEM_ADMIN` as a company-scoped configuration role rather than a browser tenant bypass. Browser DELETE and direct security-map mutation remain absent.
+- Applied the canonical P4 migrations only to `MakerACC-Development`. All 46 hosted Auth/RLS matrix cases plus four helper/profile hardening cases passed; types and operational documentation were refreshed.
 
 #### P5 — Atomic Accounting Commands
 
@@ -249,7 +250,8 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 - P0 Production Architecture Freeze completed as documentation/decision work only.
 - P1 migration/tooling foundation completed without creating a remote project or business schema.
 - P2 identity/authorization was completed on 2026-08-27 after applying and verifying the canonical migrations on Development with synthetic data.
-- P3 core master data was completed on 2026-08-27 with Development migration/constraint/RLS verification. P4 is now the next phase.
+- P3 core master data was completed on 2026-08-27 with Development migration/constraint/RLS verification.
+- P4 RLS and authorization was completed on 2026-08-27 with a fully passing hosted Development Auth/RLS matrix. P5 is now the next phase.
 - Supabase Auth/PostgreSQL/Storage selected. PostgreSQL RPCs are the ledger transaction boundary; Edge Functions are optional external orchestration, not the accounting commit boundary.
 - Company membership plus optional project restriction is authoritative through RLS/database commands.
 - `BIGINT` AED minor units selected.
@@ -258,4 +260,4 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 
 ---
 
-*P0–P3 are complete. P4 is the exact next phase; P4–P10 have not started. Do not start Payroll/WPS or bulk historical import until all Foundation exit criteria pass.*
+*P0–P4 are complete. P5 is the exact next phase; P5–P10 have not started. Do not start Payroll/WPS or bulk historical import until all Foundation exit criteria pass.*

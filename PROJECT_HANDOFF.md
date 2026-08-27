@@ -26,6 +26,7 @@ The company previously tracked project expenses, supplier bills, cash handed to 
 - **Phase 2C / P1 (Supabase Environments + Migration Foundation)** — Completed and repository-verified; no remote project or business schema was created.
 - **Phase 2C / P2 (Auth, Profiles, Memberships and Roles)** — Completed. Applied and verified remotely on the approved synthetic-only Development project.
 - **Phase 2C / P3 (Core Production Schema and Master Data)** — Completed. Applied and verified remotely on the approved synthetic-only Development project.
+- **Phase 2C / P4 (RLS and Authorization)** — Completed. Applied and verified remotely on the approved synthetic-only Development project.
 - **Payroll + WPS** — Confirmed next functional module after Production Data Foundation.
 
 See `PROJECT_ROADMAP.md` for the full phase breakdown, binding decisions, and decision log.
@@ -95,9 +96,10 @@ supabase/
 | `src/i18n/en.ts` / `src/i18n/ar.ts` | Every UI string in the app, keyed identically in both files (TypeScript enforces this). New UI text always adds a key here first, in both files, never inline English. |
 | `src/i18n/I18nContext.tsx` | `useT()` — the hook every page/component calls for translated strings; also owns locale persistence and the RTL `dir` side effect. |
 | `supabase/config.toml` | P1 CLI/local configuration. No remote project identity or credential is committed. |
-| `supabase/migrations/` | Canonical versioned SQL history. P1 is schema-free; P2 adds the identity and authorization foundation. |
+| `supabase/migrations/` | Canonical versioned SQL history. P1–P4 are applied to Development; P4 adds role/project authorization. |
 | `docs/P2_AUTHORIZATION.md` | P2 provisioning/system-admin design, authoritative active/inactive rules, frontend boundary, and remote Development authorization test matrix. |
 | `docs/P3_MASTER_DATA.md` | P3 tables, code scopes, system-account strategy, cross-dimensional enforcement, security baseline, and Development verification. |
+| `docs/P4_AUTHORIZATION.md` | P4 role/project policy matrix, assignment model, mutation boundaries, trusted pathways, and hosted verification. |
 | `src/types/database.generated.ts` | Supabase CLI-generated TypeScript types for the verified public Development schema; do not edit manually. |
 | `.env.example` | Public placeholder convention only; explicitly warns that every `VITE_*` value is browser-visible. |
 | `README.md` | Exact frontend and database migration workflow, environment promotion, secrets, and seed rules. |
@@ -332,7 +334,7 @@ Frozen outcomes:
 - Development, Staging and Production are separate Supabase projects. Production has no demo seeds, service secrets in browsers, or localStorage accounting fallback.
 - Auth is invite/admin-created only. SYSTEM_ADMIN is audited break-glass/server administration, not a browser RLS bypass; routine access still requires company membership.
 - Audit is append-only and transaction-coupled. Attachments are private, company-scoped, signed-access and versioned/superseded.
-- P1–P10 order is frozen; P1–P3 are complete and P4 is next. Payroll follows completed Foundation; historical 2025/2026 import follows Payroll.
+- P1–P10 order is frozen; P1–P4 are complete and P5 is next. Payroll follows completed Foundation; historical 2025/2026 import follows Payroll.
 
 ### P1 — Supabase Environments + Migration Foundation completed 2026-08-26
 
@@ -444,9 +446,9 @@ Foundation schema includes import batch/source row/fingerprint/review provenance
 
 ## 17. Current Roadmap and Immediate Next Task
 
-Phase 1 ✅ → 2A ✅ → 2B.1 ✅ → 2B.1A ✅ → 2B.2 ✅ → 2B.3 ✅ → **2C/P0 Production Architecture Freeze ✅** → **2C/P1 Supabase Environments + Migration Foundation ✅** → **2C/P2 Auth, Profiles, Memberships and Roles ✅** → **P3 Core Production Schema and Master Data ✅** → **P4 RLS and Authorization (next)** → P5–P10 Foundation → 2D Payroll/WPS → 2E Historical Import/Opening Balances → Phase 3 Client Contracts/Certificates/Receivables → 3B Revenue Accounting → Phase 4 Reporting.
+Phase 1 ✅ → 2A ✅ → 2B.1 ✅ → 2B.1A ✅ → 2B.2 ✅ → 2B.3 ✅ → **2C/P0 Production Architecture Freeze ✅** → **2C/P1 Supabase Environments + Migration Foundation ✅** → **2C/P2 Auth, Profiles, Memberships and Roles ✅** → **P3 Core Production Schema and Master Data ✅** → **P4 RLS and Authorization ✅** → **P5 Atomic Accounting Commands (next)** → P6–P10 Foundation → 2D Payroll/WPS → 2E Historical Import/Opening Balances → Phase 3 Client Contracts/Certificates/Receivables → 3B Revenue Accounting → Phase 4 Reporting.
 
-The exact next task is P4 — RLS and Authorization. Do not start P5 accounting commands, frontend cutover, Payroll, or historical import during P4.
+The exact next task is P5 — Atomic Accounting Commands. P4 is complete; do not repeat it or start P6/front-end cutover, Payroll, or historical import while doing P5.
 
 ## 18. Remaining External Deployment Decisions
 
@@ -504,7 +506,7 @@ P2 is complete. The approved `MakerACC-Development` project is linked, all four 
 - **RLS/privileges:** every P2 public table has RLS forced. Profiles and memberships expose only the caller's row(s); companies require active membership; permission definitions require an active profile; role mappings are available only through `has_permission`. `anon` receives no table/function privileges. Security tables have no direct browser mutation grants.
 - **System admin:** the browser-visible `SYSTEM_ADMIN` role never bypasses company membership. The separate `private.system_administrators` registry has no browser schema/table access and is reserved for an explicit trusted service/Edge Function pathway with MFA and P7 audit. No service credential enters the browser.
 - **Invitations:** public signup and anonymous sign-ins are disabled in local and hosted Development configuration. Admin create/invite remains a trusted server/operator operation; the exact lifecycle and partial-failure handling are documented in `docs/P2_AUTHORIZATION.md`.
-- **Project access:** P3 now supplies the real production project parent. The FK-backed assignment model and Project Manager policy enforcement remain for P4; no dummy project or premature broad policy was created.
+- **Project access:** P3 supplied the real production project parent; P4 now supplies the FK-backed assignment model and Project Manager policy enforcement. No dummy project or broad membership-only production policy remains.
 - **Frontend:** deliberately unchanged. Accounting continues through the localStorage demo adapter and locale remains local. A login shell without a verified backend would misleadingly associate local demo books with a real tenant; Auth/session UI and profile-locale synchronization are deferred to the async integration boundary.
 - **Types:** `src/types/database.generated.ts` was generated from the successfully applied linked public schema using Supabase CLI 2.115.0. It is not yet consumed by the localStorage frontend.
 
@@ -525,13 +527,26 @@ P3 is complete through `supabase/migrations/20260829120000_p3_core_master_data.s
 - Account classification is `ASSET|LIABILITY|EQUITY|REVENUE|EXPENSE`. Optional per-company unique `system_key` is the stable future posting resolver; display names and hardcoded UUIDs are never authoritative. Treasury rows instead have their own immutable one-to-one ASSET GL links.
 - Composite FKs enforce company consistency across projects, parties, account parents, treasury GL/project and subcontract project/party. Fixed-search-path triggers freeze treasury company/GL identity, validate ASSET mapping, require valid active subcontractors/open projects for new contracts and protect referenced party type.
 - Codes are trimmed/case-insensitive unique: company globally; project/party/category/account/treasury within company; contract number within project. Important parents use `ON DELETE RESTRICT`; server DELETE grants are withheld.
-- Every P3 table has forced RLS. Authenticated SELECT uses verified active company membership; browser writes and anon access are absent. `service_role` has only SELECT/INSERT/UPDATE. Full P4 role/project access remains next.
+- Every P3 table shipped with forced RLS and an active-membership read baseline. P4 has now replaced it with role/project-aware reads and explicit narrow browser writes; anon access and browser DELETE remain absent.
 - Synthetic verification passed every requested master-data constraint, wrong-company/type/retention case, distinct/immutable treasury mapping, tenant-isolation smoke test, browser/anon denial and service-delete denial. Final migration dry-run is current and database lint has no errors.
 - Generated public types were refreshed at `src/types/database.generated.ts`. The React/localStorage application and accounting logic remain unchanged; build and lint pass.
 
-Full field/strategy documentation is in `docs/P3_MASTER_DATA.md`. Exact next task: P4 — RLS and Authorization. Do not start P5 commands or frontend cutover during P4.
+Full field/strategy documentation is in `docs/P3_MASTER_DATA.md`. P4 authorization is documented separately in `docs/P4_AUTHORIZATION.md`.
 
-## 24. Testing Expectations
+## 24. P4 RLS and Authorization (2026-08-27)
+
+P4 is complete through `20260830120000_p4_rls_authorization.sql` and two forward corrections, applied only to `MakerACC-Development`.
+
+- Added `project_assignments` with same-company project enforcement, one-active-assignment uniqueness, active target profile/membership validation, and administrator-only mutation.
+- Replaced P3's broad member-read baseline with role-aware company/project policies. Project Managers are assignment-scoped; Accounting Admin, Accountant, Data Entry, Procurement, Management Viewer, and System Admin have the documented distinct boundaries.
+- Added narrow permissions for party, category, account, subcontract, and project-assignment administration. Permission maps remain protected and all identity derives from `auth.uid()`.
+- Tenant ownership is immutable after creation, browser DELETE remains absent, and cross-company project/party/account/treasury/subcontract relationships continue to be rejected by database constraints and triggers.
+- The first hosted run found assignment validation could not inspect protected target identity rows; `20260830123000` makes that trigger lookup fixed-search-path security-definer while keeping browser EXECUTE revoked. The next run found a newly inserted project could not satisfy its return-row helper snapshot; `20260830124500` makes the project row policy equivalent and row-local while preserving strict direct-helper semantics.
+- The final hosted matrix passed all 46 required tenant, role, project, mutation, escalation, and dimensional checks plus four helper/profile hardening checks. Only synthetic Development data was used. Generated public types were refreshed.
+
+Full policy, role, trusted-pathway, and matrix documentation is in `docs/P4_AUTHORIZATION.md`. Exact next task: P5 — Atomic Accounting Commands. P5 has not started.
+
+## 25. Testing Expectations
 
 There is no automated test suite (no `*.test.ts` files, no test runner configured) — verification so far has been: `npm run build` must be clean (zero TypeScript errors), `npm run lint` (oxlint) must show no new warnings, plus live, browser-driven functional testing (headless Chromium via Playwright, launched ad hoc — not checked into the repo) exercising each new flow end-to-end with hand-calculated expected numbers, checking `console` for zero errors, and confirming persistence across a page reload.
 
@@ -567,7 +582,7 @@ Phase 2B.3's verification run (Playwright/headless Chromium, after a full "Reset
 
 Any future phase should be verified the same way before being marked "Completed" in the roadmap: build clean, lint clean, flow tested live with real numbers, no console errors, persists after reload, and existing flows re-checked for regressions.
 
-## 25. Handoff Checklist for New Sessions
+## 26. Handoff Checklist for New Sessions
 
 - [ ] Read `PROJECT_ROADMAP.md` in full (Binding Decisions, Completed, Current/Next Phase, Known Gaps, Decision Log).
 - [ ] Read this file in full.

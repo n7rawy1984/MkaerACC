@@ -323,6 +323,57 @@ export type Database = {
         }
         Relationships: []
       }
+      project_assignments: {
+        Row: {
+          company_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          project_id: string
+          status: Database["public"]["Enums"]["account_status"]
+          updated_at: string
+          updated_by: string | null
+          user_id: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          project_id: string
+          status?: Database["public"]["Enums"]["account_status"]
+          updated_at?: string
+          updated_by?: string | null
+          user_id: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          project_id?: string
+          status?: Database["public"]["Enums"]["account_status"]
+          updated_at?: string
+          updated_by?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_assignments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_assignments_project_same_company"
+            columns: ["company_id", "project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
       projects: {
         Row: {
           budget_minor: number | null
@@ -577,6 +628,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      can_access_project: {
+        Args: { target_company_id: string; target_project_id: string }
+        Returns: boolean
+      }
+      has_active_project_assignment: {
+        Args: { target_company_id: string; target_project_id: string }
+        Returns: boolean
+      }
       has_company_role: {
         Args: {
           required_role: Database["public"]["Enums"]["company_role"]
