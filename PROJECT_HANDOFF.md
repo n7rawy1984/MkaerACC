@@ -27,6 +27,7 @@ The company previously tracked project expenses, supplier bills, cash handed to 
 - **Phase 2C / P2 (Auth, Profiles, Memberships and Roles)** — Completed. Applied and verified remotely on the approved synthetic-only Development project.
 - **Phase 2C / P3 (Core Production Schema and Master Data)** — Completed. Applied and verified remotely on the approved synthetic-only Development project.
 - **Phase 2C / P4 (RLS and Authorization)** — Completed. Applied and verified remotely on the approved synthetic-only Development project.
+- **Phase 2C / P5A (Accounting Kernel and Journal Core)** — Completed. Applied and verified remotely on Development; P5 overall remains in progress.
 - **Payroll + WPS** — Confirmed next functional module after Production Data Foundation.
 
 See `PROJECT_ROADMAP.md` for the full phase breakdown, binding decisions, and decision log.
@@ -39,7 +40,7 @@ See `PROJECT_ROADMAP.md` for the full phase breakdown, binding decisions, and de
 - Recharts 3 (Dashboard charts only)
 - lucide-react (icons)
 - `oxlint` for linting
-- **The approved Development Supabase backend now has verified P2 identity/authorization and P3 production master-data schemas.** Application accounting persistence remains `localStorage`; no transaction/journal schema, posting RPC, or frontend Supabase data path exists yet. The current abstraction helps isolate persistence but is not a drop-in production adapter (see Production Data Foundation Architecture below).
+- **The approved Development Supabase backend now has verified P2–P4 identity/master authorization and the P5A immutable journal kernel.** Application accounting persistence remains `localStorage`; no business transaction schema, specialized posting RPC, or frontend Supabase data path exists yet.
 
 ## 5. Repository Structure
 
@@ -96,10 +97,11 @@ supabase/
 | `src/i18n/en.ts` / `src/i18n/ar.ts` | Every UI string in the app, keyed identically in both files (TypeScript enforces this). New UI text always adds a key here first, in both files, never inline English. |
 | `src/i18n/I18nContext.tsx` | `useT()` — the hook every page/component calls for translated strings; also owns locale persistence and the RTL `dir` side effect. |
 | `supabase/config.toml` | P1 CLI/local configuration. No remote project identity or credential is committed. |
-| `supabase/migrations/` | Canonical versioned SQL history. P1–P4 are applied to Development; P4 adds role/project authorization. |
+| `supabase/migrations/` | Canonical forward-only SQL history. P1–P5A are applied to Development. |
 | `docs/P2_AUTHORIZATION.md` | P2 provisioning/system-admin design, authoritative active/inactive rules, frontend boundary, and remote Development authorization test matrix. |
 | `docs/P3_MASTER_DATA.md` | P3 tables, code scopes, system-account strategy, cross-dimensional enforcement, security baseline, and Development verification. |
 | `docs/P4_AUTHORIZATION.md` | P4 role/project policy matrix, assignment model, mutation boundaries, trusted pathways, and hosted verification. |
+| `docs/P5A_ACCOUNTING_KERNEL.md` | P5A journal schema, invariants, private primitives, concurrency model, RLS/grants, and hosted verification. |
 | `src/types/database.generated.ts` | Supabase CLI-generated TypeScript types for the verified public Development schema; do not edit manually. |
 | `.env.example` | Public placeholder convention only; explicitly warns that every `VITE_*` value is browser-visible. |
 | `README.md` | Exact frontend and database migration workflow, environment promotion, secrets, and seed rules. |
@@ -334,7 +336,8 @@ Frozen outcomes:
 - Development, Staging and Production are separate Supabase projects. Production has no demo seeds, service secrets in browsers, or localStorage accounting fallback.
 - Auth is invite/admin-created only. SYSTEM_ADMIN is audited break-glass/server administration, not a browser RLS bypass; routine access still requires company membership.
 - Audit is append-only and transaction-coupled. Attachments are private, company-scoped, signed-access and versioned/superseded.
-- P1–P10 order is frozen; P1–P4 are complete and P5 is next. Payroll follows completed Foundation; historical 2025/2026 import follows Payroll.
+- P1–P10 order is frozen; P1–P4 and P5A are complete, while P5 remains in progress. Payroll follows completed Foundation; historical 2025/2026 import follows Payroll.
+- P5A is complete and P5 remains in progress. No specialized P5B business-command batch is authorized until separately reviewed.
 
 ### P1 — Supabase Environments + Migration Foundation completed 2026-08-26
 
@@ -446,9 +449,9 @@ Foundation schema includes import batch/source row/fingerprint/review provenance
 
 ## 17. Current Roadmap and Immediate Next Task
 
-Phase 1 ✅ → 2A ✅ → 2B.1 ✅ → 2B.1A ✅ → 2B.2 ✅ → 2B.3 ✅ → **2C/P0 Production Architecture Freeze ✅** → **2C/P1 Supabase Environments + Migration Foundation ✅** → **2C/P2 Auth, Profiles, Memberships and Roles ✅** → **P3 Core Production Schema and Master Data ✅** → **P4 RLS and Authorization ✅** → **P5 Atomic Accounting Commands (next)** → P6–P10 Foundation → 2D Payroll/WPS → 2E Historical Import/Opening Balances → Phase 3 Client Contracts/Certificates/Receivables → 3B Revenue Accounting → Phase 4 Reporting.
+Phase 1 ✅ → 2A ✅ → 2B.1 ✅ → 2B.1A ✅ → 2B.2 ✅ → 2B.3 ✅ → **P0–P4 ✅** → **P5A Accounting Kernel ✅** → **P5 specialized business commands (in progress; next batch requires review)** → P6–P10 Foundation → 2D Payroll/WPS → 2E Historical Import/Opening Balances → later phases.
 
-The exact next task is P5 — Atomic Accounting Commands. P4 is complete; do not repeat it or start P6/front-end cutover, Payroll, or historical import while doing P5.
+The exact next task is a separately reviewed P5B specialized business-command batch. Its flow scope is not yet authorized. Do not repeat P5A or start P6/frontend cutover, Payroll, or historical import.
 
 ## 18. Remaining External Deployment Decisions
 
@@ -544,9 +547,23 @@ P4 is complete through `20260830120000_p4_rls_authorization.sql` and two forward
 - The first hosted run found assignment validation could not inspect protected target identity rows; `20260830123000` makes that trigger lookup fixed-search-path security-definer while keeping browser EXECUTE revoked. The next run found a newly inserted project could not satisfy its return-row helper snapshot; `20260830124500` makes the project row policy equivalent and row-local while preserving strict direct-helper semantics.
 - The final hosted matrix passed all 46 required tenant, role, project, mutation, escalation, and dimensional checks plus four helper/profile hardening checks. Only synthetic Development data was used. Generated public types were refreshed.
 
-Full policy, role, trusted-pathway, and matrix documentation is in `docs/P4_AUTHORIZATION.md`. Exact next task: P5 — Atomic Accounting Commands. P5 has not started.
+Full policy, role, trusted-pathway, and matrix documentation is in `docs/P4_AUTHORIZATION.md`. P5A now supplies the journal kernel without changing P4 authorization.
 
-## 25. Testing Expectations
+## 25. P5A Accounting Kernel and Journal Core (2026-08-28)
+
+P5A is complete through `20260831120000_p5a_accounting_kernel.sql` and two forward corrections, applied only to `MakerACC-Development`.
+
+- Added immutable posted `journal_entries` and `journal_lines` using `BIGINT` AED minor units and account/project/party/treasury/subcontract dimensions.
+- Added immediate private balance validation plus independently deferred transaction-end constraint triggers.
+- Added private atomic company/type/year reference counters, SHA-256 idempotency reservations, source-posting uniqueness, row locking, completion invariants, and dimension-preserving reversal.
+- Generic primitives are in `private`, have fixed empty search paths, and have no browser/service EXECUTE grants. Browser and service roles receive journal SELECT only; accounting-role RLS limits raw reads.
+- Hosted tests passed all 42 required journal, balance, dimension, immutability, reversal, idempotency, concurrency, source, reference, role, anonymous, and write-denial checks.
+- `20260831123000` corrected a deferred-trigger row-shape issue found before synthetic data committed. `20260831124500` removed provider-default service `TRUNCATE/TRIGGER/REFERENCES` privileges, leaving SELECT only.
+- No business transaction table, specialized posting command, frontend integration, Payroll, or import work was added.
+
+Full implementation and verification details are in `docs/P5A_ACCOUNTING_KERNEL.md`. P5 overall remains in progress. The exact next batch is P5B specialized business commands, whose flow scope must be reviewed separately.
+
+## 26. Testing Expectations
 
 There is no automated test suite (no `*.test.ts` files, no test runner configured) — verification so far has been: `npm run build` must be clean (zero TypeScript errors), `npm run lint` (oxlint) must show no new warnings, plus live, browser-driven functional testing (headless Chromium via Playwright, launched ad hoc — not checked into the repo) exercising each new flow end-to-end with hand-calculated expected numbers, checking `console` for zero errors, and confirming persistence across a page reload.
 
@@ -582,7 +599,7 @@ Phase 2B.3's verification run (Playwright/headless Chromium, after a full "Reset
 
 Any future phase should be verified the same way before being marked "Completed" in the roadmap: build clean, lint clean, flow tested live with real numbers, no console errors, persists after reload, and existing flows re-checked for regressions.
 
-## 26. Handoff Checklist for New Sessions
+## 27. Handoff Checklist for New Sessions
 
 - [ ] Read `PROJECT_ROADMAP.md` in full (Binding Decisions, Completed, Current/Next Phase, Known Gaps, Decision Log).
 - [ ] Read this file in full.

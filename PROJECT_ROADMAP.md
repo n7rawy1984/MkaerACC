@@ -130,12 +130,13 @@ LocalStorage remains an explicit demo/development adapter. Production mode never
 - ✅ Production Data Foundation P2 — Auth, Profiles, Memberships and Roles *(Development-applied and remotely verified with synthetic data)*
 - ✅ Production Data Foundation P3 — Core Production Schema and Master Data *(Development-applied and remotely verified with synthetic data)*
 - ✅ Production Data Foundation P4 — RLS and Authorization *(Development-applied and remotely verified with synthetic Auth/RLS matrix)*
+- ✅ Production Data Foundation P5A — Accounting Kernel and Journal Core *(Development-applied and remotely verified; P5 remains in progress)*
 
 Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 
 ## Current Phase
 
-### ➡ Phase 2C — Production Data Foundation *(P0–P4 complete; P5 next)*
+### ➡ Phase 2C — Production Data Foundation *(P0–P4 and P5A complete; P5 in progress)*
 
 #### ✅ P0 — Production Architecture Freeze
 
@@ -178,12 +179,12 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 - Preserved `SYSTEM_ADMIN` as a company-scoped configuration role rather than a browser tenant bypass. Browser DELETE and direct security-map mutation remain absent.
 - Applied the canonical P4 migrations only to `MakerACC-Development`. All 46 hosted Auth/RLS matrix cases plus four helper/profile hardening cases passed; types and operational documentation were refreshed.
 
-#### P5 — Atomic Accounting Commands
+#### 🚧 P5 — Atomic Accounting Commands
 
-- Implement minimally granted `SECURITY DEFINER` PostgreSQL functions with fixed `search_path`, authorization checks and appropriate row locks.
-- Cover Expense, Advance, Supplier Payment, Settlement finalization, Subcontractor Advance, Certificate approval, Subcontractor Payment and reversal.
-- Add idempotency, unique source posting, balance/dimension checks, journal immutability and audit.
-- Reconcile RPC results against current pure posting fixtures.
+- ✅ **P5A — Accounting Kernel and Journal Core:** added immutable `BIGINT` journals/lines, company-consistent dimensions, two-layer balance enforcement, atomic references, private idempotency/source/concurrency primitives, linked reversal foundation, conservative journal RLS, and no browser/service write path.
+- P5B+ will add separately reviewed specialized business commands for Expense, Advance, Supplier Payment, Settlement finalization, Subcontractor Advance, Certificate approval, Subcontractor Payment and business-state reversal.
+- Generic accounting primitives remain private and cannot be used as an arbitrary browser journal RPC.
+- Full P5 remains in progress; P5A did not add business documents, P7 audit events, or frontend integration.
 
 #### P6 — Async Data/Command Layer and Cutover
 
@@ -251,7 +252,8 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 - P1 migration/tooling foundation completed without creating a remote project or business schema.
 - P2 identity/authorization was completed on 2026-08-27 after applying and verifying the canonical migrations on Development with synthetic data.
 - P3 core master data was completed on 2026-08-27 with Development migration/constraint/RLS verification.
-- P4 RLS and authorization was completed on 2026-08-27 with a fully passing hosted Development Auth/RLS matrix. P5 is now the next phase.
+- P4 RLS and authorization was completed on 2026-08-27 with a fully passing hosted Development Auth/RLS matrix.
+- P5A Accounting Kernel and Journal Core was completed on 2026-08-28 with hosted balance/dimension/immutability/idempotency/concurrency/reversal/RLS verification. P5 remains in progress; the next specialized-command batch requires separate review.
 - Supabase Auth/PostgreSQL/Storage selected. PostgreSQL RPCs are the ledger transaction boundary; Edge Functions are optional external orchestration, not the accounting commit boundary.
 - Company membership plus optional project restriction is authoritative through RLS/database commands.
 - `BIGINT` AED minor units selected.
@@ -260,4 +262,4 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 
 ---
 
-*P0–P4 are complete. P5 is the exact next phase; P5–P10 have not started. Do not start Payroll/WPS or bulk historical import until all Foundation exit criteria pass.*
+*P0–P4 and P5A are complete. P5 remains in progress; no P5 business-command batch is authorized until separately reviewed. P6–P10, Payroll/WPS, and bulk historical import have not started.*

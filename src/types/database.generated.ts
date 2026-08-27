@@ -213,6 +213,157 @@ export type Database = {
           },
         ]
       }
+      journal_entries: {
+        Row: {
+          company_id: string
+          created_at: string
+          created_by: string | null
+          description: string
+          id: string
+          journal_reference: string
+          posted_at: string
+          posting_date: string
+          posting_purpose: string
+          reversal_of_journal_entry_id: string | null
+          source_id: string
+          source_type: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          description: string
+          id?: string
+          journal_reference: string
+          posted_at?: string
+          posting_date: string
+          posting_purpose: string
+          reversal_of_journal_entry_id?: string | null
+          source_id: string
+          source_type: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          id?: string
+          journal_reference?: string
+          posted_at?: string
+          posting_date?: string
+          posting_purpose?: string
+          reversal_of_journal_entry_id?: string | null
+          source_id?: string
+          source_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "journal_entries_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "journal_entries_reversal_same_company"
+            columns: ["company_id", "reversal_of_journal_entry_id"]
+            isOneToOne: false
+            referencedRelation: "journal_entries"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
+      journal_lines: {
+        Row: {
+          account_id: string
+          company_id: string
+          created_at: string
+          credit_minor: number
+          debit_minor: number
+          id: string
+          journal_entry_id: string
+          line_number: number
+          memo: string | null
+          party_id: string | null
+          project_id: string | null
+          subcontract_id: string | null
+          treasury_account_id: string | null
+        }
+        Insert: {
+          account_id: string
+          company_id: string
+          created_at?: string
+          credit_minor?: number
+          debit_minor?: number
+          id?: string
+          journal_entry_id: string
+          line_number: number
+          memo?: string | null
+          party_id?: string | null
+          project_id?: string | null
+          subcontract_id?: string | null
+          treasury_account_id?: string | null
+        }
+        Update: {
+          account_id?: string
+          company_id?: string
+          created_at?: string
+          credit_minor?: number
+          debit_minor?: number
+          id?: string
+          journal_entry_id?: string
+          line_number?: number
+          memo?: string | null
+          party_id?: string | null
+          project_id?: string | null
+          subcontract_id?: string | null
+          treasury_account_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "journal_lines_account_same_company"
+            columns: ["company_id", "account_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "journal_lines_entry_same_company"
+            columns: ["company_id", "journal_entry_id"]
+            isOneToOne: false
+            referencedRelation: "journal_entries"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "journal_lines_party_same_company"
+            columns: ["company_id", "party_id"]
+            isOneToOne: false
+            referencedRelation: "parties"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "journal_lines_project_same_company"
+            columns: ["company_id", "project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "journal_lines_subcontract_project_same_company"
+            columns: ["company_id", "subcontract_id", "project_id"]
+            isOneToOne: false
+            referencedRelation: "subcontracts"
+            referencedColumns: ["company_id", "id", "project_id"]
+          },
+          {
+            foreignKeyName: "journal_lines_treasury_same_company"
+            columns: ["company_id", "treasury_account_id"]
+            isOneToOne: false
+            referencedRelation: "treasury_accounts"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
       parties: {
         Row: {
           address: string | null
