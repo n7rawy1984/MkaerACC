@@ -14,30 +14,111 @@ export type Database = {
   }
   public: {
     Tables: {
-      companies: {
+      accounts: {
         Row: {
+          account_type: Database["public"]["Enums"]["account_type"]
           code: string
+          company_id: string
           created_at: string
+          created_by: string | null
           id: string
           name: string
+          parent_account_id: string | null
+          requires_party: boolean
           status: Database["public"]["Enums"]["account_status"]
+          system_key: Database["public"]["Enums"]["system_account_key"] | null
           updated_at: string
+          updated_by: string | null
         }
         Insert: {
+          account_type: Database["public"]["Enums"]["account_type"]
           code: string
+          company_id: string
           created_at?: string
+          created_by?: string | null
           id?: string
           name: string
+          parent_account_id?: string | null
+          requires_party?: boolean
           status?: Database["public"]["Enums"]["account_status"]
+          system_key?: Database["public"]["Enums"]["system_account_key"] | null
           updated_at?: string
+          updated_by?: string | null
         }
         Update: {
+          account_type?: Database["public"]["Enums"]["account_type"]
           code?: string
+          company_id?: string
           created_at?: string
+          created_by?: string | null
           id?: string
           name?: string
+          parent_account_id?: string | null
+          requires_party?: boolean
           status?: Database["public"]["Enums"]["account_status"]
+          system_key?: Database["public"]["Enums"]["system_account_key"] | null
           updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "accounts_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "accounts_parent_same_company"
+            columns: ["company_id", "parent_account_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
+      companies: {
+        Row: {
+          address: string | null
+          code: string
+          created_at: string
+          created_by: string | null
+          id: string
+          legal_name: string | null
+          name: string
+          notes: string | null
+          status: Database["public"]["Enums"]["account_status"]
+          trn: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          address?: string | null
+          code: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          legal_name?: string | null
+          name: string
+          notes?: string | null
+          status?: Database["public"]["Enums"]["account_status"]
+          trn?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          address?: string | null
+          code?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          legal_name?: string | null
+          name?: string
+          notes?: string | null
+          status?: Database["public"]["Enums"]["account_status"]
+          trn?: string | null
+          updated_at?: string
+          updated_by?: string | null
         }
         Relationships: []
       }
@@ -78,6 +159,118 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "company_memberships_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      expense_categories: {
+        Row: {
+          code: string
+          company_id: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          name: string
+          status: Database["public"]["Enums"]["account_status"]
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          code: string
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          status?: Database["public"]["Enums"]["account_status"]
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          code?: string
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          status?: Database["public"]["Enums"]["account_status"]
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "expense_categories_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      parties: {
+        Row: {
+          address: string | null
+          code: string | null
+          company_id: string
+          contact_person: string | null
+          created_at: string
+          created_by: string | null
+          email: string | null
+          id: string
+          name: string
+          notes: string | null
+          phone: string | null
+          status: Database["public"]["Enums"]["account_status"]
+          trn: string | null
+          type: Database["public"]["Enums"]["party_type"]
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          address?: string | null
+          code?: string | null
+          company_id: string
+          contact_person?: string | null
+          created_at?: string
+          created_by?: string | null
+          email?: string | null
+          id?: string
+          name: string
+          notes?: string | null
+          phone?: string | null
+          status?: Database["public"]["Enums"]["account_status"]
+          trn?: string | null
+          type: Database["public"]["Enums"]["party_type"]
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          address?: string | null
+          code?: string | null
+          company_id?: string
+          contact_person?: string | null
+          created_at?: string
+          created_by?: string | null
+          email?: string | null
+          id?: string
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          status?: Database["public"]["Enums"]["account_status"]
+          trn?: string | null
+          type?: Database["public"]["Enums"]["party_type"]
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "parties_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "companies"
@@ -130,6 +323,74 @@ export type Database = {
         }
         Relationships: []
       }
+      projects: {
+        Row: {
+          budget_minor: number | null
+          client_name: string | null
+          code: string
+          company_id: string
+          contract_number: string | null
+          created_at: string
+          created_by: string | null
+          expected_completion_date: string | null
+          id: string
+          location: string | null
+          name: string
+          notes: string | null
+          original_contract_value_minor: number | null
+          start_date: string | null
+          status: Database["public"]["Enums"]["project_status"]
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          budget_minor?: number | null
+          client_name?: string | null
+          code: string
+          company_id: string
+          contract_number?: string | null
+          created_at?: string
+          created_by?: string | null
+          expected_completion_date?: string | null
+          id?: string
+          location?: string | null
+          name: string
+          notes?: string | null
+          original_contract_value_minor?: number | null
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["project_status"]
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          budget_minor?: number | null
+          client_name?: string | null
+          code?: string
+          company_id?: string
+          contract_number?: string | null
+          created_at?: string
+          created_by?: string | null
+          expected_completion_date?: string | null
+          id?: string
+          location?: string | null
+          name?: string
+          notes?: string | null
+          original_contract_value_minor?: number | null
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["project_status"]
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "projects_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       role_permissions: {
         Row: {
           permission_key: string
@@ -150,6 +411,164 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "permissions"
             referencedColumns: ["key"]
+          },
+        ]
+      }
+      subcontracts: {
+        Row: {
+          approved_variations_minor: number
+          company_id: string
+          contract_number: string
+          created_at: string
+          created_by: string | null
+          expected_end_date: string | null
+          id: string
+          notes: string | null
+          original_contract_value_minor: number
+          project_id: string
+          retention_bps: number
+          scope_of_work: string
+          start_date: string | null
+          status: Database["public"]["Enums"]["subcontract_status"]
+          subcontractor_id: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          approved_variations_minor?: number
+          company_id: string
+          contract_number: string
+          created_at?: string
+          created_by?: string | null
+          expected_end_date?: string | null
+          id?: string
+          notes?: string | null
+          original_contract_value_minor: number
+          project_id: string
+          retention_bps: number
+          scope_of_work: string
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["subcontract_status"]
+          subcontractor_id: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          approved_variations_minor?: number
+          company_id?: string
+          contract_number?: string
+          created_at?: string
+          created_by?: string | null
+          expected_end_date?: string | null
+          id?: string
+          notes?: string | null
+          original_contract_value_minor?: number
+          project_id?: string
+          retention_bps?: number
+          scope_of_work?: string
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["subcontract_status"]
+          subcontractor_id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subcontracts_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subcontracts_party_same_company"
+            columns: ["company_id", "subcontractor_id"]
+            isOneToOne: false
+            referencedRelation: "parties"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "subcontracts_project_same_company"
+            columns: ["company_id", "project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
+      treasury_accounts: {
+        Row: {
+          account_reference: string | null
+          bank_name: string | null
+          code: string
+          company_id: string
+          created_at: string
+          created_by: string | null
+          gl_account_id: string
+          id: string
+          name: string
+          notes: string | null
+          project_id: string | null
+          status: Database["public"]["Enums"]["account_status"]
+          type: Database["public"]["Enums"]["treasury_account_type"]
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          account_reference?: string | null
+          bank_name?: string | null
+          code: string
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          gl_account_id: string
+          id?: string
+          name: string
+          notes?: string | null
+          project_id?: string | null
+          status?: Database["public"]["Enums"]["account_status"]
+          type: Database["public"]["Enums"]["treasury_account_type"]
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          account_reference?: string | null
+          bank_name?: string | null
+          code?: string
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          gl_account_id?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          project_id?: string | null
+          status?: Database["public"]["Enums"]["account_status"]
+          type?: Database["public"]["Enums"]["treasury_account_type"]
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "treasury_accounts_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "treasury_gl_same_company"
+            columns: ["company_id", "gl_account_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "treasury_project_same_company"
+            columns: ["company_id", "project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["company_id", "id"]
           },
         ]
       }
@@ -177,6 +596,7 @@ export type Database = {
     }
     Enums: {
       account_status: "ACTIVE" | "INACTIVE"
+      account_type: "ASSET" | "LIABILITY" | "EQUITY" | "REVENUE" | "EXPENSE"
       app_locale: "en" | "ar"
       company_role:
         | "SYSTEM_ADMIN"
@@ -186,6 +606,32 @@ export type Database = {
         | "DATA_ENTRY"
         | "PROCUREMENT"
         | "MANAGEMENT_VIEWER"
+      party_type:
+        | "OWNER"
+        | "CUSTODIAN"
+        | "SUPPLIER"
+        | "EMPLOYEE"
+        | "SUBCONTRACTOR"
+        | "OTHER"
+      project_status: "PLANNING" | "ACTIVE" | "ON_HOLD" | "COMPLETED" | "CLOSED"
+      subcontract_status: "ACTIVE" | "COMPLETED" | "CLOSED"
+      system_account_key:
+        | "INPUT_VAT"
+        | "CUSTODY_ADVANCE"
+        | "SUPPLIER_PAYABLE"
+        | "OWNER_CURRENT"
+        | "SUBCONTRACTOR_ADVANCE"
+        | "SUBCONTRACTOR_PAYABLE"
+        | "SUBCONTRACTOR_RETENTION_PAYABLE"
+        | "PROJECT_COST"
+        | "PROJECT_COST_SUBCONTRACTORS"
+        | "COMPANY_EXPENSE"
+      treasury_account_type:
+        | "CASH"
+        | "PETTY_CASH"
+        | "BANK"
+        | "PROJECT_CASH_BOX"
+        | "PROJECT_BANK"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -314,6 +760,7 @@ export const Constants = {
   public: {
     Enums: {
       account_status: ["ACTIVE", "INACTIVE"],
+      account_type: ["ASSET", "LIABILITY", "EQUITY", "REVENUE", "EXPENSE"],
       app_locale: ["en", "ar"],
       company_role: [
         "SYSTEM_ADMIN",
@@ -323,6 +770,35 @@ export const Constants = {
         "DATA_ENTRY",
         "PROCUREMENT",
         "MANAGEMENT_VIEWER",
+      ],
+      party_type: [
+        "OWNER",
+        "CUSTODIAN",
+        "SUPPLIER",
+        "EMPLOYEE",
+        "SUBCONTRACTOR",
+        "OTHER",
+      ],
+      project_status: ["PLANNING", "ACTIVE", "ON_HOLD", "COMPLETED", "CLOSED"],
+      subcontract_status: ["ACTIVE", "COMPLETED", "CLOSED"],
+      system_account_key: [
+        "INPUT_VAT",
+        "CUSTODY_ADVANCE",
+        "SUPPLIER_PAYABLE",
+        "OWNER_CURRENT",
+        "SUBCONTRACTOR_ADVANCE",
+        "SUBCONTRACTOR_PAYABLE",
+        "SUBCONTRACTOR_RETENTION_PAYABLE",
+        "PROJECT_COST",
+        "PROJECT_COST_SUBCONTRACTORS",
+        "COMPANY_EXPENSE",
+      ],
+      treasury_account_type: [
+        "CASH",
+        "PETTY_CASH",
+        "BANK",
+        "PROJECT_CASH_BOX",
+        "PROJECT_BANK",
       ],
     },
   },

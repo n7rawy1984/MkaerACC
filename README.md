@@ -94,4 +94,4 @@ Copy `.env.example` to an ignored environment-specific local file only when need
 
 P2 adds the Auth-linked profile lifecycle, a minimum company identity parent, memberships, frozen roles, centrally mapped permissions, authorization helpers, and a least-privilege RLS baseline. It was applied and verified against the synthetic-only Development project. Operational details and the authorization matrix are in `docs/P2_AUTHORIZATION.md`; generated public-schema types are in `src/types/database.generated.ts`.
 
-The frontend remains the localStorage demo application: it does not consume Supabase credentials or imply that demo books belong to an authenticated company. P2 does not add projects, accounting tables/RPCs, Storage buckets, data migration, or the P3 business master-data schema.
+The frontend remains the localStorage demo application: it does not consume Supabase credentials or imply that demo books belong to an authenticated company. P3 now provides verified backend master data, but does not add accounting transactions/RPCs, Storage buckets, data migration, or frontend cutover.
