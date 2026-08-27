@@ -127,13 +127,13 @@ LocalStorage remains an explicit demo/development adapter. Production mode never
 - ✅ Phase 2B.3 — Arabic / English i18n + RTL
 - ✅ Production Data Foundation P0 — Production Architecture Freeze *(documentation/decisions only; no backend implemented)*
 - ✅ Production Data Foundation P1 — Supabase Environments + Migration Foundation *(repository/CLI foundation; no remote projects or business schema)*
-- ◐ Production Data Foundation P2 — Auth, Profiles, Memberships and Roles *(implemented and repository-verified; database/remote authorization verification deferred)*
+- ✅ Production Data Foundation P2 — Auth, Profiles, Memberships and Roles *(Development-applied and remotely verified with synthetic data)*
 
 Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 
 ## Current Phase
 
-### ➡ Phase 2C — Production Data Foundation *(P0–P1 complete; P2 implemented pending Development verification)*
+### ➡ Phase 2C — Production Data Foundation *(P0–P2 complete; P3 next)*
 
 #### ✅ P0 — Production Architecture Freeze
 
@@ -148,14 +148,17 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 - Repository lifecycle verified with CLI version/init/migration creation and config parsing. Local migration application is deferred because this machine has neither Docker nor Podman; remote verification is deferred because no project/credentials exist.
 - Existing frontend build and lint remain successful; secret-pattern and diff checks pass. The application still uses only the localStorage adapter.
 
-#### ◐ P2 — Auth, Profiles, Memberships and Roles *(implemented; remote verification pending)*
+#### ✅ P2 — Auth, Profiles, Memberships and Roles
 
 - Added a timestamped migration for Auth-triggered profiles, the minimum P2 company identity parent, active/inactive memberships, all frozen roles, central role-permission mappings, and a private platform-admin registry.
 - Added least-privilege RLS/GRANTs and fixed-search-path helpers for active user, membership, role, and permission checks. Browser users can read only their own identity/membership and active member companies; they cannot mutate security configuration.
 - `SYSTEM_ADMIN` does not bypass tenant membership in browser queries. Cross-company administration is reserved for a trusted service pathway, with MFA and immutable audit still required operationally.
-- Public signup is disabled in local config; the equivalent hosted Development Auth setting must be verified manually. Invitation lifecycle and the complete remote negative-test matrix are documented in `docs/P2_AUTHORIZATION.md`.
-- Project access is deliberately deferred to P3's real project parent. Frontend Auth/profile-locale cutover is deferred to avoid attaching current localStorage demo books to an unverified production identity.
-- Build, lint, diff and repository/CLI static checks pass. No Docker/Podman or linked Development project exists, so migration execution, generated types, Auth/RLS tests, and deactivation tests remain **DEFERRED**. P2 is not marked complete until those pass.
+- Public signup and anonymous sign-ins are disabled in both local config and the verified hosted Development Auth settings. Invitation lifecycle and the complete remote negative-test matrix are documented in `docs/P2_AUTHORIZATION.md`.
+- Project access is deliberately deferred to P3's real project parent. Frontend Auth/profile-locale cutover is deferred so verified Development identities are not misleadingly associated with browser-local demo books.
+- Applied all four canonical P1/P2 migrations to the approved `MakerACC-Development` project. Hosted public signup and anonymous sign-ins are disabled; Development Site/redirect URLs are verified.
+- Synthetic remote verification passed for Admin Auth creation, profile trigger/defaults, own-profile access, tenant isolation/UUID guessing, membership and role write denial, duplicate-active constraint, inactive profile/membership revocation, every frozen role's certificate permission, anon denial, public-signup denial, and System Admin isolation.
+- The first remote run exposed missing `service_role` SQL privileges for the trusted provisioning pathway; `20260828120000` corrects these without granting browser writes or DELETE. `20260828123000` removes unnecessary browser EXECUTE from the provider event-trigger helper.
+- Linked migration status is aligned, final dry-run is up to date, database lint has no errors, generated types are stored in `src/types/database.generated.ts`, and frontend build/lint/secret checks pass.
 
 #### P3 — Core Schema and Master Data
 
@@ -241,7 +244,7 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 - Production Data Foundation moved ahead of Payroll/WPS and historical import.
 - P0 Production Architecture Freeze completed as documentation/decision work only.
 - P1 migration/tooling foundation completed without creating a remote project or business schema.
-- P2 identity/authorization migration was implemented on 2026-08-27. Completion remains pending remote Development migration and authorization-matrix verification; P3 must not begin before that gate is resolved.
+- P2 identity/authorization was completed on 2026-08-27 after applying and verifying the canonical migrations on Development with synthetic data. P3 is now the next phase.
 - Supabase Auth/PostgreSQL/Storage selected. PostgreSQL RPCs are the ledger transaction boundary; Edge Functions are optional external orchestration, not the accounting commit boundary.
 - Company membership plus optional project restriction is authoritative through RLS/database commands.
 - `BIGINT` AED minor units selected.
@@ -250,4 +253,4 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 
 ---
 
-*P0–P1 are complete. P2 is implemented but not marked complete until Development database/Auth/RLS verification passes. P3–P10 have not started. Do not start Payroll/WPS or bulk historical import until all Foundation exit criteria pass.*
+*P0–P2 are complete. P3 is the exact next phase; P3–P10 have not started. Do not start Payroll/WPS or bulk historical import until all Foundation exit criteria pass.*

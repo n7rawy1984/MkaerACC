@@ -2,7 +2,7 @@
 
 ## Provisioning and invitations
 
-Public signup is disabled in `supabase/config.toml` for the local configuration. In every hosted environment, also verify **Authentication → Providers → Email → Allow new users to sign up** is disabled; this hosted Auth setting is not a database migration and has not been applied from this repository.
+Public signup is disabled in `supabase/config.toml` for the local configuration. On 2026-08-27 the linked `MakerACC-Development` hosted project was also verified with **Allow new users to sign up** and anonymous sign-ins disabled. Its Development Site URL is `https://maker-eosin.vercel.app`; allowed redirects are that URL plus `http://localhost:5173` and `http://127.0.0.1:5173`.
 
 Invitations and user creation must run through a trusted server/Edge Function or an operator-only Supabase admin workflow. The browser must never receive a service-role key or call `auth.admin.*`. The workflow is:
 
@@ -27,22 +27,27 @@ Until that trusted endpoint is implemented, provisioning is an operator task usi
 
 ## Remote Development test matrix
 
-Run only against a linked Development project with synthetic users and companies. Do not run against Production.
+Executed successfully on 2026-08-27 against the linked Development project only, using nine synthetic `example.invalid` Auth identities and two synthetic companies. The initial privilege-diagnostic run created nine additional profile-only synthetic identities before tenant provisioning failed; their profiles were explicitly set `INACTIVE` after the correction, preserving Auth history without tenant access. No real company/accounting data, Staging, or Production environment was used.
 
 | Test | Expected result | Repository status |
 |---|---|---|
-| Admin invite/create | Admin API succeeds; public signup remains rejected | DEFERRED — no Development project linked |
-| Profile creation | Auth insert atomically creates one profile | DEFERRED |
-| Active membership | Member sees own membership and company | DEFERRED |
-| Tenant isolation | Member cannot select another company | DEFERRED |
-| Self elevation | Membership INSERT/UPDATE/DELETE is denied | DEFERRED |
-| Inactive membership | `is_company_member` and `has_permission` become false | DEFERRED |
-| Inactive profile | All company helpers become false | DEFERRED |
-| Certificate permission | True only for active `ACCOUNTING_ADMIN` membership | DEFERRED |
-| Anonymous access | No profile/company/membership/permission data and no helper execution | DEFERRED |
+| Admin create and public-signup denial | Nine Admin API creates succeeded; public signup rejected HTTP 422 | PASS |
+| Profile creation/defaults | 9/9 profiles matched Auth UUID, `ACTIVE` status and requested/default locale | PASS |
+| Own-profile boundary | Each token read exactly its own profile; security-field update rejected HTTP 403 | PASS |
+| Active membership | Company A member saw Company A | PASS |
+| Tenant isolation / UUID guessing | Company A member received zero Company B rows | PASS |
+| Self membership / role elevation | INSERT and role UPDATE rejected HTTP 403 | PASS |
+| Duplicate active membership | Database rejected duplicate with HTTP 409 | PASS |
+| Inactive membership | Company visibility removed and `is_company_member` returned false | PASS |
+| Inactive profile | Company visibility removed and `is_active_user` returned false | PASS |
+| Certificate permission | True only for active `ACCOUNTING_ADMIN`; false for all six other frozen roles | PASS |
+| System Admin boundary | Saw only its member company, had configuration permission, no certificate permission | PASS |
+| Anonymous access | Profile/company/membership/helper requests rejected HTTP 401 | PASS |
 
-For the permission test, explicitly prove `ACCOUNTANT` is false for `certificate.approve_post`. Test duplicate active membership rejection and inactive-company denial as additional defense-in-depth cases.
+The deployed migration history is `20260826193204`, `20260827120000`, `20260828120000`, and `20260828123000`. A final linked dry-run reported the remote database up to date; database lint reported no schema errors. The last two migrations correct trusted `service_role` provisioning privileges and remove browser EXECUTE from the provider-created `rls_auto_enable()` event-trigger helper.
+
+Security advisors retain expected warnings because the four authorization helpers are intentionally authenticated-callable `SECURITY DEFINER` functions with fixed empty search paths and `auth.uid()`-derived identity. Leaked-password protection is disabled in Development; it is recommended provider hardening, but was not a frozen P2 exit requirement.
 
 ## Frontend boundary
 
-P2 does not add a login shell. There is no verified remote backend, and gating the current localStorage accounting demo behind Supabase Auth would misleadingly associate browser-local demo books with a production company. The current adapter and locale persistence remain unchanged. Frontend Auth/session/login/logout/invite completion and profile-locale synchronization should be introduced with the async Supabase application boundary in P6 (or earlier once a Development backend and clear hybrid-mode UX exist).
+P2 does not add a login shell. Although the Development identity backend is now verified, gating the current localStorage accounting demo behind Supabase Auth would misleadingly associate browser-local demo books with a production company. The current adapter and locale persistence remain unchanged. Frontend Auth/session/login/logout/invite completion and profile-locale synchronization should be introduced with the async Supabase application boundary in P6 (or earlier only with a clearly designed hybrid-mode UX).
