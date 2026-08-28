@@ -213,6 +213,162 @@ export type Database = {
           },
         ]
       }
+      expenses: {
+        Row: {
+          company_id: string
+          created_at: string
+          created_by: string | null
+          description: string
+          expense_category_id: string
+          expense_date: string
+          expense_reference: string
+          funding_mode: Database["public"]["Enums"]["expense_funding_mode"]
+          gross_amount_minor: number
+          has_tax_invoice: boolean
+          id: string
+          invoice_number: string | null
+          net_amount_minor: number
+          notes: string | null
+          paid_by_party_id: string | null
+          payment_method: Database["public"]["Enums"]["payment_method"]
+          posted_at: string | null
+          posted_by: string | null
+          posted_journal_entry_id: string | null
+          project_id: string | null
+          reversal_journal_entry_id: string | null
+          reversed_at: string | null
+          reversed_by: string | null
+          status: Database["public"]["Enums"]["expense_status"]
+          supplier_id: string | null
+          treasury_account_id: string | null
+          updated_at: string
+          updated_by: string | null
+          vat_amount_minor: number
+          vat_mode: Database["public"]["Enums"]["expense_vat_mode"]
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          description: string
+          expense_category_id: string
+          expense_date: string
+          expense_reference: string
+          funding_mode: Database["public"]["Enums"]["expense_funding_mode"]
+          gross_amount_minor: number
+          has_tax_invoice?: boolean
+          id?: string
+          invoice_number?: string | null
+          net_amount_minor: number
+          notes?: string | null
+          paid_by_party_id?: string | null
+          payment_method: Database["public"]["Enums"]["payment_method"]
+          posted_at?: string | null
+          posted_by?: string | null
+          posted_journal_entry_id?: string | null
+          project_id?: string | null
+          reversal_journal_entry_id?: string | null
+          reversed_at?: string | null
+          reversed_by?: string | null
+          status?: Database["public"]["Enums"]["expense_status"]
+          supplier_id?: string | null
+          treasury_account_id?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          vat_amount_minor: number
+          vat_mode: Database["public"]["Enums"]["expense_vat_mode"]
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          expense_category_id?: string
+          expense_date?: string
+          expense_reference?: string
+          funding_mode?: Database["public"]["Enums"]["expense_funding_mode"]
+          gross_amount_minor?: number
+          has_tax_invoice?: boolean
+          id?: string
+          invoice_number?: string | null
+          net_amount_minor?: number
+          notes?: string | null
+          paid_by_party_id?: string | null
+          payment_method?: Database["public"]["Enums"]["payment_method"]
+          posted_at?: string | null
+          posted_by?: string | null
+          posted_journal_entry_id?: string | null
+          project_id?: string | null
+          reversal_journal_entry_id?: string | null
+          reversed_at?: string | null
+          reversed_by?: string | null
+          status?: Database["public"]["Enums"]["expense_status"]
+          supplier_id?: string | null
+          treasury_account_id?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          vat_amount_minor?: number
+          vat_mode?: Database["public"]["Enums"]["expense_vat_mode"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "expenses_category_same_company"
+            columns: ["company_id", "expense_category_id"]
+            isOneToOne: false
+            referencedRelation: "expense_categories"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "expenses_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "expenses_paid_by_party_same_company"
+            columns: ["company_id", "paid_by_party_id"]
+            isOneToOne: false
+            referencedRelation: "parties"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "expenses_posted_journal_same_company"
+            columns: ["company_id", "posted_journal_entry_id"]
+            isOneToOne: false
+            referencedRelation: "journal_entries"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "expenses_project_same_company"
+            columns: ["company_id", "project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "expenses_reversal_journal_same_company"
+            columns: ["company_id", "reversal_journal_entry_id"]
+            isOneToOne: false
+            referencedRelation: "journal_entries"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "expenses_supplier_same_company"
+            columns: ["company_id", "supplier_id"]
+            isOneToOne: false
+            referencedRelation: "parties"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "expenses_treasury_same_company"
+            columns: ["company_id", "treasury_account_id"]
+            isOneToOne: false
+            referencedRelation: "treasury_accounts"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
       journal_entries: {
         Row: {
           company_id: string
@@ -803,6 +959,48 @@ export type Database = {
         Args: { target_company_id: string }
         Returns: boolean
       }
+      post_expense: {
+        Args: {
+          target_company_id: string
+          target_description: string
+          target_expense_category_id: string
+          target_expense_date: string
+          target_funding_mode: Database["public"]["Enums"]["expense_funding_mode"]
+          target_has_tax_invoice: boolean
+          target_idempotency_key: string
+          target_invoice_number: string
+          target_manual_vat_amount_minor: number
+          target_net_amount_minor: number
+          target_notes: string
+          target_paid_by_party_id: string
+          target_payment_method: Database["public"]["Enums"]["payment_method"]
+          target_project_id: string
+          target_supplier_id: string
+          target_treasury_account_id: string
+          target_vat_mode: Database["public"]["Enums"]["expense_vat_mode"]
+        }
+        Returns: {
+          expense_id: string
+          expense_reference: string
+          journal_entry_id: string
+          replayed: boolean
+        }[]
+      }
+      reverse_expense: {
+        Args: {
+          target_company_id: string
+          target_expense_id: string
+          target_idempotency_key: string
+          target_reason: string
+          target_reversal_date: string
+        }
+        Returns: {
+          expense_id: string
+          expense_reference: string
+          replayed: boolean
+          reversal_journal_entry_id: string
+        }[]
+      }
     }
     Enums: {
       account_status: "ACTIVE" | "INACTIVE"
@@ -816,6 +1014,13 @@ export type Database = {
         | "DATA_ENTRY"
         | "PROCUREMENT"
         | "MANAGEMENT_VIEWER"
+      expense_funding_mode:
+        | "TREASURY"
+        | "CUSTODIAN"
+        | "OWNER"
+        | "SUPPLIER_CREDIT"
+      expense_status: "DRAFT" | "POSTED" | "REVERSED"
+      expense_vat_mode: "ZERO" | "AUTO_5" | "MANUAL"
       party_type:
         | "OWNER"
         | "CUSTODIAN"
@@ -823,6 +1028,7 @@ export type Database = {
         | "EMPLOYEE"
         | "SUBCONTRACTOR"
         | "OTHER"
+      payment_method: "CASH" | "BANK" | "TRANSFER" | "CHEQUE" | "OTHER"
       project_status: "PLANNING" | "ACTIVE" | "ON_HOLD" | "COMPLETED" | "CLOSED"
       subcontract_status: "ACTIVE" | "COMPLETED" | "CLOSED"
       system_account_key:
@@ -981,6 +1187,14 @@ export const Constants = {
         "PROCUREMENT",
         "MANAGEMENT_VIEWER",
       ],
+      expense_funding_mode: [
+        "TREASURY",
+        "CUSTODIAN",
+        "OWNER",
+        "SUPPLIER_CREDIT",
+      ],
+      expense_status: ["DRAFT", "POSTED", "REVERSED"],
+      expense_vat_mode: ["ZERO", "AUTO_5", "MANUAL"],
       party_type: [
         "OWNER",
         "CUSTODIAN",
@@ -989,6 +1203,7 @@ export const Constants = {
         "SUBCONTRACTOR",
         "OTHER",
       ],
+      payment_method: ["CASH", "BANK", "TRANSFER", "CHEQUE", "OTHER"],
       project_status: ["PLANNING", "ACTIVE", "ON_HOLD", "COMPLETED", "CLOSED"],
       subcontract_status: ["ACTIVE", "COMPLETED", "CLOSED"],
       system_account_key: [

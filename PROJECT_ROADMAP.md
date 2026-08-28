@@ -131,12 +131,13 @@ LocalStorage remains an explicit demo/development adapter. Production mode never
 - ✅ Production Data Foundation P3 — Core Production Schema and Master Data *(Development-applied and remotely verified with synthetic data)*
 - ✅ Production Data Foundation P4 — RLS and Authorization *(Development-applied and remotely verified with synthetic Auth/RLS matrix)*
 - ✅ Production Data Foundation P5A — Accounting Kernel and Journal Core *(Development-applied and remotely verified; P5 remains in progress)*
+- ✅ Production Data Foundation P5B — Expense Documents and Commands *(Development-applied and remotely verified; P5 remains in progress)*
 
 Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 
 ## Current Phase
 
-### ➡ Phase 2C — Production Data Foundation *(P0–P4 and P5A complete; P5 in progress)*
+### ➡ Phase 2C — Production Data Foundation *(P0–P4, P5A, and P5B complete; P5 in progress)*
 
 #### ✅ P0 — Production Architecture Freeze
 
@@ -182,9 +183,10 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 #### 🚧 P5 — Atomic Accounting Commands
 
 - ✅ **P5A — Accounting Kernel and Journal Core:** added immutable `BIGINT` journals/lines, company-consistent dimensions, two-layer balance enforcement, atomic references, private idempotency/source/concurrency primitives, linked reversal foundation, conservative journal RLS, and no browser/service write path.
-- P5B+ will add separately reviewed specialized business commands for Expense, Advance, Supplier Payment, Settlement finalization, Subcontractor Advance, Certificate approval, Subcontractor Payment and business-state reversal.
+- ✅ **P5B — Expense Documents and Commands:** added immutable expense documents plus atomic post/reverse RPCs for Treasury, Custodian, Owner, and Supplier Credit funding, deterministic VAT, system-key account resolution, expense references, idempotency/concurrency protection, and project-scoped reads.
+- P5C+ will add separately reviewed commands for Supplier Payment, Advance, Settlement finalization, Subcontractor Advance, Certificate approval, Subcontractor Payment and their business-state reversals.
 - Generic accounting primitives remain private and cannot be used as an arbitrary browser journal RPC.
-- Full P5 remains in progress; P5A did not add business documents, P7 audit events, or frontend integration.
+- Full P5 remains in progress; P5B did not add supplier payments, custody funding/settlement, subcontract flows, P7 audit events, or frontend integration.
 
 #### P6 — Async Data/Command Layer and Cutover
 
@@ -254,6 +256,7 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 - P3 core master data was completed on 2026-08-27 with Development migration/constraint/RLS verification.
 - P4 RLS and authorization was completed on 2026-08-27 with a fully passing hosted Development Auth/RLS matrix.
 - P5A Accounting Kernel and Journal Core was completed on 2026-08-28 with hosted balance/dimension/immutability/idempotency/concurrency/reversal/RLS verification. P5 remains in progress; the next specialized-command batch requires separate review.
+- P5B Expense Documents and Commands was completed on 2026-08-28 with a 64-case hosted posting/VAT/funding/idempotency/concurrency/reversal/RLS matrix. P5 remains in progress; Supplier Payment is the next proposed separately reviewed batch and has not started.
 - Supabase Auth/PostgreSQL/Storage selected. PostgreSQL RPCs are the ledger transaction boundary; Edge Functions are optional external orchestration, not the accounting commit boundary.
 - Company membership plus optional project restriction is authoritative through RLS/database commands.
 - `BIGINT` AED minor units selected.
@@ -262,4 +265,4 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 
 ---
 
-*P0–P4 and P5A are complete. P5 remains in progress; no P5 business-command batch is authorized until separately reviewed. P6–P10, Payroll/WPS, and bulk historical import have not started.*
+*P0–P4, P5A, and P5B are complete. P5 remains in progress; later command batches require separate review. P6–P10, Payroll/WPS, and bulk historical import have not started.*
