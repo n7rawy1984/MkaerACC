@@ -30,6 +30,7 @@ The company previously tracked project expenses, supplier bills, cash handed to 
 - **Phase 2C / P5A (Accounting Kernel and Journal Core)** — Completed. Applied and verified remotely on Development; P5 overall remains in progress.
 - **Phase 2C / P5B (Expense Documents and Commands)** — Completed. Applied and verified remotely on Development; P5 overall remains in progress.
 - **Phase 2C / P5C (Supplier Payments)** — Completed. Applied and verified remotely on Development; P5 overall remains in progress.
+- **Phase 2C / P5D (Custody Advance Funding)** — Completed. Applied and verified remotely on Development; P5 overall remains in progress.
 - **Payroll + WPS** — Confirmed next functional module after Production Data Foundation.
 
 See `PROJECT_ROADMAP.md` for the full phase breakdown, binding decisions, and decision log.
@@ -42,7 +43,7 @@ See `PROJECT_ROADMAP.md` for the full phase breakdown, binding decisions, and de
 - Recharts 3 (Dashboard charts only)
 - lucide-react (icons)
 - `oxlint` for linting
-- **The approved Development Supabase backend now has verified P2–P4 identity/master authorization, the P5A immutable journal kernel, P5B expenses, and P5C Supplier Payment allocation/post/reversal commands.** Application accounting persistence remains `localStorage`; no frontend Supabase data path exists yet.
+- **The approved Development Supabase backend now has verified P2–P4 identity/master authorization and P5A–P5D accounting commands through Treasury-funded Custody Advances.** Application accounting persistence remains `localStorage`; no frontend Supabase data path exists yet.
 
 ## 5. Repository Structure
 
@@ -99,13 +100,14 @@ supabase/
 | `src/i18n/en.ts` / `src/i18n/ar.ts` | Every UI string in the app, keyed identically in both files (TypeScript enforces this). New UI text always adds a key here first, in both files, never inline English. |
 | `src/i18n/I18nContext.tsx` | `useT()` — the hook every page/component calls for translated strings; also owns locale persistence and the RTL `dir` side effect. |
 | `supabase/config.toml` | P1 CLI/local configuration. No remote project identity or credential is committed. |
-| `supabase/migrations/` | Canonical forward-only SQL history. P1–P5C are applied to Development. |
+| `supabase/migrations/` | Canonical forward-only SQL history. P1–P5D are applied to Development. |
 | `docs/P2_AUTHORIZATION.md` | P2 provisioning/system-admin design, authoritative active/inactive rules, frontend boundary, and remote Development authorization test matrix. |
 | `docs/P3_MASTER_DATA.md` | P3 tables, code scopes, system-account strategy, cross-dimensional enforcement, security baseline, and Development verification. |
 | `docs/P4_AUTHORIZATION.md` | P4 role/project policy matrix, assignment model, mutation boundaries, trusted pathways, and hosted verification. |
 | `docs/P5A_ACCOUNTING_KERNEL.md` | P5A journal schema, invariants, private primitives, concurrency model, RLS/grants, and hosted verification. |
 | `docs/P5B_EXPENSE_COMMANDS.md` | P5B expense lifecycle, funding/VAT rules, commands, authorization, and 64-case hosted verification. |
 | `docs/P5C_SUPPLIER_PAYMENTS.md` | P5C payment/allocation schema, AP settlement rules, concurrency/reversal, RLS, and hosted verification. |
+| `docs/P5D_CUSTODY_ADVANCES.md` | P5D pooled Custody Advance model, funding/reversal commands, Expense overspend guard, authorization, and hosted verification. |
 | `docs/MULTI_TENANT_WHITE_LABEL_ARCHITECTURE.md` | Binding one-codebase tenant isolation, white-label configuration, slug/context, deployment, and commercial-platform boundary. |
 | `src/types/database.generated.ts` | Supabase CLI-generated TypeScript types for the verified public Development schema; do not edit manually. |
 | `.env.example` | Public placeholder convention only; explicitly warns that every `VITE_*` value is browser-visible. |
@@ -341,8 +343,8 @@ Frozen outcomes:
 - Development, Staging and Production are separate Supabase projects. Production has no demo seeds, service secrets in browsers, or localStorage accounting fallback.
 - Auth is invite/admin-created only. SYSTEM_ADMIN is audited break-glass/server administration, not a browser RLS bypass; routine access still requires company membership.
 - Audit is append-only and transaction-coupled. Attachments are private, company-scoped, signed-access and versioned/superseded.
-- P1–P10 order is frozen; P1–P4 and P5A–P5C are complete, while P5 remains in progress. Payroll follows completed Foundation; historical 2025/2026 import follows Payroll.
-- P5C is complete and P5 remains in progress. The next custody-related command batch requires separate review and has not started.
+- P1–P10 order is frozen; P1–P4 and P5A–P5D are complete, while P5 remains in progress. Payroll follows completed Foundation; historical 2025/2026 import follows Payroll.
+- P5D is complete and P5 remains in progress. P5E Custody Settlement/Cash Return requires separate review and has not started.
 
 ### P1 — Supabase Environments + Migration Foundation completed 2026-08-26
 
@@ -454,9 +456,9 @@ Foundation schema includes import batch/source row/fingerprint/review provenance
 
 ## 17. Current Roadmap and Immediate Next Task
 
-Phase 1 ✅ → 2A ✅ → 2B.1 ✅ → 2B.1A ✅ → 2B.2 ✅ → 2B.3 ✅ → **P0–P4 ✅** → **P5A Accounting Kernel ✅** → **P5B Expenses ✅** → **P5C Supplier Payments ✅** → **P5 specialized commands (in progress)** → P6–P10 Foundation → 2D Payroll/WPS → 2E Historical Import/Opening Balances → later phases.
+Phase 1 ✅ → 2A ✅ → 2B.1 ✅ → 2B.1A ✅ → 2B.2 ✅ → 2B.3 ✅ → **P0–P4 ✅** → **P5A–P5D ✅** → **P5 specialized commands (in progress)** → P6–P10 Foundation → 2D Payroll/WPS → 2E Historical Import/Opening Balances → later phases.
 
-The next proposed task is a separately reviewed custody/advance P5 batch. It is not authorized or started. Do not repeat P5A–P5C or start custody, subcontract, P6/frontend cutover, Payroll, or historical import work.
+The next proposed task is P5E Custody Settlement/Cash Return. It is not authorized or started. Do not repeat P5A–P5D or start settlement/return, alternate funding, subcontract, P6/frontend cutover, Payroll, or historical import work.
 
 ## 18. Remaining External Deployment Decisions
 
@@ -596,7 +598,21 @@ P5C is complete through `20260902120000_p5c_supplier_payments.sql` and forward c
 
 Full details are in `docs/P5C_SUPPLIER_PAYMENTS.md`. P5 remains in progress; the next custody-related command batch requires separate review.
 
-## 28. Testing Expectations
+## 28. P5D Custody Advance Funding (2026-08-28)
+
+P5D is complete through `20260903120000_p5d_custody_advances.sql`, applied only to `MakerACC-Development`.
+
+- Added immutable company-scoped `custody_advances` and atomic post/reverse commands. Funding is Treasury-only: Dr Custody Advance control / Cr Treasury permanent GL, with no cost or VAT.
+- Production custody is pooled by `(company, Custodian)`. Project is an analytic journal/document dimension, not an advance allocation bucket; multiple advances and Custodian Expenses reconcile through the party-scoped control balance.
+- The compatible P5B `post_expense` boundary now locks the Custodian and rejects gross Custodian Expenses above the pooled balance, including competing concurrent calls.
+- A posted Advance may reverse only while the current pooled balance can absorb its full inversion. This prevents a consumed sole Advance from driving custody negative while retaining exact P5A reversal provenance.
+- Accounting Admin and Accountant may post; only Accounting Admin may reverse; Management Viewer is read-only. All other browser roles and anonymous callers are denied, with forced RLS and no direct financial writes.
+- All 66 hosted funding, accounting, validation, idempotency, concurrency, immutability, reversal, authorization, and two-tenant cases passed. Database lint added no P5D warning; generated types were refreshed.
+- P5E settlement/cash return, Owner Current funding, Custody-funded Supplier Payments, subcontracts, frontend cutover, Payroll, AR/revenue, and import remain outside P5D.
+
+Full details are in `docs/P5D_CUSTODY_ADVANCES.md`. P5 remains in progress; stop before P5E.
+
+## 29. Testing Expectations
 
 There is no automated test suite (no `*.test.ts` files, no test runner configured) — verification so far has been: `npm run build` must be clean (zero TypeScript errors), `npm run lint` (oxlint) must show no new warnings, plus live, browser-driven functional testing (headless Chromium via Playwright, launched ad hoc — not checked into the repo) exercising each new flow end-to-end with hand-calculated expected numbers, checking `console` for zero errors, and confirming persistence across a page reload.
 
@@ -632,7 +648,7 @@ Phase 2B.3's verification run (Playwright/headless Chromium, after a full "Reset
 
 Any future phase should be verified the same way before being marked "Completed" in the roadmap: build clean, lint clean, flow tested live with real numbers, no console errors, persists after reload, and existing flows re-checked for regressions.
 
-## 29. Handoff Checklist for New Sessions
+## 30. Handoff Checklist for New Sessions
 
 - [ ] Read `PROJECT_ROADMAP.md` in full (Binding Decisions, Completed, Current/Next Phase, Known Gaps, Decision Log).
 - [ ] Read this file in full.

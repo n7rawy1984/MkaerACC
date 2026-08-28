@@ -28,12 +28,12 @@ Subscription/license status, plan, entitlements, tenant provisioning/suspension,
 
 ## Implemented now
 
-- Company-scoped master, authorization, expense, journal, and command schemas.
+- Company-scoped master, authorization, expense, Supplier Payment, Custody Advance, journal, and command schemas.
 - Auth profiles and multi-company memberships.
 - Forced-RLS tenant isolation and negative cross-tenant verification.
 - Company/project-consistent foreign keys and dimensions.
 - Company/type/year accounting references.
-- Company-aware P5A/P5B accounting commands and idempotency.
+- Company-aware P5A–P5D accounting commands and idempotency, including pooled company/Custodian balance enforcement.
 - Explicit multi-company synthetic Development fixtures.
 
 ## Planned, not implemented
@@ -45,6 +45,8 @@ Subscription/license status, plan, entitlements, tenant provisioning/suspension,
 - Enterprise isolated deployments.
 
 Development/demo data remains explicit tenant fixtures and must never imply that synthetic Company A is the permanent platform company. Production never auto-seeds a real tenant.
+
+Custody is an accounting control balance scoped by company and Custodian; Project is analytic rather than an authorization or per-Advance allocation bucket. P5D is Treasury-only. Owner Current funding, settlement/cash return, and Custody-funded Supplier Payments require separately reviewed commands and must not be inferred from localStorage legacy `CASH`/`BANK` values.
 
 ## Refined P6 boundary
 

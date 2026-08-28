@@ -71,4 +71,4 @@ Database lint has one harmless `warning extra`: the private implementation assig
 
 ## Limitations and next boundary
 
-P5C has no frontend integration, project-safe payment summary view, remittance document, attachments/P7 audit events, custody, subcontract, Payroll, AR/revenue, import, tenant selector, or white-label UI. Synthetic immutable fixtures remain in Development. P5 remains in progress; the next custody-related batch requires separate review and was not started.
+P5C remains Treasury-only. A future reviewed extension may add Owner Current or Custody Advance settlement funding after the custody cycle exists; legacy undifferentiated `CASH`/`BANK` values are provenance only and must never become selectable production funding. P5C has no frontend integration, project-safe payment summary view, remittance document, attachments/P7 audit events, subcontract, Payroll, AR/revenue, import, tenant selector, or white-label UI. P5D later added Custody Advance funding but did not alter Supplier Payment funding modes.

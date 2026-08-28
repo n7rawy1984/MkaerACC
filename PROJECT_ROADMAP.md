@@ -139,12 +139,13 @@ LocalStorage remains an explicit demo/development adapter. Production mode never
 - ✅ Production Data Foundation P5A — Accounting Kernel and Journal Core *(Development-applied and remotely verified; P5 remains in progress)*
 - ✅ Production Data Foundation P5B — Expense Documents and Commands *(Development-applied and remotely verified; P5 remains in progress)*
 - ✅ Production Data Foundation P5C — Supplier Payments *(Development-applied and remotely verified; P5 remains in progress)*
+- ✅ Production Data Foundation P5D — Custody Advance Funding *(Development-applied and remotely verified; P5 remains in progress)*
 
 Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 
 ## Current Phase
 
-### ➡ Phase 2C — Production Data Foundation *(P0–P4 and P5A–P5C complete; P5 in progress)*
+### ➡ Phase 2C — Production Data Foundation *(P0–P4 and P5A–P5D complete; P5 in progress)*
 
 #### ✅ P0 — Production Architecture Freeze
 
@@ -192,9 +193,10 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 - ✅ **P5A — Accounting Kernel and Journal Core:** added immutable `BIGINT` journals/lines, company-consistent dimensions, two-layer balance enforcement, atomic references, private idempotency/source/concurrency primitives, linked reversal foundation, conservative journal RLS, and no browser/service write path.
 - ✅ **P5B — Expense Documents and Commands:** added immutable expense documents plus atomic post/reverse RPCs for Treasury, Custodian, Owner, and Supplier Credit funding, deterministic VAT, system-key account resolution, expense references, idempotency/concurrency protection, and project-scoped reads.
 - ✅ **P5C — Supplier Payments:** added Treasury-only immutable payment documents and allocations to P5B Supplier Credit expenses, locked outstanding-payable enforcement, multi-project AP clearing, atomic references/idempotency, reversal/restoration, and conservative financial RLS.
-- P5D+ will add separately reviewed commands for Advance, Settlement finalization, Subcontractor Advance, Certificate approval, Subcontractor Payment and their business-state reversals.
+- ✅ **P5D — Custody Advance Funding:** added Treasury-only immutable Custody Advances, pooled company/Custodian control balances, atomic funding/reversal commands, and serialized P5B Custodian Expense overspend prevention.
+- P5E+ will add separately reviewed commands for Custody Settlement/Cash Return, Subcontractor Advance, Certificate approval, Subcontractor Payment and their business-state reversals.
 - Generic accounting primitives remain private and cannot be used as an arbitrary browser journal RPC.
-- Full P5 remains in progress; P5C did not add custody funding/settlement, subcontract flows, P7 audit events, or frontend integration.
+- Full P5 remains in progress; P5D did not add settlement/cash return, alternate Supplier Payment funding, subcontract flows, P7 audit events, or frontend integration.
 
 #### P6 — Auth, Tenant Context, White-Label and Production Cutover
 
@@ -268,6 +270,7 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 - P5A Accounting Kernel and Journal Core was completed on 2026-08-28 with hosted balance/dimension/immutability/idempotency/concurrency/reversal/RLS verification. P5 remains in progress; the next specialized-command batch requires separate review.
 - P5B Expense Documents and Commands was completed on 2026-08-28 with a 64-case hosted posting/VAT/funding/idempotency/concurrency/reversal/RLS matrix and now supplies the payable sources used by P5C.
 - P5C Supplier Payments was completed on 2026-08-28 with a 68-case hosted allocation/outstanding/concurrency/reversal/authorization/tenant matrix. P5 remains in progress; the next custody-related batch requires separate review and has not started.
+- P5D Custody Advance Funding was completed on 2026-08-28 with a 66-case hosted funding/pooling/overspend/concurrency/reversal/authorization/tenant matrix. Custody is pooled by company and Custodian; Project is analytic. P5E settlement/cash return requires separate review and was not started.
 - Supabase Auth/PostgreSQL/Storage selected. PostgreSQL RPCs are the ledger transaction boundary; Edge Functions are optional external orchestration, not the accounting commit boundary.
 - Company membership plus optional project restriction is authoritative through RLS/database commands.
 - `BIGINT` AED minor units selected.
@@ -277,4 +280,4 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 
 ---
 
-*P0–P4 and P5A–P5C are complete. P5 remains in progress; later command batches require separate review. P6–P10, Payroll/WPS, and bulk historical import have not started.*
+*P0–P4 and P5A–P5D are complete. P5 remains in progress; later command batches require separate review. P6–P10, Payroll/WPS, and bulk historical import have not started.*
