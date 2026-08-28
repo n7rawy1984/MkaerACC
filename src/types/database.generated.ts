@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.17"
+    PostgrestVersion: "14.5"
   }
   public: {
     Tables: {
@@ -854,6 +854,166 @@ export type Database = {
           },
         ]
       }
+      supplier_payment_allocations: {
+        Row: {
+          allocated_amount_minor: number
+          company_id: string
+          created_at: string
+          created_by: string | null
+          expense_id: string
+          id: string
+          supplier_payment_id: string
+        }
+        Insert: {
+          allocated_amount_minor: number
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          expense_id: string
+          id?: string
+          supplier_payment_id: string
+        }
+        Update: {
+          allocated_amount_minor?: number
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          expense_id?: string
+          id?: string
+          supplier_payment_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "supplier_payment_allocations_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "supplier_payment_allocations_expense_same_company"
+            columns: ["company_id", "expense_id"]
+            isOneToOne: false
+            referencedRelation: "expenses"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "supplier_payment_allocations_payment_same_company"
+            columns: ["company_id", "supplier_payment_id"]
+            isOneToOne: false
+            referencedRelation: "supplier_payments"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
+      supplier_payments: {
+        Row: {
+          company_id: string
+          created_at: string
+          created_by: string | null
+          external_reference: string | null
+          id: string
+          notes: string | null
+          payment_date: string
+          payment_method: Database["public"]["Enums"]["payment_method"]
+          payment_reference: string
+          posted_at: string | null
+          posted_by: string | null
+          posted_journal_entry_id: string | null
+          reversal_journal_entry_id: string | null
+          reversed_at: string | null
+          reversed_by: string | null
+          status: Database["public"]["Enums"]["expense_status"]
+          supplier_id: string
+          total_amount_minor: number
+          treasury_account_id: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          external_reference?: string | null
+          id?: string
+          notes?: string | null
+          payment_date: string
+          payment_method: Database["public"]["Enums"]["payment_method"]
+          payment_reference: string
+          posted_at?: string | null
+          posted_by?: string | null
+          posted_journal_entry_id?: string | null
+          reversal_journal_entry_id?: string | null
+          reversed_at?: string | null
+          reversed_by?: string | null
+          status?: Database["public"]["Enums"]["expense_status"]
+          supplier_id: string
+          total_amount_minor: number
+          treasury_account_id: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          external_reference?: string | null
+          id?: string
+          notes?: string | null
+          payment_date?: string
+          payment_method?: Database["public"]["Enums"]["payment_method"]
+          payment_reference?: string
+          posted_at?: string | null
+          posted_by?: string | null
+          posted_journal_entry_id?: string | null
+          reversal_journal_entry_id?: string | null
+          reversed_at?: string | null
+          reversed_by?: string | null
+          status?: Database["public"]["Enums"]["expense_status"]
+          supplier_id?: string
+          total_amount_minor?: number
+          treasury_account_id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "supplier_payments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "supplier_payments_posted_journal_same_company"
+            columns: ["company_id", "posted_journal_entry_id"]
+            isOneToOne: false
+            referencedRelation: "journal_entries"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "supplier_payments_reversal_journal_same_company"
+            columns: ["company_id", "reversal_journal_entry_id"]
+            isOneToOne: false
+            referencedRelation: "journal_entries"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "supplier_payments_supplier_same_company"
+            columns: ["company_id", "supplier_id"]
+            isOneToOne: false
+            referencedRelation: "parties"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "supplier_payments_treasury_same_company"
+            columns: ["company_id", "treasury_account_id"]
+            isOneToOne: false
+            referencedRelation: "treasury_accounts"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
       treasury_accounts: {
         Row: {
           account_reference: string | null
@@ -986,6 +1146,26 @@ export type Database = {
           replayed: boolean
         }[]
       }
+      post_supplier_payment: {
+        Args: {
+          target_allocations: Json
+          target_company_id: string
+          target_external_reference: string
+          target_idempotency_key: string
+          target_notes: string
+          target_payment_date: string
+          target_payment_method: Database["public"]["Enums"]["payment_method"]
+          target_supplier_id: string
+          target_total_amount_minor: number
+          target_treasury_account_id: string
+        }
+        Returns: {
+          journal_entry_id: string
+          payment_reference: string
+          replayed: boolean
+          supplier_payment_id: string
+        }[]
+      }
       reverse_expense: {
         Args: {
           target_company_id: string
@@ -999,6 +1179,21 @@ export type Database = {
           expense_reference: string
           replayed: boolean
           reversal_journal_entry_id: string
+        }[]
+      }
+      reverse_supplier_payment: {
+        Args: {
+          target_company_id: string
+          target_idempotency_key: string
+          target_reason: string
+          target_reversal_date: string
+          target_supplier_payment_id: string
+        }
+        Returns: {
+          payment_reference: string
+          replayed: boolean
+          reversal_journal_entry_id: string
+          supplier_payment_id: string
         }[]
       }
     }

@@ -4,7 +4,7 @@ This is the official living roadmap. Read it with `PROJECT_HANDOFF.md` before de
 
 ## Product Goal
 
-Build a production, bilingual accounting system for a small/medium UAE contracting company: company/project dimensions, treasury, custody, suppliers, subcontractors, payroll/WPS, controlled historical import, client contracts, VAT, journals, and financial reporting.
+Build a production, bilingual, multi-tenant contracting-accounting platform that can serve multiple independent companies from one codebase with strict tenant isolation and configurable white-label presentation: company/project dimensions, treasury, custody, suppliers, subcontractors, payroll/WPS, controlled historical import, client contracts, VAT, journals, and financial reporting.
 
 ## Binding Architecture Decisions
 
@@ -21,6 +21,12 @@ Build a production, bilingual accounting system for a small/medium UAE contracti
 11. **Money uses `BIGINT` fils (AED minor units), never floating point.**
 12. **Historical data is staged/reviewed.** Demo seeds never enter production and opening balances are separate approved documents.
 13. **No consolidated accounting yet.**
+14. **One multi-tenant codebase.** `Company` is the tenant boundary; ordinary customer differences are data/configuration, never tenant-specific application or accounting forks.
+15. **White-label by configuration.** Tenant branding, locale, stable slug, and later entitlements/custom domains are planned settings, distinct from accounting truth and `Company.code`.
+16. **Multi-company users use explicit tenant context.** Memberships authorize access; a route slug never does. `SYSTEM_ADMIN` remains outside tenant financial browser access.
+17. **Shared by default, isolatable when needed.** A future enterprise deployment may use its own database/domain while running the same code and canonical migrations.
+
+The binding commercial-platform architecture and implemented/planned boundary are detailed in `docs/MULTI_TENANT_WHITE_LABEL_ARCHITECTURE.md`.
 
 ## Production Architecture Freeze — P0 Approved
 
@@ -132,12 +138,13 @@ LocalStorage remains an explicit demo/development adapter. Production mode never
 - ✅ Production Data Foundation P4 — RLS and Authorization *(Development-applied and remotely verified with synthetic Auth/RLS matrix)*
 - ✅ Production Data Foundation P5A — Accounting Kernel and Journal Core *(Development-applied and remotely verified; P5 remains in progress)*
 - ✅ Production Data Foundation P5B — Expense Documents and Commands *(Development-applied and remotely verified; P5 remains in progress)*
+- ✅ Production Data Foundation P5C — Supplier Payments *(Development-applied and remotely verified; P5 remains in progress)*
 
 Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 
 ## Current Phase
 
-### ➡ Phase 2C — Production Data Foundation *(P0–P4, P5A, and P5B complete; P5 in progress)*
+### ➡ Phase 2C — Production Data Foundation *(P0–P4 and P5A–P5C complete; P5 in progress)*
 
 #### ✅ P0 — Production Architecture Freeze
 
@@ -184,16 +191,19 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 
 - ✅ **P5A — Accounting Kernel and Journal Core:** added immutable `BIGINT` journals/lines, company-consistent dimensions, two-layer balance enforcement, atomic references, private idempotency/source/concurrency primitives, linked reversal foundation, conservative journal RLS, and no browser/service write path.
 - ✅ **P5B — Expense Documents and Commands:** added immutable expense documents plus atomic post/reverse RPCs for Treasury, Custodian, Owner, and Supplier Credit funding, deterministic VAT, system-key account resolution, expense references, idempotency/concurrency protection, and project-scoped reads.
-- P5C+ will add separately reviewed commands for Supplier Payment, Advance, Settlement finalization, Subcontractor Advance, Certificate approval, Subcontractor Payment and their business-state reversals.
+- ✅ **P5C — Supplier Payments:** added Treasury-only immutable payment documents and allocations to P5B Supplier Credit expenses, locked outstanding-payable enforcement, multi-project AP clearing, atomic references/idempotency, reversal/restoration, and conservative financial RLS.
+- P5D+ will add separately reviewed commands for Advance, Settlement finalization, Subcontractor Advance, Certificate approval, Subcontractor Payment and their business-state reversals.
 - Generic accounting primitives remain private and cannot be used as an arbitrary browser journal RPC.
-- Full P5 remains in progress; P5B did not add supplier payments, custody funding/settlement, subcontract flows, P7 audit events, or frontend integration.
+- Full P5 remains in progress; P5C did not add custody funding/settlement, subcontract flows, P7 audit events, or frontend integration.
 
-#### P6 — Async Data/Command Layer and Cutover
+#### P6 — Auth, Tenant Context, White-Label and Production Cutover
 
-- Replace synchronous collection repositories with typed async query repositories plus domain command RPCs.
-- Split `AppDataContext` into server-state queries and explicit mutations; do not load/rewrite whole tables.
-- Retain pure money/certificate/ledger logic for previews and verification; the database is authoritative.
-- Keep LocalStorage only as an explicitly labeled demo/development adapter, never an offline production ledger.
+- **P6A — Auth Session and Tenant Context:** login/logout, session restore, protected routes, active memberships, explicit active tenant, and multi-company selector.
+- **P6B — Tenant Settings and White-Label Foundation:** display/legal identity, tenant slug, logo/favicon, CSS-variable theme, locale, and removal of Maker-specific visible branding.
+- **P6C — Master Data Async Repository Cutover:** typed tenant-scoped queries and explicit master-data commands.
+- **P6D — Financial Flow Cutover:** specialized financial RPC integration with no hybrid financial writes.
+- **P6E — LocalStorage Retirement / Production Data Mode:** localStorage remains an explicit demo adapter only; production fails closed and uses the database as authority.
+- Custom domains, branded documents/messages, licensing, entitlements, provisioning/suspension, and centralized customer management are later platform work and remain separate from accounting history.
 
 #### P7 — Audit, Reversal and Operational Controls
 
@@ -256,13 +266,15 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 - P3 core master data was completed on 2026-08-27 with Development migration/constraint/RLS verification.
 - P4 RLS and authorization was completed on 2026-08-27 with a fully passing hosted Development Auth/RLS matrix.
 - P5A Accounting Kernel and Journal Core was completed on 2026-08-28 with hosted balance/dimension/immutability/idempotency/concurrency/reversal/RLS verification. P5 remains in progress; the next specialized-command batch requires separate review.
-- P5B Expense Documents and Commands was completed on 2026-08-28 with a 64-case hosted posting/VAT/funding/idempotency/concurrency/reversal/RLS matrix. P5 remains in progress; Supplier Payment is the next proposed separately reviewed batch and has not started.
+- P5B Expense Documents and Commands was completed on 2026-08-28 with a 64-case hosted posting/VAT/funding/idempotency/concurrency/reversal/RLS matrix and now supplies the payable sources used by P5C.
+- P5C Supplier Payments was completed on 2026-08-28 with a 68-case hosted allocation/outstanding/concurrency/reversal/authorization/tenant matrix. P5 remains in progress; the next custody-related batch requires separate review and has not started.
 - Supabase Auth/PostgreSQL/Storage selected. PostgreSQL RPCs are the ledger transaction boundary; Edge Functions are optional external orchestration, not the accounting commit boundary.
 - Company membership plus optional project restriction is authoritative through RLS/database commands.
 - `BIGINT` AED minor units selected.
 - A generic synchronous `StorageDriver` swap is insufficient; production requires async queries and domain commands.
 - Posted journals and audit events are append-only; corrections use reversals.
+- The product is a reusable multi-tenant/white-label platform. Company is the tenant boundary, one codebase serves all tenants, branding is configuration, tenant slug is distinct from company code, and P6 is refined into Auth/tenant context, branding, master-data cutover, financial cutover, and localStorage retirement sub-phases.
 
 ---
 
-*P0–P4, P5A, and P5B are complete. P5 remains in progress; later command batches require separate review. P6–P10, Payroll/WPS, and bulk historical import have not started.*
+*P0–P4 and P5A–P5C are complete. P5 remains in progress; later command batches require separate review. P6–P10, Payroll/WPS, and bulk historical import have not started.*
