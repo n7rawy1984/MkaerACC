@@ -17,7 +17,7 @@ It creates no Project cost, VAT, retention, payable, Certificate, deduction, or 
 
 The Subcontract is the accounting scope. A composite foreign key binds the denormalized company, Project, Subcontractor, and Subcontract identity, so two contracts for one party cannot blend. The authoritative available amount is the `SUBCONTRACTOR_ADVANCE` journal debit-minus-credit balance scoped by `(company_id, subcontract_id)`. Future Certificate recovery must credit the same account and Subcontract dimension.
 
-The command locks the selected Subcontract and requires its derived Subcontractor to remain active. It accepts `ACTIVE` and `COMPLETED` contracts, matching the established local close-out semantics, but rejects `CLOSED` contracts and closed Projects. Treasury and its permanent GL must be active Assets; a Project Treasury may fund only its own Project.
+The original P5F command accepted `ACTIVE` and `COMPLETED` contracts because the local client reused a generic “not CLOSED” helper. Pre-P5G review found no approved reason to issue new funding after physical completion. Forward migration `20260906120000_p5f_active_contract_advances.sql` therefore permits new Advances only on `ACTIVE` Subcontracts. Existing Advances remain valid; `COMPLETED` contracts may still receive final Certificates/recovery and later settlement, while `CLOSED` contracts receive no new activity. Treasury and its permanent GL must be active Assets; a Project Treasury may fund only its own Project.
 
 ## Atomicity, idempotency, and reversal
 
@@ -33,8 +33,8 @@ The table has forced RLS. Accounting Admin, Accountant, and Management Viewer ma
 
 The definitive hosted Development matrix passed **106/106** cases. It covered posting shape, stable-key resolution, active/inactive masters, `ACTIVE`/`COMPLETED`/`CLOSED` lifecycle, closed Project rejection, Project Treasury compatibility, safe money bounds, normalization, idempotency replay/mismatch, exact reversal, role boundaries, RLS, tenant isolation, and direct-write denial. Its mandatory same-Subcontractor/two-contract case proved balances of 12,001 and 23,002 minor units remained independently scoped while the party aggregate equalled 35,003.
 
-Trusted whole-scope reconciliation found zero orphan sources, unbalanced or non-two-line P5F journals, missing Subcontract dimensions, or Project Cost/VAT/Subcontractor Payable/Retention account usage. Generated database types were refreshed and migration history aligned through both P5F migrations.
+Trusted whole-scope reconciliation found zero orphan sources, unbalanced or non-two-line P5F journals, missing Subcontract dimensions, or Project Cost/VAT/Subcontractor Payable/Retention account usage. Generated database types were refreshed and migration history aligned through both original P5F migrations. P5G verification subsequently confirmed the active-only funding correction and same-contract Certificate recovery.
 
 ## Boundary
 
-P5F adds no Subcontractor Certificate, advance recovery, deduction, retention, payable recognition, final Subcontractor Payment, alternate Supplier Payment funding, frontend Supabase path, audit events, attachments, Payroll, AR/revenue, or import. The exact next proposed batch is separately reviewed **P5G Subcontractor Certificate**. It has not started.
+P5F itself added no Subcontractor Certificate, advance recovery, deduction, retention, payable recognition, or final Subcontractor Payment. P5G subsequently completed Certificate approval, recovery, retention, deductions, and payable recognition without adding cash settlement.

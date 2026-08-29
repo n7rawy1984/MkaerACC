@@ -102,6 +102,51 @@ export type Database = {
           },
         ]
       }
+      certificate_deduction_account_mappings: {
+        Row: {
+          account_id: string
+          company_id: string
+          created_at: string
+          created_by: string | null
+          deduction_type: Database["public"]["Enums"]["certificate_deduction_type"]
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          account_id: string
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          deduction_type: Database["public"]["Enums"]["certificate_deduction_type"]
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          account_id?: string
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          deduction_type?: Database["public"]["Enums"]["certificate_deduction_type"]
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "certificate_deduction_account_mappings_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "certificate_deduction_mapping_account_same_company"
+            columns: ["company_id", "account_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
       companies: {
         Row: {
           address: string | null
@@ -1263,6 +1308,219 @@ export type Database = {
           },
         ]
       }
+      subcontractor_certificate_deductions: {
+        Row: {
+          account_id: string
+          amount_minor: number
+          certificate_id: string
+          company_id: string
+          created_at: string
+          created_by: string
+          deduction_type: Database["public"]["Enums"]["certificate_deduction_type"]
+          description: string
+          id: string
+          line_number: number
+        }
+        Insert: {
+          account_id: string
+          amount_minor: number
+          certificate_id: string
+          company_id: string
+          created_at?: string
+          created_by: string
+          deduction_type: Database["public"]["Enums"]["certificate_deduction_type"]
+          description: string
+          id?: string
+          line_number: number
+        }
+        Update: {
+          account_id?: string
+          amount_minor?: number
+          certificate_id?: string
+          company_id?: string
+          created_at?: string
+          created_by?: string
+          deduction_type?: Database["public"]["Enums"]["certificate_deduction_type"]
+          description?: string
+          id?: string
+          line_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subcontractor_certificate_deductions_account_same_company"
+            columns: ["company_id", "account_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "subcontractor_certificate_deductions_certificate_same_company"
+            columns: ["company_id", "certificate_id"]
+            isOneToOne: false
+            referencedRelation: "subcontractor_certificates"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
+      subcontractor_certificates: {
+        Row: {
+          advance_recovery_minor: number | null
+          approved_at: string | null
+          approved_by: string | null
+          certificate_date: string
+          certificate_reference: string
+          company_id: string
+          contractor_certificate_number: string
+          created_at: string
+          created_by: string
+          current_variation_amount_minor: number
+          current_work_amount_minor: number | null
+          deductions_total_minor: number | null
+          gross_certified_minor: number | null
+          id: string
+          manual_vat_amount_minor: number | null
+          net_before_vat_minor: number | null
+          notes: string | null
+          payable_amount_minor: number | null
+          posted_journal_entry_id: string | null
+          previous_certified_work_minor: number | null
+          project_id: string
+          requested_advance_recovery_minor: number
+          retention_amount_minor: number | null
+          retention_bps: number | null
+          reversal_journal_entry_id: string | null
+          reversal_reason: string | null
+          reversed_at: string | null
+          reversed_by: string | null
+          status: Database["public"]["Enums"]["subcontractor_certificate_status"]
+          subcontract_id: string
+          subcontractor_id: string
+          tax_invoice_date: string | null
+          tax_invoice_number: string | null
+          tax_invoice_received: boolean
+          vat_amount_minor: number | null
+          vat_mode: Database["public"]["Enums"]["expense_vat_mode"]
+          work_value_to_date_minor: number
+        }
+        Insert: {
+          advance_recovery_minor?: number | null
+          approved_at?: string | null
+          approved_by?: string | null
+          certificate_date: string
+          certificate_reference: string
+          company_id: string
+          contractor_certificate_number: string
+          created_at?: string
+          created_by: string
+          current_variation_amount_minor?: number
+          current_work_amount_minor?: number | null
+          deductions_total_minor?: number | null
+          gross_certified_minor?: number | null
+          id?: string
+          manual_vat_amount_minor?: number | null
+          net_before_vat_minor?: number | null
+          notes?: string | null
+          payable_amount_minor?: number | null
+          posted_journal_entry_id?: string | null
+          previous_certified_work_minor?: number | null
+          project_id: string
+          requested_advance_recovery_minor?: number
+          retention_amount_minor?: number | null
+          retention_bps?: number | null
+          reversal_journal_entry_id?: string | null
+          reversal_reason?: string | null
+          reversed_at?: string | null
+          reversed_by?: string | null
+          status?: Database["public"]["Enums"]["subcontractor_certificate_status"]
+          subcontract_id: string
+          subcontractor_id: string
+          tax_invoice_date?: string | null
+          tax_invoice_number?: string | null
+          tax_invoice_received?: boolean
+          vat_amount_minor?: number | null
+          vat_mode: Database["public"]["Enums"]["expense_vat_mode"]
+          work_value_to_date_minor: number
+        }
+        Update: {
+          advance_recovery_minor?: number | null
+          approved_at?: string | null
+          approved_by?: string | null
+          certificate_date?: string
+          certificate_reference?: string
+          company_id?: string
+          contractor_certificate_number?: string
+          created_at?: string
+          created_by?: string
+          current_variation_amount_minor?: number
+          current_work_amount_minor?: number | null
+          deductions_total_minor?: number | null
+          gross_certified_minor?: number | null
+          id?: string
+          manual_vat_amount_minor?: number | null
+          net_before_vat_minor?: number | null
+          notes?: string | null
+          payable_amount_minor?: number | null
+          posted_journal_entry_id?: string | null
+          previous_certified_work_minor?: number | null
+          project_id?: string
+          requested_advance_recovery_minor?: number
+          retention_amount_minor?: number | null
+          retention_bps?: number | null
+          reversal_journal_entry_id?: string | null
+          reversal_reason?: string | null
+          reversed_at?: string | null
+          reversed_by?: string | null
+          status?: Database["public"]["Enums"]["subcontractor_certificate_status"]
+          subcontract_id?: string
+          subcontractor_id?: string
+          tax_invoice_date?: string | null
+          tax_invoice_number?: string | null
+          tax_invoice_received?: boolean
+          vat_amount_minor?: number | null
+          vat_mode?: Database["public"]["Enums"]["expense_vat_mode"]
+          work_value_to_date_minor?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subcontractor_certificates_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subcontractor_certificates_identity"
+            columns: [
+              "company_id",
+              "subcontract_id",
+              "project_id",
+              "subcontractor_id",
+            ]
+            isOneToOne: false
+            referencedRelation: "subcontracts"
+            referencedColumns: [
+              "company_id",
+              "id",
+              "project_id",
+              "subcontractor_id",
+            ]
+          },
+          {
+            foreignKeyName: "subcontractor_certificates_posted_journal_same_company"
+            columns: ["company_id", "posted_journal_entry_id"]
+            isOneToOne: false
+            referencedRelation: "journal_entries"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "subcontractor_certificates_reversal_journal_same_company"
+            columns: ["company_id", "reversal_journal_entry_id"]
+            isOneToOne: false
+            referencedRelation: "journal_entries"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
       subcontracts: {
         Row: {
           approved_variations_minor: number
@@ -1586,9 +1844,44 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      approve_post_subcontractor_certificate: {
+        Args: {
+          target_company_id: string
+          target_idempotency_key: string
+          target_subcontractor_certificate_id: string
+        }
+        Returns: {
+          certificate_reference: string
+          journal_entry_id: string
+          replayed: boolean
+          subcontractor_certificate_id: string
+        }[]
+      }
       can_access_project: {
         Args: { target_company_id: string; target_project_id: string }
         Returns: boolean
+      }
+      create_subcontractor_certificate_draft: {
+        Args: {
+          target_advance_recovery_minor: number
+          target_certificate_date: string
+          target_company_id: string
+          target_contractor_certificate_number: string
+          target_current_variation_amount_minor: number
+          target_deductions: Json
+          target_manual_vat_amount_minor: number
+          target_notes: string
+          target_subcontract_id: string
+          target_tax_invoice_date: string
+          target_tax_invoice_number: string
+          target_tax_invoice_received: boolean
+          target_vat_mode: Database["public"]["Enums"]["expense_vat_mode"]
+          target_work_value_to_date_minor: number
+        }
+        Returns: {
+          certificate_reference: string
+          subcontractor_certificate_id: string
+        }[]
       }
       finalize_custody_settlement: {
         Args: {
@@ -1790,6 +2083,21 @@ export type Database = {
           subcontractor_advance_id: string
         }[]
       }
+      reverse_subcontractor_certificate: {
+        Args: {
+          target_company_id: string
+          target_idempotency_key: string
+          target_reason: string
+          target_reversal_date: string
+          target_subcontractor_certificate_id: string
+        }
+        Returns: {
+          certificate_reference: string
+          replayed: boolean
+          reversal_journal_entry_id: string
+          subcontractor_certificate_id: string
+        }[]
+      }
       reverse_supplier_payment: {
         Args: {
           target_company_id: string
@@ -1810,6 +2118,7 @@ export type Database = {
       account_status: "ACTIVE" | "INACTIVE"
       account_type: "ASSET" | "LIABILITY" | "EQUITY" | "REVENUE" | "EXPENSE"
       app_locale: "en" | "ar"
+      certificate_deduction_type: "COMPANY_MATERIALS" | "BACKCHARGE" | "OTHER"
       company_role:
         | "SYSTEM_ADMIN"
         | "ACCOUNTING_ADMIN"
@@ -1836,6 +2145,7 @@ export type Database = {
       payment_method: "CASH" | "BANK" | "TRANSFER" | "CHEQUE" | "OTHER"
       project_status: "PLANNING" | "ACTIVE" | "ON_HOLD" | "COMPLETED" | "CLOSED"
       subcontract_status: "ACTIVE" | "COMPLETED" | "CLOSED"
+      subcontractor_certificate_status: "DRAFT" | "POSTED" | "REVERSED"
       system_account_key:
         | "INPUT_VAT"
         | "CUSTODY_ADVANCE"
@@ -1986,6 +2296,7 @@ export const Constants = {
       account_status: ["ACTIVE", "INACTIVE"],
       account_type: ["ASSET", "LIABILITY", "EQUITY", "REVENUE", "EXPENSE"],
       app_locale: ["en", "ar"],
+      certificate_deduction_type: ["COMPANY_MATERIALS", "BACKCHARGE", "OTHER"],
       company_role: [
         "SYSTEM_ADMIN",
         "ACCOUNTING_ADMIN",
@@ -2015,6 +2326,7 @@ export const Constants = {
       payment_method: ["CASH", "BANK", "TRANSFER", "CHEQUE", "OTHER"],
       project_status: ["PLANNING", "ACTIVE", "ON_HOLD", "COMPLETED", "CLOSED"],
       subcontract_status: ["ACTIVE", "COMPLETED", "CLOSED"],
+      subcontractor_certificate_status: ["DRAFT", "POSTED", "REVERSED"],
       system_account_key: [
         "INPUT_VAT",
         "CUSTODY_ADVANCE",

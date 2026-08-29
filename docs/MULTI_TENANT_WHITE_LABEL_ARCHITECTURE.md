@@ -28,12 +28,12 @@ Subscription/license status, plan, entitlements, tenant provisioning/suspension,
 
 ## Implemented now
 
-- Company-scoped master, authorization, expense, Supplier Payment, Custody Advance, Settlement, Cash Return, Subcontractor Advance, journal, and command schemas.
+- Company-scoped master, authorization, expense, Supplier Payment, Custody Advance, Settlement, Cash Return, Subcontractor Advance, Subcontractor Certificate/deduction, journal, and command schemas.
 - Auth profiles and multi-company memberships.
 - Forced-RLS tenant isolation and negative cross-tenant verification.
 - Company/project-consistent foreign keys and dimensions.
 - Company/type/year accounting references.
-- Company-aware P5A–P5F accounting commands and idempotency, including pooled company/Custodian balance enforcement, no-GL Settlement grouping, and contract-isolated Subcontractor Advance balances.
+- Company-aware P5A–P5G accounting commands and idempotency, including pooled company/Custodian balance enforcement, no-GL Settlement grouping, and contract-isolated Subcontractor Advance/Certificate balances.
 - Explicit multi-company synthetic Development fixtures.
 
 ## Planned, not implemented
@@ -48,7 +48,7 @@ Development/demo data remains explicit tenant fixtures and must never imply that
 
 Custody is an accounting control balance scoped by company and Custodian; Project is analytic rather than an authorization or per-Advance allocation bucket. P5D funding and P5E Cash Return are Treasury-only. Settlement groups already-posted Custodian Expenses without a journal, and Cash Return is independently auditable. Owner Current funding and Custody-funded Supplier Payments require separately reviewed commands and must not be inferred from localStorage legacy `CASH`/`BANK` values.
 
-Subcontractor Advances are Treasury-funded recoverable Assets scoped by company and one P3 Subcontract, never pooled merely by party. Both journal lines preserve Project and Subcontract; the control debit also preserves Subcontractor Party and the funding credit preserves Treasury. Journal-derived balance is the future Certificate-recovery authority. `COMPLETED` contracts may receive close-out Advances, while `CLOSED` contracts and closed Projects cannot. P5F does not implement Certificates, recovery, retention, deductions, or final Subcontractor Payments.
+Subcontractor Advances are Treasury-funded recoverable Assets scoped by company and one P3 Subcontract, never pooled merely by party. Both journal lines preserve Project and Subcontract; the control debit also preserves Subcontractor Party and the funding credit preserves Treasury. New funding requires an `ACTIVE` Subcontract. P5G Certificates may post on `ACTIVE` or `COMPLETED` Subcontracts, recognize contract-scoped cost/VAT/retention/recovery/deductions/payable, and create no cash movement. `CLOSED` Subcontracts/Projects receive no new Certificate accounting. Final Subcontractor Payment and Retention Release remain later flows.
 
 ## Refined P6 boundary
 

@@ -142,12 +142,13 @@ LocalStorage remains an explicit demo/development adapter. Production mode never
 - ✅ Production Data Foundation P5D — Custody Advance Funding *(Development-applied and remotely verified; P5 remains in progress)*
 - ✅ Production Data Foundation P5E — Custody Settlement and Cash Return *(Development-applied and remotely verified; P5 remains in progress)*
 - ✅ Production Data Foundation P5F — Subcontractor Advance *(Development-applied and remotely verified; P5 remains in progress)*
+- ✅ Production Data Foundation P5G — Subcontractor Certificates *(Development-applied and remotely verified; P5 remains in progress)*
 
 Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 
 ## Current Phase
 
-### ➡ Phase 2C — Production Data Foundation *(P0–P4 and P5A–P5F complete; P5 in progress)*
+### ➡ Phase 2C — Production Data Foundation *(P0–P4 and P5A–P5G complete; P5 in progress)*
 
 #### ✅ P0 — Production Architecture Freeze
 
@@ -198,9 +199,10 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 - ✅ **P5D — Custody Advance Funding:** added Treasury-only immutable Custody Advances, pooled company/Custodian control balances, atomic funding/reversal commands, and serialized P5B Custodian Expense overspend prevention.
 - ✅ **P5E — Custody Settlement and Cash Return:** added immutable no-GL Settlement grouping for posted Custodian Expenses, Treasury-only Cash Returns, pooled-balance concurrency protection, exact reversal, and conservative financial RLS.
 - ✅ **P5F — Subcontractor Advance:** added immutable Treasury-funded recoverable-asset Advances, authoritative company/Subcontract balance derivation, contract/project/subcontractor dimensions, recovery-aware exact reversal, and conservative financial RLS.
-- P5G+ will add separately reviewed commands for Subcontractor Certificate approval, deductions/recovery/retention, and later Subcontractor Payment and their business-state reversals.
+- ✅ **P5G — Subcontractor Certificates:** added no-GL drafts, exclusive Accounting Admin approval, mapped deductions, evidence-gated VAT, contract-scoped retention/Advance recovery/payable recognition, cumulative revised-value enforcement, and exact reversal.
+- P5H+ will add separately reviewed Subcontractor Payment and later Retention Release flows.
 - Generic accounting primitives remain private and cannot be used as an arbitrary browser journal RPC.
-- Full P5 remains in progress; P5F did not add Certificates, deductions/recovery/retention, final Subcontractor Payments, alternate Supplier Payment funding, P7 audit events, or frontend integration.
+- Full P5 remains in progress; P5G did not add Subcontractor cash settlement, Retention Release/payment, alternate Supplier Payment funding, P7 audit events, or frontend integration.
 
 #### P6 — Auth, Tenant Context, White-Label and Production Cutover
 
@@ -276,7 +278,9 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 - P5C Supplier Payments was completed on 2026-08-28 with a 68-case hosted allocation/outstanding/concurrency/reversal/authorization/tenant matrix. P5 remains in progress; the next custody-related batch requires separate review and has not started.
 - P5D Custody Advance Funding was completed on 2026-08-28 with a 66-case hosted funding/pooling/overspend/concurrency/reversal/authorization/tenant matrix. Custody is pooled by company and Custodian; Project is analytic. P5E settlement/cash return requires separate review and was not started.
 - P5E Custody Settlement and Cash Return was completed on 2026-08-28 with an 82-case hosted grouping/no-repost/return/concurrency/reversal/authorization/tenant matrix. A forward correction removed a PL/pgSQL variable ambiguity found by the first hosted Settlement call. P5F Subcontractor Advance requires separate review and was not started.
-- P5F Subcontractor Advance was completed on 2026-08-29 with a 106-case hosted posting/contract-isolation/lifecycle/idempotency/reversal/authorization/tenant/reconciliation matrix. Advances are recoverable Assets scoped by company and Subcontract; `COMPLETED` contracts remain eligible, `CLOSED` contracts/projects are blocked, and no arbitrary commercial-value cap was invented. P5G Subcontractor Certificate requires separate review and was not started.
+- P5F Subcontractor Advance was completed on 2026-08-29 with a 106-case hosted posting/contract-isolation/lifecycle/idempotency/reversal/authorization/tenant/reconciliation matrix. Advances are recoverable Assets scoped by company and Subcontract; its original lifecycle decision was reviewed and hardened immediately before P5G. No arbitrary commercial-value cap was invented.
+- Pre-P5G review hardened P5F through `20260906120000`: new Advance funding now requires an `ACTIVE` Subcontract; existing Advances and final accounting on `COMPLETED` contracts remain valid.
+- P5G Subcontractor Certificates was completed on 2026-08-29 with a 134-case hosted draft/posting/VAT/retention/recovery/deduction/payable/concurrency/reversal/authorization/tenant/reconciliation matrix. Cumulative live gross certification is capped at revised contract value under a Subcontract lock. P5H Subcontractor Payment requires separate review and was not started.
 - Supabase Auth/PostgreSQL/Storage selected. PostgreSQL RPCs are the ledger transaction boundary; Edge Functions are optional external orchestration, not the accounting commit boundary.
 - Company membership plus optional project restriction is authoritative through RLS/database commands.
 - `BIGINT` AED minor units selected.
@@ -286,4 +290,4 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 
 ---
 
-*P0–P4 and P5A–P5F are complete. P5 remains in progress; later command batches require separate review. P6–P10, Payroll/WPS, and bulk historical import have not started.*
+*P0–P4 and P5A–P5G are complete. P5 remains in progress; later command batches require separate review. P6–P10, Payroll/WPS, and bulk historical import have not started.*
