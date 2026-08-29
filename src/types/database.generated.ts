@@ -1125,6 +1125,144 @@ export type Database = {
           },
         ]
       }
+      subcontractor_advances: {
+        Row: {
+          advance_date: string
+          advance_reference: string
+          amount_minor: number
+          company_id: string
+          created_at: string
+          created_by: string
+          external_reference: string | null
+          id: string
+          notes: string | null
+          payment_method: Database["public"]["Enums"]["payment_method"]
+          posted_at: string | null
+          posted_by: string | null
+          posted_journal_entry_id: string | null
+          project_id: string
+          reversal_journal_entry_id: string | null
+          reversed_at: string | null
+          reversed_by: string | null
+          status: Database["public"]["Enums"]["expense_status"]
+          subcontract_id: string
+          subcontractor_id: string
+          treasury_account_id: string
+          updated_at: string
+          updated_by: string
+        }
+        Insert: {
+          advance_date: string
+          advance_reference: string
+          amount_minor: number
+          company_id: string
+          created_at?: string
+          created_by: string
+          external_reference?: string | null
+          id?: string
+          notes?: string | null
+          payment_method: Database["public"]["Enums"]["payment_method"]
+          posted_at?: string | null
+          posted_by?: string | null
+          posted_journal_entry_id?: string | null
+          project_id: string
+          reversal_journal_entry_id?: string | null
+          reversed_at?: string | null
+          reversed_by?: string | null
+          status?: Database["public"]["Enums"]["expense_status"]
+          subcontract_id: string
+          subcontractor_id: string
+          treasury_account_id: string
+          updated_at?: string
+          updated_by: string
+        }
+        Update: {
+          advance_date?: string
+          advance_reference?: string
+          amount_minor?: number
+          company_id?: string
+          created_at?: string
+          created_by?: string
+          external_reference?: string | null
+          id?: string
+          notes?: string | null
+          payment_method?: Database["public"]["Enums"]["payment_method"]
+          posted_at?: string | null
+          posted_by?: string | null
+          posted_journal_entry_id?: string | null
+          project_id?: string
+          reversal_journal_entry_id?: string | null
+          reversed_at?: string | null
+          reversed_by?: string | null
+          status?: Database["public"]["Enums"]["expense_status"]
+          subcontract_id?: string
+          subcontractor_id?: string
+          treasury_account_id?: string
+          updated_at?: string
+          updated_by?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subcontractor_advances_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subcontractor_advances_party_same_company"
+            columns: ["company_id", "subcontractor_id"]
+            isOneToOne: false
+            referencedRelation: "parties"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "subcontractor_advances_posted_journal_same_company"
+            columns: ["company_id", "posted_journal_entry_id"]
+            isOneToOne: false
+            referencedRelation: "journal_entries"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "subcontractor_advances_project_same_company"
+            columns: ["company_id", "project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "subcontractor_advances_reversal_journal_same_company"
+            columns: ["company_id", "reversal_journal_entry_id"]
+            isOneToOne: false
+            referencedRelation: "journal_entries"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "subcontractor_advances_subcontract_identity"
+            columns: [
+              "company_id",
+              "subcontract_id",
+              "project_id",
+              "subcontractor_id",
+            ]
+            isOneToOne: false
+            referencedRelation: "subcontracts"
+            referencedColumns: [
+              "company_id",
+              "id",
+              "project_id",
+              "subcontractor_id",
+            ]
+          },
+          {
+            foreignKeyName: "subcontractor_advances_treasury_same_company"
+            columns: ["company_id", "treasury_account_id"]
+            isOneToOne: false
+            referencedRelation: "treasury_accounts"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
       subcontracts: {
         Row: {
           approved_variations_minor: number
@@ -1553,6 +1691,25 @@ export type Database = {
           replayed: boolean
         }[]
       }
+      post_subcontractor_advance: {
+        Args: {
+          target_advance_date: string
+          target_amount_minor: number
+          target_company_id: string
+          target_external_reference: string
+          target_idempotency_key: string
+          target_notes: string
+          target_payment_method: Database["public"]["Enums"]["payment_method"]
+          target_subcontract_id: string
+          target_treasury_account_id: string
+        }
+        Returns: {
+          advance_reference: string
+          journal_entry_id: string
+          replayed: boolean
+          subcontractor_advance_id: string
+        }[]
+      }
       post_supplier_payment: {
         Args: {
           target_allocations: Json
@@ -1616,6 +1773,21 @@ export type Database = {
           expense_reference: string
           replayed: boolean
           reversal_journal_entry_id: string
+        }[]
+      }
+      reverse_subcontractor_advance: {
+        Args: {
+          target_company_id: string
+          target_idempotency_key: string
+          target_reason: string
+          target_reversal_date: string
+          target_subcontractor_advance_id: string
+        }
+        Returns: {
+          advance_reference: string
+          replayed: boolean
+          reversal_journal_entry_id: string
+          subcontractor_advance_id: string
         }[]
       }
       reverse_supplier_payment: {

@@ -56,4 +56,4 @@ Database lint adds no P5E finding; only P5C's documented unused Supplier validat
 
 ## Boundary
 
-P5E adds no Settlement cancellation, embedded Return relation, Owner/legacy Return destination, alternate Supplier Payment funding, subcontract commands, audit events, attachments, frontend Supabase path, Payroll, AR/revenue, or import. The exact next proposed batch is separately reviewed P5F Subcontractor Advance. It was not started.
+P5E adds no Settlement cancellation, embedded Return relation, Owner/legacy Return destination, alternate Supplier Payment funding, subcontract commands, audit events, attachments, frontend Supabase path, Payroll, AR/revenue, or import. P5F subsequently completed the separately reviewed Subcontractor Advance command without changing P5E's custody model.
