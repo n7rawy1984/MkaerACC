@@ -38,6 +38,8 @@ The company previously tracked project expenses, supplier bills, cash handed to 
 
 See `PROJECT_ROADMAP.md` for the full phase breakdown, binding decisions, and decision log.
 
+Repository-root `AGENTS.md` is the binding engineering constitution for all future AI-agent and human work. Read it before meaningful changes; it defines source-of-truth precedence, frozen accounting invariants, financial-command/migration standards, proportional security priorities, stop conditions, and verification workflow.
+
 ## 4. Technology Stack (verified from `package.json`)
 
 - React 19, TypeScript ~6.0, Vite 8
@@ -89,6 +91,7 @@ supabase/
 
 | File | Why it matters |
 |---|---|
+| `AGENTS.md` | Binding engineering constitution for every future agent/developer and batch. |
 | `src/domain/types.ts` | Every domain model. Read this first to know what exists. |
 | `src/domain/money.ts` | All money math MUST go through here — never raw float arithmetic on currency. |
 | `src/accounting/postingEngine.ts` | Every journal entry in the system is built by one of the `post*` functions here. `isBalanced`/`UnbalancedJournalError` enforce balance. |
@@ -114,6 +117,7 @@ supabase/
 | `docs/P5E_CUSTODY_SETTLEMENTS_RETURNS.md` | P5E Settlement grouping/no-repost rules, Cash Return accounting/reversal, pooled concurrency, RLS, and hosted verification. |
 | `docs/P5F_SUBCONTRACTOR_ADVANCES.md` | P5F contract-scoped Advance accounting, lifecycle, recovery-aware reversal, RLS, and hosted verification. |
 | `docs/P5G_SUBCONTRACTOR_CERTIFICATES.md` | P5G Certificate lifecycle, calculations, mapped deductions, recovery/concurrency, reversal, RLS, and hosted verification. |
+| `docs/ENGINEERING_ACCOUNTING_RETROSPECTIVE_P0_P5G.md` | Focused constitution-based review, one P5F correction, accounting-treatment classifications, and P5H readiness. |
 | `docs/MULTI_TENANT_WHITE_LABEL_ARCHITECTURE.md` | Binding one-codebase tenant isolation, white-label configuration, slug/context, deployment, and commercial-platform boundary. |
 | `src/types/database.generated.ts` | Supabase CLI-generated TypeScript types for the verified public Development schema; do not edit manually. |
 | `.env.example` | Public placeholder convention only; explicitly warns that every `VITE_*` value is browser-visible. |
@@ -351,6 +355,8 @@ Frozen outcomes:
 - Audit is append-only and transaction-coupled. Attachments are private, company-scoped, signed-access and versioned/superseded.
 - P1–P10 order is frozen; P1–P4 and P5A–P5G are complete, while P5 remains in progress. Payroll follows completed Foundation; historical 2025/2026 import follows Payroll.
 - P5G is complete and P5 remains in progress. P5H Subcontractor Payment requires separate review and has not started.
+- The P0–P5G focused retrospective is complete. One P5F active-status locking race was corrected by `20260907120000_p5f_active_contract_lock.sql`; no other material pre-P5H blocker was found.
+- A read-only Production Security & Accounting Integrity Audit is a binding future pre-go-live gate. It has not been performed and is not ordinary per-batch work.
 
 ### P1 — Supabase Environments + Migration Foundation completed 2026-08-26
 
@@ -660,7 +666,16 @@ P5G is complete through pre-P5G correction `20260906120000_p5f_active_contract_a
 
 Full details are in `docs/P5G_SUBCONTRACTOR_CERTIFICATES.md`. P5 remains in progress; stop before separately reviewed P5H Subcontractor Payment.
 
-## 32. Testing Expectations
+## 32. Engineering Constitution and Focused P0–P5G Retrospective (2026-08-29)
+
+- Added binding repository-root `AGENTS.md` and reconciled roadmap/handoff/architecture memory.
+- Focused actual code/migration review covered tenant ownership and RLS, financial grants/permissions, P5A journal invariants, P5B–P5G command locking/idempotency/dependencies, dimensions, white-label readiness, migration history, and documented accounting treatments.
+- Confirmed one reachable P5F race: the active-only wrapper did not lock before delegating to the older implementation. `20260907120000_p5f_active_contract_lock.sql` now locks the Subcontract and validates `ACTIVE` in the same serialized boundary. Existing history is unchanged; focused hosted regression passed 9/9.
+- P5G deduction Revenue mapping is verified current product policy: all three local fixed deduction accounts were Recovery/Income credits and SQL preserves that policy through trusted per-company Revenue mappings. Retention basis, VAT waterfall, cumulative certification, and pre-P5H reversal assumptions are internally consistent with the accepted P5G model.
+- No Critical/High finding or decision-required accounting ambiguity remains. P5H is ready for separate authorization but was not started.
+- The future Production Security & Accounting Integrity Audit remains mandatory before real production data/go-live and was not performed here.
+
+## 33. Testing Expectations
 
 There is no automated test suite (no `*.test.ts` files, no test runner configured) — verification so far has been: `npm run build` must be clean (zero TypeScript errors), `npm run lint` (oxlint) must show no new warnings, plus live, browser-driven functional testing (headless Chromium via Playwright, launched ad hoc — not checked into the repo) exercising each new flow end-to-end with hand-calculated expected numbers, checking `console` for zero errors, and confirming persistence across a page reload.
 
@@ -696,7 +711,7 @@ Phase 2B.3's verification run (Playwright/headless Chromium, after a full "Reset
 
 Any future phase should be verified the same way before being marked "Completed" in the roadmap: build clean, lint clean, flow tested live with real numbers, no console errors, persists after reload, and existing flows re-checked for regressions.
 
-## 33. Handoff Checklist for New Sessions
+## 34. Handoff Checklist for New Sessions
 
 - [ ] Read `PROJECT_ROADMAP.md` in full (Binding Decisions, Completed, Current/Next Phase, Known Gaps, Decision Log).
 - [ ] Read this file in full.

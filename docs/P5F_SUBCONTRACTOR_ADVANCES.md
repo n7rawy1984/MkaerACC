@@ -1,6 +1,6 @@
 # P5F Subcontractor Advances
 
-P5F is implemented by `20260905120000_p5f_subcontractor_advances.sql` and forward correction `20260905123000_p5f_advance_account_compatibility.sql`, applied only to synthetic-only `MakerACC-Development`.
+P5F is implemented by `20260905120000_p5f_subcontractor_advances.sql` and forward corrections `20260905123000_p5f_advance_account_compatibility.sql`, `20260906120000_p5f_active_contract_advances.sql`, and `20260907120000_p5f_active_contract_lock.sql`, applied only to synthetic-only `MakerACC-Development`.
 
 ## Scope and accounting
 
@@ -19,6 +19,8 @@ The Subcontract is the accounting scope. A composite foreign key binds the denor
 
 The original P5F command accepted `ACTIVE` and `COMPLETED` contracts because the local client reused a generic “not CLOSED” helper. Pre-P5G review found no approved reason to issue new funding after physical completion. Forward migration `20260906120000_p5f_active_contract_advances.sql` therefore permits new Advances only on `ACTIVE` Subcontracts. Existing Advances remain valid; `COMPLETED` contracts may still receive final Certificates/recovery and later settlement, while `CLOSED` contracts receive no new activity. Treasury and its permanent GL must be active Assets; a Project Treasury may fund only its own Project.
 
+The P0–P5G retrospective found that the first active-only wrapper read status before the private implementation acquired its Subcontract lock. Forward migration `20260907120000_p5f_active_contract_lock.sql` closes that concurrency window by locking the same-company Subcontract before validating `ACTIVE` and delegating. A focused hosted regression passed **9/9** cases, including rejection after transition to `COMPLETED`, idempotent history preservation, and a single source journal.
+
 ## Atomicity, idempotency, and reversal
 
 `post_subcontractor_advance` creates the document and balanced journal in one transaction, uses the P5A atomic reference counter, and reserves a canonical request hash. Exact retries replay one result; a changed payload under the same key fails.
@@ -33,7 +35,7 @@ The table has forced RLS. Accounting Admin, Accountant, and Management Viewer ma
 
 The definitive hosted Development matrix passed **106/106** cases. It covered posting shape, stable-key resolution, active/inactive masters, `ACTIVE`/`COMPLETED`/`CLOSED` lifecycle, closed Project rejection, Project Treasury compatibility, safe money bounds, normalization, idempotency replay/mismatch, exact reversal, role boundaries, RLS, tenant isolation, and direct-write denial. Its mandatory same-Subcontractor/two-contract case proved balances of 12,001 and 23,002 minor units remained independently scoped while the party aggregate equalled 35,003.
 
-Trusted whole-scope reconciliation found zero orphan sources, unbalanced or non-two-line P5F journals, missing Subcontract dimensions, or Project Cost/VAT/Subcontractor Payable/Retention account usage. Generated database types were refreshed and migration history aligned through both original P5F migrations. P5G verification subsequently confirmed the active-only funding correction and same-contract Certificate recovery.
+Trusted whole-scope reconciliation found zero orphan sources, unbalanced or non-two-line P5F journals, missing Subcontract dimensions, or Project Cost/VAT/Subcontractor Payable/Retention account usage. Generated database types were refreshed and migration history is aligned through the later active-only lifecycle corrections. P5G verification confirmed active-only funding and same-contract Certificate recovery; the retrospective regression then confirmed the serialized lifecycle boundary.
 
 ## Boundary
 

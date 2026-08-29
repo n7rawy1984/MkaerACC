@@ -28,6 +28,8 @@ Build a production, bilingual, multi-tenant contracting-accounting platform that
 
 The binding commercial-platform architecture and implemented/planned boundary are detailed in `docs/MULTI_TENANT_WHITE_LABEL_ARCHITECTURE.md`.
 
+`AGENTS.md` is the binding engineering constitution for all future AI-agent and human development work. It defines source-of-truth order, accounting invariants, financial-command and migration standards, proportional security review, stop policy, and completion workflow.
+
 ## Production Architecture Freeze — P0 Approved
 
 These decisions are binding inputs to P1–P10. They are **approved architecture**, not implemented features.
@@ -213,6 +215,10 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 - **P6E — LocalStorage Retirement / Production Data Mode:** localStorage remains an explicit demo adapter only; production fails closed and uses the database as authority.
 - Custom domains, branded documents/messages, licensing, entitlements, provisioning/suspension, and centralized customer management are later platform work and remain separate from accounting history.
 
+#### Pre-production gate — Production Security & Accounting Integrity Audit
+
+Before real production accounting data or go-live, perform the read-only audit frozen in `AGENTS.md`: tenant isolation; RLS/authorization; Auth/session/tenant switching; financial RPC abuse; journal/reversal/dependency integrity; idempotency/concurrency; overpayment/over-recovery; immutable history; document/storage access; report leakage; secrets/configuration; white-label/custom-domain tenant confusion; and financial reconciliation. This gate is planned, not performed or completed.
+
 #### P7 — Audit, Reversal and Operational Controls
 
 - Add immutable events for create/edit/approve/post/reverse/status and permission changes.
@@ -281,6 +287,7 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 - P5F Subcontractor Advance was completed on 2026-08-29 with a 106-case hosted posting/contract-isolation/lifecycle/idempotency/reversal/authorization/tenant/reconciliation matrix. Advances are recoverable Assets scoped by company and Subcontract; its original lifecycle decision was reviewed and hardened immediately before P5G. No arbitrary commercial-value cap was invented.
 - Pre-P5G review hardened P5F through `20260906120000`: new Advance funding now requires an `ACTIVE` Subcontract; existing Advances and final accounting on `COMPLETED` contracts remain valid.
 - P5G Subcontractor Certificates was completed on 2026-08-29 with a 134-case hosted draft/posting/VAT/retention/recovery/deduction/payable/concurrency/reversal/authorization/tenant/reconciliation matrix. Cumulative live gross certification is capped at revised contract value under a Subcontract lock. P5H Subcontractor Payment requires separate review and was not started.
+- The binding `AGENTS.md` engineering constitution and focused P0–P5G retrospective were added on 2026-08-29. The review found one confirmed P5F lifecycle race and corrected it forward-only in `20260907120000`; focused regression passed. The future Production Security & Accounting Integrity Audit is now a required pre-go-live gate and has not been performed.
 - Supabase Auth/PostgreSQL/Storage selected. PostgreSQL RPCs are the ledger transaction boundary; Edge Functions are optional external orchestration, not the accounting commit boundary.
 - Company membership plus optional project restriction is authoritative through RLS/database commands.
 - `BIGINT` AED minor units selected.

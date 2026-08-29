@@ -2,6 +2,8 @@
 
 This decision is binding for all product and database work. MakerACC is an internal codename; the product is a reusable contracting-accounting platform for independent tenant companies, not bespoke software for one company.
 
+Repository-root `AGENTS.md` is the binding engineering constitution governing implementation discipline, accounting invariants, proportional security review, and verification. This architecture record remains the detailed multi-tenant/white-label decision source.
+
 ## Tenant boundary
 
 `Company` is the security and accounting tenant: Platform → Company → memberships → projects, parties, accounts, treasury, documents, journals, and future modules. Tenant-owned rows carry `company_id` directly or derive it only through an explicitly constrained parent. UUID knowledge never grants access. PostgreSQL constraints, RLS, and specialized commands remain authoritative.
@@ -59,3 +61,7 @@ Subcontractor Advances are Treasury-funded recoverable Assets scoped by company 
 - **P6E — LocalStorage Retirement and Production Data Mode:** explicit demo adapter, production fail-closed behavior, and removal of localStorage as production accounting authority.
 
 P6 is not implemented by this decision record.
+
+## Pre-production integrity gate
+
+Before real production accounting data or go-live, the read-only **Production Security & Accounting Integrity Audit** defined in `AGENTS.md` must be completed. It covers tenant/Auth/RLS isolation, financial command abuse and concurrency, journal/reversal/dependency integrity, immutable history, storage/report leakage, secrets/configuration, white-label/custom-domain tenant confusion, and financial reconciliation. This is a planned gate, not an implemented feature or a completed audit.
