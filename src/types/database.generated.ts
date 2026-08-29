@@ -309,6 +309,216 @@ export type Database = {
           },
         ]
       }
+      custody_cash_returns: {
+        Row: {
+          amount_minor: number
+          company_id: string
+          created_at: string
+          created_by: string
+          custodian_id: string
+          external_reference: string | null
+          id: string
+          notes: string | null
+          payment_method: Database["public"]["Enums"]["payment_method"]
+          posted_at: string | null
+          posted_by: string | null
+          posted_journal_entry_id: string | null
+          return_date: string
+          return_reference: string
+          reversal_journal_entry_id: string | null
+          reversed_at: string | null
+          reversed_by: string | null
+          status: Database["public"]["Enums"]["expense_status"]
+          treasury_account_id: string
+          updated_at: string
+          updated_by: string
+        }
+        Insert: {
+          amount_minor: number
+          company_id: string
+          created_at?: string
+          created_by: string
+          custodian_id: string
+          external_reference?: string | null
+          id?: string
+          notes?: string | null
+          payment_method: Database["public"]["Enums"]["payment_method"]
+          posted_at?: string | null
+          posted_by?: string | null
+          posted_journal_entry_id?: string | null
+          return_date: string
+          return_reference: string
+          reversal_journal_entry_id?: string | null
+          reversed_at?: string | null
+          reversed_by?: string | null
+          status?: Database["public"]["Enums"]["expense_status"]
+          treasury_account_id: string
+          updated_at?: string
+          updated_by: string
+        }
+        Update: {
+          amount_minor?: number
+          company_id?: string
+          created_at?: string
+          created_by?: string
+          custodian_id?: string
+          external_reference?: string | null
+          id?: string
+          notes?: string | null
+          payment_method?: Database["public"]["Enums"]["payment_method"]
+          posted_at?: string | null
+          posted_by?: string | null
+          posted_journal_entry_id?: string | null
+          return_date?: string
+          return_reference?: string
+          reversal_journal_entry_id?: string | null
+          reversed_at?: string | null
+          reversed_by?: string | null
+          status?: Database["public"]["Enums"]["expense_status"]
+          treasury_account_id?: string
+          updated_at?: string
+          updated_by?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "custody_cash_returns_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "custody_cash_returns_custodian_same_company"
+            columns: ["company_id", "custodian_id"]
+            isOneToOne: false
+            referencedRelation: "parties"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "custody_cash_returns_posted_journal_same_company"
+            columns: ["company_id", "posted_journal_entry_id"]
+            isOneToOne: false
+            referencedRelation: "journal_entries"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "custody_cash_returns_reversal_journal_same_company"
+            columns: ["company_id", "reversal_journal_entry_id"]
+            isOneToOne: false
+            referencedRelation: "journal_entries"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "custody_cash_returns_treasury_same_company"
+            columns: ["company_id", "treasury_account_id"]
+            isOneToOne: false
+            referencedRelation: "treasury_accounts"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
+      custody_settlement_items: {
+        Row: {
+          company_id: string
+          created_at: string
+          expense_amount_minor: number
+          expense_id: string
+          id: string
+          settlement_id: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          expense_amount_minor: number
+          expense_id: string
+          id?: string
+          settlement_id: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          expense_amount_minor?: number
+          expense_id?: string
+          id?: string
+          settlement_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "custody_settlement_items_expense_same_company"
+            columns: ["company_id", "expense_id"]
+            isOneToOne: false
+            referencedRelation: "expenses"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "custody_settlement_items_settlement_same_company"
+            columns: ["company_id", "settlement_id"]
+            isOneToOne: false
+            referencedRelation: "custody_settlements"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
+      custody_settlements: {
+        Row: {
+          company_id: string
+          created_at: string
+          created_by: string
+          custodian_id: string
+          finalized_at: string | null
+          finalized_by: string | null
+          id: string
+          notes: string | null
+          settlement_date: string
+          settlement_reference: string
+          status: Database["public"]["Enums"]["custody_settlement_status"]
+          total_expenses_minor: number
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          created_by: string
+          custodian_id: string
+          finalized_at?: string | null
+          finalized_by?: string | null
+          id?: string
+          notes?: string | null
+          settlement_date: string
+          settlement_reference: string
+          status?: Database["public"]["Enums"]["custody_settlement_status"]
+          total_expenses_minor: number
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          created_by?: string
+          custodian_id?: string
+          finalized_at?: string | null
+          finalized_by?: string | null
+          id?: string
+          notes?: string | null
+          settlement_date?: string
+          settlement_reference?: string
+          status?: Database["public"]["Enums"]["custody_settlement_status"]
+          total_expenses_minor?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "custody_settlements_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "custody_settlements_custodian_same_company"
+            columns: ["company_id", "custodian_id"]
+            isOneToOne: false
+            referencedRelation: "parties"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
       expense_categories: {
         Row: {
           code: string
@@ -1242,6 +1452,21 @@ export type Database = {
         Args: { target_company_id: string; target_project_id: string }
         Returns: boolean
       }
+      finalize_custody_settlement: {
+        Args: {
+          target_company_id: string
+          target_custodian_id: string
+          target_expected_total_minor: number
+          target_expense_ids: string[]
+          target_notes: string
+          target_settlement_date: string
+        }
+        Returns: {
+          custody_settlement_id: string
+          settlement_reference: string
+          total_expenses_minor: number
+        }[]
+      }
       has_active_project_assignment: {
         Args: { target_company_id: string; target_project_id: string }
         Returns: boolean
@@ -1280,6 +1505,25 @@ export type Database = {
           custody_advance_id: string
           journal_entry_id: string
           replayed: boolean
+        }[]
+      }
+      post_custody_cash_return: {
+        Args: {
+          target_amount_minor: number
+          target_company_id: string
+          target_custodian_id: string
+          target_external_reference: string
+          target_idempotency_key: string
+          target_notes: string
+          target_payment_method: Database["public"]["Enums"]["payment_method"]
+          target_return_date: string
+          target_treasury_account_id: string
+        }
+        Returns: {
+          custody_cash_return_id: string
+          journal_entry_id: string
+          replayed: boolean
+          return_reference: string
         }[]
       }
       post_expense: {
@@ -1344,6 +1588,21 @@ export type Database = {
           reversal_journal_entry_id: string
         }[]
       }
+      reverse_custody_cash_return: {
+        Args: {
+          target_company_id: string
+          target_custody_cash_return_id: string
+          target_idempotency_key: string
+          target_reason: string
+          target_reversal_date: string
+        }
+        Returns: {
+          custody_cash_return_id: string
+          replayed: boolean
+          return_reference: string
+          reversal_journal_entry_id: string
+        }[]
+      }
       reverse_expense: {
         Args: {
           target_company_id: string
@@ -1387,6 +1646,7 @@ export type Database = {
         | "DATA_ENTRY"
         | "PROCUREMENT"
         | "MANAGEMENT_VIEWER"
+      custody_settlement_status: "DRAFT" | "FINALIZED"
       expense_funding_mode:
         | "TREASURY"
         | "CUSTODIAN"
@@ -1563,6 +1823,7 @@ export const Constants = {
         "PROCUREMENT",
         "MANAGEMENT_VIEWER",
       ],
+      custody_settlement_status: ["DRAFT", "FINALIZED"],
       expense_funding_mode: [
         "TREASURY",
         "CUSTODIAN",

@@ -53,4 +53,4 @@ The linked migration history is aligned through `20260903120000`. Database lint 
 
 ## Boundary
 
-P5D adds no custody settlement/finalization, cash return, Owner Current Advance funding, Custody/Owner-funded Supplier Payment, subcontract, Payroll, AR/revenue, import, audit-event, attachment, or frontend behavior. Synthetic fixtures remain in Development. P5E Custody Settlement/Cash Return is the next separately reviewed batch and was not started.
+P5D added no settlement or return itself. P5E subsequently completed no-GL Settlement grouping and Treasury-only Cash Return while preserving this pooled balance and lock model. Owner Current Advance funding, Custody/Owner-funded Supplier Payment, subcontract, Payroll, AR/revenue, import, audit-event, attachment, and frontend behavior remain outside P5D/P5E.
