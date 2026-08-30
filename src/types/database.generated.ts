@@ -12,31 +12,6 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: "14.5"
   }
-  graphql_public: {
-    Tables: {
-      [_ in never]: never
-    }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      graphql: {
-        Args: {
-          extensions?: Json
-          operationName?: string
-          query?: string
-          variables?: Json
-        }
-        Returns: Json
-      }
-    }
-    Enums: {
-      [_ in never]: never
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
-  }
   public: {
     Tables: {
       accounts: {
@@ -1521,6 +1496,185 @@ export type Database = {
           },
         ]
       }
+      subcontractor_payment_allocations: {
+        Row: {
+          allocated_amount_minor: number
+          company_id: string
+          created_at: string
+          created_by: string
+          id: string
+          subcontractor_certificate_id: string
+          subcontractor_payment_id: string
+        }
+        Insert: {
+          allocated_amount_minor: number
+          company_id: string
+          created_at?: string
+          created_by: string
+          id?: string
+          subcontractor_certificate_id: string
+          subcontractor_payment_id: string
+        }
+        Update: {
+          allocated_amount_minor?: number
+          company_id?: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          subcontractor_certificate_id?: string
+          subcontractor_payment_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subcontractor_payment_allocations_certificate_same_company"
+            columns: ["company_id", "subcontractor_certificate_id"]
+            isOneToOne: false
+            referencedRelation: "subcontractor_certificates"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "subcontractor_payment_allocations_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subcontractor_payment_allocations_payment_same_company"
+            columns: ["company_id", "subcontractor_payment_id"]
+            isOneToOne: false
+            referencedRelation: "subcontractor_payments"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
+      subcontractor_payments: {
+        Row: {
+          company_id: string
+          created_at: string
+          created_by: string
+          external_reference: string | null
+          id: string
+          notes: string | null
+          payment_date: string
+          payment_method: Database["public"]["Enums"]["payment_method"]
+          payment_reference: string
+          posted_at: string | null
+          posted_by: string | null
+          posted_journal_entry_id: string | null
+          project_id: string
+          reversal_journal_entry_id: string | null
+          reversal_reason: string | null
+          reversed_at: string | null
+          reversed_by: string | null
+          status: Database["public"]["Enums"]["expense_status"]
+          subcontract_id: string
+          subcontractor_id: string
+          total_amount_minor: number
+          treasury_account_id: string
+          updated_at: string
+          updated_by: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          created_by: string
+          external_reference?: string | null
+          id?: string
+          notes?: string | null
+          payment_date: string
+          payment_method: Database["public"]["Enums"]["payment_method"]
+          payment_reference: string
+          posted_at?: string | null
+          posted_by?: string | null
+          posted_journal_entry_id?: string | null
+          project_id: string
+          reversal_journal_entry_id?: string | null
+          reversal_reason?: string | null
+          reversed_at?: string | null
+          reversed_by?: string | null
+          status?: Database["public"]["Enums"]["expense_status"]
+          subcontract_id: string
+          subcontractor_id: string
+          total_amount_minor: number
+          treasury_account_id: string
+          updated_at?: string
+          updated_by: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          created_by?: string
+          external_reference?: string | null
+          id?: string
+          notes?: string | null
+          payment_date?: string
+          payment_method?: Database["public"]["Enums"]["payment_method"]
+          payment_reference?: string
+          posted_at?: string | null
+          posted_by?: string | null
+          posted_journal_entry_id?: string | null
+          project_id?: string
+          reversal_journal_entry_id?: string | null
+          reversal_reason?: string | null
+          reversed_at?: string | null
+          reversed_by?: string | null
+          status?: Database["public"]["Enums"]["expense_status"]
+          subcontract_id?: string
+          subcontractor_id?: string
+          total_amount_minor?: number
+          treasury_account_id?: string
+          updated_at?: string
+          updated_by?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subcontractor_payments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subcontractor_payments_identity"
+            columns: [
+              "company_id",
+              "subcontract_id",
+              "project_id",
+              "subcontractor_id",
+            ]
+            isOneToOne: false
+            referencedRelation: "subcontracts"
+            referencedColumns: [
+              "company_id",
+              "id",
+              "project_id",
+              "subcontractor_id",
+            ]
+          },
+          {
+            foreignKeyName: "subcontractor_payments_posted_journal_same_company"
+            columns: ["company_id", "posted_journal_entry_id"]
+            isOneToOne: false
+            referencedRelation: "journal_entries"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "subcontractor_payments_reversal_journal_same_company"
+            columns: ["company_id", "reversal_journal_entry_id"]
+            isOneToOne: false
+            referencedRelation: "journal_entries"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "subcontractor_payments_treasury_same_company"
+            columns: ["company_id", "treasury_account_id"]
+            isOneToOne: false
+            referencedRelation: "treasury_accounts"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
       subcontracts: {
         Row: {
           approved_variations_minor: number
@@ -2003,6 +2157,26 @@ export type Database = {
           subcontractor_advance_id: string
         }[]
       }
+      post_subcontractor_payment: {
+        Args: {
+          target_allocations: Json
+          target_company_id: string
+          target_external_reference: string
+          target_idempotency_key: string
+          target_notes: string
+          target_payment_date: string
+          target_payment_method: Database["public"]["Enums"]["payment_method"]
+          target_subcontract_id: string
+          target_total_amount_minor: number
+          target_treasury_account_id: string
+        }
+        Returns: {
+          journal_entry_id: string
+          payment_reference: string
+          replayed: boolean
+          subcontractor_payment_id: string
+        }[]
+      }
       post_supplier_payment: {
         Args: {
           target_allocations: Json
@@ -2096,6 +2270,21 @@ export type Database = {
           replayed: boolean
           reversal_journal_entry_id: string
           subcontractor_certificate_id: string
+        }[]
+      }
+      reverse_subcontractor_payment: {
+        Args: {
+          target_company_id: string
+          target_idempotency_key: string
+          target_reason: string
+          target_reversal_date: string
+          target_subcontractor_payment_id: string
+        }
+        Returns: {
+          payment_reference: string
+          replayed: boolean
+          reversal_journal_entry_id: string
+          subcontractor_payment_id: string
         }[]
       }
       reverse_supplier_payment: {
@@ -2288,9 +2477,6 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
-  graphql_public: {
-    Enums: {},
-  },
   public: {
     Enums: {
       account_status: ["ACTIVE", "INACTIVE"],

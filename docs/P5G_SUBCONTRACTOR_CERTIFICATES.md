@@ -6,7 +6,7 @@ P5G is implemented by `20260906123000_p5g_subcontractor_certificates.sql`, after
 
 `subcontractor_certificates` stores an atomic `SCERT` reference, contractor Certificate number, date, constrained company/Project/Subcontractor/Subcontract identity, cumulative work input, current variation, requested recovery, VAT evidence, immutable calculated components, lifecycle, journal links, and actors. `subcontractor_certificate_deductions` stores immutable normalized lines.
 
-Accounting Admin and Accountant may create a `DRAFT`; it has no calculated posting components and no journal. Only Accounting Admin has `certificate.approve_post` and may approve/post. Posted economics are immutable. Accounting Admin may reverse an otherwise unconsumed Certificate through an exact P5A inversion. P5H must add a live-payment dependency check before consuming Certificate payable; no payment rows were invented in P5G.
+Accounting Admin and Accountant may create a `DRAFT`; it has no calculated posting components and no journal. Only Accounting Admin has `certificate.approve_post` and may approve/post. Posted economics are immutable. Accounting Admin may reverse an otherwise unconsumed Certificate through an exact P5A inversion. P5H now blocks reversal while any live POSTED Subcontractor Payment allocation consumes the Certificate payable; after all consuming Payments reverse, eligibility is restored subject to the other P5G rules.
 
 `ACTIVE` and `COMPLETED` Subcontracts may receive Certificates because final certification, Advance recovery, retention recognition, and liability cleanup remain legitimate after physical completion. `CLOSED` Subcontracts and closed Projects reject new approval. An inactive Subcontractor may still have an existing valid contract certified so deactivation cannot suppress a real obligation. New Advance funding is separately restricted to `ACTIVE` contracts.
 
@@ -50,4 +50,4 @@ Trusted whole-scope reconciliation found zero orphan original/reversal links, un
 
 ## Boundary
 
-P5G adds no Subcontractor cash/payment settlement, Retention Release/payment, alternate Supplier Payment funding, frontend Supabase path, Payroll, client AR/revenue, P6, or import. The exact next proposed batch is separately reviewed **P5H Subcontractor Payment**. It has not started.
+P5G itself added no Subcontractor cash/payment settlement, Retention Release/payment, alternate Supplier Payment funding, frontend Supabase path, Payroll, client AR/revenue, P6, or import. P5H subsequently added separately reviewed contract-scoped Subcontractor Payment settlement and the mandatory live-Payment reversal dependency. Retention remains separate.
