@@ -38,6 +38,7 @@ The company previously tracked project expenses, supplier bills, cash handed to 
 - **Phase 2C / P5I-A (Retention Release Foundation)** — Completed. Applied and verified remotely on Development; followed by completed P5I-B.
 - **Phase 2C / P5I-B (Retention Payment)** — Completed. Applied and verified remotely on Development; P5I integration/reconciliation and formal P5 closure are complete.
 - **Phase 2C / P5 (Atomic Accounting Commands / Production Financial Command Layer)** — Completed through P5I. Closure review accepted; no P5J/P5K exists or is required.
+- **Post-P5 Focused Engineering and Accounting Integrity Review** — Completed. P5H/P5I combined dependency, separated-source settlement, reconciliation, tenant and authorization checks passed; P6A is ready to begin separately.
 - **Payroll + WPS** — Confirmed next functional module after Production Data Foundation.
 
 See `PROJECT_ROADMAP.md` for the full phase breakdown, binding decisions, and decision log.
@@ -711,6 +712,12 @@ P5I-B adds immutable Retention Payments and Release-level allocations. Posting i
 Focused hosted verification passed all executed posting, allocation, concurrency, idempotency, reference, journal, reversal, dependency, authorization, RLS and immutability assertions. Final whole-scope P5I reconciliation found no orphan, unbalanced, duplicate-source, allocation-total, forbidden-account or dimension defects. Generated types were refreshed and the frontend remained unchanged.
 
 Full details are in `docs/P5I_SUBCONTRACTOR_RETENTION.md`. The P5I integration/reconciliation and P5 closure reviews are complete. P5 is formally closed; the focused post-P5 financial retrospective is next before P6.
+
+### Post-P5 focused review (2026-08-30)
+
+The required P5H/P5I checkpoint is complete. Static review plus a 42-assertion hosted combined interaction matrix verified that ordinary Certificate Payments and Retention Releases independently block Certificate reversal, reversing only one chain does not clear the other, live Retention Payments block Release reversal, and full downstream reversal restores eligibility in order. An 18-check whole-scope reconciliation covered 48 Certificates, 23 P5H Payments, 21 Releases, 24 Retention Payments and 107 linked journals with no source, balance, orphan, over-settlement, forbidden-account, dimension or control-account mismatch.
+
+No material defect, migration correction or new accounting-policy decision was required. The known P5C unused-variable lint warning remains non-blocking. Full evidence and classifications are in `docs/POST_P5_FOCUSED_REVIEW.md`. P6A is next but has not started; the full Production Security & Accounting Integrity Audit remains a future pre-production gate.
 
 ## 35. Testing Expectations
 
