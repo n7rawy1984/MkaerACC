@@ -138,22 +138,23 @@ LocalStorage remains an explicit demo/development adapter. Production mode never
 - ✅ Production Data Foundation P2 — Auth, Profiles, Memberships and Roles *(Development-applied and remotely verified with synthetic data)*
 - ✅ Production Data Foundation P3 — Core Production Schema and Master Data *(Development-applied and remotely verified with synthetic data)*
 - ✅ Production Data Foundation P4 — RLS and Authorization *(Development-applied and remotely verified with synthetic Auth/RLS matrix)*
-- ✅ Production Data Foundation P5A — Accounting Kernel and Journal Core *(Development-applied and remotely verified; P5 remains in progress)*
-- ✅ Production Data Foundation P5B — Expense Documents and Commands *(Development-applied and remotely verified; P5 remains in progress)*
-- ✅ Production Data Foundation P5C — Supplier Payments *(Development-applied and remotely verified; P5 remains in progress)*
-- ✅ Production Data Foundation P5D — Custody Advance Funding *(Development-applied and remotely verified; P5 remains in progress)*
-- ✅ Production Data Foundation P5E — Custody Settlement and Cash Return *(Development-applied and remotely verified; P5 remains in progress)*
-- ✅ Production Data Foundation P5F — Subcontractor Advance *(Development-applied and remotely verified; P5 remains in progress)*
-- ✅ Production Data Foundation P5G — Subcontractor Certificates *(Development-applied and remotely verified; P5 remains in progress)*
-- ✅ Production Data Foundation P5H — Subcontractor Payments *(Development-applied and remotely verified; P5 remains in progress pending separately reviewed later flows)*
+- ✅ Production Data Foundation P5A — Accounting Kernel and Journal Core *(Development-applied and remotely verified)*
+- ✅ Production Data Foundation P5B — Expense Documents and Commands *(Development-applied and remotely verified)*
+- ✅ Production Data Foundation P5C — Supplier Payments *(Development-applied and remotely verified)*
+- ✅ Production Data Foundation P5D — Custody Advance Funding *(Development-applied and remotely verified)*
+- ✅ Production Data Foundation P5E — Custody Settlement and Cash Return *(Development-applied and remotely verified)*
+- ✅ Production Data Foundation P5F — Subcontractor Advance *(Development-applied and remotely verified)*
+- ✅ Production Data Foundation P5G — Subcontractor Certificates *(Development-applied and remotely verified)*
+- ✅ Production Data Foundation P5H — Subcontractor Payments *(Development-applied and remotely verified)*
 - ✅ Production Data Foundation P5I-A — Retention Release Foundation *(Development-applied and remotely verified; followed by completed P5I-B)*
-- ✅ Production Data Foundation P5I-B — Retention Payment *(Development-applied and remotely verified; P5I integration/reconciliation complete, while overall P5 remains in progress pending separately authorized flows)*
+- ✅ Production Data Foundation P5I-B — Retention Payment *(Development-applied and remotely verified; P5I integration/reconciliation complete)*
+- ✅ Production Data Foundation P5 — Atomic Accounting Commands / Production Financial Command Layer *(P5A–P5I complete and closure review accepted)*
 
 Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 
 ## Current Phase
 
-### ➡ Phase 2C — Production Data Foundation *(P0–P4 and P5A–P5I complete; P5 remains in progress)*
+### ➡ Phase 2C — Production Data Foundation *(P0–P5 complete; post-P5 focused review is next, then P6)*
 
 #### ✅ P0 — Production Architecture Freeze
 
@@ -196,7 +197,7 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 - Preserved `SYSTEM_ADMIN` as a company-scoped configuration role rather than a browser tenant bypass. Browser DELETE and direct security-map mutation remain absent.
 - Applied the canonical P4 migrations only to `MakerACC-Development`. All 46 hosted Auth/RLS matrix cases plus four helper/profile hardening cases passed; types and operational documentation were refreshed.
 
-#### 🚧 P5 — Atomic Accounting Commands
+#### ✅ P5 — Atomic Accounting Commands / Production Financial Command Layer
 
 - ✅ **P5A — Accounting Kernel and Journal Core:** added immutable `BIGINT` journals/lines, company-consistent dimensions, two-layer balance enforcement, atomic references, private idempotency/source/concurrency primitives, linked reversal foundation, conservative journal RLS, and no browser/service write path.
 - ✅ **P5B — Expense Documents and Commands:** added immutable expense documents plus atomic post/reverse RPCs for Treasury, Custodian, Owner, and Supplier Credit funding, deterministic VAT, system-key account resolution, expense references, idempotency/concurrency protection, and project-scoped reads.
@@ -209,7 +210,14 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 - ✅ **P5I-A — Retention Release Foundation:** added immutable one-Subcontract Release documents and Certificate allocations, authoritative partial/staged availability, Retention-to-Payable reclassification, exact reversal, concurrency protection, and the live-Release Certificate-reversal dependency.
 - ✅ **P5I-B — Retention Payment:** added immutable one-Subcontract Payments and Release allocations, Treasury-only settlement of released payable, concurrency/idempotency protection, exact reversal/restoration, and the live-Payment Release-reversal dependency.
 - Generic accounting primitives remain private and cannot be used as an arbitrary browser journal RPC.
-- Full P5 remains in progress; P5I Release and Retention Payment are complete, but alternate Supplier Payment funding, P7 audit events, and frontend integration remain outside this batch.
+- P5 is complete. The production financial command layer now provides immutable balanced journals, atomic references, normalized idempotency, source uniqueness, exact dimension-preserving reversals, tenant-scoped specialized commands, expense recognition, Supplier Credit settlement, Custody funding/settlement/Cash Return, contract-scoped Subcontractor Advances and Certificates, Certificate Payable settlement, and the complete Retention Held → Release → Payable → Treasury lifecycle. Dependency-aware locking prevents duplicate, over-, and cross-contract settlement; forced RLS and direct-write denial preserve tenant isolation.
+- Alternate funding modes and other optional accounting extensions remain outside completed P5 and require separate future approval; they are not prerequisites for P6.
+
+#### ⏭ Post-P5 Focused Financial Retrospective — required checkpoint before P6
+
+- Before the major P6 transition, perform a focused engineering/accounting-integrity review under `AGENTS.md` covering P5H Subcontractor Payments, the P5I Retention Release/Payment lifecycle, new reversal dependencies, and final P5 accounting interactions.
+- This checkpoint is not a new P5 implementation batch and does not reopen completed accounting policy. It is also not the full Production Security & Accounting Integrity Audit.
+- The full read-only pre-production audit remains separately required before real production accounting data or go-live.
 
 #### P6 — Auth, Tenant Context, White-Label and Production Cutover
 
@@ -272,7 +280,7 @@ Before real production accounting data or go-live, perform the read-only audit f
 
 - Multi-company consolidation and public signup.
 - Offline/multi-master production accounting.
-- Retention release and complex legacy reversals until explicitly designed.
+- Automatic Retention Release eligibility, alternative/direct retention-settlement models, finalized Custody Settlement correction, and complex legacy reversals until explicitly designed.
 - Client revenue-recognition assumptions.
 - Enterprise DR beyond practical managed backups, exports and tested restoration.
 
@@ -305,4 +313,4 @@ Before real production accounting data or go-live, perform the read-only audit f
 
 ---
 
-*P0–P4 and P5A–P5I are complete. P5 remains in progress pending separately authorized flows. P6–P10, Payroll/WPS, and bulk historical import have not started.*
+*P0–P5 are complete. The post-P5 focused financial retrospective is the next checkpoint before P6. P6–P10, Payroll/WPS, and bulk historical import have not started.*

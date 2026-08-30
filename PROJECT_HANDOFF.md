@@ -34,9 +34,10 @@ The company previously tracked project expenses, supplier bills, cash handed to 
 - **Phase 2C / P5E (Custody Settlement and Cash Return)** — Completed. Applied and verified remotely on Development; P5 overall remains in progress.
 - **Phase 2C / P5F (Subcontractor Advance)** — Completed. Applied and verified remotely on Development; P5 overall remains in progress.
 - **Phase 2C / P5G (Subcontractor Certificates)** — Completed. Applied and verified remotely on Development; P5 overall remains in progress.
-- **Phase 2C / P5H (Subcontractor Payments)** — Completed. Applied and verified remotely on Development; P5 overall remains in progress pending separately reviewed later flows.
+- **Phase 2C / P5H (Subcontractor Payments)** — Completed. Applied and verified remotely on Development; followed by completed P5I and formal P5 closure.
 - **Phase 2C / P5I-A (Retention Release Foundation)** — Completed. Applied and verified remotely on Development; followed by completed P5I-B.
-- **Phase 2C / P5I-B (Retention Payment)** — Completed. Applied and verified remotely on Development; P5I integration/reconciliation is complete while overall P5 remains in progress.
+- **Phase 2C / P5I-B (Retention Payment)** — Completed. Applied and verified remotely on Development; P5I integration/reconciliation and formal P5 closure are complete.
+- **Phase 2C / P5 (Atomic Accounting Commands / Production Financial Command Layer)** — Completed through P5I. Closure review accepted; no P5J/P5K exists or is required.
 - **Payroll + WPS** — Confirmed next functional module after Production Data Foundation.
 
 See `PROJECT_ROADMAP.md` for the full phase breakdown, binding decisions, and decision log.
@@ -358,7 +359,7 @@ Frozen outcomes:
 - Development, Staging and Production are separate Supabase projects. Production has no demo seeds, service secrets in browsers, or localStorage accounting fallback.
 - Auth is invite/admin-created only. SYSTEM_ADMIN is audited break-glass/server administration, not a browser RLS bypass; routine access still requires company membership.
 - Audit is append-only and transaction-coupled. Attachments are private, company-scoped, signed-access and versioned/superseded.
-- P1–P10 order is frozen; P1–P4 and P5A–P5I are complete, while overall P5 remains in progress. Payroll follows completed Foundation; historical 2025/2026 import follows Payroll.
+- P1–P10 order is frozen; P1–P5 are complete. A focused post-P5 financial retrospective is the next checkpoint before P6. Payroll follows completed Foundation; historical 2025/2026 import follows Payroll.
 - P5I Retention Release and Retention Payment are complete. Any later flow requires separate review and has not started.
 - The P0–P5G focused retrospective is complete. One P5F active-status locking race was corrected by `20260907120000_p5f_active_contract_lock.sql`; no other material pre-P5H blocker was found.
 - A read-only Production Security & Accounting Integrity Audit is a binding future pre-go-live gate. It has not been performed and is not ordinary per-batch work.
@@ -473,9 +474,9 @@ Foundation schema includes import batch/source row/fingerprint/review provenance
 
 ## 17. Current Roadmap and Immediate Next Task
 
-Phase 1 ✅ → 2A ✅ → 2B.1 ✅ → 2B.1A ✅ → 2B.2 ✅ → 2B.3 ✅ → **P0–P4 ✅** → **P5A–P5I ✅** → **P5 specialized commands (in progress)** → P6–P10 Foundation → 2D Payroll/WPS → 2E Historical Import/Opening Balances → later phases.
+Phase 1 ✅ → 2A ✅ → 2B.1 ✅ → 2B.1A ✅ → 2B.2 ✅ → 2B.3 ✅ → **P0–P5 ✅** → **post-P5 focused financial retrospective** → P6–P10 Foundation → 2D Payroll/WPS → 2E Historical Import/Opening Balances → later phases.
 
-P5I Retention Release and Retention Payment are complete. Do not repeat P5A–P5I or start another financial batch, P6/frontend cutover, Payroll, client AR/revenue, or historical import without separate authorization.
+P5 is formally complete through P5I. The next authorized work is a focused engineering/accounting-integrity retrospective of P5H, P5I, their reversal dependencies, and final P5 interactions before starting P6. This is not the full pre-production Security & Accounting Integrity Audit. Do not repeat P5A–P5I, invent P5J/P5K, or start P6/frontend cutover, Payroll, client AR/revenue, or historical import without separate authorization.
 
 ## 18. Remaining External Deployment Decisions
 
@@ -490,7 +491,7 @@ Inventorying real localStorage datasets is required operational work in P9, not 
 
 ## 19. Deferred Work
 
-Payroll/WPS implementation (confirmed immediately after Foundation), bulk historical import/opening balances, retention release, client certificates/receivables/revenue recognition, consolidation, and complex legacy corrections. Public signup and offline multi-master accounting are not planned.
+Payroll/WPS implementation (confirmed immediately after Foundation), bulk historical import/opening balances, client certificates/receivables/revenue recognition, consolidation, automatic Retention Release eligibility or alternative/direct retention-settlement models, finalized Custody Settlement correction, and complex legacy corrections. Optional future funding extensions include Supplier Payment from Owner Current/Custody, Custody Advance from Owner Current, Custody Cash Return to Owner Current, and a dedicated Owner Current settlement/reimbursement command. Public signup and offline multi-master accounting are not planned.
 
 ## 20. Run / Build Instructions
 
@@ -709,7 +710,7 @@ P5I-B adds immutable Retention Payments and Release-level allocations. Posting i
 
 Focused hosted verification passed all executed posting, allocation, concurrency, idempotency, reference, journal, reversal, dependency, authorization, RLS and immutability assertions. Final whole-scope P5I reconciliation found no orphan, unbalanced, duplicate-source, allocation-total, forbidden-account or dimension defects. Generated types were refreshed and the frontend remained unchanged.
 
-Full details are in `docs/P5I_SUBCONTRACTOR_RETENTION.md`. The P5I integration/reconciliation review is complete; overall P5 remains in progress pending separately authorized flows.
+Full details are in `docs/P5I_SUBCONTRACTOR_RETENTION.md`. The P5I integration/reconciliation and P5 closure reviews are complete. P5 is formally closed; the focused post-P5 financial retrospective is next before P6.
 
 ## 35. Testing Expectations
 

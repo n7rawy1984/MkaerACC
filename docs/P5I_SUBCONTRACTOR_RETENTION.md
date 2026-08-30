@@ -31,7 +31,7 @@ Accounting Admin and Accountant may post. Only Accounting Admin may reverse thro
 
 ## Security and verification
 
-Both tables use forced RLS. Accounting Admin, Accountant and Management Viewer receive company-scoped read access. Only Accounting Admin can post or reverse; operational roles, System Admin, other tenants and anonymous callers cannot mutate or read raw rows. Direct writes are denied and the private P5A kernel remains private.
+All P5I tables use forced RLS. Accounting Admin, Accountant and Management Viewer receive company-scoped read access. Retention Release posting/reversal is Accounting-Admin-only; Retention Payment posting is available to Accounting Admin and Accountant, while reversal is Accounting-Admin-only. Operational roles, System Admin, other tenants and anonymous callers cannot mutate or read raw rows. Direct writes are denied and the private P5A kernel remains private.
 
 Focused synthetic hosted verification covered the Release lifecycle plus full/partial and repeated Retention Payments, multi-Release settlement, exact remaining settlement, overpayment and concurrency rejection, idempotency replay/change rejection, atomic references, exact journal shape/inversion, dimensions, forbidden-line absence, role/direct-write denial, Release dependency and restoration, immutable allocations/history, and end-to-end reconciliation. Hosted DB lint returned no errors; migration alignment/dry-run, generated types, build, lint, reconciliation and focused grants/RLS checks were completed.
 
