@@ -1675,6 +1675,172 @@ export type Database = {
           },
         ]
       }
+      subcontractor_retention_release_allocations: {
+        Row: {
+          allocated_amount_minor: number
+          company_id: string
+          created_at: string
+          created_by: string
+          id: string
+          retention_release_id: string
+          subcontractor_certificate_id: string
+        }
+        Insert: {
+          allocated_amount_minor: number
+          company_id: string
+          created_at?: string
+          created_by: string
+          id?: string
+          retention_release_id: string
+          subcontractor_certificate_id: string
+        }
+        Update: {
+          allocated_amount_minor?: number
+          company_id?: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          retention_release_id?: string
+          subcontractor_certificate_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subcontractor_retention_release_allocations_certificate_same_co"
+            columns: ["company_id", "subcontractor_certificate_id"]
+            isOneToOne: false
+            referencedRelation: "subcontractor_certificates"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "subcontractor_retention_release_allocations_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subcontractor_retention_release_allocations_release_same_compan"
+            columns: ["company_id", "retention_release_id"]
+            isOneToOne: false
+            referencedRelation: "subcontractor_retention_releases"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
+      subcontractor_retention_releases: {
+        Row: {
+          authorization_reference: string | null
+          company_id: string
+          created_at: string
+          created_by: string
+          id: string
+          notes: string | null
+          posted_at: string | null
+          posted_by: string | null
+          posted_journal_entry_id: string | null
+          project_id: string
+          release_date: string
+          release_reference: string
+          reversal_journal_entry_id: string | null
+          reversal_reason: string | null
+          reversed_at: string | null
+          reversed_by: string | null
+          status: Database["public"]["Enums"]["expense_status"]
+          subcontract_id: string
+          subcontractor_id: string
+          total_amount_minor: number
+          updated_at: string
+          updated_by: string
+        }
+        Insert: {
+          authorization_reference?: string | null
+          company_id: string
+          created_at?: string
+          created_by: string
+          id?: string
+          notes?: string | null
+          posted_at?: string | null
+          posted_by?: string | null
+          posted_journal_entry_id?: string | null
+          project_id: string
+          release_date: string
+          release_reference: string
+          reversal_journal_entry_id?: string | null
+          reversal_reason?: string | null
+          reversed_at?: string | null
+          reversed_by?: string | null
+          status?: Database["public"]["Enums"]["expense_status"]
+          subcontract_id: string
+          subcontractor_id: string
+          total_amount_minor: number
+          updated_at?: string
+          updated_by: string
+        }
+        Update: {
+          authorization_reference?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          notes?: string | null
+          posted_at?: string | null
+          posted_by?: string | null
+          posted_journal_entry_id?: string | null
+          project_id?: string
+          release_date?: string
+          release_reference?: string
+          reversal_journal_entry_id?: string | null
+          reversal_reason?: string | null
+          reversed_at?: string | null
+          reversed_by?: string | null
+          status?: Database["public"]["Enums"]["expense_status"]
+          subcontract_id?: string
+          subcontractor_id?: string
+          total_amount_minor?: number
+          updated_at?: string
+          updated_by?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subcontractor_retention_releases_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subcontractor_retention_releases_identity"
+            columns: [
+              "company_id",
+              "subcontract_id",
+              "project_id",
+              "subcontractor_id",
+            ]
+            isOneToOne: false
+            referencedRelation: "subcontracts"
+            referencedColumns: [
+              "company_id",
+              "id",
+              "project_id",
+              "subcontractor_id",
+            ]
+          },
+          {
+            foreignKeyName: "subcontractor_retention_releases_posted_journal_same_company"
+            columns: ["company_id", "posted_journal_entry_id"]
+            isOneToOne: false
+            referencedRelation: "journal_entries"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "subcontractor_retention_releases_reversal_journal_same_company"
+            columns: ["company_id", "reversal_journal_entry_id"]
+            isOneToOne: false
+            referencedRelation: "journal_entries"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
       subcontracts: {
         Row: {
           approved_variations_minor: number
@@ -2177,6 +2343,24 @@ export type Database = {
           subcontractor_payment_id: string
         }[]
       }
+      post_subcontractor_retention_release: {
+        Args: {
+          target_allocations: Json
+          target_authorization_reference: string
+          target_company_id: string
+          target_idempotency_key: string
+          target_notes: string
+          target_release_date: string
+          target_subcontract_id: string
+          target_total_amount_minor: number
+        }
+        Returns: {
+          journal_entry_id: string
+          release_reference: string
+          replayed: boolean
+          retention_release_id: string
+        }[]
+      }
       post_supplier_payment: {
         Args: {
           target_allocations: Json
@@ -2285,6 +2469,21 @@ export type Database = {
           replayed: boolean
           reversal_journal_entry_id: string
           subcontractor_payment_id: string
+        }[]
+      }
+      reverse_subcontractor_retention_release: {
+        Args: {
+          target_company_id: string
+          target_idempotency_key: string
+          target_reason: string
+          target_retention_release_id: string
+          target_reversal_date: string
+        }
+        Returns: {
+          release_reference: string
+          replayed: boolean
+          retention_release_id: string
+          reversal_journal_entry_id: string
         }[]
       }
       reverse_supplier_payment: {

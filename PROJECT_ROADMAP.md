@@ -146,12 +146,13 @@ LocalStorage remains an explicit demo/development adapter. Production mode never
 - ✅ Production Data Foundation P5F — Subcontractor Advance *(Development-applied and remotely verified; P5 remains in progress)*
 - ✅ Production Data Foundation P5G — Subcontractor Certificates *(Development-applied and remotely verified; P5 remains in progress)*
 - ✅ Production Data Foundation P5H — Subcontractor Payments *(Development-applied and remotely verified; P5 remains in progress pending separately reviewed later flows)*
+- ✅ Production Data Foundation P5I-A — Retention Release Foundation *(Development-applied and remotely verified; P5I/P5 remain in progress because Retention Payment is not implemented)*
 
 Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 
 ## Current Phase
 
-### ➡ Phase 2C — Production Data Foundation *(P0–P4 and P5A–P5H complete; P5 in progress)*
+### ➡ Phase 2C — Production Data Foundation *(P0–P4, P5A–P5H and P5I-A complete; P5I/P5 in progress)*
 
 #### ✅ P0 — Production Architecture Freeze
 
@@ -204,9 +205,10 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 - ✅ **P5F — Subcontractor Advance:** added immutable Treasury-funded recoverable-asset Advances, authoritative company/Subcontract balance derivation, contract/project/subcontractor dimensions, recovery-aware exact reversal, and conservative financial RLS.
 - ✅ **P5G — Subcontractor Certificates:** added no-GL drafts, exclusive Accounting Admin approval, mapped deductions, evidence-gated VAT, contract-scoped retention/Advance recovery/payable recognition, cumulative revised-value enforcement, and exact reversal.
 - ✅ **P5H — Subcontractor Payments:** added immutable contract-scoped Payment documents and Certificate allocations, Treasury-only payable settlement, locked outstanding/concurrency enforcement, exact reversal/restoration, and the mandatory live-Payment Certificate-reversal dependency.
-- Later separately reviewed flows may add Retention Release/Settlement; P5H does not settle retention.
+- ✅ **P5I-A — Retention Release Foundation:** added immutable one-Subcontract Release documents and Certificate allocations, authoritative partial/staged availability, Retention-to-Payable reclassification, exact reversal, concurrency protection, and the live-Release Certificate-reversal dependency.
+- ➡ **P5I-B — Retention Payment:** not implemented; requires separate authorization and must allocate actual Treasury settlement to live Releases.
 - Generic accounting primitives remain private and cannot be used as an arbitrary browser journal RPC.
-- Full P5 remains in progress; P5H added Subcontractor cash settlement but did not add Retention Release/payment, alternate Supplier Payment funding, P7 audit events, or frontend integration.
+- Full P5 remains in progress; P5I-A added Retention Release but not Retention Payment, alternate Supplier Payment funding, P7 audit events, or frontend integration.
 
 #### P6 — Auth, Tenant Context, White-Label and Production Cutover
 
@@ -290,7 +292,8 @@ Before real production accounting data or go-live, perform the read-only audit f
 - Pre-P5G review hardened P5F through `20260906120000`: new Advance funding now requires an `ACTIVE` Subcontract; existing Advances and final accounting on `COMPLETED` contracts remain valid.
 - P5G Subcontractor Certificates was completed on 2026-08-29 with a 134-case hosted draft/posting/VAT/retention/recovery/deduction/payable/concurrency/reversal/authorization/tenant/reconciliation matrix. Cumulative live gross certification is capped at revised contract value under a Subcontract lock. P5H was separately reviewed and subsequently completed.
 - The binding `AGENTS.md` engineering constitution and focused P0–P5G retrospective were added on 2026-08-29. The review found one confirmed P5F lifecycle race and corrected it forward-only in `20260907120000`; focused regression passed. The future Production Security & Accounting Integrity Audit is now a required pre-go-live gate and has not been performed.
-- P5H Subcontractor Payments was completed on 2026-08-29 through `20260908120000` with a definitive 95/95 hosted matrix. Payments are one-Subcontract documents with immutable Certificate allocations: Dr Subcontractor Payable / Cr selected Treasury. Locked authoritative outstanding prevents concurrent overpayment; reversal restores payable, and live Payments block Certificate reversal. Retention remains separate and no later batch was started.
+- P5H Subcontractor Payments was completed on 2026-08-29 through `20260908120000` with a definitive 95/95 hosted matrix. Payments are one-Subcontract documents with immutable Certificate allocations: Dr Subcontractor Payable / Cr selected Treasury. Locked authoritative outstanding prevents concurrent overpayment; reversal restores payable, and live Payments block Certificate reversal.
+- P5I-A Retention Release Foundation was completed on 2026-08-30 through `20260909120000`. Releases are one-Subcontract documents with immutable Certificate allocations: Dr Retention Payable / Cr Subcontractor Payable. Locked authoritative remaining retention prevents concurrent over-release; exact reversal restores availability, and live Releases block Certificate reversal. P5I remains in progress because Retention Payment is not implemented.
 - Supabase Auth/PostgreSQL/Storage selected. PostgreSQL RPCs are the ledger transaction boundary; Edge Functions are optional external orchestration, not the accounting commit boundary.
 - Company membership plus optional project restriction is authoritative through RLS/database commands.
 - `BIGINT` AED minor units selected.
@@ -300,4 +303,4 @@ Before real production accounting data or go-live, perform the read-only audit f
 
 ---
 
-*P0–P4 and P5A–P5H are complete. P5 remains in progress pending separately reviewed later flows. P6–P10, Payroll/WPS, and bulk historical import have not started.*
+*P0–P4, P5A–P5H and P5I-A are complete. P5I/P5 remain in progress because Retention Payment is not implemented. P6–P10, Payroll/WPS, and bulk historical import have not started.*
