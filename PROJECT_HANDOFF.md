@@ -35,7 +35,8 @@ The company previously tracked project expenses, supplier bills, cash handed to 
 - **Phase 2C / P5F (Subcontractor Advance)** — Completed. Applied and verified remotely on Development; P5 overall remains in progress.
 - **Phase 2C / P5G (Subcontractor Certificates)** — Completed. Applied and verified remotely on Development; P5 overall remains in progress.
 - **Phase 2C / P5H (Subcontractor Payments)** — Completed. Applied and verified remotely on Development; P5 overall remains in progress pending separately reviewed later flows.
-- **Phase 2C / P5I-A (Retention Release Foundation)** — Completed. Applied and verified remotely on Development; P5I and P5 remain in progress because Retention Payment is not implemented.
+- **Phase 2C / P5I-A (Retention Release Foundation)** — Completed. Applied and verified remotely on Development; followed by completed P5I-B.
+- **Phase 2C / P5I-B (Retention Payment)** — Completed. Applied and verified remotely on Development; P5I integration/reconciliation is complete while overall P5 remains in progress.
 - **Payroll + WPS** — Confirmed next functional module after Production Data Foundation.
 
 See `PROJECT_ROADMAP.md` for the full phase breakdown, binding decisions, and decision log.
@@ -50,7 +51,7 @@ Repository-root `AGENTS.md` is the binding engineering constitution for all futu
 - Recharts 3 (Dashboard charts only)
 - lucide-react (icons)
 - `oxlint` for linting
-- **The approved Development Supabase backend now has verified P2–P4 identity/master authorization and P5A–P5H plus P5I-A accounting commands through Retention Release.** Application accounting persistence remains `localStorage`; no frontend Supabase data path exists yet.
+- **The approved Development Supabase backend now has verified P2–P4 identity/master authorization and P5A–P5I accounting commands through Retention Release and Retention Payment.** Application accounting persistence remains `localStorage`; no frontend Supabase data path exists yet.
 
 ## 5. Repository Structure
 
@@ -108,7 +109,7 @@ supabase/
 | `src/i18n/en.ts` / `src/i18n/ar.ts` | Every UI string in the app, keyed identically in both files (TypeScript enforces this). New UI text always adds a key here first, in both files, never inline English. |
 | `src/i18n/I18nContext.tsx` | `useT()` — the hook every page/component calls for translated strings; also owns locale persistence and the RTL `dir` side effect. |
 | `supabase/config.toml` | P1 CLI/local configuration. No remote project identity or credential is committed. |
-| `supabase/migrations/` | Canonical forward-only SQL history. P1–P5H and P5I-A are applied to Development. |
+| `supabase/migrations/` | Canonical forward-only SQL history. P1–P5I are applied to Development. |
 | `docs/P2_AUTHORIZATION.md` | P2 provisioning/system-admin design, authoritative active/inactive rules, frontend boundary, and remote Development authorization test matrix. |
 | `docs/P3_MASTER_DATA.md` | P3 tables, code scopes, system-account strategy, cross-dimensional enforcement, security baseline, and Development verification. |
 | `docs/P4_AUTHORIZATION.md` | P4 role/project policy matrix, assignment model, mutation boundaries, trusted pathways, and hosted verification. |
@@ -120,7 +121,7 @@ supabase/
 | `docs/P5F_SUBCONTRACTOR_ADVANCES.md` | P5F contract-scoped Advance accounting, lifecycle, recovery-aware reversal, RLS, and hosted verification. |
 | `docs/P5G_SUBCONTRACTOR_CERTIFICATES.md` | P5G Certificate lifecycle, calculations, mapped deductions, recovery/concurrency, reversal, RLS, and hosted verification. |
 | `docs/P5H_SUBCONTRACTOR_PAYMENTS.md` | P5H contract-scoped Payments/allocations, payable settlement, concurrency, Certificate dependency, reversal, RLS, and hosted verification. |
-| `docs/P5I_SUBCONTRACTOR_RETENTION.md` | P5I-A contract-scoped Retention Releases/allocations, reclassification, concurrency, Certificate dependency, reversal, RLS, and the unimplemented P5I-B boundary. |
+| `docs/P5I_SUBCONTRACTOR_RETENTION.md` | P5I Release and Retention Payment documents/allocations, accounting, concurrency, dependency chain, reversal, RLS, and hosted verification. |
 | `docs/ENGINEERING_ACCOUNTING_RETROSPECTIVE_P0_P5G.md` | Focused constitution-based review, one P5F correction, accounting-treatment classifications, and P5H readiness. |
 | `docs/MULTI_TENANT_WHITE_LABEL_ARCHITECTURE.md` | Binding one-codebase tenant isolation, white-label configuration, slug/context, deployment, and commercial-platform boundary. |
 | `src/types/database.generated.ts` | Supabase CLI-generated TypeScript types for the verified public Development schema; do not edit manually. |
@@ -357,8 +358,8 @@ Frozen outcomes:
 - Development, Staging and Production are separate Supabase projects. Production has no demo seeds, service secrets in browsers, or localStorage accounting fallback.
 - Auth is invite/admin-created only. SYSTEM_ADMIN is audited break-glass/server administration, not a browser RLS bypass; routine access still requires company membership.
 - Audit is append-only and transaction-coupled. Attachments are private, company-scoped, signed-access and versioned/superseded.
-- P1–P10 order is frozen; P1–P4, P5A–P5H and P5I-A are complete, while P5I/P5 remain in progress. Payroll follows completed Foundation; historical 2025/2026 import follows Payroll.
-- P5I-A Retention Release is complete. P5I-B Retention Payment and any later flow require separate review and have not started.
+- P1–P10 order is frozen; P1–P4 and P5A–P5I are complete, while overall P5 remains in progress. Payroll follows completed Foundation; historical 2025/2026 import follows Payroll.
+- P5I Retention Release and Retention Payment are complete. Any later flow requires separate review and has not started.
 - The P0–P5G focused retrospective is complete. One P5F active-status locking race was corrected by `20260907120000_p5f_active_contract_lock.sql`; no other material pre-P5H blocker was found.
 - A read-only Production Security & Accounting Integrity Audit is a binding future pre-go-live gate. It has not been performed and is not ordinary per-batch work.
 
@@ -472,9 +473,9 @@ Foundation schema includes import batch/source row/fingerprint/review provenance
 
 ## 17. Current Roadmap and Immediate Next Task
 
-Phase 1 ✅ → 2A ✅ → 2B.1 ✅ → 2B.1A ✅ → 2B.2 ✅ → 2B.3 ✅ → **P0–P4 ✅** → **P5A–P5H ✅** → **P5I-A ✅** → **P5I/P5 specialized commands (in progress)** → P6–P10 Foundation → 2D Payroll/WPS → 2E Historical Import/Opening Balances → later phases.
+Phase 1 ✅ → 2A ✅ → 2B.1 ✅ → 2B.1A ✅ → 2B.2 ✅ → 2B.3 ✅ → **P0–P4 ✅** → **P5A–P5I ✅** → **P5 specialized commands (in progress)** → P6–P10 Foundation → 2D Payroll/WPS → 2E Historical Import/Opening Balances → later phases.
 
-P5I-A Retention Release is complete. P5I overall remains in progress: the next authorized batch is P5I-B Retention Payment. Do not repeat P5A–P5I-A or start P5I-B, alternate Supplier Payment funding, P6/frontend cutover, Payroll, client AR/revenue, or historical import without separate authorization.
+P5I Retention Release and Retention Payment are complete. Do not repeat P5A–P5I or start another financial batch, P6/frontend cutover, Payroll, client AR/revenue, or historical import without separate authorization.
 
 ## 18. Remaining External Deployment Decisions
 
@@ -704,7 +705,11 @@ P5I-A is complete through `20260909120000_p5i_retention_releases.sql`, applied o
 - Exact reversal retains allocations and restores availability. A live Release allocation blocks Certificate reversal; after Release reversal that dependency clears while P5H dependencies remain independently enforced.
 - Forced RLS, read-only browser grants, immutable history triggers and private-kernel grants were verified. Focused hosted synthetic runs passed all executed assertions, including concurrent consumption, exact journals/reversal, idempotency, authorization and direct-write denial. DB lint, generated types, build and lint were refreshed/clean except unchanged frontend warnings.
 
-Full details are in `docs/P5I_SUBCONTRACTOR_RETENTION.md`. P5I/P5 remain in progress because P5I-B Retention Payment is not implemented.
+P5I-B adds immutable Retention Payments and Release-level allocations. Posting is Dr Subcontractor Payable / Cr selected active Treasury; it repeats no Retention, Cost, VAT, Advance recovery or deductions. Subcontract-first/deterministic Release locks enforce authoritative released-but-unpaid balances, and P5A supplies atomic `SRPAY` references, idempotency and exact reversal. Live Payments block Release reversal; reversing all consumers restores Release eligibility. Accounting Admin and Accountant may post; only Accounting Admin may reverse. Forced RLS and direct-write denial preserve the established read-only role boundary.
+
+Focused hosted verification passed all executed posting, allocation, concurrency, idempotency, reference, journal, reversal, dependency, authorization, RLS and immutability assertions. Final whole-scope P5I reconciliation found no orphan, unbalanced, duplicate-source, allocation-total, forbidden-account or dimension defects. Generated types were refreshed and the frontend remained unchanged.
+
+Full details are in `docs/P5I_SUBCONTRACTOR_RETENTION.md`. The P5I integration/reconciliation review is complete; overall P5 remains in progress pending separately authorized flows.
 
 ## 35. Testing Expectations
 
