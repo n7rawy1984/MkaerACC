@@ -150,12 +150,13 @@ LocalStorage remains an explicit demo/development adapter. Production mode never
 - ✅ Production Data Foundation P5I-B — Retention Payment *(Development-applied and remotely verified; P5I integration/reconciliation complete)*
 - ✅ Production Data Foundation P5 — Atomic Accounting Commands / Production Financial Command Layer *(P5A–P5I complete and closure review accepted)*
 - ✅ Post-P5 Focused Engineering and Accounting Integrity Review *(P5H/P5I interaction, dependency, subledger, tenant and authorization checkpoint passed; ready for P6A)*
+- ◐ Production Data Foundation P6A — Auth Session and Tenant Context *(implemented; automated gates pass; browser/Auth smoke matrix pending)*
 
 Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 
 ## Current Phase
 
-### ➡ Phase 2C — Production Data Foundation *(P0–P5 and the post-P5 focused review are complete; P6A is next)*
+### ➡ Phase 2C — Production Data Foundation *(P0–P5 and the post-P5 focused review are complete; P6A implementation awaits browser smoke verification)*
 
 #### ✅ P0 — Production Architecture Freeze
 
@@ -223,7 +224,7 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 
 #### P6 — Auth, Tenant Context, White-Label and Production Cutover
 
-- **P6A — Auth Session and Tenant Context:** login/logout, session restore, protected routes, active memberships, explicit active tenant, and multi-company selector.
+- **P6A — Auth Session and Tenant Context (implemented; browser verification pending):** isolated demo/Auth modes, password login/logout, session restore/events, claims-validated P2 profile and active memberships, explicit/revalidated active tenant, multi-company selector, protected routes, retry/no-company states, and a production cutover-pending shell. No database migration or data cutover. See `docs/P6A_AUTH_TENANT_CONTEXT.md`.
 - **P6B — Tenant Settings and White-Label Foundation:** display/legal identity, tenant slug, logo/favicon, CSS-variable theme, locale, and removal of Maker-specific visible branding.
 - **P6C — Master Data Async Repository Cutover:** typed tenant-scoped queries and explicit master-data commands.
 - **P6D — Financial Flow Cutover:** specialized financial RPC integration with no hybrid financial writes.
@@ -307,6 +308,7 @@ Before real production accounting data or go-live, perform the read-only audit f
 - P5I-A Retention Release Foundation was completed on 2026-08-30 through `20260909120000`. Releases are one-Subcontract documents with immutable Certificate allocations: Dr Retention Payable / Cr Subcontractor Payable. Locked authoritative remaining retention prevents concurrent over-release; exact reversal restores availability, and live Releases block Certificate reversal. P5I-B subsequently completed the Payment/dependency chain.
 - P5I-B Retention Payment was completed on 2026-08-30 through `20260910120000`. Payments allocate live same-contract Releases and post Dr Subcontractor Payable / Cr selected Treasury. Locked authoritative released-but-unpaid prevents concurrent overpayment; exact reversal restores availability, and live Payments block Release reversal. The P5I integration/reconciliation review completed without detected defects.
 - The post-P5 focused engineering/accounting review completed on 2026-08-30. No material defect or decision-required policy gap was found; combined P5H/P5I dependency and separated-source settlement tests passed, and P6A is ready to begin separately.
+- P6A Auth/session and tenant context was implemented on 2026-08-31 with a fail-closed production configuration and structurally isolated local demo. Automated build/lint/import-boundary checks pass; browser/Auth smoke verification remains pending before marking it complete or starting P6B.
 - Supabase Auth/PostgreSQL/Storage selected. PostgreSQL RPCs are the ledger transaction boundary; Edge Functions are optional external orchestration, not the accounting commit boundary.
 - Company membership plus optional project restriction is authoritative through RLS/database commands.
 - `BIGINT` AED minor units selected.
@@ -316,4 +318,4 @@ Before real production accounting data or go-live, perform the read-only audit f
 
 ---
 
-*P0–P5 and the post-P5 focused financial retrospective are complete. P6A is next; P6–P10, Payroll/WPS, and bulk historical import have not started.*
+*P0–P5 and the post-P5 focused financial retrospective are complete. P6A is implemented with browser verification pending; P6B–P10, Payroll/WPS, and bulk historical import have not started.*

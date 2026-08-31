@@ -39,6 +39,7 @@ The company previously tracked project expenses, supplier bills, cash handed to 
 - **Phase 2C / P5I-B (Retention Payment)** — Completed. Applied and verified remotely on Development; P5I integration/reconciliation and formal P5 closure are complete.
 - **Phase 2C / P5 (Atomic Accounting Commands / Production Financial Command Layer)** — Completed through P5I. Closure review accepted; no P5J/P5K exists or is required.
 - **Post-P5 Focused Engineering and Accounting Integrity Review** — Completed. P5H/P5I combined dependency, separated-source settlement, reconciliation, tenant and authorization checks passed; P6A is ready to begin separately.
+- **Phase 2C / P6A (Auth Session and Tenant Context)** — Implemented on 2026-08-31. Automated build/lint/import-boundary checks pass; the real browser/Auth smoke matrix remains pending, so P6A is not yet marked fully complete.
 - **Payroll + WPS** — Confirmed next functional module after Production Data Foundation.
 
 See `PROJECT_ROADMAP.md` for the full phase breakdown, binding decisions, and decision log.
@@ -48,6 +49,7 @@ Repository-root `AGENTS.md` is the binding engineering constitution for all futu
 ## 4. Technology Stack (verified from `package.json`)
 
 - React 19, TypeScript ~6.0, Vite 8
+- Supabase JS 2.112 for the isolated P6A browser Auth/tenant path
 - Tailwind CSS 4 (via `@tailwindcss/postcss`)
 - React Router 7 (`react-router-dom`)
 - Recharts 3 (Dashboard charts only)
@@ -329,7 +331,7 @@ Before this phase, subcontractor payable/retention/advance balances in `ledger.t
 
 ## 15. Known Limitations
 
-- Production still has no backend/auth/RLS/audit/atomic transaction boundary; localStorage remains the only implemented persistence.
+- Production Auth/session and active-tenant context are implemented in P6A; master/financial frontend data remains unavailable in `supabase-auth` until P6C/P6D. The legacy accounting UI still uses localStorage only in development `local-demo` mode. Audit and remaining production cutover work are not implemented.
 - `AppDataContext` writes a business row, journal and status in separate synchronous operations. A quota/browser failure can leave partial state; concurrent users are impossible; authorization is absent.
 - The generic repository loads and rewrites whole collections, caches indefinitely, has no query/filter/pagination/concurrency contract, and is synchronous. It is not a viable direct Supabase adapter.
 - Most current local business documents lack a direct `companyId`; company is inferred through project where present. P0 resolved the production rule: financially important records receive mandatory direct `company_id`, while ambiguous local rows go to migration review rather than inferred tenant ownership.
@@ -717,7 +719,13 @@ Full details are in `docs/P5I_SUBCONTRACTOR_RETENTION.md`. The P5I integration/r
 
 The required P5H/P5I checkpoint is complete. Static review plus a 42-assertion hosted combined interaction matrix verified that ordinary Certificate Payments and Retention Releases independently block Certificate reversal, reversing only one chain does not clear the other, live Retention Payments block Release reversal, and full downstream reversal restores eligibility in order. An 18-check whole-scope reconciliation covered 48 Certificates, 23 P5H Payments, 21 Releases, 24 Retention Payments and 107 linked journals with no source, balance, orphan, over-settlement, forbidden-account, dimension or control-account mismatch.
 
-No material defect, migration correction or new accounting-policy decision was required. The known P5C unused-variable lint warning remains non-blocking. Full evidence and classifications are in `docs/POST_P5_FOCUSED_REVIEW.md`. P6A is next but has not started; the full Production Security & Accounting Integrity Audit remains a future pre-production gate.
+No material defect, migration correction or new accounting-policy decision was required. The known P5C unused-variable lint warning remains non-blocking. Full evidence and classifications are in `docs/POST_P5_FOCUSED_REVIEW.md`. The full Production Security & Accounting Integrity Audit remains a future pre-production gate.
+
+### P6A Auth session and tenant context (2026-08-31)
+
+P6A is implemented with explicit `local-demo` and `supabase-auth` modes. The demo route tree is development-only and lazy; the production Auth dependency graph cannot import the local accounting context, repositories, migrations, seed path, or accounting pages. Production configuration fails closed. Supabase password Auth restores and synchronizes sessions, validates JWT claims, and loads the active profile/memberships/Companies through existing P2 RLS. Zero/one/multiple membership resolution, revalidated per-user tenant preference, switching, protected routes, local-scope logout, bilingual states, focus/retry revalidation, and stale-request invalidation are present. Auth mode deliberately exposes only a tenant-ready cutover-pending shell and performs no master/financial writes.
+
+No database migration was added. Automated build, lint and static import-boundary verification pass. Browser smoke verification with safely provisioned Auth fixtures remains pending, so P6A is not yet recorded as fully complete. See `docs/P6A_AUTH_TENANT_CONTEXT.md`.
 
 ## 35. Testing Expectations
 

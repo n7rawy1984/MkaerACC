@@ -548,6 +548,32 @@ const ar: Record<TranslationKey, string> = {
   "journal.colDebit": "مدين",
   "journal.colCredit": "دائن",
   "journal.total": "الإجمالي",
+
+  // المصادقة وسياق الشركة — P6A
+  "auth.loading": "جارٍ التحميل الآمن…",
+  "auth.configurationErrorTitle": "الإعداد مطلوب",
+  "auth.configurationError": "إعدادات مصادقة الإنتاج غير صحيحة. تواصل مع مسؤول النظام.",
+  "auth.loginTitle": "تسجيل الدخول",
+  "auth.loginSubtitle": "استخدم حساب نظام الأعمال الذي تم تجهيزه لك.",
+  "auth.email": "البريد الإلكتروني",
+  "auth.password": "كلمة المرور",
+  "auth.signIn": "تسجيل الدخول",
+  "auth.signingIn": "جارٍ تسجيل الدخول…",
+  "auth.invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
+  "auth.connectivityError": "تعذر الوصول إلى خدمة تسجيل الدخول. تحقق من الاتصال وحاول مرة أخرى.",
+  "auth.identityErrorTitle": "تعذر التحقق من صلاحية الحساب",
+  "auth.identityError": "تعذر تحديث ملفك الحالي وصلاحيات الشركات. تظل البيانات المحمية غير متاحة.",
+  "auth.noCompanyTitle": "لا توجد شركة نشطة",
+  "auth.noCompany": "لا يملك هذا الحساب حاليًا ملفًا نشطًا وعضوية نشطة في شركة. تواصل مع المسؤول إذا كنت تتوقع وجود صلاحية.",
+  "auth.selectCompany": "اختر الشركة",
+  "auth.selectCompanyHint": "اختر الشركة التي تريد العمل معها. يتم التحقق من الصلاحية قبل قبول الاختيار.",
+  "auth.activeCompany": "الشركة النشطة",
+  "auth.role": "الدور",
+  "auth.switchCompany": "تبديل الشركة",
+  "auth.signOut": "تسجيل الخروج",
+  "auth.retry": "إعادة المحاولة",
+  "auth.tenantReadyTitle": "تم التحقق من صلاحية الشركة",
+  "auth.cutoverPending": "بيانات محاسبة الإنتاج غير متاحة في الواجهة بعد. لن تُفعّل البيانات الأساسية والتدفقات المالية إلا ضمن مراحل الانتقال المنضبطة اللاحقة من P6.",
 };
 
 export default ar;

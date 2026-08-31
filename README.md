@@ -74,13 +74,13 @@ Supabase stores local link state under ignored `supabase/.temp/`. Access tokens,
 
 ## Environment variables and secrets
 
-Copy `.env.example` to an ignored environment-specific local file only when needed. The current frontend does not consume Supabase variables.
+Copy `.env.example` to an ignored environment-specific local file only when needed. P6A supports explicit `local-demo` (Vite development only) and `supabase-auth` modes.
 
-- `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` are public browser configuration intended for future P6 integration.
+- `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` are the public browser configuration used only by `supabase-auth`.
 - Every `VITE_*` value is browser-visible.
 - Database passwords, management access tokens, secret/service-role keys, and other privileged credentials must never use a `VITE_*` name or enter the frontend bundle.
-- Vercel will eventually receive only public browser variables. Privileged values belong exclusively in protected server/CI secrets.
-- Production must fail explicitly if required database configuration is unavailable after P6; it must never fall back to localStorage accounting.
+- Before enabling `supabase-auth` on Vercel, configure those two public values and `VITE_APP_DATA_MODE=supabase-auth`. Privileged values belong exclusively in protected server/CI secrets.
+- Production fails explicitly if its mode or Auth configuration is unavailable; it never falls back to localStorage accounting.
 
 ## Seed policy
 

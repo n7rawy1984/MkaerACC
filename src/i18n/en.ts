@@ -546,6 +546,32 @@ const en = {
   "journal.colDebit": "Debit",
   "journal.colCredit": "Credit",
   "journal.total": "Total",
+
+  // P6A authentication and tenant context
+  "auth.loading": "Loading securely…",
+  "auth.configurationErrorTitle": "Configuration required",
+  "auth.configurationError": "Production authentication is not configured correctly. Contact the system administrator.",
+  "auth.loginTitle": "Sign in",
+  "auth.loginSubtitle": "Use your provisioned business-system account.",
+  "auth.email": "Email",
+  "auth.password": "Password",
+  "auth.signIn": "Sign in",
+  "auth.signingIn": "Signing in…",
+  "auth.invalidCredentials": "Email or password is incorrect.",
+  "auth.connectivityError": "The sign-in service could not be reached. Check your connection and try again.",
+  "auth.identityErrorTitle": "Account access could not be verified",
+  "auth.identityError": "Your current profile and Company access could not be refreshed. Protected data remains unavailable.",
+  "auth.noCompanyTitle": "No active Company",
+  "auth.noCompany": "This account does not currently have an active profile and active Company membership. Contact your administrator if access is expected.",
+  "auth.selectCompany": "Select Company",
+  "auth.selectCompanyHint": "Choose the Company you want to work with. Access is verified before the selection is accepted.",
+  "auth.activeCompany": "Active Company",
+  "auth.role": "Role",
+  "auth.switchCompany": "Switch Company",
+  "auth.signOut": "Sign out",
+  "auth.retry": "Retry",
+  "auth.tenantReadyTitle": "Company access verified",
+  "auth.cutoverPending": "Production accounting data is not available in the frontend yet. Master-data and financial workflows will be enabled only by the later controlled P6 cutover stages.",
 } as const;
 
 export default en;

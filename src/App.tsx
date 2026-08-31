@@ -1,40 +1,42 @@
-import { Route, Routes } from "react-router-dom";
-import { AppShell } from "./components/layout/AppShell";
-import { AppDataProvider } from "./state/AppDataContext";
-import { Dashboard } from "./pages/Dashboard";
-import { Companies } from "./pages/Companies";
-import { Projects } from "./pages/Projects";
-import { ProjectDetail } from "./pages/ProjectDetail";
-import { Treasury } from "./pages/Treasury";
-import { Expenses } from "./pages/Expenses";
-import { Advances } from "./pages/Advances";
-import { Suppliers } from "./pages/Suppliers";
-import { Subcontractors } from "./pages/Subcontractors";
-import { SubcontractorDetail } from "./pages/SubcontractorDetail";
-import { SubcontractDetail } from "./pages/SubcontractDetail";
-import { OwnersCustodians } from "./pages/OwnersCustodians";
-import { Journal } from "./pages/Journal";
+import { lazy, Suspense } from "react";
+import { useT } from "./i18n/I18nContext";
+
+const DemoApplication = lazy(() => import("./app/DemoApplication"));
+const ProtectedApplication = lazy(() => import("./auth/ProtectedApplication"));
+
+type AppMode = "local-demo" | "supabase-auth";
+
+function resolveAppMode(): { mode: AppMode | null; error: boolean } {
+  const configuredMode = import.meta.env.VITE_APP_DATA_MODE;
+  if (configuredMode === "supabase-auth") return { mode: configuredMode, error: false };
+  if (configuredMode === "local-demo" && import.meta.env.DEV) return { mode: configuredMode, error: false };
+  return { mode: null, error: true };
+}
+
+function AppLoading() {
+  const t = useT();
+  return <main className="flex min-h-screen items-center justify-center p-6"><p className="text-sm text-slate-600" role="status">{t("auth.loading")}</p></main>;
+}
+
+function ConfigurationError() {
+  const t = useT();
+  return (
+    <main className="flex min-h-screen items-center justify-center p-6">
+      <section className="w-full max-w-lg rounded-2xl border border-red-200 bg-white p-8 shadow-sm" role="alert">
+        <h1 className="text-xl font-semibold text-slate-900">{t("auth.configurationErrorTitle")}</h1>
+        <p className="mt-3 text-sm leading-6 text-slate-600">{t("auth.configurationError")}</p>
+      </section>
+    </main>
+  );
+}
 
 export default function App() {
+  const resolved = resolveAppMode();
+  if (resolved.error || !resolved.mode) return <ConfigurationError />;
+
   return (
-    <AppDataProvider>
-      <AppShell>
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/company" element={<Companies />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/projects/:id" element={<ProjectDetail />} />
-          <Route path="/treasury" element={<Treasury />} />
-          <Route path="/expenses" element={<Expenses />} />
-          <Route path="/advances" element={<Advances />} />
-          <Route path="/suppliers" element={<Suppliers />} />
-          <Route path="/subcontractors" element={<Subcontractors />} />
-          <Route path="/subcontractors/:id" element={<SubcontractorDetail />} />
-          <Route path="/subcontracts/:id" element={<SubcontractDetail />} />
-          <Route path="/people" element={<OwnersCustodians />} />
-          <Route path="/journal" element={<Journal />} />
-        </Routes>
-      </AppShell>
-    </AppDataProvider>
+    <Suspense fallback={<AppLoading />}>
+      {resolved.mode === "local-demo" ? <DemoApplication /> : <ProtectedApplication />}
+    </Suspense>
   );
 }
