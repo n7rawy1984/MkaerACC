@@ -8,7 +8,7 @@ Repository-root `AGENTS.md` is the binding engineering constitution governing im
 
 `Company` is the security and accounting tenant: Platform → Company → memberships → projects, parties, accounts, treasury, documents, journals, and future modules. Tenant-owned rows carry `company_id` directly or derive it only through an explicitly constrained parent. UUID knowledge never grants access. PostgreSQL constraints, RLS, and specialized commands remain authoritative.
 
-A user may belong to multiple companies. P6A will restore the Auth session, load active memberships, enter the sole company automatically or require a tenant choice, and hold an explicit active-company context. A URL slug is routing context only and never authorization evidence.
+A user may belong to multiple companies. Completed P6A restores the Auth session, loads active memberships, enters the sole company automatically or requires a tenant choice, and holds an explicit active-company context. A URL slug is routing context only and never authorization evidence.
 
 `SYSTEM_ADMIN` remains platform/configuration administration and receives no automatic browser access to tenant financial data.
 
@@ -37,10 +37,10 @@ Subscription/license status, plan, entitlements, tenant provisioning/suspension,
 - Company/type/year accounting references.
 - Company-aware P5A–P5G accounting commands and idempotency, including pooled company/Custodian balance enforcement, no-GL Settlement grouping, and contract-isolated Subcontractor Advance/Certificate balances.
 - Explicit multi-company synthetic Development fixtures.
+- Verified P6A Auth/session lifecycle, active tenant context, protected routes, tenant switching, and strict production-auth/local-demo isolation.
 
 ## Planned, not implemented
 
-- Active-tenant selector and frontend tenant context.
 - Tenant settings, branding, slug, logo, theme, and favicon.
 - Custom domains and branded documents/messages.
 - SaaS licensing, entitlements, provisioning, and suspension UI.
@@ -54,13 +54,13 @@ Subcontractor Advances are Treasury-funded recoverable Assets scoped by company 
 
 ## Refined P6 boundary
 
-- **P6A — Auth Session and Tenant Context:** login/logout, session restoration, protected routes, active memberships, explicit active tenant, and multi-company selector.
+- ✅ **P6A — Auth Session and Tenant Context:** verified complete on 2026-09-04; login/logout, session restoration, protected routes, active memberships, explicit active tenant, and multi-company selector.
 - **P6B — Tenant Settings and White-Label Foundation:** company settings, stable slug, display identity, logo/favicon, CSS-variable theme, locale, and removal of Maker-specific visible branding.
 - **P6C — Master Data Async Repository Cutover:** typed tenant-scoped queries and master-data commands.
 - **P6D — Financial Flow Cutover:** frontend use of specialized financial RPCs with no hybrid writes.
 - **P6E — LocalStorage Retirement and Production Data Mode:** explicit demo adapter, production fail-closed behavior, and removal of localStorage as production accounting authority.
 
-P6 is not implemented by this decision record.
+P6A is implemented and verified complete as recorded in `docs/P6A_AUTH_TENANT_CONTEXT.md`; P6B–P6E remain planned and unimplemented.
 
 ## Pre-production integrity gate
 

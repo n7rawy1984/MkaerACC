@@ -1,6 +1,6 @@
 # P6A — Auth Session and Tenant Context
 
-Date: 2026-08-31. Status: implemented; automated verification complete, browser smoke verification pending.
+Date: 2026-08-31. Status: verified complete on 2026-09-04.
 
 ## Scope
 
@@ -52,4 +52,6 @@ Before activating `supabase-auth` on Vercel, configure its browser-safe URL and 
 
 Automated checks cover the TypeScript/Vite production build, the production-auth static import graph, lint, package audit, unchanged migration history, and targeted secret/signup/hybrid-write/demo-dependency scans. The canonical migrations remain aligned with `MakerACC-Development` through `20260910120000`.
 
-A real browser/Auth smoke matrix remains required because this repository contains no browser automation harness or safe test-user credentials. It must cover valid/invalid login, duplicate submission, session restore, logout, invalid/expired session, zero/one/multiple memberships, inactive profile/membership/Company, forged/stale preference, switching, direct protected URLs, focus revalidation, English/Arabic/RTL, and removal of access during a session. Until that is run, P6A is implemented but not recorded as fully complete.
+The full risk-proportionate hosted browser/Auth smoke matrix completed on 2026-09-04 with synthetic users and Companies in `MakerACC-Development`. It passed valid/invalid login, duplicate-submit prevention, session restoration, logout and cross-tab logout, invalid persisted-session fail-closed behavior, zero/one/multiple membership resolution, inactive profile/membership/Company exclusion, forged/stale preference rejection, Company switching, protected accounting URLs, focus/visibility revocation and recovery, English/Arabic/RTL, keyboard smoke accessibility, and local-demo/localStorage isolation. Network inspection found only Auth/JWKS and P2 identity reads: no master/financial mutation, accounting-table request, financial RPC, or privileged browser secret was present.
+
+The deliberately timed stale identity-response race is classified `BEST-EFFORT / NOT PRACTICALLY REPRODUCIBLE`. Source review confirms deterministic request-generation, current-user and live-session guards plus synchronous invalidation; cross-tab logout and live membership/profile revocation provide supporting runtime evidence. No confirmed P6A defect remains. P6B–P6E and the master/financial Supabase frontend cutover have not started. Staging and Production databases were untouched, the full Production Security & Accounting Integrity Audit remains a future pre-production gate, and synthetic P6A fixture cleanup remains post-closure housekeeping.

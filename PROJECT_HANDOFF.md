@@ -39,7 +39,7 @@ The company previously tracked project expenses, supplier bills, cash handed to 
 - **Phase 2C / P5I-B (Retention Payment)** — Completed. Applied and verified remotely on Development; P5I integration/reconciliation and formal P5 closure are complete.
 - **Phase 2C / P5 (Atomic Accounting Commands / Production Financial Command Layer)** — Completed through P5I. Closure review accepted; no P5J/P5K exists or is required.
 - **Post-P5 Focused Engineering and Accounting Integrity Review** — Completed. P5H/P5I combined dependency, separated-source settlement, reconciliation, tenant and authorization checks passed; P6A is ready to begin separately.
-- **Phase 2C / P6A (Auth Session and Tenant Context)** — Implemented on 2026-08-31. Automated build/lint/import-boundary checks pass; the real browser/Auth smoke matrix remains pending, so P6A is not yet marked fully complete.
+- **Phase 2C / P6A (Auth Session and Tenant Context)** — Verified complete on 2026-09-04. Automated gates and the full risk-proportionate browser/Auth smoke matrix pass with no confirmed defect; synthetic Development fixture cleanup remains post-closure housekeeping.
 - **Payroll + WPS** — Confirmed next functional module after Production Data Foundation.
 
 See `PROJECT_ROADMAP.md` for the full phase breakdown, binding decisions, and decision log.
@@ -725,7 +725,7 @@ No material defect, migration correction or new accounting-policy decision was r
 
 P6A is implemented with explicit `local-demo` and `supabase-auth` modes. The demo route tree is development-only and lazy; the production Auth dependency graph cannot import the local accounting context, repositories, migrations, seed path, or accounting pages. Production configuration fails closed. Supabase password Auth restores and synchronizes sessions, validates JWT claims, and loads the active profile/memberships/Companies through existing P2 RLS. Zero/one/multiple membership resolution, revalidated per-user tenant preference, switching, protected routes, local-scope logout, bilingual states, focus/retry revalidation, and stale-request invalidation are present. Auth mode deliberately exposes only a tenant-ready cutover-pending shell and performs no master/financial writes.
 
-No database migration was added. Automated build, lint and static import-boundary verification pass. Browser smoke verification with safely provisioned Auth fixtures remains pending, so P6A is not yet recorded as fully complete. See `docs/P6A_AUTH_TENANT_CONTEXT.md`.
+No database migration was added. Automated build, lint and static import-boundary verification pass. The hosted browser smoke matrix completed on 2026-09-04 using synthetic Development-only users and verified Auth/routing, zero/one/multiple tenant resolution, inactive profile/membership/Company exclusion, tenant switching and preference validation, logout/session behavior, focus revalidation, language/RTL/keyboard smoke behavior, localStorage/demo isolation, and absence of master/financial requests or privileged browser secrets. Duplicate submission and invalid persisted-session behavior also passed. The deliberately timed stale-response race remains best-effort/not practically reproducible, with deterministic generation/user/session guards confirmed in source and supporting runtime revocation/logout evidence. No confirmed P6A defect remains. P6B–P6E have not started; synthetic fixture cleanup is pending post-closure housekeeping. See `docs/P6A_AUTH_TENANT_CONTEXT.md`.
 
 ## 35. Testing Expectations
 
