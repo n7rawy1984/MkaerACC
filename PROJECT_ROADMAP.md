@@ -156,7 +156,7 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 
 ## Current Phase
 
-### ➡ Phase 2C — Production Data Foundation *(P0–P6A are complete; P6B–P6E have not started)*
+### ➡ Phase 2C — Production Data Foundation *(P0–P6B are verified complete; P6C–P6E have not started)*
 
 #### ✅ P0 — Production Architecture Freeze
 
@@ -225,7 +225,7 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 #### P6 — Auth, Tenant Context, White-Label and Production Cutover
 
 - ✅ **P6A — Auth Session and Tenant Context (verified complete):** isolated demo/Auth modes, password login/logout, session restore/events, claims-validated P2 profile and active memberships, explicit/revalidated active tenant, multi-company selector, protected routes, retry/no-company states, and a production cutover-pending shell. Automated gates and the full risk-proportionate browser matrix pass with no confirmed defect. No database migration or data cutover occurred; Development-only synthetic fixture and temporary browser-state cleanup is complete. See `docs/P6A_AUTH_TENANT_CONTEXT.md`.
-- **P6B — Tenant Settings and White-Label Foundation:** display/legal identity, tenant slug, logo/favicon, CSS-variable theme, locale, and removal of Maker-specific visible branding.
+- ✅ **P6B — Tenant Settings and White-Label Foundation (verified complete):** added the read-only Company-owned settings model, stable slug, display/legal identity separation, logo/favicon references, bounded CSS-variable theme, locale precedence, neutral failure behavior, and isolated Auth/demo runtime integration. The hosted constraint/RLS matrix, complete browser branding/isolation matrix, and post-fix canonical-route regression pass. Development-only fixture and browser-state cleanup is verified complete. See `docs/P6B_TENANT_SETTINGS_WHITE_LABEL.md`.
 - **P6C — Master Data Async Repository Cutover:** typed tenant-scoped queries and explicit master-data commands.
 - **P6D — Financial Flow Cutover:** specialized financial RPC integration with no hybrid financial writes.
 - **P6E — LocalStorage Retirement / Production Data Mode:** localStorage remains an explicit demo adapter only; production fails closed and uses the database as authority.
@@ -308,7 +308,8 @@ Before real production accounting data or go-live, perform the read-only audit f
 - P5I-A Retention Release Foundation was completed on 2026-08-30 through `20260909120000`. Releases are one-Subcontract documents with immutable Certificate allocations: Dr Retention Payable / Cr Subcontractor Payable. Locked authoritative remaining retention prevents concurrent over-release; exact reversal restores availability, and live Releases block Certificate reversal. P5I-B subsequently completed the Payment/dependency chain.
 - P5I-B Retention Payment was completed on 2026-08-30 through `20260910120000`. Payments allocate live same-contract Releases and post Dr Subcontractor Payable / Cr selected Treasury. Locked authoritative released-but-unpaid prevents concurrent overpayment; exact reversal restores availability, and live Payments block Release reversal. The P5I integration/reconciliation review completed without detected defects.
 - The post-P5 focused engineering/accounting review completed on 2026-08-30. No material defect or decision-required policy gap was found; combined P5H/P5I dependency and separated-source settlement tests passed, and P6A is ready to begin separately.
-- P6A Auth/session and tenant context was implemented on 2026-08-31 and verified complete on 2026-09-04. Automated gates and hosted browser evidence verified fail-closed Auth/session behavior, authoritative tenant resolution and revocation, route/demo isolation, localStorage preservation, bilingual/RTL/keyboard smoke behavior, and no master/financial cutover. The artificial stale-response race remains proportionately best-effort with deterministic source guards and supporting runtime evidence. No confirmed defect remains. Development-only synthetic fixture and temporary browser-state cleanup was verified complete on 2026-09-05; P6B–P6E have not started.
+- P6A Auth/session and tenant context was implemented on 2026-08-31 and verified complete on 2026-09-04. Automated gates and hosted browser evidence verified fail-closed Auth/session behavior, authoritative tenant resolution and revocation, route/demo isolation, localStorage preservation, bilingual/RTL/keyboard smoke behavior, and no master/financial cutover. The artificial stale-response race remains proportionately best-effort with deterministic source guards and supporting runtime evidence. No confirmed defect remains. Development-only synthetic fixture and temporary browser-state cleanup was verified complete on 2026-09-05.
+- P6B was verified complete on 2026-09-05 through `20260911120000_p6b_company_settings.sql` and forward correction `20260911123000_p6b_collision_safe_slugs.sql`, applied only to `MakerACC-Development`. Its hosted constraint/RLS matrix and complete Auth/demo browser branding/isolation matrix pass. Repeated testing found that ready state could retain `/no-company` or `/select-company`; the route table now canonically replaces obsolete Auth-state paths with `/` only after `TENANT_READY`, and the focused route re-smoke passed. Development-only cleanup removed exactly the P6B fixtures and temporary Auth/tenant browser state, preserved all 15 `cas:v1:*` keys, and left 14 Companies/14 settings with zero missing or orphan rows. P6C–P6E have not started.
 - Supabase Auth/PostgreSQL/Storage selected. PostgreSQL RPCs are the ledger transaction boundary; Edge Functions are optional external orchestration, not the accounting commit boundary.
 - Company membership plus optional project restriction is authoritative through RLS/database commands.
 - `BIGINT` AED minor units selected.
@@ -318,4 +319,4 @@ Before real production accounting data or go-live, perform the read-only audit f
 
 ---
 
-*P0–P6A and the post-P5 focused financial retrospective are complete. P6B–P10, Payroll/WPS, and bulk historical import have not started.*
+*P0–P6B and the post-P5 focused financial retrospective are verified complete. P6C–P10, Payroll/WPS, and bulk historical import have not started.*

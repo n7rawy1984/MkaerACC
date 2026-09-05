@@ -133,7 +133,7 @@ export function AuthProvider({ client, children }: { client: SupabaseClient<Data
         if (companyIds.length > 0) {
           const { data, error } = await client
             .from("companies")
-            .select("id, code, name, status")
+            .select("id, code, name, legal_name, status")
             .in("id", companyIds)
             .eq("status", "ACTIVE");
           if (!isCurrent()) return;
@@ -149,6 +149,7 @@ export function AuthProvider({ client, children }: { client: SupabaseClient<Data
             companyId: company.id,
             companyCode: company.code,
             companyName: company.name,
+            companyLegalName: company.legal_name,
             role: membership.role,
           }] : [];
         });

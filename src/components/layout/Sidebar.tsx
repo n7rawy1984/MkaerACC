@@ -9,7 +9,6 @@ import {
   Truck,
   Users,
   BookText,
-  HardHat,
   Hammer,
   RotateCcw,
   Languages,
@@ -17,6 +16,8 @@ import {
 import { resetDemoData } from "../../seed/seedData";
 import { useI18n, type Locale } from "../../i18n/I18nContext";
 import type { TranslationKey } from "../../i18n/en";
+import { useTenantSettings } from "../../tenant/TenantSettingsContext";
+import { TenantBrandMark } from "../../tenant/TenantBrandMark";
 
 const NAV_ITEMS: { to: string; labelKey: TranslationKey; icon: typeof LayoutDashboard; end?: boolean }[] = [
   { to: "/", labelKey: "nav.dashboard", icon: LayoutDashboard, end: true },
@@ -33,6 +34,8 @@ const NAV_ITEMS: { to: string; labelKey: TranslationKey; icon: typeof LayoutDash
 
 export function Sidebar() {
   const { t, locale, setLocale } = useI18n();
+  const tenantSettings = useTenantSettings();
+  const settings = tenantSettings.phase === "READY" ? tenantSettings.settings : null;
 
   function handleResetDemoData() {
     const confirmed = window.confirm(t("sidebar.resetConfirm"));
@@ -44,11 +47,9 @@ export function Sidebar() {
   return (
     <aside className="flex h-screen w-64 shrink-0 flex-col border-e border-slate-200 bg-white">
       <div className="flex items-center gap-2.5 px-5 py-5 border-b border-slate-100">
-        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-900 text-white">
-          <HardHat size={18} />
-        </div>
+        <TenantBrandMark logoUrl={settings?.logoUrl ?? null} className="h-9 w-9" />
         <div className="leading-tight">
-          <p className="text-sm font-semibold text-slate-900">{t("app.title")}</p>
+          <p className="text-sm font-semibold text-slate-900">{settings?.effectiveDisplayName ?? t("app.title")}</p>
           <p className="text-xs text-slate-400">{t("app.subtitle")}</p>
         </div>
       </div>
@@ -63,7 +64,7 @@ export function Sidebar() {
               [
                 "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
                 isActive
-                  ? "bg-slate-900 text-white"
+                  ? "bg-[var(--tenant-primary)] text-white"
                   : "text-slate-600 hover:bg-slate-100 hover:text-slate-900",
               ].join(" ")
             }
@@ -86,7 +87,7 @@ export function Sidebar() {
                 aria-pressed={locale === option}
                 className={
                   locale === option
-                    ? "bg-slate-900 px-2.5 py-1 text-white"
+                    ? "bg-[var(--tenant-primary)] px-2.5 py-1 text-white"
                     : "bg-white px-2.5 py-1 text-slate-500 hover:bg-slate-50"
                 }
               >

@@ -2,7 +2,7 @@ import type { Database } from "../types/database.generated";
 
 export type CompanyRole = Database["public"]["Enums"]["company_role"];
 export interface AuthProfile { userId: string; displayName: string; email: string | null; locale: "en" | "ar"; }
-export interface TenantMembership { membershipId: string; companyId: string; companyCode: string; companyName: string; role: CompanyRole; }
+export interface TenantMembership { membershipId: string; companyId: string; companyCode: string; companyName: string; companyLegalName: string | null; role: CompanyRole; }
 interface IdentityState { profile: AuthProfile; memberships: TenantMembership[]; }
 
 export type AuthState =

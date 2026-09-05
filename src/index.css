@@ -6,6 +6,8 @@
 
 html {
   color-scheme: light;
+  --tenant-primary: #0f172a;
+  --tenant-accent: #2563eb;
 }
 
 body {

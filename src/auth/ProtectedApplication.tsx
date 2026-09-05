@@ -8,6 +8,7 @@ import { AuthErrorPage } from "./AuthErrorPage";
 import { CompanySelectPage } from "./CompanySelectPage";
 import { LoginPage } from "./LoginPage";
 import { NoCompanyPage } from "./NoCompanyPage";
+import { SupabaseTenantSettingsProvider } from "../tenant/SupabaseTenantSettingsProvider";
 
 function LoadingPage() {
   const t = useT();
@@ -21,7 +22,17 @@ function RoutedApplication() {
   if (state.phase === "NO_ACTIVE_COMPANY") return <Routes><Route path="/no-company" element={<NoCompanyPage />} /><Route path="*" element={<Navigate to="/no-company" replace />} /></Routes>;
   if (state.phase === "SELECTING_COMPANY") return <Routes><Route path="/select-company" element={<CompanySelectPage />} /><Route path="*" element={<Navigate to="/select-company" replace />} /></Routes>;
   if (state.phase === "IDENTITY_LOAD_ERROR") return <Routes><Route path="/auth-error" element={<AuthErrorPage />} /><Route path="*" element={<Navigate to="/auth-error" replace />} /></Routes>;
-  return <Routes><Route path="/login" element={<Navigate to="/" replace />} /><Route path="*" element={<TenantReadyApplication />} /></Routes>;
+  return (
+    <SupabaseTenantSettingsProvider key={`${state.profile.userId}:${state.activeTenant.companyId}`} client={getSupabaseClient()} profile={state.profile} tenant={state.activeTenant}>
+      <Routes>
+        <Route path="/login" element={<Navigate to="/" replace />} />
+        <Route path="/no-company" element={<Navigate to="/" replace />} />
+        <Route path="/select-company" element={<Navigate to="/" replace />} />
+        <Route path="/auth-error" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<TenantReadyApplication />} />
+      </Routes>
+    </SupabaseTenantSettingsProvider>
+  );
 }
 
 export default function ProtectedApplication() {

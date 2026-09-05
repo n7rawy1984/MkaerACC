@@ -571,6 +571,8 @@ const en = {
   "auth.signOut": "Sign out",
   "auth.retry": "Retry",
   "auth.tenantReadyTitle": "Company access verified",
+  "auth.loadingTenantSettings": "Loading Company presentation settings…",
+  "auth.tenantSettingsUnavailable": "Company presentation settings are incomplete or temporarily unavailable. Neutral branding is being used; your verified Company access is unchanged.",
   "auth.cutoverPending": "Production accounting data is not available in the frontend yet. Master-data and financial workflows will be enabled only by the later controlled P6 cutover stages.",
 } as const;
 

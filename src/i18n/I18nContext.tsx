@@ -35,6 +35,7 @@ function interpolate(template: string, vars?: Record<string, string | number>): 
 interface I18nContextValue {
   locale: Locale;
   setLocale: (locale: Locale) => void;
+  applyLocaleDefault: (locale: Locale) => void;
   dir: "ltr" | "rtl";
   t: (key: TranslationKey, vars?: Record<string, string | number>) => string;
 }
@@ -43,6 +44,10 @@ const I18nContext = createContext<I18nContextValue | null>(null);
 
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>(readStoredLocale);
+  const [hasExplicitPreference, setHasExplicitPreference] = useState(() => {
+    try { return window.localStorage.getItem(LOCALE_STORAGE_KEY) === "en" || window.localStorage.getItem(LOCALE_STORAGE_KEY) === "ar"; }
+    catch { return false; }
+  });
   const dir = locale === "ar" ? "rtl" : "ltr";
 
   useEffect(() => {
@@ -52,6 +57,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
   const setLocale = useCallback((next: Locale) => {
     setLocaleState(next);
+    setHasExplicitPreference(true);
     try {
       window.localStorage.setItem(LOCALE_STORAGE_KEY, next);
     } catch {
@@ -59,6 +65,10 @@ export function I18nProvider({ children }: { children: ReactNode }) {
       // locale switch above already succeeded, only persistence across reloads is lost.
     }
   }, []);
+
+  const applyLocaleDefault = useCallback((next: Locale) => {
+    if (!hasExplicitPreference) setLocaleState(next);
+  }, [hasExplicitPreference]);
 
   const t = useCallback(
     (key: TranslationKey, vars?: Record<string, string | number>) => {
@@ -72,7 +82,10 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     [locale],
   );
 
-  const value = useMemo<I18nContextValue>(() => ({ locale, setLocale, dir, t }), [locale, setLocale, dir, t]);
+  const value = useMemo<I18nContextValue>(
+    () => ({ locale, setLocale, applyLocaleDefault, dir, t }),
+    [locale, setLocale, applyLocaleDefault, dir, t],
+  );
 
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 }

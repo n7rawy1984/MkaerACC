@@ -5,6 +5,7 @@ const repositoryRoot = resolve(import.meta.dirname, "..");
 const extensions = [".ts", ".tsx", ".js", ".jsx"];
 const forbiddenSegments = ["/state/", "/storage/", "/seed/", "/pages/", "/components/layout/"];
 const forbiddenText = ["ensureSeeded", "ensurePhase2ASeeded"];
+const forbiddenSettingsMutations = [/\.from\(["']company_settings["']\)[\s\S]{0,400}\.(?:insert|update|delete|upsert)\s*\(/];
 
 function resolveImport(fromFile, specifier) {
   if (!specifier.startsWith(".")) return null;
@@ -46,6 +47,17 @@ for (const file of authGraph) {
   if (forbiddenText.some((text) => source.includes(text))) {
     throw new Error(`Production Auth contains forbidden demo data access: ${file}`);
   }
+  if (forbiddenSettingsMutations.some((pattern) => pattern.test(source))) {
+    throw new Error(`Production Auth contains a forbidden Company-settings mutation: ${file}`);
+  }
 }
 
-console.log(`P6A import boundary verified across ${authGraph.size} production-auth modules.`);
+const protectedApplicationSource = readFileSync(resolve(repositoryRoot, "src/auth/ProtectedApplication.tsx"), "utf8");
+for (const obsoleteAuthPath of ["/login", "/no-company", "/select-company", "/auth-error"]) {
+  const canonicalRoute = `<Route path="${obsoleteAuthPath}" element={<Navigate to="/" replace />} />`;
+  if (!protectedApplicationSource.includes(canonicalRoute)) {
+    throw new Error(`TENANT_READY does not canonically replace obsolete Auth-state route: ${obsoleteAuthPath}`);
+  }
+}
+
+console.log(`P6A import boundary and TENANT_READY canonical routes verified across ${authGraph.size} production-auth modules.`);

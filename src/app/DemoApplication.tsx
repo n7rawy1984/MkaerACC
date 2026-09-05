@@ -14,10 +14,11 @@ import { SubcontractorDetail } from "../pages/SubcontractorDetail";
 import { SubcontractDetail } from "../pages/SubcontractDetail";
 import { OwnersCustodians } from "../pages/OwnersCustodians";
 import { Journal } from "../pages/Journal";
+import { DemoTenantSettingsProvider } from "../tenant/DemoTenantSettingsProvider";
 
 export default function DemoApplication() {
   return (
-    <AppDataProvider><AppShell><Routes>
+    <DemoTenantSettingsProvider><AppDataProvider><AppShell><Routes>
       <Route path="/" element={<Dashboard />} />
       <Route path="/company" element={<Companies />} />
       <Route path="/projects" element={<Projects />} />
@@ -31,6 +32,6 @@ export default function DemoApplication() {
       <Route path="/subcontracts/:id" element={<SubcontractDetail />} />
       <Route path="/people" element={<OwnersCustodians />} />
       <Route path="/journal" element={<Journal />} />
-    </Routes></AppShell></AppDataProvider>
+    </Routes></AppShell></AppDataProvider></DemoTenantSettingsProvider>
   );
 }
