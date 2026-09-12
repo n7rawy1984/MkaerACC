@@ -4,6 +4,8 @@ import type {
   MasterDataQueryError,
   ProductionCompanyProfile,
   ProductionProjectSummary,
+  ProductionParty,
+  ProductionExpenseCategory,
 } from "./masterTypes";
 
 type CompanyRow = Database["public"]["Tables"]["companies"]["Row"];
@@ -87,4 +89,69 @@ export async function readActiveCompanyProjects(
     ok: true,
     data: (data ?? []).filter((row) => row.company_id === activeCompanyId).map(mapProjectRow),
   };
+}
+
+export function mapPartyRow(row: Database["public"]["Tables"]["parties"]["Row"]): ProductionParty {
+  return {
+    id: row.id,
+    companyId: row.company_id,
+    type: row.type,
+    name: row.name,
+    code: row.code,
+    taxRegistrationNumber: row.trn,
+    contactPerson: row.contact_person,
+    phone: row.phone,
+    email: row.email,
+    address: row.address,
+    status: row.status,
+    notes: row.notes,
+    createdAt: row.created_at,
+    createdBy: row.created_by,
+    updatedAt: row.updated_at,
+    updatedBy: row.updated_by,
+  };
+}
+
+export function mapExpenseCategoryRow(row: Database["public"]["Tables"]["expense_categories"]["Row"]): ProductionExpenseCategory {
+  return {
+    id: row.id,
+    companyId: row.company_id,
+    code: row.code,
+    name: row.name,
+    description: row.description,
+    status: row.status,
+    createdAt: row.created_at,
+    createdBy: row.created_by,
+    updatedAt: row.updated_at,
+    updatedBy: row.updated_by,
+  };
+}
+
+export async function readActiveCompanyParties(
+  client: SupabaseClient<Database>,
+  activeCompanyId: string,
+): Promise<RepositoryResult<ProductionParty[]>> {
+  const { data, error } = await client
+    .from("parties")
+    .select("id, company_id, type, name, code, trn, contact_person, phone, email, address, status, notes, created_at, created_by, updated_at, updated_by")
+    .eq("company_id", activeCompanyId)
+    .order("name", { ascending: true })
+    .order("id", { ascending: true });
+  if (error) return { ok: false, error: queryError("parties", error) };
+  // RLS-filtered subsets (including zero rows) are authoritative and valid.
+  return { ok: true, data: (data ?? []).filter((row) => row.company_id === activeCompanyId).map(mapPartyRow) };
+}
+
+export async function readActiveCompanyExpenseCategories(
+  client: SupabaseClient<Database>,
+  activeCompanyId: string,
+): Promise<RepositoryResult<ProductionExpenseCategory[]>> {
+  const { data, error } = await client
+    .from("expense_categories")
+    .select("id, company_id, code, name, description, status, created_at, created_by, updated_at, updated_by")
+    .eq("company_id", activeCompanyId)
+    .order("code", { ascending: true })
+    .order("id", { ascending: true });
+  if (error) return { ok: false, error: queryError("expenseCategories", error) };
+  return { ok: true, data: (data ?? []).filter((row) => row.company_id === activeCompanyId).map(mapExpenseCategoryRow) };
 }

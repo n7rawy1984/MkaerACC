@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import { LanguageButton } from "../auth/AuthFrame";
 import { useAuth } from "../auth/AuthContext";
 import { useT } from "../i18n/I18nContext";
@@ -5,7 +6,7 @@ import { useTenantSettings } from "../tenant/TenantSettingsContext";
 import { TenantBrandMark } from "../tenant/TenantBrandMark";
 import { useProductionMasterData } from "../master/productionMasterDataContext";
 
-export default function TenantReadyApplication({ view }: { view: "projects" | "deferred" }) {
+export default function TenantReadyApplication({ view }: { view: "projects" | "parties" | "expenseCategories" | "deferred" }) {
   const t = useT();
   const { state, showCompanySelector, signOut } = useAuth();
   const tenantSettings = useTenantSettings();
@@ -36,6 +37,13 @@ export default function TenantReadyApplication({ view }: { view: "projects" | "d
         </div>
       </header>
       <main className="mx-auto max-w-4xl px-6 py-16">
+        <nav aria-label={t("productionMaster.navigation")} className="mb-6 flex flex-wrap gap-3">
+          {(["projects", "parties", "expenseCategories"] as const).map((resource) => (
+            <NavLink key={resource} to={resource === "expenseCategories" ? "/expense-categories" : `/${resource}`} className={({ isActive }) => `rounded-lg border px-3 py-2 text-sm font-medium ${isActive ? "border-[var(--tenant-primary)] text-[var(--tenant-primary)]" : "border-slate-300 text-slate-600"}`}>
+              {t(`productionMaster.${resource}`)}
+            </NavLink>
+          ))}
+        </nav>
         {(tenantSettings.phase === "MISSING" || tenantSettings.phase === "ERROR") && <p role="alert" className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">{t("auth.tenantSettingsUnavailable")}</p>}
         {tenantSettings.phase === "LOADING" && <p role="status" className="mb-4 text-sm text-slate-500">{t("auth.loadingTenantSettings")}</p>}
         {view === "deferred" ? (
@@ -45,12 +53,12 @@ export default function TenantReadyApplication({ view }: { view: "projects" | "d
           </section>
         ) : (
           <section className="rounded-2xl border border-[var(--tenant-accent)] bg-white p-8 shadow-sm">
-            <h2 className="text-2xl font-semibold">{t("productionProjects.title")}</h2>
-            {masterData.phase === "LOADING" && <p role="status" className="mt-4 text-sm text-slate-500">{t("productionProjects.loading")}</p>}
+            <h2 className="text-2xl font-semibold">{t(`productionMaster.${view}`)}</h2>
+            {masterData.phase === "LOADING" && <p role="status" className="mt-4 text-sm text-slate-500">{t("productionMaster.loading")}</p>}
             {masterData.phase === "MISSING_COMPANY" && <p role="alert" className="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">{t("productionProjects.companyUnavailable")}</p>}
-            {masterData.phase === "ERROR" && <p role="alert" className="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900">{t("productionProjects.error")}</p>}
-            {masterData.phase === "READY" && masterData.projects.length === 0 && <p className="mt-4 text-sm text-slate-500">{t("productionProjects.empty")}</p>}
-            {masterData.phase === "READY" && masterData.projects.length > 0 && (
+            {masterData.phase === "ERROR" && <p role="alert" className="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900">{t("productionMaster.error")}</p>}
+            {view === "projects" && masterData.phase === "READY" && masterData.projects.length === 0 && <p className="mt-4 text-sm text-slate-500">{t("productionProjects.empty")}</p>}
+            {view === "projects" && masterData.phase === "READY" && masterData.projects.length > 0 && (
               <ul className="mt-5 divide-y divide-slate-200" aria-label={t("productionProjects.title")}>
                 {masterData.projects.map((project) => (
                   <li key={project.id} className="flex flex-wrap items-start justify-between gap-3 py-4 first:pt-0 last:pb-0">
@@ -59,6 +67,43 @@ export default function TenantReadyApplication({ view }: { view: "projects" | "d
                   </li>
                 ))}
               </ul>
+            )}
+            {view === "parties" && masterData.phase === "READY" && (
+              <>
+                <p className="mt-3 text-sm text-slate-500">{t("productionMaster.partyVisibility")}</p>
+                {masterData.parties.length === 0 ? <p role="status" className="mt-4 text-sm text-slate-500">{t("productionMaster.partiesEmpty")}</p> : (
+                  <ul className="mt-5 divide-y divide-slate-200" aria-label={t("productionMaster.parties")}>
+                    {masterData.parties.map((party) => (
+                      <li key={party.id} className="py-4 first:pt-0 last:pb-0">
+                        <div className="flex flex-wrap items-start justify-between gap-3">
+                          <p className="break-words font-medium text-slate-900">{party.code ? `${party.code} · ` : ""}{party.name}</p>
+                          <span className="text-sm text-slate-600">{t(`productionMaster.type.${party.type}`)} · {t(`partyStatus.${party.status}`)}</span>
+                        </div>
+                        <dl className="mt-2 space-y-1 break-words text-sm text-slate-500">
+                          {([
+                            ["trn", party.taxRegistrationNumber], ["contact", party.contactPerson],
+                            ["phone", party.phone], ["email", party.email], ["address", party.address], ["notes", party.notes],
+                          ] as const).map(([field, value]) => value !== null && (
+                            <div key={field}><dt className="inline font-medium">{t(`productionMaster.${field}`)}: </dt><dd className="inline"><bdi>{value}</bdi></dd></div>
+                          ))}
+                        </dl>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            )}
+            {view === "expenseCategories" && masterData.phase === "READY" && (
+              masterData.expenseCategories.length === 0 ? <p role="status" className="mt-4 text-sm text-slate-500">{t("productionMaster.categoriesEmpty")}</p> : (
+                <ul className="mt-5 divide-y divide-slate-200" aria-label={t("productionMaster.expenseCategories")}>
+                  {masterData.expenseCategories.map((category) => (
+                    <li key={category.id} className="flex flex-wrap items-start justify-between gap-3 py-4 first:pt-0 last:pb-0">
+                      <div className="min-w-0 break-words"><p className="font-medium text-slate-900">{category.code} · {category.name}</p>{category.description !== null && <p className="mt-1 text-sm text-slate-500">{category.description}</p>}</div>
+                      <span className="text-sm text-slate-600">{t(`partyStatus.${category.status}`)}</span>
+                    </li>
+                  ))}
+                </ul>
+              )
             )}
           </section>
         )}

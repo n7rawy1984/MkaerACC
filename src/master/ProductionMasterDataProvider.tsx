@@ -1,17 +1,18 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "../types/database.generated";
-import { readActiveCompanyProfile, readActiveCompanyProjects } from "./masterRepositories";
+import { readActiveCompanyProfile, readActiveCompanyProjects, readActiveCompanyParties, readActiveCompanyExpenseCategories } from "./masterRepositories";
 import type { ProductionMasterDataState } from "./masterTypes";
 import { ProductionMasterDataContext } from "./productionMasterDataContext";
 
-export function ProductionMasterDataProvider({ client, userId, activeCompanyId, children }: {
+export function ProductionMasterDataProvider({ client, userId, activeCompanyId, role, children }: {
   client: SupabaseClient<Database>;
   userId: string;
   activeCompanyId: string;
+  role: Database["public"]["Enums"]["company_role"];
   children: ReactNode;
 }) {
-  const scopeKey = `${userId}:${activeCompanyId}`;
+  const scopeKey = `${userId}:${activeCompanyId}:${role}`;
   const [scopedState, setScopedState] = useState<{ scopeKey: string; state: ProductionMasterDataState }>({
     scopeKey,
     state: { phase: "LOADING" },
@@ -37,9 +38,11 @@ export function ProductionMasterDataProvider({ client, userId, activeCompanyId, 
         return;
       }
 
-      const [companyResult, projectsResult] = await Promise.all([
+      const [companyResult, projectsResult, partiesResult, categoriesResult] = await Promise.all([
         readActiveCompanyProfile(client, activeCompanyId),
         readActiveCompanyProjects(client, activeCompanyId),
+        readActiveCompanyParties(client, activeCompanyId),
+        readActiveCompanyExpenseCategories(client, activeCompanyId),
       ]);
       const { data: liveSession } = await client.auth.getSession();
       if (!isCurrent() || liveSession.session?.user.id !== userId) return;
@@ -51,14 +54,25 @@ export function ProductionMasterDataProvider({ client, userId, activeCompanyId, 
         commit({ phase: "ERROR", error: projectsResult.error });
         return;
       }
+      if (!partiesResult.ok) {
+        commit({ phase: "ERROR", error: partiesResult.error });
+        return;
+      }
+      if (!categoriesResult.ok) {
+        commit({ phase: "ERROR", error: categoriesResult.error });
+        return;
+      }
       if (!companyResult.data) {
         commit({ phase: "MISSING_COMPANY" });
         return;
       }
-      commit({ phase: "READY", company: companyResult.data, projects: projectsResult.data });
+      commit({ phase: "READY", company: companyResult.data, projects: projectsResult.data, parties: partiesResult.data, expenseCategories: categoriesResult.data });
     };
 
-    void load();
+    void load().catch(() => commit({
+      phase: "ERROR",
+      error: { source: "session", code: null, message: "Protected master data could not be loaded." },
+    }));
     return () => {
       mounted = false;
       requestGeneration.current += 1;

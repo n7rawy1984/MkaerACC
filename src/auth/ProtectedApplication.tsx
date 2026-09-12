@@ -25,7 +25,7 @@ function RoutedApplication() {
   if (state.phase === "IDENTITY_LOAD_ERROR") return <Routes><Route path="/auth-error" element={<AuthErrorPage />} /><Route path="*" element={<Navigate to="/auth-error" replace />} /></Routes>;
   return (
     <SupabaseTenantSettingsProvider key={`${state.profile.userId}:${state.activeTenant.companyId}`} client={getSupabaseClient()} profile={state.profile} tenant={state.activeTenant}>
-      <ProductionMasterDataProvider key={`${state.profile.userId}:${state.activeTenant.companyId}`} client={getSupabaseClient()} userId={state.profile.userId} activeCompanyId={state.activeTenant.companyId}>
+      <ProductionMasterDataProvider key={`${state.profile.userId}:${state.activeTenant.companyId}:${state.activeTenant.role}`} role={state.activeTenant.role} client={getSupabaseClient()} userId={state.profile.userId} activeCompanyId={state.activeTenant.companyId}>
         <Routes>
           <Route path="/login" element={<Navigate to="/" replace />} />
           <Route path="/no-company" element={<Navigate to="/" replace />} />
@@ -33,6 +33,8 @@ function RoutedApplication() {
           <Route path="/auth-error" element={<Navigate to="/" replace />} />
           <Route path="/" element={<TenantReadyApplication view="projects" />} />
           <Route path="/projects" element={<TenantReadyApplication view="projects" />} />
+          <Route path="/parties" element={<TenantReadyApplication view="parties" />} />
+          <Route path="/expense-categories" element={<TenantReadyApplication view="expenseCategories" />} />
           <Route path="*" element={<TenantReadyApplication view="deferred" />} />
         </Routes>
       </ProductionMasterDataProvider>

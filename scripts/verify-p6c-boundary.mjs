@@ -43,6 +43,7 @@ const forbiddenMasterText = [
   "journal_entries", "journal_lines", "post_expense", "post_supplier_payment",
   "custody_advances", "supplier_payments", "subcontractor_payments", ".delete(",
   "service_role", "SUPABASE_SERVICE_ROLE", "SECRET_KEY",
+  ".insert(", ".update(", ".upsert(", ".rpc(",
 ];
 for (const file of masterFiles) {
   const source = readFileSync(file, "utf8");
@@ -59,8 +60,23 @@ for (const required of [
   if (!repositorySource.includes(required)) throw new Error(`Missing explicit tenant query boundary: ${required}`);
 }
 
+const allowedTables = new Set(["companies", "projects", "parties", "expense_categories"]);
+for (const file of masterFiles) {
+  const source = readFileSync(file, "utf8");
+  for (const match of source.matchAll(/\.from\(["']([^"']+)["']\)/g)) {
+    if (!allowedTables.has(match[1])) throw new Error(`Out-of-slice table: ${match[1]}`);
+  }
+  if (/\.(insert|update|upsert|delete|rpc)\s*\(/.test(source)) throw new Error(`Mutation/RPC in master module: ${file}`);
+}
+for (const [name, table] of [["readActiveCompanyParties", "parties"], ["readActiveCompanyExpenseCategories", "expense_categories"]]) {
+  const body = repositorySource.split(`export async function ${name}(`)[1]?.split("export ")[0];
+  for (const required of [`.from("${table}")`, '.eq("company_id", activeCompanyId)', 'row.company_id === activeCompanyId']) {
+    if (!body?.includes(required)) throw new Error(`Missing ${name} boundary: ${required}`);
+  }
+}
+
 const providerSource = readFileSync(resolve(masterRoot, "ProductionMasterDataProvider.tsx"), "utf8");
-for (const guard of ["requestGeneration", "scopeKey", "mounted", "liveSession.session?.user.id !== userId"]) {
+for (const guard of ["requestGeneration", "scopeKey", "mounted", "liveSession.session?.user.id !== userId", "${userId}:${activeCompanyId}:${role}", "scopedState.scopeKey === scopeKey", "readActiveCompanyParties", "readActiveCompanyExpenseCategories"]) {
   if (!providerSource.includes(guard)) throw new Error(`Missing stale-response/session guard: ${guard}`);
 }
 
@@ -94,6 +110,10 @@ const protectedApplicationSource = readFileSync(resolve(repositoryRoot, "src/aut
 for (const required of [
   'key={`${state.profile.userId}:${state.activeTenant.companyId}`}',
   'activeCompanyId={state.activeTenant.companyId}',
+  'role={state.activeTenant.role}',
+  'key={`${state.profile.userId}:${state.activeTenant.companyId}:${state.activeTenant.role}`}',
+  'path="/parties"',
+  'path="/expense-categories"',
 ]) {
   if (!protectedApplicationSource.includes(required)) throw new Error(`Missing Company-change master invalidation boundary: ${required}`);
 }
@@ -113,4 +133,6 @@ for (const file of productionGraph) {
   }
 }
 
-console.log(`P6C Company/Projects boundary verified across ${masterFiles.length} master modules, ${productionGraph.size} production modules, and ${demoGraph.size} demo modules.`);
+console.log(`P6C Company/Projects/Parties/Expense Categories boundary verified across ${masterFiles.length} master modules, ${productionGraph.size} production modules, and ${demoGraph.size} demo modules.`);
+
+await import("./verify-p6c-behavior.mjs");

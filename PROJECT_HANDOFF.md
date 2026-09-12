@@ -41,7 +41,7 @@ The company previously tracked project expenses, supplier bills, cash handed to 
 - **Post-P5 Focused Engineering and Accounting Integrity Review** — Completed. P5H/P5I combined dependency, separated-source settlement, reconciliation, tenant and authorization checks passed; P6A is ready to begin separately.
 - **Phase 2C / P6A (Auth Session and Tenant Context)** — Verified complete on 2026-09-04. Automated gates and the full risk-proportionate browser/Auth smoke matrix pass with no confirmed defect; Development-only synthetic fixture and temporary browser-state cleanup was verified complete on 2026-09-05.
 - **Phase 2C / P6B (Tenant Settings and White-Label Foundation)** — Verified complete on Development through `20260911123000`; hosted constraint/RLS, complete browser branding/isolation, and post-fix canonical-route matrices pass. Development-only fixture and browser-state cleanup is verified complete.
-- **Phase 2C / P6C (Master Data Async Repository Cutover)** — In progress. Slice 1 is verified complete: the production-only async foundation and read-only active-Company profile plus tenant-scoped Projects passed authenticated browser, tenant-isolation, focus/revalidation, and fail-closed revocation acceptance. All remaining master entities and mutations belong to later separately authorized P6C slices.
+- **Phase 2C / P6C (Master Data Async Repository Cutover)** — In progress. Slice 1 is verified complete: the production-only async foundation and read-only active-Company profile plus tenant-scoped Projects passed authenticated browser, tenant-isolation, focus/revalidation, and fail-closed revocation acceptance. Slice 2 Parties/Expense Categories reads are VERIFIED COMPLETE, including accepted authenticated role/tenant/focus checks and complete fixture/Auth cleanup. Accounts/Treasury/Subcontracts and all master mutations belong to later separately authorized P6C slices.
 - **Payroll + WPS** — Confirmed next functional module after Production Data Foundation.
 
 See `PROJECT_ROADMAP.md` for the full phase breakdown, binding decisions, and decision log.
@@ -333,7 +333,7 @@ Before this phase, subcontractor payable/retention/advance balances in `ledger.t
 
 ## 15. Known Limitations
 
-- Production Auth/session and active-tenant context are implemented in P6A. P6C Slice 1 exposes only read-only active-Company profile and tenant-scoped Projects in `supabase-auth`; other master data and all financial frontend flows remain unavailable pending later P6C/P6D work. The legacy accounting UI still uses localStorage only in development `local-demo` mode. Audit and remaining production cutover work are not implemented.
+- Production Auth/session and active-tenant context are implemented in P6A. P6C exposes read-only active-Company profile and tenant-scoped Projects (Slice 1 verified), plus Parties and Expense Categories (Slice 2 VERIFIED COMPLETE) in `supabase-auth`; other master data and all financial frontend flows remain unavailable pending later P6C/P6D work. The legacy accounting UI still uses localStorage only in development `local-demo` mode. Audit and remaining production cutover work are not implemented.
 - `AppDataContext` writes a business row, journal and status in separate synchronous operations. A quota/browser failure can leave partial state; concurrent users are impossible; authorization is absent.
 - The generic repository loads and rewrites whole collections, caches indefinitely, has no query/filter/pagination/concurrency contract, and is synchronous. It is not a viable direct Supabase adapter.
 - Most current local business documents lack a direct `companyId`; company is inferred through project where present. P0 resolved the production rule: financially important records receive mandatory direct `company_id`, while ambiguous local rows go to migration review rather than inferred tenant ownership.
@@ -805,3 +805,101 @@ Any future phase should be verified the same way before being marked "Completed"
 - [ ] Check `git log` / `git status` for anything not yet reflected here.
 - [ ] Before writing code: identify which files in §5/§6 the task actually touches; don't restructure working modules.
 - [ ] After completing a phase or making a binding decision: update **both** `PROJECT_ROADMAP.md` (phase status, next action, decision log, known gaps) and this file (implementation state, new files/models, changed accounting rules, limitations, immediate next task). A feature is only "Completed" once it exists and has been verified running — not merely planned.
+
+
+### P6C Slice 2 — Parties and Expense Categories read-only (2026-09-12)
+
+Status: **VERIFIED COMPLETE**. The implementation/setup-stage notes below are historical; final acceptance and cleanup are recorded at the end of this section. Slice 1 remains verified complete; overall P6C is not complete. P6D/P6E and the next entity slice have not started. This entry supersedes earlier statements that Slice 2 has not started. Historical architecture/P6B documents contain dated planned-state statements; the implemented P6B/P6C records and actual code/migrations remain authoritative. Construction Materials / Site Stores + Tool Custody stays future-only.
+
+#### Schema and authorization evidence
+
+Canonical P3/P4 migrations, P5B's category composite-key addition, generated public types, and hosted Development metadata were inspected. All 27 local/remote migration versions align through `20260911123000`; linked `db push --dry-run` returned up-to-date with no migrations/seeds/roles to apply. HEAD and the live remote `main` were both `d0687f2769a3c8694465754f726192c3a0ae949e` before this uncommitted batch.
+
+- `parties`: UUID `id` PK; mandatory UUID `company_id`; mandatory `type`, `name`, `status`; nullable text `code`, `trn`, `contact_person`, `phone`, `email`, `address`, `notes`; mandatory timestamptz `created_at`/`updated_at`; nullable UUID `created_by`/`updated_by`. Party type is exactly OWNER/CUSTODIAN/SUPPLIER/EMPLOYEE/SUBCONTRACTOR/OTHER. Status is ACTIVE/INACTIVE, default ACTIVE. Trimmed name length is 1–200; optional trimmed code length is 1–50. Code uniqueness is Company-scoped, case-insensitive and trimmed, excluding NULL codes; `(company_id,id)` is unique. TRN is nullable text with no additional format constraint. No inferred numeric conversion or validation is applied during reads.
+- `expense_categories`: UUID `id` PK; mandatory UUID `company_id`; mandatory text `code`/`name`; nullable text `description`; mandatory ACTIVE/INACTIVE `status` default ACTIVE; mandatory timestamptz creation/update timestamps and nullable UUID actors. Trimmed code/name bounds are 1–50/1–200. Trimmed, case-insensitive code is Company-unique. P5B added unique `(company_id,id)` without changing the read model.
+- Both tables have Company/actor FKs using ON DELETE RESTRICT, enabled and forced RLS, P4 tenant-reassignment prevention, and update-timestamp triggers. Party type is protected when referenced by a Subcontract. No schema blocker was found.
+- SELECT policies are `parties_read_sensitive_roles` and `categories_read_operational`. Existing role helpers derive `auth.uid()` and require active profile, membership and Company. No status filter is imposed on the master rows themselves: authorized inactive records remain visible.
+
+| Active Company role | Parties SELECT | Categories SELECT |
+|---|---|---|
+| ACCOUNTING_ADMIN, ACCOUNTANT, MANAGEMENT_VIEWER | All six types | Company categories |
+| PROCUREMENT, DATA_ENTRY | CUSTODIAN, SUPPLIER, SUBCONTRACTOR, OTHER; excludes OWNER/EMPLOYEE | Company categories |
+| PROJECT_MANAGER | No direct Party rows | Only with at least one own ACTIVE Company project assignment |
+| SYSTEM_ADMIN | No rows | No rows |
+| Anonymous or inactive profile/membership/Company | No authorized read | No authorized read |
+
+Authenticated grants on both tables are SELECT/INSERT/UPDATE, not DELETE. Existing INSERT/UPDATE policies permit Accounting Admin Party/category management and Procurement Party management for SUPPLIER/SUBCONTRACTOR/OTHER only (plus the existing permission checks). This frontend slice exposes none of those writes. Anonymous has no table grants.
+
+**Hardening opportunity, non-blocking:** actual hosted `service_role` grants include SELECT/INSERT/UPDATE plus TRUNCATE/TRIGGER/REFERENCES on both tables, with DELETE absent. This corrects older P3/P4 prose claiming trusted grants were SELECT/INSERT/UPDATE only. These trusted-only extras are not browser-reachable and are unchanged; reviewing them belongs to a separately scoped least-privilege batch/pre-production review, not this read-only frontend slice.
+
+#### Implemented architecture and behavior
+
+The existing production-only `src/master` graph now includes `ProductionParty` and `ProductionExpenseCategory`, explicit projections/mappers, and `readActiveCompanyParties`/`readActiveCompanyExpenseCategories`. Both use `.eq("company_id", activeCompanyId)` and reject out-of-scope returned rows defensively. Parties sort by name then ID; categories by code then ID. RLS results, including partial and empty arrays, are accepted without expected-type counts, hidden-row lookups, or fabricated relationships.
+
+The Party mapper preserves all 16 selected fields, intentionally mapping `trn` to nullable string `taxRegistrationNumber` and `contact_person` to `contactPerson`, plus Company/actor/timestamp metadata. Leading zeros and NULL are preserved. Status is required from the database, unlike the demo model's optional ACTIVE fallback. Categories preserve all ten fields, including description, status and metadata absent from the smaller demo type. No demo domain/model import is introduced.
+
+The same provider loads Company, Projects, Parties and Categories concurrently once per mounted user/Company/role scope. It retains generation, mount, live-session and synchronous visible-scope guards. A detected authoritative role change invalidates loaded master data; P6B remains keyed to user/Company. Genuine tenant changes, logout and P6A authority revocation unmount the protected tree. Unchanged focus/visibility authority revalidation and redundant same-user SIGNED_IN handling retain Slice 1 behavior and do not reload masters. No new global cache or persistence exists.
+
+Routes `/parties` and `/expense-categories`, plus minimal master navigation, expose localized loading, populated, role-aware valid empty, generic safe query-error, and missing-Company states. P6B branding and EN/AR/RTL remain in the existing shell. Contact/TRN fields render as plain text; no HTML or external action is generated. All resources share the existing fail-closed aggregate state: a query error withholds the whole master snapshot, with refresh as retry. Merely navigating between the three master views does not initiate another load.
+
+A Project Manager may legitimately see an assigned Project while its Party list is empty. The UI does not resolve hidden Parties or infer authorization from Projects. **Expected/intentional behavior**, not a missing-data application error. Lists are read snapshots, not realtime subscriptions or completeness/count assertions; provider/API row limits and later pagination remain a limitation of this minimal proof UI. Assignment-only changes are enforced by RLS on the next query; P6A currently revalidates identity/membership/Company, not project-assignment snapshots.
+
+#### Exact files and verification at implementation stage
+
+Added: `scripts/verify-p6c-behavior.mjs`.
+
+Changed: `src/master/masterTypes.ts`, `src/master/masterRepositories.ts`, `src/master/ProductionMasterDataProvider.tsx`, `src/auth/ProtectedApplication.tsx`, `src/app/TenantReadyApplication.tsx`, `src/i18n/en.ts`, `src/i18n/ar.ts`, `scripts/verify-p6c-boundary.mjs`, `PROJECT_ROADMAP.md`, `PROJECT_HANDOFF.md`.
+
+- `npm run build`: PASS; existing demo chunk-size advisory only.
+- `npm run lint`: PASS; four established Fast Refresh warnings only.
+- `npm run verify:p6a-boundary`: PASS.
+- `npm run verify:p6c-boundary`: PASS; now includes the focused behavioral script using installed TypeScript/Node and controlled query/hook adapters, without a new framework/dependency. It checks exact mapping, NULL/TRN preservation, all Party types, inactive records, tenant filters, partial/empty results, normalized query errors, populated/empty provider readiness, query/rejection failures, missing Company, unchanged-scope load count, immediate role/Company invalidation, late A response after B, unmount and session rejection. These are deterministic controlled lifecycle tests, not mounted React/browser evidence.
+- Static boundary checks cover production/demo import isolation, no master localStorage, allowed tables only, no mutation/RPC, no privileged secret markers, provider scope/session guards, and existing coalesced focus/visibility/same-user SIGNED_IN safeguards. Focus/visibility runtime regression remains in the manual plan.
+- Hosted Development verification: metadata-only read-only transactions checked columns, enums, constraints/indexes, forced RLS, policies and grants. No business-row/Auth fixture was created, changed or deleted. Migration alignment and linked no-op dry-run passed.
+- `git diff --check` and focused changed-file credential-pattern scan: PASS. No privileged values entered source/output.
+- Not performed: authenticated Slice 2 Data API role matrix, browser navigation/network/console/RTL verification, timed browser stale-response races, or hosted synthetic mutation-denial testing. No authenticated test identity was provisioned. No material implementation blocker found.
+
+No Party/category mutation, Accounts/Treasury/Subcontracts implementation, migration, RLS/grant change, financial-flow cutover, localStorage fallback, Staging/Production action, commit or push occurred. No P5 file/command changed.
+
+#### Original manual/browser verification plan — final acceptance recorded below
+
+1. Use only MakerACC-Development with browser-safe Auth configuration. Reuse suitable explicitly authorized synthetic identities/data if available; otherwise separately prepare a narrowly scoped fixture before this plan, with exact cleanup IDs. Need Companies A/B with distinct branding; A has all six Party types, active/inactive rows, a leading-zero TRN and NULL business fields, and categories with/without descriptions; B has empty Party/category results. Cover all seven roles and Project Manager assignment/no-assignment. Do not use real accounting records or alter historical fixtures without authorization.
+2. Signed out, open `/parties` and `/expense-categories`: expect login and no protected data. Sign in; verify A's exact authorized records, IDs/company filters in Network, NULL/leading-zero/status mapping, category descriptions and P6B branding. Visit `/projects`, `/parties`, `/expense-categories` and refresh each direct URL.
+3. Exercise every role against the matrix above. Check Procurement/Data Entry include Custodians but never Owner/Employee rows; Project Manager sees assigned Projects with a valid empty Party list; System Admin sees empty lists. Verify Company B empty states without an error. Do not bypass RLS to retrieve missing dependent Parties.
+4. Throttle reads to see loading; delay A responses, switch to B, then release A. Expect neutral tenant transition and no A record/branding flash under B. Repeat B→A and logout during pending requests. Refresh restores only the authorized selected Company. Test another user's login without retaining the first user's records.
+5. Repeatedly switch tabs/focus while authority is unchanged: only P6A authority revalidation should occur; no settings/master reload, blocking loader, disappearing list or duplicate resource request. Separately revoke/restore synthetic profile, membership and Company, triggering focus each time: detected revocation clears the protected tree; restore and Retry recovers safely. Test a role downgrade from Accounting Admin to Procurement: revalidation must clear the old Party snapshot and requery the restricted subset. Test Project Manager assignment removal with a fresh read/refresh.
+6. Block/fail Party and category requests separately; expect a safe error, no prior snapshot/demo data and no raw server message. Remove the fault and refresh to recover. Verify EN/AR, document lang/dir, keyboard navigation, narrow viewport, mixed Arabic/Latin contact fields, and long names/descriptions.
+7. Verify no create/edit/delete control, financial request/RPC, or newly enabled financial route. `/expenses`, `/journal`, `/advances`, and other deferred paths remain holding views. Network must contain only Auth/P6A, settings and the four allowed master resources; no privileged credentials. Check console for unexpected errors.
+8. Check local-demo separately: its accounting data and `cas:v1:*` collections remain unchanged and it imports/loads no production master modules. After acceptance, remove only newly authorized verification fixtures and temporary browser Auth state, retain demo data, record evidence and exact cleanup. Do not mark all P6C complete.
+
+#### Proportional lifecycle classification at implementation stage
+
+- Business/accounting: **VERIFIED** — read-only reference behavior; no accounting policy or P5 change.
+- Security/authorization: **VERIFIED** for schema/policy/source and controlled scope evidence; authenticated browser/role acceptance **DEFERRED**.
+- Database: **VERIFIED** — actual hosted metadata and canonical history align; no schema work needed.
+- Deployment: **NOT APPLICABLE** to this local implementation batch; Staging/Production rollout **DEFERRED**, configuration unchanged.
+- Testing: automated and hosted metadata checks **VERIFIED**; browser/runtime acceptance **DEFERRED**.
+- Documentation: **VERIFIED** — Slice 2 implementation and remaining gates recorded without closing P6C.
+
+### P6C Slice 2 temporary fixture creation history (2026-09-12; now cleaned up)
+
+The user manually created confirmed Auth identity `74e36291-172a-44e7-95be-f6c1283c315b` / `p6c-slice2-user@example.test`; its automatic ACTIVE profile and exact identity were verified read-only. The explicitly authorized Development-only fixture was then created in one guarded transaction after zero ID/code/slug/user collision checks. Full exact manifest, creation/verification SQL, seven guarded Alpha role-switch scripts, active/inactive assignment scripts and unexecuted cleanup are in `docs/verification/p6c-slice2/README.md`.
+
+Companies `72000000-0000-4000-8000-0000000000a1` (P6C Slice 2 Alpha) and `72000000-0000-4000-8000-0000000000a2` (P6C Slice 2 Beta) have distinct settings and ACTIVE/MANAGEMENT_VIEWER memberships for this user. Post-commit checks verified profile 1, Companies 2, memberships 2, settings 2, Alpha Project 1, active assignment 1, Alpha Parties 6 (all valid types, inactive OTHER, Supplier TRN `001234567890123`), Alpha Categories 3 (active/inactive/NULL-description cases), and Beta Projects/Parties/Categories 0. Financial/other out-of-scope Company-owned rows, unrelated user memberships/assignments and orphan fixture rows are all zero. Global integrity is now 16 Companies/16 settings with zero missing/orphan settings, up from the verified 14/14 baseline.
+
+No role switching, assignment toggling or cleanup was executed. At setup time the fixture was preserved for manual verification; the subsequent acceptance and cleanup below supersede this temporary state. No password is stored. This supersedes the earlier no-fixture status only; browser acceptance remains pending and P6C is not complete. No application logic, migration, RLS/grant, financial flow, other entity slice, Staging/Production, commit or push change occurred in this fixture batch.
+
+
+### P6C Slice 2 final acceptance and checkpoint (2026-09-12)
+
+**P6C Slice 2 — VERIFIED COMPLETE.** Overall P6C remains incomplete; the next entity slice, P6D and P6E have not started. The user supplied authenticated manual acceptance evidence in this session: MANAGEMENT_VIEWER displayed all six Party types and all three Categories; inactive OTHER/category status, NULL optional fields/description, exact Supplier TRN `001234567890123`, and Arabic contact text rendered correctly. PROCUREMENT displayed only CUSTODIAN/SUPPLIER/SUBCONTRACTOR/OTHER (4 Parties, 3 Categories), removing OWNER/EMPLOYEE during the existing session. This is representative browser evidence for the shared DATA_ENTRY policy branch, not a separate DATA_ENTRY login test. ACCOUNTING_ADMIN/ACCOUNTANT use the inspected unrestricted policy branches; separate browser runs for those roles were not reported.
+
+PROJECT_MANAGER displayed 0 Parties/3 Categories with ACTIVE assignment and 0/0 with INACTIVE assignment; the assignment was restored ACTIVE. SYSTEM_ADMIN displayed 0/0, confirming no browser bypass. Alpha was restored to ACTIVE/MANAGEMENT_VIEWER, then Alpha→Beta showed Beta branding and 0 Projects/Parties/Categories without Alpha records. Repeated Beta tab-away/return caused no secure/presentation loading interruption or stale master flash, accepting the Slice 1 focus/visibility regression boundary.
+
+The user reported successful guarded SQL cleanup, zero fixture database counts, global 14 Companies/14 settings with zero missing/orphan settings, then manual deletion of Auth user `74e36291-172a-44e7-95be-f6c1283c315b` / `p6c-slice2-user@example.test`. Final read-only Development checks independently reconfirm these zero counts, Auth absence, and global one-to-one integrity. No fixture remains. `docs/verification/p6c-slice2/` is retained as historical/reusable operational documentation; it is not a live fixture or an automatically executed migration.
+
+Final build, lint, P6A boundary, P6C boundary (including the controlled mapper/query/provider behavior checks), focused credential/boundary scans and diff checks pass. Lint retains only four established Fast Refresh warnings; build retains the existing large demo-chunk advisory. All 27 local/Development migrations remain aligned through `20260911123000`. No migration, RLS/grant change, financial-flow cutover, Accounts/Treasury/Subcontracts implementation, or Staging/Production action occurred. One checkpoint commit is authorized; pushing remains the user's action.
+
+No blocking issue remains in the accepted read-only slice. Trusted service_role TRUNCATE/TRIGGER/REFERENCES privileges remain an unchanged, non-blocking future hardening/audit item. Pagination/realtime snapshots remain deferred. Detailed timed browser races, query-failure browser injection, full RTL/keyboard/network/console matrices and separate per-role browser runs beyond the supplied evidence are not newly claimed; existing source/controlled tests and representative manual acceptance form the proportionate closure evidence.
+
+Final lifecycle: business/accounting VERIFIED (read-only); security/authorization VERIFIED for the accepted policy and representative browser boundaries; database VERIFIED (aligned history and cleaned fixture); deployment NOT APPLICABLE to this checkpoint, Staging/Production DEFERRED; testing VERIFIED with the explicit evidence limits above; documentation VERIFIED. Development slice completion is not production readiness.
