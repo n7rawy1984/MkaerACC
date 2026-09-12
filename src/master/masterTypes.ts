@@ -67,8 +67,42 @@ export interface ProductionExpenseCategory {
   updatedBy: string | null;
 }
 
+export interface ProductionAccount {
+  id: string;
+  companyId: string;
+  code: string;
+  name: string;
+  accountType: Database["public"]["Enums"]["account_type"];
+  parentAccountId: string | null;
+  requiresParty: boolean;
+  status: Database["public"]["Enums"]["account_status"];
+  systemKey: Database["public"]["Enums"]["system_account_key"] | null;
+  createdAt: string;
+  createdBy: string | null;
+  updatedAt: string;
+  updatedBy: string | null;
+}
+
+export interface ProductionTreasuryAccount {
+  id: string;
+  companyId: string;
+  projectId: string | null;
+  code: string;
+  name: string;
+  type: Database["public"]["Enums"]["treasury_account_type"];
+  glAccountId: string;
+  status: Database["public"]["Enums"]["account_status"];
+  bankName: string | null;
+  accountReference: string | null;
+  notes: string | null;
+  createdAt: string;
+  createdBy: string | null;
+  updatedAt: string;
+  updatedBy: string | null;
+}
+
 export interface MasterDataQueryError {
-  source: "company" | "projects" | "parties" | "expenseCategories" | "session";
+  source: "company" | "projects" | "parties" | "expenseCategories" | "accounts" | "treasuryAccounts" | "session";
   code: string | null;
   message: string;
 }
@@ -77,4 +111,4 @@ export type ProductionMasterDataState =
   | { phase: "LOADING" }
   | { phase: "MISSING_COMPANY" }
   | { phase: "ERROR"; error: MasterDataQueryError }
-  | { phase: "READY"; company: ProductionCompanyProfile; projects: ProductionProjectSummary[]; parties: ProductionParty[]; expenseCategories: ProductionExpenseCategory[] };
+  | { phase: "READY"; company: ProductionCompanyProfile; projects: ProductionProjectSummary[]; parties: ProductionParty[]; expenseCategories: ProductionExpenseCategory[]; accounts: ProductionAccount[]; treasuryAccounts: ProductionTreasuryAccount[] };

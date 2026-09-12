@@ -33,6 +33,35 @@ assert.deepEqual(repositories.mapExpenseCategoryRow(category), {
   id: "category-a", companyId: "company-a", name: "Materials", code: "MAT", description: null,
   status: "INACTIVE", createdAt: audit.created_at, createdBy: null, updatedAt: audit.updated_at, updatedBy: "actor",
 });
+const account = { ...audit, id: "gl-a", company_id: "company-a", code: "0010", name: "حساب", account_type: "ASSET", parent_account_id: "parent-a", requires_party: true, system_key: "INPUT_VAT", status: "INACTIVE" };
+const treasury = { ...audit, id: "treasury-a", company_id: "company-a", project_id: null, code: "BANK-1", name: "بنك", type: "BANK", gl_account_id: "gl-a", status: "INACTIVE", bank_name: null, account_reference: "001234", notes: null };
+assert.deepEqual(repositories.mapAccountRow(account), {
+  id: "gl-a", companyId: "company-a", code: "0010", name: "حساب", accountType: "ASSET", parentAccountId: "parent-a", requiresParty: true, systemKey: "INPUT_VAT", status: "INACTIVE",
+  createdAt: audit.created_at, createdBy: null, updatedAt: audit.updated_at, updatedBy: "actor",
+});
+assert.deepEqual(repositories.mapTreasuryAccountRow(treasury), {
+  id: "treasury-a", companyId: "company-a", projectId: null, code: "BANK-1", name: "بنك", type: "BANK", glAccountId: "gl-a", status: "INACTIVE", bankName: null, accountReference: "001234", notes: null,
+  createdAt: audit.created_at, createdBy: null, updatedAt: audit.updated_at, updatedBy: "actor",
+});
+for (const account_type of ["ASSET", "LIABILITY", "EQUITY", "REVENUE", "EXPENSE"]) {
+  const mapped = repositories.mapAccountRow({ ...account, account_type, parent_account_id: null, requires_party: false, system_key: null });
+  assert.equal(mapped.accountType, account_type); assert.equal(mapped.parentAccountId, null);
+  assert.equal(mapped.requiresParty, false); assert.equal(mapped.systemKey, null);
+}
+for (const type of ["CASH", "PETTY_CASH", "BANK", "PROJECT_CASH_BOX", "PROJECT_BANK"]) {
+  const mapped = repositories.mapTreasuryAccountRow({ ...treasury, type, project_id: "project-a", bank_name: "بنك", account_reference: null, notes: "ملاحظة", created_by: "actor", updated_by: null });
+  assert.equal(mapped.type, type); assert.equal(mapped.glAccountId, account.id);
+  assert.equal(mapped.projectId, "project-a"); assert.equal(mapped.bankName, "بنك");
+  assert.equal(mapped.accountReference, null); assert.equal(mapped.notes, "ملاحظة");
+  assert.equal(mapped.createdBy, "actor"); assert.equal(mapped.updatedBy, null);
+}
+const { findVisibleAccount } = moduleAt("src/master/accountPresentation.ts");
+const mappedAccount = repositories.mapAccountRow(account);
+assert.equal(findVisibleAccount([mappedAccount], "company-a", "gl-a"), mappedAccount);
+assert.equal(findVisibleAccount([mappedAccount], "company-b", "gl-a"), null);
+assert.equal(findVisibleAccount([], "company-a", "gl-a"), null, "PM Treasury mapping must not synthesize a hidden Account");
+assert.equal(findVisibleAccount([mappedAccount], "company-a", "parent-a"), null, "partial parent reference stays unresolved");
+assert.equal(findVisibleAccount([mappedAccount], "company-a", null), null);
 function queryClient(result) {
   const calls = [];
   const query = { then: (done, fail) => Promise.resolve(result).then(done, fail) };
@@ -42,6 +71,8 @@ function queryClient(result) {
 for (const [read, table, row, source] of [
   [repositories.readActiveCompanyParties, "parties", party, "parties"],
   [repositories.readActiveCompanyExpenseCategories, "expense_categories", category, "expenseCategories"],
+  [repositories.readActiveCompanyAccounts, "accounts", account, "accounts"],
+  [repositories.readActiveCompanyTreasuryAccounts, "treasury_accounts", treasury, "treasuryAccounts"],
 ]) {
   const client = queryClient({ data: [row, { ...row, id: "other", company_id: "company-b" }], error: null });
   const result = await read(client, "company-a");
@@ -74,7 +105,9 @@ function harness(overrides = {}) {
     readActiveCompanyProfile: async (_client, id) => ok({ id }),
     readActiveCompanyProjects: async () => ok([]),
     readActiveCompanyParties: async () => ok([]),
-    readActiveCompanyExpenseCategories: async () => ok([]), ...overrides,
+    readActiveCompanyExpenseCategories: async () => ok([]),
+    readActiveCompanyAccounts: async () => ok([]),
+    readActiveCompanyTreasuryAccounts: async () => ok([]), ...overrides,
   };
   for (const [key, fn] of Object.entries(readers)) readers[key] = (...args) => { calls++; return fn(...args); };
   const { ProductionMasterDataProvider } = moduleAt("src/master/ProductionMasterDataProvider.tsx", {
@@ -99,12 +132,11 @@ assert.equal(h.render().parties[0].taxRegistrationNumber, "001234567890123");
 assert.equal(h.state().expenseCategories[0].status, "INACTIVE");
 h = harness();
 assert.equal(h.render().phase, "LOADING"); await flush();
-assert.deepEqual(h.render(), { phase: "READY", company: { id: "company-a" }, projects: [], parties: [], expenseCategories: [] });
-h.render(); await flush(); assert.equal(h.calls(), 4, "unchanged scope must not reload");
+assert.deepEqual(h.render(), { phase: "READY", company: { id: "company-a" }, projects: [], parties: [], expenseCategories: [], accounts: [], treasuryAccounts: [] });
+h.render(); await flush(); assert.equal(h.calls(), 6, "unchanged scope must not reload");
 assert.equal(h.render({ role: "PROCUREMENT" }).phase, "LOADING", "role change hides old data synchronously"); await flush();
-assert.equal(h.calls(), 8);
-for (const source of ["parties", "expenseCategories"]) {
-  const reader = source === "parties" ? "readActiveCompanyParties" : "readActiveCompanyExpenseCategories";
+assert.equal(h.calls(), 12);
+for (const [source, reader] of [["parties", "readActiveCompanyParties"], ["expenseCategories", "readActiveCompanyExpenseCategories"], ["accounts", "readActiveCompanyAccounts"], ["treasuryAccounts", "readActiveCompanyTreasuryAccounts"]]) {
   h = harness({ [reader]: async () => ({ ok: false, error: { source, code: "42501", message: "denied" } }) });
   h.render(); await flush(); assert.equal(h.render().phase, "ERROR"); assert.equal(h.state().error.source, source);
 }
@@ -130,3 +162,55 @@ for (const invalidate of ["unmount", "session"]) {
 h = harness(); h.session("different-user"); h.render(); await flush();
 assert.equal(h.render().phase, "ERROR"); assert.equal(h.calls(), 0);
 console.log("P6C mapper/query and controlled provider lifecycle checks passed (empty, partial, error, scope/role switch, late result, unmount, session, unchanged scope).");
+
+for (const [reader, field, row, mapper] of [
+  ["readActiveCompanyAccounts", "accounts", account, repositories.mapAccountRow],
+  ["readActiveCompanyTreasuryAccounts", "treasuryAccounts", treasury, repositories.mapTreasuryAccountRow],
+]) {
+  h = harness({ [reader]: async () => ({ ok: true, data: [mapper(row)] }) });
+  h.render(); await flush(); assert.deepEqual(h.render()[field], [mapper(row)]);
+  for (const nextScope of [{ activeCompanyId: "company-b" }, { role: "PROJECT_MANAGER" }, { userId: "user-b" }]) {
+    const delayed = deferred(); let requests = 0;
+    h = harness({ [reader]: () => ++requests === 1 ? delayed.promise : Promise.resolve({ ok: true, data: [] }) });
+    h.render(); await flush();
+    if (nextScope.userId) h.session(nextScope.userId);
+    assert.equal(h.render(nextScope).phase, "LOADING"); await flush();
+    assert.equal(h.render(nextScope).phase, "READY");
+    delayed.resolve({ ok: true, data: [mapper(row)] }); await flush();
+    assert.deepEqual(h.render(nextScope)[field], [], "old tenant/role/user result cannot enter new snapshot");
+  }
+  for (const invalidate of ["unmount", "session"]) {
+    const pending = deferred();
+    h = harness({ [reader]: () => pending.promise }); h.render(); await flush();
+    if (invalidate === "unmount") h.unmount(); else h.session(null);
+    pending.resolve({ ok: true, data: [mapper(row)] }); await flush();
+    assert.equal(h.state().phase, "LOADING", `${field}: ${invalidate} prevents late commit`);
+  }
+}
+h = harness({ readActiveCompanyTreasuryAccounts: async () => ({ ok: true, data: [repositories.mapTreasuryAccountRow(treasury)] }) });
+h.render({ role: "PROJECT_MANAGER" }); await flush();
+assert.equal(h.render({ role: "PROJECT_MANAGER" }).treasuryAccounts[0].glAccountId, "gl-a");
+assert.deepEqual(h.state().accounts, [], "Treasury without visible GL detail is a valid ready state");
+console.log("P6C Slice 3 mapping, relationship visibility, and delayed tenant/role/user/session checks passed.");
+
+// Render actual list components without an authenticated browser or hosted fixtures.
+const { createElement } = require("react");
+const { renderToStaticMarkup } = require("react-dom/server");
+const { AccountsList, TreasuryAccountsList } = moduleAt("src/master/AccountMasterLists.tsx", {
+  "../i18n/I18nContext": { useT: () => (key) => key },
+  "./accountPresentation": { findVisibleAccount },
+});
+const accountMarkup = renderToStaticMarkup(createElement(AccountsList, { accounts: [mappedAccount] }));
+assert(accountMarkup.includes("0010")); assert(accountMarkup.includes("parent-a"));
+assert(accountMarkup.includes("INPUT_VAT")); assert(accountMarkup.includes("productionMaster.yes"));
+assert(accountMarkup.includes("productionMaster.accountDetailsUnavailable"));
+assert(!/<(?:button|input|form)\b/.test(accountMarkup));
+const treasuryMarkup = (accounts) => renderToStaticMarkup(createElement(TreasuryAccountsList, { accounts, treasuryAccounts: [repositories.mapTreasuryAccountRow(treasury)] }));
+assert(treasuryMarkup([mappedAccount]).includes("حساب"));
+assert(treasuryMarkup([]).includes("gl-a"));
+assert(treasuryMarkup([]).includes("productionMaster.accountDetailsUnavailable"));
+assert(!treasuryMarkup([]).includes("حساب"));
+assert(!/<(?:button|input|form)\b/.test(treasuryMarkup([])));
+assert(renderToStaticMarkup(createElement(AccountsList, { accounts: [] })).includes("productionMaster.accountsEmpty"));
+assert(renderToStaticMarkup(createElement(TreasuryAccountsList, { accounts: [], treasuryAccounts: [] })).includes("productionMaster.treasuryAccountsEmpty"));
+console.log("P6C Slice 3 list rendering checks passed (references, hidden details, system flag, empty, no mutation controls).");

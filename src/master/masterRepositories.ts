@@ -6,6 +6,8 @@ import type {
   ProductionProjectSummary,
   ProductionParty,
   ProductionExpenseCategory,
+  ProductionAccount,
+  ProductionTreasuryAccount,
 } from "./masterTypes";
 
 type CompanyRow = Database["public"]["Tables"]["companies"]["Row"];
@@ -154,4 +156,70 @@ export async function readActiveCompanyExpenseCategories(
     .order("id", { ascending: true });
   if (error) return { ok: false, error: queryError("expenseCategories", error) };
   return { ok: true, data: (data ?? []).filter((row) => row.company_id === activeCompanyId).map(mapExpenseCategoryRow) };
+}
+
+export function mapAccountRow(row: Database["public"]["Tables"]["accounts"]["Row"]): ProductionAccount {
+  return {
+    id: row.id,
+    companyId: row.company_id,
+    code: row.code,
+    name: row.name,
+    accountType: row.account_type,
+    parentAccountId: row.parent_account_id,
+    requiresParty: row.requires_party,
+    systemKey: row.system_key,
+    status: row.status,
+    createdAt: row.created_at,
+    createdBy: row.created_by,
+    updatedAt: row.updated_at,
+    updatedBy: row.updated_by,
+  };
+}
+
+export async function readActiveCompanyAccounts(
+  client: SupabaseClient<Database>,
+  activeCompanyId: string,
+): Promise<RepositoryResult<ProductionAccount[]>> {
+  const { data, error } = await client
+    .from("accounts")
+    .select("id, company_id, code, name, account_type, parent_account_id, requires_party, system_key, status, created_at, created_by, updated_at, updated_by")
+    .eq("company_id", activeCompanyId)
+    .order("code", { ascending: true })
+    .order("id", { ascending: true });
+  if (error) return { ok: false, error: queryError("accounts", error) };
+  return { ok: true, data: (data ?? []).filter((row) => row.company_id === activeCompanyId).map(mapAccountRow) };
+}
+
+export function mapTreasuryAccountRow(row: Database["public"]["Tables"]["treasury_accounts"]["Row"]): ProductionTreasuryAccount {
+  return {
+    id: row.id,
+    companyId: row.company_id,
+    code: row.code,
+    name: row.name,
+    projectId: row.project_id,
+    type: row.type,
+    glAccountId: row.gl_account_id,
+    bankName: row.bank_name,
+    accountReference: row.account_reference,
+    notes: row.notes,
+    status: row.status,
+    createdAt: row.created_at,
+    createdBy: row.created_by,
+    updatedAt: row.updated_at,
+    updatedBy: row.updated_by,
+  };
+}
+
+export async function readActiveCompanyTreasuryAccounts(
+  client: SupabaseClient<Database>,
+  activeCompanyId: string,
+): Promise<RepositoryResult<ProductionTreasuryAccount[]>> {
+  const { data, error } = await client
+    .from("treasury_accounts")
+    .select("id, company_id, code, name, project_id, type, gl_account_id, bank_name, account_reference, notes, status, created_at, created_by, updated_at, updated_by")
+    .eq("company_id", activeCompanyId)
+    .order("code", { ascending: true })
+    .order("id", { ascending: true });
+  if (error) return { ok: false, error: queryError("treasuryAccounts", error) };
+  return { ok: true, data: (data ?? []).filter((row) => row.company_id === activeCompanyId).map(mapTreasuryAccountRow) };
 }

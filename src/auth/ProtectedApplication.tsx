@@ -35,6 +35,8 @@ function RoutedApplication() {
           <Route path="/projects" element={<TenantReadyApplication view="projects" />} />
           <Route path="/parties" element={<TenantReadyApplication view="parties" />} />
           <Route path="/expense-categories" element={<TenantReadyApplication view="expenseCategories" />} />
+          <Route path="/accounts" element={<TenantReadyApplication view="accounts" />} />
+          <Route path="/treasury-accounts" element={<TenantReadyApplication view="treasuryAccounts" />} />
           <Route path="*" element={<TenantReadyApplication view="deferred" />} />
         </Routes>
       </ProductionMasterDataProvider>

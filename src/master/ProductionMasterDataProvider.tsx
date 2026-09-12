@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "../types/database.generated";
-import { readActiveCompanyProfile, readActiveCompanyProjects, readActiveCompanyParties, readActiveCompanyExpenseCategories } from "./masterRepositories";
+import { readActiveCompanyProfile, readActiveCompanyProjects, readActiveCompanyParties, readActiveCompanyExpenseCategories, readActiveCompanyAccounts, readActiveCompanyTreasuryAccounts } from "./masterRepositories";
 import type { ProductionMasterDataState } from "./masterTypes";
 import { ProductionMasterDataContext } from "./productionMasterDataContext";
 
@@ -38,11 +38,13 @@ export function ProductionMasterDataProvider({ client, userId, activeCompanyId, 
         return;
       }
 
-      const [companyResult, projectsResult, partiesResult, categoriesResult] = await Promise.all([
+      const [companyResult, projectsResult, partiesResult, categoriesResult, accountsResult, treasuryResult] = await Promise.all([
         readActiveCompanyProfile(client, activeCompanyId),
         readActiveCompanyProjects(client, activeCompanyId),
         readActiveCompanyParties(client, activeCompanyId),
         readActiveCompanyExpenseCategories(client, activeCompanyId),
+        readActiveCompanyAccounts(client, activeCompanyId),
+        readActiveCompanyTreasuryAccounts(client, activeCompanyId),
       ]);
       const { data: liveSession } = await client.auth.getSession();
       if (!isCurrent() || liveSession.session?.user.id !== userId) return;
@@ -62,11 +64,19 @@ export function ProductionMasterDataProvider({ client, userId, activeCompanyId, 
         commit({ phase: "ERROR", error: categoriesResult.error });
         return;
       }
+      if (!accountsResult.ok) {
+        commit({ phase: "ERROR", error: accountsResult.error });
+        return;
+      }
+      if (!treasuryResult.ok) {
+        commit({ phase: "ERROR", error: treasuryResult.error });
+        return;
+      }
       if (!companyResult.data) {
         commit({ phase: "MISSING_COMPANY" });
         return;
       }
-      commit({ phase: "READY", company: companyResult.data, projects: projectsResult.data, parties: partiesResult.data, expenseCategories: categoriesResult.data });
+      commit({ phase: "READY", company: companyResult.data, projects: projectsResult.data, parties: partiesResult.data, expenseCategories: categoriesResult.data, accounts: accountsResult.data, treasuryAccounts: treasuryResult.data });
     };
 
     void load().catch(() => commit({
