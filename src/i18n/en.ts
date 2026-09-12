@@ -574,6 +574,12 @@ const en = {
   "auth.loadingTenantSettings": "Loading Company presentation settings…",
   "auth.tenantSettingsUnavailable": "Company presentation settings are incomplete or temporarily unavailable. Neutral branding is being used; your verified Company access is unchanged.",
   "auth.cutoverPending": "Production accounting data is not available in the frontend yet. Master-data and financial workflows will be enabled only by the later controlled P6 cutover stages.",
+  "productionProjects.title": "Projects",
+  "productionProjects.loading": "Loading authorized Company and Project data…",
+  "productionProjects.empty": "No Projects are available for your current role in this Company.",
+  "productionProjects.error": "Company or Project data could not be loaded. Protected data remains unavailable.",
+  "productionProjects.companyUnavailable": "The active Company business profile is no longer available. Protected master data remains unavailable.",
+  "productionProjects.noDetails": "No client or location details",
 } as const;
 
 export default en;

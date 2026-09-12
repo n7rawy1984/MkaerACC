@@ -10,6 +10,7 @@
     "db:version": "supabase --version",
     "lint": "oxlint",
     "verify:p6a-boundary": "node scripts/verify-p6a-boundary.mjs",
+    "verify:p6c-boundary": "node scripts/verify-p6c-boundary.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

@@ -9,6 +9,7 @@ import { CompanySelectPage } from "./CompanySelectPage";
 import { LoginPage } from "./LoginPage";
 import { NoCompanyPage } from "./NoCompanyPage";
 import { SupabaseTenantSettingsProvider } from "../tenant/SupabaseTenantSettingsProvider";
+import { ProductionMasterDataProvider } from "../master/ProductionMasterDataProvider";
 
 function LoadingPage() {
   const t = useT();
@@ -24,13 +25,17 @@ function RoutedApplication() {
   if (state.phase === "IDENTITY_LOAD_ERROR") return <Routes><Route path="/auth-error" element={<AuthErrorPage />} /><Route path="*" element={<Navigate to="/auth-error" replace />} /></Routes>;
   return (
     <SupabaseTenantSettingsProvider key={`${state.profile.userId}:${state.activeTenant.companyId}`} client={getSupabaseClient()} profile={state.profile} tenant={state.activeTenant}>
-      <Routes>
-        <Route path="/login" element={<Navigate to="/" replace />} />
-        <Route path="/no-company" element={<Navigate to="/" replace />} />
-        <Route path="/select-company" element={<Navigate to="/" replace />} />
-        <Route path="/auth-error" element={<Navigate to="/" replace />} />
-        <Route path="*" element={<TenantReadyApplication />} />
-      </Routes>
+      <ProductionMasterDataProvider key={`${state.profile.userId}:${state.activeTenant.companyId}`} client={getSupabaseClient()} userId={state.profile.userId} activeCompanyId={state.activeTenant.companyId}>
+        <Routes>
+          <Route path="/login" element={<Navigate to="/" replace />} />
+          <Route path="/no-company" element={<Navigate to="/" replace />} />
+          <Route path="/select-company" element={<Navigate to="/" replace />} />
+          <Route path="/auth-error" element={<Navigate to="/" replace />} />
+          <Route path="/" element={<TenantReadyApplication view="projects" />} />
+          <Route path="/projects" element={<TenantReadyApplication view="projects" />} />
+          <Route path="*" element={<TenantReadyApplication view="deferred" />} />
+        </Routes>
+      </ProductionMasterDataProvider>
     </SupabaseTenantSettingsProvider>
   );
 }

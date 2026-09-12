@@ -13,7 +13,7 @@ import type { AuthChangeEvent, Session, SupabaseClient } from "@supabase/supabas
 import type { Database } from "../types/database.generated";
 import type { AuthProfile, AuthState, SignInResult, TenantMembership } from "./authTypes";
 
-interface TransportState { userId: string; generation: number; }
+interface TransportState { userId: string; generation: number; preserveReadyState: boolean; }
 interface AuthContextValue {
   state: AuthState;
   signIn: (email: string, password: string) => Promise<SignInResult>;
@@ -36,19 +36,45 @@ function removePreference(userId: string): void {
   try { window.localStorage.removeItem(preferenceKey(userId)); } catch { /* storage may be unavailable */ }
 }
 
+function sameReadyAuthority(current: AuthState, profile: AuthProfile, memberships: TenantMembership[], activeTenant: TenantMembership): boolean {
+  if (current.phase !== "TENANT_READY") return false;
+  if (current.profile.userId !== profile.userId
+    || current.profile.displayName !== profile.displayName
+    || current.profile.email !== profile.email
+    || current.profile.locale !== profile.locale
+    || current.activeTenant.companyId !== activeTenant.companyId) return false;
+  const membershipKey = (membership: TenantMembership) => [
+    membership.membershipId,
+    membership.companyId,
+    membership.companyCode,
+    membership.companyName,
+    membership.companyLegalName,
+    membership.role,
+  ].join(":");
+  return current.memberships.map(membershipKey).sort().join("|")
+    === memberships.map(membershipKey).sort().join("|");
+}
+
 export function AuthProvider({ client, children }: { client: SupabaseClient<Database>; children: ReactNode }) {
   const [state, setState] = useState<AuthState>({ phase: "INITIALIZING_AUTH" });
+  const stateRef = useRef<AuthState>(state);
   const [transport, setTransport] = useState<TransportState | null>(null);
   const sessionRef = useRef<Session | null>(null);
   const userIdRef = useRef<string | null>(null);
   const generationRef = useRef(0);
   const requestRef = useRef(0);
+  const backgroundGenerationRef = useRef<number | null>(null);
   const forcedCompanyRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    stateRef.current = state;
+  }, [state]);
 
   const clearProtectedState = useCallback(() => {
     requestRef.current += 1;
     sessionRef.current = null;
     userIdRef.current = null;
+    backgroundGenerationRef.current = null;
     forcedCompanyRef.current = null;
     setTransport(null);
     setState({ phase: "SIGNED_OUT" });
@@ -61,15 +87,22 @@ export function AuthProvider({ client, children }: { client: SupabaseClient<Data
         return;
       }
 
+      const sameKnownUser = userIdRef.current === session.user.id;
       sessionRef.current = session;
       userIdRef.current = session.user.id;
       if (event === "TOKEN_REFRESHED") return;
 
+      // Supabase may re-emit SIGNED_IN when an existing tab regains focus. The
+      // focus/visibility path below owns authority revalidation for that case.
+      if (event === "SIGNED_IN" && sameKnownUser && stateRef.current.phase !== "SIGNED_OUT"
+        && stateRef.current.phase !== "INITIALIZING_AUTH") return;
+
       if (event === "INITIAL_SESSION" || event === "SIGNED_IN" || event === "USER_UPDATED") {
+        backgroundGenerationRef.current = null;
         const generation = ++generationRef.current;
         requestRef.current += 1;
         setState({ phase: "LOADING_IDENTITY" });
-        setTransport({ userId: session.user.id, generation });
+        setTransport({ userId: session.user.id, generation, preserveReadyState: false });
       }
     };
 
@@ -83,7 +116,7 @@ export function AuthProvider({ client, children }: { client: SupabaseClient<Data
   useEffect(() => {
     if (!transport) return;
     const request = ++requestRef.current;
-    const { userId, generation } = transport;
+    const { userId, generation, preserveReadyState } = transport;
     const isCurrent = () => requestRef.current === request
       && generationRef.current === generation
       && userIdRef.current === userId
@@ -176,31 +209,38 @@ export function AuthProvider({ client, children }: { client: SupabaseClient<Data
         if (selected || memberships.length === 1) {
           const activeTenant = selected ?? memberships[0];
           writePreference(userId, activeTenant.companyId);
-          setState({ phase: "TENANT_READY", profile, memberships, activeTenant });
+          setState((current) => preserveReadyState && sameReadyAuthority(current, profile, memberships, activeTenant)
+            ? current
+            : { phase: "TENANT_READY", profile, memberships, activeTenant });
           return;
         }
         setState({ phase: "SELECTING_COMPANY", profile, memberships });
       } catch {
-        if (isCurrent()) setState({ phase: "IDENTITY_LOAD_ERROR" });
+        if (isCurrent() && !preserveReadyState) setState({ phase: "IDENTITY_LOAD_ERROR" });
+      } finally {
+        if (backgroundGenerationRef.current === generation) backgroundGenerationRef.current = null;
       }
     };
 
     void loadIdentity();
   }, [clearProtectedState, client, transport]);
 
-  const revalidate = useCallback((companyId?: string) => {
+  const revalidate = useCallback((companyId?: string, background = false) => {
     const userId = userIdRef.current;
     if (!userId || !sessionRef.current) return;
+    const preserveReadyState = background && stateRef.current.phase === "TENANT_READY";
+    if (preserveReadyState && backgroundGenerationRef.current !== null) return;
     forcedCompanyRef.current = companyId ?? null;
     const generation = ++generationRef.current;
+    backgroundGenerationRef.current = preserveReadyState ? generation : null;
     requestRef.current += 1;
-    setState({ phase: "LOADING_IDENTITY" });
-    setTransport({ userId, generation });
+    if (!preserveReadyState) setState({ phase: "LOADING_IDENTITY" });
+    setTransport({ userId, generation, preserveReadyState });
   }, []);
 
   useEffect(() => {
-    const refresh = () => revalidate();
-    const visible = () => { if (document.visibilityState === "visible") revalidate(); };
+    const refresh = () => revalidate(undefined, true);
+    const visible = () => { if (document.visibilityState === "visible") revalidate(undefined, true); };
     window.addEventListener("focus", refresh);
     document.addEventListener("visibilitychange", visible);
     return () => {

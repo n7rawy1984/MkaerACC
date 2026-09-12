@@ -576,6 +576,12 @@ const ar: Record<TranslationKey, string> = {
   "auth.loadingTenantSettings": "جارٍ تحميل إعدادات عرض الشركة…",
   "auth.tenantSettingsUnavailable": "إعدادات عرض الشركة غير مكتملة أو غير متاحة مؤقتًا. يتم استخدام الهوية المحايدة دون تغيير صلاحية وصولك الموثقة للشركة.",
   "auth.cutoverPending": "بيانات محاسبة الإنتاج غير متاحة في الواجهة بعد. لن تُفعّل البيانات الأساسية والتدفقات المالية إلا ضمن مراحل الانتقال المنضبطة اللاحقة من P6.",
+  "productionProjects.title": "المشاريع",
+  "productionProjects.loading": "جارٍ تحميل بيانات الشركة والمشاريع المصرح بها…",
+  "productionProjects.empty": "لا توجد مشاريع متاحة لدورك الحالي في هذه الشركة.",
+  "productionProjects.error": "تعذر تحميل بيانات الشركة أو المشاريع. تظل البيانات المحمية غير متاحة.",
+  "productionProjects.companyUnavailable": "لم يعد ملف أعمال الشركة النشطة متاحًا. تظل البيانات الأساسية المحمية غير متاحة.",
+  "productionProjects.noDetails": "لا توجد تفاصيل للعميل أو الموقع",
 };
 
 export default ar;
