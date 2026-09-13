@@ -36,6 +36,7 @@ function RoutedApplication() {
           <Route path="/parties" element={<TenantReadyApplication view="parties" />} />
           <Route path="/expense-categories" element={<TenantReadyApplication view="expenseCategories" />} />
           <Route path="/accounts" element={<TenantReadyApplication view="accounts" />} />
+          <Route path="/subcontracts" element={<TenantReadyApplication view="subcontracts" />} />
           <Route path="/treasury-accounts" element={<TenantReadyApplication view="treasuryAccounts" />} />
           <Route path="*" element={<TenantReadyApplication view="deferred" />} />
         </Routes>

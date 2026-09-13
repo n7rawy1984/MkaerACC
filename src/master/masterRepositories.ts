@@ -8,6 +8,7 @@ import type {
   ProductionExpenseCategory,
   ProductionAccount,
   ProductionTreasuryAccount,
+  ProductionSubcontract,
 } from "./masterTypes";
 
 type CompanyRow = Database["public"]["Tables"]["companies"]["Row"];
@@ -222,4 +223,54 @@ export async function readActiveCompanyTreasuryAccounts(
     .order("id", { ascending: true });
   if (error) return { ok: false, error: queryError("treasuryAccounts", error) };
   return { ok: true, data: (data ?? []).filter((row) => row.company_id === activeCompanyId).map(mapTreasuryAccountRow) };
+}
+
+// Generated rows use number for BIGINT; this explicit projection casts before
+// JSON decoding, preserving every minor unit without a schema change.
+type SubcontractReadRow = Omit<Database["public"]["Tables"]["subcontracts"]["Row"],
+  "original_contract_value_minor" | "approved_variations_minor"
+> & { original_contract_value_minor: string; approved_variations_minor: string };
+
+export function mapSubcontractRow(row: SubcontractReadRow): ProductionSubcontract {
+  if (typeof row.original_contract_value_minor !== "string" || !/^\d+$/.test(row.original_contract_value_minor)
+    || typeof row.approved_variations_minor !== "string" || !/^-?\d+$/.test(row.approved_variations_minor)) {
+    throw new Error("Invalid exact subcontract amounts.");
+  }
+  return {
+    id: row.id,
+    companyId: row.company_id,
+    projectId: row.project_id,
+    subcontractorId: row.subcontractor_id,
+    contractNumber: row.contract_number,
+    scopeOfWork: row.scope_of_work,
+    originalContractValueMinor: row.original_contract_value_minor,
+    approvedVariationsMinor: row.approved_variations_minor,
+    retentionBps: row.retention_bps,
+    startDate: row.start_date,
+    expectedEndDate: row.expected_end_date,
+    status: row.status,
+    notes: row.notes,
+    createdAt: row.created_at,
+    createdBy: row.created_by,
+    updatedAt: row.updated_at,
+    updatedBy: row.updated_by,
+  };
+}
+
+export async function readActiveCompanySubcontracts(
+  client: SupabaseClient<Database>,
+  activeCompanyId: string,
+): Promise<RepositoryResult<ProductionSubcontract[]>> {
+  const { data, error } = await client
+    .from("subcontracts")
+    .select("id, company_id, project_id, subcontractor_id, contract_number, scope_of_work, original_contract_value_minor::text, approved_variations_minor::text, retention_bps, start_date, expected_end_date, status, notes, created_at, created_by, updated_at, updated_by")
+    .eq("company_id", activeCompanyId)
+    .order("contract_number", { ascending: true })
+    .order("id", { ascending: true });
+  if (error) return { ok: false, error: queryError("subcontracts", { code: error.code, message: "Protected subcontracts could not be loaded." }) };
+  try {
+    return { ok: true, data: (data ?? []).filter((row) => row.company_id === activeCompanyId).map(mapSubcontractRow) };
+  } catch {
+    return { ok: false, error: queryError("subcontracts", { message: "Protected subcontract values could not be read exactly." }) };
+  }
 }

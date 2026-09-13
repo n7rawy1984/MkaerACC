@@ -101,8 +101,29 @@ export interface ProductionTreasuryAccount {
   updatedBy: string | null;
 }
 
+export interface ProductionSubcontract {
+  id: string;
+  companyId: string;
+  projectId: string;
+  subcontractorId: string;
+  contractNumber: string;
+  scopeOfWork: string;
+  // Exact decimal strings from server-side BIGINT-to-text projections.
+  originalContractValueMinor: string;
+  approvedVariationsMinor: string;
+  retentionBps: number;
+  startDate: string | null;
+  expectedEndDate: string | null;
+  status: Database["public"]["Enums"]["subcontract_status"];
+  notes: string | null;
+  createdAt: string;
+  createdBy: string | null;
+  updatedAt: string;
+  updatedBy: string | null;
+}
+
 export interface MasterDataQueryError {
-  source: "company" | "projects" | "parties" | "expenseCategories" | "accounts" | "treasuryAccounts" | "session";
+  source: "company" | "projects" | "parties" | "expenseCategories" | "accounts" | "treasuryAccounts" | "subcontracts" | "session";
   code: string | null;
   message: string;
 }
@@ -111,4 +132,4 @@ export type ProductionMasterDataState =
   | { phase: "LOADING" }
   | { phase: "MISSING_COMPANY" }
   | { phase: "ERROR"; error: MasterDataQueryError }
-  | { phase: "READY"; company: ProductionCompanyProfile; projects: ProductionProjectSummary[]; parties: ProductionParty[]; expenseCategories: ProductionExpenseCategory[]; accounts: ProductionAccount[]; treasuryAccounts: ProductionTreasuryAccount[] };
+  | { phase: "READY"; company: ProductionCompanyProfile; projects: ProductionProjectSummary[]; parties: ProductionParty[]; expenseCategories: ProductionExpenseCategory[]; accounts: ProductionAccount[]; treasuryAccounts: ProductionTreasuryAccount[]; subcontracts: ProductionSubcontract[] };

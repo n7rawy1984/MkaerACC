@@ -1,3 +1,4 @@
+import { SubcontractsList } from "../master/SubcontractsList";
 import { AccountsList, TreasuryAccountsList } from "../master/AccountMasterLists";
 import { NavLink } from "react-router-dom";
 import { LanguageButton } from "../auth/AuthFrame";
@@ -7,7 +8,7 @@ import { useTenantSettings } from "../tenant/TenantSettingsContext";
 import { TenantBrandMark } from "../tenant/TenantBrandMark";
 import { useProductionMasterData } from "../master/productionMasterDataContext";
 
-export default function TenantReadyApplication({ view }: { view: "projects" | "parties" | "expenseCategories" | "accounts" | "treasuryAccounts" | "deferred" }) {
+export default function TenantReadyApplication({ view }: { view: "projects" | "parties" | "expenseCategories" | "accounts" | "treasuryAccounts" | "subcontracts" | "deferred" }) {
   const t = useT();
   const { state, showCompanySelector, signOut } = useAuth();
   const tenantSettings = useTenantSettings();
@@ -39,7 +40,7 @@ export default function TenantReadyApplication({ view }: { view: "projects" | "p
       </header>
       <main className="mx-auto max-w-4xl px-6 py-16">
         <nav aria-label={t("productionMaster.navigation")} className="mb-6 flex flex-wrap gap-3">
-          {(["projects", "parties", "expenseCategories", "accounts", "treasuryAccounts"] as const).map((resource) => (
+          {(["projects", "parties", "expenseCategories", "accounts", "treasuryAccounts", "subcontracts"] as const).map((resource) => (
             <NavLink key={resource} to={resource === "treasuryAccounts" ? "/treasury-accounts" : resource === "expenseCategories" ? "/expense-categories" : `/${resource}`} className={({ isActive }) => `rounded-lg border px-3 py-2 text-sm font-medium ${isActive ? "border-[var(--tenant-primary)] text-[var(--tenant-primary)]" : "border-slate-300 text-slate-600"}`}>
               {t(`productionMaster.${resource}`)}
             </NavLink>
@@ -59,6 +60,8 @@ export default function TenantReadyApplication({ view }: { view: "projects" | "p
             {masterData.phase === "MISSING_COMPANY" && <p role="alert" className="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">{t("productionProjects.companyUnavailable")}</p>}
             {masterData.phase === "ERROR" && <p role="alert" className="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900">{t("productionMaster.error")}</p>}
             {(view === "accounts" || view === "treasuryAccounts") && <p className="mt-3 text-sm text-slate-500">{t("productionMaster.accountsReadOnly")}</p>}
+            {view === "subcontracts" && <p className="mt-3 text-sm text-slate-500">{t("productionMaster.subcontractsReadOnly")}</p>}
+            {view === "subcontracts" && masterData.phase === "READY" && <SubcontractsList subcontracts={masterData.subcontracts} projects={masterData.projects} parties={masterData.parties} />}
             {view === "accounts" && masterData.phase === "READY" && <AccountsList accounts={masterData.accounts} />}
             {view === "treasuryAccounts" && masterData.phase === "READY" && <TreasuryAccountsList treasuryAccounts={masterData.treasuryAccounts} accounts={masterData.accounts} />}
             {view === "projects" && masterData.phase === "READY" && masterData.projects.length === 0 && <p className="mt-4 text-sm text-slate-500">{t("productionProjects.empty")}</p>}

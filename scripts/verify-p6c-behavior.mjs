@@ -62,6 +62,24 @@ assert.equal(findVisibleAccount([mappedAccount], "company-b", "gl-a"), null);
 assert.equal(findVisibleAccount([], "company-a", "gl-a"), null, "PM Treasury mapping must not synthesize a hidden Account");
 assert.equal(findVisibleAccount([mappedAccount], "company-a", "parent-a"), null, "partial parent reference stays unresolved");
 assert.equal(findVisibleAccount([mappedAccount], "company-a", null), null);
+const subcontract = { ...audit, id: "subcontract-a", company_id: "company-a", project_id: "project-a", subcontractor_id: "party-a", contract_number: "000123", scope_of_work: "أعمال الخرسانة", original_contract_value_minor: "9223372036854775807", approved_variations_minor: "-9007199254740993", retention_bps: 125, start_date: null, expected_end_date: null, status: "CLOSED", notes: null };
+assert.deepEqual(repositories.mapSubcontractRow(subcontract), {
+  id: "subcontract-a", companyId: "company-a", projectId: "project-a", subcontractorId: "party-a", contractNumber: "000123", scopeOfWork: "أعمال الخرسانة",
+  originalContractValueMinor: "9223372036854775807", approvedVariationsMinor: "-9007199254740993", retentionBps: 125, startDate: null, expectedEndDate: null, status: "CLOSED", notes: null,
+  createdAt: audit.created_at, createdBy: null, updatedAt: audit.updated_at, updatedBy: "actor",
+});
+for (const status of ["ACTIVE", "COMPLETED", "CLOSED"]) {
+  const mapped = repositories.mapSubcontractRow({ ...subcontract, status, original_contract_value_minor: "0", approved_variations_minor: "0", retention_bps: 10000, start_date: "2026-01-01", expected_end_date: "2027-01-01", notes: "ملاحظة", created_by: "actor", updated_by: null });
+  assert.equal(mapped.status, status); assert.equal(mapped.originalContractValueMinor, "0");
+  assert.equal(mapped.approvedVariationsMinor, "0"); assert.equal(mapped.retentionBps, 10000);
+  assert.equal(mapped.startDate, "2026-01-01"); assert.equal(mapped.expectedEndDate, "2027-01-01");
+  assert.equal(mapped.notes, "ملاحظة"); assert.equal(mapped.createdBy, "actor"); assert.equal(mapped.updatedBy, null);
+}
+for (const field of ["original_contract_value_minor", "approved_variations_minor"]) {
+  for (const invalid of [9007199254740992, 0, null, "1.5", "1e4", ""]) {
+    assert.throws(() => repositories.mapSubcontractRow({ ...subcontract, [field]: invalid }), /Invalid exact/);
+  }
+}
 function queryClient(result) {
   const calls = [];
   const query = { then: (done, fail) => Promise.resolve(result).then(done, fail) };
@@ -73,6 +91,7 @@ for (const [read, table, row, source] of [
   [repositories.readActiveCompanyExpenseCategories, "expense_categories", category, "expenseCategories"],
   [repositories.readActiveCompanyAccounts, "accounts", account, "accounts"],
   [repositories.readActiveCompanyTreasuryAccounts, "treasury_accounts", treasury, "treasuryAccounts"],
+  [repositories.readActiveCompanySubcontracts, "subcontracts", subcontract, "subcontracts"],
 ]) {
   const client = queryClient({ data: [row, { ...row, id: "other", company_id: "company-b" }], error: null });
   const result = await read(client, "company-a");
@@ -81,9 +100,18 @@ for (const [read, table, row, source] of [
   assert.deepEqual(client.calls[0], ["from", table]);
   assert(client.calls.some((c) => c[0] === "eq" && c[1] === "company_id" && c[2] === "company-a"));
   assert(!client.calls.some((c) => c[0] === "eq" && c[1] === "status"));
+  if (table === "subcontracts") {
+    const projection = client.calls.find((c) => c[0] === "select")[1];
+    assert(projection.includes("original_contract_value_minor::text"));
+    assert(projection.includes("approved_variations_minor::text"));
+    assert(!projection.includes("*"));
+    assert.deepEqual(client.calls.filter((c) => c[0] === "order"), [["order", "contract_number", { ascending: true }], ["order", "id", { ascending: true }]]);
+    const malformed = await read(queryClient({ data: [{ ...row, original_contract_value_minor: 9007199254740992 }], error: null }), "company-a");
+    assert.equal(malformed.ok, false); assert.equal(malformed.error.source, "subcontracts");
+  }
   for (const data of [[], null]) assert.deepEqual(await read(queryClient({ data, error: null }), "company-a"), { ok: true, data: [] });
   assert.deepEqual(await read(queryClient({ data: null, error: { code: "42501", message: "denied" } }), "company-a"), {
-    ok: false, error: { source, code: "42501", message: "denied" },
+    ok: false, error: { source, code: "42501", message: source === "subcontracts" ? "Protected subcontracts could not be loaded." : "denied" },
   });
 }
 const flush = async () => { for (let i = 0; i < 20; i++) await Promise.resolve(); };
@@ -107,7 +135,8 @@ function harness(overrides = {}) {
     readActiveCompanyParties: async () => ok([]),
     readActiveCompanyExpenseCategories: async () => ok([]),
     readActiveCompanyAccounts: async () => ok([]),
-    readActiveCompanyTreasuryAccounts: async () => ok([]), ...overrides,
+    readActiveCompanyTreasuryAccounts: async () => ok([]),
+    readActiveCompanySubcontracts: async () => ok([]), ...overrides,
   };
   for (const [key, fn] of Object.entries(readers)) readers[key] = (...args) => { calls++; return fn(...args); };
   const { ProductionMasterDataProvider } = moduleAt("src/master/ProductionMasterDataProvider.tsx", {
@@ -132,11 +161,11 @@ assert.equal(h.render().parties[0].taxRegistrationNumber, "001234567890123");
 assert.equal(h.state().expenseCategories[0].status, "INACTIVE");
 h = harness();
 assert.equal(h.render().phase, "LOADING"); await flush();
-assert.deepEqual(h.render(), { phase: "READY", company: { id: "company-a" }, projects: [], parties: [], expenseCategories: [], accounts: [], treasuryAccounts: [] });
-h.render(); await flush(); assert.equal(h.calls(), 6, "unchanged scope must not reload");
+assert.deepEqual(h.render(), { phase: "READY", company: { id: "company-a" }, projects: [], parties: [], expenseCategories: [], accounts: [], treasuryAccounts: [], subcontracts: [] });
+h.render(); await flush(); assert.equal(h.calls(), 7, "unchanged scope must not reload");
 assert.equal(h.render({ role: "PROCUREMENT" }).phase, "LOADING", "role change hides old data synchronously"); await flush();
-assert.equal(h.calls(), 12);
-for (const [source, reader] of [["parties", "readActiveCompanyParties"], ["expenseCategories", "readActiveCompanyExpenseCategories"], ["accounts", "readActiveCompanyAccounts"], ["treasuryAccounts", "readActiveCompanyTreasuryAccounts"]]) {
+assert.equal(h.calls(), 14);
+for (const [source, reader] of [["parties", "readActiveCompanyParties"], ["expenseCategories", "readActiveCompanyExpenseCategories"], ["accounts", "readActiveCompanyAccounts"], ["treasuryAccounts", "readActiveCompanyTreasuryAccounts"], ["subcontracts", "readActiveCompanySubcontracts"]]) {
   h = harness({ [reader]: async () => ({ ok: false, error: { source, code: "42501", message: "denied" } }) });
   h.render(); await flush(); assert.equal(h.render().phase, "ERROR"); assert.equal(h.state().error.source, source);
 }
@@ -166,6 +195,7 @@ console.log("P6C mapper/query and controlled provider lifecycle checks passed (e
 for (const [reader, field, row, mapper] of [
   ["readActiveCompanyAccounts", "accounts", account, repositories.mapAccountRow],
   ["readActiveCompanyTreasuryAccounts", "treasuryAccounts", treasury, repositories.mapTreasuryAccountRow],
+  ["readActiveCompanySubcontracts", "subcontracts", subcontract, repositories.mapSubcontractRow],
 ]) {
   h = harness({ [reader]: async () => ({ ok: true, data: [mapper(row)] }) });
   h.render(); await flush(); assert.deepEqual(h.render()[field], [mapper(row)]);
@@ -214,3 +244,31 @@ assert(!/<(?:button|input|form)\b/.test(treasuryMarkup([])));
 assert(renderToStaticMarkup(createElement(AccountsList, { accounts: [] })).includes("productionMaster.accountsEmpty"));
 assert(renderToStaticMarkup(createElement(TreasuryAccountsList, { accounts: [], treasuryAccounts: [] })).includes("productionMaster.treasuryAccountsEmpty"));
 console.log("P6C Slice 3 list rendering checks passed (references, hidden details, system flag, empty, no mutation controls).");
+
+const { SubcontractsList } = moduleAt("src/master/SubcontractsList.tsx", {
+  "../i18n/I18nContext": { useT: () => (key) => key },
+});
+const contractMarkup = (projects = [], parties = [], extra = {}) => renderToStaticMarkup(createElement(SubcontractsList, {
+  subcontracts: [repositories.mapSubcontractRow({ ...subcontract, ...extra })], projects, parties,
+}));
+const hiddenContract = contractMarkup();
+for (const text of ["000123", "أعمال الخرسانة", "project-a", "party-a", "9223372036854775807", "-9007199254740993", "1.25%", "productionMaster.subcontractStatus.CLOSED", "productionMaster.projectDetailsUnavailable", "productionMaster.partyDetailsUnavailable"]) assert(hiddenContract.includes(text), text);
+assert(!hiddenContract.includes("productionMaster.startDate"));
+assert(!hiddenContract.includes("productionMaster.expectedEndDate"));
+assert(!hiddenContract.includes("productionMaster.notes"));
+assert(!/<(?:button|input|form)\b/.test(hiddenContract));
+const visibleProject = { id: "project-a", companyId: "company-a", code: "P-1", name: "Visible Project" };
+const visibleParty = { ...repositories.mapPartyRow(party), type: "SUBCONTRACTOR" };
+assert(contractMarkup([visibleProject], [visibleParty]).includes("Visible Project"));
+assert(contractMarkup([visibleProject], [visibleParty]).includes("مورد"));
+const wrongCompany = contractMarkup([{ ...visibleProject, companyId: "company-b" }], [{ ...visibleParty, companyId: "company-b" }]);
+assert(!wrongCompany.includes("Visible Project")); assert(!wrongCompany.includes("مورد"));
+for (const [retention_bps, text] of [[0, "0.00%"], [1, "0.01%"], [10000, "100.00%"]]) assert(contractMarkup([], [], { retention_bps }).includes(text));
+assert(renderToStaticMarkup(createElement(SubcontractsList, { subcontracts: [], projects: [], parties: [] })).includes("productionMaster.subcontractsEmpty"));
+h = harness({ readActiveCompanySubcontracts: async () => ({ ok: true, data: [repositories.mapSubcontractRow(subcontract)] }) });
+h.render({ role: "PROJECT_MANAGER" }); await flush();
+assert.equal(h.render({ role: "PROJECT_MANAGER" }).subcontracts[0].subcontractorId, "party-a");
+assert.deepEqual(h.state().parties, [], "Subcontract with hidden Party details is a valid snapshot");
+const countBeforeFocus = h.calls(); h.render({ role: "PROJECT_MANAGER" }); await flush();
+assert.equal(h.calls(), countBeforeFocus, "unchanged authority preserves contract snapshot");
+console.log("P6C Slice 4 checks passed: exact BIGINT text, null/status/date mapping, query boundary/errors, delayed tenant/role/user/session, hidden references, empty/read-only lists and unchanged scope.");
