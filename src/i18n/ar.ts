@@ -4,6 +4,30 @@
 import type { TranslationKey } from "./en";
 
 const ar: Record<TranslationKey, string> = {
+  "categoryMutation.create": "فئة مصروف جديدة",
+  "categoryMutation.edit": "تعديل الفئة",
+  "categoryMutation.code": "الرمز (1–50 حرفًا)",
+  "categoryMutation.name": "الاسم (1–200 حرف)",
+  "categoryMutation.description": "الوصف",
+  "categoryMutation.activeOnCreate": "تُنشأ الفئات بحالة نشطة.",
+  "categoryMutation.save": "حفظ",
+  "categoryMutation.close": "إغلاق",
+  "categoryMutation.refresh": "تحديث الفئات",
+  "categoryMutation.pending": "جارٍ حفظ الفئات أو تحديثها…",
+  "categoryMutation.saved": "تم حفظ الفئة.",
+  "categoryMutation.invalid": "أدخل رمزًا من 1–50 حرفًا واسمًا من 1–200 حرف مع حالة صالحة.",
+  "categoryMutation.duplicate": "توجد في هذه الشركة فئة بهذا الرمز، وقد تكون غير نشطة.",
+  "categoryMutation.denied": "لم يعد الوصول إلى الفئة متاحًا.",
+  "categoryMutation.conflict": "تغيّرت الفئة أو لم تعد متاحة. لم يُحفظ تعديلك.",
+  "categoryMutation.uncertain": "تعذّر تأكيد النتيجة. قد يكون التغيير قد حُفظ.",
+  "categoryMutation.refreshRequired": "حدّث البيانات وراجعها قبل المحاولة مجددًا.",
+  "categoryMutation.refreshError": "تعذّر تحديث الفئات. قد يكون الحفظ السابق قد اكتمل. حدّث البيانات قبل التعديل مجددًا.",
+  "categoryMutation.deactivate": "تعطيل",
+  "categoryMutation.reactivate": "إعادة تنشيط",
+  "categoryMutation.confirm": "تأكيد",
+  "categoryMutation.deactivateConfirm": "هل تريد تعطيل هذه الفئة للمصروفات الجديدة؟ يبقى سجل المصروفات السابقة دون تغيير.",
+  "categoryMutation.reactivateConfirm": "هل تريد إعادة تنشيط هذه الفئة للمصروفات الجديدة؟",
+
   // ---------------------------------------------------------------------
   // App shell / Sidebar
   // ---------------------------------------------------------------------

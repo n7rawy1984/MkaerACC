@@ -1,9 +1,9 @@
 import { createContext, useContext } from "react";
-import type { ProductionMasterDataState } from "./masterTypes";
+import type { ProductionMasterDataContextValue } from "./masterTypes";
 
-export const ProductionMasterDataContext = createContext<ProductionMasterDataState | null>(null);
+export const ProductionMasterDataContext = createContext<ProductionMasterDataContextValue | null>(null);
 
-export function useProductionMasterData(): ProductionMasterDataState {
+export function useProductionMasterData(): ProductionMasterDataContextValue {
   const value = useContext(ProductionMasterDataContext);
   if (!value) throw new Error("useProductionMasterData must be used within ProductionMasterDataProvider");
   return value;

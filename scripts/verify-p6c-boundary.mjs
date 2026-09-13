@@ -43,7 +43,7 @@ const forbiddenMasterText = [
   "journal_entries", "journal_lines", "post_expense", "post_supplier_payment",
   "custody_advances", "supplier_payments", "subcontractor_payments", ".delete(",
   "service_role", "SUPABASE_SERVICE_ROLE", "SECRET_KEY",
-  ".insert(", ".update(", ".upsert(", ".rpc(",
+  ".upsert(", ".rpc(",
 ];
 for (const file of masterFiles) {
   const source = readFileSync(file, "utf8");
@@ -66,7 +66,9 @@ for (const file of masterFiles) {
   for (const match of source.matchAll(/\.from\(["']([^"']+)["']\)/g)) {
     if (!allowedTables.has(match[1])) throw new Error(`Out-of-slice table: ${match[1]}`);
   }
-  if (/\.(insert|update|upsert|delete|rpc)\s*\(/.test(source)) throw new Error(`Mutation/RPC in master module: ${file}`);
+  const isCategoryMutation = file === resolve(masterRoot, "expenseCategoryMutations.ts");
+  if (/\.(upsert|delete|rpc)\s*\(/.test(source) || (!isCategoryMutation && /\.(insert|update)\s*\(/.test(source))) throw new Error(`Mutation/RPC outside category repository: ${file}`);
+  if (isCategoryMutation && [...source.matchAll(/\.from\(["']([^"']+)["']\)/g)].some((m) => m[1] !== "expense_categories")) throw new Error("Category writer accesses another table");
 }
 for (const [name, table] of [["readActiveCompanyParties", "parties"], ["readActiveCompanyExpenseCategories", "expense_categories"], ["readActiveCompanyAccounts", "accounts"], ["readActiveCompanyTreasuryAccounts", "treasury_accounts"], ["readActiveCompanySubcontracts", "subcontracts"]]) {
   const body = repositorySource.split(`export async function ${name}(`)[1]?.split("export ")[0];

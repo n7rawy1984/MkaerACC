@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "../types/database.generated";
 import { readActiveCompanyProfile, readActiveCompanyProjects, readActiveCompanyParties, readActiveCompanyExpenseCategories, readActiveCompanyAccounts, readActiveCompanyTreasuryAccounts, readActiveCompanySubcontracts } from "./masterRepositories";
-import type { ProductionMasterDataState } from "./masterTypes";
+import type { CategoryActions, ProductionMasterDataState } from "./masterTypes";
+import { mutateExpenseCategory, type ExpenseCategoryCommand } from "./expenseCategoryMutations";
 import { ProductionMasterDataContext } from "./productionMasterDataContext";
 
 export function ProductionMasterDataProvider({ client, userId, activeCompanyId, role, children }: {
@@ -18,9 +19,19 @@ export function ProductionMasterDataProvider({ client, userId, activeCompanyId, 
     state: { phase: "LOADING" },
   });
   const requestGeneration = useRef(0);
+  const liveScope = useRef(scopeKey);
+  const mutationLock = useRef(false);
+  const categoryGeneration = useRef(0);
+  const [mutationState, setMutationState] = useState<{ scopeKey: string; value: CategoryActions["categoryMutation"] }>({ scopeKey, value: { phase: "IDLE" } });
+
+  useLayoutEffect(() => {
+    liveScope.current = scopeKey;
+    return () => { categoryGeneration.current += 1; };
+  }, [scopeKey]);
 
   useEffect(() => {
     const generation = ++requestGeneration.current;
+    mutationLock.current = false;
     let mounted = true;
 
     const isCurrent = () => mounted && requestGeneration.current === generation;
@@ -95,5 +106,47 @@ export function ProductionMasterDataProvider({ client, userId, activeCompanyId, 
   }, [activeCompanyId, client, scopeKey, userId]);
 
   const visibleState = scopedState.scopeKey === scopeKey ? scopedState.state : { phase: "LOADING" } as const;
-  return <ProductionMasterDataContext.Provider value={visibleState}>{children}</ProductionMasterDataContext.Provider>;
+  const categoryMutation = mutationState.scopeKey === scopeKey ? mutationState.value : { phase: "IDLE" } as const;
+
+  // Explicit category operations never trigger the seven-resource initial loader.
+  const runCategoryOperation = async (command?: ExpenseCategoryCommand): Promise<boolean> => {
+    if (visibleState.phase !== "READY" || mutationLock.current || liveScope.current !== scopeKey
+      || (command && (role !== "ACCOUNTING_ADMIN" || categoryMutation.phase === "ERROR" || categoryMutation.phase === "REFRESH_ERROR"))) return false;
+    mutationLock.current = true;
+    const generation = requestGeneration.current;
+    const categoryRequest = ++categoryGeneration.current;
+    const current = () => liveScope.current === scopeKey && requestGeneration.current === generation && categoryGeneration.current === categoryRequest;
+    const feedback = (value: CategoryActions["categoryMutation"]) => { if (current()) setMutationState({ scopeKey, value }); };
+    const validSession = async () => {
+      const { data, error } = await client.auth.getSession();
+      return current() && !error && data.session?.user.id === userId;
+    };
+    feedback({ phase: "PENDING" });
+    let saved = false;
+    try {
+      if (!await validSession()) { feedback({ phase: "ERROR", error: "denied" }); return false; }
+      if (command) {
+        const result = await mutateExpenseCategory(client, activeCompanyId, command);
+        if (!await validSession()) { feedback({ phase: "ERROR", error: "denied" }); return false; }
+        if (!result.ok) { feedback({ phase: "ERROR", error: result.error }); return false; }
+        saved = true;
+      }
+      const refreshed = await readActiveCompanyExpenseCategories(client, activeCompanyId);
+      if (!await validSession()) { feedback({ phase: "ERROR", error: "denied" }); return false; }
+      if (!refreshed.ok) { feedback({ phase: "REFRESH_ERROR" }); return false; }
+      setScopedState((previous) => previous.scopeKey === scopeKey && previous.state.phase === "READY"
+        ? { scopeKey, state: { ...previous.state, expenseCategories: refreshed.data } } : previous);
+      feedback({ phase: saved ? "SAVED" : "IDLE" });
+      return true;
+    } catch {
+      feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "uncertain" });
+      return false;
+    } finally {
+      if (current()) mutationLock.current = false;
+    }
+  };
+  return <ProductionMasterDataContext.Provider value={{ ...visibleState, categoryMutation,
+    saveExpenseCategory: runCategoryOperation,
+    refreshExpenseCategories: () => runCategoryOperation(),
+  }}>{children}</ProductionMasterDataContext.Provider>;
 }

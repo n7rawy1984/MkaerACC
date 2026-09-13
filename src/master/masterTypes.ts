@@ -1,4 +1,12 @@
 import type { Database } from "../types/database.generated";
+import type { CategoryMutationError, ExpenseCategoryCommand } from "./expenseCategoryMutations";
+
+export interface CategoryActions {
+  categoryMutation: { phase: "IDLE" | "PENDING" | "SAVED" | "ERROR" | "REFRESH_ERROR"; error?: CategoryMutationError };
+  saveExpenseCategory: (command: ExpenseCategoryCommand) => Promise<boolean>;
+  refreshExpenseCategories: () => Promise<boolean>;
+}
+export type ProductionMasterDataContextValue = ProductionMasterDataState & CategoryActions;
 
 export type ProductionCompanyStatus = Database["public"]["Enums"]["account_status"];
 export type ProductionProjectStatus = Database["public"]["Enums"]["project_status"];

@@ -16,6 +16,7 @@ function moduleAt(path, mocks = {}) {
   return module.exports;
 }
 const repositories = moduleAt("src/master/masterRepositories.ts");
+const mutations = moduleAt("src/master/expenseCategoryMutations.ts", { "./masterRepositories": repositories });
 const audit = { created_at: "2026-09-12T00:00:00Z", created_by: null, updated_at: "2026-09-12T01:00:00Z", updated_by: "actor" };
 const party = { ...audit, id: "party-a", company_id: "company-a", type: "SUPPLIER", name: "مورد", code: null, trn: "001234567890123", contact_person: "Contact", phone: null, email: null, address: null, status: "INACTIVE", notes: null };
 const category = { ...audit, id: "category-a", company_id: "company-a", name: "Materials", code: "MAT", description: null, status: "INACTIVE" };
@@ -83,7 +84,7 @@ for (const field of ["original_contract_value_minor", "approved_variations_minor
 function queryClient(result) {
   const calls = [];
   const query = { then: (done, fail) => Promise.resolve(result).then(done, fail) };
-  for (const method of ["select", "eq", "order"]) query[method] = (...args) => { calls.push([method, ...args]); return query; };
+  for (const method of ["select", "eq", "order", "insert", "update"]) query[method] = (...args) => { calls.push([method, ...args]); return query; };
   return { calls, from: (table) => { calls.push(["from", table]); return query; } };
 }
 for (const [read, table, row, source] of [
@@ -116,11 +117,13 @@ for (const [read, table, row, source] of [
 }
 const flush = async () => { for (let i = 0; i < 20; i++) await Promise.resolve(); };
 function deferred() { let resolve; const promise = new Promise((done) => { resolve = done; }); return { promise, resolve }; }
-function harness(overrides = {}) {
-  let state, ref, previousDeps, cleanup, effect, output, calls = 0;
+function harness(overrides = {}, writer = mutations) {
+  let previousDeps, cleanup, effect, output, calls = 0, cursor = 0;
+  const slots = [];
   const hooks = {
-    useState: (initial) => { state ??= initial; return [state, (next) => { state = next; }]; },
-    useRef: (initial) => { ref ??= { current: initial }; return ref; },
+    useState: (initial) => { const i = cursor++; if (!(i in slots)) slots[i] = initial; return [slots[i], (next) => { slots[i] = typeof next === "function" ? next(slots[i]) : next; }]; },
+    useRef: (initial) => { const i = cursor++; slots[i] ??= { current: initial }; return slots[i]; },
+    useLayoutEffect: (run) => { run(); },
     useEffect: (run, deps) => {
       if (!previousDeps || deps.some((d, i) => d !== previousDeps[i])) {
         effect = () => { cleanup?.(); cleanup = run(); };
@@ -141,16 +144,17 @@ function harness(overrides = {}) {
   for (const [key, fn] of Object.entries(readers)) readers[key] = (...args) => { calls++; return fn(...args); };
   const { ProductionMasterDataProvider } = moduleAt("src/master/ProductionMasterDataProvider.tsx", {
     react: hooks, "react/jsx-runtime": { jsx: (_type, props) => props.value },
-    "./masterRepositories": readers, "./productionMasterDataContext": { ProductionMasterDataContext: { Provider: "provider" } },
+    "./expenseCategoryMutations": writer, "./masterRepositories": readers, "./productionMasterDataContext": { ProductionMasterDataContext: { Provider: "provider" } },
   });
   let userId = "user-a";
   const client = { auth: { getSession: async () => ({ data: { session: userId ? { user: { id: userId } } : null }, error: null }) } };
   const render = (props = {}) => {
+    cursor = 0;
     output = ProductionMasterDataProvider({ client, userId: "user-a", activeCompanyId: "company-a", role: "ACCOUNTANT", children: null, ...props });
     const pending = effect; effect = null; pending?.();
     return output;
   };
-  return { render, unmount: () => cleanup?.(), session: (id) => { userId = id; }, calls: () => calls, state: () => state.state };
+  return { render, unmount: () => cleanup?.(), session: (id) => { userId = id; }, calls: () => calls, state: () => slots[0].state };
 }
 let h = harness({
   readActiveCompanyParties: async () => ({ ok: true, data: [repositories.mapPartyRow(party)] }),
@@ -161,7 +165,8 @@ assert.equal(h.render().parties[0].taxRegistrationNumber, "001234567890123");
 assert.equal(h.state().expenseCategories[0].status, "INACTIVE");
 h = harness();
 assert.equal(h.render().phase, "LOADING"); await flush();
-assert.deepEqual(h.render(), { phase: "READY", company: { id: "company-a" }, projects: [], parties: [], expenseCategories: [], accounts: [], treasuryAccounts: [], subcontracts: [] });
+h.render();
+assert.deepEqual(h.state(), { phase: "READY", company: { id: "company-a" }, projects: [], parties: [], expenseCategories: [], accounts: [], treasuryAccounts: [], subcontracts: [] });
 h.render(); await flush(); assert.equal(h.calls(), 7, "unchanged scope must not reload");
 assert.equal(h.render({ role: "PROCUREMENT" }).phase, "LOADING", "role change hides old data synchronously"); await flush();
 assert.equal(h.calls(), 14);
@@ -272,3 +277,97 @@ assert.deepEqual(h.state().parties, [], "Subcontract with hidden Party details i
 const countBeforeFocus = h.calls(); h.render({ role: "PROJECT_MANAGER" }); await flush();
 assert.equal(h.calls(), countBeforeFocus, "unchanged authority preserves contract snapshot");
 console.log("P6C Slice 4 checks passed: exact BIGINT text, null/status/date mapping, query boundary/errors, delayed tenant/role/user/session, hidden references, empty/read-only lists and unchanged scope.");
+
+// Slice 5: real write repository payloads and exact optimistic token.
+const input = { code: " MAT ", name: " Materials ", description: " " };
+const currentCategory = repositories.mapExpenseCategoryRow(category);
+for (const command of [{ kind: "create", input: { ...input, id: "forged", status: "INACTIVE", created_by: "forged" } }, { kind: "edit", category: currentCategory, input }, { kind: "status", category: currentCategory, status: "ACTIVE" }]) {
+  const client = queryClient({ data: [{ ...category, updated_at: "2026-09-13T00:00:00.123456+00:00" }], error: null });
+  const result = await mutations.mutateExpenseCategory(client, "company-a", command);
+  assert.equal(result.ok, true);
+  assert.equal(result.category.updatedAt, "2026-09-13T00:00:00.123456+00:00");
+  const payload = client.calls.find(([method]) => method === "insert" || method === "update")[1];
+  assert.deepEqual(Object.keys(payload).sort(), command.kind === "create" ? ["code", "company_id", "description", "name"] : command.kind === "edit" ? ["code", "description", "name"] : ["status"]);
+  if (command.kind !== "create") assert.deepEqual(client.calls.filter(([m]) => m === "eq"), [["eq", "company_id", "company-a"], ["eq", "id", category.id], ["eq", "updated_at", category.updated_at]]);
+}
+for (const [response, expected] of [
+  [{ data: [], error: null }, "conflict"], [{ data: [category, category], error: null }, "uncertain"],
+  [{ data: [{ ...category, company_id: "company-b" }], error: null }, "uncertain"],
+  ...[["23505", "duplicate"], ["42501", "denied"], ["23514", "invalid"], ["", "uncertain"]].map(([code, expected]) => [{ data: null, error: { code, message: "private server detail" } }, expected]),
+]) assert.deepEqual(await mutations.mutateExpenseCategory(queryClient(response), "company-a", { kind: "edit", category: currentCategory, input }), { ok: false, error: expected });
+for (const bad of [{ ...input, code: " " }, { ...input, name: "x".repeat(201) }, { ...input, code: null }]) assert.equal(mutations.normalizeExpenseCategory(bad), null);
+assert.equal(mutations.normalizeExpenseCategory({ ...input, code: "😀".repeat(50) }).code.length, 100);
+const wrongTenantClient = queryClient({});
+assert.equal((await mutations.mutateExpenseCategory(wrongTenantClient, "company-b", { kind: "edit", category: currentCategory, input })).error, "denied");
+assert.equal(wrongTenantClient.calls.length, 0);
+
+let writes = 0;
+const successfulWriter = { mutateExpenseCategory: async () => { writes++; return { ok: true, category: currentCategory }; } };
+const admin = { role: "ACCOUNTING_ADMIN" };
+h = harness({}, successfulWriter); h.render(admin); await flush();
+assert.equal(await h.render(admin).saveExpenseCategory({ kind: "create", input }), true);
+assert.equal(h.calls(), 8, "save refreshes only categories");
+assert.equal(h.render(admin).categoryMutation.phase, "SAVED");
+h.render(admin); await flush(); assert.equal(h.calls(), 8, "focus-equivalent unchanged render does not reload");
+for (const role of ["ACCOUNTANT", "PROCUREMENT", "DATA_ENTRY", "MANAGEMENT_VIEWER", "PROJECT_MANAGER", "SYSTEM_ADMIN"]) {
+  h = harness({}, successfulWriter); h.render({ role }); await flush(); const before = writes;
+  assert.equal(await h.render({ role }).saveExpenseCategory({ kind: "create", input }), false); assert.equal(writes, before);
+}
+for (const transition of ["company", "role", "user", "logout", "unmount"]) {
+  const delayedWrite = deferred();
+  h = harness({}, { mutateExpenseCategory: () => delayedWrite.promise }); h.render(admin); await flush();
+  const action = h.render(admin).saveExpenseCategory({ kind: "create", input }); await flush();
+  assert.equal(await h.render(admin).saveExpenseCategory({ kind: "create", input }), false, "duplicate in-flight submission rejected");
+  let next = admin;
+  if (transition === "company") next = { ...admin, activeCompanyId: "company-b" };
+  if (transition === "role") next = { role: "PROCUREMENT" };
+  if (transition === "user") { next = { ...admin, userId: "user-b" }; h.session("user-b"); }
+  if (transition === "logout") h.session(null);
+  if (transition === "unmount") h.unmount(); else { h.render(next); await flush(); }
+  const reads = h.calls(); delayedWrite.resolve({ ok: true, category: currentCategory });
+  assert.equal(await action, false); await flush(); assert.equal(h.calls(), reads, "stale save cannot refresh another scope");
+  if (!["logout", "unmount"].includes(transition)) assert.equal(h.render(next).categoryMutation.phase, "IDLE");
+}
+let categoryReads = 0;
+h = harness({ readActiveCompanyExpenseCategories: async () => ++categoryReads === 2 ? { ok: false, error: { source: "expenseCategories" } } : { ok: true, data: [] } }, successfulWriter);
+h.render(admin); await flush();
+assert.equal(await h.render(admin).saveExpenseCategory({ kind: "create", input }), false);
+assert.equal(h.render(admin).categoryMutation.phase, "REFRESH_ERROR");
+const beforeRetry = writes;
+assert.equal(await h.render(admin).saveExpenseCategory({ kind: "create", input }), false); assert.equal(writes, beforeRetry);
+assert.equal(await h.render(admin).refreshExpenseCategories(), true);
+assert.equal(h.render(admin).categoryMutation.phase, "IDLE");
+console.log("P6C Slice 5 payload, normalization, exact-token, denied-role, category-refresh, duplicate-submit, stale-save and refresh-recovery checks passed.");
+
+// Late category refresh cannot repaint a different tenant, even after a confirmed write.
+const lateRefresh = deferred(); let readNumber = 0;
+h = harness({ readActiveCompanyExpenseCategories: async () => ++readNumber === 2 ? lateRefresh.promise : { ok: true, data: [] } }, successfulWriter);
+h.render(admin); await flush(); const refreshAction = h.render(admin).saveExpenseCategory({ kind: "create", input }); await flush();
+h.render({ ...admin, activeCompanyId: "company-b" }); await flush();
+lateRefresh.resolve({ ok: true, data: [currentCategory] }); assert.equal(await refreshAction, false);
+assert.deepEqual(h.render({ ...admin, activeCompanyId: "company-b" }).expenseCategories, []);
+for (const error of ["conflict", "uncertain", "denied", "duplicate"]) {
+  h = harness({}, { mutateExpenseCategory: async () => ({ ok: false, error }) }); h.render(admin); await flush();
+  assert.equal(await h.render(admin).saveExpenseCategory({ kind: "create", input }), false);
+  assert.deepEqual(h.render(admin).categoryMutation, { phase: "ERROR", error });
+  assert.equal(await h.render(admin).saveExpenseCategory({ kind: "create", input }), false);
+  assert.equal(await h.render(admin).refreshExpenseCategories(), true);
+}
+const fieldModule = moduleAt("src/components/ui/Field.tsx");
+const categoryFormModule = moduleAt("src/master/ExpenseCategoryForm.tsx", {
+  "../components/ui/Field": fieldModule, "../i18n/I18nContext": { useT: () => (key) => key }, "./expenseCategoryMutations": mutations,
+});
+const formHtml = renderToStaticMarkup(createElement(categoryFormModule.ExpenseCategoryForm, { category: null, disabled: false, onSave: async () => {}, onCancel: () => {} }));
+assert(formHtml.includes("categoryMutation.activeOnCreate")); assert(!formHtml.includes("<select"));
+for (const role of ["ACCOUNTING_ADMIN", "ACCOUNTANT", "PROCUREMENT", "DATA_ENTRY", "MANAGEMENT_VIEWER", "PROJECT_MANAGER", "SYSTEM_ADMIN"]) {
+  const { ExpenseCategoriesList } = moduleAt("src/master/ExpenseCategoriesList.tsx", {
+    "../auth/AuthContext": { useAuth: () => ({ state: { phase: "TENANT_READY", activeTenant: { role } } }) },
+    "../i18n/I18nContext": { useT: () => (key) => key },
+    "./productionMasterDataContext": { useProductionMasterData: () => ({ phase: "READY", expenseCategories: [currentCategory], categoryMutation: { phase: "IDLE" } }) },
+    "./ExpenseCategoryForm": categoryFormModule,
+  });
+  const html = renderToStaticMarkup(createElement(ExpenseCategoriesList));
+  for (const control of ["categoryMutation.create", "categoryMutation.edit", "categoryMutation.reactivate"]) assert.equal(html.includes(control), role === "ACCOUNTING_ADMIN");
+  assert(!html.includes("categoryMutation.delete"));
+}
+console.log("P6C Slice 5 late-refresh, conflict/uncertainty recovery and actual role-gated list/form rendering checks passed.");

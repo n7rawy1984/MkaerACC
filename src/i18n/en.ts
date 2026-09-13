@@ -2,6 +2,30 @@
 // location in this file mirrors where it's used. ar.ts must define exactly the same key set —
 // see i18n/I18nContext.tsx for the lookup/fallback behavior and translation-key discipline notes.
 const en = {
+  "categoryMutation.create": "New expense category",
+  "categoryMutation.edit": "Edit category",
+  "categoryMutation.code": "Code (1–50 characters)",
+  "categoryMutation.name": "Name (1–200 characters)",
+  "categoryMutation.description": "Description",
+  "categoryMutation.activeOnCreate": "New categories are active.",
+  "categoryMutation.save": "Save",
+  "categoryMutation.close": "Close",
+  "categoryMutation.refresh": "Refresh categories",
+  "categoryMutation.pending": "Saving or refreshing categories…",
+  "categoryMutation.saved": "Category saved.",
+  "categoryMutation.invalid": "Enter a code of 1–50 characters and a name of 1–200 characters, with a valid status.",
+  "categoryMutation.duplicate": "This Company already has a category with that code, possibly inactive.",
+  "categoryMutation.denied": "Category access is no longer available.",
+  "categoryMutation.conflict": "The category changed or is no longer available. Your edit was not saved.",
+  "categoryMutation.uncertain": "The result could not be confirmed. The change may have been saved.",
+  "categoryMutation.refreshRequired": "Refresh and review the current data before trying again.",
+  "categoryMutation.refreshError": "Categories could not be refreshed. A preceding save may already have completed. Refresh before editing again.",
+  "categoryMutation.deactivate": "Deactivate",
+  "categoryMutation.reactivate": "Reactivate",
+  "categoryMutation.confirm": "Confirm",
+  "categoryMutation.deactivateConfirm": "Deactivate this category for new expenses? Existing expense history remains unchanged.",
+  "categoryMutation.reactivateConfirm": "Reactivate this category for new expenses?",
+
   // ---------------------------------------------------------------------
   // App shell / Sidebar
   // ---------------------------------------------------------------------

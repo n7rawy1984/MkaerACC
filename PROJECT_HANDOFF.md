@@ -41,7 +41,7 @@ The company previously tracked project expenses, supplier bills, cash handed to 
 - **Post-P5 Focused Engineering and Accounting Integrity Review** — Completed. P5H/P5I combined dependency, separated-source settlement, reconciliation, tenant and authorization checks passed; P6A is ready to begin separately.
 - **Phase 2C / P6A (Auth Session and Tenant Context)** — Verified complete on 2026-09-04. Automated gates and the full risk-proportionate browser/Auth smoke matrix pass with no confirmed defect; Development-only synthetic fixture and temporary browser-state cleanup was verified complete on 2026-09-05.
 - **Phase 2C / P6B (Tenant Settings and White-Label Foundation)** — Verified complete on Development through `20260911123000`; hosted constraint/RLS, complete browser branding/isolation, and post-fix canonical-route matrices pass. Development-only fixture and browser-state cleanup is verified complete.
-- **Phase 2C / P6C (Master Data Async Repository Cutover)** — In progress. Slice 1 is verified complete: the production-only async foundation and read-only active-Company profile plus tenant-scoped Projects passed authenticated browser, tenant-isolation, focus/revalidation, and fail-closed revocation acceptance. Slice 2 Parties/Expense Categories reads are VERIFIED COMPLETE, including accepted authenticated role/tenant/focus checks and complete fixture/Auth cleanup. Slice 3 Accounts/Treasury READ-ONLY is VERIFIED COMPLETE, including representative authenticated acceptance and complete fixture/Auth cleanup. Slice 4 Subcontracts READ-ONLY is VERIFIED COMPLETE, including authenticated acceptance and fixture/Auth cleanup; all master mutations remain pending. See `docs/P6C_SLICE_4_SUBCONTRACTS.md`.
+- **Phase 2C / P6C (Master Data Async Repository Cutover)** — In progress. Slice 1 is verified complete: the production-only async foundation and read-only active-Company profile plus tenant-scoped Projects passed authenticated browser, tenant-isolation, focus/revalidation, and fail-closed revocation acceptance. Slice 2 Parties/Expense Categories reads are VERIFIED COMPLETE, including accepted authenticated role/tenant/focus checks and complete fixture/Auth cleanup. Slice 3 Accounts/Treasury READ-ONLY is VERIFIED COMPLETE, including representative authenticated acceptance and complete fixture/Auth cleanup. Slice 4 Subcontracts READ-ONLY is VERIFIED COMPLETE, including authenticated acceptance and fixture/Auth cleanup; Slice 5 — Expense Categories MUTATION — VERIFIED COMPLETE, including accepted authenticated browser checks and full disposable database/Auth cleanup. Other master mutations remain pending. See `docs/P6C_SLICE_5_EXPENSE_CATEGORIES_MUTATION.md`.
 - **Payroll + WPS** — Confirmed next functional module after Production Data Foundation.
 
 See `PROJECT_ROADMAP.md` for the full phase breakdown, binding decisions, and decision log.
@@ -333,7 +333,7 @@ Before this phase, subcontractor payable/retention/advance balances in `ledger.t
 
 ## 15. Known Limitations
 
-- Production Auth/session and active-tenant context are implemented in P6A. P6C exposes read-only active-Company profile and tenant-scoped Projects (Slice 1 verified), plus Parties and Expense Categories (Slice 2 VERIFIED COMPLETE), and Accounts/Treasury (Slice 3 VERIFIED COMPLETE), plus Subcontracts (Slice 4 VERIFIED COMPLETE) in `supabase-auth`; remaining master work and all financial frontend flows remain unavailable pending later P6C/P6D work. The legacy accounting UI still uses localStorage only in development `local-demo` mode. Audit and remaining production cutover work are not implemented.
+- Production Auth/session and active-tenant context are implemented in P6A. P6C exposes read-only active-Company profile and tenant-scoped Projects (Slice 1 verified), plus Parties and Expense Categories (Slice 2 VERIFIED COMPLETE), and Accounts/Treasury (Slice 3 VERIFIED COMPLETE), plus Subcontracts (Slice 4 VERIFIED COMPLETE) and Expense Categories mutations (Slice 5 VERIFIED COMPLETE) in `supabase-auth`; remaining master work and all financial frontend flows remain unavailable pending later P6C/P6D work. The legacy accounting UI still uses localStorage only in development `local-demo` mode. Audit and remaining production cutover work are not implemented.
 - `AppDataContext` writes a business row, journal and status in separate synchronous operations. A quota/browser failure can leave partial state; concurrent users are impossible; authorization is absent.
 - The generic repository loads and rewrites whole collections, caches indefinitely, has no query/filter/pagination/concurrency contract, and is synchronous. It is not a viable direct Supabase adapter.
 - Most current local business documents lack a direct `companyId`; company is inferred through project where present. P0 resolved the production rule: financially important records receive mandatory direct `company_id`, while ambiguous local rows go to migration review rather than inferred tenant ownership.
@@ -966,3 +966,55 @@ No production localStorage fallback, frontend financial/master mutation, journal
 Overall P6C is **NOT COMPLETE**. The next documented remaining item is **P6C master-data mutation cutover**; the roadmap does not yet specify the first entity/command sequence, which must be established before implementation. P6D specialized financial RPC integration and P6E have not started. Site Materials / Stores and reusable Tool Custody remain future-only. Existing pagination/realtime and assignment-only snapshot refresh limits remain; trusted service_role grant extras remain a non-blocking hardening opportunity.
 
 Final lifecycle: business/accounting **VERIFIED** for read-only semantics and exact values; security/authorization **VERIFIED** for inspected boundaries and accepted representative browser evidence; database **VERIFIED** for aligned history and cleaned fixture; testing **VERIFIED** with the explicit evidence limits above; documentation **VERIFIED**. Deployment **NOT APPLICABLE** to the local checkpoint; Staging/Production and full production readiness **DEFERRED**. Development slice completion is not production readiness.
+
+
+### P6C Slice 5 — Expense Categories MUTATION — VERIFIED COMPLETE (2026-09-13)
+
+Overall **P6C — IN PROGRESS**. Slices 1–5 are verified complete; other master mutations remain pending. P6D/P6E have not started. Starting HEAD was `a9ca416fe4e471a50f17900b74af5cce1ad0339f`.
+
+Category-only create, metadata edit, deactivate/reactivate use direct authenticated RLS writes, authorized only by ACCOUNTING_ADMIN / `category.manage`. No delete/upsert/bulk/generic CRUD, expense recategorization, SYSTEM_ADMIN bypass, other master mutation or P6D/financial mutation path was introduced.
+
+Canonical migration `20260913120000_p6c_category_mutations.sql` was applied via linked db push to positively verified MakerACC-Development only. INSERT grants are limited to company_id/code/name/description; UPDATE grants to code/name/description/status. UUID and ACTIVE are database defaults. One category-specific invoker trigger owns normalization, authenticated actor stamping, immutable creation provenance and strictly advancing updated_at while preserving trusted/import provenance. Shared timestamp function, RLS policies, permissions, tenant guard, indexes and restrictive FKs remain unchanged.
+
+The dedicated repository rebuilds allowed payloads and filters updates by Company/UUID/exact timestamp, requiring one authoritative row. Bilingual role-gated category forms/status confirmations refresh categories only. Provider session/scope/generation guards and in-flight locking protect asynchronous results; stale/uncertain outcomes require refresh.
+
+Hosted verification passed 70/70 rollback assertions. Concurrent creates produced one success/one expected 23505; concurrent conditional edits affected 1/0 rows. Rollback and concurrency fixtures were removed. These SQL-role and automated results remain distinct from accepted browser evidence.
+
+#### Final accepted browser evidence — 2026-09-13
+
+The user completed and accepted authenticated manual acceptance:
+
+- ACCOUNTING_ADMIN list/create/edit/deactivate/reactivate: PASS.
+- Normalized duplicate-code rejection: PASS.
+- Optimistic concurrency stale-edit conflict: PASS.
+- Beta tenant / MANAGEMENT_VIEWER read-only behavior: PASS.
+- Alpha role downgrade to MANAGEMENT_VIEWER observed after revalidation; mutation controls disappeared: PASS.
+- Tab-away/tab-return regression: PASS, without blocking “Loading securely” or stale tenant flash.
+- Arabic/RTL: PASS.
+
+Cross-tab locale persistence is a **non-blocking UX observation**: one tab retained English until refresh, then converged to Arabic. No Slice 5 fix is required or introduced.
+
+#### Final Development cleanup
+
+The disposable database fixture was fully removed. Auth user `e6cac418-6739-4b66-a1ab-f7cd98bf89fc` was deleted through Supabase Authentication. Final accepted cleanup counts:
+
+- `auth_user=0`, `profile=0`, `fixture_companies=0`, `memberships=0`.
+- `global_companies=14`, `global_settings=14`.
+- No missing/orphan Company settings.
+- All inspected financial/out-of-scope fixture tables were zero before cleanup.
+
+#### Final accepted local and migration checks
+
+These are the user's final accepted results, recorded during documentation closure without rerunning build/lint/database verification:
+
+- `npm run build`: PASS; only the existing Vite >500 kB demo chunk advisory.
+- `npm run lint`: PASS; 0 errors, 4 pre-existing Fast Refresh warnings.
+- P6A boundary, P6C boundary, P6C behavior: PASS.
+- `git diff --check`: PASS.
+- All 28 local/remote migration versions aligned, including `20260913120000`.
+- Linked `db push --dry-run`: Remote database is up to date.
+- Focused real-secret scan: PASS.
+
+Business/accounting, security/authorization, Development database, risk-proportionate automated/hosted/browser testing and documentation: **VERIFIED**. Development migration/local Auth-mode acceptance: **VERIFIED**. Frontend release, Staging/Production and production readiness: **DEFERRED**; other-environment database changes: **NOT APPLICABLE**. No build/lint/database checks were rerun for this documentation-only closure.
+
+The final cleanup above supersedes earlier live-fixture/prepared-only notes. Full implementation manifest, database contract and evidence limits are in `docs/P6C_SLICE_5_EXPENSE_CATEGORIES_MUTATION.md`; archived fixture evidence is in `docs/verification/p6c-slice5/README.md`. One local checkpoint commit is authorized; no push or next-slice work is authorized.

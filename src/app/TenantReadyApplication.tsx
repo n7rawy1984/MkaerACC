@@ -1,3 +1,4 @@
+import { ExpenseCategoriesList } from "../master/ExpenseCategoriesList";
 import { SubcontractsList } from "../master/SubcontractsList";
 import { AccountsList, TreasuryAccountsList } from "../master/AccountMasterLists";
 import { NavLink } from "react-router-dom";
@@ -100,18 +101,7 @@ export default function TenantReadyApplication({ view }: { view: "projects" | "p
                 )}
               </>
             )}
-            {view === "expenseCategories" && masterData.phase === "READY" && (
-              masterData.expenseCategories.length === 0 ? <p role="status" className="mt-4 text-sm text-slate-500">{t("productionMaster.categoriesEmpty")}</p> : (
-                <ul className="mt-5 divide-y divide-slate-200" aria-label={t("productionMaster.expenseCategories")}>
-                  {masterData.expenseCategories.map((category) => (
-                    <li key={category.id} className="flex flex-wrap items-start justify-between gap-3 py-4 first:pt-0 last:pb-0">
-                      <div className="min-w-0 break-words"><p className="font-medium text-slate-900">{category.code} · {category.name}</p>{category.description !== null && <p className="mt-1 text-sm text-slate-500">{category.description}</p>}</div>
-                      <span className="text-sm text-slate-600">{t(`partyStatus.${category.status}`)}</span>
-                    </li>
-                  ))}
-                </ul>
-              )
-            )}
+            {view === "expenseCategories" && masterData.phase === "READY" && <ExpenseCategoriesList />}
           </section>
         )}
       </main>
