@@ -1,17 +1,19 @@
+import { updateCompanyProfile, type CompanyProfileCommand } from "./companyProfileMutations";
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "../types/database.generated";
 import { readActiveCompanyProfile, readActiveCompanyProjects, readActiveCompanyParties, readActiveCompanyExpenseCategories, readActiveCompanyAccounts, readActiveCompanyTreasuryAccounts, readActiveCompanySubcontracts } from "./masterRepositories";
-import type { CategoryActions, SupplierActions, ProductionMasterDataState } from "./masterTypes";
+import type { CategoryActions, SupplierActions, CompanyProfileActions, ProductionMasterDataState } from "./masterTypes";
 import { mutateExpenseCategory, type ExpenseCategoryCommand } from "./expenseCategoryMutations";
 import { mutateSupplierParty, type SupplierPartyCommand } from "./supplierPartyMutations";
 import { ProductionMasterDataContext } from "./productionMasterDataContext";
 
-export function ProductionMasterDataProvider({ client, userId, activeCompanyId, role, children }: {
+export function ProductionMasterDataProvider({ client, userId, activeCompanyId, role, onCompanyProfileRefreshed, children }: {
   client: SupabaseClient<Database>;
   userId: string;
   activeCompanyId: string;
   role: Database["public"]["Enums"]["company_role"];
+  onCompanyProfileRefreshed?: (userId: string, companyId: string, role: Database["public"]["Enums"]["company_role"], legalName: string | null) => void;
   children: ReactNode;
 }) {
   const scopeKey = `${userId}:${activeCompanyId}:${role}`;
@@ -29,15 +31,20 @@ export function ProductionMasterDataProvider({ client, userId, activeCompanyId, 
   const supplierGeneration = useRef(0);
   const [supplierState, setSupplierState] = useState<{ scopeKey: string; value: SupplierActions["supplierMutation"] }>({ scopeKey, value: { phase: "IDLE" } });
 
+  const companyLock = useRef(false);
+  const companyGeneration = useRef(0);
+  const [companyState, setCompanyState] = useState<{ scopeKey: string; value: CompanyProfileActions["companyProfileMutation"] }>({ scopeKey, value: { phase: "IDLE" } });
+
   useLayoutEffect(() => {
     liveScope.current = scopeKey;
-    return () => { categoryGeneration.current += 1; supplierGeneration.current += 1; };
+    return () => { categoryGeneration.current += 1; supplierGeneration.current += 1; companyGeneration.current += 1; };
   }, [scopeKey]);
 
   useEffect(() => {
     const generation = ++requestGeneration.current;
     mutationLock.current = false;
     supplierLock.current = false;
+    companyLock.current = false;
     let mounted = true;
 
     const isCurrent = () => mounted && requestGeneration.current === generation;
@@ -190,7 +197,52 @@ export function ProductionMasterDataProvider({ client, userId, activeCompanyId, 
       if (current()) supplierLock.current = false;
     }
   };
-  return <ProductionMasterDataContext.Provider value={{ ...visibleState, categoryMutation, supplierMutation,
+  const companyProfileMutation = companyState.scopeKey === scopeKey ? companyState.value : { phase: "IDLE" } as const;
+  const runCompanyOperation = async (command?: CompanyProfileCommand): Promise<boolean> => {
+    if (visibleState.phase !== "READY" || companyLock.current || liveScope.current !== scopeKey
+      || (command && ((role !== "ACCOUNTING_ADMIN" && role !== "SYSTEM_ADMIN")
+        || companyProfileMutation.phase === "ERROR" || companyProfileMutation.phase === "REFRESH_ERROR"))) return false;
+    companyLock.current = true;
+    const generation = requestGeneration.current;
+    const operation = ++companyGeneration.current;
+    const current = () => liveScope.current === scopeKey && requestGeneration.current === generation && companyGeneration.current === operation;
+    const feedback = (value: CompanyProfileActions["companyProfileMutation"]) => { if (current()) setCompanyState({ scopeKey, value }); };
+    const validSession = async () => {
+      const { data, error } = await client.auth.getSession();
+      return current() && !error && data.session?.user.id === userId;
+    };
+    feedback({ phase: "PENDING" });
+    let saved = !command && companyProfileMutation.phase === "REFRESH_ERROR";
+    try {
+      if (!await validSession()) { feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "denied" }); return false; }
+      if (command) {
+        const result = await updateCompanyProfile(client, activeCompanyId, command);
+        if (result.ok) saved = true;
+        if (!await validSession()) { feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "denied" }); return false; }
+        if (!result.ok) { feedback({ phase: "ERROR", error: result.error }); return false; }
+      }
+      // Refresh only Company, leaving settings, other masters and their operations intact.
+      const refreshed = await readActiveCompanyProfile(client, activeCompanyId);
+      if (!await validSession()) { feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "denied" }); return false; }
+      if (!refreshed.ok || !refreshed.data || refreshed.data.status !== "ACTIVE") {
+        feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "uncertain" }); return false;
+      }
+      const company = refreshed.data;
+      setScopedState((previous) => previous.scopeKey === scopeKey && previous.state.phase === "READY"
+        ? { scopeKey, state: { ...previous.state, company } } : previous);
+      onCompanyProfileRefreshed?.(userId, activeCompanyId, role, company.legalName);
+      feedback({ phase: saved ? "SAVED" : "IDLE" });
+      return true;
+    } catch {
+      feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "uncertain" });
+      return false;
+    } finally {
+      if (current()) companyLock.current = false;
+    }
+  };
+  return <ProductionMasterDataContext.Provider value={{ ...visibleState, categoryMutation, supplierMutation, companyProfileMutation,
+    saveCompanyProfile: runCompanyOperation,
+    refreshCompanyProfile: () => runCompanyOperation(),
     saveSupplierParty: runSupplierOperation,
     refreshParties: () => runSupplierOperation(),
     saveExpenseCategory: runCategoryOperation,

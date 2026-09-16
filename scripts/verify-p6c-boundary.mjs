@@ -67,8 +67,10 @@ for (const file of masterFiles) {
     if (!allowedTables.has(match[1])) throw new Error(`Out-of-slice table: ${match[1]}`);
   }
   const isCategoryMutation = file === resolve(masterRoot, "expenseCategoryMutations.ts");
+  const isCompanyMutation = file === resolve(masterRoot, "companyProfileMutations.ts");
   const isSupplierMutation = file === resolve(masterRoot, "supplierPartyMutations.ts");
-  if (/\.(upsert|delete|rpc)\s*\(/.test(source) || (!isCategoryMutation && !isSupplierMutation && /\.(insert|update)\s*\(/.test(source))) throw new Error(`Mutation/RPC outside approved repositories: ${file}`);
+  if (/\.(upsert|delete|rpc)\s*\(/.test(source) || (!isCategoryMutation && !isSupplierMutation && !isCompanyMutation && /\.(insert|update)\s*\(/.test(source))) throw new Error(`Mutation/RPC outside approved repositories: ${file}`);
+  if (isCompanyMutation && (/\.insert\s*\(/.test(source) || [...source.matchAll(/\.from\(["']([^"']+)["']\)/g)].some((m) => m[1] !== "companies"))) throw new Error("Company writer exceeds metadata UPDATE boundary");
   if (isCategoryMutation && [...source.matchAll(/\.from\(["']([^"']+)["']\)/g)].some((m) => m[1] !== "expense_categories")) throw new Error("Category writer accesses another table");
   if (isSupplierMutation && [...source.matchAll(/\.from\(["']([^"']+)["']\)/g)].some((m) => m[1] !== "parties")) throw new Error("Supplier writer accesses another table");
 }

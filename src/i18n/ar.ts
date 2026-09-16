@@ -1,9 +1,30 @@
 // Arabic dictionary — Phase 2B.3. Must define exactly the same key set as en.ts (verified by
 // tooling in I18nContext.tsx: a missing Arabic key falls back to English rather than crashing,
 // but that fallback should never be relied on for shipped UI — see Known Limitations).
-import type { TranslationKey } from "./en";
+import type {
+ TranslationKey } from "./en";
 
 const ar: Record<TranslationKey, string> = {
+  "productionMaster.companyProfile": "بيانات الشركة",
+  "companyProfile.edit": "تعديل بيانات الشركة",
+  "companyProfile.legal_name": "الاسم القانوني",
+  "companyProfile.trn": "رقم التسجيل الضريبي",
+  "companyProfile.address": "العنوان",
+  "companyProfile.notes": "ملاحظات",
+  "companyProfile.optional": "جميع الحقول اختيارية. اترك الحقل فارغاً لمسح قيمته.",
+  "companyProfile.empty": "غير محدد",
+  "companyProfile.save": "حفظ البيانات",
+  "companyProfile.close": "إغلاق",
+  "companyProfile.refresh": "تحديث بيانات الشركة",
+  "companyProfile.pending": "جارٍ تحديث بيانات الشركة…",
+  "companyProfile.saved": "تم حفظ بيانات الشركة.",
+  "companyProfile.invalid": "يرجى مراجعة حقول الشركة.",
+  "companyProfile.denied": "لم تعد لديك صلاحية تعديل هذه الشركة.",
+  "companyProfile.conflict": "تغيرت بيانات هذه الشركة أو لم تعد متاحة.",
+  "companyProfile.uncertain": "تعذر تأكيد نتيجة العملية.",
+  "companyProfile.refreshRequired": "حدّث بيانات الشركة وراجعها قبل المحاولة مجدداً.",
+  "companyProfile.refreshError": "تم حفظ البيانات، لكن تعذر تحديث عرضها. حدّث العرض لمراجعة البيانات المحفوظة قبل إجراء تغيير آخر.",
+
   "supplierMutation.create": "إنشاء مورد",
   "supplierMutation.edit": "تعديل المورد",
   "supplierMutation.deactivate": "إلغاء التفعيل",

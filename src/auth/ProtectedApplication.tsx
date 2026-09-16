@@ -17,7 +17,7 @@ function LoadingPage() {
 }
 
 function RoutedApplication() {
-  const { state } = useAuth();
+  const { state, syncCompanyLegalName } = useAuth();
   if (state.phase === "INITIALIZING_AUTH" || state.phase === "LOADING_IDENTITY") return <LoadingPage />;
   if (state.phase === "SIGNED_OUT") return <Routes><Route path="/login" element={<LoginPage />} /><Route path="*" element={<Navigate to="/login" replace />} /></Routes>;
   if (state.phase === "NO_ACTIVE_COMPANY") return <Routes><Route path="/no-company" element={<NoCompanyPage />} /><Route path="*" element={<Navigate to="/no-company" replace />} /></Routes>;
@@ -25,13 +25,14 @@ function RoutedApplication() {
   if (state.phase === "IDENTITY_LOAD_ERROR") return <Routes><Route path="/auth-error" element={<AuthErrorPage />} /><Route path="*" element={<Navigate to="/auth-error" replace />} /></Routes>;
   return (
     <SupabaseTenantSettingsProvider key={`${state.profile.userId}:${state.activeTenant.companyId}`} client={getSupabaseClient()} profile={state.profile} tenant={state.activeTenant}>
-      <ProductionMasterDataProvider key={`${state.profile.userId}:${state.activeTenant.companyId}:${state.activeTenant.role}`} role={state.activeTenant.role} client={getSupabaseClient()} userId={state.profile.userId} activeCompanyId={state.activeTenant.companyId}>
+      <ProductionMasterDataProvider onCompanyProfileRefreshed={syncCompanyLegalName} key={`${state.profile.userId}:${state.activeTenant.companyId}:${state.activeTenant.role}`} role={state.activeTenant.role} client={getSupabaseClient()} userId={state.profile.userId} activeCompanyId={state.activeTenant.companyId}>
         <Routes>
           <Route path="/login" element={<Navigate to="/" replace />} />
           <Route path="/no-company" element={<Navigate to="/" replace />} />
           <Route path="/select-company" element={<Navigate to="/" replace />} />
           <Route path="/auth-error" element={<Navigate to="/" replace />} />
           <Route path="/" element={<TenantReadyApplication view="projects" />} />
+          <Route path="/company-profile" element={<TenantReadyApplication view="companyProfile" />} />
           <Route path="/projects" element={<TenantReadyApplication view="projects" />} />
           <Route path="/parties" element={<TenantReadyApplication view="parties" />} />
           <Route path="/expense-categories" element={<TenantReadyApplication view="expenseCategories" />} />

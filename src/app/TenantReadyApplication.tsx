@@ -1,3 +1,4 @@
+import { CompanyProfilePanel } from "../master/CompanyProfilePanel";
 import { PartiesList } from "../master/PartiesList";
 import { ExpenseCategoriesList } from "../master/ExpenseCategoriesList";
 import { SubcontractsList } from "../master/SubcontractsList";
@@ -10,7 +11,7 @@ import { useTenantSettings } from "../tenant/TenantSettingsContext";
 import { TenantBrandMark } from "../tenant/TenantBrandMark";
 import { useProductionMasterData } from "../master/productionMasterDataContext";
 
-export default function TenantReadyApplication({ view }: { view: "projects" | "parties" | "expenseCategories" | "accounts" | "treasuryAccounts" | "subcontracts" | "deferred" }) {
+export default function TenantReadyApplication({ view }: { view: "companyProfile" | "projects" | "parties" | "expenseCategories" | "accounts" | "treasuryAccounts" | "subcontracts" | "deferred" }) {
   const t = useT();
   const { state, showCompanySelector, signOut } = useAuth();
   const tenantSettings = useTenantSettings();
@@ -42,8 +43,8 @@ export default function TenantReadyApplication({ view }: { view: "projects" | "p
       </header>
       <main className="mx-auto max-w-4xl px-6 py-16">
         <nav aria-label={t("productionMaster.navigation")} className="mb-6 flex flex-wrap gap-3">
-          {(["projects", "parties", "expenseCategories", "accounts", "treasuryAccounts", "subcontracts"] as const).map((resource) => (
-            <NavLink key={resource} to={resource === "treasuryAccounts" ? "/treasury-accounts" : resource === "expenseCategories" ? "/expense-categories" : `/${resource}`} className={({ isActive }) => `rounded-lg border px-3 py-2 text-sm font-medium ${isActive ? "border-[var(--tenant-primary)] text-[var(--tenant-primary)]" : "border-slate-300 text-slate-600"}`}>
+          {(["companyProfile", "projects", "parties", "expenseCategories", "accounts", "treasuryAccounts", "subcontracts"] as const).map((resource) => (
+            <NavLink key={resource} to={resource === "companyProfile" ? "/company-profile" : resource === "treasuryAccounts" ? "/treasury-accounts" : resource === "expenseCategories" ? "/expense-categories" : `/${resource}`} className={({ isActive }) => `rounded-lg border px-3 py-2 text-sm font-medium ${isActive ? "border-[var(--tenant-primary)] text-[var(--tenant-primary)]" : "border-slate-300 text-slate-600"}`}>
               {t(`productionMaster.${resource}`)}
             </NavLink>
           ))}
@@ -77,6 +78,7 @@ export default function TenantReadyApplication({ view }: { view: "projects" | "p
                 ))}
               </ul>
             )}
+            {view === "companyProfile" && masterData.phase === "READY" && <CompanyProfilePanel />}
             {view === "parties" && masterData.phase === "READY" && <PartiesList />}
             {view === "expenseCategories" && masterData.phase === "READY" && <ExpenseCategoriesList />}
           </section>

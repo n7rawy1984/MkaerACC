@@ -2,6 +2,26 @@
 // location in this file mirrors where it's used. ar.ts must define exactly the same key set —
 // see i18n/I18nContext.tsx for the lookup/fallback behavior and translation-key discipline notes.
 const en = {
+  "productionMaster.companyProfile": "Company profile",
+  "companyProfile.edit": "Edit company profile",
+  "companyProfile.legal_name": "Legal name",
+  "companyProfile.trn": "Tax registration number",
+  "companyProfile.address": "Address",
+  "companyProfile.notes": "Notes",
+  "companyProfile.optional": "All fields are optional. Leave a field blank to clear it.",
+  "companyProfile.empty": "Not provided",
+  "companyProfile.save": "Save profile",
+  "companyProfile.close": "Close",
+  "companyProfile.refresh": "Refresh company profile",
+  "companyProfile.pending": "Updating company profile…",
+  "companyProfile.saved": "Company profile saved.",
+  "companyProfile.invalid": "Check the profile fields.",
+  "companyProfile.denied": "You no longer have access to update this company.",
+  "companyProfile.conflict": "This company changed or is no longer available.",
+  "companyProfile.uncertain": "The result could not be confirmed.",
+  "companyProfile.refreshRequired": "Refresh and review the profile before trying again.",
+  "companyProfile.refreshError": "The profile was saved, but could not be refreshed. Refresh to review the saved profile before making another change.",
+
   "supplierMutation.create": "Create supplier",
   "supplierMutation.edit": "Edit supplier",
   "supplierMutation.deactivate": "Deactivate",

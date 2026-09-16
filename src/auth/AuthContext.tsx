@@ -21,6 +21,7 @@ interface AuthContextValue {
   retry: () => void;
   chooseCompany: (companyId: string) => void;
   showCompanySelector: () => void;
+  syncCompanyLegalName: (userId: string, companyId: string, role: TenantMembership["role"], legalName: string | null) => void;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -65,6 +66,7 @@ export function AuthProvider({ client, children }: { client: SupabaseClient<Data
   const requestRef = useRef(0);
   const backgroundGenerationRef = useRef<number | null>(null);
   const forcedCompanyRef = useRef<string | null>(null);
+  const companyMetadataRef = useRef<{ userId: string; companyId: string; legalName: string | null } | null>(null);
 
   useEffect(() => {
     stateRef.current = state;
@@ -76,6 +78,7 @@ export function AuthProvider({ client, children }: { client: SupabaseClient<Data
     userIdRef.current = null;
     backgroundGenerationRef.current = null;
     forcedCompanyRef.current = null;
+    companyMetadataRef.current = null;
     setTransport(null);
     setState({ phase: "SIGNED_OUT" });
   }, []);
@@ -122,6 +125,7 @@ export function AuthProvider({ client, children }: { client: SupabaseClient<Data
       && userIdRef.current === userId
       && sessionRef.current?.user.id === userId;
 
+    const metadataAtStart = companyMetadataRef.current;
     const loadIdentity = async () => {
       try {
         const { data: claimsData, error: claimsError } = await client.auth.getClaims();
@@ -182,7 +186,12 @@ export function AuthProvider({ client, children }: { client: SupabaseClient<Data
             companyId: company.id,
             companyCode: company.code,
             companyName: company.name,
-            companyLegalName: company.legal_name,
+            // An authority query started before a confirmed profile refresh must
+            // not put its older legal name back. Authority/role checks still apply.
+            companyLegalName: companyMetadataRef.current !== metadataAtStart
+              && companyMetadataRef.current?.userId === userId
+              && companyMetadataRef.current.companyId === company.id
+              ? companyMetadataRef.current.legalName : company.legal_name,
             role: membership.role,
           }] : [];
         });
@@ -273,6 +282,21 @@ export function AuthProvider({ client, children }: { client: SupabaseClient<Data
       : current);
   }, []);
 
+  const syncCompanyLegalName = useCallback((userId: string, companyId: string, role: TenantMembership["role"], legalName: string | null) => {
+    const current = stateRef.current;
+    if (userIdRef.current !== userId || sessionRef.current?.user.id !== userId
+      || current.phase !== "TENANT_READY" || current.profile.userId !== userId
+      || current.activeTenant.companyId !== companyId || current.activeTenant.role !== role) return;
+    companyMetadataRef.current = { userId, companyId, legalName };
+    setState((previous) => {
+      if (previous.phase !== "TENANT_READY" || previous.profile.userId !== userId
+        || previous.activeTenant.companyId !== companyId || previous.activeTenant.role !== role) return previous;
+      const memberships = previous.memberships.map((membership) => membership.companyId === companyId
+        ? { ...membership, companyLegalName: legalName } : membership);
+      return { ...previous, memberships, activeTenant: { ...previous.activeTenant, companyLegalName: legalName } };
+    });
+  }, []);
+
   const value = useMemo<AuthContextValue>(() => ({
     state,
     signIn,
@@ -280,7 +304,8 @@ export function AuthProvider({ client, children }: { client: SupabaseClient<Data
     retry: () => revalidate(),
     chooseCompany: (companyId) => revalidate(companyId),
     showCompanySelector,
-  }), [revalidate, showCompanySelector, signIn, signOut, state]);
+    syncCompanyLegalName,
+  }), [revalidate, showCompanySelector, signIn, signOut, state, syncCompanyLegalName]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

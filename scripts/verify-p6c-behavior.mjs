@@ -17,6 +17,7 @@ function moduleAt(path, mocks = {}) {
 }
 const repositories = moduleAt("src/master/masterRepositories.ts");
 const mutations = moduleAt("src/master/expenseCategoryMutations.ts", { "./masterRepositories": repositories });
+const companyMutations = moduleAt("src/master/companyProfileMutations.ts", { "./masterRepositories": repositories });
 const supplierMutations = moduleAt("src/master/supplierPartyMutations.ts", { "./masterRepositories": repositories });
 const audit = { created_at: "2026-09-12T00:00:00Z", created_by: null, updated_at: "2026-09-12T01:00:00Z", updated_by: "actor" };
 const party = { ...audit, id: "party-a", company_id: "company-a", type: "SUPPLIER", name: "مورد", code: null, trn: "001234567890123", contact_person: "Contact", phone: null, email: null, address: null, status: "INACTIVE", notes: null };
@@ -118,7 +119,7 @@ for (const [read, table, row, source] of [
 }
 const flush = async () => { for (let i = 0; i < 20; i++) await Promise.resolve(); };
 function deferred() { let resolve; const promise = new Promise((done) => { resolve = done; }); return { promise, resolve }; }
-function harness(overrides = {}, writer = mutations, supplierWriter = supplierMutations) {
+function harness(overrides = {}, writer = mutations, supplierWriter = supplierMutations, companyWriter = companyMutations) {
   let previousDeps, cleanup, effect, output, calls = 0, cursor = 0;
   const slots = [];
   const hooks = {
@@ -145,7 +146,7 @@ function harness(overrides = {}, writer = mutations, supplierWriter = supplierMu
   for (const [key, fn] of Object.entries(readers)) readers[key] = (...args) => { calls++; return fn(...args); };
   const { ProductionMasterDataProvider } = moduleAt("src/master/ProductionMasterDataProvider.tsx", {
     react: hooks, "react/jsx-runtime": { jsx: (_type, props) => props.value },
-    "./supplierPartyMutations": supplierWriter, "./expenseCategoryMutations": writer, "./masterRepositories": readers, "./productionMasterDataContext": { ProductionMasterDataContext: { Provider: "provider" } },
+    "./companyProfileMutations": companyWriter, "./supplierPartyMutations": supplierWriter, "./expenseCategoryMutations": writer, "./masterRepositories": readers, "./productionMasterDataContext": { ProductionMasterDataContext: { Provider: "provider" } },
   });
   let userId = "user-a";
   const client = { auth: { getSession: async () => ({ data: { session: userId ? { user: { id: userId } } : null }, error: null }) } };
@@ -527,3 +528,82 @@ if (process.env.P6C_BROWSER_INTERACTIONS === "1") {
 } else {
   console.log("Supplier browser click/layout coverage NOT RUN. Use P6C_BROWSER_INTERACTIONS=1 with Playwright, or run scripts/verify-p6c-supplier-interactions.mjs separately.");
 }
+
+// Slice 7: real Company repository and independent provider operation lifecycle.
+const companyRow = { ...audit, id: 'company-a', code: 'COMP', name: 'Trade name', legal_name: 'Legal name', trn: '00123', address: null, notes: null, status: 'ACTIVE', updated_at: '2026-09-16T00:00:00.123456+00:00' };
+const companyProfile = repositories.mapCompanyRow(companyRow);
+const companyInput = { legal_name: '\uFEFF  شركة  Mixed Case \n', trn: ' 00123 ', address: 'A\n  B', notes: '\t\u00a0 ' };
+const companyCommand = { company: companyProfile, input: companyInput };
+assert.deepEqual(companyMutations.normalizeCompanyProfile(companyInput), { legal_name: 'شركة  Mixed Case', trn: '00123', address: 'A\n  B', notes: null });
+for (const field of ['legal_name','trn','address','notes']) {
+  assert.equal(companyMutations.normalizeCompanyProfile({ ...companyInput, [field]: 123 }), null);
+  assert.equal(companyMutations.normalizeCompanyProfile({ ...companyInput, [field]: 'x'.repeat(10001) })[field].length, 10001, 'no invented length restriction');
+}
+const companyClient = queryClient({ data: [companyRow], error: null });
+assert.equal((await companyMutations.updateCompanyProfile(companyClient, 'company-a', { ...companyCommand, input: { ...companyInput, id: 'forged', company_id: 'forged', name: 'forged', status: 'INACTIVE', updated_by: 'forged', updated_at: 'forged' } })).ok, true);
+assert.deepEqual(companyClient.calls.find(([m]) => m === 'update')[1], companyMutations.normalizeCompanyProfile(companyInput));
+assert.deepEqual(companyClient.calls.filter(([m]) => m === 'eq'), [['eq','id','company-a'],['eq','updated_at',companyRow.updated_at]]);
+for (const [response, expected] of [
+  [{data: [], error: null}, 'conflict'], [{data: [companyRow,companyRow], error: null}, 'uncertain'],
+  [{data: [{...companyRow,id:'company-b'}], error:null}, 'uncertain'],
+  [{data: [{...companyRow,updated_at:null}], error:null}, 'uncertain'],
+  ...[['42501','denied'],['23514','invalid'],['','uncertain']].map(([code,e]) => [{data:null,error:{code,message:'PRIVATE DETAIL'}},e]),
+]) assert.deepEqual(await companyMutations.updateCompanyProfile(queryClient(response), 'company-a', companyCommand), {ok:false,error:expected});
+for (const current of [{...companyProfile,id:'company-b'}, {...companyProfile,status:'INACTIVE'}, {...companyProfile,updatedAt:''}]) {
+  const c=queryClient({}); assert.equal((await companyMutations.updateCompanyProfile(c,'company-a',{...companyCommand,company:current})).ok,false); assert.equal(c.calls.length,0);
+}
+let companyWrites=0;
+const companyWriter = { updateCompanyProfile: async () => { companyWrites++; return {ok:true,company:companyProfile}; } };
+const companyReader = { readActiveCompanyProfile: async (_c,id) => ({ok:true,data:{...companyProfile,id}}) };
+for (const role of ['ACCOUNTING_ADMIN','SYSTEM_ADMIN']) {
+  const synced=[]; const props={role,onCompanyProfileRefreshed:(...args)=>synced.push(args)};
+  h=harness(companyReader,mutations,supplierMutations,companyWriter);h.render(props);await flush();
+  assert.equal(await h.render(props).saveCompanyProfile(companyCommand),true);
+  assert.equal(h.calls(),8,'only Company refresh, not seven-resource reload');
+  assert.equal(h.render(props).companyProfileMutation.phase,'SAVED');
+  assert.deepEqual(synced,[['user-a','company-a',role,'Legal name']]);
+  assert.equal(h.render(props).supplierMutation.phase,'IDLE'); assert.equal(h.render(props).categoryMutation.phase,'IDLE');
+  h.render(props);await flush();assert.equal(h.calls(),8);
+}
+for (const role of ['ACCOUNTANT','PROCUREMENT','DATA_ENTRY','MANAGEMENT_VIEWER','PROJECT_MANAGER']) {
+  h=harness(companyReader,mutations,supplierMutations,companyWriter);h.render({role});await flush();const before=companyWrites;
+  assert.equal(await h.render({role}).saveCompanyProfile(companyCommand),false);assert.equal(companyWrites,before);
+}
+for (const stage of ['write','refresh']) for (const transition of ['company','role','user','logout','unmount']) {
+  const delayed=deferred(); let reads=0;const synced=[];let props={...admin,onCompanyProfileRefreshed:(...a)=>synced.push(a)};
+  h=harness({readActiveCompanyProfile: async (_c,id) => ++reads===2 && stage==='refresh' ? delayed.promise : {ok:true,data:{...companyProfile,id}}},mutations,supplierMutations,
+    stage==='write'?{updateCompanyProfile:()=>delayed.promise}:companyWriter);
+  h.render(props);await flush();const pending=h.render(props).saveCompanyProfile(companyCommand);await flush();
+  assert.equal(await h.render(props).saveCompanyProfile(companyCommand),false,'duplicate save blocked');
+  if (transition==='unmount') h.unmount();
+  else if (transition==='logout') h.session(null);
+  else { props={...props,...(transition==='company'?{activeCompanyId:'company-b'}:transition==='role'?{role:'MANAGEMENT_VIEWER'}:{userId:'user-b'})};if(transition==='user')h.session('user-b');h.render(props);await flush(); }
+  delayed.resolve(stage==='write'?{ok:true,company:companyProfile}:{ok:true,data:companyProfile});
+  assert.equal(await pending,false);assert.equal(synced.length,0,'late result must not sync Auth');
+  if(!['unmount','logout'].includes(transition)) {assert.equal(h.render(props).companyProfileMutation.phase,'IDLE'); if(transition==='company')assert.equal(h.state().company.id,'company-b');}
+}
+let companyReads=0,failCompanyRefresh=true;
+h=harness({readActiveCompanyProfile:async()=>++companyReads>1 && failCompanyRefresh?{ok:false,error:{source:'company'}}:{ok:true,data:companyProfile}},mutations,supplierMutations,companyWriter);
+h.render(admin);await flush();
+assert.equal(await h.render(admin).saveCompanyProfile(companyCommand),false);
+assert.equal(h.render(admin).companyProfileMutation.phase,'REFRESH_ERROR');
+assert.equal(await h.render(admin).refreshCompanyProfile(),false);
+assert.equal(h.render(admin).companyProfileMutation.phase,'REFRESH_ERROR','repeated recovery failure retains known commit');
+const writesBeforeRecovery=companyWrites;failCompanyRefresh=false;
+assert.equal(await h.render(admin).refreshCompanyProfile(),true);assert.equal(companyWrites,writesBeforeRecovery,'recovery does not replay write');
+assert.equal(h.render(admin).companyProfileMutation.phase,'SAVED');
+for (const error of ['conflict','denied','uncertain']) {
+  h=harness(companyReader,mutations,supplierMutations,{updateCompanyProfile:async()=>({ok:false,error})});h.render(admin);await flush();
+  assert.equal(await h.render(admin).saveCompanyProfile(companyCommand),false);assert.equal(h.render(admin).companyProfileMutation.error,error);
+  assert.equal(await h.render(admin).saveCompanyProfile(companyCommand),false);
+  assert.equal(await h.render(admin).refreshCompanyProfile(),true);assert.equal(h.render(admin).companyProfileMutation.phase,'IDLE');
+}
+// Independent Company and Supplier operations cannot overwrite one another's snapshot.
+const companyDelayed=deferred();
+h=harness({...companyReader,readActiveCompanyParties:async()=>({ok:true,data:[currentSupplier]})},mutations,{mutateSupplierParty:async()=>({ok:true,supplier:currentSupplier})},{updateCompanyProfile:()=>companyDelayed.promise});
+h.render(admin);await flush();const pendingCompany=h.render(admin).saveCompanyProfile(companyCommand);await flush();
+assert.equal(await h.render(admin).saveSupplierParty({kind:'edit',supplier:currentSupplier,input:supplierInput}),true);
+companyDelayed.resolve({ok:true,company:companyProfile});assert.equal(await pendingCompany,true);
+assert.equal(h.render(admin).supplierMutation.phase,'SAVED');assert.equal(h.render(admin).companyProfileMutation.phase,'SAVED');
+assert.deepEqual(h.state().parties,[currentSupplier]);assert.deepEqual(h.state().company,companyProfile);
+console.log('P6C Slice 7 repository/provider PASS: four-field payload, normalization, exact token, both allowed/all denied roles, Company-only refresh, independent operations, duplicate save, late write/read isolation, Auth sync callback and conflict/denial/uncertain/committed-refresh recovery.');
