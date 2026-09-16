@@ -62,3 +62,14 @@ The final run used ten synthetic `example.invalid` Auth users, two synthetic com
 Four additional hardening checks passed: unrelated-tenant helper returns false, inactive-assignment helper returns false, helper calls do not infer membership, and protected profile fields cannot be changed. The initial verification identified and the forward migrations corrected (1) protected-row visibility inside assignment validation and (2) PostgREST `return=representation` visibility for a newly inserted project. The full matrix passed after both corrections.
 
 No real company data, Staging project, or Production project was accessed. Synthetic verification rows are deliberately retained as non-production Development test fixtures; they grant no access outside Development.
+
+
+## P6C Slice 6 Supplier-only narrowing — VERIFIED COMPLETE (2026-09-16)
+
+The P4 matrix above records the historical baseline. Applied Development canonical migration `20260913123000_p6c_supplier_party_mutations.sql` intentionally narrows authenticated Party INSERT/UPDATE to SUPPLIER only. No current authenticated production code path writes other Party types; demo/localStorage writes are isolated and P5 commands only reference/validate/lock Parties. This narrowing is explicitly user-approved.
+
+Restrictive Supplier INSERT and UPDATE USING/WITH CHECK policies AND with the existing P4 party.manage/role policies. Allowed roles remain ACCOUNTING_ADMIN and PROCUREMENT, requiring active profile/membership/Company. All other roles, including SYSTEM_ADMIN, remain denied. SELECT policies/type visibility and permission mappings do not change. Broader P4 non-Supplier authenticated writes cease to be available; they must not be described as still enabled after this migration.
+
+Authenticated INSERT columns: company_id,name,code,trn,contact_person,phone,email,address,notes. UPDATE: name,code,trn,contact_person,phone,email,address,notes,status. No table-wide write, DELETE/TRUNCATE, type/identity/provenance/timestamp writes, creation-status write or Company reassignment. DB preparation supplies Supplier/ACTIVE and actor/time provenance. Trusted non-Supplier operations retain their existing behavior, and no P5 command/grant changes.
+
+**Final accepted evidence:** Development migration applied, local/remote history aligned and final linked dry-run up to date; 104/104 hosted checks, concurrency and authenticated browser acceptance PASS. All Slice 6 fixtures/Auth were cleaned; global 14 Companies / 14 settings, zero missing/orphan settings. No P6D path or Staging/Production action. Release/production readiness remains deferred. See `P6C_SLICE_6_SUPPLIER_PARTY_MUTATION.md` and `verification/p6c-slice6/README.md`.

@@ -67,8 +67,10 @@ for (const file of masterFiles) {
     if (!allowedTables.has(match[1])) throw new Error(`Out-of-slice table: ${match[1]}`);
   }
   const isCategoryMutation = file === resolve(masterRoot, "expenseCategoryMutations.ts");
-  if (/\.(upsert|delete|rpc)\s*\(/.test(source) || (!isCategoryMutation && /\.(insert|update)\s*\(/.test(source))) throw new Error(`Mutation/RPC outside category repository: ${file}`);
+  const isSupplierMutation = file === resolve(masterRoot, "supplierPartyMutations.ts");
+  if (/\.(upsert|delete|rpc)\s*\(/.test(source) || (!isCategoryMutation && !isSupplierMutation && /\.(insert|update)\s*\(/.test(source))) throw new Error(`Mutation/RPC outside approved repositories: ${file}`);
   if (isCategoryMutation && [...source.matchAll(/\.from\(["']([^"']+)["']\)/g)].some((m) => m[1] !== "expense_categories")) throw new Error("Category writer accesses another table");
+  if (isSupplierMutation && [...source.matchAll(/\.from\(["']([^"']+)["']\)/g)].some((m) => m[1] !== "parties")) throw new Error("Supplier writer accesses another table");
 }
 for (const [name, table] of [["readActiveCompanyParties", "parties"], ["readActiveCompanyExpenseCategories", "expense_categories"], ["readActiveCompanyAccounts", "accounts"], ["readActiveCompanyTreasuryAccounts", "treasury_accounts"], ["readActiveCompanySubcontracts", "subcontracts"]]) {
   const body = repositorySource.split(`export async function ${name}(`)[1]?.split("export ")[0];

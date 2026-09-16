@@ -1,3 +1,4 @@
+import type { SupplierMutationError, SupplierPartyCommand } from "./supplierPartyMutations";
 import type { Database } from "../types/database.generated";
 import type { CategoryMutationError, ExpenseCategoryCommand } from "./expenseCategoryMutations";
 
@@ -6,7 +7,12 @@ export interface CategoryActions {
   saveExpenseCategory: (command: ExpenseCategoryCommand) => Promise<boolean>;
   refreshExpenseCategories: () => Promise<boolean>;
 }
-export type ProductionMasterDataContextValue = ProductionMasterDataState & CategoryActions;
+export interface SupplierActions {
+  supplierMutation: { phase: "IDLE" | "PENDING" | "SAVED" | "ERROR" | "REFRESH_ERROR"; error?: SupplierMutationError };
+  saveSupplierParty: (command: SupplierPartyCommand) => Promise<boolean>;
+  refreshParties: () => Promise<boolean>;
+}
+export type ProductionMasterDataContextValue = ProductionMasterDataState & CategoryActions & SupplierActions;
 
 export type ProductionCompanyStatus = Database["public"]["Enums"]["account_status"];
 export type ProductionProjectStatus = Database["public"]["Enums"]["project_status"];

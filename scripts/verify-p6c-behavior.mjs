@@ -17,6 +17,7 @@ function moduleAt(path, mocks = {}) {
 }
 const repositories = moduleAt("src/master/masterRepositories.ts");
 const mutations = moduleAt("src/master/expenseCategoryMutations.ts", { "./masterRepositories": repositories });
+const supplierMutations = moduleAt("src/master/supplierPartyMutations.ts", { "./masterRepositories": repositories });
 const audit = { created_at: "2026-09-12T00:00:00Z", created_by: null, updated_at: "2026-09-12T01:00:00Z", updated_by: "actor" };
 const party = { ...audit, id: "party-a", company_id: "company-a", type: "SUPPLIER", name: "مورد", code: null, trn: "001234567890123", contact_person: "Contact", phone: null, email: null, address: null, status: "INACTIVE", notes: null };
 const category = { ...audit, id: "category-a", company_id: "company-a", name: "Materials", code: "MAT", description: null, status: "INACTIVE" };
@@ -117,7 +118,7 @@ for (const [read, table, row, source] of [
 }
 const flush = async () => { for (let i = 0; i < 20; i++) await Promise.resolve(); };
 function deferred() { let resolve; const promise = new Promise((done) => { resolve = done; }); return { promise, resolve }; }
-function harness(overrides = {}, writer = mutations) {
+function harness(overrides = {}, writer = mutations, supplierWriter = supplierMutations) {
   let previousDeps, cleanup, effect, output, calls = 0, cursor = 0;
   const slots = [];
   const hooks = {
@@ -144,7 +145,7 @@ function harness(overrides = {}, writer = mutations) {
   for (const [key, fn] of Object.entries(readers)) readers[key] = (...args) => { calls++; return fn(...args); };
   const { ProductionMasterDataProvider } = moduleAt("src/master/ProductionMasterDataProvider.tsx", {
     react: hooks, "react/jsx-runtime": { jsx: (_type, props) => props.value },
-    "./expenseCategoryMutations": writer, "./masterRepositories": readers, "./productionMasterDataContext": { ProductionMasterDataContext: { Provider: "provider" } },
+    "./supplierPartyMutations": supplierWriter, "./expenseCategoryMutations": writer, "./masterRepositories": readers, "./productionMasterDataContext": { ProductionMasterDataContext: { Provider: "provider" } },
   });
   let userId = "user-a";
   const client = { auth: { getSession: async () => ({ data: { session: userId ? { user: { id: userId } } : null }, error: null }) } };
@@ -371,3 +372,158 @@ for (const role of ["ACCOUNTING_ADMIN", "ACCOUNTANT", "PROCUREMENT", "DATA_ENTRY
   assert(!html.includes("categoryMutation.delete"));
 }
 console.log("P6C Slice 5 late-refresh, conflict/uncertainty recovery and actual role-gated list/form rendering checks passed.");
+
+// Slice 6: explicit Supplier payloads, exact tokens, and separate provider state.
+const supplierInput = { name: "  مورد ", code: " SUP ", trn: " 00123 ", contact_person: " Contact  Person ", phone: " +971 (0)01 ", email: " User@Example.test ", address: " ", notes: "\t\n" };
+const normalizedSupplier = { name: "مورد", code: "SUP", trn: "00123", contact_person: "Contact  Person", phone: "+971 (0)01", email: "User@Example.test", address: null, notes: null };
+const currentSupplier = repositories.mapPartyRow(party);
+assert.deepEqual(supplierMutations.normalizeSupplierParty(supplierInput), normalizedSupplier);
+assert.equal(supplierMutations.normalizeSupplierParty({ ...supplierInput, code: "\u00a0\t" }).code, null);
+assert.equal(supplierMutations.normalizeSupplierParty({ ...supplierInput, name: "\u2003مورد\uFEFF" }).name, "مورد");
+assert.equal(supplierMutations.normalizeSupplierParty({ ...supplierInput, code: "😀".repeat(50) }).code.length, 100);
+for (const bad of [{ ...supplierInput, name: "\t " }, { ...supplierInput, name: "x".repeat(201) }, { ...supplierInput, code: "x".repeat(51) }, { ...supplierInput, trn: 123 }, { ...supplierInput, phone: undefined }]) assert.equal(supplierMutations.normalizeSupplierParty(bad), null);
+for (const command of [
+  { kind: "create", input: { ...supplierInput, company_id: "company-b", type: "OWNER", status: "INACTIVE", id: "forged", created_by: "forged", updated_at: "forged" } },
+  { kind: "edit", supplier: currentSupplier, input: supplierInput },
+  { kind: "status", supplier: currentSupplier, status: "ACTIVE" },
+  { kind: "status", supplier: { ...currentSupplier, status: "ACTIVE" }, status: "INACTIVE" },
+]) {
+  const client = queryClient({ data: [{ ...party, updated_at: "2026-09-13T00:00:00.123456+00:00" }], error: null });
+  const result = await supplierMutations.mutateSupplierParty(client, "company-a", command);
+  assert.equal(result.ok, true); assert.equal(result.supplier.updatedAt, "2026-09-13T00:00:00.123456+00:00");
+  const payload = client.calls.find(([m]) => m === "insert" || m === "update")[1];
+  assert.deepEqual(payload, command.kind === "create" ? { company_id: "company-a", ...normalizedSupplier } : command.kind === "edit" ? normalizedSupplier : { status: command.status });
+  if (command.kind !== "create") assert.deepEqual(client.calls.filter(([m]) => m === "eq"), [["eq", "company_id", "company-a"], ["eq", "id", party.id], ["eq", "type", "SUPPLIER"], ["eq", "updated_at", party.updated_at]]);
+}
+for (const type of ["OWNER", "CUSTODIAN", "EMPLOYEE", "SUBCONTRACTOR", "OTHER"]) {
+  const client = queryClient({});
+  assert.deepEqual(await supplierMutations.mutateSupplierParty(client, "company-a", { kind: "edit", supplier: { ...currentSupplier, type }, input: supplierInput }), { ok: false, error: "denied" });
+  assert.equal(client.calls.length, 0);
+}
+for (const supplier of [{ ...currentSupplier, companyId: "company-b" }, { ...currentSupplier, updatedAt: "" }]) {
+  const client = queryClient({});
+  assert.equal((await supplierMutations.mutateSupplierParty(client, "company-a", { kind: "status", supplier, status: "ACTIVE" })).error, "denied");
+  assert.equal(client.calls.length, 0);
+}
+for (const [response, expected] of [
+  [{ data: [], error: null }, "conflict"], [{ data: [party, party], error: null }, "uncertain"],
+  ...[{ company_id: "company-b" }, { type: "OWNER" }, { id: "other" }, { updated_at: null }].map((patch) => [{ data: [{ ...party, ...patch }], error: null }, "uncertain"]),
+  ...[["23505", "duplicate"], ["42501", "denied"], ["23514", "invalid"], ["23502", "invalid"], ["22P02", "invalid"], ["22001", "invalid"], ["", "uncertain"]].map(([code, error]) => [{ data: null, error: { code, message: "Hidden Owner UUID and private detail" } }, error]),
+]) assert.deepEqual(await supplierMutations.mutateSupplierParty(queryClient(response), "company-a", { kind: "edit", supplier: currentSupplier, input: supplierInput }), { ok: false, error: expected });
+assert.equal((await supplierMutations.mutateSupplierParty(queryClient({ data: [], error: null }), "company-a", { kind: "create", input: supplierInput })).error, "uncertain");
+const rejectingSupplierClient = { from: () => { throw new Error("Transport failure"); } };
+assert.deepEqual(await supplierMutations.mutateSupplierParty(rejectingSupplierClient, "company-a", { kind: "create", input: supplierInput }), { ok: false, error: "uncertain" });
+let supplierWrites = 0;
+const supplierWriter = { mutateSupplierParty: async () => { supplierWrites++; return { ok: true, supplier: currentSupplier }; } };
+for (const role of ["ACCOUNTING_ADMIN", "PROCUREMENT", "ACCOUNTANT", "DATA_ENTRY", "MANAGEMENT_VIEWER", "PROJECT_MANAGER", "SYSTEM_ADMIN"]) {
+  const props = { role };
+  const readCounts = {};
+  const countedReaders = Object.fromEntries(["readActiveCompanyParties", "readActiveCompanyExpenseCategories", "readActiveCompanyAccounts", "readActiveCompanyTreasuryAccounts", "readActiveCompanySubcontracts"].map((name) => [name, async () => { readCounts[name] = (readCounts[name] ?? 0) + 1; return { ok: true, data: [] }; }]));
+  h = harness(countedReaders, successfulWriter, supplierWriter); h.render(props); await flush();
+  const before = supplierWrites;
+  const allowed = role === "ACCOUNTING_ADMIN" || role === "PROCUREMENT";
+  assert.equal(await h.render(props).saveSupplierParty({ kind: "create", input: supplierInput }), allowed);
+  assert.equal(supplierWrites - before, allowed ? 1 : 0);
+  assert.equal(h.calls(), allowed ? 8 : 7);
+  for (const [name, count] of Object.entries(readCounts)) assert.equal(count, allowed && name === "readActiveCompanyParties" ? 2 : 1, name);
+  assert.equal(h.render(props).categoryMutation.phase, "IDLE");
+  h.render(props); await flush(); assert.equal(h.calls(), allowed ? 8 : 7, "unchanged scope does not reload");
+}
+for (const transition of ["company", "role", "user", "logout", "unmount"]) {
+  const pending = deferred();
+  h = harness({}, successfulWriter, { mutateSupplierParty: () => pending.promise }); h.render(admin); await flush();
+  const action = h.render(admin).saveSupplierParty({ kind: "create", input: supplierInput }); await flush();
+  assert.equal(await h.render(admin).saveSupplierParty({ kind: "create", input: supplierInput }), false);
+  let next = admin;
+  if (transition === "company") next = { ...admin, activeCompanyId: "company-b" };
+  if (transition === "role") next = { role: "MANAGEMENT_VIEWER" };
+  if (transition === "user") { next = { ...admin, userId: "user-b" }; h.session("user-b"); }
+  if (transition === "logout") h.session(null);
+  if (transition === "unmount") h.unmount(); else { h.render(next); await flush(); }
+  const reads = h.calls(); pending.resolve({ ok: true, supplier: currentSupplier });
+  assert.equal(await action, false); assert.equal(h.calls(), reads);
+  if (!["logout", "unmount"].includes(transition)) assert.equal(h.render(next).supplierMutation.phase, "IDLE");
+}
+// Late Parties refresh cannot replace another scope, even after a committed save.
+for (const transition of ["company", "role", "user", "logout", "unmount"]) {
+  const pending = deferred(); let count = 0;
+  h = harness({ readActiveCompanyParties: async () => ++count === 2 ? pending.promise : { ok: true, data: [] } }, successfulWriter, supplierWriter);
+  h.render(admin); await flush(); const action = h.render(admin).saveSupplierParty({ kind: "create", input: supplierInput }); await flush();
+  let next = admin;
+  if (transition === "company") next = { ...admin, activeCompanyId: "company-b" };
+  if (transition === "role") next = { role: "MANAGEMENT_VIEWER" };
+  if (transition === "user") { next = { ...admin, userId: "user-b" }; h.session("user-b"); }
+  if (transition === "logout") h.session(null);
+  if (transition === "unmount") h.unmount(); else { h.render(next); await flush(); }
+  pending.resolve({ ok: true, data: [currentSupplier] }); assert.equal(await action, false);
+  assert.deepEqual(h.state().parties, []);
+}
+for (const error of ["conflict", "uncertain", "denied", "duplicate", "invalid"]) {
+  let attempts = 0;
+  h = harness({}, successfulWriter, { mutateSupplierParty: async () => { attempts++; return { ok: false, error }; } });
+  h.render(admin); await flush(); assert.equal(await h.render(admin).saveSupplierParty({ kind: "create", input: supplierInput }), false);
+  assert.deepEqual(h.render(admin).supplierMutation, { phase: "ERROR", error });
+  assert.equal(await h.render(admin).saveSupplierParty({ kind: "create", input: supplierInput }), false); assert.equal(attempts, 1);
+  assert.equal(await h.render(admin).refreshParties(), true);
+}
+let supplierReads = 0;
+h = harness({ readActiveCompanyParties: async () => ++supplierReads === 2 || supplierReads === 3 ? { ok: false, error: { source: "parties" } } : { ok: true, data: [] } }, successfulWriter, supplierWriter);
+h.render(admin); await flush(); assert.equal(await h.render(admin).saveSupplierParty({ kind: "create", input: supplierInput }), false);
+assert.equal(h.render(admin).supplierMutation.phase, "REFRESH_ERROR");
+const supplierBeforeRetry = supplierWrites;
+assert.equal(await h.render(admin).saveSupplierParty({ kind: "create", input: supplierInput }), false);
+assert.equal(supplierWrites, supplierBeforeRetry);
+assert.equal(await h.render(admin).refreshParties(), false); assert.equal(h.render(admin).supplierMutation.phase, "REFRESH_ERROR");
+assert.equal(await h.render(admin).refreshParties(), true); assert.equal(h.render(admin).supplierMutation.phase, "SAVED");
+// A plain read failure must never announce a committed write.
+supplierReads = 0;
+h = harness({ readActiveCompanyParties: async () => ++supplierReads === 2 ? { ok: false, error: { source: "parties" } } : { ok: true, data: [] } });
+h.render(admin); await flush(); assert.equal(await h.render(admin).refreshParties(), false);
+assert.deepEqual(h.render(admin).supplierMutation, { phase: "ERROR", error: "uncertain" });
+// Both independent operations can finish without losing the other's resource/state.
+const independentSave = deferred();
+h = harness({ readActiveCompanyParties: async () => ({ ok: true, data: [currentSupplier] }), readActiveCompanyExpenseCategories: async () => ({ ok: true, data: [currentCategory] }) }, successfulWriter, { mutateSupplierParty: () => independentSave.promise });
+h.render(admin); await flush(); const independentAction = h.render(admin).saveSupplierParty({ kind: "create", input: supplierInput }); await flush();
+assert.equal(await h.render(admin).saveExpenseCategory({ kind: "create", input }), true);
+assert.equal(h.render(admin).supplierMutation.phase, "PENDING");
+independentSave.resolve({ ok: true, supplier: currentSupplier }); assert.equal(await independentAction, true);
+assert.equal(h.render(admin).categoryMutation.phase, "SAVED"); assert.equal(h.render(admin).supplierMutation.phase, "SAVED");
+assert.deepEqual(h.state().parties, [currentSupplier]); assert.deepEqual(h.state().expenseCategories, [currentCategory]);
+const supplierFormModule = moduleAt("src/master/SupplierPartyForm.tsx", {
+  "../components/ui/Field": fieldModule, "../i18n/I18nContext": { useT: () => (key) => key }, "./supplierPartyMutations": supplierMutations,
+});
+const supplierFormHtml = renderToStaticMarkup(createElement(supplierFormModule.SupplierPartyForm, { supplier: null, disabled: false, onSave: async () => {}, onCancel: () => {} }));
+assert(supplierFormHtml.includes("supplierMutation.activeOnCreate")); assert(!supplierFormHtml.includes("<select"));
+assert.deepEqual([...supplierFormHtml.matchAll(/name="([^"]+)"/g)].map((m) => m[1]).sort(), Object.keys(normalizedSupplier).sort());
+for (const role of ["ACCOUNTING_ADMIN", "PROCUREMENT", "ACCOUNTANT", "DATA_ENTRY", "MANAGEMENT_VIEWER", "PROJECT_MANAGER", "SYSTEM_ADMIN"]) {
+  for (const type of ["SUPPLIER", "SUBCONTRACTOR", "OWNER", "CUSTODIAN", "EMPLOYEE", "OTHER"]) {
+    const { PartiesList } = moduleAt("src/master/PartiesList.tsx", {
+      "../auth/AuthContext": { useAuth: () => ({ state: { phase: "TENANT_READY", activeTenant: { role } } }) },
+      "../i18n/I18nContext": { useT: () => (key) => key },
+      "./productionMasterDataContext": { useProductionMasterData: () => ({ phase: "READY", parties: [{ ...currentSupplier, type }], supplierMutation: { phase: "IDLE" } }) },
+      "./SupplierPartyForm": supplierFormModule,
+    });
+    const html = renderToStaticMarkup(createElement(PartiesList));
+    const manager = role === "ACCOUNTING_ADMIN" || role === "PROCUREMENT";
+    assert.equal(html.includes("supplierMutation.create"), manager);
+    for (const control of ["supplierMutation.edit", "supplierMutation.reactivate"]) assert.equal(html.includes(control), manager && type === "SUPPLIER");
+    assert(html.includes("001234567890123")); assert(html.includes(`productionMaster.type.${type}`));
+    assert(!html.includes("supplierMutation.delete"));
+  }
+}
+console.log("P6C Slice 6 Supplier payload, normalization, roles/types, exact-token, conflict, independent resource refresh, stale save/refresh isolation, recovery and actual rendering checks passed.");
+
+for (const session of [null, "other-user"]) {
+  h = harness({}, successfulWriter, supplierWriter); h.session(session); h.render(admin); await flush();
+  const before = supplierWrites;
+  assert.equal(await h.render(admin).saveSupplierParty({ kind: "create", input: supplierInput }), false);
+  assert.equal(supplierWrites, before);
+}
+
+// Static markup cannot prove that row controls reveal an actionable panel.
+// Opt in to real Chromium interactions; absence is reported rather than a browser PASS.
+if (process.env.P6C_BROWSER_INTERACTIONS === "1") {
+  await import("./verify-p6c-supplier-interactions.mjs");
+} else {
+  console.log("Supplier browser click/layout coverage NOT RUN. Use P6C_BROWSER_INTERACTIONS=1 with Playwright, or run scripts/verify-p6c-supplier-interactions.mjs separately.");
+}

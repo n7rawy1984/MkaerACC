@@ -1,3 +1,4 @@
+import { PartiesList } from "../master/PartiesList";
 import { ExpenseCategoriesList } from "../master/ExpenseCategoriesList";
 import { SubcontractsList } from "../master/SubcontractsList";
 import { AccountsList, TreasuryAccountsList } from "../master/AccountMasterLists";
@@ -76,31 +77,7 @@ export default function TenantReadyApplication({ view }: { view: "projects" | "p
                 ))}
               </ul>
             )}
-            {view === "parties" && masterData.phase === "READY" && (
-              <>
-                <p className="mt-3 text-sm text-slate-500">{t("productionMaster.partyVisibility")}</p>
-                {masterData.parties.length === 0 ? <p role="status" className="mt-4 text-sm text-slate-500">{t("productionMaster.partiesEmpty")}</p> : (
-                  <ul className="mt-5 divide-y divide-slate-200" aria-label={t("productionMaster.parties")}>
-                    {masterData.parties.map((party) => (
-                      <li key={party.id} className="py-4 first:pt-0 last:pb-0">
-                        <div className="flex flex-wrap items-start justify-between gap-3">
-                          <p className="break-words font-medium text-slate-900">{party.code ? `${party.code} · ` : ""}{party.name}</p>
-                          <span className="text-sm text-slate-600">{t(`productionMaster.type.${party.type}`)} · {t(`partyStatus.${party.status}`)}</span>
-                        </div>
-                        <dl className="mt-2 space-y-1 break-words text-sm text-slate-500">
-                          {([
-                            ["trn", party.taxRegistrationNumber], ["contact", party.contactPerson],
-                            ["phone", party.phone], ["email", party.email], ["address", party.address], ["notes", party.notes],
-                          ] as const).map(([field, value]) => value !== null && (
-                            <div key={field}><dt className="inline font-medium">{t(`productionMaster.${field}`)}: </dt><dd className="inline"><bdi>{value}</bdi></dd></div>
-                          ))}
-                        </dl>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </>
-            )}
+            {view === "parties" && masterData.phase === "READY" && <PartiesList />}
             {view === "expenseCategories" && masterData.phase === "READY" && <ExpenseCategoriesList />}
           </section>
         )}
