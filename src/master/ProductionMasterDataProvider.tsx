@@ -1,9 +1,10 @@
+import { updateProjectMetadata, type ProjectMetadataCommand } from "./projectMetadataMutations";
 import { updateCompanyProfile, type CompanyProfileCommand } from "./companyProfileMutations";
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "../types/database.generated";
 import { readActiveCompanyProfile, readActiveCompanyProjects, readActiveCompanyParties, readActiveCompanyExpenseCategories, readActiveCompanyAccounts, readActiveCompanyTreasuryAccounts, readActiveCompanySubcontracts } from "./masterRepositories";
-import type { CategoryActions, SupplierActions, CompanyProfileActions, ProductionMasterDataState } from "./masterTypes";
+import type { CategoryActions, SupplierActions, CompanyProfileActions, ProjectMetadataActions, ProductionMasterDataState } from "./masterTypes";
 import { mutateExpenseCategory, type ExpenseCategoryCommand } from "./expenseCategoryMutations";
 import { mutateSupplierParty, type SupplierPartyCommand } from "./supplierPartyMutations";
 import { ProductionMasterDataContext } from "./productionMasterDataContext";
@@ -35,9 +36,13 @@ export function ProductionMasterDataProvider({ client, userId, activeCompanyId, 
   const companyGeneration = useRef(0);
   const [companyState, setCompanyState] = useState<{ scopeKey: string; value: CompanyProfileActions["companyProfileMutation"] }>({ scopeKey, value: { phase: "IDLE" } });
 
+  const projectLock = useRef(false);
+  const projectGeneration = useRef(0);
+  const [projectState, setProjectState] = useState<{ scopeKey: string; value: ProjectMetadataActions["projectMetadataMutation"] }>({ scopeKey, value: { phase: "IDLE" } });
+
   useLayoutEffect(() => {
     liveScope.current = scopeKey;
-    return () => { categoryGeneration.current += 1; supplierGeneration.current += 1; companyGeneration.current += 1; };
+    return () => { categoryGeneration.current += 1; supplierGeneration.current += 1; companyGeneration.current += 1; projectGeneration.current += 1; };
   }, [scopeKey]);
 
   useEffect(() => {
@@ -45,6 +50,7 @@ export function ProductionMasterDataProvider({ client, userId, activeCompanyId, 
     mutationLock.current = false;
     supplierLock.current = false;
     companyLock.current = false;
+    projectLock.current = false;
     let mounted = true;
 
     const isCurrent = () => mounted && requestGeneration.current === generation;
@@ -240,7 +246,50 @@ export function ProductionMasterDataProvider({ client, userId, activeCompanyId, 
       if (current()) companyLock.current = false;
     }
   };
-  return <ProductionMasterDataContext.Provider value={{ ...visibleState, categoryMutation, supplierMutation, companyProfileMutation,
+  const projectMetadataMutation = projectState.scopeKey === scopeKey ? projectState.value : { phase: "IDLE" } as const;
+  const runProjectOperation = async (command?: ProjectMetadataCommand): Promise<boolean> => {
+    if (visibleState.phase !== "READY" || projectLock.current || liveScope.current !== scopeKey
+      || (command && ((role !== "ACCOUNTING_ADMIN" && role !== "PROJECT_MANAGER")
+        || projectMetadataMutation.phase === "ERROR" || projectMetadataMutation.phase === "REFRESH_ERROR"))) return false;
+    projectLock.current = true;
+    const generation = requestGeneration.current;
+    const operation = ++projectGeneration.current;
+    const current = () => liveScope.current === scopeKey && requestGeneration.current === generation && projectGeneration.current === operation;
+    const feedback = (value: ProjectMetadataActions["projectMetadataMutation"]) => { if (current()) setProjectState({ scopeKey, value }); };
+    const validSession = async () => {
+      const { data, error } = await client.auth.getSession();
+      return current() && !error && data.session?.user.id === userId;
+    };
+    feedback({ phase: "PENDING" });
+    let saved = !command && projectMetadataMutation.phase === "REFRESH_ERROR";
+    try {
+      if (!await validSession()) { feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "denied" }); return false; }
+      if (command) {
+        const result = await updateProjectMetadata(client, activeCompanyId, command);
+        if (result.ok) saved = true;
+        if (!await validSession()) { feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "denied" }); return false; }
+        if (!result.ok) { feedback({ phase: "ERROR", error: result.error }); return false; }
+      }
+      // Refresh only Projects; RLS removes revoked assignments from the next snapshot.
+      const refreshed = await readActiveCompanyProjects(client, activeCompanyId);
+      if (!await validSession()) { feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "denied" }); return false; }
+      if (!refreshed.ok) {
+        feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "uncertain" }); return false;
+      }
+      setScopedState((previous) => previous.scopeKey === scopeKey && previous.state.phase === "READY"
+        ? { scopeKey, state: { ...previous.state, projects: refreshed.data } } : previous);
+      feedback({ phase: saved ? "SAVED" : "IDLE" });
+      return true;
+    } catch {
+      feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "uncertain" });
+      return false;
+    } finally {
+      if (current()) projectLock.current = false;
+    }
+  };
+  return <ProductionMasterDataContext.Provider value={{ ...visibleState, categoryMutation, supplierMutation, companyProfileMutation, projectMetadataMutation,
+    saveProjectMetadata: runProjectOperation,
+    refreshProjects: () => runProjectOperation(),
     saveCompanyProfile: runCompanyOperation,
     refreshCompanyProfile: () => runCompanyOperation(),
     saveSupplierParty: runSupplierOperation,

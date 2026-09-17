@@ -2,6 +2,26 @@
 // location in this file mirrors where it's used. ar.ts must define exactly the same key set —
 // see i18n/I18nContext.tsx for the lookup/fallback behavior and translation-key discipline notes.
 const en = {
+  "projectMetadata.edit": "Edit project details",
+  "projectMetadata.name": "Project name",
+  "projectMetadata.client_name": "Client name",
+  "projectMetadata.location": "Location",
+  "projectMetadata.contract_number": "Contract number",
+  "projectMetadata.notes": "Notes",
+  "projectMetadata.scope": "Name is required (up to 200 characters). Other fields are optional; leave blank to clear.",
+  "projectMetadata.save": "Save project details",
+  "projectMetadata.close": "Close",
+  "projectMetadata.refresh": "Refresh projects",
+  "projectMetadata.empty": "Not provided",
+  "projectMetadata.pending": "Updating project details…",
+  "projectMetadata.saved": "Project details saved.",
+  "projectMetadata.invalid": "Enter a project name of 1–200 characters and check the fields.",
+  "projectMetadata.denied": "You no longer have access to edit this project.",
+  "projectMetadata.conflict": "This project changed or is no longer available.",
+  "projectMetadata.uncertain": "The result could not be confirmed.",
+  "projectMetadata.refreshRequired": "Refresh and review before trying again.",
+  "projectMetadata.refreshError": "The project was saved, but could not be refreshed. Refresh to review before another change.",
+
   "productionMaster.companyProfile": "Company profile",
   "companyProfile.edit": "Edit company profile",
   "companyProfile.legal_name": "Legal name",

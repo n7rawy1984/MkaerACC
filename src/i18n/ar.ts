@@ -5,6 +5,26 @@ import type {
  TranslationKey } from "./en";
 
 const ar: Record<TranslationKey, string> = {
+  "projectMetadata.edit": "تعديل بيانات المشروع",
+  "projectMetadata.name": "اسم المشروع",
+  "projectMetadata.client_name": "اسم العميل",
+  "projectMetadata.location": "الموقع",
+  "projectMetadata.contract_number": "رقم العقد",
+  "projectMetadata.notes": "ملاحظات",
+  "projectMetadata.scope": "الاسم مطلوب (حتى 200 حرف). بقية الحقول اختيارية؛ اتركها فارغة لمسحها.",
+  "projectMetadata.save": "حفظ بيانات المشروع",
+  "projectMetadata.close": "إغلاق",
+  "projectMetadata.refresh": "تحديث المشاريع",
+  "projectMetadata.empty": "غير محدد",
+  "projectMetadata.pending": "جارٍ تحديث بيانات المشروع…",
+  "projectMetadata.saved": "تم حفظ بيانات المشروع.",
+  "projectMetadata.invalid": "أدخل اسم مشروع من 1 إلى 200 حرف وراجع الحقول.",
+  "projectMetadata.denied": "لم تعد لديك صلاحية تعديل هذا المشروع.",
+  "projectMetadata.conflict": "تغير هذا المشروع أو لم يعد متاحاً.",
+  "projectMetadata.uncertain": "تعذر تأكيد نتيجة العملية.",
+  "projectMetadata.refreshRequired": "حدّث البيانات وراجعها قبل المحاولة مجدداً.",
+  "projectMetadata.refreshError": "تم حفظ المشروع لكن تعذر تحديث عرضه. حدّث العرض وراجعه قبل تغيير آخر.",
+
   "productionMaster.companyProfile": "بيانات الشركة",
   "companyProfile.edit": "تعديل بيانات الشركة",
   "companyProfile.legal_name": "الاسم القانوني",

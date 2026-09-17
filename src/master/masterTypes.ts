@@ -1,3 +1,4 @@
+import type { ProjectMetadataCommand, ProjectMetadataMutationError } from "./projectMetadataMutations";
 import type { CompanyProfileCommand, CompanyProfileMutationError } from "./companyProfileMutations";
 import type { SupplierMutationError, SupplierPartyCommand } from "./supplierPartyMutations";
 import type { Database } from "../types/database.generated";
@@ -18,7 +19,12 @@ export interface CompanyProfileActions {
   saveCompanyProfile: (command: CompanyProfileCommand) => Promise<boolean>;
   refreshCompanyProfile: () => Promise<boolean>;
 }
-export type ProductionMasterDataContextValue = ProductionMasterDataState & CategoryActions & SupplierActions & CompanyProfileActions;
+export interface ProjectMetadataActions {
+  projectMetadataMutation: { phase: "IDLE" | "PENDING" | "SAVED" | "ERROR" | "REFRESH_ERROR"; error?: ProjectMetadataMutationError };
+  saveProjectMetadata: (command: ProjectMetadataCommand) => Promise<boolean>;
+  refreshProjects: () => Promise<boolean>;
+}
+export type ProductionMasterDataContextValue = ProductionMasterDataState & CategoryActions & SupplierActions & CompanyProfileActions & ProjectMetadataActions;
 
 export type ProductionCompanyStatus = Database["public"]["Enums"]["account_status"];
 export type ProductionProjectStatus = Database["public"]["Enums"]["project_status"];
@@ -46,6 +52,7 @@ export interface ProductionProjectSummary {
   clientName: string | null;
   location: string | null;
   contractNumber: string | null;
+  notes: string | null;
   startDate: string | null;
   expectedCompletionDate: string | null;
   status: ProductionProjectStatus;

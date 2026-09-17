@@ -1,3 +1,4 @@
+import { ProjectsList } from "../master/ProjectsList";
 import { CompanyProfilePanel } from "../master/CompanyProfilePanel";
 import { PartiesList } from "../master/PartiesList";
 import { ExpenseCategoriesList } from "../master/ExpenseCategoriesList";
@@ -67,17 +68,7 @@ export default function TenantReadyApplication({ view }: { view: "companyProfile
             {view === "subcontracts" && masterData.phase === "READY" && <SubcontractsList subcontracts={masterData.subcontracts} projects={masterData.projects} parties={masterData.parties} />}
             {view === "accounts" && masterData.phase === "READY" && <AccountsList accounts={masterData.accounts} />}
             {view === "treasuryAccounts" && masterData.phase === "READY" && <TreasuryAccountsList treasuryAccounts={masterData.treasuryAccounts} accounts={masterData.accounts} />}
-            {view === "projects" && masterData.phase === "READY" && masterData.projects.length === 0 && <p className="mt-4 text-sm text-slate-500">{t("productionProjects.empty")}</p>}
-            {view === "projects" && masterData.phase === "READY" && masterData.projects.length > 0 && (
-              <ul className="mt-5 divide-y divide-slate-200" aria-label={t("productionProjects.title")}>
-                {masterData.projects.map((project) => (
-                  <li key={project.id} className="flex flex-wrap items-start justify-between gap-3 py-4 first:pt-0 last:pb-0">
-                    <div><p className="font-medium text-slate-900">{project.code} · {project.name}</p><p className="mt-1 text-sm text-slate-500">{project.clientName ?? project.location ?? t("productionProjects.noDetails")}</p></div>
-                    <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">{t(`projectStatus.${project.status}`)}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
+            {view === "projects" && masterData.phase === "READY" && <ProjectsList />}
             {view === "companyProfile" && masterData.phase === "READY" && <CompanyProfilePanel />}
             {view === "parties" && masterData.phase === "READY" && <PartiesList />}
             {view === "expenseCategories" && masterData.phase === "READY" && <ExpenseCategoriesList />}

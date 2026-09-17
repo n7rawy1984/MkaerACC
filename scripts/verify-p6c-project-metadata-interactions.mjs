@@ -1,0 +1,54 @@
+// Real Chromium with actual providers and forms; isolated in-memory transport.
+import assert from 'node:assert/strict';
+import { createServer } from 'vite';
+import react from '@vitejs/plugin-react';
+import { resolve } from 'node:path';
+import { chromium } from 'playwright';
+const root=resolve(import.meta.dirname,'..');
+const server=await createServer({root,configFile:false,plugins:[{name:'project-metadata-fixture',configureServer(s){s.middlewares.use('/__project_test',async(_req,res)=>{res.setHeader('Content-Type','text/html');res.end(await s.transformIndexHtml('/__project_test','<html><body><div id="root"></div><script type="module" src="/scripts/fixtures/p6c-project-metadata-interactions.tsx"></script></body></html>'));});}},react()],server:{host:'127.0.0.1',port:0},logLevel:'error'});
+let browser;
+try {
+ await server.listen();browser=await chromium.launch({headless:true,...(process.env.CHROMIUM_PATH?{executablePath:process.env.CHROMIUM_PATH}:{})});
+ const page=await browser.newPage({viewport:{width:1000,height:750}});const errors=[];
+ page.on('pageerror',e=>errors.push(e.message));
+ await page.route('**/*',route=>new URL(route.request().url()).hostname==='127.0.0.1'?route.continue():route.abort());
+ await page.goto(`http://127.0.0.1:${server.httpServer.address().port}/__project_test`);
+ const edit=()=>page.getByRole('button',{name:'Edit project details',exact:true}).last();
+ const form=()=>page.getByRole('form',{name:'Edit project details',exact:true});
+ const refresh=()=>page.getByRole('button',{name:'Refresh projects',exact:true}).first();
+ const resetLog=()=>page.evaluate(()=>{window.slice8.log.length=0;});
+ const open=async()=>{await edit().focus();await page.keyboard.press('Enter');await form().waitFor();assert(await form().evaluate(el=>el.contains(document.activeElement)));const box=await form().boundingBox();assert(box.y<750&&box.y+box.height>0);};
+ await edit().waitFor();await open();
+ assert.equal(await form().locator('[name="name"]').inputValue(),'Project 11');
+ assert.equal(await form().locator('[name="contract_number"]').inputValue(),'0001');
+ assert.deepEqual(await form().locator('input,textarea').evaluateAll(es=>es.map(e=>e.name)),['name','client_name','location','contract_number','notes']);
+ await form().getByRole('button',{name:'Close',exact:true}).click();assert(await edit().evaluate(el=>document.activeElement===el));
+ await open();await resetLog();await form().locator('[name="name"]').fill('  مشروع  Mixed  ');await form().locator('[name="contract_number"]').fill(' 0002 ');await form().locator('[name="location"]').fill(' ');
+ await form().getByRole('button',{name:'Save project details',exact:true}).click();await form().waitFor({state:'detached'});
+ const saved=await page.evaluate(()=>window.slice8.log);assert.equal(saved.length,2);assert(saved.every(c=>c.table==='projects'));
+ assert.deepEqual(saved[0].payload,{name:'مشروع  Mixed',client_name:null,location:null,contract_number:'0002',notes:null});
+ assert.deepEqual(saved[0].filters,[['company_id','company-a'],['id','project-11'],['updated_at','2000-01-01T00:00:00.123456+00:00']]);
+ assert.equal(await page.evaluate(()=>window.slice8.projects[11].status),'CLOSED');
+ await open();await form().locator('[name="name"]').fill('Draft retained');await resetLog();
+ await page.evaluate(()=>{window.dispatchEvent(new Event('focus'));document.dispatchEvent(new Event('visibilitychange'));});
+ await page.waitForFunction(()=>window.slice8.log.some(c=>c.operation==='authority'));
+ assert.equal(await form().locator('[name="name"]').inputValue(),'Draft retained');assert((await page.evaluate(()=>window.slice8.log)).every(c=>['profiles','company_memberships','companies'].includes(c.table)));
+ await page.evaluate(()=>window.slice8.concurrent());await form().getByRole('button',{name:'Save project details',exact:true}).click();await page.getByRole('alert').filter({hasText:'changed or is no longer available'}).waitFor();assert(await form().getByRole('button',{name:'Save project details',exact:true}).isDisabled());
+ await refresh().click();await form().waitFor({state:'detached'});await edit().waitFor();
+ await open();await form().locator('[name="name"]').fill('Saved before failed refresh');await page.evaluate(()=>window.slice8.fail('read'));await form().getByRole('button',{name:'Save project details',exact:true}).click();await page.getByRole('alert').filter({hasText:'was saved, but could not be refreshed'}).waitFor();
+ await page.evaluate(()=>window.slice8.fail('read'));await refresh().click();await page.getByRole('alert').filter({hasText:'was saved, but could not be refreshed'}).waitFor();await resetLog();await refresh().click();await page.getByRole('status').filter({hasText:'Project details saved.'}).waitFor();assert((await page.evaluate(()=>window.slice8.log)).every(c=>c.kind==='read'));
+ await page.evaluate(()=>window.slice8.role('PROJECT_MANAGER'));await page.getByText('Role: PROJECT_MANAGER',{exact:true}).waitFor();assert.equal(await page.getByRole('button',{name:'Edit project details',exact:true}).count(),1);
+ await open();await page.evaluate(()=>window.slice8.assignment(false));await form().getByRole('button',{name:'Save project details',exact:true}).click();await page.getByRole('alert').filter({hasText:'changed or is no longer available'}).waitFor();await refresh().click();await form().waitFor({state:'detached'});await page.waitForFunction(()=>!document.querySelector('main li'));assert.equal(await edit().count(),0);
+ await page.evaluate(()=>window.slice8.assignment(true));await refresh().click();await edit().waitFor();await open();await form().locator('[name="name"]').fill('Manager edit');await form().getByRole('button',{name:'Save project details',exact:true}).click();await form().waitFor({state:'detached'});
+ for(const role of ['ACCOUNTANT','PROCUREMENT','DATA_ENTRY','MANAGEMENT_VIEWER','SYSTEM_ADMIN']) {await page.evaluate(r=>window.slice8.role(r),role);await page.getByText(`Role: ${role}`,{exact:true}).waitFor();assert.equal(await edit().count(),0);}
+ await page.evaluate(()=>window.slice8.role('ACCOUNTING_ADMIN'));await edit().waitFor();await open();await form().locator('[name="name"]').fill('Late Alpha');await page.evaluate(()=>window.slice8.hold('update'));await form().getByRole('button',{name:'Save project details',exact:true}).click();
+ await page.getByRole('button',{name:'Switch fixture company',exact:true}).click();await page.getByRole('heading',{name:'Beta Brand',exact:true}).waitFor();await page.evaluate(()=>window.slice8.release());await page.waitForTimeout(80);assert(!(await page.locator('main').textContent()).includes('Late Alpha'));assert((await page.locator('main').textContent()).includes('Beta Project'));
+ await page.getByRole('button',{name:'Switch fixture company',exact:true}).click();await page.getByRole('heading',{name:'Alpha Brand',exact:true}).waitFor();await open();await page.evaluate(()=>window.slice8.role('MANAGEMENT_VIEWER'));await page.getByText('Role: MANAGEMENT_VIEWER',{exact:true}).waitFor();assert.equal(await form().count(),0);
+ await page.evaluate(()=>window.slice8.role('ACCOUNTING_ADMIN'));await edit().waitFor();await page.setViewportSize({width:390,height:750});await page.getByRole('button',{name:'العربية',exact:true}).click();await page.waitForFunction(()=>document.documentElement.dir==='rtl');
+ const arEdit=page.getByRole('button',{name:'تعديل بيانات المشروع',exact:true}).last();await arEdit.focus();await page.keyboard.press('Enter');const arForm=page.getByRole('form',{name:'تعديل بيانات المشروع',exact:true});await arForm.waitFor();assert(await arForm.evaluate(el=>el.contains(document.activeElement)));assert(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
+ await arForm.locator('[name="notes"]').fill('  ملاحظات عربية  ');await arForm.getByRole('button',{name:'حفظ بيانات المشروع',exact:true}).click();await arForm.waitFor({state:'detached'});assert(await arEdit.evaluate(el=>document.activeElement===el));
+ await page.evaluate(()=>window.slice8.revoke());await page.getByTestId('auth-phase').filter({hasText:'NO_ACTIVE_COMPANY'}).waitFor();assert.equal(await page.locator('header').count(),0);
+ await page.evaluate(()=>window.slice8.restore());await page.getByRole('button',{name:'Select fixture Alpha',exact:true}).click();await page.getByRole('heading',{name:'Alpha Brand',exact:true}).waitFor();await page.evaluate(()=>window.slice8.logout());await page.getByTestId('auth-phase').filter({hasText:'SIGNED_OUT'}).waitFor();
+ assert.equal(errors.length,0,errors.join('\n'));
+ console.log('Slice 8 real isolated Chromium PASS: lower-row keyboard/focus, populated exact payload/token, metadata-only CLOSED Project edit, resource-only refresh, stale conflict, failed-refresh recovery, role/assignment revocation, tenant/delayed-save isolation, tab return, RTL/narrow layout, profile revocation/logout.');
+} finally {await browser?.close();await server.close();}

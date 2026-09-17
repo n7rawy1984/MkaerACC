@@ -17,6 +17,7 @@ function moduleAt(path, mocks = {}) {
 }
 const repositories = moduleAt("src/master/masterRepositories.ts");
 const mutations = moduleAt("src/master/expenseCategoryMutations.ts", { "./masterRepositories": repositories });
+const projectMutations = moduleAt("src/master/projectMetadataMutations.ts", { "./masterRepositories": repositories });
 const companyMutations = moduleAt("src/master/companyProfileMutations.ts", { "./masterRepositories": repositories });
 const supplierMutations = moduleAt("src/master/supplierPartyMutations.ts", { "./masterRepositories": repositories });
 const audit = { created_at: "2026-09-12T00:00:00Z", created_by: null, updated_at: "2026-09-12T01:00:00Z", updated_by: "actor" };
@@ -119,7 +120,7 @@ for (const [read, table, row, source] of [
 }
 const flush = async () => { for (let i = 0; i < 20; i++) await Promise.resolve(); };
 function deferred() { let resolve; const promise = new Promise((done) => { resolve = done; }); return { promise, resolve }; }
-function harness(overrides = {}, writer = mutations, supplierWriter = supplierMutations, companyWriter = companyMutations) {
+function harness(overrides = {}, writer = mutations, supplierWriter = supplierMutations, companyWriter = companyMutations, projectWriter = projectMutations) {
   let previousDeps, cleanup, effect, output, calls = 0, cursor = 0;
   const slots = [];
   const hooks = {
@@ -146,7 +147,7 @@ function harness(overrides = {}, writer = mutations, supplierWriter = supplierMu
   for (const [key, fn] of Object.entries(readers)) readers[key] = (...args) => { calls++; return fn(...args); };
   const { ProductionMasterDataProvider } = moduleAt("src/master/ProductionMasterDataProvider.tsx", {
     react: hooks, "react/jsx-runtime": { jsx: (_type, props) => props.value },
-    "./companyProfileMutations": companyWriter, "./supplierPartyMutations": supplierWriter, "./expenseCategoryMutations": writer, "./masterRepositories": readers, "./productionMasterDataContext": { ProductionMasterDataContext: { Provider: "provider" } },
+    "./projectMetadataMutations": projectWriter, "./companyProfileMutations": companyWriter, "./supplierPartyMutations": supplierWriter, "./expenseCategoryMutations": writer, "./masterRepositories": readers, "./productionMasterDataContext": { ProductionMasterDataContext: { Provider: "provider" } },
   });
   let userId = "user-a";
   const client = { auth: { getSession: async () => ({ data: { session: userId ? { user: { id: userId } } : null }, error: null }) } };
@@ -607,3 +608,57 @@ companyDelayed.resolve({ok:true,company:companyProfile});assert.equal(await pend
 assert.equal(h.render(admin).supplierMutation.phase,'SAVED');assert.equal(h.render(admin).companyProfileMutation.phase,'SAVED');
 assert.deepEqual(h.state().parties,[currentSupplier]);assert.deepEqual(h.state().company,companyProfile);
 console.log('P6C Slice 7 repository/provider PASS: four-field payload, normalization, exact token, both allowed/all denied roles, Company-only refresh, independent operations, duplicate save, late write/read isolation, Auth sync callback and conflict/denial/uncertain/committed-refresh recovery.');
+
+// Slice 8: Project descriptions only, including CLOSED projects; no lifecycle writes.
+const projectRow = { ...audit, id:'project-a', company_id:'company-a', code:'P-1',name:'Original',client_name:null,location:null,contract_number:'0001',notes:null,start_date:null,expected_completion_date:null,status:'CLOSED',updated_at:'2026-09-16T00:00:00.123456+00:00' };
+const projectSummary = repositories.mapProjectRow(projectRow);
+const projectInput = {name:' \uFEFF مشروع  Mixed ',client_name:'  ',location:' Site ',contract_number:' 0001 ',notes:'A\n  B'};
+const projectCommand = {project:projectSummary,input:projectInput};
+assert.deepEqual(projectMutations.normalizeProjectMetadata(projectInput), {name:'مشروع  Mixed',client_name:null,location:'Site',contract_number:'0001',notes:'A\n  B'});
+for (const name of ['', '  ', 'x'.repeat(201)]) assert.equal(projectMutations.normalizeProjectMetadata({...projectInput,name}),null);
+assert.equal(projectMutations.normalizeProjectMetadata({...projectInput,name:'😀'.repeat(200)}).name.length,400,'Postgres character count');
+for (const field of ['name','client_name','location','contract_number','notes']) assert.equal(projectMutations.normalizeProjectMetadata({...projectInput,[field]:123}),null);
+const pc=queryClient({data:[projectRow],error:null});
+assert.equal((await projectMutations.updateProjectMetadata(pc,'company-a',{...projectCommand,input:{...projectInput,status:'ACTIVE',budget_minor:123,code:'forged',company_id:'b',updated_by:'forged'}})).ok,true);
+assert.deepEqual(pc.calls.find(([m])=>m==='update')[1],projectMutations.normalizeProjectMetadata(projectInput));
+assert.deepEqual(pc.calls.filter(([m])=>m==='eq'),[['eq','company_id','company-a'],['eq','id','project-a'],['eq','updated_at',projectRow.updated_at]]);
+for (const [response,error] of [[{data:[],error:null},'conflict'],[{data:[projectRow,projectRow],error:null},'uncertain'],[{data:[{...projectRow,company_id:'b'}],error:null},'uncertain'],[{data:[{...projectRow,id:'b'}],error:null},'uncertain'],[{data:[{...projectRow,updated_at:null}],error:null},'uncertain'],[{data:null,error:{code:'42501'}},'denied'],[{data:null,error:{code:'23514'}},'invalid'],[{data:null,error:{}},'uncertain']]) assert.deepEqual(await projectMutations.updateProjectMetadata(queryClient(response),'company-a',projectCommand),{ok:false,error});
+for (const project of [{...projectSummary,companyId:'b'},{...projectSummary,updatedAt:''}]) {const c=queryClient({});assert.equal((await projectMutations.updateProjectMetadata(c,'company-a',{...projectCommand,project})).ok,false);assert.equal(c.calls.length,0);}
+let projectWrites=0;
+const projectWriter={updateProjectMetadata:async()=>{projectWrites++;return {ok:true,project:projectSummary};}};
+const projectReaders={readActiveCompanyProjects:async(_c,id)=>({ok:true,data:[{...projectSummary,companyId:id}]})};
+for (const role of ['ACCOUNTING_ADMIN','PROJECT_MANAGER']) {
+ h=harness(projectReaders,mutations,supplierMutations,companyMutations,projectWriter);h.render({role});await flush();
+ assert.equal(await h.render({role}).saveProjectMetadata(projectCommand),true);assert.equal(h.calls(),8);
+ assert.equal(h.render({role}).projectMetadataMutation.phase,'SAVED');assert.equal(h.render({role}).companyProfileMutation.phase,'IDLE');
+}
+for (const role of ['ACCOUNTANT','PROCUREMENT','DATA_ENTRY','MANAGEMENT_VIEWER','SYSTEM_ADMIN']) {h=harness(projectReaders,mutations,supplierMutations,companyMutations,projectWriter);h.render({role});await flush();const n=projectWrites;assert.equal(await h.render({role}).saveProjectMetadata(projectCommand),false);assert.equal(projectWrites,n);}
+for (const stage of ['write','refresh']) for (const transition of ['company','role','user','logout','unmount']) {
+ const delayed=deferred();let reads=0;let props={role:'ACCOUNTING_ADMIN'};
+ h=harness({readActiveCompanyProjects:async(_c,id)=>++reads===2&&stage==='refresh'?delayed.promise:{ok:true,data:[{...projectSummary,companyId:id}]}},mutations,supplierMutations,companyMutations,stage==='write'?{updateProjectMetadata:()=>delayed.promise}:projectWriter);
+ h.render(props);await flush();const pending=h.render(props).saveProjectMetadata(projectCommand);await flush();assert.equal(await h.render(props).saveProjectMetadata(projectCommand),false);
+ if(transition==='unmount')h.unmount();else if(transition==='logout')h.session(null);else {props={...props,...(transition==='company'?{activeCompanyId:'company-b'}:transition==='role'?{role:'MANAGEMENT_VIEWER'}:{userId:'user-b'})};if(transition==='user')h.session('user-b');h.render(props);await flush();}
+ delayed.resolve(stage==='write'?{ok:true,project:projectSummary}:{ok:true,data:[projectSummary]});assert.equal(await pending,false);
+ if(!['unmount','logout'].includes(transition)){assert.equal(h.render(props).projectMetadataMutation.phase,'IDLE');if(transition==='company')assert.equal(h.state().projects[0].companyId,'company-b');}
+}
+let pr=0,failProjectRead=true;
+h=harness({readActiveCompanyProjects:async()=>++pr>1&&failProjectRead?{ok:false,error:{source:'projects'}}:{ok:true,data:[projectSummary]}},mutations,supplierMutations,companyMutations,projectWriter);
+h.render(admin);await flush();assert.equal(await h.render(admin).saveProjectMetadata(projectCommand),false);assert.equal(h.render(admin).projectMetadataMutation.phase,'REFRESH_ERROR');assert.equal(await h.render(admin).refreshProjects(),false);assert.equal(h.render(admin).projectMetadataMutation.phase,'REFRESH_ERROR');
+const pw=projectWrites;failProjectRead=false;assert.equal(await h.render(admin).refreshProjects(),true);assert.equal(projectWrites,pw);
+for(const error of ['conflict','denied','uncertain']) {h=harness(projectReaders,mutations,supplierMutations,companyMutations,{updateProjectMetadata:async()=>({ok:false,error})});h.render(admin);await flush();assert.equal(await h.render(admin).saveProjectMetadata(projectCommand),false);assert.equal(h.render(admin).projectMetadataMutation.error,error);assert.equal(await h.render(admin).saveProjectMetadata(projectCommand),false);assert.equal(await h.render(admin).refreshProjects(),true);}
+// Assignment revocation is enforced by DB and refreshed empty snapshots remove old rows.
+h=harness({readActiveCompanyProjects:async()=>({ok:true,data:[]})},mutations,supplierMutations,companyMutations,projectWriter);h.render({role:'PROJECT_MANAGER'});await flush();assert.equal(await h.render({role:'PROJECT_MANAGER'}).refreshProjects(),true);assert.deepEqual(h.state().projects,[]);
+console.log('Slice 8 Project repository/provider PASS: allowlist, exact token, roles, scoped late results, selective refresh, recovery and assignment-filtered empty snapshot.');
+// A Project write can overlap the three completed operations without replacing them.
+const projectGate=deferred();
+h=harness({...projectReaders,...companyReader,readActiveCompanyParties:async()=>({ok:true,data:[currentSupplier]}),readActiveCompanyExpenseCategories:async()=>({ok:true,data:[repositories.mapExpenseCategoryRow(category)]})},
+ {mutateExpenseCategory:async()=>({ok:true,category:repositories.mapExpenseCategoryRow(category)})},
+ {mutateSupplierParty:async()=>({ok:true,supplier:currentSupplier})},companyWriter,{updateProjectMetadata:()=>projectGate.promise});
+h.render(admin);await flush();const projectPending=h.render(admin).saveProjectMetadata(projectCommand);await flush();
+assert.equal(await h.render(admin).saveCompanyProfile(companyCommand),true);
+assert.equal(await h.render(admin).saveSupplierParty({kind:'edit',supplier:currentSupplier,input:supplierInput}),true);
+assert.equal(await h.render(admin).saveExpenseCategory({}),true);
+projectGate.resolve({ok:true,project:projectSummary});assert.equal(await projectPending,true);
+for(const key of ['projectMetadataMutation','companyProfileMutation','supplierMutation','categoryMutation'])assert.equal(h.render(admin)[key].phase,'SAVED');
+assert.equal(h.state().projects[0].id,projectSummary.id);assert.equal(h.state().company.id,companyProfile.id);assert.equal(h.state().parties[0].id,currentSupplier.id);assert.equal(h.state().expenseCategories[0].id,category.id);
+console.log('Slice 8 concurrent Project/Company/Supplier/Category provider operations preserve all four resources and feedback states.');

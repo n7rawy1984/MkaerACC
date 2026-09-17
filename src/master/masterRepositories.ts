@@ -33,7 +33,7 @@ export function mapCompanyRow(row: CompanyRow): ProductionCompanyProfile {
 
 export function mapProjectRow(row: Pick<ProjectRow,
   "id" | "company_id" | "code" | "name" | "client_name" | "location" |
-  "contract_number" | "start_date" | "expected_completion_date" | "status" |
+  "contract_number" | "notes" | "start_date" | "expected_completion_date" | "status" |
   "created_at" | "created_by" | "updated_at" | "updated_by"
 >): ProductionProjectSummary {
   return {
@@ -44,6 +44,7 @@ export function mapProjectRow(row: Pick<ProjectRow,
     clientName: row.client_name,
     location: row.location,
     contractNumber: row.contract_number,
+    notes: row.notes,
     startDate: row.start_date,
     expectedCompletionDate: row.expected_completion_date,
     status: row.status,
@@ -84,7 +85,7 @@ export async function readActiveCompanyProjects(
 ): Promise<RepositoryResult<ProductionProjectSummary[]>> {
   const { data, error } = await client
     .from("projects")
-    .select("id, company_id, code, name, client_name, location, contract_number, start_date, expected_completion_date, status, created_at, created_by, updated_at, updated_by")
+    .select("id, company_id, code, name, client_name, location, contract_number, notes, start_date, expected_completion_date, status, created_at, created_by, updated_at, updated_by")
     .eq("company_id", activeCompanyId)
     .order("code", { ascending: true });
   if (error) return { ok: false, error: queryError("projects", error) };
