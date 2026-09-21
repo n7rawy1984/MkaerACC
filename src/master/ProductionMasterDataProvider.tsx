@@ -1,3 +1,4 @@
+import { updateTreasuryName, type TreasuryNameCommand } from "./treasuryNameMutations";
 import { updateAccountName, type AccountNameCommand } from "./accountNameMutations";
 import { updateProjectMetadata, type ProjectMetadataCommand } from "./projectMetadataMutations";
 import { updateCompanyProfile, type CompanyProfileCommand } from "./companyProfileMutations";
@@ -5,7 +6,7 @@ import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "re
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "../types/database.generated";
 import { readActiveCompanyProfile, readActiveCompanyProjects, readActiveCompanyParties, readActiveCompanyExpenseCategories, readActiveCompanyAccounts, readActiveCompanyTreasuryAccounts, readActiveCompanySubcontracts } from "./masterRepositories";
-import type { CategoryActions, SupplierActions, CompanyProfileActions, ProjectMetadataActions, AccountNameActions, ProductionMasterDataState } from "./masterTypes";
+import type { CategoryActions, SupplierActions, CompanyProfileActions, ProjectMetadataActions, AccountNameActions, TreasuryNameActions, ProductionMasterDataState } from "./masterTypes";
 import { mutateExpenseCategory, type ExpenseCategoryCommand } from "./expenseCategoryMutations";
 import { mutateSupplierParty, type SupplierPartyCommand } from "./supplierPartyMutations";
 import { ProductionMasterDataContext } from "./productionMasterDataContext";
@@ -45,9 +46,13 @@ export function ProductionMasterDataProvider({ client, userId, activeCompanyId, 
   const accountGeneration = useRef(0);
   const [accountState, setAccountState] = useState<{ scopeKey: string; value: AccountNameActions["accountNameMutation"] }>({ scopeKey, value: { phase: "IDLE" } });
 
+  const treasuryLock = useRef(false);
+  const treasuryGeneration = useRef(0);
+  const [treasuryState, setTreasuryState] = useState<{ scopeKey: string; value: TreasuryNameActions["treasuryNameMutation"] }>({ scopeKey, value: { phase: "IDLE" } });
+
   useLayoutEffect(() => {
     liveScope.current = scopeKey;
-    return () => { categoryGeneration.current += 1; supplierGeneration.current += 1; companyGeneration.current += 1; projectGeneration.current += 1; accountGeneration.current += 1; };
+    return () => { categoryGeneration.current += 1; supplierGeneration.current += 1; companyGeneration.current += 1; projectGeneration.current += 1; accountGeneration.current += 1; treasuryGeneration.current += 1; };
   }, [scopeKey]);
 
   useEffect(() => {
@@ -57,6 +62,7 @@ export function ProductionMasterDataProvider({ client, userId, activeCompanyId, 
     companyLock.current = false;
     projectLock.current = false;
     accountLock.current = false;
+    treasuryLock.current = false;
     let mounted = true;
 
     const isCurrent = () => mounted && requestGeneration.current === generation;
@@ -334,7 +340,50 @@ export function ProductionMasterDataProvider({ client, userId, activeCompanyId, 
       if (current()) accountLock.current = false;
     }
   };
-  return <ProductionMasterDataContext.Provider value={{ ...visibleState, categoryMutation, supplierMutation, companyProfileMutation, projectMetadataMutation, accountNameMutation,
+  const treasuryNameMutation = treasuryState.scopeKey === scopeKey ? treasuryState.value : { phase: "IDLE" } as const;
+  const runTreasuryOperation = async (command?: TreasuryNameCommand): Promise<boolean> => {
+    if (visibleState.phase !== "READY" || treasuryLock.current || liveScope.current !== scopeKey
+      || (command && (role !== "ACCOUNTING_ADMIN"
+        || treasuryNameMutation.phase === "ERROR" || treasuryNameMutation.phase === "REFRESH_ERROR"))) return false;
+    treasuryLock.current = true;
+    const generation = requestGeneration.current;
+    const operation = ++treasuryGeneration.current;
+    const current = () => liveScope.current === scopeKey && requestGeneration.current === generation && treasuryGeneration.current === operation;
+    const feedback = (value: TreasuryNameActions["treasuryNameMutation"]) => { if (current()) setTreasuryState({ scopeKey, value }); };
+    const validSession = async () => {
+      const { data, error } = await client.auth.getSession();
+      return current() && !error && data.session?.user.id === userId;
+    };
+    feedback({ phase: "PENDING" });
+    let saved = !command && treasuryNameMutation.phase === "REFRESH_ERROR";
+    try {
+      if (!await validSession()) { feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "denied" }); return false; }
+      if (command) {
+        const result = await updateTreasuryName(client, activeCompanyId, command);
+        if (result.ok) saved = true;
+        if (!await validSession()) { feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "denied" }); return false; }
+        if (!result.ok) { feedback({ phase: "ERROR", error: result.error }); return false; }
+      }
+      // Refresh only Treasury; Retain all other resource snapshots and operation states.
+      const refreshed = await readActiveCompanyTreasuryAccounts(client, activeCompanyId);
+      if (!await validSession()) { feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "denied" }); return false; }
+      if (!refreshed.ok) {
+        feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "uncertain" }); return false;
+      }
+      setScopedState((previous) => previous.scopeKey === scopeKey && previous.state.phase === "READY"
+        ? { scopeKey, state: { ...previous.state, treasuryAccounts: refreshed.data } } : previous);
+      feedback({ phase: saved ? "SAVED" : "IDLE" });
+      return true;
+    } catch {
+      feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "uncertain" });
+      return false;
+    } finally {
+      if (current()) treasuryLock.current = false;
+    }
+  };
+  return <ProductionMasterDataContext.Provider value={{ ...visibleState, categoryMutation, supplierMutation, companyProfileMutation, projectMetadataMutation, accountNameMutation, treasuryNameMutation,
+    saveTreasuryName: runTreasuryOperation,
+    refreshTreasuryAccounts: () => runTreasuryOperation(),
     saveAccountName: runAccountOperation,
     refreshAccounts: () => runAccountOperation(),
     saveProjectMetadata: runProjectOperation,

@@ -67,12 +67,14 @@ for (const file of masterFiles) {
     if (!allowedTables.has(match[1])) throw new Error(`Out-of-slice table: ${match[1]}`);
   }
   const isCategoryMutation = file === resolve(masterRoot, "expenseCategoryMutations.ts");
+  const isTreasuryMutation = file === resolve(masterRoot, "treasuryNameMutations.ts");
   const isAccountMutation = file === resolve(masterRoot, "accountNameMutations.ts");
   const isProjectMutation = file === resolve(masterRoot, "projectMetadataMutations.ts");
   const isCompanyMutation = file === resolve(masterRoot, "companyProfileMutations.ts");
   const isSupplierMutation = file === resolve(masterRoot, "supplierPartyMutations.ts");
-  if (/\.(upsert|delete|rpc)\s*\(/.test(source) || (!isCategoryMutation && !isSupplierMutation && !isCompanyMutation && !isProjectMutation && !isAccountMutation && /\.(insert|update)\s*\(/.test(source))) throw new Error(`Mutation/RPC outside approved repositories: ${file}`);
+  if (/\.(upsert|delete|rpc)\s*\(/.test(source) || (!isCategoryMutation && !isSupplierMutation && !isCompanyMutation && !isProjectMutation && !isAccountMutation && !isTreasuryMutation && /\.(insert|update)\s*\(/.test(source))) throw new Error(`Mutation/RPC outside approved repositories: ${file}`);
   if (isAccountMutation && (/\.insert\s*\(/.test(source) || [...source.matchAll(/\.from\(["']([^"']+)["']\)/g)].some((m) => m[1] !== "accounts"))) throw new Error("Account writer exceeds name UPDATE boundary");
+  if (isTreasuryMutation && (/\.insert\s*\(/.test(source) || [...source.matchAll(/\.from\(["']([^"']+)["']\)/g)].some((m) => m[1] !== "treasury_accounts"))) throw new Error("Treasury writer exceeds name UPDATE boundary");
   if (isProjectMutation && (/\.insert\s*\(/.test(source) || [...source.matchAll(/\.from\(["']([^"']+)["']\)/g)].some((m) => m[1] !== "projects"))) throw new Error("Project writer exceeds metadata UPDATE boundary");
   if (isCompanyMutation && (/\.insert\s*\(/.test(source) || [...source.matchAll(/\.from\(["']([^"']+)["']\)/g)].some((m) => m[1] !== "companies"))) throw new Error("Company writer exceeds metadata UPDATE boundary");
   if (isCategoryMutation && [...source.matchAll(/\.from\(["']([^"']+)["']\)/g)].some((m) => m[1] !== "expense_categories")) throw new Error("Category writer accesses another table");

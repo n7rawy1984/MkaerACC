@@ -2,6 +2,21 @@
 // location in this file mirrors where it's used. ar.ts must define exactly the same key set —
 // see i18n/I18nContext.tsx for the lookup/fallback behavior and translation-key discipline notes.
 const en = {
+  "treasuryName.edit": "Edit treasury name",
+  "treasuryName.name": "Treasury name",
+  "treasuryName.scope": "Name is required (up to 200 characters). Treasury configuration stays unchanged.",
+  "treasuryName.save": "Save treasury name",
+  "treasuryName.close": "Close",
+  "treasuryName.refresh": "Refresh treasury records",
+  "treasuryName.pending": "Updating treasury name…",
+  "treasuryName.saved": "Treasury name saved.",
+  "treasuryName.invalid": "Enter a treasury name of 1–200 characters.",
+  "treasuryName.denied": "You no longer have access to rename this treasury.",
+  "treasuryName.conflict": "This treasury changed or is no longer available.",
+  "treasuryName.uncertain": "The result could not be confirmed.",
+  "treasuryName.refreshRequired": "Refresh and review before trying again.",
+  "treasuryName.refreshError": "The name was saved, but treasury records could not be refreshed. Refresh to review before another change.",
+
   "accountName.edit": "Edit account name",
   "accountName.name": "Account name",
   "accountName.scope": "Name is required (up to 200 characters). Account configuration stays unchanged.",

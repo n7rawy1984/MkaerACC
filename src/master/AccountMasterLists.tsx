@@ -32,7 +32,7 @@ export function AccountsList({ accounts, renderAction }: { accounts: ProductionA
   );
 }
 
-export function TreasuryAccountsList({ treasuryAccounts, accounts }: { treasuryAccounts: ProductionTreasuryAccount[]; accounts: ProductionAccount[] }) {
+export function TreasuryAccountsList({ treasuryAccounts, accounts, renderAction }: { treasuryAccounts: ProductionTreasuryAccount[]; accounts: ProductionAccount[]; renderAction?: (treasury: ProductionTreasuryAccount) => ReactNode }) {
   const t = useT();
   if (treasuryAccounts.length === 0) return <p role="status" className="mt-4 text-sm text-slate-500">{t("productionMaster.treasuryAccountsEmpty")}</p>;
   return (
@@ -50,6 +50,7 @@ export function TreasuryAccountsList({ treasuryAccounts, accounts }: { treasuryA
               ["accountReference", treasury.accountReference], ["notes", treasury.notes],
             ] as const).map(([field, value]) => value !== null && <div key={field}><dt className="inline font-medium">{t(`productionMaster.${field}`)}: </dt><dd className="inline"><bdi>{value}</bdi></dd></div>)}
           </dl>
+          {renderAction?.(treasury)}
         </li>
       ))}
     </ul>

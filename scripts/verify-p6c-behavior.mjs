@@ -17,6 +17,7 @@ function moduleAt(path, mocks = {}) {
 }
 const repositories = moduleAt("src/master/masterRepositories.ts");
 const mutations = moduleAt("src/master/expenseCategoryMutations.ts", { "./masterRepositories": repositories });
+const treasuryMutations = moduleAt("src/master/treasuryNameMutations.ts", { "./masterRepositories": repositories });
 const accountMutations = moduleAt("src/master/accountNameMutations.ts", { "./masterRepositories": repositories });
 const projectMutations = moduleAt("src/master/projectMetadataMutations.ts", { "./masterRepositories": repositories });
 const companyMutations = moduleAt("src/master/companyProfileMutations.ts", { "./masterRepositories": repositories });
@@ -121,7 +122,7 @@ for (const [read, table, row, source] of [
 }
 const flush = async () => { for (let i = 0; i < 20; i++) await Promise.resolve(); };
 function deferred() { let resolve; const promise = new Promise((done) => { resolve = done; }); return { promise, resolve }; }
-function harness(overrides = {}, writer = mutations, supplierWriter = supplierMutations, companyWriter = companyMutations, projectWriter = projectMutations, accountWriter = accountMutations) {
+function harness(overrides = {}, writer = mutations, supplierWriter = supplierMutations, companyWriter = companyMutations, projectWriter = projectMutations, accountWriter = accountMutations, treasuryWriter = treasuryMutations) {
   let previousDeps, cleanup, effect, output, calls = 0, cursor = 0;
   const slots = [];
   const hooks = {
@@ -148,7 +149,7 @@ function harness(overrides = {}, writer = mutations, supplierWriter = supplierMu
   for (const [key, fn] of Object.entries(readers)) readers[key] = (...args) => { calls++; return fn(...args); };
   const { ProductionMasterDataProvider } = moduleAt("src/master/ProductionMasterDataProvider.tsx", {
     react: hooks, "react/jsx-runtime": { jsx: (_type, props) => props.value },
-    "./accountNameMutations": accountWriter, "./projectMetadataMutations": projectWriter, "./companyProfileMutations": companyWriter, "./supplierPartyMutations": supplierWriter, "./expenseCategoryMutations": writer, "./masterRepositories": readers, "./productionMasterDataContext": { ProductionMasterDataContext: { Provider: "provider" } },
+    "./treasuryNameMutations": treasuryWriter, "./accountNameMutations": accountWriter, "./projectMetadataMutations": projectWriter, "./companyProfileMutations": companyWriter, "./supplierPartyMutations": supplierWriter, "./expenseCategoryMutations": writer, "./masterRepositories": readers, "./productionMasterDataContext": { ProductionMasterDataContext: { Provider: "provider" } },
   });
   let userId = "user-a";
   const client = { auth: { getSession: async () => ({ data: { session: userId ? { user: { id: userId } } : null }, error: null }) } };
@@ -711,3 +712,51 @@ assert.equal(await h.render(admin).saveProjectMetadata(projectCommand),true);
 s9Gate.resolve({ok:true,account:s9Account});assert.equal(await s9Pending,true);
 assert.equal(h.render(admin).accountNameMutation.phase,'SAVED');assert.equal(h.render(admin).projectMetadataMutation.phase,'SAVED');
 assert.equal(h.state().accounts[0].id,s9Account.id);assert.equal(h.state().projects[0].id,projectSummary.id);
+
+// Slice 10: Treasury display names only, including inactive Treasury.
+const s10Row = { ...treasury, id:'treasury-a',code:'0010',name:'Original',status:'INACTIVE',updated_at:'2026-09-17T00:00:00.123456+00:00' };
+const s10Treasury = repositories.mapTreasuryAccountRow(s10Row);
+const s10Input = {name:' \uFEFF حساب  Mixed '};
+const s10Command = {treasury:s10Treasury,input:s10Input};
+assert.deepEqual(treasuryMutations.normalizeTreasuryName(s10Input), {name:'حساب  Mixed'});
+for (const name of ['', '  ', 'x'.repeat(201)]) assert.equal(treasuryMutations.normalizeTreasuryName({...s10Input,name}),null);
+assert.equal(treasuryMutations.normalizeTreasuryName({...s10Input,name:'😀'.repeat(200)}).name.length,400,'Postgres character count');
+for (const field of ['name']) assert.equal(treasuryMutations.normalizeTreasuryName({...s10Input,[field]:123}),null);
+const s10Client=queryClient({data:[s10Row],error:null});
+assert.equal((await treasuryMutations.updateTreasuryName(s10Client,'company-a',{...s10Command,input:{...s10Input,status:'ACTIVE',type:'BANK',gl_account_id:'forged',project_id:'forged',bank_name:'forged',account_reference:'forged',notes:'forged',code:'forged',company_id:'b',updated_by:'forged'}})).ok,true);
+assert.deepEqual(s10Client.calls.find(([m])=>m==='update')[1],treasuryMutations.normalizeTreasuryName(s10Input));
+assert.deepEqual(s10Client.calls.filter(([m])=>m==='eq'),[['eq','company_id','company-a'],['eq','id','treasury-a'],['eq','updated_at',s10Row.updated_at]]);
+for (const [response,error] of [[{data:[],error:null},'conflict'],[{data:[s10Row,s10Row],error:null},'uncertain'],[{data:[{...s10Row,company_id:'b'}],error:null},'uncertain'],[{data:[{...s10Row,id:'b'}],error:null},'uncertain'],[{data:[{...s10Row,updated_at:null}],error:null},'uncertain'],[{data:null,error:{code:'42501'}},'denied'],[{data:null,error:{code:'23514'}},'invalid'],[{data:null,error:{}},'uncertain']]) assert.deepEqual(await treasuryMutations.updateTreasuryName(queryClient(response),'company-a',s10Command),{ok:false,error});
+for (const treasury of [{...s10Treasury,companyId:'b'},{...s10Treasury,updatedAt:''}]) {const c=queryClient({});assert.equal((await treasuryMutations.updateTreasuryName(c,'company-a',{...s10Command,treasury})).ok,false);assert.equal(c.calls.length,0);}
+let s10Writes=0;
+const s10Writer={updateTreasuryName:async()=>{s10Writes++;return {ok:true,treasury:s10Treasury};}};
+const s10Readers={readActiveCompanyTreasuryAccounts:async(_c,id)=>({ok:true,data:[{...s10Treasury,companyId:id}]})};
+for (const role of ['ACCOUNTING_ADMIN']) {
+ h=harness(s10Readers,mutations,supplierMutations,companyMutations,projectMutations,accountMutations,s10Writer);h.render({role});await flush();
+ assert.equal(await h.render({role}).saveTreasuryName(s10Command),true);assert.equal(h.calls(),8);
+ assert.equal(h.render({role}).treasuryNameMutation.phase,'SAVED');assert.equal(h.render({role}).companyProfileMutation.phase,'IDLE');
+}
+for (const role of ['ACCOUNTANT','PROCUREMENT','DATA_ENTRY','MANAGEMENT_VIEWER','SYSTEM_ADMIN','PROJECT_MANAGER']) {h=harness(s10Readers,mutations,supplierMutations,companyMutations,projectMutations,accountMutations,s10Writer);h.render({role});await flush();const n=s10Writes;assert.equal(await h.render({role}).saveTreasuryName(s10Command),false);assert.equal(s10Writes,n);}
+for (const stage of ['write','refresh']) for (const transition of ['company','role','user','logout','unmount']) {
+ const delayed=deferred();let reads=0;let props={role:'ACCOUNTING_ADMIN'};
+ h=harness({readActiveCompanyTreasuryAccounts:async(_c,id)=>++reads===2&&stage==='refresh'?delayed.promise:{ok:true,data:[{...s10Treasury,companyId:id}]}},mutations,supplierMutations,companyMutations,projectMutations,accountMutations,stage==='write'?{updateTreasuryName:()=>delayed.promise}:s10Writer);
+ h.render(props);await flush();const pending=h.render(props).saveTreasuryName(s10Command);await flush();assert.equal(await h.render(props).saveTreasuryName(s10Command),false);
+ if(transition==='unmount')h.unmount();else if(transition==='logout')h.session(null);else {props={...props,...(transition==='company'?{activeCompanyId:'company-b'}:transition==='role'?{role:'MANAGEMENT_VIEWER'}:{userId:'user-b'})};if(transition==='user')h.session('user-b');h.render(props);await flush();}
+ delayed.resolve(stage==='write'?{ok:true,treasury:s10Treasury}:{ok:true,data:[s10Treasury]});assert.equal(await pending,false);
+ if(!['unmount','logout'].includes(transition)){assert.equal(h.render(props).treasuryNameMutation.phase,'IDLE');if(transition==='company')assert.equal(h.state().treasuryAccounts[0].companyId,'company-b');}
+}
+let s10Reads=0,failTreasuryRead=true;
+h=harness({readActiveCompanyTreasuryAccounts:async()=>++s10Reads>1&&failTreasuryRead?{ok:false,error:{source:'treasuryAccounts'}}:{ok:true,data:[s10Treasury]}},mutations,supplierMutations,companyMutations,projectMutations,accountMutations,s10Writer);
+h.render(admin);await flush();assert.equal(await h.render(admin).saveTreasuryName(s10Command),false);assert.equal(h.render(admin).treasuryNameMutation.phase,'REFRESH_ERROR');assert.equal(await h.render(admin).refreshTreasuryAccounts(),false);assert.equal(h.render(admin).treasuryNameMutation.phase,'REFRESH_ERROR');
+const s10Before=s10Writes;failTreasuryRead=false;assert.equal(await h.render(admin).refreshTreasuryAccounts(),true);assert.equal(s10Writes,s10Before);
+for(const error of ['conflict','denied','uncertain']) {h=harness(s10Readers,mutations,supplierMutations,companyMutations,projectMutations,accountMutations,{updateTreasuryName:async()=>({ok:false,error})});h.render(admin);await flush();assert.equal(await h.render(admin).saveTreasuryName(s10Command),false);assert.equal(h.render(admin).treasuryNameMutation.error,error);assert.equal(await h.render(admin).saveTreasuryName(s10Command),false);assert.equal(await h.render(admin).refreshTreasuryAccounts(),true);}
+
+console.log('Slice 10 Treasury name repository/provider PASS: one-field payload, normalization, Unicode bounds, exact token, allowed/all denied roles, duplicate guard, late writes/reads across scope/session/unmount, selective refresh, conflict/uncertainty/known-commit recovery.');
+// Held Treasury write and completed Project write preserve both snapshots/feedback.
+const s10Gate=deferred();
+h=harness({...s10Readers,...projectReaders},mutations,supplierMutations,companyMutations,projectWriter,accountMutations,{updateTreasuryName:()=>s10Gate.promise});
+h.render(admin);await flush();const s10Pending=h.render(admin).saveTreasuryName(s10Command);await flush();
+assert.equal(await h.render(admin).saveProjectMetadata(projectCommand),true);
+s10Gate.resolve({ok:true,treasury:s10Treasury});assert.equal(await s10Pending,true);
+assert.equal(h.render(admin).treasuryNameMutation.phase,'SAVED');assert.equal(h.render(admin).projectMetadataMutation.phase,'SAVED');
+assert.equal(h.state().treasuryAccounts[0].id,s10Treasury.id);assert.equal(h.state().projects[0].id,projectSummary.id);

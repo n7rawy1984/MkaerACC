@@ -5,6 +5,21 @@ import type {
  TranslationKey } from "./en";
 
 const ar: Record<TranslationKey, string> = {
+  "treasuryName.edit": "تعديل اسم الخزينة",
+  "treasuryName.name": "اسم الخزينة",
+  "treasuryName.scope": "الاسم مطلوب (حتى 200 حرف). إعدادات الخزينة تبقى كما هي.",
+  "treasuryName.save": "حفظ اسم الخزينة",
+  "treasuryName.close": "إغلاق",
+  "treasuryName.refresh": "تحديث الخزائن",
+  "treasuryName.pending": "جارٍ تحديث اسم الخزينة…",
+  "treasuryName.saved": "تم حفظ اسم الخزينة.",
+  "treasuryName.invalid": "أدخل اسم خزينة من 1 إلى 200 حرف.",
+  "treasuryName.denied": "لم تعد لديك صلاحية تعديل اسم هذه الخزينة.",
+  "treasuryName.conflict": "تغيرت هذه الخزينة أو لم تعد متاحة.",
+  "treasuryName.uncertain": "تعذر تأكيد نتيجة العملية.",
+  "treasuryName.refreshRequired": "حدّث البيانات وراجعها قبل المحاولة مجدداً.",
+  "treasuryName.refreshError": "تم حفظ الاسم لكن تعذر تحديث الخزائن. حدّث العرض وراجعه قبل تغيير آخر.",
+
   "accountName.edit": "تعديل اسم الحساب",
   "accountName.name": "اسم الحساب",
   "accountName.scope": "الاسم مطلوب (حتى 200 حرف). إعدادات الحساب تبقى كما هي.",
