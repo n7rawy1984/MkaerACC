@@ -2,6 +2,21 @@
 // location in this file mirrors where it's used. ar.ts must define exactly the same key set —
 // see i18n/I18nContext.tsx for the lookup/fallback behavior and translation-key discipline notes.
 const en = {
+  "accountName.edit": "Edit account name",
+  "accountName.name": "Account name",
+  "accountName.scope": "Name is required (up to 200 characters). Account configuration stays unchanged.",
+  "accountName.save": "Save account name",
+  "accountName.close": "Close",
+  "accountName.refresh": "Refresh accounts",
+  "accountName.pending": "Updating account name…",
+  "accountName.saved": "Account name saved.",
+  "accountName.invalid": "Enter an account name of 1–200 characters.",
+  "accountName.denied": "You no longer have access to rename this account.",
+  "accountName.conflict": "This account changed or is no longer available.",
+  "accountName.uncertain": "The result could not be confirmed.",
+  "accountName.refreshRequired": "Refresh and review before trying again.",
+  "accountName.refreshError": "The name was saved, but accounts could not be refreshed. Refresh to review before another change.",
+
   "projectMetadata.edit": "Edit project details",
   "projectMetadata.name": "Project name",
   "projectMetadata.client_name": "Client name",

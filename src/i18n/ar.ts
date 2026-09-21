@@ -5,6 +5,21 @@ import type {
  TranslationKey } from "./en";
 
 const ar: Record<TranslationKey, string> = {
+  "accountName.edit": "تعديل اسم الحساب",
+  "accountName.name": "اسم الحساب",
+  "accountName.scope": "الاسم مطلوب (حتى 200 حرف). إعدادات الحساب تبقى كما هي.",
+  "accountName.save": "حفظ اسم الحساب",
+  "accountName.close": "إغلاق",
+  "accountName.refresh": "تحديث الحسابات",
+  "accountName.pending": "جارٍ تحديث اسم الحساب…",
+  "accountName.saved": "تم حفظ اسم الحساب.",
+  "accountName.invalid": "أدخل اسم حساب من 1 إلى 200 حرف.",
+  "accountName.denied": "لم تعد لديك صلاحية تعديل اسم هذا الحساب.",
+  "accountName.conflict": "تغير هذا الحساب أو لم يعد متاحاً.",
+  "accountName.uncertain": "تعذر تأكيد نتيجة العملية.",
+  "accountName.refreshRequired": "حدّث البيانات وراجعها قبل المحاولة مجدداً.",
+  "accountName.refreshError": "تم حفظ الاسم لكن تعذر تحديث الحسابات. حدّث العرض وراجعه قبل تغيير آخر.",
+
   "projectMetadata.edit": "تعديل بيانات المشروع",
   "projectMetadata.name": "اسم المشروع",
   "projectMetadata.client_name": "اسم العميل",

@@ -1,10 +1,11 @@
+import { updateAccountName, type AccountNameCommand } from "./accountNameMutations";
 import { updateProjectMetadata, type ProjectMetadataCommand } from "./projectMetadataMutations";
 import { updateCompanyProfile, type CompanyProfileCommand } from "./companyProfileMutations";
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "../types/database.generated";
 import { readActiveCompanyProfile, readActiveCompanyProjects, readActiveCompanyParties, readActiveCompanyExpenseCategories, readActiveCompanyAccounts, readActiveCompanyTreasuryAccounts, readActiveCompanySubcontracts } from "./masterRepositories";
-import type { CategoryActions, SupplierActions, CompanyProfileActions, ProjectMetadataActions, ProductionMasterDataState } from "./masterTypes";
+import type { CategoryActions, SupplierActions, CompanyProfileActions, ProjectMetadataActions, AccountNameActions, ProductionMasterDataState } from "./masterTypes";
 import { mutateExpenseCategory, type ExpenseCategoryCommand } from "./expenseCategoryMutations";
 import { mutateSupplierParty, type SupplierPartyCommand } from "./supplierPartyMutations";
 import { ProductionMasterDataContext } from "./productionMasterDataContext";
@@ -40,9 +41,13 @@ export function ProductionMasterDataProvider({ client, userId, activeCompanyId, 
   const projectGeneration = useRef(0);
   const [projectState, setProjectState] = useState<{ scopeKey: string; value: ProjectMetadataActions["projectMetadataMutation"] }>({ scopeKey, value: { phase: "IDLE" } });
 
+  const accountLock = useRef(false);
+  const accountGeneration = useRef(0);
+  const [accountState, setAccountState] = useState<{ scopeKey: string; value: AccountNameActions["accountNameMutation"] }>({ scopeKey, value: { phase: "IDLE" } });
+
   useLayoutEffect(() => {
     liveScope.current = scopeKey;
-    return () => { categoryGeneration.current += 1; supplierGeneration.current += 1; companyGeneration.current += 1; projectGeneration.current += 1; };
+    return () => { categoryGeneration.current += 1; supplierGeneration.current += 1; companyGeneration.current += 1; projectGeneration.current += 1; accountGeneration.current += 1; };
   }, [scopeKey]);
 
   useEffect(() => {
@@ -51,6 +56,7 @@ export function ProductionMasterDataProvider({ client, userId, activeCompanyId, 
     supplierLock.current = false;
     companyLock.current = false;
     projectLock.current = false;
+    accountLock.current = false;
     let mounted = true;
 
     const isCurrent = () => mounted && requestGeneration.current === generation;
@@ -287,7 +293,50 @@ export function ProductionMasterDataProvider({ client, userId, activeCompanyId, 
       if (current()) projectLock.current = false;
     }
   };
-  return <ProductionMasterDataContext.Provider value={{ ...visibleState, categoryMutation, supplierMutation, companyProfileMutation, projectMetadataMutation,
+  const accountNameMutation = accountState.scopeKey === scopeKey ? accountState.value : { phase: "IDLE" } as const;
+  const runAccountOperation = async (command?: AccountNameCommand): Promise<boolean> => {
+    if (visibleState.phase !== "READY" || accountLock.current || liveScope.current !== scopeKey
+      || (command && (role !== "ACCOUNTING_ADMIN"
+        || accountNameMutation.phase === "ERROR" || accountNameMutation.phase === "REFRESH_ERROR"))) return false;
+    accountLock.current = true;
+    const generation = requestGeneration.current;
+    const operation = ++accountGeneration.current;
+    const current = () => liveScope.current === scopeKey && requestGeneration.current === generation && accountGeneration.current === operation;
+    const feedback = (value: AccountNameActions["accountNameMutation"]) => { if (current()) setAccountState({ scopeKey, value }); };
+    const validSession = async () => {
+      const { data, error } = await client.auth.getSession();
+      return current() && !error && data.session?.user.id === userId;
+    };
+    feedback({ phase: "PENDING" });
+    let saved = !command && accountNameMutation.phase === "REFRESH_ERROR";
+    try {
+      if (!await validSession()) { feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "denied" }); return false; }
+      if (command) {
+        const result = await updateAccountName(client, activeCompanyId, command);
+        if (result.ok) saved = true;
+        if (!await validSession()) { feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "denied" }); return false; }
+        if (!result.ok) { feedback({ phase: "ERROR", error: result.error }); return false; }
+      }
+      // Refresh only Accounts; Retain all other resource snapshots and operation states.
+      const refreshed = await readActiveCompanyAccounts(client, activeCompanyId);
+      if (!await validSession()) { feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "denied" }); return false; }
+      if (!refreshed.ok) {
+        feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "uncertain" }); return false;
+      }
+      setScopedState((previous) => previous.scopeKey === scopeKey && previous.state.phase === "READY"
+        ? { scopeKey, state: { ...previous.state, accounts: refreshed.data } } : previous);
+      feedback({ phase: saved ? "SAVED" : "IDLE" });
+      return true;
+    } catch {
+      feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "uncertain" });
+      return false;
+    } finally {
+      if (current()) accountLock.current = false;
+    }
+  };
+  return <ProductionMasterDataContext.Provider value={{ ...visibleState, categoryMutation, supplierMutation, companyProfileMutation, projectMetadataMutation, accountNameMutation,
+    saveAccountName: runAccountOperation,
+    refreshAccounts: () => runAccountOperation(),
     saveProjectMetadata: runProjectOperation,
     refreshProjects: () => runProjectOperation(),
     saveCompanyProfile: runCompanyOperation,

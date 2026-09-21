@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { useT } from "../i18n/I18nContext";
 import { findVisibleAccount } from "./accountPresentation";
 import type { ProductionAccount, ProductionTreasuryAccount } from "./masterTypes";
@@ -8,7 +9,7 @@ function AccountReference({ accounts, companyId, accountId }: { accounts: Produc
   return <><bdi>{accountId}</bdi><span className="block">{account ? <bdi>{account.code} · {account.name}</bdi> : t("productionMaster.accountDetailsUnavailable")}</span></>;
 }
 
-export function AccountsList({ accounts }: { accounts: ProductionAccount[] }) {
+export function AccountsList({ accounts, renderAction }: { accounts: ProductionAccount[]; renderAction?: (account: ProductionAccount) => ReactNode }) {
   const t = useT();
   if (accounts.length === 0) return <p role="status" className="mt-4 text-sm text-slate-500">{t("productionMaster.accountsEmpty")}</p>;
   return (
@@ -24,6 +25,7 @@ export function AccountsList({ accounts }: { accounts: ProductionAccount[] }) {
             <div><dt className="inline font-medium">{t("productionMaster.requiresParty")}: </dt><dd className="inline">{t(account.requiresParty ? "productionMaster.yes" : "productionMaster.no")}</dd></div>
             {account.systemKey !== null && <div><dt className="inline font-medium">{t("productionMaster.systemAccount")}: </dt><dd className="inline"><bdi>{account.systemKey}</bdi></dd></div>}
           </dl>
+          {renderAction?.(account)}
         </li>
       ))}
     </ul>

@@ -17,6 +17,7 @@ function moduleAt(path, mocks = {}) {
 }
 const repositories = moduleAt("src/master/masterRepositories.ts");
 const mutations = moduleAt("src/master/expenseCategoryMutations.ts", { "./masterRepositories": repositories });
+const accountMutations = moduleAt("src/master/accountNameMutations.ts", { "./masterRepositories": repositories });
 const projectMutations = moduleAt("src/master/projectMetadataMutations.ts", { "./masterRepositories": repositories });
 const companyMutations = moduleAt("src/master/companyProfileMutations.ts", { "./masterRepositories": repositories });
 const supplierMutations = moduleAt("src/master/supplierPartyMutations.ts", { "./masterRepositories": repositories });
@@ -120,7 +121,7 @@ for (const [read, table, row, source] of [
 }
 const flush = async () => { for (let i = 0; i < 20; i++) await Promise.resolve(); };
 function deferred() { let resolve; const promise = new Promise((done) => { resolve = done; }); return { promise, resolve }; }
-function harness(overrides = {}, writer = mutations, supplierWriter = supplierMutations, companyWriter = companyMutations, projectWriter = projectMutations) {
+function harness(overrides = {}, writer = mutations, supplierWriter = supplierMutations, companyWriter = companyMutations, projectWriter = projectMutations, accountWriter = accountMutations) {
   let previousDeps, cleanup, effect, output, calls = 0, cursor = 0;
   const slots = [];
   const hooks = {
@@ -147,7 +148,7 @@ function harness(overrides = {}, writer = mutations, supplierWriter = supplierMu
   for (const [key, fn] of Object.entries(readers)) readers[key] = (...args) => { calls++; return fn(...args); };
   const { ProductionMasterDataProvider } = moduleAt("src/master/ProductionMasterDataProvider.tsx", {
     react: hooks, "react/jsx-runtime": { jsx: (_type, props) => props.value },
-    "./projectMetadataMutations": projectWriter, "./companyProfileMutations": companyWriter, "./supplierPartyMutations": supplierWriter, "./expenseCategoryMutations": writer, "./masterRepositories": readers, "./productionMasterDataContext": { ProductionMasterDataContext: { Provider: "provider" } },
+    "./accountNameMutations": accountWriter, "./projectMetadataMutations": projectWriter, "./companyProfileMutations": companyWriter, "./supplierPartyMutations": supplierWriter, "./expenseCategoryMutations": writer, "./masterRepositories": readers, "./productionMasterDataContext": { ProductionMasterDataContext: { Provider: "provider" } },
   });
   let userId = "user-a";
   const client = { auth: { getSession: async () => ({ data: { session: userId ? { user: { id: userId } } : null }, error: null }) } };
@@ -662,3 +663,51 @@ projectGate.resolve({ok:true,project:projectSummary});assert.equal(await project
 for(const key of ['projectMetadataMutation','companyProfileMutation','supplierMutation','categoryMutation'])assert.equal(h.render(admin)[key].phase,'SAVED');
 assert.equal(h.state().projects[0].id,projectSummary.id);assert.equal(h.state().company.id,companyProfile.id);assert.equal(h.state().parties[0].id,currentSupplier.id);assert.equal(h.state().expenseCategories[0].id,category.id);
 console.log('Slice 8 concurrent Project/Company/Supplier/Category provider operations preserve all four resources and feedback states.');
+
+// Slice 9: Account display names only, including inactive/system accounts.
+const s9Row = { ...account, id:'account-a',code:'0010',name:'Original',status:'INACTIVE',system_key:'INPUT_VAT',updated_at:'2026-09-17T00:00:00.123456+00:00' };
+const s9Account = repositories.mapAccountRow(s9Row);
+const s9Input = {name:' \uFEFF حساب  Mixed '};
+const s9Command = {account:s9Account,input:s9Input};
+assert.deepEqual(accountMutations.normalizeAccountName(s9Input), {name:'حساب  Mixed'});
+for (const name of ['', '  ', 'x'.repeat(201)]) assert.equal(accountMutations.normalizeAccountName({...s9Input,name}),null);
+assert.equal(accountMutations.normalizeAccountName({...s9Input,name:'😀'.repeat(200)}).name.length,400,'Postgres character count');
+for (const field of ['name']) assert.equal(accountMutations.normalizeAccountName({...s9Input,[field]:123}),null);
+const s9Client=queryClient({data:[s9Row],error:null});
+assert.equal((await accountMutations.updateAccountName(s9Client,'company-a',{...s9Command,input:{...s9Input,status:'ACTIVE',account_type:'EXPENSE',system_key:'PROJECT_COST',parent_account_id:'forged',requires_party:false,code:'forged',company_id:'b',updated_by:'forged'}})).ok,true);
+assert.deepEqual(s9Client.calls.find(([m])=>m==='update')[1],accountMutations.normalizeAccountName(s9Input));
+assert.deepEqual(s9Client.calls.filter(([m])=>m==='eq'),[['eq','company_id','company-a'],['eq','id','account-a'],['eq','updated_at',s9Row.updated_at]]);
+for (const [response,error] of [[{data:[],error:null},'conflict'],[{data:[s9Row,s9Row],error:null},'uncertain'],[{data:[{...s9Row,company_id:'b'}],error:null},'uncertain'],[{data:[{...s9Row,id:'b'}],error:null},'uncertain'],[{data:[{...s9Row,updated_at:null}],error:null},'uncertain'],[{data:null,error:{code:'42501'}},'denied'],[{data:null,error:{code:'23514'}},'invalid'],[{data:null,error:{}},'uncertain']]) assert.deepEqual(await accountMutations.updateAccountName(queryClient(response),'company-a',s9Command),{ok:false,error});
+for (const account of [{...s9Account,companyId:'b'},{...s9Account,updatedAt:''}]) {const c=queryClient({});assert.equal((await accountMutations.updateAccountName(c,'company-a',{...s9Command,account})).ok,false);assert.equal(c.calls.length,0);}
+let s9Writes=0;
+const s9Writer={updateAccountName:async()=>{s9Writes++;return {ok:true,account:s9Account};}};
+const s9Readers={readActiveCompanyAccounts:async(_c,id)=>({ok:true,data:[{...s9Account,companyId:id}]})};
+for (const role of ['ACCOUNTING_ADMIN']) {
+ h=harness(s9Readers,mutations,supplierMutations,companyMutations,projectMutations,s9Writer);h.render({role});await flush();
+ assert.equal(await h.render({role}).saveAccountName(s9Command),true);assert.equal(h.calls(),8);
+ assert.equal(h.render({role}).accountNameMutation.phase,'SAVED');assert.equal(h.render({role}).companyProfileMutation.phase,'IDLE');
+}
+for (const role of ['ACCOUNTANT','PROCUREMENT','DATA_ENTRY','MANAGEMENT_VIEWER','SYSTEM_ADMIN','PROJECT_MANAGER']) {h=harness(s9Readers,mutations,supplierMutations,companyMutations,projectMutations,s9Writer);h.render({role});await flush();const n=s9Writes;assert.equal(await h.render({role}).saveAccountName(s9Command),false);assert.equal(s9Writes,n);}
+for (const stage of ['write','refresh']) for (const transition of ['company','role','user','logout','unmount']) {
+ const delayed=deferred();let reads=0;let props={role:'ACCOUNTING_ADMIN'};
+ h=harness({readActiveCompanyAccounts:async(_c,id)=>++reads===2&&stage==='refresh'?delayed.promise:{ok:true,data:[{...s9Account,companyId:id}]}},mutations,supplierMutations,companyMutations,projectMutations,stage==='write'?{updateAccountName:()=>delayed.promise}:s9Writer);
+ h.render(props);await flush();const pending=h.render(props).saveAccountName(s9Command);await flush();assert.equal(await h.render(props).saveAccountName(s9Command),false);
+ if(transition==='unmount')h.unmount();else if(transition==='logout')h.session(null);else {props={...props,...(transition==='company'?{activeCompanyId:'company-b'}:transition==='role'?{role:'MANAGEMENT_VIEWER'}:{userId:'user-b'})};if(transition==='user')h.session('user-b');h.render(props);await flush();}
+ delayed.resolve(stage==='write'?{ok:true,account:s9Account}:{ok:true,data:[s9Account]});assert.equal(await pending,false);
+ if(!['unmount','logout'].includes(transition)){assert.equal(h.render(props).accountNameMutation.phase,'IDLE');if(transition==='company')assert.equal(h.state().accounts[0].companyId,'company-b');}
+}
+let s9Reads=0,failAccountRead=true;
+h=harness({readActiveCompanyAccounts:async()=>++s9Reads>1&&failAccountRead?{ok:false,error:{source:'accounts'}}:{ok:true,data:[s9Account]}},mutations,supplierMutations,companyMutations,projectMutations,s9Writer);
+h.render(admin);await flush();assert.equal(await h.render(admin).saveAccountName(s9Command),false);assert.equal(h.render(admin).accountNameMutation.phase,'REFRESH_ERROR');assert.equal(await h.render(admin).refreshAccounts(),false);assert.equal(h.render(admin).accountNameMutation.phase,'REFRESH_ERROR');
+const s9Before=s9Writes;failAccountRead=false;assert.equal(await h.render(admin).refreshAccounts(),true);assert.equal(s9Writes,s9Before);
+for(const error of ['conflict','denied','uncertain']) {h=harness(s9Readers,mutations,supplierMutations,companyMutations,projectMutations,{updateAccountName:async()=>({ok:false,error})});h.render(admin);await flush();assert.equal(await h.render(admin).saveAccountName(s9Command),false);assert.equal(h.render(admin).accountNameMutation.error,error);assert.equal(await h.render(admin).saveAccountName(s9Command),false);assert.equal(await h.render(admin).refreshAccounts(),true);}
+
+console.log('Slice 9 Account name repository/provider PASS: one-field payload, normalization, Unicode bounds, exact token, allowed/all denied roles, duplicate guard, late writes/reads across scope/session/unmount, selective refresh, conflict/uncertainty/known-commit recovery.');
+// Held Account write and completed Project write preserve both snapshots/feedback.
+const s9Gate=deferred();
+h=harness({...s9Readers,...projectReaders},mutations,supplierMutations,companyMutations,projectWriter,{updateAccountName:()=>s9Gate.promise});
+h.render(admin);await flush();const s9Pending=h.render(admin).saveAccountName(s9Command);await flush();
+assert.equal(await h.render(admin).saveProjectMetadata(projectCommand),true);
+s9Gate.resolve({ok:true,account:s9Account});assert.equal(await s9Pending,true);
+assert.equal(h.render(admin).accountNameMutation.phase,'SAVED');assert.equal(h.render(admin).projectMetadataMutation.phase,'SAVED');
+assert.equal(h.state().accounts[0].id,s9Account.id);assert.equal(h.state().projects[0].id,projectSummary.id);
