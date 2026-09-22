@@ -1,5 +1,6 @@
 import { updateOtherPartyName, type OtherPartyNameCommand } from "./otherPartyNameMutations";
 import { updateEmployeePartyName, type EmployeePartyNameCommand } from "./employeePartyNameMutations";
+import { updateCustodianPartyName, type CustodianPartyNameCommand } from "./custodianPartyNameMutations";
 import { updateTreasuryName, type TreasuryNameCommand } from "./treasuryNameMutations";
 import { updateAccountName, type AccountNameCommand } from "./accountNameMutations";
 import { updateProjectMetadata, type ProjectMetadataCommand } from "./projectMetadataMutations";
@@ -8,7 +9,7 @@ import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "re
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "../types/database.generated";
 import { readActiveCompanyProfile, readActiveCompanyProjects, readActiveCompanyParties, readActiveCompanyExpenseCategories, readActiveCompanyAccounts, readActiveCompanyTreasuryAccounts, readActiveCompanySubcontracts } from "./masterRepositories";
-import type { CategoryActions, SupplierActions, CompanyProfileActions, ProjectMetadataActions, AccountNameActions, TreasuryNameActions, OtherPartyNameActions, EmployeePartyNameActions, ProductionMasterDataState } from "./masterTypes";
+import type { CategoryActions, SupplierActions, CompanyProfileActions, ProjectMetadataActions, AccountNameActions, TreasuryNameActions, OtherPartyNameActions, EmployeePartyNameActions, CustodianPartyNameActions, ProductionMasterDataState } from "./masterTypes";
 import { mutateExpenseCategory, type ExpenseCategoryCommand } from "./expenseCategoryMutations";
 import { mutateSupplierParty, type SupplierPartyCommand } from "./supplierPartyMutations";
 import { ProductionMasterDataContext } from "./productionMasterDataContext";
@@ -59,9 +60,13 @@ export function ProductionMasterDataProvider({ client, userId, activeCompanyId, 
   const employeePartyGeneration = useRef(0);
   const [employeePartyState, setEmployeePartyState] = useState<{ scopeKey: string; value: EmployeePartyNameActions["employeePartyNameMutation"] }>({ scopeKey, value: { phase: "IDLE" } });
 
+  const custodianPartyLock = useRef(false);
+  const custodianPartyGeneration = useRef(0);
+  const [custodianPartyState, setCustodianPartyState] = useState<{ scopeKey: string; value: CustodianPartyNameActions["custodianPartyNameMutation"] }>({ scopeKey, value: { phase: "IDLE" } });
+
   useLayoutEffect(() => {
     liveScope.current = scopeKey;
-    return () => { categoryGeneration.current += 1; supplierGeneration.current += 1; companyGeneration.current += 1; projectGeneration.current += 1; accountGeneration.current += 1; treasuryGeneration.current += 1; otherPartyGeneration.current += 1; employeePartyGeneration.current += 1; };
+    return () => { categoryGeneration.current += 1; supplierGeneration.current += 1; companyGeneration.current += 1; projectGeneration.current += 1; accountGeneration.current += 1; treasuryGeneration.current += 1; otherPartyGeneration.current += 1; employeePartyGeneration.current += 1; custodianPartyGeneration.current += 1; };
   }, [scopeKey]);
 
   useEffect(() => {
@@ -74,6 +79,7 @@ export function ProductionMasterDataProvider({ client, userId, activeCompanyId, 
     treasuryLock.current = false;
     otherPartyLock.current = false;
     employeePartyLock.current = false;
+    custodianPartyLock.current = false;
     let mounted = true;
 
     const isCurrent = () => mounted && requestGeneration.current === generation;
@@ -191,7 +197,7 @@ export function ProductionMasterDataProvider({ client, userId, activeCompanyId, 
   };
   // Explicit supplier operations never trigger the seven-resource initial loader.
   const runSupplierOperation = async (command?: SupplierPartyCommand): Promise<boolean> => {
-    if (visibleState.phase !== "READY" || supplierLock.current || otherPartyLock.current || employeePartyLock.current || liveScope.current !== scopeKey
+    if (visibleState.phase !== "READY" || supplierLock.current || otherPartyLock.current || employeePartyLock.current || custodianPartyLock.current || liveScope.current !== scopeKey
       || (command && ((role !== "ACCOUNTING_ADMIN" && role !== "PROCUREMENT") || supplierMutation.phase === "ERROR" || supplierMutation.phase === "REFRESH_ERROR"))) return false;
     supplierLock.current = true;
     const generation = requestGeneration.current;
@@ -394,7 +400,7 @@ export function ProductionMasterDataProvider({ client, userId, activeCompanyId, 
   };
   const otherPartyNameMutation = otherPartyState.scopeKey === scopeKey ? otherPartyState.value : { phase: "IDLE" } as const;
   const runOtherPartyOperation = async (command?: OtherPartyNameCommand): Promise<boolean> => {
-    if (visibleState.phase !== "READY" || otherPartyLock.current || supplierLock.current || employeePartyLock.current || liveScope.current !== scopeKey
+    if (visibleState.phase !== "READY" || otherPartyLock.current || supplierLock.current || employeePartyLock.current || custodianPartyLock.current || liveScope.current !== scopeKey
       || (command && ((role !== "ACCOUNTING_ADMIN" && role !== "PROCUREMENT")
         || otherPartyNameMutation.phase === "ERROR" || otherPartyNameMutation.phase === "REFRESH_ERROR"))) return false;
     otherPartyLock.current = true;
@@ -435,7 +441,7 @@ export function ProductionMasterDataProvider({ client, userId, activeCompanyId, 
   };
   const employeePartyNameMutation = employeePartyState.scopeKey === scopeKey ? employeePartyState.value : { phase: "IDLE" } as const;
   const runEmployeePartyOperation = async (command?: EmployeePartyNameCommand): Promise<boolean> => {
-    if (visibleState.phase !== "READY" || employeePartyLock.current || supplierLock.current || otherPartyLock.current || liveScope.current !== scopeKey
+    if (visibleState.phase !== "READY" || employeePartyLock.current || supplierLock.current || otherPartyLock.current || custodianPartyLock.current || liveScope.current !== scopeKey
       || (command && (role !== "ACCOUNTING_ADMIN" || employeePartyNameMutation.phase === "ERROR" || employeePartyNameMutation.phase === "REFRESH_ERROR"))) return false;
     employeePartyLock.current = true;
     const generation = requestGeneration.current;
@@ -470,7 +476,46 @@ export function ProductionMasterDataProvider({ client, userId, activeCompanyId, 
       if (current()) employeePartyLock.current = false;
     }
   };
-  return <ProductionMasterDataContext.Provider value={{ ...visibleState, categoryMutation, supplierMutation, companyProfileMutation, projectMetadataMutation, accountNameMutation, treasuryNameMutation, otherPartyNameMutation, employeePartyNameMutation,
+  const custodianPartyNameMutation = custodianPartyState.scopeKey === scopeKey ? custodianPartyState.value : { phase: "IDLE" } as const;
+  const runCustodianPartyOperation = async (command?: CustodianPartyNameCommand): Promise<boolean> => {
+    if (visibleState.phase !== "READY" || custodianPartyLock.current || supplierLock.current || otherPartyLock.current || employeePartyLock.current || liveScope.current !== scopeKey
+      || (command && (role !== "ACCOUNTING_ADMIN" || custodianPartyNameMutation.phase === "ERROR" || custodianPartyNameMutation.phase === "REFRESH_ERROR"))) return false;
+    custodianPartyLock.current = true;
+    const generation = requestGeneration.current;
+    const operation = ++custodianPartyGeneration.current;
+    const current = () => liveScope.current === scopeKey && requestGeneration.current === generation && custodianPartyGeneration.current === operation;
+    const feedback = (value: CustodianPartyNameActions["custodianPartyNameMutation"]) => { if (current()) setCustodianPartyState({ scopeKey, value }); };
+    const validSession = async () => {
+      const { data, error } = await client.auth.getSession();
+      return current() && !error && data.session?.user.id === userId;
+    };
+    feedback({ phase: "PENDING" });
+    let saved = !command && custodianPartyNameMutation.phase === "REFRESH_ERROR";
+    try {
+      if (!await validSession()) { feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "denied" }); return false; }
+      if (command) {
+        const result = await updateCustodianPartyName(client, activeCompanyId, command);
+        if (result.ok) saved = true;
+        if (!await validSession()) { feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "denied" }); return false; }
+        if (!result.ok) { feedback({ phase: "ERROR", error: result.error }); return false; }
+      }
+      const refreshed = await readActiveCompanyParties(client, activeCompanyId);
+      if (!await validSession()) { feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "denied" }); return false; }
+      if (!refreshed.ok) { feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "uncertain" }); return false; }
+      setScopedState((previous) => previous.scopeKey === scopeKey && previous.state.phase === "READY"
+        ? { scopeKey, state: { ...previous.state, parties: refreshed.data } } : previous);
+      feedback({ phase: saved ? "SAVED" : "IDLE" });
+      return true;
+    } catch {
+      feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "uncertain" });
+      return false;
+    } finally {
+      if (current()) custodianPartyLock.current = false;
+    }
+  };
+  return <ProductionMasterDataContext.Provider value={{ ...visibleState, categoryMutation, supplierMutation, companyProfileMutation, projectMetadataMutation, accountNameMutation, treasuryNameMutation, otherPartyNameMutation, employeePartyNameMutation, custodianPartyNameMutation,
+    saveCustodianPartyName: runCustodianPartyOperation,
+    refreshCustodianPartyNames: () => runCustodianPartyOperation(),
     saveEmployeePartyName: runEmployeePartyOperation,
     refreshEmployeePartyNames: () => runEmployeePartyOperation(),
     saveOtherPartyName: runOtherPartyOperation,
