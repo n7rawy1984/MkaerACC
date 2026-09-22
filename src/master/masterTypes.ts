@@ -1,6 +1,7 @@
 import type { OtherPartyNameCommand, OtherPartyNameMutationError } from "./otherPartyNameMutations";
 import type { EmployeePartyNameCommand, EmployeePartyNameMutationError } from "./employeePartyNameMutations";
 import type { CustodianPartyNameCommand, CustodianPartyNameMutationError } from "./custodianPartyNameMutations";
+import type { OwnerPartyNameCommand, OwnerPartyNameMutationError } from "./ownerPartyNameMutations";
 import type { TreasuryNameCommand, TreasuryNameMutationError } from "./treasuryNameMutations";
 import type { AccountNameCommand, AccountNameMutationError } from "./accountNameMutations";
 import type { ProjectMetadataCommand, ProjectMetadataMutationError } from "./projectMetadataMutations";
@@ -54,7 +55,12 @@ export interface CustodianPartyNameActions {
   saveCustodianPartyName: (command: CustodianPartyNameCommand) => Promise<boolean>;
   refreshCustodianPartyNames: () => Promise<boolean>;
 }
-export type ProductionMasterDataContextValue = ProductionMasterDataState & CategoryActions & SupplierActions & CompanyProfileActions & ProjectMetadataActions & AccountNameActions & TreasuryNameActions & OtherPartyNameActions & EmployeePartyNameActions & CustodianPartyNameActions;
+export interface OwnerPartyNameActions {
+  ownerPartyNameMutation: { phase: "IDLE" | "PENDING" | "SAVED" | "ERROR" | "REFRESH_ERROR"; error?: OwnerPartyNameMutationError };
+  saveOwnerPartyName: (command: OwnerPartyNameCommand) => Promise<boolean>;
+  refreshOwnerPartyNames: () => Promise<boolean>;
+}
+export type ProductionMasterDataContextValue = ProductionMasterDataState & CategoryActions & SupplierActions & CompanyProfileActions & ProjectMetadataActions & AccountNameActions & TreasuryNameActions & OtherPartyNameActions & EmployeePartyNameActions & CustodianPartyNameActions & OwnerPartyNameActions;
 
 export type ProductionCompanyStatus = Database["public"]["Enums"]["account_status"];
 export type ProductionProjectStatus = Database["public"]["Enums"]["project_status"];

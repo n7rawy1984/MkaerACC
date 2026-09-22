@@ -1,0 +1,22 @@
+# P6C Slice 14 — OWNER Party Display Name UPDATE
+
+**VERIFIED COMPLETE; AUTHENTICATED BROWSER ACCEPTANCE COMPLETE; FIXTURE CLEANUP COMPLETE.** Development project `eqnzueginpkskbnqvgoc`. P6C IN PROGRESS; P6D/P6E NOT STARTED; Production readiness DEFERRED.
+
+The disposable Development identity `p6c-s14-browser@example.test` was provisioned separately for the authorized acceptance run; no password/token or UUID is stored in this repository. Read-only preflight passed, guarded setup ran once, acceptance completed, authority was restored, the operator signed out, exact-manifest cleanup completed, and final verification returned all Slice 14 fixture/Auth/profile counts 0 with global Companies/settings 14/14 and missing/orphan 0/0.
+
+## Authenticated acceptance matrix — COMPLETE
+
+1. Sign in through the real Development browser Auth form, select Alpha, open `/parties`. ACCOUNTING_ADMIN can rename ACTIVE and INACTIVE OWNER rows. The selected form is populated and contains only `name`. Save trims Unicode boundary whitespace, preserves internal spaces/case, accepts Arabic and exactly 200 Unicode characters, rejects empty/whitespace and 201 characters. Verify code, type, status, leading-zero TRN, contact, notes and creation provenance unchanged. No OWNER create/delete/status/current-account or financial controls.
+2. Load the same OWNER in two real tabs. Save in A, submit stale B: B reports conflict from zero affected rows; A's result survives, with no overwrite or silent retry. Refresh/review allows a fresh edit.
+3. Switch Alpha/Beta and rename Beta independently. No Alpha row, draft, feedback or branding leaks into Beta. Switch back and confirm Alpha state.
+4. Use `browser-role.sql` execution copies for Alpha only. ACCOUNTING_ADMIN edit allowed. ACCOUNTANT and MANAGEMENT_VIEWER read OWNER without edit; PROCUREMENT and DATA_ENTRY cannot read OWNER (their permitted operational Party rows remain visible), PROJECT_MANAGER and SYSTEM_ADMIN have no Party rows/edit. Downgrade while the form is open; genuine tab blur/focus must revalidate role and remove the stale form without relying on reload.
+5. Use `browser-authority.sql` execution copies to revoke/restore Alpha Company, Alpha membership and profile separately. Tab-return/refetch must fail closed. Alpha-only membership revocation leaves Beta available; profile revocation removes all Company access. Restore all before continuing.
+6. Verify ordinary tab-return preserves an unsaved draft, keyboard Enter/open/save/cancel, focus restoration and error focus. At 390px test EN/AR/RTL and full 200-character unbroken ASCII/Arabic OWNER names: readable wrapping, no document/body horizontal overflow.
+7. Type boundary: Alpha Supplier retains Supplier edit/status controls; OTHER, EMPLOYEE and CUSTODIAN retain their prior name controls under each role's existing permissions. The OWNER form cannot alter these rows or protected columns. Observe regression rows without changing fixed cleanup fields. No owner-current-account/equity/payment/journal or P6D route becomes writable.
+8. Sign out and close sessions. Restore Alpha role/Company/membership/profile to ACCOUNTING_ADMIN/ACTIVE. Run the exact guarded `browser-cleanup.sql` with the fixture UUID in a private execution copy, then `verify.sql`. Require all Slice 14 fixture Companies/Parties/memberships/settings/assignments and browser Auth/profile counts **0**; global Companies/settings **14/14**, missing/orphan **0/0**. On any failure preserve evidence and report the exact step; never loosen cleanup guards.
+
+## Fixture manifest
+
+Prefix `84200000-0000-4000-8000-0000000000`: `a1` Alpha Company/settings/membership; `a2` Beta; `b1` Alpha INACTIVE OWNER with leading-zero TRN, Arabic name/contact and fixed notes; `b2` Alpha ACTIVE OWNER; `b3` Beta ACTIVE OWNER; `b4` Supplier regression; `b5` OTHER regression; `b6` EMPLOYEE regression; `b7` CUSTODIAN regression. No Project, GL, Treasury, subcontract or financial document fixture. Role/authority helpers affect only exact Alpha fixture or disposable profile.
+
+Automated implementation evidence is in [the phase record](../../P6C_SLICE_14_OWNER_PARTY_NAME.md). Isolated Chromium remains automated in-memory evidence and is distinct from hosted acceptance. Authenticated Development browser acceptance was subsequently completed manually. The guarded setup/helpers were used only for the exact synthetic fixture; authority was restored before cleanup. Cleanup and final integrity verification completed successfully.
