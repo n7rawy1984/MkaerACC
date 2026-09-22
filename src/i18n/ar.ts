@@ -5,6 +5,20 @@ import type {
  TranslationKey } from "./en";
 
 const ar: Record<TranslationKey, string> = {
+  "otherPartyName.edit": "تعديل اسم الجهة من نوع أخرى",
+  "otherPartyName.name": "اسم الجهة من نوع أخرى",
+  "otherPartyName.scope": "الاسم مطلوب (حتى 200 حرف). إعدادات الجهة من نوع أخرى تبقى كما هي.",
+  "otherPartyName.save": "حفظ اسم الجهة من نوع أخرى",
+  "otherPartyName.close": "إغلاق",
+  "otherPartyName.refresh": "تحديث الجهات",
+  "otherPartyName.pending": "جارٍ تحديث اسم الجهة من نوع أخرى…",
+  "otherPartyName.saved": "تم حفظ اسم الجهة من نوع أخرى.",
+  "otherPartyName.invalid": "أدخل اسم جهة من 1 إلى 200 حرف.",
+  "otherPartyName.denied": "لم تعد لديك صلاحية تعديل اسم هذه الجهة من نوع أخرى.",
+  "otherPartyName.conflict": "تغيرت هذه الجهة من نوع أخرى أو لم تعد متاحة.",
+  "otherPartyName.uncertain": "تعذر تأكيد نتيجة العملية.",
+  "otherPartyName.refreshRequired": "حدّث البيانات وراجعها قبل المحاولة مجدداً.",
+  "otherPartyName.refreshError": "تم حفظ الاسم لكن تعذر تحديث الجهات. حدّث العرض وراجعه قبل تغيير آخر.",
   "treasuryName.edit": "تعديل اسم الخزينة",
   "treasuryName.name": "اسم الخزينة",
   "treasuryName.scope": "الاسم مطلوب (حتى 200 حرف). إعدادات الخزينة تبقى كما هي.",

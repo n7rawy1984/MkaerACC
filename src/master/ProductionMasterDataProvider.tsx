@@ -1,3 +1,4 @@
+import { updateOtherPartyName, type OtherPartyNameCommand } from "./otherPartyNameMutations";
 import { updateTreasuryName, type TreasuryNameCommand } from "./treasuryNameMutations";
 import { updateAccountName, type AccountNameCommand } from "./accountNameMutations";
 import { updateProjectMetadata, type ProjectMetadataCommand } from "./projectMetadataMutations";
@@ -6,7 +7,7 @@ import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "re
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "../types/database.generated";
 import { readActiveCompanyProfile, readActiveCompanyProjects, readActiveCompanyParties, readActiveCompanyExpenseCategories, readActiveCompanyAccounts, readActiveCompanyTreasuryAccounts, readActiveCompanySubcontracts } from "./masterRepositories";
-import type { CategoryActions, SupplierActions, CompanyProfileActions, ProjectMetadataActions, AccountNameActions, TreasuryNameActions, ProductionMasterDataState } from "./masterTypes";
+import type { CategoryActions, SupplierActions, CompanyProfileActions, ProjectMetadataActions, AccountNameActions, TreasuryNameActions, OtherPartyNameActions, ProductionMasterDataState } from "./masterTypes";
 import { mutateExpenseCategory, type ExpenseCategoryCommand } from "./expenseCategoryMutations";
 import { mutateSupplierParty, type SupplierPartyCommand } from "./supplierPartyMutations";
 import { ProductionMasterDataContext } from "./productionMasterDataContext";
@@ -50,9 +51,13 @@ export function ProductionMasterDataProvider({ client, userId, activeCompanyId, 
   const treasuryGeneration = useRef(0);
   const [treasuryState, setTreasuryState] = useState<{ scopeKey: string; value: TreasuryNameActions["treasuryNameMutation"] }>({ scopeKey, value: { phase: "IDLE" } });
 
+  const otherPartyLock = useRef(false);
+  const otherPartyGeneration = useRef(0);
+  const [otherPartyState, setOtherPartyState] = useState<{ scopeKey: string; value: OtherPartyNameActions["otherPartyNameMutation"] }>({ scopeKey, value: { phase: "IDLE" } });
+
   useLayoutEffect(() => {
     liveScope.current = scopeKey;
-    return () => { categoryGeneration.current += 1; supplierGeneration.current += 1; companyGeneration.current += 1; projectGeneration.current += 1; accountGeneration.current += 1; treasuryGeneration.current += 1; };
+    return () => { categoryGeneration.current += 1; supplierGeneration.current += 1; companyGeneration.current += 1; projectGeneration.current += 1; accountGeneration.current += 1; treasuryGeneration.current += 1; otherPartyGeneration.current += 1; };
   }, [scopeKey]);
 
   useEffect(() => {
@@ -63,6 +68,7 @@ export function ProductionMasterDataProvider({ client, userId, activeCompanyId, 
     projectLock.current = false;
     accountLock.current = false;
     treasuryLock.current = false;
+    otherPartyLock.current = false;
     let mounted = true;
 
     const isCurrent = () => mounted && requestGeneration.current === generation;
@@ -180,7 +186,7 @@ export function ProductionMasterDataProvider({ client, userId, activeCompanyId, 
   };
   // Explicit supplier operations never trigger the seven-resource initial loader.
   const runSupplierOperation = async (command?: SupplierPartyCommand): Promise<boolean> => {
-    if (visibleState.phase !== "READY" || supplierLock.current || liveScope.current !== scopeKey
+    if (visibleState.phase !== "READY" || supplierLock.current || otherPartyLock.current || liveScope.current !== scopeKey
       || (command && ((role !== "ACCOUNTING_ADMIN" && role !== "PROCUREMENT") || supplierMutation.phase === "ERROR" || supplierMutation.phase === "REFRESH_ERROR"))) return false;
     supplierLock.current = true;
     const generation = requestGeneration.current;
@@ -381,7 +387,50 @@ export function ProductionMasterDataProvider({ client, userId, activeCompanyId, 
       if (current()) treasuryLock.current = false;
     }
   };
-  return <ProductionMasterDataContext.Provider value={{ ...visibleState, categoryMutation, supplierMutation, companyProfileMutation, projectMetadataMutation, accountNameMutation, treasuryNameMutation,
+  const otherPartyNameMutation = otherPartyState.scopeKey === scopeKey ? otherPartyState.value : { phase: "IDLE" } as const;
+  const runOtherPartyOperation = async (command?: OtherPartyNameCommand): Promise<boolean> => {
+    if (visibleState.phase !== "READY" || otherPartyLock.current || supplierLock.current || liveScope.current !== scopeKey
+      || (command && ((role !== "ACCOUNTING_ADMIN" && role !== "PROCUREMENT")
+        || otherPartyNameMutation.phase === "ERROR" || otherPartyNameMutation.phase === "REFRESH_ERROR"))) return false;
+    otherPartyLock.current = true;
+    const generation = requestGeneration.current;
+    const operation = ++otherPartyGeneration.current;
+    const current = () => liveScope.current === scopeKey && requestGeneration.current === generation && otherPartyGeneration.current === operation;
+    const feedback = (value: OtherPartyNameActions["otherPartyNameMutation"]) => { if (current()) setOtherPartyState({ scopeKey, value }); };
+    const validSession = async () => {
+      const { data, error } = await client.auth.getSession();
+      return current() && !error && data.session?.user.id === userId;
+    };
+    feedback({ phase: "PENDING" });
+    let saved = !command && otherPartyNameMutation.phase === "REFRESH_ERROR";
+    try {
+      if (!await validSession()) { feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "denied" }); return false; }
+      if (command) {
+        const result = await updateOtherPartyName(client, activeCompanyId, command);
+        if (result.ok) saved = true;
+        if (!await validSession()) { feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "denied" }); return false; }
+        if (!result.ok) { feedback({ phase: "ERROR", error: result.error }); return false; }
+      }
+      // Refresh only Parties; retain all other resource snapshots and operation states.
+      const refreshed = await readActiveCompanyParties(client, activeCompanyId);
+      if (!await validSession()) { feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "denied" }); return false; }
+      if (!refreshed.ok) {
+        feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "uncertain" }); return false;
+      }
+      setScopedState((previous) => previous.scopeKey === scopeKey && previous.state.phase === "READY"
+        ? { scopeKey, state: { ...previous.state, parties: refreshed.data } } : previous);
+      feedback({ phase: saved ? "SAVED" : "IDLE" });
+      return true;
+    } catch {
+      feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "uncertain" });
+      return false;
+    } finally {
+      if (current()) otherPartyLock.current = false;
+    }
+  };
+  return <ProductionMasterDataContext.Provider value={{ ...visibleState, categoryMutation, supplierMutation, companyProfileMutation, projectMetadataMutation, accountNameMutation, treasuryNameMutation, otherPartyNameMutation,
+    saveOtherPartyName: runOtherPartyOperation,
+    refreshOtherPartyNames: () => runOtherPartyOperation(),
     saveTreasuryName: runTreasuryOperation,
     refreshTreasuryAccounts: () => runTreasuryOperation(),
     saveAccountName: runAccountOperation,

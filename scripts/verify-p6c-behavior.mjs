@@ -17,6 +17,7 @@ function moduleAt(path, mocks = {}) {
 }
 const repositories = moduleAt("src/master/masterRepositories.ts");
 const mutations = moduleAt("src/master/expenseCategoryMutations.ts", { "./masterRepositories": repositories });
+const otherPartyMutations = moduleAt("src/master/otherPartyNameMutations.ts", { "./masterRepositories": repositories });
 const treasuryMutations = moduleAt("src/master/treasuryNameMutations.ts", { "./masterRepositories": repositories });
 const accountMutations = moduleAt("src/master/accountNameMutations.ts", { "./masterRepositories": repositories });
 const projectMutations = moduleAt("src/master/projectMetadataMutations.ts", { "./masterRepositories": repositories });
@@ -122,7 +123,7 @@ for (const [read, table, row, source] of [
 }
 const flush = async () => { for (let i = 0; i < 20; i++) await Promise.resolve(); };
 function deferred() { let resolve; const promise = new Promise((done) => { resolve = done; }); return { promise, resolve }; }
-function harness(overrides = {}, writer = mutations, supplierWriter = supplierMutations, companyWriter = companyMutations, projectWriter = projectMutations, accountWriter = accountMutations, treasuryWriter = treasuryMutations) {
+function harness(overrides = {}, writer = mutations, supplierWriter = supplierMutations, companyWriter = companyMutations, projectWriter = projectMutations, accountWriter = accountMutations, treasuryWriter = treasuryMutations, otherPartyWriter = otherPartyMutations) {
   let previousDeps, cleanup, effect, output, calls = 0, cursor = 0;
   const slots = [];
   const hooks = {
@@ -149,7 +150,7 @@ function harness(overrides = {}, writer = mutations, supplierWriter = supplierMu
   for (const [key, fn] of Object.entries(readers)) readers[key] = (...args) => { calls++; return fn(...args); };
   const { ProductionMasterDataProvider } = moduleAt("src/master/ProductionMasterDataProvider.tsx", {
     react: hooks, "react/jsx-runtime": { jsx: (_type, props) => props.value },
-    "./treasuryNameMutations": treasuryWriter, "./accountNameMutations": accountWriter, "./projectMetadataMutations": projectWriter, "./companyProfileMutations": companyWriter, "./supplierPartyMutations": supplierWriter, "./expenseCategoryMutations": writer, "./masterRepositories": readers, "./productionMasterDataContext": { ProductionMasterDataContext: { Provider: "provider" } },
+    "./otherPartyNameMutations": otherPartyWriter, "./treasuryNameMutations": treasuryWriter, "./accountNameMutations": accountWriter, "./projectMetadataMutations": projectWriter, "./companyProfileMutations": companyWriter, "./supplierPartyMutations": supplierWriter, "./expenseCategoryMutations": writer, "./masterRepositories": readers, "./productionMasterDataContext": { ProductionMasterDataContext: { Provider: "provider" } },
   });
   let userId = "user-a";
   const client = { auth: { getSession: async () => ({ data: { session: userId ? { user: { id: userId } } : null }, error: null }) } };
@@ -504,7 +505,8 @@ for (const role of ["ACCOUNTING_ADMIN", "PROCUREMENT", "ACCOUNTANT", "DATA_ENTRY
     const { PartiesList } = moduleAt("src/master/PartiesList.tsx", {
       "../auth/AuthContext": { useAuth: () => ({ state: { phase: "TENANT_READY", activeTenant: { role } } }) },
       "../i18n/I18nContext": { useT: () => (key) => key },
-      "./productionMasterDataContext": { useProductionMasterData: () => ({ phase: "READY", parties: [{ ...currentSupplier, type }], supplierMutation: { phase: "IDLE" } }) },
+      "./productionMasterDataContext": { useProductionMasterData: () => ({ phase: "READY", parties: [{ ...currentSupplier, type }], supplierMutation: { phase: "IDLE" }, otherPartyNameMutation: { phase: "IDLE" } }) },
+      "./OtherPartyNameControl": { OtherPartyNameControl: () => null }, // New control has separate real Chromium coverage.
       "./SupplierPartyForm": supplierFormModule,
     });
     const html = renderToStaticMarkup(createElement(PartiesList));
@@ -760,3 +762,57 @@ assert.equal(await h.render(admin).saveProjectMetadata(projectCommand),true);
 s10Gate.resolve({ok:true,treasury:s10Treasury});assert.equal(await s10Pending,true);
 assert.equal(h.render(admin).treasuryNameMutation.phase,'SAVED');assert.equal(h.render(admin).projectMetadataMutation.phase,'SAVED');
 assert.equal(h.state().treasuryAccounts[0].id,s10Treasury.id);assert.equal(h.state().projects[0].id,projectSummary.id);
+
+// Slice 11: OtherParty display names only, including inactive OtherParty.
+const s11Row = { ...party, type:"OTHER", id:'otherParty-a',code:'0010',name:'Original',status:'INACTIVE',updated_at:'2026-09-17T00:00:00.123456+00:00' };
+const s11OtherParty = repositories.mapPartyRow(s11Row);
+const s11Input = {name:' \uFEFF حساب  Mixed '};
+const s11Command = {party:s11OtherParty,input:s11Input};
+assert.deepEqual(otherPartyMutations.normalizeOtherPartyName(s11Input), {name:'حساب  Mixed'});
+for (const name of ['', '  ', 'x'.repeat(201)]) assert.equal(otherPartyMutations.normalizeOtherPartyName({...s11Input,name}),null);
+assert.equal(otherPartyMutations.normalizeOtherPartyName({...s11Input,name:'😀'.repeat(200)}).name.length,400,'Postgres character count');
+for (const field of ['name']) assert.equal(otherPartyMutations.normalizeOtherPartyName({...s11Input,[field]:123}),null);
+const s11Client=queryClient({data:[s11Row],error:null});
+assert.equal((await otherPartyMutations.updateOtherPartyName(s11Client,'company-a',{...s11Command,input:{...s11Input,status:'ACTIVE',type:'BANK',gl_account_id:'forged',project_id:'forged',bank_name:'forged',account_reference:'forged',notes:'forged',code:'forged',company_id:'b',updated_by:'forged'}})).ok,true);
+assert.deepEqual(s11Client.calls.find(([m])=>m==='update')[1],otherPartyMutations.normalizeOtherPartyName(s11Input));
+assert.deepEqual(s11Client.calls.filter(([m])=>m==='eq'),[['eq','company_id','company-a'],['eq','type','OTHER'],['eq','id','otherParty-a'],['eq','updated_at',s11Row.updated_at]]);
+for (const [response,error] of [[{data:[],error:null},'conflict'],[{data:[s11Row,s11Row],error:null},'uncertain'],[{data:[{...s11Row,company_id:'b'}],error:null},'uncertain'],[{data:[{...s11Row,id:'b'}],error:null},'uncertain'],[{data:[{...s11Row,updated_at:null}],error:null},'uncertain'],[{data:null,error:{code:'42501'}},'denied'],[{data:null,error:{code:'23514'}},'invalid'],[{data:null,error:{}},'uncertain']]) assert.deepEqual(await otherPartyMutations.updateOtherPartyName(queryClient(response),'company-a',s11Command),{ok:false,error});
+for (const party of [{...s11OtherParty,type:'SUPPLIER'},{...s11OtherParty,companyId:'b'},{...s11OtherParty,updatedAt:''}]) {const c=queryClient({});assert.equal((await otherPartyMutations.updateOtherPartyName(c,'company-a',{...s11Command,party})).ok,false);assert.equal(c.calls.length,0);}
+let s11Writes=0;
+const s11Writer={updateOtherPartyName:async()=>{s11Writes++;return {ok:true,party:s11OtherParty};}};
+const s11Readers={readActiveCompanyParties:async(_c,id)=>({ok:true,data:[{...s11OtherParty,companyId:id}]})};
+for (const role of ['ACCOUNTING_ADMIN','PROCUREMENT']) {
+ h=harness(s11Readers,mutations,supplierMutations,companyMutations,projectMutations,accountMutations,treasuryMutations,s11Writer);h.render({role});await flush();
+ assert.equal(await h.render({role}).saveOtherPartyName(s11Command),true);assert.equal(h.calls(),8);
+ assert.equal(h.render({role}).otherPartyNameMutation.phase,'SAVED');assert.equal(h.render({role}).companyProfileMutation.phase,'IDLE');
+}
+for (const role of ['ACCOUNTANT','DATA_ENTRY','MANAGEMENT_VIEWER','SYSTEM_ADMIN','PROJECT_MANAGER']) {h=harness(s11Readers,mutations,supplierMutations,companyMutations,projectMutations,accountMutations,treasuryMutations,s11Writer);h.render({role});await flush();const n=s11Writes;assert.equal(await h.render({role}).saveOtherPartyName(s11Command),false);assert.equal(s11Writes,n);}
+for (const stage of ['write','refresh']) for (const transition of ['company','role','user','logout','unmount']) {
+ const delayed=deferred();let reads=0;let props={role:'ACCOUNTING_ADMIN'};
+ h=harness({readActiveCompanyParties:async(_c,id)=>++reads===2&&stage==='refresh'?delayed.promise:{ok:true,data:[{...s11OtherParty,companyId:id}]}},mutations,supplierMutations,companyMutations,projectMutations,accountMutations,treasuryMutations,stage==='write'?{updateOtherPartyName:()=>delayed.promise}:s11Writer);
+ h.render(props);await flush();const pending=h.render(props).saveOtherPartyName(s11Command);await flush();assert.equal(await h.render(props).saveOtherPartyName(s11Command),false);
+ if(transition==='unmount')h.unmount();else if(transition==='logout')h.session(null);else {props={...props,...(transition==='company'?{activeCompanyId:'company-b'}:transition==='role'?{role:'MANAGEMENT_VIEWER'}:{userId:'user-b'})};if(transition==='user')h.session('user-b');h.render(props);await flush();}
+ delayed.resolve(stage==='write'?{ok:true,party:s11OtherParty}:{ok:true,data:[s11OtherParty]});assert.equal(await pending,false);
+ if(!['unmount','logout'].includes(transition)){assert.equal(h.render(props).otherPartyNameMutation.phase,'IDLE');if(transition==='company')assert.equal(h.state().parties[0].companyId,'company-b');}
+}
+let s11Reads=0,failOtherPartyRead=true;
+h=harness({readActiveCompanyParties:async()=>++s11Reads>1&&failOtherPartyRead?{ok:false,error:{source:'parties'}}:{ok:true,data:[s11OtherParty]}},mutations,supplierMutations,companyMutations,projectMutations,accountMutations,treasuryMutations,s11Writer);
+h.render(admin);await flush();assert.equal(await h.render(admin).saveOtherPartyName(s11Command),false);assert.equal(h.render(admin).otherPartyNameMutation.phase,'REFRESH_ERROR');assert.equal(await h.render(admin).refreshOtherPartyNames(),false);assert.equal(h.render(admin).otherPartyNameMutation.phase,'REFRESH_ERROR');
+const s11Before=s11Writes;failOtherPartyRead=false;assert.equal(await h.render(admin).refreshOtherPartyNames(),true);assert.equal(s11Writes,s11Before);
+for(const error of ['conflict','denied','uncertain']) {h=harness(s11Readers,mutations,supplierMutations,companyMutations,projectMutations,accountMutations,treasuryMutations,{updateOtherPartyName:async()=>({ok:false,error})});h.render(admin);await flush();assert.equal(await h.render(admin).saveOtherPartyName(s11Command),false);assert.equal(h.render(admin).otherPartyNameMutation.error,error);assert.equal(await h.render(admin).saveOtherPartyName(s11Command),false);assert.equal(await h.render(admin).refreshOtherPartyNames(),true);}
+
+console.log('Slice 11 OtherParty name repository/provider PASS: one-field payload, normalization, Unicode bounds, exact token, allowed/all denied roles, duplicate guard, late writes/reads across scope/session/unmount, selective refresh, conflict/uncertainty/known-commit recovery.');
+
+// Same-resource Supplier/OTHER operations serialize their writes and refreshes.
+const s11Gate=deferred();
+h=harness(s11Readers,mutations,supplierMutations,companyMutations,projectMutations,accountMutations,treasuryMutations,{updateOtherPartyName:()=>s11Gate.promise});
+h.render(admin);await flush();const s11Pending=h.render(admin).saveOtherPartyName(s11Command);await flush();
+assert.equal(await h.render(admin).refreshParties(),false);
+assert.equal(await h.render(admin).saveSupplierParty({kind:'edit',supplier:repositories.mapPartyRow(party),input:{}}),false);
+s11Gate.resolve({ok:true,party:s11OtherParty});assert.equal(await s11Pending,true);
+const s11SupplierGate=deferred();
+h=harness(s11Readers,mutations,{mutateSupplierParty:()=>s11SupplierGate.promise},companyMutations,projectMutations,accountMutations,treasuryMutations,s11Writer);
+h.render(admin);await flush();const s11SupplierPending=h.render(admin).saveSupplierParty({kind:'edit',supplier:repositories.mapPartyRow(party),input:{}});await flush();
+assert.equal(await h.render(admin).saveOtherPartyName(s11Command),false);assert.equal(await h.render(admin).refreshOtherPartyNames(),false);
+s11SupplierGate.resolve({ok:true,supplier:repositories.mapPartyRow(party)});assert.equal(await s11SupplierPending,true);
+console.log('Slice 11 shared Party resource serialization PASS.');

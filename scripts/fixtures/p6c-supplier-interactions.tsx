@@ -10,6 +10,8 @@ import '/src/index.css';
 const audit = { created_at: '2026-09-13T00:00:00.123456+00:00', updated_at: '2026-09-13T00:00:00.123456+00:00', created_by: 'user-a', updated_by: 'user-a' };
 const makeParty = (id, type = 'SUPPLIER') => ({ ...audit, id, company_id: 'company-a', type, name: id, code: id, trn: '001234', contact_person: 'Contact', phone: '+001', email: null, address: null, notes: null, status: 'ACTIVE' });
 const rows = Array.from({ length: 20 }, (_, i) => makeParty(`Supplier-${i.toString().padStart(2, '0')}`));
+rows[0].name='A'.repeat(200);
+rows[1].name='ع'.repeat(200);
 rows.push(makeParty('Other-row', 'OTHER'));
 let serial = 0;
 let scope = { userId: 'user-a', companyId: 'company-a', role: 'ACCOUNTING_ADMIN', signedIn: true };

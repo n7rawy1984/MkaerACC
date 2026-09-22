@@ -2,6 +2,20 @@
 // location in this file mirrors where it's used. ar.ts must define exactly the same key set —
 // see i18n/I18nContext.tsx for the lookup/fallback behavior and translation-key discipline notes.
 const en = {
+  "otherPartyName.edit": "Edit OTHER party name",
+  "otherPartyName.name": "OTHER party name",
+  "otherPartyName.scope": "Name is required (up to 200 characters). OTHER party configuration stays unchanged.",
+  "otherPartyName.save": "Save OTHER party name",
+  "otherPartyName.close": "Close",
+  "otherPartyName.refresh": "Refresh OTHER party records",
+  "otherPartyName.pending": "Updating OTHER party name…",
+  "otherPartyName.saved": "OTHER party name saved.",
+  "otherPartyName.invalid": "Enter an OTHER party name of 1–200 characters.",
+  "otherPartyName.denied": "You no longer have access to rename this OTHER party.",
+  "otherPartyName.conflict": "This OTHER party changed or is no longer available.",
+  "otherPartyName.uncertain": "The result could not be confirmed.",
+  "otherPartyName.refreshRequired": "Refresh and review before trying again.",
+  "otherPartyName.refreshError": "The name was saved, but OTHER party records could not be refreshed. Refresh to review before another change.",
   "treasuryName.edit": "Edit treasury name",
   "treasuryName.name": "Treasury name",
   "treasuryName.scope": "Name is required (up to 200 characters). Treasury configuration stays unchanged.",

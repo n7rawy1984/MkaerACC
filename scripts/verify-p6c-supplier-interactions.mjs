@@ -127,7 +127,8 @@ try {
     const creation=(await log()).find(x=>x.kind==='insert');
     assert(!('type' in creation.payload));assert(!('status' in creation.payload));assert.equal(creation.payload.company_id,'company-a');
     const other=page.getByRole('listitem').filter({has:page.getByText('Other-row · Other-row',{exact:true})});
-    assert.equal(await other.getByRole('button').count(),0);
+    assert.equal(await other.getByRole('button',{name:/^supplierMutation\./}).count(),0);
+    assert.equal(await other.getByRole('button',{name:'otherPartyName.edit',exact:true}).count(),1);
     // Unchanged rerender/focus keeps draft and snapshot. No authority handler is replaced in production.
     await editButton.click(); await form.waitFor();
     await form.locator('[name="name"]').fill('Unsaved draft');await clearLog();
