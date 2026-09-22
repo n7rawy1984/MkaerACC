@@ -24,7 +24,7 @@ export function EmployeePartyNameControl({ party, selected, onSelect }: { party:
   }, [phase, selected]);
   if (master.phase !== "READY" || state.phase !== "TENANT_READY") return null;
   const canEdit = party.type === "EMPLOYEE" && state.activeTenant.role === "ACCOUNTING_ADMIN";
-  const blocked = master.supplierMutation.phase === "PENDING" || master.ownerPartyNameMutation.phase === "PENDING" || master.custodianPartyNameMutation.phase === "PENDING" || master.otherPartyNameMutation.phase === "PENDING" || phase === "PENDING" || phase === "ERROR" || phase === "REFRESH_ERROR";
+  const blocked = master.subcontractorPartyNameMutation.phase === "PENDING" || master.supplierMutation.phase === "PENDING" || master.ownerPartyNameMutation.phase === "PENDING" || master.custodianPartyNameMutation.phase === "PENDING" || master.otherPartyNameMutation.phase === "PENDING" || phase === "PENDING" || phase === "ERROR" || phase === "REFRESH_ERROR";
   const close = () => { restoreFocus.current = true; setEditing(null); };
   const refresh = () => { close(); void master.refreshEmployeePartyNames(); };
   const message = <div ref={feedback} tabIndex={-1} className="mt-3 text-sm">

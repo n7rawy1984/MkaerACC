@@ -2,6 +2,7 @@ import type { OtherPartyNameCommand, OtherPartyNameMutationError } from "./other
 import type { EmployeePartyNameCommand, EmployeePartyNameMutationError } from "./employeePartyNameMutations";
 import type { CustodianPartyNameCommand, CustodianPartyNameMutationError } from "./custodianPartyNameMutations";
 import type { OwnerPartyNameCommand, OwnerPartyNameMutationError } from "./ownerPartyNameMutations";
+import type { SubcontractorPartyNameCommand, SubcontractorPartyNameMutationError } from "./subcontractorPartyNameMutations";
 import type { TreasuryNameCommand, TreasuryNameMutationError } from "./treasuryNameMutations";
 import type { AccountNameCommand, AccountNameMutationError } from "./accountNameMutations";
 import type { ProjectMetadataCommand, ProjectMetadataMutationError } from "./projectMetadataMutations";
@@ -60,7 +61,12 @@ export interface OwnerPartyNameActions {
   saveOwnerPartyName: (command: OwnerPartyNameCommand) => Promise<boolean>;
   refreshOwnerPartyNames: () => Promise<boolean>;
 }
-export type ProductionMasterDataContextValue = ProductionMasterDataState & CategoryActions & SupplierActions & CompanyProfileActions & ProjectMetadataActions & AccountNameActions & TreasuryNameActions & OtherPartyNameActions & EmployeePartyNameActions & CustodianPartyNameActions & OwnerPartyNameActions;
+export interface SubcontractorPartyNameActions {
+  subcontractorPartyNameMutation: { phase: "IDLE" | "PENDING" | "SAVED" | "ERROR" | "REFRESH_ERROR"; error?: SubcontractorPartyNameMutationError };
+  saveSubcontractorPartyName: (command: SubcontractorPartyNameCommand) => Promise<boolean>;
+  refreshSubcontractorPartyNames: () => Promise<boolean>;
+}
+export type ProductionMasterDataContextValue = ProductionMasterDataState & CategoryActions & SupplierActions & CompanyProfileActions & ProjectMetadataActions & AccountNameActions & TreasuryNameActions & OtherPartyNameActions & EmployeePartyNameActions & CustodianPartyNameActions & OwnerPartyNameActions & SubcontractorPartyNameActions;
 
 export type ProductionCompanyStatus = Database["public"]["Enums"]["account_status"];
 export type ProductionProjectStatus = Database["public"]["Enums"]["project_status"];

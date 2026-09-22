@@ -21,6 +21,7 @@ const otherPartyMutations = moduleAt("src/master/otherPartyNameMutations.ts", { 
 const employeePartyMutations = moduleAt("src/master/employeePartyNameMutations.ts", { "./masterRepositories": repositories });
 const custodianPartyMutations = moduleAt("src/master/custodianPartyNameMutations.ts", { "./masterRepositories": repositories });
 const ownerPartyMutations = moduleAt("src/master/ownerPartyNameMutations.ts", { "./masterRepositories": repositories });
+const subcontractorPartyMutations = moduleAt("src/master/subcontractorPartyNameMutations.ts", { "./masterRepositories": repositories });
 const treasuryMutations = moduleAt("src/master/treasuryNameMutations.ts", { "./masterRepositories": repositories });
 const accountMutations = moduleAt("src/master/accountNameMutations.ts", { "./masterRepositories": repositories });
 const projectMutations = moduleAt("src/master/projectMetadataMutations.ts", { "./masterRepositories": repositories });
@@ -153,7 +154,7 @@ function harness(overrides = {}, writer = mutations, supplierWriter = supplierMu
   for (const [key, fn] of Object.entries(readers)) readers[key] = (...args) => { calls++; return fn(...args); };
   const { ProductionMasterDataProvider } = moduleAt("src/master/ProductionMasterDataProvider.tsx", {
     react: hooks, "react/jsx-runtime": { jsx: (_type, props) => props.value },
-    "./ownerPartyNameMutations": ownerPartyMutations, "./custodianPartyNameMutations": custodianPartyMutations, "./employeePartyNameMutations": employeePartyMutations, "./otherPartyNameMutations": otherPartyWriter, "./treasuryNameMutations": treasuryWriter, "./accountNameMutations": accountWriter, "./projectMetadataMutations": projectWriter, "./companyProfileMutations": companyWriter, "./supplierPartyMutations": supplierWriter, "./expenseCategoryMutations": writer, "./masterRepositories": readers, "./productionMasterDataContext": { ProductionMasterDataContext: { Provider: "provider" } },
+    "./ownerPartyNameMutations": ownerPartyMutations, "./subcontractorPartyNameMutations": subcontractorPartyMutations, "./custodianPartyNameMutations": custodianPartyMutations, "./employeePartyNameMutations": employeePartyMutations, "./otherPartyNameMutations": otherPartyWriter, "./treasuryNameMutations": treasuryWriter, "./accountNameMutations": accountWriter, "./projectMetadataMutations": projectWriter, "./companyProfileMutations": companyWriter, "./supplierPartyMutations": supplierWriter, "./expenseCategoryMutations": writer, "./masterRepositories": readers, "./productionMasterDataContext": { ProductionMasterDataContext: { Provider: "provider" } },
   });
   let userId = "user-a";
   const client = { auth: { getSession: async () => ({ data: { session: userId ? { user: { id: userId } } : null }, error: null }) } };
@@ -508,11 +509,12 @@ for (const role of ["ACCOUNTING_ADMIN", "PROCUREMENT", "ACCOUNTANT", "DATA_ENTRY
     const { PartiesList } = moduleAt("src/master/PartiesList.tsx", {
       "../auth/AuthContext": { useAuth: () => ({ state: { phase: "TENANT_READY", activeTenant: { role } } }) },
       "../i18n/I18nContext": { useT: () => (key) => key },
-      "./productionMasterDataContext": { useProductionMasterData: () => ({ phase: "READY", parties: [{ ...currentSupplier, type }], supplierMutation: { phase: "IDLE" }, otherPartyNameMutation: { phase: "IDLE" }, employeePartyNameMutation: { phase: "IDLE" }, custodianPartyNameMutation: { phase: "IDLE" }, ownerPartyNameMutation: { phase: "IDLE" } }) },
+      "./productionMasterDataContext": { useProductionMasterData: () => ({ phase: "READY", parties: [{ ...currentSupplier, type }], supplierMutation: { phase: "IDLE" }, otherPartyNameMutation: { phase: "IDLE" }, employeePartyNameMutation: { phase: "IDLE" }, custodianPartyNameMutation: { phase: "IDLE" }, ownerPartyNameMutation: { phase: "IDLE" }, subcontractorPartyNameMutation: { phase: "IDLE" } }) },
       "./OtherPartyNameControl": { OtherPartyNameControl: () => null }, // New control has separate real Chromium coverage.
       "./EmployeePartyNameControl": { EmployeePartyNameControl: () => null }, // New control has separate real Chromium coverage.
       "./CustodianPartyNameControl": { CustodianPartyNameControl: () => null }, // New control has separate real Chromium coverage.
-      "./OwnerPartyNameControl": { OwnerPartyNameControl: () => null }, // New control has separate real Chromium coverage.
+      "./OwnerPartyNameControl": { OwnerPartyNameControl: () => null }, // Separate real Chromium coverage.
+      "./SubcontractorPartyNameControl": { SubcontractorPartyNameControl: () => null }, // Separate real Chromium coverage.
       "./SupplierPartyForm": supplierFormModule,
     });
     const html = renderToStaticMarkup(createElement(PartiesList));
