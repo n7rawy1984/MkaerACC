@@ -24,7 +24,7 @@ export function OtherPartyNameControl({ party, selected, onSelect }: { party: Pr
   }, [phase, selected]);
   if (master.phase !== "READY" || state.phase !== "TENANT_READY") return null;
   const canEdit = party.type === "OTHER" && (state.activeTenant.role === "ACCOUNTING_ADMIN" || state.activeTenant.role === "PROCUREMENT");
-  const blocked = master.supplierMutation.phase === "PENDING" || phase === "PENDING" || phase === "ERROR" || phase === "REFRESH_ERROR";
+  const blocked = master.supplierMutation.phase === "PENDING" || master.employeePartyNameMutation.phase === "PENDING" || phase === "PENDING" || phase === "ERROR" || phase === "REFRESH_ERROR";
   const close = () => { restoreFocus.current = true; setEditing(null); };
   const refresh = () => { close(); void master.refreshOtherPartyNames(); };
   const message = <div ref={feedback} tabIndex={-1} className="mt-3 text-sm">

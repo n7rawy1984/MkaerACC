@@ -68,14 +68,16 @@ for (const file of masterFiles) {
   }
   const isCategoryMutation = file === resolve(masterRoot, "expenseCategoryMutations.ts");
   const isOtherPartyMutation = file === resolve(masterRoot, "otherPartyNameMutations.ts");
+  const isEmployeePartyMutation = file === resolve(masterRoot, "employeePartyNameMutations.ts");
   const isTreasuryMutation = file === resolve(masterRoot, "treasuryNameMutations.ts");
   const isAccountMutation = file === resolve(masterRoot, "accountNameMutations.ts");
   const isProjectMutation = file === resolve(masterRoot, "projectMetadataMutations.ts");
   const isCompanyMutation = file === resolve(masterRoot, "companyProfileMutations.ts");
   const isSupplierMutation = file === resolve(masterRoot, "supplierPartyMutations.ts");
-  if (/\.(upsert|delete|rpc)\s*\(/.test(source) || (!isCategoryMutation && !isSupplierMutation && !isCompanyMutation && !isProjectMutation && !isAccountMutation && !isTreasuryMutation && !isOtherPartyMutation && /\.(insert|update)\s*\(/.test(source))) throw new Error(`Mutation/RPC outside approved repositories: ${file}`);
+  if (/\.(upsert|delete|rpc)\s*\(/.test(source) || (!isCategoryMutation && !isSupplierMutation && !isCompanyMutation && !isProjectMutation && !isAccountMutation && !isTreasuryMutation && !isOtherPartyMutation && !isEmployeePartyMutation && /\.(insert|update)\s*\(/.test(source))) throw new Error(`Mutation/RPC outside approved repositories: ${file}`);
   if (isAccountMutation && (/\.insert\s*\(/.test(source) || [...source.matchAll(/\.from\(["']([^"']+)["']\)/g)].some((m) => m[1] !== "accounts"))) throw new Error("Account writer exceeds name UPDATE boundary");
   if (isOtherPartyMutation && (/\.insert\s*\(/.test(source) || [...source.matchAll(/\.from\(["']([^"']+)["']\)/g)].some((m) => m[1] !== "parties"))) throw new Error("OTHER Party writer exceeds name UPDATE boundary");
+  if (isEmployeePartyMutation && (/\.insert\s*\(/.test(source) || [...source.matchAll(/\.from\(["']([^"']+)["']\)/g)].some((m) => m[1] !== "parties"))) throw new Error("EMPLOYEE Party writer exceeds name UPDATE boundary");
   if (isTreasuryMutation && (/\.insert\s*\(/.test(source) || [...source.matchAll(/\.from\(["']([^"']+)["']\)/g)].some((m) => m[1] !== "treasury_accounts"))) throw new Error("Treasury writer exceeds name UPDATE boundary");
   if (isProjectMutation && (/\.insert\s*\(/.test(source) || [...source.matchAll(/\.from\(["']([^"']+)["']\)/g)].some((m) => m[1] !== "projects"))) throw new Error("Project writer exceeds metadata UPDATE boundary");
   if (isCompanyMutation && (/\.insert\s*\(/.test(source) || [...source.matchAll(/\.from\(["']([^"']+)["']\)/g)].some((m) => m[1] !== "companies"))) throw new Error("Company writer exceeds metadata UPDATE boundary");

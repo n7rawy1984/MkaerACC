@@ -18,6 +18,7 @@ function moduleAt(path, mocks = {}) {
 const repositories = moduleAt("src/master/masterRepositories.ts");
 const mutations = moduleAt("src/master/expenseCategoryMutations.ts", { "./masterRepositories": repositories });
 const otherPartyMutations = moduleAt("src/master/otherPartyNameMutations.ts", { "./masterRepositories": repositories });
+const employeePartyMutations = moduleAt("src/master/employeePartyNameMutations.ts", { "./masterRepositories": repositories });
 const treasuryMutations = moduleAt("src/master/treasuryNameMutations.ts", { "./masterRepositories": repositories });
 const accountMutations = moduleAt("src/master/accountNameMutations.ts", { "./masterRepositories": repositories });
 const projectMutations = moduleAt("src/master/projectMetadataMutations.ts", { "./masterRepositories": repositories });
@@ -150,7 +151,7 @@ function harness(overrides = {}, writer = mutations, supplierWriter = supplierMu
   for (const [key, fn] of Object.entries(readers)) readers[key] = (...args) => { calls++; return fn(...args); };
   const { ProductionMasterDataProvider } = moduleAt("src/master/ProductionMasterDataProvider.tsx", {
     react: hooks, "react/jsx-runtime": { jsx: (_type, props) => props.value },
-    "./otherPartyNameMutations": otherPartyWriter, "./treasuryNameMutations": treasuryWriter, "./accountNameMutations": accountWriter, "./projectMetadataMutations": projectWriter, "./companyProfileMutations": companyWriter, "./supplierPartyMutations": supplierWriter, "./expenseCategoryMutations": writer, "./masterRepositories": readers, "./productionMasterDataContext": { ProductionMasterDataContext: { Provider: "provider" } },
+    "./employeePartyNameMutations": employeePartyMutations, "./otherPartyNameMutations": otherPartyWriter, "./treasuryNameMutations": treasuryWriter, "./accountNameMutations": accountWriter, "./projectMetadataMutations": projectWriter, "./companyProfileMutations": companyWriter, "./supplierPartyMutations": supplierWriter, "./expenseCategoryMutations": writer, "./masterRepositories": readers, "./productionMasterDataContext": { ProductionMasterDataContext: { Provider: "provider" } },
   });
   let userId = "user-a";
   const client = { auth: { getSession: async () => ({ data: { session: userId ? { user: { id: userId } } : null }, error: null }) } };
@@ -505,8 +506,9 @@ for (const role of ["ACCOUNTING_ADMIN", "PROCUREMENT", "ACCOUNTANT", "DATA_ENTRY
     const { PartiesList } = moduleAt("src/master/PartiesList.tsx", {
       "../auth/AuthContext": { useAuth: () => ({ state: { phase: "TENANT_READY", activeTenant: { role } } }) },
       "../i18n/I18nContext": { useT: () => (key) => key },
-      "./productionMasterDataContext": { useProductionMasterData: () => ({ phase: "READY", parties: [{ ...currentSupplier, type }], supplierMutation: { phase: "IDLE" }, otherPartyNameMutation: { phase: "IDLE" } }) },
+      "./productionMasterDataContext": { useProductionMasterData: () => ({ phase: "READY", parties: [{ ...currentSupplier, type }], supplierMutation: { phase: "IDLE" }, otherPartyNameMutation: { phase: "IDLE" }, employeePartyNameMutation: { phase: "IDLE" } }) },
       "./OtherPartyNameControl": { OtherPartyNameControl: () => null }, // New control has separate real Chromium coverage.
+      "./EmployeePartyNameControl": { EmployeePartyNameControl: () => null }, // New control has separate real Chromium coverage.
       "./SupplierPartyForm": supplierFormModule,
     });
     const html = renderToStaticMarkup(createElement(PartiesList));
