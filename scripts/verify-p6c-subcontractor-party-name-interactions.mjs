@@ -59,7 +59,8 @@ try {
  await page.getByRole('button',{name:'Show subcontract display',exact:true}).click();
  const subcontractView=page.locator('ul').filter({hasText:'Read-only display test'});await subcontractView.waitFor();
  assert((await subcontractView.textContent()).includes('A'.repeat(200)));assert((await subcontractView.textContent()).includes('0001'));
- assert.equal(await subcontractView.locator('button,input,form').count(),0);
+ assert.equal(await subcontractView.getByRole('button',{name:'Edit Subcontract details',exact:true}).count(),1);
+ assert.equal(await subcontractView.locator('input,form').count(),0);
  await page.getByRole('button',{name:'Show subcontract display',exact:true}).click();
  await open();await form().locator('[name="name"]').fill('Draft retained');await resetLog();
  await page.evaluate(()=>{window.dispatchEvent(new Event('focus'));document.dispatchEvent(new Event('visibilitychange'));});

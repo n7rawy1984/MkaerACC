@@ -10,6 +10,7 @@ import type { CompanyProfileCommand, CompanyProfileMutationError } from "./compa
 import type { SupplierMutationError, SupplierPartyCommand } from "./supplierPartyMutations";
 import type { Database } from "../types/database.generated";
 import type { CategoryMutationError, ExpenseCategoryCommand } from "./expenseCategoryMutations";
+import type { SubcontractMetadataCommand, SubcontractMetadataMutationError } from "./subcontractMetadataMutations";
 
 export interface CategoryActions {
   categoryMutation: { phase: "IDLE" | "PENDING" | "SAVED" | "ERROR" | "REFRESH_ERROR"; error?: CategoryMutationError };
@@ -66,7 +67,12 @@ export interface SubcontractorPartyNameActions {
   saveSubcontractorPartyName: (command: SubcontractorPartyNameCommand) => Promise<boolean>;
   refreshSubcontractorPartyNames: () => Promise<boolean>;
 }
-export type ProductionMasterDataContextValue = ProductionMasterDataState & CategoryActions & SupplierActions & CompanyProfileActions & ProjectMetadataActions & AccountNameActions & TreasuryNameActions & OtherPartyNameActions & EmployeePartyNameActions & CustodianPartyNameActions & OwnerPartyNameActions & SubcontractorPartyNameActions;
+export interface SubcontractMetadataActions {
+  subcontractMetadataMutation: { phase: "IDLE" | "PENDING" | "SAVED" | "ERROR" | "REFRESH_ERROR"; error?: SubcontractMetadataMutationError };
+  saveSubcontractMetadata: (command: SubcontractMetadataCommand) => Promise<boolean>;
+  refreshSubcontracts: () => Promise<boolean>;
+}
+export type ProductionMasterDataContextValue = ProductionMasterDataState & CategoryActions & SupplierActions & CompanyProfileActions & ProjectMetadataActions & AccountNameActions & TreasuryNameActions & OtherPartyNameActions & EmployeePartyNameActions & CustodianPartyNameActions & OwnerPartyNameActions & SubcontractorPartyNameActions & SubcontractMetadataActions;
 
 export type ProductionCompanyStatus = Database["public"]["Enums"]["account_status"];
 export type ProductionProjectStatus = Database["public"]["Enums"]["project_status"];

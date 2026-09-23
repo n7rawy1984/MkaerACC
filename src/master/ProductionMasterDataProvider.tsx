@@ -7,11 +7,12 @@ import { updateTreasuryName, type TreasuryNameCommand } from "./treasuryNameMuta
 import { updateAccountName, type AccountNameCommand } from "./accountNameMutations";
 import { updateProjectMetadata, type ProjectMetadataCommand } from "./projectMetadataMutations";
 import { updateCompanyProfile, type CompanyProfileCommand } from "./companyProfileMutations";
+import { updateSubcontractMetadata, type SubcontractMetadataCommand } from "./subcontractMetadataMutations";
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "../types/database.generated";
 import { readActiveCompanyProfile, readActiveCompanyProjects, readActiveCompanyParties, readActiveCompanyExpenseCategories, readActiveCompanyAccounts, readActiveCompanyTreasuryAccounts, readActiveCompanySubcontracts } from "./masterRepositories";
-import type { CategoryActions, SupplierActions, CompanyProfileActions, ProjectMetadataActions, AccountNameActions, TreasuryNameActions, OtherPartyNameActions, EmployeePartyNameActions, CustodianPartyNameActions, OwnerPartyNameActions, SubcontractorPartyNameActions, ProductionMasterDataState } from "./masterTypes";
+import type { CategoryActions, SupplierActions, CompanyProfileActions, ProjectMetadataActions, AccountNameActions, TreasuryNameActions, OtherPartyNameActions, EmployeePartyNameActions, CustodianPartyNameActions, OwnerPartyNameActions, SubcontractorPartyNameActions, SubcontractMetadataActions, ProductionMasterDataState } from "./masterTypes";
 import { mutateExpenseCategory, type ExpenseCategoryCommand } from "./expenseCategoryMutations";
 import { mutateSupplierParty, type SupplierPartyCommand } from "./supplierPartyMutations";
 import { ProductionMasterDataContext } from "./productionMasterDataContext";
@@ -72,10 +73,13 @@ export function ProductionMasterDataProvider({ client, userId, activeCompanyId, 
   const subcontractorPartyLock = useRef(false);
   const subcontractorPartyGeneration = useRef(0);
   const [subcontractorPartyState, setSubcontractorPartyState] = useState<{ scopeKey: string; value: SubcontractorPartyNameActions["subcontractorPartyNameMutation"] }>({ scopeKey, value: { phase: "IDLE" } });
+  const subcontractLock = useRef(false);
+  const subcontractGeneration = useRef(0);
+  const [subcontractState, setSubcontractState] = useState<{ scopeKey: string; value: SubcontractMetadataActions["subcontractMetadataMutation"] }>({ scopeKey, value: { phase: "IDLE" } });
 
   useLayoutEffect(() => {
     liveScope.current = scopeKey;
-    return () => { categoryGeneration.current += 1; supplierGeneration.current += 1; companyGeneration.current += 1; projectGeneration.current += 1; accountGeneration.current += 1; treasuryGeneration.current += 1; otherPartyGeneration.current += 1; employeePartyGeneration.current += 1; custodianPartyGeneration.current += 1; ownerPartyGeneration.current += 1; subcontractorPartyGeneration.current += 1; };
+    return () => { categoryGeneration.current += 1; supplierGeneration.current += 1; companyGeneration.current += 1; projectGeneration.current += 1; accountGeneration.current += 1; treasuryGeneration.current += 1; otherPartyGeneration.current += 1; employeePartyGeneration.current += 1; custodianPartyGeneration.current += 1; ownerPartyGeneration.current += 1; subcontractorPartyGeneration.current += 1; subcontractGeneration.current += 1; };
   }, [scopeKey]);
 
   useEffect(() => {
@@ -91,6 +95,7 @@ export function ProductionMasterDataProvider({ client, userId, activeCompanyId, 
     custodianPartyLock.current = false;
     ownerPartyLock.current = false;
     subcontractorPartyLock.current = false;
+    subcontractLock.current = false;
     let mounted = true;
 
     const isCurrent = () => mounted && requestGeneration.current === generation;
@@ -598,7 +603,47 @@ export function ProductionMasterDataProvider({ client, userId, activeCompanyId, 
       if (current()) subcontractorPartyLock.current = false;
     }
   };
-  return <ProductionMasterDataContext.Provider value={{ ...visibleState, categoryMutation, supplierMutation, companyProfileMutation, projectMetadataMutation, accountNameMutation, treasuryNameMutation, otherPartyNameMutation, employeePartyNameMutation, custodianPartyNameMutation, ownerPartyNameMutation, subcontractorPartyNameMutation,
+  const subcontractMetadataMutation = subcontractState.scopeKey === scopeKey ? subcontractState.value : { phase: "IDLE" } as const;
+  const runSubcontractOperation = async (command?: SubcontractMetadataCommand): Promise<boolean> => {
+    if (visibleState.phase !== "READY" || subcontractLock.current || liveScope.current !== scopeKey
+      || (command && ((role !== "ACCOUNTING_ADMIN" && role !== "PROCUREMENT") || subcontractMetadataMutation.phase === "ERROR" || subcontractMetadataMutation.phase === "REFRESH_ERROR"))) return false;
+    subcontractLock.current = true;
+    const generation = requestGeneration.current;
+    const operation = ++subcontractGeneration.current;
+    const current = () => liveScope.current === scopeKey && requestGeneration.current === generation && subcontractGeneration.current === operation;
+    const feedback = (value: SubcontractMetadataActions["subcontractMetadataMutation"]) => { if (current()) setSubcontractState({ scopeKey, value }); };
+    const validSession = async () => {
+      const { data, error } = await client.auth.getSession();
+      return current() && !error && data.session?.user.id === userId;
+    };
+    feedback({ phase: "PENDING" });
+    let saved = !command && subcontractMetadataMutation.phase === "REFRESH_ERROR";
+    try {
+      if (!await validSession()) { feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "denied" }); return false; }
+      if (command) {
+        const result = await updateSubcontractMetadata(client, activeCompanyId, command);
+        if (result.ok) saved = true;
+        if (!await validSession()) { feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "denied" }); return false; }
+        if (!result.ok) { feedback({ phase: "ERROR", error: result.error }); return false; }
+      }
+      // Refresh only Subcontracts; Project and Party labels remain scoped snapshots.
+      const refreshed = await readActiveCompanySubcontracts(client, activeCompanyId);
+      if (!await validSession()) { feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "denied" }); return false; }
+      if (!refreshed.ok) { feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "uncertain" }); return false; }
+      setScopedState(previous => previous.scopeKey === scopeKey && previous.state.phase === "READY"
+        ? { scopeKey, state: { ...previous.state, subcontracts: refreshed.data } } : previous);
+      feedback({ phase: saved ? "SAVED" : "IDLE" });
+      return true;
+    } catch {
+      feedback(saved ? { phase: "REFRESH_ERROR" } : { phase: "ERROR", error: "uncertain" });
+      return false;
+    } finally {
+      if (current()) subcontractLock.current = false;
+    }
+  };
+  return <ProductionMasterDataContext.Provider value={{ ...visibleState, categoryMutation, supplierMutation, companyProfileMutation, projectMetadataMutation, accountNameMutation, treasuryNameMutation, otherPartyNameMutation, employeePartyNameMutation, custodianPartyNameMutation, ownerPartyNameMutation, subcontractorPartyNameMutation, subcontractMetadataMutation,
+    saveSubcontractMetadata: runSubcontractOperation,
+    refreshSubcontracts: () => runSubcontractOperation(),
     saveSubcontractorPartyName: runSubcontractorPartyOperation,
     refreshSubcontractorPartyNames: () => runSubcontractorPartyOperation(),
     saveOwnerPartyName: runOwnerPartyOperation,

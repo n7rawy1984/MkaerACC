@@ -27,6 +27,7 @@ const accountMutations = moduleAt("src/master/accountNameMutations.ts", { "./mas
 const projectMutations = moduleAt("src/master/projectMetadataMutations.ts", { "./masterRepositories": repositories });
 const companyMutations = moduleAt("src/master/companyProfileMutations.ts", { "./masterRepositories": repositories });
 const supplierMutations = moduleAt("src/master/supplierPartyMutations.ts", { "./masterRepositories": repositories });
+const subcontractMetadataMutations = moduleAt("src/master/subcontractMetadataMutations.ts", { "./masterRepositories": repositories });
 const audit = { created_at: "2026-09-12T00:00:00Z", created_by: null, updated_at: "2026-09-12T01:00:00Z", updated_by: "actor" };
 const party = { ...audit, id: "party-a", company_id: "company-a", type: "SUPPLIER", name: "مورد", code: null, trn: "001234567890123", contact_person: "Contact", phone: null, email: null, address: null, status: "INACTIVE", notes: null };
 const category = { ...audit, id: "category-a", company_id: "company-a", name: "Materials", code: "MAT", description: null, status: "INACTIVE" };
@@ -154,7 +155,7 @@ function harness(overrides = {}, writer = mutations, supplierWriter = supplierMu
   for (const [key, fn] of Object.entries(readers)) readers[key] = (...args) => { calls++; return fn(...args); };
   const { ProductionMasterDataProvider } = moduleAt("src/master/ProductionMasterDataProvider.tsx", {
     react: hooks, "react/jsx-runtime": { jsx: (_type, props) => props.value },
-    "./ownerPartyNameMutations": ownerPartyMutations, "./subcontractorPartyNameMutations": subcontractorPartyMutations, "./custodianPartyNameMutations": custodianPartyMutations, "./employeePartyNameMutations": employeePartyMutations, "./otherPartyNameMutations": otherPartyWriter, "./treasuryNameMutations": treasuryWriter, "./accountNameMutations": accountWriter, "./projectMetadataMutations": projectWriter, "./companyProfileMutations": companyWriter, "./supplierPartyMutations": supplierWriter, "./expenseCategoryMutations": writer, "./masterRepositories": readers, "./productionMasterDataContext": { ProductionMasterDataContext: { Provider: "provider" } },
+    "./subcontractMetadataMutations": subcontractMetadataMutations, "./ownerPartyNameMutations": ownerPartyMutations, "./subcontractorPartyNameMutations": subcontractorPartyMutations, "./custodianPartyNameMutations": custodianPartyMutations, "./employeePartyNameMutations": employeePartyMutations, "./otherPartyNameMutations": otherPartyWriter, "./treasuryNameMutations": treasuryWriter, "./accountNameMutations": accountWriter, "./projectMetadataMutations": projectWriter, "./companyProfileMutations": companyWriter, "./supplierPartyMutations": supplierWriter, "./expenseCategoryMutations": writer, "./masterRepositories": readers, "./productionMasterDataContext": { ProductionMasterDataContext: { Provider: "provider" } },
   });
   let userId = "user-a";
   const client = { auth: { getSession: async () => ({ data: { session: userId ? { user: { id: userId } } : null }, error: null }) } };
@@ -260,18 +261,24 @@ assert(renderToStaticMarkup(createElement(AccountsList, { accounts: [] })).inclu
 assert(renderToStaticMarkup(createElement(TreasuryAccountsList, { accounts: [], treasuryAccounts: [] })).includes("productionMaster.treasuryAccountsEmpty"));
 console.log("P6C Slice 3 list rendering checks passed (references, hidden details, system flag, empty, no mutation controls).");
 
+let contractState = { subcontracts: [], projects: [], parties: [] };
 const { SubcontractsList } = moduleAt("src/master/SubcontractsList.tsx", {
+  "../auth/AuthContext": { useAuth: () => ({ state: { phase: "TENANT_READY", activeTenant: { role: "ACCOUNTANT" } } }) },
   "../i18n/I18nContext": { useT: () => (key) => key },
+  "./SubcontractMetadataForm": { SubcontractMetadataForm: () => null },
+  "./productionMasterDataContext": { useProductionMasterData: () => ({ phase: "READY", ...contractState, subcontractMetadataMutation: { phase: "IDLE" }, refreshSubcontracts: async () => true, saveSubcontractMetadata: async () => true }) },
 });
-const contractMarkup = (projects = [], parties = [], extra = {}) => renderToStaticMarkup(createElement(SubcontractsList, {
-  subcontracts: [repositories.mapSubcontractRow({ ...subcontract, ...extra })], projects, parties,
-}));
+const contractMarkup = (projects = [], parties = [], extra = {}) => {
+  contractState = { subcontracts: [repositories.mapSubcontractRow({ ...subcontract, ...extra })], projects, parties };
+  return renderToStaticMarkup(createElement(SubcontractsList));
+};
 const hiddenContract = contractMarkup();
 for (const text of ["000123", "أعمال الخرسانة", "project-a", "party-a", "9223372036854775807", "-9007199254740993", "1.25%", "productionMaster.subcontractStatus.CLOSED", "productionMaster.projectDetailsUnavailable", "productionMaster.partyDetailsUnavailable"]) assert(hiddenContract.includes(text), text);
 assert(!hiddenContract.includes("productionMaster.startDate"));
 assert(!hiddenContract.includes("productionMaster.expectedEndDate"));
 assert(!hiddenContract.includes("productionMaster.notes"));
-assert(!/<(?:button|input|form)\b/.test(hiddenContract));
+assert(!/<(?:input|form)\b/.test(hiddenContract));
+assert(!hiddenContract.includes("subcontractMetadata.edit"));
 const visibleProject = { id: "project-a", companyId: "company-a", code: "P-1", name: "Visible Project" };
 const visibleParty = { ...repositories.mapPartyRow(party), type: "SUBCONTRACTOR" };
 assert(contractMarkup([visibleProject], [visibleParty]).includes("Visible Project"));
@@ -279,7 +286,8 @@ assert(contractMarkup([visibleProject], [visibleParty]).includes("مورد"));
 const wrongCompany = contractMarkup([{ ...visibleProject, companyId: "company-b" }], [{ ...visibleParty, companyId: "company-b" }]);
 assert(!wrongCompany.includes("Visible Project")); assert(!wrongCompany.includes("مورد"));
 for (const [retention_bps, text] of [[0, "0.00%"], [1, "0.01%"], [10000, "100.00%"]]) assert(contractMarkup([], [], { retention_bps }).includes(text));
-assert(renderToStaticMarkup(createElement(SubcontractsList, { subcontracts: [], projects: [], parties: [] })).includes("productionMaster.subcontractsEmpty"));
+contractState = { subcontracts: [], projects: [], parties: [] };
+assert(renderToStaticMarkup(createElement(SubcontractsList)).includes("productionMaster.subcontractsEmpty"));
 h = harness({ readActiveCompanySubcontracts: async () => ({ ok: true, data: [repositories.mapSubcontractRow(subcontract)] }) });
 h.render({ role: "PROJECT_MANAGER" }); await flush();
 assert.equal(h.render({ role: "PROJECT_MANAGER" }).subcontracts[0].subcontractorId, "party-a");

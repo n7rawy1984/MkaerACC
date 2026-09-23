@@ -64,8 +64,8 @@ export default function TenantReadyApplication({ view }: { view: "companyProfile
             {masterData.phase === "LOADING" && <p role="status" className="mt-4 text-sm text-slate-500">{t("productionMaster.loading")}</p>}
             {masterData.phase === "MISSING_COMPANY" && <p role="alert" className="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">{t("productionProjects.companyUnavailable")}</p>}
             {masterData.phase === "ERROR" && <p role="alert" className="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900">{t("productionMaster.error")}</p>}
-            {view === "subcontracts" && <p className="mt-3 text-sm text-slate-500">{t("productionMaster.subcontractsReadOnly")}</p>}
-            {view === "subcontracts" && masterData.phase === "READY" && <SubcontractsList subcontracts={masterData.subcontracts} projects={masterData.projects} parties={masterData.parties} />}
+            {view === "subcontracts" && <p className="mt-3 text-sm text-slate-500">{t("productionMaster.subcontractsMetadataScope")}</p>}
+            {view === "subcontracts" && masterData.phase === "READY" && <SubcontractsList />}
             {view === "accounts" && masterData.phase === "READY" && <AccountNamesPanel />}
             {view === "treasuryAccounts" && masterData.phase === "READY" && <TreasuryNamesPanel />}
             {view === "projects" && masterData.phase === "READY" && <ProjectsList />}

@@ -1,0 +1,1 @@
+begin read only; select scope_of_work,updated_by='7cf0bfff-6938-4beb-a0ff-0ed726867304'::uuid correct_actor,updated_at>'2000-01-01T00:00:00.123456Z' advanced_token from public.subcontracts where id='86100000-0000-4000-8000-0000000000d1'; commit;
