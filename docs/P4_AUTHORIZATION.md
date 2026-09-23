@@ -2,6 +2,16 @@
 
 P4 is implemented by `20260830120000_p4_rls_authorization.sql` plus the forward corrective migrations `20260830123000_p4_assignment_validation_security.sql` and `20260830124500_p4_project_insert_visibility.sql`. All three are applied and verified only on the linked synthetic-only `MakerACC-Development` project. P4 adds no journals, accounting documents, posting commands, audit tables, Storage objects, or frontend data path.
 
+## Current P6C closeout authorization checkpoint — 2026-09-23
+
+**P6C COMPLETE on Development; P6D/P6E NOT STARTED; Production readiness DEFERRED.** [Final closeout](P6C_FINAL_CLOSEOUT.md) supersedes historical incomplete/pending statuses below. The original P4 role/table matrices describe the baseline; subsequent P6C column restrictions and Party-type guards are authoritative for current browser mutations.
+
+Read-only inspection found residual TRUNCATE/REFERENCES/TRIGGER and PostgreSQL 17 MAINTAIN grants on project_assignments for anon/authenticated. No exploit path was demonstrated. Forward migration `20260923130000_p6c_closeout_grant_hardening.sql` revokes only these eight grants. DELETE remains denied; anon now has no table/column access; authenticated retains SELECT/INSERT/UPDATE under unchanged tenant-scoped assignment policies. All 32 public application tables now deny browser DELETE/TRUNCATE/REFERENCES/TRIGGER/MAINTAIN. No other table needed correction.
+
+Before/after snapshots prove all intended DML/column grants and service_role privileges unchanged, along with 32 RLS/ownership records, 48 policies, 38 role-permission rows, 46 functions/ACLs and 372 constraints. All tables retain ENABLE/FORCE RLS. Assignment administration remains ACCOUNTING_ADMIN/SYSTEM_ADMIN under project.assign_users; Project Manager remains assignment-scoped without assignment-administration permission. Existing trusted-only extra privileges are preserved and remain a separate hardening concern, not browser grants.
+
+All 41 Development migrations align; public DB lint and final no-op dry-run pass; Companies/settings 14/14 and missing/orphan 0/0. Consolidated automated gates pass; no new hosted mutation/browser matrix is claimed. PRE_DEMO_UAT remains separate/non-blocking. Development completion is not Production readiness. No Staging/Production, commit or push.
+
 ## Authoritative access model
 
 Every browser decision derives the actor from `auth.uid()`. Company access requires an `ACTIVE` profile, `ACTIVE` membership, and `ACTIVE` company. Project Manager scope additionally requires an `ACTIVE` row in `project_assignments`; a caller cannot supply an alternate user identity to either project helper. Inactive profile, membership, or assignment revokes access immediately.
@@ -26,7 +36,7 @@ New stable permissions are `party.manage`, `category.manage`, `account.manage`, 
 
 - All exposed public tables have RLS enabled and forced. `anon` has no table access.
 - Tenant-owned master rows cannot change `company_id`; same-company composite foreign keys continue to protect project, party, account, treasury, and subcontract dimensions.
-- Browser DELETE remains absent on all P4 tables. `service_role` remains the trusted provisioning/administration pathway with reviewed SELECT/INSERT/UPDATE only and no DELETE.
+- Browser DELETE remains absent on all P4 tables. `service_role` remains the trusted provisioning/administration pathway; table-specific grants and previously documented trusted-only extras are preserved. The historical SELECT/INSERT/UPDATE-only shorthand is not an exact global ACL inventory.
 - The two authenticated project helpers are fixed-search-path security-definer functions, derive identity internally, and reveal only booleans. Trigger functions are not directly executable by browser roles.
 - P4 has no journal, posted-document, audit, or Storage tables to authorize. Those controls remain in their frozen later phases; P4 did not create placeholders.
 
@@ -40,8 +50,8 @@ New stable permissions are `party.manage`, `category.manage`, `account.manage`, 
 | `projects` | Company-wide approved roles; assigned-only Project Manager | Accounting Admin insert; Accounting Admin or assigned Project Manager update | None | SELECT/INSERT/UPDATE; no DELETE |
 | `parties` | Accounting/viewer all; Procurement/Data Entry operational types only; no Project Manager direct read | Accounting Admin all; Procurement operational types only | None | SELECT/INSERT/UPDATE; no DELETE |
 | `expense_categories` | Approved company roles; Project Manager only while actively assigned in company | Accounting Admin only | None | SELECT/INSERT/UPDATE; no DELETE |
-| `accounts` | Accounting Admin, Accountant, Management Viewer | Accounting Admin only | None | SELECT; UPDATE(name) only since P6C Slice 9; no INSERT/DELETE/TRUNCATE |
-| `treasury_accounts` | Accounting/viewer company-wide; Project Manager assigned project-specific rows only | Accounting Admin only | None | SELECT; UPDATE(name) only since P6C Slice 10; no INSERT/DELETE/TRUNCATE |
+| `accounts` | Accounting Admin, Accountant, Management Viewer | Accounting Admin only | None | Trusted SELECT/INSERT/UPDATE preserved; no DELETE; existing extra privileges unchanged |
+| `treasury_accounts` | Accounting/viewer company-wide; Project Manager assigned project-specific rows only | Accounting Admin only | None | Trusted SELECT/INSERT/UPDATE preserved; no DELETE; existing extra privileges unchanged |
 | `subcontracts` | Accounting/Procurement/viewer company-wide; Project Manager assigned projects only | Accounting Admin and Procurement | None | SELECT/INSERT/UPDATE; no DELETE |
 | `project_assignments` | Own rows or assignment administrators | `project.assign_users` only | None; deactivate by status | SELECT/INSERT/UPDATE; no DELETE |
 
@@ -131,7 +141,7 @@ Development migration `20260922140000` adds existing OWNER name-only UPDATE to t
 
 **Closure evidence:** authenticated Development acceptance PASS for ACCOUNTING_ADMIN and PROCUREMENT; ACCOUNTANT, MANAGEMENT_VIEWER and DATA_ENTRY remained read-only; PROJECT_MANAGER and SYSTEM_ADMIN retained no Party-row access. Subcontract display resolved the renamed Party through stable IDs without mutating contract/financial history. Exact cleanup/final verify PASSed after correcting the verification-kit Project guard from ACTIVE to the actual schema-default PLANNING. All Slice 15 fixture/Auth/profile counts 0; global Companies/settings 14/14, missing/orphan 0/0.
 
-Development migration `20260922150000` adds existing SUBCONTRACTOR name-only UPDATE to the restrictive Party policy. The unchanged P4 `party.manage` and UPDATE policies allow ACCOUNTING_ADMIN and PROCUREMENT to rename this type, while ACCOUNTANT, MANAGEMENT_VIEWER and DATA_ENTRY may read without edit; PROJECT_MANAGER and SYSTEM_ADMIN see no Party rows. Active Company/profile/membership and tenant isolation remain required. Forced RLS, SELECT, grants and role mappings are unchanged; Supplier-only INSERT and prior Party UPDATE types continue. A fixed-path SECURITY INVOKER trigger guards protected fields, derives the DB actor and advances exact tokens. Hosted 117/117, concurrent exact-token 1/0 and focused repository/provider/isolated Chromium PASS. Subcontracts uses the current Party snapshot for its label; source IDs, contract economics and financial/journal rows are unchanged. Authenticated hosted browser acceptance is **PENDING**. See `P6C_SLICE_15_SUBCONTRACTOR_PARTY_NAME.md`.
+Development migration `20260922150000` adds existing SUBCONTRACTOR name-only UPDATE to the restrictive Party policy. The unchanged P4 `party.manage` and UPDATE policies allow ACCOUNTING_ADMIN and PROCUREMENT to rename this type, while ACCOUNTANT, MANAGEMENT_VIEWER and DATA_ENTRY may read without edit; PROJECT_MANAGER and SYSTEM_ADMIN see no Party rows. Active Company/profile/membership and tenant isolation remain required. Forced RLS, SELECT, grants and role mappings are unchanged; Supplier-only INSERT and prior Party UPDATE types continue. A fixed-path SECURITY INVOKER trigger guards protected fields, derives the DB actor and advances exact tokens. Hosted 117/117, concurrent exact-token 1/0 and focused repository/provider/isolated Chromium PASS. Subcontracts uses the current Party snapshot for its label; source IDs, contract economics and financial/journal rows are unchanged. Authenticated hosted browser acceptance and exact cleanup are **PASS**, as recorded in the closure evidence above. See `P6C_SLICE_15_SUBCONTRACTOR_PARTY_NAME.md`.
 
 ## P6C Slice 16 — Subcontract descriptive metadata — VERIFIED COMPLETE
 
