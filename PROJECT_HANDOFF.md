@@ -6,13 +6,13 @@ Repository: `https://github.com/n7rawy1984/MkaerACC` · Local path: `/media/nagh
 
 ---
 
-## P6D current checkpoint — Expense Reversal
+## P6D current checkpoint — Supplier Payment
 
-**P6D IN PROGRESS; Expense READ COMPLETE for Development; Treasury-funded Expense POST COMPLETE for Development; Checkpoint 3 Expense Reversal COMPLETE for Development.** Production-mode `/expenses` now invokes canonical `reverse_expense` only for ACCOUNTING_ADMIN and eligible POSTED Expenses, with explicit confirmation, frozen same-key recovery, exact server-owned opposite journals and authoritative reversed-state/journal readback. Focused automated and rollback-only Development SQL evidence is accepted. No migration; no other financial workflow. See [Checkpoint 3](docs/P6D_EXPENSE_REVERSAL.md) and deferred [PRE_DEMO_UAT](docs/PRE_DEMO_UAT.md), which remains separate/non-blocking.
+**P6D IN PROGRESS; Expense READ, Treasury-funded Expense POST, Expense Reversal, and Checkpoint 4 Supplier Payment COMPLETE for Development.** Production-mode `/supplier-payments` reads canonical payment/allocation history and exact outstanding Supplier Credit Expenses, posts Treasury-funded explicit allocations through `post_supplier_payment`, and reverses through `reverse_supplier_payment` with frozen same-key recovery and authoritative readback. Focused automated and rollback-only Development SQL evidence is accepted. No migration. See [Checkpoint 4](docs/P6D_SUPPLIER_PAYMENT.md) and deferred [PRE_DEMO_UAT](docs/PRE_DEMO_UAT.md), which remains separate/non-blocking.
 
-P6C COMPLETE; P6E NOT STARTED; Production readiness DEFERRED. This current state supersedes historical Expense POST/reversal and P6D NOT STARTED notes below. No commit/push/Staging/Production.
+P6C COMPLETE; P6E NOT STARTED; Production readiness DEFERRED. Corrected Replacement Expense and all other financial workflows remain NOT STARTED. This status supersedes historical P6D NOT STARTED and Expense-only checkpoint wording below. One local closure commit only; no push or Staging/Production action.
 
-## Current authoritative checkpoint — 2026-09-23
+## Historical P6C closeout checkpoint — 2026-09-23
 
 **P6C — COMPLETE (Development). P6D/P6E — NOT STARTED. Production readiness — DEFERRED.** The final integrated boundary audit and narrow forward grant correction passed. Migration `20260923130000_p6c_closeout_grant_hardening.sql` removes browser TRUNCATE/REFERENCES/TRIGGER/MAINTAIN only from project_assignments; all 32 public application tables pass the residual-grant audit. Intended grants, trusted provisioning, RLS/policies, ownership and role behavior are preserved. All 41 Development migrations align; DB lint is clean, final linked dry-run is a no-op and Companies/settings remain 14/14 with missing/orphan 0/0. Consolidated build/lint/boundary/behavior gates pass.
 

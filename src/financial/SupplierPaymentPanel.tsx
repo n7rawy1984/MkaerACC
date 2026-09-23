@@ -1,0 +1,24 @@
+import { useState } from "react";
+import { useAuth } from "../auth/AuthContext";
+import { useT } from "../i18n/I18nContext";
+import { getSupabaseClient } from "../lib/supabase";
+import { useProductionMasterData } from "../master/productionMasterDataContext";
+import { displayMinor } from "./expenseRepository";
+import { SupplierPaymentPost } from "./SupplierPaymentPost";
+import { SupplierPaymentReverseAction } from "./SupplierPaymentReverseAction";
+import { canReadSupplierPayments } from "./supplierPaymentRepository";
+import { useSupplierPaymentRead } from "./useSupplierPaymentRead";
+
+export function SupplierPaymentPanel() { const { state } = useAuth(); if (state.phase !== "TENANT_READY") return null; return <SupplierPaymentContent key={`${state.profile.userId}:${state.activeTenant.companyId}:${state.activeTenant.role}`} userId={state.profile.userId} companyId={state.activeTenant.companyId} role={state.activeTenant.role} />; }
+export function SupplierPaymentContent({ userId, companyId, role }: { userId: string; companyId: string; role: string }) {
+  const t = useT(); const master = useProductionMasterData(); const [revision, setRevision] = useState(0); const state = useSupplierPaymentRead(getSupabaseClient(), userId, companyId, role, revision); const refresh = () => setRevision(value => value + 1);
+  if (!canReadSupplierPayments(role)) return <section className="rounded-2xl border bg-white p-6"><h2 className="text-2xl font-semibold">{t("supplierPaymentRead.title")}</h2><p role="alert" className="mt-4">{t("supplierPaymentRead.denied")}</p></section>;
+  const partyName = (id: string) => master.phase === "READY" ? master.parties.find(row => row.id === id)?.name ?? id : id; const treasuryName = (id: string) => master.phase === "READY" ? master.treasuryAccounts.find(row => row.id === id)?.name ?? id : id;
+  return <section className="min-w-0 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"><h2 className="text-2xl font-semibold">{t("supplierPaymentRead.title")}</h2><p className="mt-3 text-sm text-slate-500">{t("supplierPaymentRead.scope")}</p>
+    <SupplierPaymentPost userId={userId} companyId={companyId} role={role} outstanding={state.phase === "READY" ? state.outstanding : []} onPosted={refresh} />
+    <button type="button" onClick={refresh} disabled={state.phase === "LOADING"} className="mt-4 rounded-lg border px-3 py-2 disabled:opacity-50">{t("supplierPaymentRead.refresh")}</button>
+    {state.phase === "LOADING" && <p role="status" className="mt-4">{t("supplierPaymentRead.loading")}</p>}{state.phase === "ERROR" && <p role="alert" className="mt-4 text-red-800">{t("supplierPaymentRead.error")}</p>}
+    {state.phase === "READY" && <><section className="mt-5"><h3 className="font-semibold">{t("supplierPaymentRead.outstanding")}</h3>{state.outstanding.length === 0 ? <p role="status" className="mt-2">{t("supplierPaymentRead.noOutstanding")}</p> : <ul className="mt-2 divide-y">{state.outstanding.map(row => <li key={row.id} className="py-3"><p><bdi>{row.expense_reference} · {partyName(row.supplier_id)} · {displayMinor(row.outstanding_amount_minor)} AED</bdi></p><p className="text-sm text-slate-600"><bdi>{row.expense_date} · {row.description} · {row.project_id ?? t("supplierPaymentRead.companyLevel")}</bdi></p></li>)}</ul>}</section>
+      <section className="mt-6"><h3 className="font-semibold">{t("supplierPaymentRead.history")}</h3>{state.payments.length === 0 ? <p role="status" className="mt-2">{t("supplierPaymentRead.empty")}</p> : <ul className="mt-2 divide-y">{state.payments.map(row => { const allocations = state.allocations.filter(item => item.supplier_payment_id === row.id); return <li key={row.id} className="min-w-0 break-words py-4"><div className="flex flex-wrap justify-between gap-3"><h4 className="font-semibold"><bdi>{row.payment_reference}</bdi></h4><span>{t(`supplierPaymentRead.${row.status}`)}</span></div><p><bdi>{row.payment_date} · {partyName(row.supplier_id)} · {treasuryName(row.treasury_account_id)} · {displayMinor(row.total_amount_minor)} AED</bdi></p><p className="text-sm"><bdi>{t(`expenseRead.${row.payment_method}`)}{row.external_reference ? ` · ${row.external_reference}` : ""}</bdi></p>{row.notes && <p className="whitespace-pre-wrap text-sm"><bdi>{row.notes}</bdi></p>}<details className="mt-2"><summary>{t("supplierPaymentRead.allocations")}</summary><ul>{allocations.map(item => <li key={item.id}><bdi>{item.expense_id} · {displayMinor(item.allocated_amount_minor)} AED</bdi></li>)}</ul><p><bdi>{t("supplierPaymentRead.postedJournal")}: {row.posted_journal_entry_id ?? t("expenseRead.absent")}</bdi></p>{row.reversal_journal_entry_id && <p><bdi>{t("supplierPaymentRead.reversalJournal")}: {row.reversal_journal_entry_id}</bdi></p>}</details><SupplierPaymentReverseAction userId={userId} companyId={companyId} role={role} payment={row} onRefresh={refresh} /></li>; })}</ul>}</section></>}
+  </section>;
+}
