@@ -31,3 +31,17 @@ If any defect is found, open a focused regression/fix task. Do not retroactively
 - Pre-demo UAT is separate from feature development verification.
 - Production still requires the planned Full Production Security & Accounting Integrity Audit.
 - Staging/Production promotion remains separately authorized.
+
+
+## P6D Expense READ presentation smoke
+
+Non-blocking Development follow-up before external demo/pilot:
+
+- Open production `/expenses` with an existing authorized Company/session.
+- Confirm populated and empty states.
+- Confirm paging, refresh and tenant switching.
+- Confirm EN/AR presentation and readable narrow-screen layout.
+- Confirm no posting/edit/reversal/payment controls are exposed by the READ checkpoint.
+- Confirm displayed monetary values remain exact and no stale prior-Company rows survive a tenant switch.
+
+This is presentation/UAT coverage only. P6D Expense READ remains Development-complete.

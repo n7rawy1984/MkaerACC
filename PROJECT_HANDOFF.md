@@ -6,6 +6,12 @@ Repository: `https://github.com/n7rawy1984/MkaerACC` · Local path: `/media/nagh
 
 ---
 
+## P6D current checkpoint — Expense READ Foundation
+
+**P6D IN PROGRESS; Expense READ Checkpoint 1 COMPLETE for Development; Expense POST NOT STARTED.** Explicitly selected by the operator after P6C closeout. `/expenses` now reads the canonical P5B Supabase expense rows with exact BIGINT strings, Company/RLS scope, faithful lifecycle/journal references and a separate guarded financial read hook. No posting/reversal/payment path, migration or fixture was added. Focused repository/lifecycle/EN-AR rendering, build/lint/current static boundaries and read-only hosted RLS checks pass; fresh global integrity 14/14, missing/orphan 0/0. See [checkpoint record](docs/P6D_EXPENSE_READ_FOUNDATION.md) for evidence and deferred operator UI smoke.
+
+P6C remains COMPLETE; P6E NOT STARTED; Production readiness DEFERRED. This supersedes P6D NOT STARTED in historical closeout/slice notes below. No commit/push/Staging/Production.
+
 ## Current authoritative checkpoint — 2026-09-23
 
 **P6C — COMPLETE (Development). P6D/P6E — NOT STARTED. Production readiness — DEFERRED.** The final integrated boundary audit and narrow forward grant correction passed. Migration `20260923130000_p6c_closeout_grant_hardening.sql` removes browser TRUNCATE/REFERENCES/TRIGGER/MAINTAIN only from project_assignments; all 32 public application tables pass the residual-grant audit. Intended grants, trusted provisioning, RLS/policies, ownership and role behavior are preserved. All 41 Development migrations align; DB lint is clean, final linked dry-run is a no-op and Companies/settings remain 14/14 with missing/orphan 0/0. Consolidated build/lint/boundary/behavior gates pass.
@@ -493,7 +499,7 @@ Foundation schema includes import batch/source row/fingerprint/review provenance
 
 Phase 1 ✅ → 2A ✅ → 2B.1 ✅ → 2B.1A ✅ → 2B.2 ✅ → 2B.3 ✅ → **P0–P5 ✅** → **post-P5 focused financial retrospective** → P6–P10 Foundation → 2D Payroll/WPS → 2E Historical Import/Opening Balances → later phases.
 
-P5/post-P5 review, P6A/P6B and P6C Slices 1–11 are VERIFIED COMPLETE. Slice 10 Treasury Display Name UPDATE is VERIFIED COMPLETE. Authenticated acceptance and exact cleanup are complete. Further implementation requires separate authorization. P6C IN PROGRESS; P6D/P6E NOT STARTED; production readiness DEFERRED. See `docs/verification/p6c-slice10/README.md`; browser fixture/Auth cleanup complete.
+P6C is COMPLETE. P6D Checkpoint 1 Expense READ Foundation is Development-complete; P6D remains IN PROGRESS. Expense POST remains NOT STARTED and requires a separately bounded checkpoint. See `docs/P6D_EXPENSE_READ_FOUNDATION.md`. P6E NOT STARTED; Production readiness DEFERRED.
 
 ## 18. Remaining External Deployment Decisions
 

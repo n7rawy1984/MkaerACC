@@ -162,4 +162,4 @@ for (const file of productionGraph) {
 
 console.log(`P6C Company/Projects/Parties/Expense Categories/Accounts/Treasury/Subcontracts boundary verified across ${masterFiles.length} master modules, ${productionGraph.size} production modules, and ${demoGraph.size} demo modules.`);
 
-await import("./verify-p6c-behavior.mjs");
+if (!process.argv.includes("--static-only")) await import("./verify-p6c-behavior.mjs");
