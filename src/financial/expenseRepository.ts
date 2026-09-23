@@ -31,3 +31,9 @@ export async function readExpenses(client: SupabaseClient<Database>, companyId: 
   const rows = data.map(mapExpense);
   return { rows: rows.slice(0, EXPENSE_PAGE_SIZE), hasNext: rows.length > EXPENSE_PAGE_SIZE };
 }
+
+export async function readExpenseById(client: SupabaseClient<Database>, companyId: string, expenseId: string): Promise<ExpenseRead> {
+  const { data, error } = await client.from("expenses").select(projection).eq("company_id", companyId).eq("id", expenseId).maybeSingle();
+  if (error || !data || data.company_id !== companyId || data.id !== expenseId) throw new Error("Expense readback unavailable");
+  return mapExpense(data);
+}

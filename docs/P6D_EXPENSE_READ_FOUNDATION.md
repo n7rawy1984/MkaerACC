@@ -1,5 +1,7 @@
 # P6D Checkpoint 1 — Expense READ Foundation
 
+Historical Checkpoint 1 record; subsequent Treasury POST state is in [Checkpoint 2](P6D_TREASURY_EXPENSE_POST.md). POST NOT STARTED below describes Checkpoint 1 closure.
+
 **Expense READ — COMPLETE for Development. P6D — IN PROGRESS. Expense POST — NOT STARTED.** P6C remains COMPLETE; P6E NOT STARTED; Production readiness DEFERRED. The operator selected this checkpoint explicitly after the roadmap was found to have no prescribed first P6D workflow.
 
 Baseline: clean `main`, HEAD = fetched origin/main = `9cc37db166a55ebe2ec5cd273bc234595ad000e9`. This checkpoint implements reads only. No migration, financial command, new Auth/browser fixture, Staging/Production action, commit or push.

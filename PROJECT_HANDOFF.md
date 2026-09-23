@@ -6,11 +6,11 @@ Repository: `https://github.com/n7rawy1984/MkaerACC` · Local path: `/media/nagh
 
 ---
 
-## P6D current checkpoint — Expense READ Foundation
+## P6D current checkpoint — Treasury-funded Expense POST
 
-**P6D IN PROGRESS; Expense READ Checkpoint 1 COMPLETE for Development; Expense POST NOT STARTED.** Explicitly selected by the operator after P6C closeout. `/expenses` now reads the canonical P5B Supabase expense rows with exact BIGINT strings, Company/RLS scope, faithful lifecycle/journal references and a separate guarded financial read hook. No posting/reversal/payment path, migration or fixture was added. Focused repository/lifecycle/EN-AR rendering, build/lint/current static boundaries and read-only hosted RLS checks pass; fresh global integrity 14/14, missing/orphan 0/0. See [checkpoint record](docs/P6D_EXPENSE_READ_FOUNDATION.md) for evidence and deferred operator UI smoke.
+**P6D IN PROGRESS; Expense READ COMPLETE for Development; Checkpoint 2 Treasury-funded Expense POST COMPLETE for Development; reversal NOT STARTED.** Production-mode `/expenses` now uses canonical `post_expense` for Treasury funding only, with exact string/BIGINT amounts, Company-scoped selectors, ACCOUNTING_ADMIN/ACCOUNTANT gates, frozen same-key retry and authoritative Expense-only readback. Focused automated and Development SQL evidence is accepted. No migration; no other workflow. See [Checkpoint 2](docs/P6D_TREASURY_EXPENSE_POST.md) for the contract, tests, recovery limits and deferred short operator smoke in [PRE_DEMO_UAT](docs/PRE_DEMO_UAT.md), which remains separate/non-blocking.
 
-P6C remains COMPLETE; P6E NOT STARTED; Production readiness DEFERRED. This supersedes P6D NOT STARTED in historical closeout/slice notes below. No commit/push/Staging/Production.
+P6C COMPLETE; P6E NOT STARTED; Production readiness DEFERRED. This current state supersedes historical POST/P6D NOT STARTED notes below. No commit/push/Staging/Production.
 
 ## Current authoritative checkpoint — 2026-09-23
 

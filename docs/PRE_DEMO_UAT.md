@@ -41,7 +41,11 @@ Non-blocking Development follow-up before external demo/pilot:
 - Confirm populated and empty states.
 - Confirm paging, refresh and tenant switching.
 - Confirm EN/AR presentation and readable narrow-screen layout.
-- Confirm no posting/edit/reversal/payment controls are exposed by the READ checkpoint.
+- Confirm READ remains immutable; only permitted accounting roles see the subsequent Treasury POST form, with no edit/reversal/payment controls.
 - Confirm displayed monetary values remain exact and no stale prior-Company rows survive a tenant switch.
 
 This is presentation/UAT coverage only. P6D Expense READ remains Development-complete.
+
+## P6D Checkpoint 2 Treasury POST smoke
+
+Deferred/non-blocking Development operator follow-up, using an existing authorized session (no new Auth fixture): post one synthetic Treasury-funded Expense with invoice/VAT inputs; confirm server-stored net/VAT/gross and journal reference in refreshed Expense READ; refresh without reposting; check EN/AR and narrow-screen presentation. Confirm denied-role absence of the form. Automated uncertainty/reload/same-key and read-only recovery evidence is in the checkpoint record; do not create a fresh expense to retry an unresolved request. No Staging/Production action is authorized by this checklist.
