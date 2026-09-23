@@ -41,7 +41,7 @@ Non-blocking Development follow-up before external demo/pilot:
 - Confirm populated and empty states.
 - Confirm paging, refresh and tenant switching.
 - Confirm EN/AR presentation and readable narrow-screen layout.
-- Confirm READ remains immutable; only permitted accounting roles see the subsequent Treasury POST form, with no edit/reversal/payment controls.
+- Confirm READ remains immutable; permitted roles see only their supported Treasury POST or Expense reversal controls, with no posted-field edit or payment controls.
 - Confirm displayed monetary values remain exact and no stale prior-Company rows survive a tenant switch.
 
 This is presentation/UAT coverage only. P6D Expense READ remains Development-complete.
@@ -49,3 +49,7 @@ This is presentation/UAT coverage only. P6D Expense READ remains Development-com
 ## P6D Checkpoint 2 Treasury POST smoke
 
 Deferred/non-blocking Development operator follow-up, using an existing authorized session (no new Auth fixture): post one synthetic Treasury-funded Expense with invoice/VAT inputs; confirm server-stored net/VAT/gross and journal reference in refreshed Expense READ; refresh without reposting; check EN/AR and narrow-screen presentation. Confirm denied-role absence of the form. Automated uncertainty/reload/same-key and read-only recovery evidence is in the checkpoint record; do not create a fresh expense to retry an unresolved request. No Staging/Production action is authorized by this checklist.
+
+## P6D Checkpoint 3 Expense Reversal smoke
+
+Deferred/non-blocking Development operator follow-up using an existing ACCOUNTING_ADMIN session and a disposable synthetic POSTED Expense: open the reversal action, confirm the immutable-history warning, enter date/reason, explicitly confirm, and verify authoritative `REVERSED` status plus original and reversal journal links after refresh. Refresh again to confirm no duplicate effect; check EN/AR and narrow-screen presentation. Confirm ACCOUNTANT and every other role has no reversal action. Reversal history is permanent, so do not use a retained business fixture. Never start a new reversal request for an unresolved recovery key. No Staging/Production action is authorized by this checklist.

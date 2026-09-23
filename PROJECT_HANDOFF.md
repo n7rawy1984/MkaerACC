@@ -6,11 +6,11 @@ Repository: `https://github.com/n7rawy1984/MkaerACC` · Local path: `/media/nagh
 
 ---
 
-## P6D current checkpoint — Treasury-funded Expense POST
+## P6D current checkpoint — Expense Reversal
 
-**P6D IN PROGRESS; Expense READ COMPLETE for Development; Checkpoint 2 Treasury-funded Expense POST COMPLETE for Development; reversal NOT STARTED.** Production-mode `/expenses` now uses canonical `post_expense` for Treasury funding only, with exact string/BIGINT amounts, Company-scoped selectors, ACCOUNTING_ADMIN/ACCOUNTANT gates, frozen same-key retry and authoritative Expense-only readback. Focused automated and Development SQL evidence is accepted. No migration; no other workflow. See [Checkpoint 2](docs/P6D_TREASURY_EXPENSE_POST.md) for the contract, tests, recovery limits and deferred short operator smoke in [PRE_DEMO_UAT](docs/PRE_DEMO_UAT.md), which remains separate/non-blocking.
+**P6D IN PROGRESS; Expense READ COMPLETE for Development; Treasury-funded Expense POST COMPLETE for Development; Checkpoint 3 Expense Reversal COMPLETE for Development.** Production-mode `/expenses` now invokes canonical `reverse_expense` only for ACCOUNTING_ADMIN and eligible POSTED Expenses, with explicit confirmation, frozen same-key recovery, exact server-owned opposite journals and authoritative reversed-state/journal readback. Focused automated and rollback-only Development SQL evidence is accepted. No migration; no other financial workflow. See [Checkpoint 3](docs/P6D_EXPENSE_REVERSAL.md) and deferred [PRE_DEMO_UAT](docs/PRE_DEMO_UAT.md), which remains separate/non-blocking.
 
-P6C COMPLETE; P6E NOT STARTED; Production readiness DEFERRED. This current state supersedes historical POST/P6D NOT STARTED notes below. No commit/push/Staging/Production.
+P6C COMPLETE; P6E NOT STARTED; Production readiness DEFERRED. This current state supersedes historical Expense POST/reversal and P6D NOT STARTED notes below. No commit/push/Staging/Production.
 
 ## Current authoritative checkpoint — 2026-09-23
 

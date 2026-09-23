@@ -1,5 +1,7 @@
 import { TreasuryExpensePost } from "./TreasuryExpensePost";
 import { canPostExpense } from "./expensePostRepository";
+import { ExpenseReverseAction } from "./ExpenseReverseAction";
+import { canReverseExpense } from "./expenseReverseRepository";
 import { useState } from "react";
 import { useAuth } from "../auth/AuthContext";
 import { useT } from "../i18n/I18nContext";
@@ -38,6 +40,7 @@ export function ExpenseReadContent({ userId, companyId, role }: { userId: string
           <div><dt>{t("expenseRead.method")}</dt><dd>{t(`expenseRead.${row.payment_method}`)}</dd></div>
           <div><dt>{t("expenseRead.invoice")}</dt><dd>{t(row.has_tax_invoice ? "expenseRead.yes" : "expenseRead.no")}</dd></div>
         </dl></details>
+        {(canReverseExpense(role, row.status) || role === "ACCOUNTING_ADMIN") && <ExpenseReverseAction userId={userId} companyId={companyId} role={role} expense={row} onRefresh={refresh} />}
       </li>)}</ul>
       <nav className="mt-4 flex flex-wrap gap-3" aria-label={t("expenseRead.pages")}>
         <button type="button" disabled={page === 0} onClick={() => setPage(value => value - 1)} className="rounded-lg border px-3 py-2 disabled:opacity-50">{t("expenseRead.previous")}</button>

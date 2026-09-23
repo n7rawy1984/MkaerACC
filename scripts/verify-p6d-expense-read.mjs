@@ -94,7 +94,7 @@ for(const lang of ['en','ar']) {
  const dictionary=moduleAt(`src/i18n/${lang}.ts`).default;
  const t=(key,vars={})=>{assert.equal(typeof dictionary[key],'string',key);return dictionary[key].replace('{page}',String(vars.page??''));};
  for(const state of [{phase:'LOADING'},{phase:'ERROR'},{phase:'READY',rows:[],hasNext:false},{phase:'READY',rows:[{...row,status:'REVERSED',reversal_journal_entry_id:'reversal-a'}],hasNext:true}]) {
-  const {ExpenseReadContent}=moduleAt('src/financial/ExpenseReadPanel.tsx',{'../auth/AuthContext':{},'./TreasuryExpensePost':{TreasuryExpensePost:()=>null},'./expensePostRepository':{canPostExpense:()=>false},'../i18n/I18nContext':{useT:()=>t},'../lib/supabase':{getSupabaseClient:()=>({})},'./expenseRepository':repo,'./useExpenseRead':{useExpenseRead:()=>state}});
+  const {ExpenseReadContent}=moduleAt('src/financial/ExpenseReadPanel.tsx',{'../auth/AuthContext':{},'./TreasuryExpensePost':{TreasuryExpensePost:()=>null},'./expensePostRepository':{canPostExpense:()=>false},'./ExpenseReverseAction':{ExpenseReverseAction:()=>null},'./expenseReverseRepository':{canReverseExpense:()=>false},'../i18n/I18nContext':{useT:()=>t},'../lib/supabase':{getSupabaseClient:()=>({})},'./expenseRepository':repo,'./useExpenseRead':{useExpenseRead:()=>state}});
   const html=renderToStaticMarkup(React.createElement(ExpenseReadContent,{userId:'user-a',companyId:'company-a',role:'ACCOUNTANT'}));
   assert(!/<form|<input/.test(html));
   if(state.phase==='READY'&&state.rows.length){for(const value of ['90000000000000.00','journal-a','reversal-a','supplier-a',dictionary['expenseRead.REVERSED']])assert(html.includes(value));}

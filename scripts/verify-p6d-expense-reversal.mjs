@@ -1,0 +1,32 @@
+import assert from 'node:assert/strict';
+import {readFileSync,readdirSync} from 'node:fs';
+import {createRequire} from 'node:module';
+import ts from 'typescript';
+const require=createRequire(import.meta.url);
+function load(path,mocks={}){const module={exports:{}};const source=ts.transpileModule(readFileSync(new URL(`../${path}`,import.meta.url),'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,jsx:ts.JsxEmit.ReactJSX}}).outputText;new Function('require','module','exports',source)(name=>mocks[name]??require(name),module,module.exports);return module.exports;}
+const repo=load('src/financial/expenseReverseRepository.ts');
+const recovery=load('src/financial/expenseReverseAttempt.ts',{'./expenseReverseRepository':repo});
+const id=n=>`91000000-0000-4000-8000-${String(n).padStart(12,'0')}`;
+const input={date:'2026-09-23',reason:'  Duplicate invoice عكس  '};
+const payload=repo.expenseReversePayload(id(1),id(2),id(3),input);
+assert.deepEqual(payload,{target_company_id:id(1),target_expense_id:id(2),target_reversal_date:'2026-09-23',target_reason:'Duplicate invoice عكس',target_idempotency_key:id(3)});assert.equal(Object.keys(payload).length,5);
+for(const role of ['ACCOUNTING_ADMIN','ACCOUNTANT','PROCUREMENT','PROJECT_MANAGER','DATA_ENTRY','MANAGEMENT_VIEWER','SYSTEM_ADMIN'])for(const status of ['DRAFT','POSTED','REVERSED'])assert.equal(repo.canReverseExpense(role,status),role==='ACCOUNTING_ADMIN'&&status==='POSTED');
+for(const change of [{date:'2026-02-30'},{date:'bad'},{reason:''},{reason:' '.repeat(2)},{reason:'x'.repeat(1001)}])assert.throws(()=>repo.normalizeExpenseReverseInput({...input,...change}));
+const receipt={expense_id:id(2),expense_reference:'EXP-2026-1',reversal_journal_entry_id:id(4),replayed:false};
+const {createClient}=require('@supabase/supabase-js');let calls=[];
+const sdk=createClient('https://example.invalid','public-test-key',{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false},global:{fetch:async(url,init)=>{calls.push({url:String(url),body:JSON.parse(init.body)});return new Response(JSON.stringify([receipt]),{headers:{'Content-Type':'application/json'}});}}});
+assert.deepEqual(await repo.reverseExpense(sdk,id(1),id(2),id(3),input),receipt);assert(calls[0].url.endsWith('/rpc/reverse_expense'));assert.deepEqual(calls[0].body,payload);
+const storage=()=>{const data=new Map();return{getItem:k=>data.get(k)??null,setItem:(k,v)=>data.set(k,v),removeItem:k=>data.delete(k)};};
+const attempt={version:1,userId:id(5),companyId:id(1),expenseId:id(2),key:id(3),input:repo.normalizeExpenseReverseInput(input)};let store=storage();
+recovery.saveExpenseReverseAttempt(store,attempt);assert.deepEqual(recovery.loadExpenseReverseAttempt(store,id(5),id(1),id(2)),attempt);assert.equal(recovery.loadExpenseReverseAttempt(store,id(6),id(1),id(2)),null);
+const client=(rpc,user=id(5))=>({auth:{getSession:async()=>({data:{session:user?{user:{id:user}}:null},error:null})},rpc});
+let sends=0;let release;const waiting=new Promise(r=>release=r);const concurrent=client(async()=>{sends++;await waiting;return{data:[receipt],error:null};});
+const one=recovery.sendExpenseReverseAttempt(concurrent,store,attempt,true),two=recovery.sendExpenseReverseAttempt(concurrent,store,attempt,true);assert.equal(one,two);release();const saved=await one;assert.equal(sends,1);assert.deepEqual(saved.receipt,receipt);await recovery.sendExpenseReverseAttempt(client(()=>{throw new Error('must not resend receipt');}),store,saved);assert.equal(sends,1);
+store=storage();const sent=[];const uncertain=client(async(_name,args)=>{sent.push(args);if(sent.length===1)throw new Error('lost response');return{data:[{...receipt,replayed:true}],error:null};});
+await assert.rejects(recovery.sendExpenseReverseAttempt(uncertain,store,attempt,true));const restored=recovery.loadExpenseReverseAttempt(store,id(5),id(1),id(2));const replayed=await recovery.sendExpenseReverseAttempt(uncertain,store,restored);assert(replayed.receipt.replayed);assert.deepEqual(sent[0],sent[1]);assert.equal(sent[0].target_idempotency_key,attempt.key);
+store=storage();const rejected=client(async()=>({data:null,error:{code:'23514'}}));await assert.rejects(recovery.sendExpenseReverseAttempt(rejected,store,attempt,true),/rejected/);assert.equal(recovery.loadExpenseReverseAttempt(store,id(5),id(1),id(2)),null);
+recovery.saveExpenseReverseAttempt(store,attempt);await assert.rejects(recovery.sendExpenseReverseAttempt(rejected,store,attempt));assert.deepEqual(recovery.loadExpenseReverseAttempt(store,id(5),id(1),id(2)),attempt);
+await assert.rejects(recovery.sendExpenseReverseAttempt(client(()=>{throw new Error('must not send');},id(6)),store,attempt),/denied/);
+await assert.rejects(recovery.sendExpenseReverseAttempt(client(()=>{throw new Error('must not send');}),{...store,setItem:()=>{throw new Error('storage');}},attempt),/storage/);
+for(const name of readdirSync(new URL('../src/financial/',import.meta.url))){const source=readFileSync(new URL(`../src/financial/${name}`,import.meta.url),'utf8');assert(!/\.(insert|update|upsert|delete)\s*\(/.test(source.replaceAll('inFlight.delete(lock)','')),name);assert(!/localStorage|cas:v1|service_role|AppDataContext|\/pages\//.test(source),name);if(!['expensePostRepository.ts','expenseReverseRepository.ts'].includes(name))assert(!/\.rpc\(/.test(source),name);}
+console.log('Expense reversal PASS: exact five-field SDK payload, lifecycle/role gate, reason/date validation, scoped persistence, duplicate coalescing, receipt no-resend, lost-response same-key replay, rejection/uncertainty distinction, actor/storage failure, and financial boundary.');

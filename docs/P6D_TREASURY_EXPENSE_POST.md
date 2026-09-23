@@ -1,5 +1,7 @@
 # P6D Checkpoint 2 — Treasury-funded Expense POST
 
+Historical Checkpoint 2 record; subsequent Expense Reversal state is in [Checkpoint 3](P6D_EXPENSE_REVERSAL.md). Reversal NOT STARTED below describes Checkpoint 2 closure.
+
 P6D **IN PROGRESS**. Expense READ **COMPLETE for Development**. Treasury-funded Expense POST **COMPLETE for Development** based on accepted focused automated and Development SQL evidence; operator smoke deferred below and non-blocking. Expense reversal **NOT STARTED**. P6C COMPLETE; P6E NOT STARTED; Production readiness DEFERRED.
 
 Clean starting baseline: `main`, HEAD = fetched origin/main = `5e3d15474cdcf2f0f4bba8aa9bc20019595fa5f0`. No commit/push or Staging/Production action. “Production” UI means the production-mode application using MakerACC-Development, not deployment to Production.
