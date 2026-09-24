@@ -23,7 +23,7 @@ const paymentProjection = "id,company_id,payment_reference,payment_date,supplier
 const allocationProjection = "id,company_id,supplier_payment_id,expense_id,allocated_amount_minor::text";
 const expenseProjection = "id,company_id,expense_reference,expense_date,project_id,supplier_id,description,gross_amount_minor::text";
 
-async function allRows<T>(load: (from: number, to: number) => Promise<{ data: T[] | null; error: unknown }>): Promise<T[]> {
+async function allRows<T>(load: (from: number, to: number) => PromiseLike<{ data: T[] | null; error: unknown }>): Promise<T[]> {
   const rows: T[] = [];
   for (let from = 0; ; from += 500) {
     const { data, error } = await load(from, from + 499);

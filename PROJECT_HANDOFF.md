@@ -6,11 +6,11 @@ Repository: `https://github.com/n7rawy1984/MkaerACC` · Local path: `/media/nagh
 
 ---
 
-## P6D current checkpoint — Subcontractor Advance
+## P6D current checkpoint — Subcontractor Certificates
 
-**P6D IN PROGRESS; Checkpoints 1–6 COMPLETE for Development.** Expense READ, Treasury-funded Expense POST, Expense Reversal, Supplier Payment, Supplier Credit Expense POST, and Subcontractor Advance READ/POST/Reversal are complete. Production `/subcontractor-advances` reuses canonical P5F commands with exact BIGINT strings, active Subcontract/Treasury validation, frozen same-key recovery, authoritative readback, and unchanged role/RLS boundaries. Focused automated and rollback-only Development evidence is accepted. No migration. See [Checkpoint 6](docs/P6D_SUBCONTRACTOR_ADVANCE.md) and deferred [PRE_DEMO_UAT](docs/PRE_DEMO_UAT.md).
+**P6D IN PROGRESS; Checkpoints 1–7 COMPLETE for Development.** Expense READ, Treasury-funded Expense POST, Expense Reversal, Supplier Payment, Supplier Credit Expense POST, Subcontractor Advance, and Subcontractor Certificate READ/draft/approve-post/reversal are complete. Production `/subcontractor-certificates` reuses canonical P5G commands with exact BIGINT strings, server-owned calculations, uniqueness/same-key recovery, authoritative readback, and unchanged role/RLS/dependency boundaries. Focused automated and rollback-only Development evidence is accepted. No migration. See [Checkpoint 7](docs/P6D_SUBCONTRACTOR_CERTIFICATES.md) and deferred [PRE_DEMO_UAT](docs/PRE_DEMO_UAT.md).
 
-P6C COMPLETE; P6E NOT STARTED; Production readiness DEFERRED. Subcontractor Certificates, Payments, Retention flows, Corrected Replacement Expense, and all other financial workflows remain NOT STARTED. One local closure commit only; no push or Staging/Production action.
+P6C COMPLETE; P6E NOT STARTED; Production readiness DEFERRED. Subcontractor Payments, Retention flows, Corrected Replacement Expense, and all other financial workflows remain NOT STARTED in P6D. One local Checkpoint 7 closure commit is authorized; no push or Staging/Production action.
 
 ## Historical P6C closeout checkpoint — 2026-09-23
 
