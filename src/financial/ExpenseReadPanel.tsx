@@ -1,4 +1,5 @@
 import { TreasuryExpensePost } from "./TreasuryExpensePost";
+import { SupplierCreditExpensePost } from "./SupplierCreditExpensePost";
 import { canPostExpense } from "./expensePostRepository";
 import { ExpenseReverseAction } from "./ExpenseReverseAction";
 import { canReverseExpense } from "./expenseReverseRepository";
@@ -24,6 +25,7 @@ export function ExpenseReadContent({ userId, companyId, role }: { userId: string
     <h2 className="text-2xl font-semibold">{t("expenseRead.title")}</h2>
     <p className="mt-3 text-sm text-slate-500">{t("expenseRead.scope")}</p>
     {canPostExpense(role) && <TreasuryExpensePost userId={userId} companyId={companyId} role={role} onPosted={refresh} />}
+    {canPostExpense(role) && <SupplierCreditExpensePost userId={userId} companyId={companyId} role={role} onPosted={refresh} />}
     <button type="button" onClick={refresh} disabled={state.phase === "LOADING"} className="mt-4 rounded-lg border px-3 py-2 disabled:opacity-50">{t("expenseRead.refresh")}</button>
     {state.phase === "LOADING" && <p role="status" className="mt-4">{t("expenseRead.loading")}</p>}
     {state.phase === "ERROR" && <p role="alert" className="mt-4 text-red-800">{t("expenseRead.error")}</p>}
