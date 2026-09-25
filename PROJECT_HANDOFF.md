@@ -6,11 +6,11 @@ Repository: `https://github.com/n7rawy1984/MkaerACC` · Local path: `/media/nagh
 
 ---
 
-## P6D current checkpoint — Subcontractor Certificates
+## P6D current checkpoint — Subcontractor Payments
 
-**P6D IN PROGRESS; Checkpoints 1–7 COMPLETE for Development.** Expense READ, Treasury-funded Expense POST, Expense Reversal, Supplier Payment, Supplier Credit Expense POST, Subcontractor Advance, and Subcontractor Certificate READ/draft/approve-post/reversal are complete. Production `/subcontractor-certificates` reuses canonical P5G commands with exact BIGINT strings, server-owned calculations, uniqueness/same-key recovery, authoritative readback, and unchanged role/RLS/dependency boundaries. Focused automated and rollback-only Development evidence is accepted. No migration. See [Checkpoint 7](docs/P6D_SUBCONTRACTOR_CERTIFICATES.md) and deferred [PRE_DEMO_UAT](docs/PRE_DEMO_UAT.md).
+**P6D IN PROGRESS; Checkpoints 1–8 COMPLETE for Development.** Expense READ, Treasury-funded Expense POST, Expense Reversal, Supplier Payment, Supplier Credit Expense POST, Subcontractor Advance, Subcontractor Certificates, and Subcontractor Payment READ/POST/Reversal are complete. Production `/subcontractor-payments` reuses canonical P5H commands with exact BIGINT strings, explicit same-Subcontract Certificate allocations, frozen same-key recovery, authoritative readback, and unchanged role/RLS/locking/dependency boundaries. Focused automated and rollback-only Development evidence passes. No migration. See [Checkpoint 8](docs/P6D_SUBCONTRACTOR_PAYMENTS.md) and deferred [PRE_DEMO_UAT](docs/PRE_DEMO_UAT.md).
 
-P6C COMPLETE; P6E NOT STARTED; Production readiness DEFERRED. Subcontractor Payments, Retention flows, Corrected Replacement Expense, and all other financial workflows remain NOT STARTED in P6D. One local Checkpoint 7 closure commit is authorized; no push or Staging/Production action.
+P6C COMPLETE; P6E NOT STARTED; Production readiness DEFERRED. Retention flows, Corrected Replacement Expense, and all other financial workflows remain NOT STARTED in P6D. One local Checkpoint 8 closure commit is authorized; no push or Staging/Production action.
 
 ## Historical P6C closeout checkpoint — 2026-09-23
 
