@@ -6,11 +6,11 @@ Repository: `https://github.com/n7rawy1984/MkaerACC` · Local path: `/media/nagh
 
 ---
 
-## P6D current checkpoint — Subcontractor Payments
+## P6D current checkpoint — Subcontractor Retention Release
 
-**P6D IN PROGRESS; Checkpoints 1–8 COMPLETE for Development.** Expense READ, Treasury-funded Expense POST, Expense Reversal, Supplier Payment, Supplier Credit Expense POST, Subcontractor Advance, Subcontractor Certificates, and Subcontractor Payment READ/POST/Reversal are complete. Production `/subcontractor-payments` reuses canonical P5H commands with exact BIGINT strings, explicit same-Subcontract Certificate allocations, frozen same-key recovery, authoritative readback, and unchanged role/RLS/locking/dependency boundaries. Focused automated and rollback-only Development evidence passes. No migration. See [Checkpoint 8](docs/P6D_SUBCONTRACTOR_PAYMENTS.md) and deferred [PRE_DEMO_UAT](docs/PRE_DEMO_UAT.md).
+**P6D IN PROGRESS; Checkpoints 1–9 COMPLETE for Development.** Expense READ, Treasury-funded Expense POST, Expense Reversal, Supplier Payment, Supplier Credit Expense POST, Subcontractor Advance, Subcontractor Certificates, Subcontractor Payment READ/POST/Reversal, and Subcontractor Retention Release READ/POST/Reversal are complete. Production `/retention-releases` reuses canonical P5I-A commands with exact BIGINT strings, explicit same-Subcontract Certificate allocations, authoritative availability, frozen same-key recovery, authoritative readback, and unchanged role/RLS/locking/dependency boundaries. Focused automated and rollback-only Development evidence passes. No migration. See [Checkpoint 9](docs/P6D_SUBCONTRACTOR_RETENTION_RELEASE.md) and deferred [PRE_DEMO_UAT](docs/PRE_DEMO_UAT.md).
 
-P6C COMPLETE; P6E NOT STARTED; Production readiness DEFERRED. Retention flows, Corrected Replacement Expense, and all other financial workflows remain NOT STARTED in P6D. One local Checkpoint 8 closure commit is authorized; no push or Staging/Production action.
+P6C COMPLETE; P6E NOT STARTED; Production readiness DEFERRED. Retention Payment, Corrected Replacement Expense, and all other financial workflows remain NOT STARTED in P6D. One local Checkpoint 9 closure commit is authorized; no push or Staging/Production action.
 
 ## Historical P6C closeout checkpoint — 2026-09-23
 
@@ -499,7 +499,7 @@ Foundation schema includes import batch/source row/fingerprint/review provenance
 
 Phase 1 ✅ → 2A ✅ → 2B.1 ✅ → 2B.1A ✅ → 2B.2 ✅ → 2B.3 ✅ → **P0–P5 ✅** → **post-P5 focused financial retrospective** → P6–P10 Foundation → 2D Payroll/WPS → 2E Historical Import/Opening Balances → later phases.
 
-P6C is COMPLETE. P6D Checkpoint 1 Expense READ Foundation is Development-complete; P6D remains IN PROGRESS. Expense POST remains NOT STARTED and requires a separately bounded checkpoint. See `docs/P6D_EXPENSE_READ_FOUNDATION.md`. P6E NOT STARTED; Production readiness DEFERRED.
+P6C is COMPLETE. P6D Checkpoints 1–9 are Development-complete through Subcontractor Retention Release; P6D remains IN PROGRESS. Retention Payment and Corrected Replacement Expense remain NOT STARTED. See `docs/P6D_SUBCONTRACTOR_RETENTION_RELEASE.md`. P6E NOT STARTED; Production readiness DEFERRED.
 
 ## 18. Remaining External Deployment Decisions
 
