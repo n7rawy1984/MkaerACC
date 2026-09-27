@@ -1,3 +1,4 @@
+import PayrollApplication from "../payroll/PayrollApplication";
 import AttendanceApplication from "../attendance/AttendanceApplication";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { useT } from "../i18n/I18nContext";
@@ -29,6 +30,7 @@ function RoutedApplication() {
     <SupabaseTenantSettingsProvider key={`${state.profile.userId}:${state.activeTenant.companyId}`} client={getSupabaseClient()} profile={state.profile} tenant={state.activeTenant}>
       <ProductionMasterDataProvider onCompanyProfileRefreshed={syncCompanyLegalName} key={`${state.profile.userId}:${state.activeTenant.companyId}:${state.activeTenant.role}`} role={state.activeTenant.role} client={getSupabaseClient()} userId={state.profile.userId} activeCompanyId={state.activeTenant.companyId}>
         <Routes>
+          <Route path="/payroll" element={<PayrollApplication />} />
           <Route path="/attendance" element={<AttendanceApplication />} />
           <Route path="/login" element={<Navigate to="/" replace />} />
           <Route path="/no-company" element={<Navigate to="/" replace />} />

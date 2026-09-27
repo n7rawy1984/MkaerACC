@@ -1227,6 +1227,341 @@ export type Database = {
           },
         ]
       }
+      payroll_draft_adjustments: {
+        Row: {
+          amount_minor: number
+          change_reason: string | null
+          company_id: string
+          created_at: string
+          created_by: string
+          id: string
+          kind: string
+          reason: string
+          row_id: string
+          updated_at: string
+          updated_by: string
+          version: number
+          voided: boolean
+        }
+        Insert: {
+          amount_minor: number
+          change_reason?: string | null
+          company_id: string
+          created_at?: string
+          created_by: string
+          id: string
+          kind: string
+          reason: string
+          row_id: string
+          updated_at?: string
+          updated_by: string
+          version?: number
+          voided?: boolean
+        }
+        Update: {
+          amount_minor?: number
+          change_reason?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          kind?: string
+          reason?: string
+          row_id?: string
+          updated_at?: string
+          updated_by?: string
+          version?: number
+          voided?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payroll_draft_adjustments_company_id_row_id_fkey"
+            columns: ["company_id", "row_id"]
+            isOneToOne: false
+            referencedRelation: "payroll_draft_rows"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
+      payroll_draft_audit: {
+        Row: {
+          actor_id: string
+          after_row: Json
+          before_row: Json | null
+          company_id: string
+          entity: string
+          entity_id: string
+          id: string
+          occurred_at: string
+        }
+        Insert: {
+          actor_id: string
+          after_row: Json
+          before_row?: Json | null
+          company_id: string
+          entity: string
+          entity_id: string
+          id?: string
+          occurred_at?: string
+        }
+        Update: {
+          actor_id?: string
+          after_row?: Json
+          before_row?: Json | null
+          company_id?: string
+          entity?: string
+          entity_id?: string
+          id?: string
+          occurred_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payroll_draft_audit_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payroll_draft_periods: {
+        Row: {
+          adjustments_revision: number
+          attendance_revision: number
+          calculated_adjustments_revision: number
+          calendar_days: number
+          company_id: string
+          created_at: string
+          created_by: string
+          id: string
+          month: string
+          refreshed_at: string
+          refreshed_by: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          reviewed_version: number | null
+          source_hash: string
+          state: string
+          version: number
+        }
+        Insert: {
+          adjustments_revision?: number
+          attendance_revision: number
+          calculated_adjustments_revision?: number
+          calendar_days: number
+          company_id: string
+          created_at?: string
+          created_by: string
+          id?: string
+          month: string
+          refreshed_at?: string
+          refreshed_by: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          reviewed_version?: number | null
+          source_hash: string
+          state?: string
+          version?: number
+        }
+        Update: {
+          adjustments_revision?: number
+          attendance_revision?: number
+          calculated_adjustments_revision?: number
+          calendar_days?: number
+          company_id?: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          month?: string
+          refreshed_at?: string
+          refreshed_by?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          reviewed_version?: number | null
+          source_hash?: string
+          state?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payroll_draft_periods_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payroll_draft_rows: {
+        Row: {
+          absence_deduction_minor: number
+          absence_half_units: number
+          additions_minor: number
+          calendar_days: number
+          company_id: string
+          deductions_minor: number
+          default_project_id: string | null
+          employee_id: string
+          employee_name: string
+          gross_salary_minor: number
+          id: string
+          included: boolean
+          monthly_salary_minor: number
+          net_salary_minor: number
+          payment_type: string
+          payroll_id: string
+          payroll_type: string
+          period_id: string
+          profession: string
+          work_station: string
+        }
+        Insert: {
+          absence_deduction_minor: number
+          absence_half_units: number
+          additions_minor: number
+          calendar_days: number
+          company_id: string
+          deductions_minor: number
+          default_project_id?: string | null
+          employee_id: string
+          employee_name: string
+          gross_salary_minor: number
+          id?: string
+          included?: boolean
+          monthly_salary_minor: number
+          net_salary_minor: number
+          payment_type: string
+          payroll_id: string
+          payroll_type: string
+          period_id: string
+          profession: string
+          work_station: string
+        }
+        Update: {
+          absence_deduction_minor?: number
+          absence_half_units?: number
+          additions_minor?: number
+          calendar_days?: number
+          company_id?: string
+          deductions_minor?: number
+          default_project_id?: string | null
+          employee_id?: string
+          employee_name?: string
+          gross_salary_minor?: number
+          id?: string
+          included?: boolean
+          monthly_salary_minor?: number
+          net_salary_minor?: number
+          payment_type?: string
+          payroll_id?: string
+          payroll_type?: string
+          period_id?: string
+          profession?: string
+          work_station?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payroll_draft_rows_company_id_default_project_id_fkey"
+            columns: ["company_id", "default_project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "payroll_draft_rows_company_id_employee_id_fkey"
+            columns: ["company_id", "employee_id"]
+            isOneToOne: false
+            referencedRelation: "payroll_profiles"
+            referencedColumns: ["company_id", "employee_id"]
+          },
+          {
+            foreignKeyName: "payroll_draft_rows_company_id_period_id_fkey"
+            columns: ["company_id", "period_id"]
+            isOneToOne: false
+            referencedRelation: "payroll_draft_periods"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
+      payroll_profiles: {
+        Row: {
+          company_id: string
+          created_at: string
+          created_by: string
+          default_project_id: string | null
+          employee_id: string
+          id: string
+          monthly_salary_minor: number
+          payment_type: string
+          payroll_id: string
+          payroll_type: string
+          profession: string
+          status: Database["public"]["Enums"]["account_status"]
+          updated_at: string
+          updated_by: string
+          version: number
+          work_station: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          created_by: string
+          default_project_id?: string | null
+          employee_id: string
+          id?: string
+          monthly_salary_minor: number
+          payment_type: string
+          payroll_id: string
+          payroll_type: string
+          profession: string
+          status?: Database["public"]["Enums"]["account_status"]
+          updated_at?: string
+          updated_by: string
+          version?: number
+          work_station: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          created_by?: string
+          default_project_id?: string | null
+          employee_id?: string
+          id?: string
+          monthly_salary_minor?: number
+          payment_type?: string
+          payroll_id?: string
+          payroll_type?: string
+          profession?: string
+          status?: Database["public"]["Enums"]["account_status"]
+          updated_at?: string
+          updated_by?: string
+          version?: number
+          work_station?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payroll_profiles_company_id_default_project_id_fkey"
+            columns: ["company_id", "default_project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "payroll_profiles_company_id_employee_id_fkey"
+            columns: ["company_id", "employee_id"]
+            isOneToOne: true
+            referencedRelation: "parties"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "payroll_profiles_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       permissions: {
         Row: {
           description: string
@@ -2870,6 +3205,22 @@ export type Database = {
           supplier_payment_id: string
         }[]
       }
+      read_payroll_draft: {
+        Args: { target_company_id: string; target_month: string }
+        Returns: Json
+      }
+      read_payroll_profiles: {
+        Args: { target_company_id: string }
+        Returns: Json
+      }
+      refresh_payroll_draft: {
+        Args: {
+          target_company_id: string
+          target_month: string
+          target_version: number
+        }
+        Returns: string
+      }
       reverse_custody_advance: {
         Args: {
           target_company_id: string
@@ -3005,6 +3356,14 @@ export type Database = {
           supplier_payment_id: string
         }[]
       }
+      review_payroll_draft: {
+        Args: {
+          target_company_id: string
+          target_period_id: string
+          target_version: number
+        }
+        Returns: undefined
+      }
       save_attendance_exception: {
         Args: {
           target_company_id: string
@@ -3029,6 +3388,36 @@ export type Database = {
           target_reason?: string
           target_starts_on: string
           target_version?: number
+        }
+        Returns: string
+      }
+      save_payroll_draft_adjustment: {
+        Args: {
+          target_amount_minor: number
+          target_change_reason: string
+          target_company_id: string
+          target_id: string
+          target_kind: string
+          target_reason: string
+          target_row_id: string
+          target_version: number
+          target_void: boolean
+        }
+        Returns: string
+      }
+      save_payroll_profile: {
+        Args: {
+          target_company_id: string
+          target_employee_id: string
+          target_payment_type: string
+          target_payroll_id: string
+          target_payroll_type: string
+          target_profession: string
+          target_project_id: string
+          target_salary_minor: number
+          target_status: Database["public"]["Enums"]["account_status"]
+          target_version: number
+          target_work_station: string
         }
         Returns: string
       }

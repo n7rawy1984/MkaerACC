@@ -5,6 +5,7 @@ import type {
  TranslationKey } from "./en";
 
 const ar: Record<TranslationKey, string> = {
+  "payroll.title": "مسودات الرواتب",
   "attendance.title": "الحضور",
   "certificateRead.title": "شهادات مقاول الباطن",
   "certificateRead.scope": "شهادات إنجاز مرتبطة بالعقد. يثبت الاعتماد تكلفة المشروع والضريبة المؤهلة والاحتجاز واسترداد الدفعة والخصومات المربوطة والمستحق المتبقي دون حركة خزينة.",

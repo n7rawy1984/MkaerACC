@@ -2,11 +2,17 @@
 
 This is the official living roadmap. Read it with `PROJECT_HANDOFF.md` before development. Architecture planned does not mean implemented.
 
+## Payroll Lite Step 1 — Development
+
+**Payroll Lite Step 1 COMPLETE for Development:** EMPLOYEE Payroll Profiles, monthly DRAFT register, exact server calculation, generic audited additions/deductions, explicit refresh/stale detection and draft review. Accountant/Admin only; Management Viewer and Foreman denied. Reviewed Attendance is consumed without locking it. One canonical migration applied only to MakerACC-Development (44 total). Hosted rollback checks 127/127, repository/SDK, isolated EN/AR/390px browser, build/lint, static boundaries and focused DB review pass. See [Payroll Lite Step 1](docs/PAYROLL_LITE_STEP_1.md) for evidence and limits.
+
+Attendance Lite remains COMPLETE; P6D financial V1 core remains sufficient/frozen. Payroll posting/payment, WPS, Excel/PDF and P6E are NOT STARTED. PRE_DEMO_UAT and signed-in hosted browser smoke are deferred/non-blocking; Production readiness DEFERRED. Development closure is user-accepted and recorded in one local commit, `Complete Payroll Lite Step 1`. Closure reran no tests or verification and performed no hosted browser smoke. No push or Staging/Production action. This current state supersedes older Payroll-not-started statements only for Step 1; full Payroll/WPS and Foundation gates are not complete.
+
 ## Attendance Lite — V1 Development implementation (2026-09-27)
 
 **Attendance Lite COMPLETE for Development.** Focused hosted matrix 84/84, repository/SDK and isolated EN/AR browser checks, build/lint, current static boundaries, grants/cleanup, secret/diff checks and linked no-op migration dry-run pass. Hosted signed-in operator smoke remains deferred/non-blocking. Scope: dated EMPLOYEE site assignments, absence-only HALF_DAY/FULL_DAY, narrow FOREMAN access, scoped DB commands/RLS, own corrections/voids, immutable audit, staff monthly review and a private future payroll month-lock boundary. Attendance has zero accounting effect. Two forward migrations applied only to MakerACC-Development; no completed financial workflow changed. See [Attendance Lite](docs/ATTENDANCE_LITE.md) for exact scope, files, evidence and limitations.
 
-The user approved the **P6D financial V1 core as sufficient/frozen** after Checkpoints 1–10; optional financial workflows remain deferred. P6C COMPLETE; P6D's broader phase remains IN PROGRESS; P6E NOT STARTED; PRE_DEMO_UAT deferred/non-blocking; Production readiness DEFERRED. This user-approved Attendance-first package supersedes the historical sequencing for this bounded V1 work only; it does not close the remaining Foundation or production gates. Payroll calculation/posting, WPS and Excel/PDF have not started. Development closure is user-accepted and recorded in one local commit, `Complete Attendance Lite`. Closure reran no tests or verification and performed no hosted browser smoke. No push or Staging/Production action.
+The user approved the **P6D financial V1 core as sufficient/frozen** after Checkpoints 1–10; optional financial workflows remain deferred. P6C COMPLETE; P6D's broader phase remains IN PROGRESS; P6E NOT STARTED; PRE_DEMO_UAT deferred/non-blocking; Production readiness DEFERRED. This user-approved Attendance-first package supersedes the historical sequencing for this bounded V1 work only; it does not close the remaining Foundation or production gates. At Attendance closure, Payroll calculation/posting, WPS and Excel/PDF had not started; current Payroll Step 1 state is recorded above. Development closure is user-accepted and recorded in one local commit, `Complete Attendance Lite`. Closure reran no tests or verification and performed no hosted browser smoke. No push or Staging/Production action.
 
 ## P6D current checkpoint — Subcontractor Retention Payment
 
@@ -361,4 +367,4 @@ Before real production accounting data or go-live, perform the read-only audit f
 
 ---
 
-*P0–P6C and the post-P5 focused financial retrospective are verified complete. P6D is in progress through Checkpoint 10; P6E–P10, Payroll/WPS, and bulk historical import have not started.*
+*P0–P6C and the post-P5 focused financial retrospective are verified complete. P6D financial V1 core is frozen through Checkpoint 10. Attendance Lite and Payroll Lite Step 1 are Development-complete. P6E–P10, Payroll posting/payment, WPS/Excel/PDF and bulk historical import have not started.*
