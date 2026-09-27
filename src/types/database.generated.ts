@@ -77,6 +77,158 @@ export type Database = {
           },
         ]
       }
+      attendance_audit: {
+        Row: {
+          actor_id: string
+          after_row: Json
+          before_row: Json | null
+          company_id: string
+          entity: string
+          entity_id: string
+          id: string
+          occurred_at: string
+        }
+        Insert: {
+          actor_id: string
+          after_row: Json
+          before_row?: Json | null
+          company_id: string
+          entity: string
+          entity_id: string
+          id?: string
+          occurred_at?: string
+        }
+        Update: {
+          actor_id?: string
+          after_row?: Json
+          before_row?: Json | null
+          company_id?: string
+          entity?: string
+          entity_id?: string
+          id?: string
+          occurred_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendance_audit_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      attendance_exceptions: {
+        Row: {
+          absence_date: string
+          company_id: string
+          correction_reason: string | null
+          created_at: string
+          created_by: string
+          employee_id: string
+          id: string
+          kind: string
+          note: string | null
+          project_id: string
+          updated_at: string
+          updated_by: string
+          version: number
+          voided: boolean
+        }
+        Insert: {
+          absence_date: string
+          company_id: string
+          correction_reason?: string | null
+          created_at?: string
+          created_by: string
+          employee_id: string
+          id?: string
+          kind: string
+          note?: string | null
+          project_id: string
+          updated_at?: string
+          updated_by: string
+          version?: number
+          voided?: boolean
+        }
+        Update: {
+          absence_date?: string
+          company_id?: string
+          correction_reason?: string | null
+          created_at?: string
+          created_by?: string
+          employee_id?: string
+          id?: string
+          kind?: string
+          note?: string | null
+          project_id?: string
+          updated_at?: string
+          updated_by?: string
+          version?: number
+          voided?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendance_exceptions_company_id_employee_id_fkey"
+            columns: ["company_id", "employee_id"]
+            isOneToOne: false
+            referencedRelation: "parties"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "attendance_exceptions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_exceptions_company_id_project_id_fkey"
+            columns: ["company_id", "project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
+      attendance_periods: {
+        Row: {
+          company_id: string
+          locked_at: string | null
+          month: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          reviewed_revision: number | null
+          revision: number
+        }
+        Insert: {
+          company_id: string
+          locked_at?: string | null
+          month: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          reviewed_revision?: number | null
+          revision?: number
+        }
+        Update: {
+          company_id?: string
+          locked_at?: string | null
+          month?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          reviewed_revision?: number | null
+          revision?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendance_periods_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       certificate_deduction_account_mappings: {
         Row: {
           account_id: string
@@ -588,6 +740,70 @@ export type Database = {
             columns: ["company_id", "custodian_id"]
             isOneToOne: false
             referencedRelation: "parties"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
+      employee_site_assignments: {
+        Row: {
+          company_id: string
+          created_at: string
+          created_by: string
+          employee_id: string
+          ends_on: string | null
+          id: string
+          project_id: string
+          starts_on: string
+          updated_at: string
+          updated_by: string
+          version: number
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          created_by: string
+          employee_id: string
+          ends_on?: string | null
+          id?: string
+          project_id: string
+          starts_on: string
+          updated_at?: string
+          updated_by: string
+          version?: number
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          created_by?: string
+          employee_id?: string
+          ends_on?: string | null
+          id?: string
+          project_id?: string
+          starts_on?: string
+          updated_at?: string
+          updated_by?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "employee_site_assignments_company_id_employee_id_fkey"
+            columns: ["company_id", "employee_id"]
+            isOneToOne: false
+            referencedRelation: "parties"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "employee_site_assignments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "employee_site_assignments_company_id_project_id_fkey"
+            columns: ["company_id", "project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
             referencedColumns: ["company_id", "id"]
           },
         ]
@@ -2409,9 +2625,30 @@ export type Database = {
           subcontractor_certificate_id: string
         }[]
       }
+      attendance_context: { Args: { target_company_id: string }; Returns: Json }
+      attendance_day: {
+        Args: {
+          target_company_id: string
+          target_date: string
+          target_project_id: string
+        }
+        Returns: Json
+      }
+      attendance_month: {
+        Args: { target_company_id: string; target_month: string }
+        Returns: Json
+      }
       can_access_project: {
         Args: { target_company_id: string; target_project_id: string }
         Returns: boolean
+      }
+      confirm_attendance_review: {
+        Args: {
+          target_company_id: string
+          target_month: string
+          target_revision: number
+        }
+        Returns: undefined
       }
       create_subcontractor_certificate_draft: {
         Args: {
@@ -2768,6 +3005,33 @@ export type Database = {
           supplier_payment_id: string
         }[]
       }
+      save_attendance_exception: {
+        Args: {
+          target_company_id: string
+          target_date: string
+          target_employee_id: string
+          target_kind: string
+          target_note: string
+          target_project_id: string
+          target_reason?: string
+          target_version: number
+          target_void?: boolean
+        }
+        Returns: string
+      }
+      save_employee_site_assignment: {
+        Args: {
+          target_assignment_id?: string
+          target_company_id: string
+          target_employee_id: string
+          target_ends_on: string
+          target_project_id: string
+          target_reason?: string
+          target_starts_on: string
+          target_version?: number
+        }
+        Returns: string
+      }
     }
     Enums: {
       account_status: "ACTIVE" | "INACTIVE"
@@ -2782,6 +3046,7 @@ export type Database = {
         | "DATA_ENTRY"
         | "PROCUREMENT"
         | "MANAGEMENT_VIEWER"
+        | "FOREMAN"
       custody_settlement_status: "DRAFT" | "FINALIZED"
       expense_funding_mode:
         | "TREASURY"
@@ -2957,6 +3222,7 @@ export const Constants = {
         "DATA_ENTRY",
         "PROCUREMENT",
         "MANAGEMENT_VIEWER",
+        "FOREMAN",
       ],
       custody_settlement_status: ["DRAFT", "FINALIZED"],
       expense_funding_mode: [

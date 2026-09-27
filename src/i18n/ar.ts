@@ -5,6 +5,7 @@ import type {
  TranslationKey } from "./en";
 
 const ar: Record<TranslationKey, string> = {
+  "attendance.title": "الحضور",
   "certificateRead.title": "شهادات مقاول الباطن",
   "certificateRead.scope": "شهادات إنجاز مرتبطة بالعقد. يثبت الاعتماد تكلفة المشروع والضريبة المؤهلة والاحتجاز واسترداد الدفعة والخصومات المربوطة والمستحق المتبقي دون حركة خزينة.",
   "certificateRead.denied": "لا يسمح دورك الحالي بقراءة شهادات مقاول الباطن.", "certificateRead.refresh": "تحديث الشهادات", "certificateRead.loading": "جارٍ تحميل الشهادات…", "certificateRead.error": "تعذر تحميل الشهادات بأمان.", "certificateRead.empty": "لا توجد شهادات ظاهرة.",

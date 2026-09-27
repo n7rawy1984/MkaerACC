@@ -1,3 +1,4 @@
+import AttendanceApplication from "../attendance/AttendanceApplication";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { useT } from "../i18n/I18nContext";
 import { getSupabaseClient } from "../lib/supabase";
@@ -23,10 +24,12 @@ function RoutedApplication() {
   if (state.phase === "NO_ACTIVE_COMPANY") return <Routes><Route path="/no-company" element={<NoCompanyPage />} /><Route path="*" element={<Navigate to="/no-company" replace />} /></Routes>;
   if (state.phase === "SELECTING_COMPANY") return <Routes><Route path="/select-company" element={<CompanySelectPage />} /><Route path="*" element={<Navigate to="/select-company" replace />} /></Routes>;
   if (state.phase === "IDENTITY_LOAD_ERROR") return <Routes><Route path="/auth-error" element={<AuthErrorPage />} /><Route path="*" element={<Navigate to="/auth-error" replace />} /></Routes>;
+  if (state.activeTenant.role === "FOREMAN") return <Routes><Route path="/attendance" element={<AttendanceApplication />} /><Route path="*" element={<Navigate to="/attendance" replace />} /></Routes>;
   return (
     <SupabaseTenantSettingsProvider key={`${state.profile.userId}:${state.activeTenant.companyId}`} client={getSupabaseClient()} profile={state.profile} tenant={state.activeTenant}>
       <ProductionMasterDataProvider onCompanyProfileRefreshed={syncCompanyLegalName} key={`${state.profile.userId}:${state.activeTenant.companyId}:${state.activeTenant.role}`} role={state.activeTenant.role} client={getSupabaseClient()} userId={state.profile.userId} activeCompanyId={state.activeTenant.companyId}>
         <Routes>
+          <Route path="/attendance" element={<AttendanceApplication />} />
           <Route path="/login" element={<Navigate to="/" replace />} />
           <Route path="/no-company" element={<Navigate to="/" replace />} />
           <Route path="/select-company" element={<Navigate to="/" replace />} />

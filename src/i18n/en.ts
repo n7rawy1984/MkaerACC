@@ -2,6 +2,7 @@
 // location in this file mirrors where it's used. ar.ts must define exactly the same key set —
 // see i18n/I18nContext.tsx for the lookup/fallback behavior and translation-key discipline notes.
 const en = {
+  "attendance.title": "Attendance",
   "certificateRead.title": "Subcontractor Certificates",
   "certificateRead.scope": "Contract-scoped progress certificates. Approval recognizes project cost, eligible VAT, retention, advance recovery, mapped deductions and the residual payable without moving Treasury.",
   "certificateRead.denied": "Your current Company role cannot read Subcontractor Certificates.",

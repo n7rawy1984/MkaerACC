@@ -6,6 +6,12 @@ Repository: `https://github.com/n7rawy1984/MkaerACC` · Local path: `/media/nagh
 
 ---
 
+## Attendance Lite — V1 Development implementation (2026-09-27)
+
+**Attendance Lite COMPLETE for Development.** Focused hosted matrix 84/84, repository/SDK and isolated EN/AR browser checks, build/lint, current static boundaries, grants/cleanup, secret/diff checks and linked no-op migration dry-run pass. Hosted signed-in operator smoke remains deferred/non-blocking. Scope: dated EMPLOYEE site assignments, absence-only HALF_DAY/FULL_DAY, narrow FOREMAN access, scoped DB commands/RLS, own corrections/voids, immutable audit, staff monthly review and a private future payroll month-lock boundary. Attendance has zero accounting effect. Two forward migrations applied only to MakerACC-Development; no completed financial workflow changed. See [Attendance Lite](docs/ATTENDANCE_LITE.md) for exact scope, files, evidence and limitations.
+
+The user approved the **P6D financial V1 core as sufficient/frozen** after Checkpoints 1–10; optional financial workflows remain deferred. P6C COMPLETE; P6D's broader phase remains IN PROGRESS; P6E NOT STARTED; PRE_DEMO_UAT deferred/non-blocking; Production readiness DEFERRED. This user-approved Attendance-first package supersedes the historical sequencing for this bounded V1 work only; it does not close the remaining Foundation or production gates. Payroll calculation/posting, WPS and Excel/PDF have not started. Development closure is user-accepted and recorded in one local commit, `Complete Attendance Lite`. Closure reran no tests or verification and performed no hosted browser smoke. No push or Staging/Production action.
+
 ## P6D current checkpoint — Subcontractor Retention Payment
 
 **P6D IN PROGRESS; Checkpoints 1–10 COMPLETE for Development.** Expense READ, Treasury-funded Expense POST, Expense Reversal, Supplier Payment, Supplier Credit Expense POST, Subcontractor Advance, Subcontractor Certificates, Subcontractor Payment, Subcontractor Retention Release, and Subcontractor Retention Payment READ/POST/Reversal are complete. Production `/retention-payments` reuses canonical P5I-B commands with exact BIGINT strings, explicit same-Subcontract Release allocations, authoritative released-but-unpaid availability, Treasury compatibility, frozen same-key recovery, authoritative readback, and unchanged role/RLS/locking/dependency boundaries. Focused automated and rollback-only Development evidence passes. No migration. See [Checkpoint 10](docs/P6D_SUBCONTRACTOR_RETENTION_PAYMENT.md) and deferred [PRE_DEMO_UAT](docs/PRE_DEMO_UAT.md).
@@ -496,6 +502,8 @@ Migration tooling exports every `cas:v1:*` collection plus schema/app version, t
 Foundation schema includes import batch/source row/fingerprint/review provenance, but no importer is implemented now. Suggested review states remain `READY`, `NEEDS_REVIEW`, `POSSIBLE_DUPLICATE`, `MISSING_PROJECT`, `MISSING_SUPPLIER`, `INVALID_VAT`, `APPROVED`, plus `REJECTED`. Large history and opening balances wait until Foundation is live and verified.
 
 ## 17. Current Roadmap and Immediate Next Task
+
+Current V1 override: Attendance Lite is COMPLETE for Development; see the current checkpoint above. Next functional work requires the remaining Payroll Lite policy decisions and separate implementation authorization. The historical sequence below does not reopen frozen optional P6D scope.
 
 Phase 1 ✅ → 2A ✅ → 2B.1 ✅ → 2B.1A ✅ → 2B.2 ✅ → 2B.3 ✅ → **P0–P5 ✅** → **post-P5 focused financial retrospective** → P6–P10 Foundation → 2D Payroll/WPS → 2E Historical Import/Opening Balances → later phases.
 

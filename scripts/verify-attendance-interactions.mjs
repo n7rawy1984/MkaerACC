@@ -1,0 +1,55 @@
+import assert from 'node:assert/strict';
+import {createServer} from 'vite';
+import react from '@vitejs/plugin-react';
+import {resolve} from 'node:path';
+import {chromium} from 'playwright';
+const root=resolve(import.meta.dirname,'..');
+const server=await createServer({root,configFile:false,plugins:[{name:'attendance-test',load(id){if(id===resolve(root,'src/lib/supabase.ts'))return 'export const getSupabaseClient=()=>window.attendanceTest.client;';},configureServer(s){s.middlewares.use('/__attendance_test',async(_req,res)=>{res.setHeader('Content-Type','text/html');res.end(await s.transformIndexHtml('/__attendance_test','<html><body><div id="root"></div><script type="module" src="/scripts/fixtures/attendance-interactions.tsx"></script></body></html>'));});}},react()],server:{host:'127.0.0.1',port:0},logLevel:'error'});
+let browser;
+try{
+ await server.listen();browser=await chromium.launch({headless:true,...(process.env.CHROMIUM_PATH?{executablePath:process.env.CHROMIUM_PATH}:{})});const page=await browser.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.route('**/*',r=>new URL(r.request().url()).hostname==='127.0.0.1'?r.continue():r.abort());
+ await page.goto(`http://127.0.0.1:${server.httpServer.address().port}/__attendance_test`);
+ await page.getByRole('button',{name:'Save absence',exact:true}).waitFor();assert.equal(await page.getByRole('button',{name:'Monthly review',exact:true}).count(),0);
+ assert.equal(await page.locator('input[type=date]').getAttribute('max'),'2026-09-27');
+ await page.getByLabel('Note (optional)').fill('Absence note');await page.getByRole('button',{name:'Save absence',exact:true}).click();
+ await page.getByRole('button',{name:'Save correction',exact:true}).waitFor();
+ let calls=await page.evaluate(()=>window.attendanceTest.calls.filter(c=>c.name==='save_attendance_exception'));
+ assert.equal(calls.length,1);assert.equal(calls[0].args.target_kind,'HALF_DAY');assert.equal(calls[0].args.target_version,0);
+ assert(await page.getByRole('button',{name:'Save correction',exact:true}).isDisabled());
+ await page.locator('form select').selectOption('FULL_DAY');await page.getByLabel('Correction reason (required)').fill('Full day');
+ await page.getByRole('button',{name:'Save correction',exact:true}).click();await page.waitForFunction(()=>window.attendanceTest.entry.version===2);
+ await page.getByLabel('Correction reason (required)').fill('Wrong entry');await page.getByRole('button',{name:'Void absence',exact:true}).click();
+ await page.waitForFunction(()=>window.attendanceTest.entry.voided);await page.getByText('Voided',{exact:true}).waitFor();
+ await page.getByLabel('Correction reason (required)').fill('Restore');await page.evaluate(()=>window.attendanceTest.lost=true);
+ await page.getByRole('button',{name:'Save correction',exact:true}).click();await page.getByRole('alert').waitFor();
+ assert(await page.getByRole('button',{name:'Save correction',exact:true}).isDisabled());
+ const mutations=await page.evaluate(()=>window.attendanceTest.calls.filter(c=>c.name==='save_attendance_exception').length);
+ await page.locator('form').getByRole('button',{name:'Refresh',exact:true}).click();await page.getByRole('button',{name:'Save correction',exact:true}).waitFor();
+ assert.equal(await page.evaluate(()=>window.attendanceTest.calls.filter(c=>c.name==='save_attendance_exception').length),mutations);
+ await page.evaluate(()=>{window.attendanceTest.entry.created_by='other-actor';});await page.getByRole('button',{name:'Refresh',exact:true}).first().click();
+ await page.getByText('Employee One',{exact:true}).waitFor();assert.equal(await page.locator('form').count(),0);
+ await page.evaluate(()=>window.attendanceTest.role('ACCOUNTING_ADMIN'));await page.getByRole('button',{name:'Save correction',exact:true}).waitFor();
+ await page.getByRole('button',{name:'Monthly review',exact:true}).click();await page.getByRole('checkbox').check();await page.getByRole('button',{name:'Confirm monthly review',exact:true}).click();
+ await page.getByText('Review confirmed',{exact:true}).waitFor();assert.equal(await page.evaluate(()=>window.attendanceTest.calls.filter(c=>c.name==='confirm_attendance_review').length),1);
+ await page.locator('summary').filter({hasText:'Assign employee to site'}).click();
+ const assignmentForm=page.locator('form').filter({has:page.locator('[name=employee]')});
+ await assignmentForm.locator('[name=employee]').selectOption({index:1});await assignmentForm.locator('[name=project]').selectOption({index:1});await assignmentForm.locator('[name=start]').fill('2026-09-01');
+ await assignmentForm.getByRole('button',{name:'Assign employee to site',exact:true}).click();
+ await page.waitForFunction(()=>window.attendanceTest.calls.some(c=>c.name==='save_employee_site_assignment'));
+ const assignment=await page.evaluate(()=>window.attendanceTest.calls.find(c=>c.name==='save_employee_site_assignment').args);
+ assert.equal(assignment.target_starts_on,'2026-09-01');assert.equal(assignment.target_ends_on,null);assert.equal(assignment.target_assignment_id,null);
+ await page.locator('summary').filter({hasText:'Change end date'}).click();const endForm=page.locator('form').filter({has:page.locator('[name=reason]')});
+ await endForm.locator('[name=end]').fill('2026-09-25');await endForm.locator('[name=reason]').fill('Site transfer');await endForm.getByRole('button',{name:'Change end date',exact:true}).click();
+ await page.waitForFunction(()=>window.attendanceTest.calls.filter(c=>c.name==='save_employee_site_assignment').length===2);
+ const changed=await page.evaluate(()=>window.attendanceTest.calls.filter(c=>c.name==='save_employee_site_assignment')[1].args);
+ assert.equal(changed.target_version,1);assert.equal(changed.target_reason,'Site transfer');assert.equal(changed.target_ends_on,'2026-09-25');
+
+ await page.evaluate(()=>window.attendanceTest.role('ACCOUNTANT'));await page.getByText('Employee One',{exact:true}).waitFor();assert.equal(await page.locator('form').count(),0);
+ await page.getByRole('button',{name:'Monthly review',exact:true}).click();await page.getByRole('checkbox').waitFor();assert.equal(await page.locator('form').count(),0);
+ for(const role of ['PROJECT_MANAGER','DATA_ENTRY','PROCUREMENT','MANAGEMENT_VIEWER','SYSTEM_ADMIN']){await page.evaluate(r=>window.attendanceTest.role(r),role);await page.getByRole('alert').waitFor();assert.equal(await page.locator('form').count(),0);}
+ await page.evaluate(()=>{window.attendanceTest.role('FOREMAN');window.attendanceTest.locked=true;});await page.getByText('This attendance month is locked.',{exact:true}).waitFor();assert.equal(await page.locator('form').count(),0);
+ await page.setViewportSize({width:390,height:760});await page.evaluate(()=>window.attendanceTest.locale());await page.waitForFunction(()=>document.documentElement.dir==='rtl');assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+ assert.equal(errors.length,0,errors.join('\n'));
+ console.log('Attendance isolated Chromium PASS: EN/AR/390px, half/full, correction reason, void, uncertain-response readback, ownership, accountant review, denied roles and month lock.');
+}finally{await browser?.close();await server.close();}

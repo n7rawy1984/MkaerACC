@@ -57,6 +57,7 @@ export default function TenantReadyApplication({ view }: { view: "expenses" | "s
               {t(`productionMaster.${resource}`)}
             </NavLink>
           ))}
+          {(state.activeTenant.role === "ACCOUNTING_ADMIN" || state.activeTenant.role === "ACCOUNTANT") && <NavLink to="/attendance" className="rounded-lg border px-3 py-2 text-sm">{t("attendance.title")}</NavLink>}
           <NavLink to="/expenses" className={({ isActive }) => `rounded-lg border px-3 py-2 text-sm font-medium ${isActive ? "border-[var(--tenant-primary)] text-[var(--tenant-primary)]" : "border-slate-300 text-slate-600"}`}>{t("expenseRead.title")}</NavLink>
           <NavLink to="/supplier-payments" className={({ isActive }) => `rounded-lg border px-3 py-2 text-sm font-medium ${isActive ? "border-[var(--tenant-primary)] text-[var(--tenant-primary)]" : "border-slate-300 text-slate-600"}`}>{t("supplierPaymentRead.title")}</NavLink>
           <NavLink to="/subcontractor-advances" className={({ isActive }) => `rounded-lg border px-3 py-2 text-sm font-medium ${isActive ? "border-[var(--tenant-primary)] text-[var(--tenant-primary)]" : "border-slate-300 text-slate-600"}`}>{t("subcontractorAdvanceRead.title")}</NavLink>
