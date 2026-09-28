@@ -2,11 +2,17 @@
 
 This is the official living roadmap. Read it with `PROJECT_HANDOFF.md` before development. Architecture planned does not mean implemented.
 
-## Payroll Lite Step 1 — Development
+## Payroll Lite Step 2 — Development
+
+**Payroll Lite Step 2 COMPLETE for Development.** Frozen Payroll POST, Salary Payable, partial Salary Payments, both reversals, controlled replacement and payroll journal privacy are implemented. Three forward migrations applied only to MakerACC-Development; 47 aligned, linked dry-run no-op. Focused 114-check rollback matrix, four concurrency scenarios, repository/SDK and isolated EN/AR/390px UI pass. See [Step 2 record](docs/PAYROLL_LITE_STEP_2.md) for commands, accounting, required tenant mappings, exact evidence and retained synthetic fixture.
+
+Attendance and Step 1 remain COMPLETE; P6D financial V1 core remains frozen. WPS, Excel/PDF and P6E NOT STARTED. Production readiness remains DEFERRED; hosted signed-in smoke is deferred/non-blocking. Development closure is user-accepted and recorded in one local commit, `Complete Payroll Lite Step 2`. Closure reran no tests and performed no hosted signed-in smoke. Each Company must configure a valid `SALARY_PAYABLE` mapping before operational Payroll POST. No push or Staging/Production action. This checkpoint supersedes historical Payroll-posting-not-started statements only for the approved Step 2 scope.
+
+## Payroll Lite Step 1 — Historical Development closure
 
 **Payroll Lite Step 1 COMPLETE for Development:** EMPLOYEE Payroll Profiles, monthly DRAFT register, exact server calculation, generic audited additions/deductions, explicit refresh/stale detection and draft review. Accountant/Admin only; Management Viewer and Foreman denied. Reviewed Attendance is consumed without locking it. One canonical migration applied only to MakerACC-Development (44 total). Hosted rollback checks 127/127, repository/SDK, isolated EN/AR/390px browser, build/lint, static boundaries and focused DB review pass. See [Payroll Lite Step 1](docs/PAYROLL_LITE_STEP_1.md) for evidence and limits.
 
-Attendance Lite remains COMPLETE; P6D financial V1 core remains sufficient/frozen. Payroll posting/payment, WPS, Excel/PDF and P6E are NOT STARTED. PRE_DEMO_UAT and signed-in hosted browser smoke are deferred/non-blocking; Production readiness DEFERRED. Development closure is user-accepted and recorded in one local commit, `Complete Payroll Lite Step 1`. Closure reran no tests or verification and performed no hosted browser smoke. No push or Staging/Production action. This current state supersedes older Payroll-not-started statements only for Step 1; full Payroll/WPS and Foundation gates are not complete.
+At Step 1 closure, Attendance Lite was COMPLETE and the P6D financial V1 core sufficient/frozen; Payroll posting/payment, WPS, Excel/PDF and P6E had not started. Current Step 2 state is above. PRE_DEMO_UAT and signed-in hosted browser smoke are deferred/non-blocking; Production readiness DEFERRED. Development closure is user-accepted and recorded in one local commit, `Complete Payroll Lite Step 1`. Closure reran no tests or verification and performed no hosted browser smoke. No push or Staging/Production action. This current state supersedes older Payroll-not-started statements only for Step 1; full Payroll/WPS and Foundation gates are not complete.
 
 ## Attendance Lite — V1 Development implementation (2026-09-27)
 
@@ -367,4 +373,4 @@ Before real production accounting data or go-live, perform the read-only audit f
 
 ---
 
-*P0–P6C and the post-P5 focused financial retrospective are verified complete. P6D financial V1 core is frozen through Checkpoint 10. Attendance Lite and Payroll Lite Step 1 are Development-complete. P6E–P10, Payroll posting/payment, WPS/Excel/PDF and bulk historical import have not started.*
+*P0–P6C and the post-P5 focused financial retrospective are verified complete. P6D financial V1 core is frozen through Checkpoint 10. Attendance Lite and Payroll Lite Step 1 are Development-complete; Payroll Lite Step 2 is COMPLETE for Development. P6E–P10, WPS/Excel/PDF and bulk historical import have not started.*

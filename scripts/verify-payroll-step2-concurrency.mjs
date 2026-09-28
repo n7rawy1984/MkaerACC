@@ -1,0 +1,15 @@
+// Development only. Setup is separate and explicit; teardown retains immutable synthetic journals.
+import {spawn} from 'node:child_process';import assert from 'node:assert/strict';import {writeFileSync,mkdtempSync,rmSync} from 'node:fs';import {tmpdir} from 'node:os';import {join} from 'node:path';
+const dir=mkdtempSync(join(tmpdir(),'payroll-step2-'));const c='95610000-0000-4000-8000-000000000001';let serial=0;
+const execute=sql=>new Promise(resolve=>{const path=join(dir,`${++serial}.sql`);writeFileSync(path,sql);const p=spawn('node_modules/.bin/supabase',['db','query','--linked','--file',path]);let output='';p.stdout.on('data',d=>output+=d);p.stderr.on('data',d=>output+=d);p.on('close',code=>resolve({code,output}));});
+const tx=body=>`begin; select set_config('request.jwt.claim.sub',(select user_id::text from public.company_memberships where company_id='${c}' and status='ACTIVE'),true);set local role authenticated;select pg_sleep(1);${body};commit;`;
+const post=`select public.post_payroll('${c}',(select id from public.payroll_draft_periods where company_id='${c}'),2,'95610000-0000-4000-8000-000000000010')`;
+const pay=k=>`select public.pay_salary('${c}',(select id from public.payroll_entitlements where company_id='${c}'),'95610000-0000-4000-8000-000000000006','2026-09-01',7000,'Concurrent synthetic payment','${k}')`;
+try{
+ let results=await Promise.all([execute(tx(post)),execute(tx(post))]);assert(results.every(r=>r.code===0),results.map(r=>r.output).join('\n'));console.log('Concurrent same-key POST: both callers resolved successfully.');
+ results=await Promise.all([execute(tx(pay('95610000-0000-4000-8000-000000000011'))),execute(tx(pay('95610000-0000-4000-8000-000000000012')))]);assert.equal(results.filter(r=>r.code===0).length,1,results.map(r=>r.output).join('\n'));assert(results.find(r=>r.code!==0).output.includes('Invalid payment date, amount or reference'));console.log('Concurrent overpayment: one accepted, one rejected.');
+ const reverse=`select public.reverse_salary_payment('${c}',(select id from public.salary_payments where company_id='${c}'),'2026-09-02','Synthetic reversal race','95610000-0000-4000-8000-000000000013')`;
+ results=await Promise.all([execute(tx(reverse)),execute(tx(reverse))]);assert(results.every(r=>r.code===0),results.map(r=>r.output).join('\n'));console.log('Concurrent same-key payment reversal: both callers resolved successfully.');
+ const reversePayroll=`select public.reverse_payroll('${c}',(select id from public.payroll_postings where company_id='${c}'),'2026-09-02','Synthetic payroll race','95610000-0000-4000-8000-000000000014')`;
+ results=await Promise.all([execute(tx(reversePayroll)),execute(tx(pay('95610000-0000-4000-8000-000000000015')))]);assert.equal(results.filter(r=>r.code===0).length,1,results.map(r=>r.output).join('\n'));assert(/Payroll reversed|Reverse all live salary payments first/.test(results.find(r=>r.code!==0).output));console.log('Payroll reversal vs payment: exactly one accepted; dependency preserved.');
+}finally{rmSync(dir,{recursive:true,force:true});}

@@ -1227,6 +1227,47 @@ export type Database = {
           },
         ]
       }
+      payroll_draft_accounting: {
+        Row: {
+          allocations: Json
+          classifications: Json
+          company_id: string
+          created_at: string
+          created_by: string
+          id: string
+          period_id: string
+          version: number
+        }
+        Insert: {
+          allocations: Json
+          classifications: Json
+          company_id: string
+          created_at?: string
+          created_by: string
+          id?: string
+          period_id: string
+          version: number
+        }
+        Update: {
+          allocations?: Json
+          classifications?: Json
+          company_id?: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          period_id?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payroll_draft_accounting_company_id_period_id_fkey"
+            columns: ["company_id", "period_id"]
+            isOneToOne: false
+            referencedRelation: "payroll_draft_periods"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
       payroll_draft_adjustments: {
         Row: {
           amount_minor: number
@@ -1483,6 +1524,139 @@ export type Database = {
           },
         ]
       }
+      payroll_entitlements: {
+        Row: {
+          amount_minor: number
+          company_id: string
+          cost_account_id: string
+          employee_id: string
+          id: string
+          payable_account_id: string
+          payroll_id: string
+          project_id: string | null
+        }
+        Insert: {
+          amount_minor: number
+          company_id: string
+          cost_account_id: string
+          employee_id: string
+          id?: string
+          payable_account_id: string
+          payroll_id: string
+          project_id?: string | null
+        }
+        Update: {
+          amount_minor?: number
+          company_id?: string
+          cost_account_id?: string
+          employee_id?: string
+          id?: string
+          payable_account_id?: string
+          payroll_id?: string
+          project_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payroll_entitlements_company_id_cost_account_id_fkey"
+            columns: ["company_id", "cost_account_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "payroll_entitlements_company_id_employee_id_fkey"
+            columns: ["company_id", "employee_id"]
+            isOneToOne: false
+            referencedRelation: "parties"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "payroll_entitlements_company_id_payable_account_id_fkey"
+            columns: ["company_id", "payable_account_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "payroll_entitlements_company_id_payroll_id_fkey"
+            columns: ["company_id", "payroll_id"]
+            isOneToOne: false
+            referencedRelation: "payroll_postings"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "payroll_entitlements_company_id_project_id_fkey"
+            columns: ["company_id", "project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
+      payroll_postings: {
+        Row: {
+          company_id: string
+          created_at: string
+          created_by: string
+          draft_version: number
+          id: string
+          journal_id: string
+          month: string
+          period_id: string
+          posting_date: string
+          replaces_id: string | null
+          snapshot: Json
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          created_by: string
+          draft_version: number
+          id: string
+          journal_id: string
+          month: string
+          period_id: string
+          posting_date: string
+          replaces_id?: string | null
+          snapshot: Json
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          created_by?: string
+          draft_version?: number
+          id?: string
+          journal_id?: string
+          month?: string
+          period_id?: string
+          posting_date?: string
+          replaces_id?: string | null
+          snapshot?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payroll_postings_company_id_journal_id_fkey"
+            columns: ["company_id", "journal_id"]
+            isOneToOne: false
+            referencedRelation: "journal_entries"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "payroll_postings_company_id_period_id_fkey"
+            columns: ["company_id", "period_id"]
+            isOneToOne: false
+            referencedRelation: "payroll_draft_periods"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "payroll_postings_company_id_replaces_id_fkey"
+            columns: ["company_id", "replaces_id"]
+            isOneToOne: false
+            referencedRelation: "payroll_postings"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
       payroll_profiles: {
         Row: {
           company_id: string
@@ -1559,6 +1733,54 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "companies"
             referencedColumns: ["id"]
+          },
+        ]
+      }
+      payroll_reversals: {
+        Row: {
+          company_id: string
+          created_at: string
+          created_by: string
+          id: string
+          journal_id: string
+          payroll_id: string
+          reason: string
+          reversal_date: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          created_by: string
+          id: string
+          journal_id: string
+          payroll_id: string
+          reason: string
+          reversal_date: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          journal_id?: string
+          payroll_id?: string
+          reason?: string
+          reversal_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payroll_reversals_company_id_journal_id_fkey"
+            columns: ["company_id", "journal_id"]
+            isOneToOne: false
+            referencedRelation: "journal_entries"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "payroll_reversals_company_id_payroll_id_fkey"
+            columns: ["company_id", "payroll_id"]
+            isOneToOne: false
+            referencedRelation: "payroll_postings"
+            referencedColumns: ["company_id", "id"]
           },
         ]
       }
@@ -1746,6 +1968,115 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "permissions"
             referencedColumns: ["key"]
+          },
+        ]
+      }
+      salary_payment_reversals: {
+        Row: {
+          company_id: string
+          created_at: string
+          created_by: string
+          id: string
+          journal_id: string
+          payment_id: string
+          reason: string
+          reversal_date: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          created_by: string
+          id: string
+          journal_id: string
+          payment_id: string
+          reason: string
+          reversal_date: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          journal_id?: string
+          payment_id?: string
+          reason?: string
+          reversal_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "salary_payment_reversals_company_id_journal_id_fkey"
+            columns: ["company_id", "journal_id"]
+            isOneToOne: false
+            referencedRelation: "journal_entries"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "salary_payment_reversals_company_id_payment_id_fkey"
+            columns: ["company_id", "payment_id"]
+            isOneToOne: false
+            referencedRelation: "salary_payments"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
+      salary_payments: {
+        Row: {
+          amount_minor: number
+          company_id: string
+          created_at: string
+          created_by: string
+          entitlement_id: string
+          id: string
+          journal_id: string
+          payment_date: string
+          reference: string
+          treasury_id: string
+        }
+        Insert: {
+          amount_minor: number
+          company_id: string
+          created_at?: string
+          created_by: string
+          entitlement_id: string
+          id: string
+          journal_id: string
+          payment_date: string
+          reference: string
+          treasury_id: string
+        }
+        Update: {
+          amount_minor?: number
+          company_id?: string
+          created_at?: string
+          created_by?: string
+          entitlement_id?: string
+          id?: string
+          journal_id?: string
+          payment_date?: string
+          reference?: string
+          treasury_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "salary_payments_company_id_entitlement_id_fkey"
+            columns: ["company_id", "entitlement_id"]
+            isOneToOne: false
+            referencedRelation: "payroll_entitlements"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "salary_payments_company_id_journal_id_fkey"
+            columns: ["company_id", "journal_id"]
+            isOneToOne: false
+            referencedRelation: "journal_entries"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "salary_payments_company_id_treasury_id_fkey"
+            columns: ["company_id", "treasury_id"]
+            isOneToOne: false
+            referencedRelation: "treasury_accounts"
+            referencedColumns: ["company_id", "id"]
           },
         ]
       }
@@ -3042,6 +3373,22 @@ export type Database = {
         Args: { target_company_id: string }
         Returns: boolean
       }
+      pay_salary: {
+        Args: {
+          target_amount_minor: number
+          target_company_id: string
+          target_date: string
+          target_entitlement_id: string
+          target_idempotency_key: string
+          target_reference: string
+          target_treasury_id: string
+        }
+        Returns: string
+      }
+      payroll_journal_visible: {
+        Args: { target_company_id: string; target_journal_id: string }
+        Returns: boolean
+      }
       post_custody_advance: {
         Args: {
           target_advance_date: string
@@ -3107,6 +3454,15 @@ export type Database = {
           journal_entry_id: string
           replayed: boolean
         }[]
+      }
+      post_payroll: {
+        Args: {
+          target_company_id: string
+          target_idempotency_key: string
+          target_period_id: string
+          target_version: number
+        }
+        Returns: string
       }
       post_subcontractor_advance: {
         Args: {
@@ -3205,7 +3561,21 @@ export type Database = {
           supplier_payment_id: string
         }[]
       }
+      prepare_payroll_accounting: {
+        Args: {
+          target_allocations: Json
+          target_classifications: Json
+          target_company_id: string
+          target_period_id: string
+          target_version: number
+        }
+        Returns: undefined
+      }
       read_payroll_draft: {
+        Args: { target_company_id: string; target_month: string }
+        Returns: Json
+      }
+      read_payroll_postings: {
         Args: { target_company_id: string; target_month: string }
         Returns: Json
       }
@@ -3265,6 +3635,26 @@ export type Database = {
           replayed: boolean
           reversal_journal_entry_id: string
         }[]
+      }
+      reverse_payroll: {
+        Args: {
+          target_company_id: string
+          target_date: string
+          target_idempotency_key: string
+          target_payroll_id: string
+          target_reason: string
+        }
+        Returns: string
+      }
+      reverse_salary_payment: {
+        Args: {
+          target_company_id: string
+          target_date: string
+          target_idempotency_key: string
+          target_payment_id: string
+          target_reason: string
+        }
+        Returns: string
       }
       reverse_subcontractor_advance: {
         Args: {
@@ -3466,6 +3856,7 @@ export type Database = {
         | "PROJECT_COST"
         | "PROJECT_COST_SUBCONTRACTORS"
         | "COMPANY_EXPENSE"
+        | "SALARY_PAYABLE"
       treasury_account_type:
         | "CASH"
         | "PETTY_CASH"
@@ -3645,6 +4036,7 @@ export const Constants = {
         "PROJECT_COST",
         "PROJECT_COST_SUBCONTRACTORS",
         "COMPANY_EXPENSE",
+        "SALARY_PAYABLE",
       ],
       treasury_account_type: [
         "CASH",

@@ -1,0 +1,145 @@
+-- Focused Step 2 only. Synthetic Development fixtures, every change rolls back.
+begin;
+create temp table results(n integer); insert into results values(0); grant all on results to authenticated;
+create function pg_temp.ok(b boolean,label text) returns void language plpgsql as $$ begin if b is distinct from true then raise exception 'FAIL %',label; end if; update results set n=n+1; end $$;
+create function pg_temp.reject(q text) returns void language plpgsql as $$ begin begin execute q; exception when others then perform pg_temp.ok(true,'rejected');return;end;raise exception 'Expected rejection: %',q;end $$;
+do $$
+#variable_conflict use_variable
+declare f record; e2 uuid:=gen_random_uuid(); row1 uuid; row2 uuid; period uuid; draft jsonb; plan jsonb; v integer;
+ posted uuid; entitlement uuid; payment uuid; payment2 uuid; reversal uuid; key1 uuid:=gen_random_uuid(); key2 uuid:=gen_random_uuid(); paymentkey uuid:=gen_random_uuid();
+ adj uuid:=gen_random_uuid(); other uuid; treasury uuid; salary uuid:=gen_random_uuid(); role_name public.company_role; table_name text; n integer; original_j uuid; journals uuid[]; replacement uuid; bigdoc jsonb; incompatible uuid:=gen_random_uuid(); wrong_project uuid:=gen_random_uuid(); wrong_gl uuid:=gen_random_uuid(); deduction uuid:=gen_random_uuid();
+begin
+ select c.id company_id,m.user_id,p.id project_id,e.id employee_id into f from public.companies c
+ join public.company_memberships m on m.company_id=c.id and m.status='ACTIVE' join public.profiles u on u.user_id=m.user_id and u.status='ACTIVE'
+ join public.projects p on p.company_id=c.id and p.status<>'CLOSED' join public.parties e on e.company_id=c.id and e.type='EMPLOYEE' and e.status='ACTIVE'
+ where c.status='ACTIVE' order by c.id,m.user_id,p.id limit 1;
+ if f.user_id is null then raise exception 'Synthetic fixture unavailable'; end if;
+ select id into other from public.companies where id<>f.company_id limit 1;
+ insert into public.parties(id,company_id,type,name) values(e2,f.company_id,'EMPLOYEE','Step 2 rollback only');
+ select id into treasury from public.treasury_accounts where company_id=f.company_id and project_id is null and status='ACTIVE' limit 1;
+ if treasury is null then raise exception 'Company Treasury fixture required'; end if;
+ insert into public.accounts(company_id,code,name,account_type,system_key) select f.company_id,'STEP2-'||k,k,'EXPENSE',k::public.system_account_key from unnest(array['PROJECT_COST','COMPANY_EXPENSE']) k where not exists(select 1 from public.accounts where company_id=f.company_id and system_key=k::public.system_account_key);
+ insert into public.projects(id,company_id,code,name) values(wrong_project,f.company_id,'STEP2-WRONG','Different synthetic Project');
+ insert into public.accounts(id,company_id,code,name,account_type) values(wrong_gl,f.company_id,'STEP2-WRONG','Different synthetic bank','ASSET');
+ insert into public.treasury_accounts(id,company_id,project_id,code,name,type,gl_account_id) values(incompatible,f.company_id,wrong_project,'STEP2-WRONG','Different Project bank','PROJECT_BANK',wrong_gl);
+ perform set_config('request.jwt.claim.sub',f.user_id::text,true);
+ update public.company_memberships set role='ACCOUNTING_ADMIN' where company_id=f.company_id and user_id=f.user_id;
+ set local role authenticated;
+ perform public.save_payroll_profile(f.company_id,f.employee_id,0,'STEP2-A','Monthly','Worker','Site',f.project_id,10000,'CASH','ACTIVE');
+ perform public.save_payroll_profile(f.company_id,e2,0,'STEP2-B','Monthly','Admin','Office',null,20000,'BANK','ACTIVE');
+ perform public.confirm_attendance_review(f.company_id,'2026-08-01',0);
+ period:=public.refresh_payroll_draft(f.company_id,'2026-08-01',0);
+ draft:=public.read_payroll_draft(f.company_id,'2026-08-01');
+ select id into row1 from public.payroll_draft_rows where period_id=period and employee_id=f.employee_id;
+ select id into row2 from public.payroll_draft_rows where period_id=period and employee_id=e2;
+ perform public.save_payroll_draft_adjustment(f.company_id,row1,adj,0,'ADDITION',500,'Additional salary',false,null);
+ draft:=public.read_payroll_draft(f.company_id,'2026-08-01');
+ perform public.refresh_payroll_draft(f.company_id,'2026-08-01',(draft->'period'->>'version')::integer);
+ select version into v from public.payroll_draft_periods where id=period;
+ plan:=jsonb_build_object(row1::text,f.project_id,row2::text,null);
+ perform pg_temp.reject(format('select public.prepare_payroll_accounting(%L,%L,%s,%L,%L)',f.company_id,period,v,plan,jsonb_build_object(adj::text,'LOAN_RECOVERY')));
+ perform public.prepare_payroll_accounting(f.company_id,period,v,plan,jsonb_build_object(adj::text,'EARNED_SALARY_ADDITION')); v:=v+1;
+ perform pg_temp.reject(format('select public.post_payroll(%L,%L,%s,%L)',f.company_id,period,v,key1));
+ perform public.review_payroll_draft(f.company_id,period,v);
+ perform pg_temp.reject(format('select public.post_payroll(%L,%L,%s,%L)',f.company_id,period,v,key1)); -- mapping missing
+ reset role;
+ insert into public.accounts(id,company_id,code,name,account_type,requires_party,system_key) values(salary,f.company_id,'STEP2-SALARY','Salary payable','LIABILITY',true,'SALARY_PAYABLE');
+ perform pg_temp.reject(format('update public.accounts set account_type=''EXPENSE'' where id=%L',salary));
+ set local role authenticated;
+ posted:=public.post_payroll(f.company_id,period,v,key1);
+ perform pg_temp.ok(posted=public.post_payroll(f.company_id,period,v,key1),'POST replay');
+ perform pg_temp.reject(format('select public.post_payroll(%L,%L,%s,%L)',f.company_id,period,v+1,key1));
+ perform pg_temp.reject(format('select public.post_payroll(%L,%L,%s,%L)',f.company_id,period,v,key2));
+ select journal_id into original_j from public.payroll_postings where id=posted;
+ perform pg_temp.ok((select sum(debit_minor)=30500 and sum(credit_minor)=30500 from public.journal_lines where journal_entry_id=original_j),'balanced exact recognition');
+ perform pg_temp.ok((select count(*)=1 from public.journal_lines l join public.accounts a on a.id=l.account_id where l.journal_entry_id=original_j and a.system_key='PROJECT_COST' and l.project_id=f.project_id and l.debit_minor=10500),'Project allocation');
+ perform pg_temp.ok((select count(*)=1 from public.journal_lines l join public.accounts a on a.id=l.account_id where l.journal_entry_id=original_j and a.system_key='COMPANY_EXPENSE' and l.project_id is null and l.debit_minor=20000),'overhead allocation');
+ perform pg_temp.ok((select locked_at is not null from public.attendance_periods where company_id=f.company_id and month='2026-08-01'),'attendance locked');
+ perform pg_temp.reject(format('select public.refresh_payroll_draft(%L,''2026-08-01'',%s)',f.company_id,v));
+ perform pg_temp.reject(format('select public.confirm_attendance_review(%L,''2026-08-01'',0)',f.company_id));
+ select id into entitlement from public.payroll_entitlements where payroll_id=posted and employee_id=f.employee_id;
+ perform pg_temp.reject(format('select public.pay_salary(%L,%L,%L,''2026-09-01'',1,''wrong project'',%L)',f.company_id,entitlement,incompatible,gen_random_uuid()));
+ perform pg_temp.reject(format('select public.pay_salary(%L,%L,%L,''2026-08-01'',1,''before recognition'',%L)',f.company_id,entitlement,treasury,gen_random_uuid()));
+ payment:=public.pay_salary(f.company_id,entitlement,treasury,'2026-09-01',3000,'Bank ref 1',paymentkey);
+ perform pg_temp.ok(payment=public.pay_salary(f.company_id,entitlement,treasury,'2026-09-01',3000,'Bank ref 1',paymentkey),'payment replay');
+ perform pg_temp.reject(format('select public.pay_salary(%L,%L,%L,''2026-09-01'',1,''changed'',%L)',f.company_id,entitlement,treasury,paymentkey));
+ perform pg_temp.reject(format('select public.pay_salary(%L,%L,%L,''2026-09-01'',7501,''too much'',%L)',f.company_id,entitlement,treasury,gen_random_uuid()));
+ perform pg_temp.reject(format('select public.reverse_payroll(%L,%L,''2026-09-02'',''correction'',%L)',f.company_id,posted,gen_random_uuid()));
+ reset role;
+ update public.parties set status='INACTIVE' where id=f.employee_id; update public.projects set status='CLOSED' where id=f.project_id;
+ set local role authenticated;
+ payment2:=public.pay_salary(f.company_id,entitlement,treasury,'2026-09-01',7500,'Bank ref 2',gen_random_uuid());
+ perform pg_temp.ok((select sum(amount_minor)=10500 from public.salary_payments where entitlement_id=entitlement),'inactive/closed settlement and multiple partial payments');
+ perform pg_temp.ok((select count(*)=0 from public.journal_lines l join public.accounts a on a.id=l.account_id where l.journal_entry_id in(select journal_id from public.salary_payments where entitlement_id=entitlement) and a.account_type='EXPENSE'),'payments never recreate cost');
+ reversal:=public.reverse_salary_payment(f.company_id,payment,'2026-09-02','Erroneous payment',key2);
+ perform pg_temp.ok(reversal=public.reverse_salary_payment(f.company_id,payment,'2026-09-02','Erroneous payment',key2),'payment reversal replay');
+ perform pg_temp.reject(format('select public.reverse_salary_payment(%L,%L,''2026-09-02'',''again'',%L)',f.company_id,payment,gen_random_uuid()));
+ perform pg_temp.ok((select sum(l.debit_minor)=sum(l.credit_minor) from public.journal_lines l where l.journal_entry_id in(select journal_id from public.salary_payments where id=payment union all select journal_id from public.salary_payment_reversals where payment_id=payment)),'payment exact inversion');
+ perform public.reverse_salary_payment(f.company_id,payment2,'2026-09-02','Returned funds',gen_random_uuid());
+ perform public.reverse_payroll(f.company_id,posted,'2026-09-02','Replace incorrect payroll',gen_random_uuid());
+ perform pg_temp.ok((select locked_at is null and reviewed_revision is null from public.attendance_periods where company_id=f.company_id and month='2026-08-01'),'controlled unlock requires fresh review');
+ perform pg_temp.ok((select sum(l.debit_minor)=sum(l.credit_minor) from public.journal_lines l where l.journal_entry_id in(original_j,(select journal_id from public.payroll_reversals where payroll_id=posted))),'payroll inversion');
+ perform pg_temp.reject(format('update public.payroll_postings set snapshot=''{}'' where id=%L',posted));
+ perform pg_temp.reject(format('select public.read_payroll_postings(%L,''2026-08-01'')',other));
+ reset role;
+ update public.parties set status='ACTIVE' where id=f.employee_id;
+ set local role authenticated;
+ perform public.save_payroll_draft_adjustment(f.company_id,row1,adj,1,'ADDITION',500,'Additional salary',true,'Replacement removes addition');
+ perform public.save_payroll_profile(f.company_id,f.employee_id,1,'STEP2-A','Monthly','Worker','Site',null,0,'CASH','ACTIVE');
+ perform public.save_payroll_profile(f.company_id,e2,1,'STEP2-B','Monthly','Admin','Office',null,9000000000000000,'BANK','ACTIVE');
+ perform pg_temp.reject(format('select public.refresh_payroll_draft(%L,''2026-08-01'',%s)',f.company_id,(select version from public.payroll_draft_periods where id=period)));
+ perform public.confirm_attendance_review(f.company_id,'2026-08-01',(select revision from public.attendance_periods where company_id=f.company_id and month='2026-08-01'));
+ perform public.refresh_payroll_draft(f.company_id,'2026-08-01',(select version from public.payroll_draft_periods where id=period));
+ select version into v from public.payroll_draft_periods where id=period;
+ perform public.prepare_payroll_accounting(f.company_id,period,v,jsonb_build_object(row1::text,null,row2::text,null),'{}');
+ perform public.review_payroll_draft(f.company_id,period,v+1);
+ replacement:=public.post_payroll(f.company_id,period,v+1,gen_random_uuid());
+ perform pg_temp.ok((select replaces_id=posted from public.payroll_postings where id=replacement),'replacement links immutable original');
+ perform pg_temp.ok((select count(*)=2 from public.journal_lines where journal_entry_id=(select journal_id from public.payroll_postings where id=replacement)),'zero employee produces no journal lines');
+ bigdoc:=public.read_payroll_postings(f.company_id,'2026-08-01');
+ perform pg_temp.ok(exists(select 1 from jsonb_array_elements(bigdoc->'entitlements') x where x->>'amount_minor'='9000000000000000' and jsonb_typeof(x->'amount_minor')='string' and x->>'unpaid_minor'='9000000000000000'),'BIGINT exact string entitlement and outstanding');
+ perform pg_temp.reject(format('select public.pay_salary(%L,%L,%L,''2026-09-01'',0,''zero'',%L)',f.company_id,(select id from public.payroll_entitlements where payroll_id=replacement and employee_id=e2),treasury,gen_random_uuid()));
+ perform pg_temp.reject(format('select public.pay_salary(%L,%L,%L,''2026-09-01'',9000000000000001,''overflow'',%L)',f.company_id,(select id from public.payroll_entitlements where payroll_id=replacement and employee_id=e2),treasury,gen_random_uuid()));
+ perform pg_temp.reject(format('select public.pay_salary(%L,%L,%L,''2026-09-01'',1,''foreign'',%L)',other,entitlement,treasury,gen_random_uuid()));
+ perform public.reverse_payroll(f.company_id,replacement,'2026-09-02','Test all-zero boundary',gen_random_uuid());
+ perform public.save_payroll_profile(f.company_id,e2,2,'STEP2-B','Monthly','Admin','Office',null,0,'BANK','ACTIVE');
+ perform public.confirm_attendance_review(f.company_id,'2026-08-01',(select revision from public.attendance_periods where company_id=f.company_id and month='2026-08-01'));
+ perform public.refresh_payroll_draft(f.company_id,'2026-08-01',(select version from public.payroll_draft_periods where id=period));
+ select version into v from public.payroll_draft_periods where id=period;
+ perform public.prepare_payroll_accounting(f.company_id,period,v,jsonb_build_object(row1::text,null,row2::text,null),'{}');
+ perform public.review_payroll_draft(f.company_id,period,v+1);
+ perform pg_temp.reject(format('select public.post_payroll(%L,%L,%s,%L)',f.company_id,period,v+1,gen_random_uuid()));
+ -- Supported reduction has the same salary-cost/payable accounting, never a guessed third-party liability.
+ perform public.save_payroll_profile(f.company_id,e2,3,'STEP2-B','Monthly','Admin','Office',null,100,'BANK','ACTIVE');
+ perform public.refresh_payroll_draft(f.company_id,'2026-08-01',(select version from public.payroll_draft_periods where id=period));
+ perform public.save_payroll_draft_adjustment(f.company_id,row2,deduction,0,'DEDUCTION',25,'Current salary entitlement correction',false,null);
+ perform public.refresh_payroll_draft(f.company_id,'2026-08-01',(select version from public.payroll_draft_periods where id=period));
+ select version into v from public.payroll_draft_periods where id=period;
+ perform pg_temp.reject(format('select public.prepare_payroll_accounting(%L,%L,%s,%L,%L)',f.company_id,period,v,jsonb_build_object(row1::text,null,row2::text,null),jsonb_build_object(deduction::text,'THIRD_PARTY_DEDUCTION')));
+ perform public.prepare_payroll_accounting(f.company_id,period,v,jsonb_build_object(row1::text,null,row2::text,null),jsonb_build_object(deduction::text,'CURRENT_SALARY_REDUCTION'));
+ perform public.review_payroll_draft(f.company_id,period,v+1);
+ replacement:=public.post_payroll(f.company_id,period,v+1,gen_random_uuid());
+ perform pg_temp.ok((select amount_minor=75 from public.payroll_entitlements where payroll_id=replacement and employee_id=e2),'classified reduction reduces cost and payable');
+ -- Verify exact reversal per account and dimensions, not merely aggregate balance.
+ perform pg_temp.ok(not exists(select 1 from public.journal_lines l where l.journal_entry_id in(original_j,(select journal_id from public.payroll_reversals where payroll_id=posted)) group by account_id,project_id,party_id,treasury_account_id having sum(debit_minor::numeric-credit_minor::numeric)<>0),'payroll exact dimension inversion');
+ perform pg_temp.ok(not exists(select 1 from public.journal_lines l where l.journal_entry_id in((select journal_id from public.salary_payments where id=payment),(select journal_id from public.salary_payment_reversals where payment_id=payment)) group by account_id,project_id,party_id,treasury_account_id having sum(debit_minor::numeric-credit_minor::numeric)<>0),'payment exact dimension inversion');
+ select array_agg(id) into journals from public.journal_entries where company_id=f.company_id and (source_type in ('PAYROLL','SALARY_PAYMENT') or reversal_of_journal_entry_id in(select id from public.journal_entries where source_type in ('PAYROLL','SALARY_PAYMENT')));
+ reset role;
+ foreach role_name in array enum_range(null::public.company_role) loop
+  update public.company_memberships set role=role_name where company_id=f.company_id and user_id=f.user_id;
+  set local role authenticated;
+  if role_name not in ('ACCOUNTANT','ACCOUNTING_ADMIN') then
+   perform pg_temp.reject(format('select public.read_payroll_postings(%L,''2026-08-01'')',f.company_id));
+   foreach table_name in array array['payroll_draft_accounting','payroll_postings','payroll_entitlements','salary_payments','salary_payment_reversals','payroll_reversals'] loop
+    execute format('select count(*) from public.%I where company_id=%L',table_name,f.company_id) into n; perform pg_temp.ok(n=0,'private events');
+   end loop;
+   perform pg_temp.ok((select count(*)=0 from public.journal_entries where id=any(journals)),'journal headers hidden');
+   perform pg_temp.ok((select count(*)=0 from public.journal_lines where journal_entry_id=any(journals)),'journal lines hidden');
+  end if;
+  if role_name<>'ACCOUNTING_ADMIN' then perform pg_temp.reject(format('select public.post_payroll(%L,%L,%s,%L)',f.company_id,period,v,gen_random_uuid())); perform pg_temp.reject(format('select public.reverse_payroll(%L,%L,''2026-09-02'',''Denied'',%L)',f.company_id,posted,gen_random_uuid())); end if;
+  if role_name not in ('ACCOUNTANT','ACCOUNTING_ADMIN') then perform pg_temp.reject(format('select public.pay_salary(%L,%L,%L,''2026-09-02'',1,''Denied'',%L)',f.company_id,entitlement,treasury,gen_random_uuid())); end if;
+  reset role;
+ end loop;
+end $$;
+select n,'Payroll Step 2 rollback checks PASS' result from results;
+rollback;

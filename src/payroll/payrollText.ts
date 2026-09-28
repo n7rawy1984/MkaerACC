@@ -1,5 +1,5 @@
 export const payrollText={
- en:{title:'Payroll drafts',profiles:'Payroll Profiles',register:'Draft Register',scope:'Calculation only — no accounting posting or salary payment. Full-month regular salary only; no proration.',
+ en:{title:'Payroll drafts',profiles:'Payroll Profiles',register:'Draft Register',scope:'Full-month payroll. Draft preparation has no accounting effect; approved posting and salary payments are separate actions.',
  denied:'Payroll access is restricted to Accountant and Accounting Admin.',back:'Company workspace',signOut:'Sign out',switchCompany:'Switch Company',reload:'Reload saved data',
  loading:'Loading payroll…',error:'Request failed or outcome is uncertain. Reload saved data before trying again.',policy:'Request rejected. Check required fields, attendance review, employee eligibility, and non-negative net salary. No change was saved; reload before retrying.',
  staleError:'Inputs changed. Reload and explicitly refresh the draft before continuing.',emptyProfiles:'No payroll profiles.',emptyRows:'No eligible active employee profiles in this draft.',
@@ -14,7 +14,7 @@ export const payrollText={
  add:'Add adjustment',saveAdjustment:'Save adjustment',void:'Void adjustment',voided:'Voided',adjustmentHint:'Generic calculation adjustments only. Changes require an explicit draft refresh. Clear deductions before voiding additions if needed to avoid negative net.',
  provenance:'Actor / time',employeeInactive:'Employee Party inactive',fullMonth:'Active profiles use the full selected month salary. Payroll Type and Work Station do not change calculations.',
  },
- ar:{title:'مسودات الرواتب',profiles:'ملفات الرواتب',register:'سجل المسودة',scope:'حساب فقط — لا ترحيل محاسبي ولا دفع رواتب. راتب شهري كامل فقط دون احتساب نسبي.',
+ ar:{title:'مسودات الرواتب',profiles:'ملفات الرواتب',register:'سجل المسودة',scope:'رواتب شهرية كاملة. إعداد المسودة بلا أثر محاسبي؛ اعتماد الترحيل ودفع الرواتب إجراءان منفصلان.',
  denied:'الوصول للرواتب مقتصر على المحاسب ومدير الحسابات.',back:'مساحة عمل الشركة',signOut:'تسجيل الخروج',switchCompany:'تغيير الشركة',reload:'إعادة تحميل البيانات المحفوظة',
  loading:'جارٍ تحميل الرواتب…',error:'فشل الطلب أو تعذر التأكد من النتيجة. أعد تحميل البيانات المحفوظة قبل المحاولة.',policy:'رُفض الطلب. تحقق من الحقول المطلوبة ومراجعة الحضور وأهلية الموظف وعدم سلبية صافي الراتب. لم يُحفظ التغيير؛ أعد التحميل قبل المحاولة.',
  staleError:'تغيرت المدخلات. أعد التحميل ثم حدّث حساب المسودة قبل المتابعة.',emptyProfiles:'لا توجد ملفات رواتب.',emptyRows:'لا توجد ملفات موظفين نشطة مؤهلة في هذه المسودة.',

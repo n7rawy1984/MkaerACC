@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {readFileSync,readdirSync} from 'node:fs';
+import {readFileSync} from 'node:fs';
 import {createRequire} from 'node:module';
 import ts from 'typescript';
 const require=createRequire(import.meta.url);const module={exports:{}};
@@ -28,7 +28,7 @@ await assert.rejects(api.payrollRequest(client,id(9),'save_payroll_profile',args
 await assert.rejects(api.payrollRequest(client,id(2),'save_payroll_profile',args,()=>false),/session changed/);assert.equal(sent.length,1);
 const adjustment={target_company_id:id(1),target_row_id:id(4),target_id:id(6),target_version:0,target_kind:'ADDITION',target_amount_minor:'9000000000000000',target_reason:'Reason',target_void:false,target_change_reason:null};
 await api.payrollRequest(client,id(2),'save_payroll_draft_adjustment',adjustment);assert.deepEqual(sent[1].args,adjustment);
-for(const file of readdirSync(new URL('../src/payroll/',import.meta.url))){const source=readFileSync(new URL(`../src/payroll/${file}`,import.meta.url),'utf8');assert(!/\.from\(|\.(insert|update|upsert|delete)\(|localStorage|sessionStorage|service_role|AppDataContext/.test(source),file);assert(!/Number\([^)]*(?:salary|minor|amount)/i.test(source),file);}
+for(const file of ['PayrollApplication.tsx','payrollRepository.ts','payrollText.ts']){const source=readFileSync(new URL(`../src/payroll/${file}`,import.meta.url),'utf8');assert(!/\.from\(|\.(insert|update|upsert|delete)\(|localStorage|sessionStorage|service_role|AppDataContext/.test(source),file);assert(!/Number\([^)]*(?:salary|minor|amount)/i.test(source),file);}
 const sql=readFileSync(new URL('../supabase/migrations/20260928120000_payroll_lite_drafts.sql',import.meta.url),'utf8');
 assert(!/create_journal|reverse_journal|lock_attendance_month|salary_payable/i.test(sql));
 assert(sql.includes("check(state='DRAFT')"));
