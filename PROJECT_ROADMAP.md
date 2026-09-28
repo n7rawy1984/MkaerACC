@@ -2,11 +2,17 @@
 
 This is the official living roadmap. Read it with `PROJECT_HANDOFF.md` before development. Architecture planned does not mean implemented.
 
-## Payroll Lite Step 2 — Development
+## Payroll Lite Step 3 — Development
+
+**Payroll Lite Step 3 COMPLETE for Development.** Payroll register Excel and EN/AR browser Print / Save PDF use fresh reviewed DRAFT values or frozen POSTED snapshots. Exact two-decimal text amounts and BigInt totals preserve cents without Excel formulas. A4 landscape, repeated headings, role/session/scope rejection and print revalidation are covered by isolated checks. No accounting, authorization or migration changes. See [Step 3 record](docs/PAYROLL_LITE_STEP_3.md) for implementation, evidence and limits.
+
+Attendance and Payroll Steps 1/2 remain COMPLETE. WPS and P6E NOT STARTED; Production readiness and hosted signed-in smoke remain DEFERRED/non-blocking. Development closure is user-accepted and recorded in one local commit, `Complete Payroll Lite Step 3`. Closure reran no tests and performed no hosted signed-in smoke. No hosted changes, migrations, Staging/Production action or push. This section supersedes historical Excel/PDF-not-started statements only for Payroll register output.
+
+## Payroll Lite Step 2 — Historical Development closure
 
 **Payroll Lite Step 2 COMPLETE for Development.** Frozen Payroll POST, Salary Payable, partial Salary Payments, both reversals, controlled replacement and payroll journal privacy are implemented. Three forward migrations applied only to MakerACC-Development; 47 aligned, linked dry-run no-op. Focused 114-check rollback matrix, four concurrency scenarios, repository/SDK and isolated EN/AR/390px UI pass. See [Step 2 record](docs/PAYROLL_LITE_STEP_2.md) for commands, accounting, required tenant mappings, exact evidence and retained synthetic fixture.
 
-Attendance and Step 1 remain COMPLETE; P6D financial V1 core remains frozen. WPS, Excel/PDF and P6E NOT STARTED. Production readiness remains DEFERRED; hosted signed-in smoke is deferred/non-blocking. Development closure is user-accepted and recorded in one local commit, `Complete Payroll Lite Step 2`. Closure reran no tests and performed no hosted signed-in smoke. Each Company must configure a valid `SALARY_PAYABLE` mapping before operational Payroll POST. No push or Staging/Production action. This checkpoint supersedes historical Payroll-posting-not-started statements only for the approved Step 2 scope.
+Attendance and Step 1 remain COMPLETE; P6D financial V1 core remains frozen. At Step 2 closure, WPS, Excel/PDF and P6E had not started; current register output state is above. Production readiness remains DEFERRED; hosted signed-in smoke is deferred/non-blocking. Development closure is user-accepted and recorded in one local commit, `Complete Payroll Lite Step 2`. Closure reran no tests and performed no hosted signed-in smoke. Each Company must configure a valid `SALARY_PAYABLE` mapping before operational Payroll POST. No push or Staging/Production action. This checkpoint supersedes historical Payroll-posting-not-started statements only for the approved Step 2 scope.
 
 ## Payroll Lite Step 1 — Historical Development closure
 
