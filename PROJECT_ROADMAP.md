@@ -2,11 +2,17 @@
 
 This is the official living roadmap. Read it with `PROJECT_HANDOFF.md` before development. Architecture planned does not mean implemented.
 
-## Payroll Lite Step 3 — Development
+## P6E — Development
+
+**P6E COMPLETE for Development.** Failed background authority reads now block protected UI with authoritative retry; production configuration rejects invalid modes and unsafe browser keys before bundling/runtime use; shared dependency guards cover dynamic imports and re-exports. Allowed locale/tenant/Auth preferences and scoped session recovery remain; demo business storage stays isolated. No financial/Payroll or database changes. See [P6E record](docs/P6E_PRODUCTION_DATA_MODE.md) for the frozen contract, focused evidence and limits.
+
+P6C, the P6D V1 financial core, Attendance Lite and Payroll Lite Steps 1–3 remain complete/frozen within their approved scope. WPS remains deferred. Production readiness is outstanding; PRE_DEMO_UAT and hosted signed-in smoke remain deferred/non-blocking. Development closure is user-accepted and recorded in one local commit, `Complete P6E production data mode`. Closure reran no tests and started no new phase. No PRE_DEMO_UAT, production-readiness work, full production audit, migrations, Staging/Production actions or push. This current section supersedes historical P6E-not-started statements only for this bounded package.
+
+## Payroll Lite Step 3 — Historical Development closure
 
 **Payroll Lite Step 3 COMPLETE for Development.** Payroll register Excel and EN/AR browser Print / Save PDF use fresh reviewed DRAFT values or frozen POSTED snapshots. Exact two-decimal text amounts and BigInt totals preserve cents without Excel formulas. A4 landscape, repeated headings, role/session/scope rejection and print revalidation are covered by isolated checks. No accounting, authorization or migration changes. See [Step 3 record](docs/PAYROLL_LITE_STEP_3.md) for implementation, evidence and limits.
 
-Attendance and Payroll Steps 1/2 remain COMPLETE. WPS and P6E NOT STARTED; Production readiness and hosted signed-in smoke remain DEFERRED/non-blocking. Development closure is user-accepted and recorded in one local commit, `Complete Payroll Lite Step 3`. Closure reran no tests and performed no hosted signed-in smoke. No hosted changes, migrations, Staging/Production action or push. This section supersedes historical Excel/PDF-not-started statements only for Payroll register output.
+Attendance and Payroll Steps 1/2 remain COMPLETE. At Step 3 closure, WPS and P6E had not started; current P6E state is above. Production readiness and hosted signed-in smoke remain DEFERRED/non-blocking. Development closure is user-accepted and recorded in one local commit, `Complete Payroll Lite Step 3`. Closure reran no tests and performed no hosted signed-in smoke. No hosted changes, migrations, Staging/Production action or push. This section supersedes historical Excel/PDF-not-started statements only for Payroll register output.
 
 ## Payroll Lite Step 2 — Historical Development closure
 
@@ -192,7 +198,7 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 
 ## Current Phase
 
-### ➡ Phase 2C — Production Data Foundation *(P0–P6C are verified complete on Development; P6D is in progress; P6E has not started)*
+### ➡ Phase 2C — Production Data Foundation *(P0–P6C are verified complete on Development; P6D V1 financial core is frozen; P6E is COMPLETE for Development)*
 
 #### ✅ P0 — Production Architecture Freeze
 
@@ -275,7 +281,7 @@ Detailed implementation history remains in `PROJECT_HANDOFF.md` and git history.
 - **P6C Slice 15 — SUBCONTRACTOR Party Display Name UPDATE — VERIFIED COMPLETE (2026-09-23).** Existing ACTIVE/INACTIVE SUBCONTRACTOR name only for ACCOUNTING_ADMIN and PROCUREMENT under unchanged P4 policy. Historical-integrity verification confirmed that Subcontracts and P5 financial/history rows retain stable IDs; rename changes only current Party display identity. Development migration `20260922150000` applied. Hosted 117/117, exact-token concurrency 1/0, focused repository/provider, isolated Chromium and prior Party/Subcontracts regressions PASS; 39 migrations aligned, dry-run no-op and DB lint clean. Authenticated browser acceptance and final cleanup PASS. Subcontract display updated through Party ID without altering contract fields. Cleanup revealed a kit-only Project status mismatch (PLANNING default vs ACTIVE guard); failed transaction rolled back, guard was corrected to PLANNING, then exact cleanup/final verification PASSed. All fixture/Auth/profile counts 0; Companies/settings 14/14; missing/orphan 0/0. P6C IN PROGRESS; P6D/P6E NOT STARTED; Production readiness DEFERRED.
 - **P6C Slice 16 — Subcontract Descriptive Metadata UPDATE — VERIFIED COMPLETE (2026-09-23).** Existing `scope_of_work`, nullable dates and notes only; `contract_number`, identity, economics, retention, status and provenance remain protected. ACCOUNTING_ADMIN and PROCUREMENT may edit under unchanged P4 authorization. Development migration `20260923120000` applied; hosted 41/41, exact-token concurrency 1/0, focused repository/provider, isolated Chromium, read/Party regressions, financial-history invariants, build/lint/boundaries, cleanup, migration and DB checks PASS. Primary real-browser smoke was operator-accepted. The remaining extended manual role/UI sweep is explicitly tracked in `docs/PRE_DEMO_UAT.md` and is non-blocking for Development. No additional required frozen P6C master-data operation remains. Final checkpoint: **P6C Final Closeout / Boundary Audit COMPLETE** (see `docs/P6C_FINAL_CLOSEOUT.md`). P6C COMPLETE; P6D/P6E NOT STARTED; Production readiness DEFERRED.
 - **P6D — Financial Flow Cutover (IN PROGRESS):** Checkpoints 1–10 COMPLETE for Development through Subcontractor Retention Payment READ/POST/Reversal. Checkpoint 10 reuses canonical P5I-B commands and unchanged accounting/RLS/locking/dependency rules; see `docs/P6D_SUBCONTRACTOR_RETENTION_PAYMENT.md`. Focused automated and rollback-only Development evidence passes; no migration. Operator smoke is deferred/non-blocking. Corrected Replacement Expense and other optional workflows remain NOT STARTED; no hybrid financial writes.
-- **P6E — LocalStorage Retirement / Production Data Mode (NOT STARTED):** localStorage remains an explicit demo adapter only; production fails closed and uses the database as authority.
+- **P6E — LocalStorage Retirement / Production Data Mode (COMPLETE for Development):** localStorage remains an explicit demo adapter only; production fails closed and uses the database as authority.
 - Custom domains, branded documents/messages, licensing, entitlements, provisioning/suspension, and centralized customer management are later platform work and remain separate from accounting history.
 
 #### Pre-production gate — Production Security & Accounting Integrity Audit
@@ -379,4 +385,4 @@ Before real production accounting data or go-live, perform the read-only audit f
 
 ---
 
-*P0–P6C and the post-P5 focused financial retrospective are verified complete. P6D financial V1 core is frozen through Checkpoint 10. Attendance Lite and Payroll Lite Step 1 are Development-complete; Payroll Lite Step 2 is COMPLETE for Development. P6E–P10, WPS/Excel/PDF and bulk historical import have not started.*
+*P0–P6C and the post-P5 focused financial retrospective are verified complete. P6D financial V1 core is frozen through Checkpoint 10. Attendance Lite and Payroll Lite Steps 1–3 are COMPLETE for Development, including Payroll register Excel/Print output. P6E is COMPLETE for Development. P7–P10 and bulk historical import have not started; WPS and Production readiness remain deferred.*

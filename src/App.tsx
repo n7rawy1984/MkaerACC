@@ -1,3 +1,4 @@
+import { applicationMode } from "./config/productionConfig";
 import { lazy, Suspense } from "react";
 import { useT } from "./i18n/I18nContext";
 
@@ -7,10 +8,8 @@ const ProtectedApplication = lazy(() => import("./auth/ProtectedApplication"));
 type AppMode = "local-demo" | "supabase-auth";
 
 function resolveAppMode(): { mode: AppMode | null; error: boolean } {
-  const configuredMode = import.meta.env.VITE_APP_DATA_MODE;
-  if (configuredMode === "supabase-auth") return { mode: configuredMode, error: false };
-  if (configuredMode === "local-demo" && import.meta.env.DEV) return { mode: configuredMode, error: false };
-  return { mode: null, error: true };
+  try { return { mode: applicationMode(import.meta.env.VITE_APP_DATA_MODE, import.meta.env.DEV), error: false }; }
+  catch { return { mode: null, error: true }; }
 }
 
 function AppLoading() {

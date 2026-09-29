@@ -225,7 +225,8 @@ export function AuthProvider({ client, children }: { client: SupabaseClient<Data
         }
         setState({ phase: "SELECTING_COMPANY", profile, memberships });
       } catch {
-        if (isCurrent() && !preserveReadyState) setState({ phase: "IDENTITY_LOAD_ERROR" });
+        // A failed authority read must revoke the ready UI even during background refresh.
+        if (isCurrent()) setState({ phase: "IDENTITY_LOAD_ERROR" });
       } finally {
         if (backgroundGenerationRef.current === generation) backgroundGenerationRef.current = null;
       }

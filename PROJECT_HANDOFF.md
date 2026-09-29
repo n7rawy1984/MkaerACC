@@ -6,11 +6,17 @@ Repository: `https://github.com/n7rawy1984/MkaerACC` · Local path: `/media/nagh
 
 ---
 
-## Payroll Lite Step 3 — Development
+## P6E — Development
+
+**P6E COMPLETE for Development.** Failed background authority reads now block protected UI with authoritative retry; production configuration rejects invalid modes and unsafe browser keys before bundling/runtime use; shared dependency guards cover dynamic imports and re-exports. Allowed locale/tenant/Auth preferences and scoped session recovery remain; demo business storage stays isolated. No financial/Payroll or database changes. See [P6E record](docs/P6E_PRODUCTION_DATA_MODE.md) for the frozen contract, focused evidence and limits.
+
+P6C, the P6D V1 financial core, Attendance Lite and Payroll Lite Steps 1–3 remain complete/frozen within their approved scope. WPS remains deferred. Production readiness is outstanding; PRE_DEMO_UAT and hosted signed-in smoke remain deferred/non-blocking. Development closure is user-accepted and recorded in one local commit, `Complete P6E production data mode`. Closure reran no tests and started no new phase. No PRE_DEMO_UAT, production-readiness work, full production audit, migrations, Staging/Production actions or push. This current section supersedes historical P6E-not-started statements only for this bounded package.
+
+## Payroll Lite Step 3 — Historical Development closure
 
 **Payroll Lite Step 3 COMPLETE for Development.** Payroll register Excel and EN/AR browser Print / Save PDF use fresh reviewed DRAFT values or frozen POSTED snapshots. Exact two-decimal text amounts and BigInt totals preserve cents without Excel formulas. A4 landscape, repeated headings, role/session/scope rejection and print revalidation are covered by isolated checks. No accounting, authorization or migration changes. See [Step 3 record](docs/PAYROLL_LITE_STEP_3.md) for implementation, evidence and limits.
 
-Attendance and Payroll Steps 1/2 remain COMPLETE. WPS and P6E NOT STARTED; Production readiness and hosted signed-in smoke remain DEFERRED/non-blocking. Development closure is user-accepted and recorded in one local commit, `Complete Payroll Lite Step 3`. Closure reran no tests and performed no hosted signed-in smoke. No hosted changes, migrations, Staging/Production action or push. This section supersedes historical Excel/PDF-not-started statements only for Payroll register output.
+Attendance and Payroll Steps 1/2 remain COMPLETE. At Step 3 closure, WPS and P6E had not started; current P6E state is above. Production readiness and hosted signed-in smoke remain DEFERRED/non-blocking. Development closure is user-accepted and recorded in one local commit, `Complete Payroll Lite Step 3`. Closure reran no tests and performed no hosted signed-in smoke. No hosted changes, migrations, Staging/Production action or push. This section supersedes historical Excel/PDF-not-started statements only for Payroll register output.
 
 ## Payroll Lite Step 2 — Historical Development closure
 

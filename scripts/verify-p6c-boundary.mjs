@@ -1,33 +1,8 @@
-import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
-import { dirname, extname, resolve } from "node:path";
+import {dependencyGraph as staticGraph, assertProductionBoundary} from "./production-boundary.mjs";
+import { readFileSync, readdirSync, statSync } from "node:fs";
+import { resolve } from "node:path";
 
 const repositoryRoot = resolve(import.meta.dirname, "..");
-const extensions = [".ts", ".tsx", ".js", ".jsx"];
-
-function resolveImport(fromFile, specifier) {
-  if (!specifier.startsWith(".")) return null;
-  const base = resolve(dirname(fromFile), specifier);
-  if (existsSync(base) && extname(base)) return base;
-  for (const extension of extensions) if (existsSync(`${base}${extension}`)) return `${base}${extension}`;
-  for (const extension of extensions) if (existsSync(resolve(base, `index${extension}`))) return resolve(base, `index${extension}`);
-  throw new Error(`Cannot resolve ${specifier} from ${fromFile}`);
-}
-
-function staticGraph(entry) {
-  const visited = new Set();
-  const visit = (file) => {
-    if (visited.has(file)) return;
-    visited.add(file);
-    const source = readFileSync(file, "utf8");
-    const imports = /(?:^|\n)\s*import(?:\s+type)?(?:[\s\S]*?\sfrom\s*)?["']([^"']+)["'];?/g;
-    for (const match of source.matchAll(imports)) {
-      const imported = resolveImport(file, match[1]);
-      if (imported) visit(imported);
-    }
-  };
-  visit(entry);
-  return visited;
-}
 
 function filesBelow(directory) {
   return readdirSync(directory).flatMap((name) => {
@@ -118,8 +93,8 @@ for (const required of [
 ]) {
   if (!authSource.includes(required)) throw new Error(`Missing Auth revalidation boundary: ${required}`);
 }
-if (!authSource.includes('if (isCurrent() && !preserveReadyState) setState({ phase: "IDENTITY_LOAD_ERROR" })')) {
-  throw new Error("Background revalidation does not preserve the current tenant-ready UI on a transient load failure");
+if (!authSource.includes('if (isCurrent()) setState({ phase: "IDENTITY_LOAD_ERROR" })')) {
+  throw new Error("Failed authority revalidation must block the protected UI, including background failures");
 }
 const redundantSignedInGuard = authSource.indexOf('event === "SIGNED_IN" && sameKnownUser');
 const foregroundLoadingTransition = authSource.indexOf('setState({ phase: "LOADING_IDENTITY" })', redundantSignedInGuard);
@@ -152,7 +127,7 @@ for (const file of demoGraph) {
   }
 }
 
-const productionGraph = staticGraph(resolve(repositoryRoot, "src/auth/ProtectedApplication.tsx"));
+const productionGraph = assertProductionBoundary(repositoryRoot);
 for (const file of productionGraph) {
   const normalized = file.replaceAll("\\", "/");
   for (const forbidden of ["/src/state/", "/src/storage/", "/src/seed/", "/src/accounting/postingEngine", "/src/accounting/ledger", "/src/app/DemoApplication"] ) {
