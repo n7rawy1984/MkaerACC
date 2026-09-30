@@ -5,6 +5,16 @@ This file tracks manual checks intentionally deferred from normal Development sl
 These items are **not blockers for continued Development, P6C closeout, or starting P6D**.
 They must be reviewed before the first serious external company demo/pilot and again as appropriate before Production.
 
+## Accepted closure — Single-Company V1 Demo Ready
+
+The user accepted the single-Company Development rehearsal as PASS and the V1 flow as ready for Company presentation. No product/accounting defect or demonstrated demo blocker was found; no application/accounting changes were required. **Cross-Company UAT is deferred unless separately authorized**, so PRE_DEMO_UAT is not globally/unconditionally closed. **Production readiness remains deferred. Operator-controlled credentials are required before the live human demo.**
+
+This documentation-only closure preserves the current synthetic fixture, including the retained posted/partially paid August Payroll and reviewed/locked Attendance. No cleanup, reversal, hosted action, test rerun or new phase. One local commit: `Complete V1 demo rehearsal`; no push. Earlier no-commit statements describe the rehearsal before this authorized closure.
+
+## Current bounded execution — 2026-09-30
+
+See [the dated Development rehearsal](PRE_DEMO_UAT_20260930.md) and [recorded results](verification/pre-demo-uat-20260930/results.json). The single-Company role, authority, Expense paging, bounded P6D POST/reversal, Attendance/Payroll and EN/AR output flows have now been exercised against Development. No product blocker was found. True switching between two authorized Companies remains untested because this session permitted only one synthetic Company. The historical lists below retain their original scope; do not infer that every expanded matrix/edge case was rerun or that the full audit/Production gate is closed.
+
 ## P6C Slice 16 residual manual sweep
 
 Automated authorization/security/accounting-integrity coverage is already complete and Slice 16 is Development-closed.

@@ -1,0 +1,351 @@
+{
+  "date": "2026-09-30",
+  "baseline": "1bcf80410885f86432a06acd5e257e77186c6f84",
+  "environment": "MakerACC-Development",
+  "company_id": "d3292026-0929-4000-8000-000000000001",
+  "company_code": "V1-DEMO-20260929",
+  "method": "Chromium actual signed-in UI with hosted Development; public-user canonical financial RPCs for immediately reversed paging fixtures",
+  "prior_session_carried_forward": [
+    "clean aligned baseline",
+    "current-source build PASS",
+    "eight role password logins PASS",
+    "Accounting Admin Subcontract visibility/descriptive edit PASS",
+    "P6E authority failure blocked protected content PASS"
+  ],
+  "results": {
+    "roles": [
+      {
+        "role": "PROCUREMENT",
+        "rows": 2,
+        "edits": 2
+      },
+      {
+        "role": "ACCOUNTANT",
+        "rows": 2,
+        "edits": 0
+      },
+      {
+        "role": "MANAGEMENT_VIEWER",
+        "rows": 2,
+        "edits": 0
+      },
+      {
+        "role": "PROJECT_MANAGER",
+        "rows": 1,
+        "edits": 0
+      }
+    ],
+    "roles-remaining": [
+      {
+        "role": "DATA_ENTRY",
+        "rows": 0,
+        "edits": 0
+      },
+      {
+        "role": "SYSTEM_ADMIN",
+        "rows": 0,
+        "edits": 0
+      },
+      {
+        "role": "FOREMAN",
+        "attendanceOnly": true
+      }
+    ],
+    "authority": [
+      {
+        "check": "authoritative retry",
+        "result": "PASS",
+        "route": "/"
+      },
+      {
+        "check": "open-form role downgrade",
+        "result": "PASS"
+      },
+      {
+        "check": "profile revocation/restoration",
+        "result": "PASS"
+      },
+      {
+        "check": "membership revocation/restoration",
+        "result": "PASS"
+      },
+      {
+        "check": "company revocation/restoration",
+        "result": "PASS"
+      }
+    ],
+    "expense": {
+      "empty": true,
+      "post_expense": [
+        {
+          "expense_id": "0a64e80e-5156-4451-8db4-c1865f139aaf",
+          "expense_reference": "V1-DEMO-20260929-EXP-2026-000001",
+          "journal_entry_id": "6e2bb735-9581-4bb0-936f-8ee77bcb0fd0",
+          "replayed": false
+        }
+      ],
+      "treasuryReadback": "PASS",
+      "reverse_expense": [
+        {
+          "expense_id": "0a64e80e-5156-4451-8db4-c1865f139aaf",
+          "expense_reference": "V1-DEMO-20260929-EXP-2026-000001",
+          "reversal_journal_entry_id": "1d917973-6a3a-4510-8e73-41caee6a2ffa",
+          "replayed": false
+        }
+      ],
+      "reversalReadback": "PASS",
+      "supplierExpense": [
+        {
+          "expense_id": "3d306c4e-7bcd-44c9-b88f-b90d047f15e2",
+          "expense_reference": "V1-DEMO-20260929-EXP-2026-000002",
+          "journal_entry_id": "2f711289-7d9a-43fb-97a6-54b776169e3a",
+          "replayed": false
+        }
+      ],
+      "post_supplier_payment": [
+        {
+          "supplier_payment_id": "80bcf365-4146-4566-89ff-6d57982f54ac",
+          "payment_reference": "V1-DEMO-20260929-SPAY-2026-000001",
+          "journal_entry_id": "dac2b3d9-8546-4b5b-9902-2eb16baa9681",
+          "replayed": false
+        }
+      ],
+      "partialOutstanding": "16000"
+    },
+    "subcontract": {
+      "post_subcontractor_advance": [
+        {
+          "subcontractor_advance_id": "2766f1b5-ce44-4729-85d8-701ac320f49c",
+          "advance_reference": "V1-DEMO-20260929-SADV-2026-000001",
+          "journal_entry_id": "cd6e862c-7905-47fa-b2ab-9af1818551a7",
+          "replayed": false
+        }
+      ],
+      "create_subcontractor_certificate_draft": [
+        {
+          "subcontractor_certificate_id": "0bd4e219-d78c-417a-828d-bce09dc0c51d",
+          "certificate_reference": "V1-DEMO-20260929-SCERT-2026-000001"
+        }
+      ],
+      "approve_post_subcontractor_certificate": [
+        {
+          "subcontractor_certificate_id": "0bd4e219-d78c-417a-828d-bce09dc0c51d",
+          "certificate_reference": "V1-DEMO-20260929-SCERT-2026-000001",
+          "journal_entry_id": "ded3ac56-fa37-4ee4-a91d-a72b1db566c8",
+          "replayed": false
+        }
+      ],
+      "certificatePayable": "170000",
+      "post_subcontractor_payment": [
+        {
+          "subcontractor_payment_id": "f4b89937-07c6-401d-b86f-23fe3ca0383e",
+          "payment_reference": "V1-DEMO-20260929-SCPAY-2026-000001",
+          "journal_entry_id": "069be411-203e-44cf-8ca8-cba2f9cfd6e3",
+          "replayed": false
+        }
+      ],
+      "post_subcontractor_retention_release": [
+        {
+          "retention_release_id": "27fbeee7-d0b6-4fe2-a8c3-948ac046b62a",
+          "release_reference": "V1-DEMO-20260929-SCREL-2026-000001",
+          "journal_entry_id": "be1e7b96-c527-439d-bcec-f7811042365b",
+          "replayed": false
+        }
+      ],
+      "post_subcontractor_retention_payment": [
+        {
+          "retention_payment_id": "57ff9e6f-4a56-487e-bbda-b3ed05596c05",
+          "payment_reference": "V1-DEMO-20260929-SRPAY-2026-000001",
+          "journal_entry_id": "3e909b7f-3454-48cd-a11a-9c57769c3b56",
+          "replayed": false
+        }
+      ]
+    },
+    "reversals": {
+      "reverse_supplier_payment": [
+        {
+          "supplier_payment_id": "80bcf365-4146-4566-89ff-6d57982f54ac",
+          "payment_reference": "V1-DEMO-20260929-SPAY-2026-000001",
+          "reversal_journal_entry_id": "770c8a1a-814e-49f0-b01c-73fcb1a75f94",
+          "replayed": false
+        }
+      ],
+      "reverse_subcontractor_retention_payment": [
+        {
+          "retention_payment_id": "57ff9e6f-4a56-487e-bbda-b3ed05596c05",
+          "payment_reference": "V1-DEMO-20260929-SRPAY-2026-000001",
+          "reversal_journal_entry_id": "79eb5782-c458-40e3-834f-f196ff28660c",
+          "replayed": false
+        }
+      ],
+      "reverse_subcontractor_retention_release": [
+        {
+          "retention_release_id": "27fbeee7-d0b6-4fe2-a8c3-948ac046b62a",
+          "release_reference": "V1-DEMO-20260929-SCREL-2026-000001",
+          "reversal_journal_entry_id": "ee578bed-c2ae-4fa2-9143-f5b5cbb42e64",
+          "replayed": false
+        }
+      ],
+      "reverse_subcontractor_payment": [
+        {
+          "subcontractor_payment_id": "f4b89937-07c6-401d-b86f-23fe3ca0383e",
+          "payment_reference": "V1-DEMO-20260929-SCPAY-2026-000001",
+          "reversal_journal_entry_id": "a5f923cb-834c-4bdb-89d7-2a4a0cde04af",
+          "replayed": false
+        }
+      ],
+      "reverse_subcontractor_certificate": [
+        {
+          "subcontractor_certificate_id": "0bd4e219-d78c-417a-828d-bce09dc0c51d",
+          "certificate_reference": "V1-DEMO-20260929-SCERT-2026-000001",
+          "reversal_journal_entry_id": "bfed876f-078a-49c3-8eff-08e68ab1e770",
+          "replayed": false
+        }
+      ],
+      "reverse_subcontractor_advance": [
+        {
+          "subcontractor_advance_id": "2766f1b5-ce44-4729-85d8-701ac320f49c",
+          "advance_reference": "V1-DEMO-20260929-SADV-2026-000001",
+          "reversal_journal_entry_id": "a24c064f-b4ac-4e60-ad80-09390e29965b",
+          "replayed": false
+        }
+      ]
+    },
+    "payroll": {
+      "save_attendance_exception": "0c9c642a-42b6-4ac6-9aa6-71e693c24c1b",
+      "confirm_attendance_review": {
+        "recovered": true
+      },
+      "refresh_payroll_draft": "ba397146-c1ff-4aef-a3d6-4472aff22d28",
+      "save_payroll_draft_adjustment": "49925b8c-b608-4e39-8762-3428b5d0d9dc",
+      "refreshedAfterAdjustment": "ba397146-c1ff-4aef-a3d6-4472aff22d28",
+      "prepare_payroll_accounting": {
+        "httpStatus": 204
+      },
+      "review_payroll_draft": {
+        "httpStatus": 204
+      },
+      "draftExport": "SYNTHETIC-V1-Demo-شركة-تجريبية-Payroll-2026-08-DRAFT.xlsx",
+      "post_payroll": "563bc884-e226-46c8-95df-02d5206d111d",
+      "pay_salary": "99d496a3-0601-4d57-974a-605bbab76220",
+      "locked": true
+    },
+    "presentation": {
+      "en": {
+        "columns": 13,
+        "rows": 2,
+        "total": "9350.00",
+        "xlsx": "SYNTHETIC-V1-Demo-شركة-تجريبية-Payroll-2026-08-POSTED.xlsx",
+        "print": "A4 landscape browser output",
+        "narrow": "PASS"
+      },
+      "ar": {
+        "columns": 13,
+        "rows": 2,
+        "total": "9350.00",
+        "xlsx": "SYNTHETIC-V1-Demo-شركة-تجريبية-Payroll-2026-08-POSTED.xlsx",
+        "print": "A4 landscape browser output",
+        "narrow": "PASS"
+      },
+      "attendanceLock": "PASS"
+    },
+    "paging-results": {
+      "page1": 50,
+      "page2": 1,
+      "disjoint": true,
+      "previous": "PASS",
+      "refresh": "PASS",
+      "errorRetry": "PASS",
+      "fixtureReversals": 49,
+      "tenantSwitch": "NOT EXERCISED: one authorized synthetic Company"
+    },
+    "ui-final": [
+      {
+        "check": "Procurement descriptive save/reload",
+        "result": "PASS"
+      },
+      {
+        "check": "Expense loading state",
+        "result": "PASS"
+      },
+      {
+        "check": "Invalid remembered Company revalidated to sole authorized Company",
+        "result": "PASS"
+      },
+      {
+        "check": "Expense en 390px",
+        "result": "PASS"
+      },
+      {
+        "check": "Expense ar 390px",
+        "result": "PASS"
+      },
+      {
+        "check": "ACCOUNTANT denied action/read surface",
+        "result": "PASS"
+      },
+      {
+        "check": "MANAGEMENT_VIEWER denied action/read surface",
+        "result": "PASS"
+      },
+      {
+        "check": "SYSTEM_ADMIN denied action/read surface",
+        "result": "PASS"
+      }
+    ]
+  },
+  "final_readback": {
+    "active_memberships": 8,
+    "salary_payable_liability_mapping": 1,
+    "expenses": 51,
+    "reversed_expenses": 50,
+    "reversed_supplier_payments": 1,
+    "reversed_advances": 1,
+    "reversed_certificates": 1,
+    "reversed_subcontract_payments": 1,
+    "reversed_retention_releases": 1,
+    "reversed_retention_payments": 1,
+    "payroll_postings": 1,
+    "salary_payments": 1,
+    "august_locked": true,
+    "unbalanced_fixture_journals": 0,
+    "payroll_net_minor": [
+      "315000",
+      "620000"
+    ],
+    "salary_unpaid_minor": [
+      "215000",
+      "620000"
+    ]
+  },
+  "export_inspection": {
+    "draft_and_posted_en_ar": "exact shared-string money and leading-zero IDs; no formulas",
+    "net_total_minor": "935000",
+    "pdf_pages_each": 1,
+    "pdf_size_points": [
+      841.92,
+      594.96
+    ],
+    "arabic_mobile_visual_review": "PASS"
+  },
+  "not_exercised": [
+    "True switching between two authorized Companies: fixture scope permits one Company only",
+    "human-operated OS print dialog and physical printer",
+    "full Production Security & Accounting Integrity Audit",
+    "historical browser matrices",
+    "Staging/Production"
+  ],
+  "accepted_closure": {
+    "state": "Single-Company V1 Demo Ready",
+    "scope": "Development only; user-accepted Company presentation readiness",
+    "pre_demo_uat_global_closure": false,
+    "cross_company_uat": "DEFERRED unless separately authorized",
+    "production_readiness": "DEFERRED",
+    "operator_credentials": "Required before live human demo",
+    "fixture": "Preserved, including retained August Payroll/Attendance",
+    "tests_rerun": false,
+    "new_phase_started": false,
+    "local_commit_message": "Complete V1 demo rehearsal",
+    "push": false
+  }
+}

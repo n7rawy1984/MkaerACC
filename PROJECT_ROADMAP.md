@@ -2,11 +2,21 @@
 
 This is the official living roadmap. Read it with `PROJECT_HANDOFF.md` before development. Architecture planned does not mean implemented.
 
+## Accepted closure — Single-Company V1 Demo Ready
+
+The user accepted the single-Company Development rehearsal as PASS and the V1 flow as ready for Company presentation. No product/accounting defect or demonstrated demo blocker was found; no application/accounting changes were required. **Cross-Company UAT is deferred unless separately authorized**, so PRE_DEMO_UAT is not globally/unconditionally closed. **Production readiness remains deferred. Operator-controlled credentials are required before the live human demo.**
+
+This documentation-only closure preserves the current synthetic fixture, including the retained posted/partially paid August Payroll and reviewed/locked Attendance. No cleanup, reversal, hosted action, test rerun or new phase. One local commit: `Complete V1 demo rehearsal`; no push. Earlier no-commit statements describe the rehearsal before this authorized closure.
+
+## Development demo rehearsal — 2026-09-30
+
+**Bounded single-Company demo rehearsal PASS; no demonstrated product blocker.** Actual signed-in Development browser flows cover the outstanding role/revocation/retry checks, real Expense paging, P6D POST/reversal smoke, August Attendance → Payroll → partial Salary Payment, EN/AR Excel and landscape browser print. One isolated synthetic Company is retained. **True cross-Company switching remains untested under the one-Company fixture limit; PRE_DEMO_UAT is not unconditionally closed.** Production readiness/full audit remain deferred; completed phases remain closed/frozen. No product-code or migration change, new feature, Staging/Production action, commit or push. See [dated UAT record](docs/PRE_DEMO_UAT_20260930.md) for exact evidence, data retained and limits. This section supersedes prior blanket smoke/UAT deferral only for the listed checks.
+
 ## P6E — Development
 
 **P6E COMPLETE for Development.** Failed background authority reads now block protected UI with authoritative retry; production configuration rejects invalid modes and unsafe browser keys before bundling/runtime use; shared dependency guards cover dynamic imports and re-exports. Allowed locale/tenant/Auth preferences and scoped session recovery remain; demo business storage stays isolated. No financial/Payroll or database changes. See [P6E record](docs/P6E_PRODUCTION_DATA_MODE.md) for the frozen contract, focused evidence and limits.
 
-P6C, the P6D V1 financial core, Attendance Lite and Payroll Lite Steps 1–3 remain complete/frozen within their approved scope. WPS remains deferred. Production readiness is outstanding; PRE_DEMO_UAT and hosted signed-in smoke remain deferred/non-blocking. Development closure is user-accepted and recorded in one local commit, `Complete P6E production data mode`. Closure reran no tests and started no new phase. No PRE_DEMO_UAT, production-readiness work, full production audit, migrations, Staging/Production actions or push. This current section supersedes historical P6E-not-started statements only for this bounded package.
+P6C, the P6D V1 financial core, Attendance Lite and Payroll Lite Steps 1–3 remain complete/frozen within their approved scope. WPS remains deferred. At P6E closure, Production readiness was outstanding and PRE_DEMO_UAT/hosted signed-in smoke were deferred/non-blocking; current bounded UAT evidence is above. Development closure is user-accepted and recorded in one local commit, `Complete P6E production data mode`. Closure reran no tests and started no new phase. No PRE_DEMO_UAT, production-readiness work, full production audit, migrations, Staging/Production actions or push. This current section supersedes historical P6E-not-started statements only for this bounded package.
 
 ## Payroll Lite Step 3 — Historical Development closure
 
