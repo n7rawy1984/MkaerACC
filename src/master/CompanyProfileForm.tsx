@@ -29,7 +29,7 @@ export function CompanyProfileForm({ company, disabled, onSave, onCancel }: {
       {(["legal_name", "trn", "address", "notes"] as const).map((field) => <Field key={field} label={t(`companyProfile.${field}`)}>
         {field === "address" || field === "notes"
           ? <textarea name={field} className={inputClassName} value={input[field] ?? ""} onChange={(e) => setInput({ ...input, [field]: e.target.value })} />
-          : <input name={field} type="text" className={inputClassName} value={input[field] ?? ""} onChange={(e) => setInput({ ...input, [field]: e.target.value })} />}
+          : <input dir={field === "trn" ? "ltr" : undefined} name={field} type="text" className={inputClassName} value={input[field] ?? ""} onChange={(e) => setInput({ ...input, [field]: e.target.value })} />}
       </Field>)}
       <button type="submit" className="rounded-lg bg-[var(--tenant-primary)] px-4 py-2 text-sm text-white disabled:opacity-50">{t("companyProfile.save")}</button>
     </fieldset>

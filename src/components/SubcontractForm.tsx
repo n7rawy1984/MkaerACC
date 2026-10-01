@@ -165,7 +165,7 @@ export function SubcontractForm({
 
       <div className="grid grid-cols-3 gap-4">
         <Field label={t("subcontractForm.originalValueAed")} required error={errors.originalContractValue}>
-          <input
+          <input dir="ltr"
             type="number"
             min="0"
             step="0.01"
@@ -176,7 +176,7 @@ export function SubcontractForm({
           />
         </Field>
         <Field label={t("subcontractForm.approvedVariationsAed")}>
-          <input
+          <input dir="ltr"
             type="number"
             step="0.01"
             value={approvedVariations}
@@ -185,7 +185,7 @@ export function SubcontractForm({
           />
         </Field>
         <Field label={t("subcontractForm.retentionPercent")} required error={errors.retentionPercent}>
-          <input
+          <input dir="ltr"
             type="number"
             min="0"
             max="100"
@@ -199,10 +199,10 @@ export function SubcontractForm({
 
       <div className="grid grid-cols-2 gap-4">
         <Field label={t("subcontractForm.startDateOptional")}>
-          <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className={inputClassName} />
+          <input dir="ltr" type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className={inputClassName} />
         </Field>
         <Field label={t("subcontractForm.expectedEndDateOptional")}>
-          <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className={inputClassName} />
+          <input dir="ltr" type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className={inputClassName} />
         </Field>
       </div>
 

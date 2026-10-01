@@ -1,5 +1,7 @@
 # Maker Contracting Accounting System — Project Handoff
 
+**2026-10-01 presentation checkpoint:** Maker logo + Arabic/RTL source hardening verified locally; Company-settings update, asset deployment and hosted branding/login checks remain operator-deferred. No DB/accounting/fixture/migration change. See [checkpoint record](docs/MAKER_DEMO_BRANDING_ARABIC_RTL.md). P6E/V1 demo acceptance and WPS/Production deferrals remain unchanged.
+
 **Read this file and `PROJECT_ROADMAP.md` fully before writing any code.** This file is the complete orientation for a new Claude/AI/developer session. It should be enough, on its own, to understand what the system is, why it exists, what's actually implemented, what's known-incomplete, and what to do next.
 
 Repository: `https://github.com/n7rawy1984/MkaerACC` · Local path: `/media/nagham/msn4ever/www.downloadly.ir/Maker`

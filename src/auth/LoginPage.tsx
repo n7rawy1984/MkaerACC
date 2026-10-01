@@ -27,7 +27,7 @@ export function LoginPage() {
       <p className="mt-2 text-sm text-slate-600">{t("auth.loginSubtitle")}</p>
       <form className="mt-6 space-y-4" onSubmit={submit}>
         <label className="block text-sm font-medium">{t("auth.email")}
-          <input type="email" autoComplete="email" required value={email} onChange={(event) => setEmail(event.target.value)} disabled={pending} className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" />
+          <input dir="ltr" type="email" autoComplete="email" required value={email} onChange={(event) => setEmail(event.target.value)} disabled={pending} className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" />
         </label>
         <label className="block text-sm font-medium">{t("auth.password")}
           <input type="password" autoComplete="current-password" required value={password} onChange={(event) => setPassword(event.target.value)} disabled={pending} className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" />

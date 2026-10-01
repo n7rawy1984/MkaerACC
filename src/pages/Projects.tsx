@@ -124,15 +124,15 @@ export function Projects() {
                 </div>
               </div>
               <div className="flex items-center gap-8">
-                <div className="text-right">
+                <div className="text-end">
                   <p className="text-xs text-slate-400">{t("projects.cost")}</p>
                   <p className="text-sm font-semibold text-slate-900">{formatAED(cost)}</p>
                 </div>
-                <div className="text-right">
+                <div className="text-end">
                   <p className="text-xs text-slate-400">{t("projects.vat")}</p>
                   <p className="text-sm font-medium text-slate-600">{formatAED(vat)}</p>
                 </div>
-                <div className="text-right">
+                <div className="text-end">
                   <p className="text-xs text-slate-400">{t("projects.expenses")}</p>
                   <p className="text-sm font-medium text-slate-600">{expenseCount}</p>
                 </div>

@@ -26,7 +26,7 @@ export function ExpenseCategoryForm({ category, disabled, onSave, onCancel }: {
     <h3 className="font-semibold">{t(category ? "categoryMutation.edit" : "categoryMutation.create")}</h3>
     {!category && <p className="text-sm text-slate-500">{t("categoryMutation.activeOnCreate")}</p>}
     <fieldset disabled={disabled} className="space-y-3">
-      <Field label={t("categoryMutation.code")} required><input className={inputClassName} value={code} onChange={(e) => setCode(e.target.value)} required /></Field>
+      <Field label={t("categoryMutation.code")} required><input dir="ltr" className={inputClassName} value={code} onChange={(e) => setCode(e.target.value)} required /></Field>
       <Field label={t("categoryMutation.name")} required><input className={inputClassName} value={name} onChange={(e) => setName(e.target.value)} required /></Field>
       <Field label={t("categoryMutation.description")}><textarea className={inputClassName} value={description} onChange={(e) => setDescription(e.target.value)} /></Field>
       {invalid && <p role="alert" className="text-sm text-red-700">{t("categoryMutation.invalid")}</p>}

@@ -128,7 +128,7 @@ export function CustodySettlementForm({ custodianId, onDone }: { custodianId: st
 
       <div className="grid grid-cols-2 gap-4">
         <Field label={t("settlementForm.settlementDate")} required error={errors.settlementDate}>
-          <input
+          <input dir="ltr"
             type="date"
             value={settlementDate}
             onChange={(e) => setSettlementDate(e.target.value)}
@@ -177,7 +177,7 @@ export function CustodySettlementForm({ custodianId, onDone }: { custodianId: st
 
       <div className="grid grid-cols-2 gap-4">
         <Field label={t("settlementForm.cashReturnedOptional")} error={errors.cashReturnAmount}>
-          <input
+          <input dir="ltr"
             type="number"
             min="0"
             step="0.01"

@@ -1,3 +1,5 @@
+import { useTenantSettings } from "../tenant/TenantSettingsContext";
+import { TenantBrandMark } from "../tenant/TenantBrandMark";
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
@@ -13,9 +15,11 @@ const button = 'rounded border border-slate-300 px-3 py-2 disabled:opacity-50';
 export default function AttendanceApplication() {
  const { state, signOut, showCompanySelector } = useAuth();
  const { locale } = useI18n(); const t = attendanceText[locale];
+ const branding = useTenantSettings();
+ const displayName = branding.phase === 'READY' ? branding.settings.effectiveDisplayName : state.phase === 'TENANT_READY' ? state.activeTenant.companyName : '';
  if (state.phase !== 'TENANT_READY') return null;
  return <div className="min-h-screen bg-slate-50 p-4 sm:p-6"><header className="mx-auto mb-6 flex max-w-5xl flex-wrap items-center justify-between gap-3">
-  <h1 className="text-xl font-semibold">{state.activeTenant.companyName} · {t.title}</h1><div className="flex flex-wrap gap-2">
+  <div className="flex min-w-0 items-center gap-3"><TenantBrandMark logoUrl={branding.phase === "READY" ? branding.settings.logoUrl : null}/><h1 className="min-w-0 break-words text-xl font-semibold"><bdi>{displayName}</bdi> · {t.title}</h1></div><div className="flex flex-wrap gap-2">
   {state.activeTenant.role !== 'FOREMAN' && <Link className={button} to="/">{t.back}</Link>}
   {state.memberships.length > 1 && <button className={button} onClick={showCompanySelector}>{t.switchCompany}</button>}
   <LanguageButton /><button className={button} onClick={() => void signOut()}>{t.signOut}</button></div></header>
@@ -50,9 +54,9 @@ export function AttendanceContent({ userId, companyId, role }: { userId: string;
   {!context && !error && <p role="status">{t.loading}</p>}
   {context && (tab === 'day' ? <><div className="grid gap-3 sm:grid-cols-2">
    <label>{t.project}<select className={field} value={project} onChange={e => setProject(e.target.value)}><option value="">{t.select}</option>{context.projects.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}</select></label>
-   <label>{t.date}<input className={field} type="date" value={date} max={context.today} onChange={e => setDate(e.target.value)} /></label></div>
+   <label>{t.date}<input dir="ltr" className={field} type="date" value={date} max={context.today} onChange={e => setDate(e.target.value)} /></label></div>
    {project && date && date <= context.today && <DayPanel key={`${project}:${date}`} userId={userId} companyId={companyId} role={role} project={project} date={date} t={t} />}
-  </> : <><label className="block max-w-xs">{t.month}<input className={field} type="month" value={month} max={context.today.slice(0, 7)} onChange={e => setMonth(e.target.value)} /></label>
+  </> : <><label className="block max-w-xs">{t.month}<input dir="ltr" className={field} type="month" value={month} max={context.today.slice(0, 7)} onChange={e => setMonth(e.target.value)} /></label>
    {month && <MonthPanel key={month} userId={userId} companyId={companyId} role={role} month={`${month}-01`} context={context} t={t} />}</>)}
  </main>;
 }
@@ -153,8 +157,8 @@ function AssignmentForm({ userId, companyId, projects, employees, assignment, t,
  return <details className="mt-3"><summary>{assignment ? t.endEdit : t.assign}</summary><form className="mt-3" onSubmit={e => { e.preventDefault(); void save(e.currentTarget); }}>
   <fieldset disabled={busy || failed} className="grid gap-3 sm:grid-cols-2">
    {!assignment && <><label>{t.employee}<select className={field} name="employee" required><option value="">{t.select}</option>{employees.map(e => <option key={e.id} value={e.id}>{e.name}</option>)}</select>{!employees.length && <span>{t.noEmployees}</span>}</label>
-    <label>{t.project}<select className={field} name="project" required><option value="">{t.select}</option>{projects.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}</select></label><label>{t.start}<input className={field} type="date" name="start" required /></label></>}
-   <label>{t.end}<input className={field} type="date" name="end" defaultValue={assignment?.ends_on ?? ''} min={assignment?.starts_on} /></label>
+    <label>{t.project}<select className={field} name="project" required><option value="">{t.select}</option>{projects.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}</select></label><label>{t.start}<input dir="ltr" className={field} type="date" name="start" required /></label></>}
+   <label>{t.end}<input dir="ltr" className={field} type="date" name="end" defaultValue={assignment?.ends_on ?? ''} min={assignment?.starts_on} /></label>
    {assignment && <label>{t.reason}<input className={field} name="reason" required maxLength={1000} /></label>}<button className={button}>{assignment ? t.endEdit : t.assign}</button>
   </fieldset>{failed && <><p role="alert">{t.error}</p><button type="button" className={button} onClick={onRefresh}>{t.refresh}</button></>}
  </form></details>;

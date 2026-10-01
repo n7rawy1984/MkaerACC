@@ -72,10 +72,10 @@ export function SupplierPaymentForm({
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
         <Field label={t("common.date")} required>
-          <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className={inputClassName} />
+          <input dir="ltr" type="date" value={date} onChange={(e) => setDate(e.target.value)} className={inputClassName} />
         </Field>
         <Field label={t("common.amountAed")} required error={errors.amount}>
-          <input
+          <input dir="ltr"
             type="number"
             min="0"
             step="0.01"

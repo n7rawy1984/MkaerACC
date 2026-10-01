@@ -45,10 +45,10 @@ export function Sidebar() {
   }
 
   return (
-    <aside className="flex h-screen w-64 shrink-0 flex-col border-e border-slate-200 bg-white">
+    <aside className="flex h-auto w-full sm:h-screen sm:w-64 shrink-0 flex-col border-e border-slate-200 bg-white">
       <div className="flex items-center gap-2.5 px-5 py-5 border-b border-slate-100">
         <TenantBrandMark logoUrl={settings?.logoUrl ?? null} className="h-9 w-9" />
-        <div className="leading-tight">
+        <div className="min-w-0 break-words leading-tight">
           <p className="text-sm font-semibold text-slate-900">{settings?.effectiveDisplayName ?? t("app.title")}</p>
           <p className="text-xs text-slate-400">{t("app.subtitle")}</p>
         </div>

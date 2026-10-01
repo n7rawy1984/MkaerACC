@@ -38,12 +38,12 @@ export default function TenantReadyApplication({ view }: { view: "expenses" | "s
     <div className="min-h-screen bg-slate-50">
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-4">
-          <div className="flex items-center gap-3">
+          <div className="flex min-w-0 items-center gap-3">
             <TenantBrandMark logoUrl={tenantSettings.phase === "READY" ? tenantSettings.settings.logoUrl : null} />
-            <div><p className="text-xs font-medium uppercase tracking-wide text-slate-500">{t("auth.activeCompany")}</p><h1 className="text-lg font-semibold">{displayName}</h1><p className="text-xs text-slate-500">{businessIdentity}</p></div>
+            <div className="min-w-0 break-words"><p className="text-xs font-medium uppercase tracking-wide text-slate-500">{t("auth.activeCompany")}</p><h1 className="text-lg font-semibold"><bdi>{displayName}</bdi></h1><p className="text-xs text-slate-500"><bdi>{businessIdentity}</bdi></p></div>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <span className="rounded-lg bg-slate-100 px-3 py-2 text-sm"><span className="text-slate-500">{t("auth.role")}:</span> {state.activeTenant.role}</span>
+            <span className="rounded-lg bg-slate-100 px-3 py-2 text-sm"><span className="text-slate-500">{t("auth.role")}:</span> <bdi dir="ltr">{state.activeTenant.role}</bdi></span>
             {state.memberships.length > 1 && <button type="button" onClick={showCompanySelector} className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium">{t("auth.switchCompany")}</button>}
             <LanguageButton />
             <button type="button" onClick={() => void signOut()} className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium">{t("auth.signOut")}</button>

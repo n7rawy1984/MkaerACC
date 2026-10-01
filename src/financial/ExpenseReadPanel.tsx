@@ -32,8 +32,8 @@ export function ExpenseReadContent({ userId, companyId, role }: { userId: string
     {state.phase === "READY" && <>
       {state.rows.length === 0 && <p role="status" className="mt-4">{t("expenseRead.empty")}</p>}
       <ul className="mt-5 divide-y divide-slate-200" aria-label={t("expenseRead.title")}>{state.rows.map(row => <li key={row.id} className="min-w-0 break-words py-4">
-        <div className="flex flex-wrap justify-between gap-3"><h3 className="font-semibold"><bdi>{row.expense_reference}</bdi></h3><span>{t(`expenseRead.${row.status}`)}</span></div>
-        <p><bdi>{row.expense_date}</bdi></p><p className="whitespace-pre-wrap"><bdi>{row.description}</bdi></p>
+        <div className="flex flex-wrap justify-between gap-3"><h3 className="font-semibold"><bdi dir="ltr">{row.expense_reference}</bdi></h3><span>{t(`expenseRead.${row.status}`)}</span></div>
+        <p><bdi dir="ltr">{row.expense_date}</bdi></p><p className="whitespace-pre-wrap"><bdi>{row.description}</bdi></p>
         <dl className="mt-3 grid gap-3 sm:grid-cols-3">{(["net_amount_minor", "vat_amount_minor", "gross_amount_minor"] as const).map(field => <div key={field}><dt>{t(`expenseRead.${field}`)}</dt><dd><bdi>{displayMinor(row[field])} AED</bdi></dd></div>)}</dl>
         <details className="mt-3"><summary className="cursor-pointer">{t("expenseRead.details")}</summary><dl className="mt-2 space-y-2 text-sm">
           {(["id", "company_id", "project_id", "expense_category_id", "supplier_id", "treasury_account_id", "paid_by_party_id", "posted_journal_entry_id", "reversal_journal_entry_id", "invoice_number", "notes", "created_at", "created_by", "updated_at", "updated_by", "posted_at", "posted_by", "reversed_at", "reversed_by"] as const).map(field => <div key={field}><dt className="font-medium">{t(`expenseRead.${field}`)}</dt><dd className="whitespace-pre-wrap break-words"><bdi>{row[field] ?? t("expenseRead.absent")}</bdi></dd></div>)}

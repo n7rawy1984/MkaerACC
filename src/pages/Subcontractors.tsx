@@ -63,14 +63,14 @@ export function Subcontractors() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-slate-100 text-left text-xs font-medium uppercase tracking-wide text-slate-400">
+              <tr className="border-b border-slate-100 text-start text-xs font-medium uppercase tracking-wide text-slate-400">
                 <th className="px-5 py-2.5 font-medium">{t("subcontractors.colSubcontractor")}</th>
-                <th className="px-3 py-2.5 text-right font-medium">{t("subcontractors.colActiveContracts")}</th>
-                <th className="px-3 py-2.5 text-right font-medium">{t("subcontractors.colProjects")}</th>
-                <th className="px-3 py-2.5 text-right font-medium">{t("subcontractors.colCertifiedToDate")}</th>
-                <th className="px-3 py-2.5 text-right font-medium">{t("subcontractors.colOutstandingPayable")}</th>
-                <th className="px-3 py-2.5 text-right font-medium">{t("subcontractors.colRetentionHeld")}</th>
-                <th className="px-5 py-2.5 text-right font-medium">{t("subcontractors.colAdvanceBalance")}</th>
+                <th className="px-3 py-2.5 text-end font-medium">{t("subcontractors.colActiveContracts")}</th>
+                <th className="px-3 py-2.5 text-end font-medium">{t("subcontractors.colProjects")}</th>
+                <th className="px-3 py-2.5 text-end font-medium">{t("subcontractors.colCertifiedToDate")}</th>
+                <th className="px-3 py-2.5 text-end font-medium">{t("subcontractors.colOutstandingPayable")}</th>
+                <th className="px-3 py-2.5 text-end font-medium">{t("subcontractors.colRetentionHeld")}</th>
+                <th className="px-5 py-2.5 text-end font-medium">{t("subcontractors.colAdvanceBalance")}</th>
               </tr>
             </thead>
             <tbody>
@@ -105,20 +105,20 @@ export function Subcontractors() {
                       </div>
                     </div>
                   </td>
-                  <td className="px-3 py-3.5 text-right text-slate-700">
+                  <td className="px-3 py-3.5 text-end text-slate-700">
                     {row.activeContracts} / {row.contractCount}
                   </td>
-                  <td className="px-3 py-3.5 text-right text-slate-700">{row.projectCount}</td>
-                  <td className="px-3 py-3.5 whitespace-nowrap text-right font-medium text-slate-900">
+                  <td className="px-3 py-3.5 text-end text-slate-700">{row.projectCount}</td>
+                  <td className="px-3 py-3.5 whitespace-nowrap text-end font-medium text-slate-900">
                     {formatAED(row.certifiedToDate)}
                   </td>
-                  <td className="px-3 py-3.5 whitespace-nowrap text-right font-medium text-slate-900">
+                  <td className="px-3 py-3.5 whitespace-nowrap text-end font-medium text-slate-900">
                     {formatAED(row.payable)}
                   </td>
-                  <td className="px-3 py-3.5 whitespace-nowrap text-right font-medium text-slate-600">
+                  <td className="px-3 py-3.5 whitespace-nowrap text-end font-medium text-slate-600">
                     {formatAED(row.retention)}
                   </td>
-                  <td className="px-5 py-3.5 whitespace-nowrap text-right font-medium text-slate-600">
+                  <td className="px-5 py-3.5 whitespace-nowrap text-end font-medium text-slate-600">
                     {formatAED(row.advanceBalance)}
                   </td>
                 </tr>

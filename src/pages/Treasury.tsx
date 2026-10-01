@@ -76,7 +76,7 @@ export function Treasury() {
                 </div>
               </div>
               <div className="flex items-center gap-4">
-                <div className="text-right">
+                <div className="text-end">
                   <p className="text-xs text-slate-400">{t("treasury.currentBalance")}</p>
                   <p className="text-sm font-semibold text-slate-900">
                     {formatAED(treasuryAccountBalance(journalEntries, account.glAccountId))}

@@ -88,7 +88,7 @@ export function SubcontractorForm({ subcontractor, onDone }: { subcontractor?: P
           <input value={phone} onChange={(e) => setPhone(e.target.value)} className={inputClassName} />
         </Field>
         <Field label={t("subcontractorForm.email")}>
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className={inputClassName} />
+          <input dir="ltr" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className={inputClassName} />
         </Field>
       </div>
 

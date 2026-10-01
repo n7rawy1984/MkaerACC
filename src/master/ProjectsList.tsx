@@ -43,7 +43,7 @@ export function ProjectsList() {
     {master.projects.length === 0 && <p className="mt-4 text-sm">{t("productionProjects.empty")}</p>}
     <ul className="mt-5 divide-y divide-slate-200" aria-label={t("productionProjects.title")}>
       {master.projects.map(project => <li key={project.id} className="min-w-0 break-words py-4">
-        <p className="font-medium">{project.code} · {project.name}</p>
+        <p className="font-medium"><bdi dir="ltr">{project.code}</bdi> · <bdi>{project.name}</bdi></p>
         <p className="text-sm">{t(`projectStatus.${project.status}`)}</p>
         <dl className="mt-2 space-y-2 text-sm">
           {(["client_name", "location", "contract_number", "notes"] as const).map(field => <div key={field}><dt className="text-slate-500">{t(`projectMetadata.${field}`)}</dt><dd className="whitespace-pre-wrap">{(field === "client_name" ? project.clientName : field === "contract_number" ? project.contractNumber : project[field]) ?? t("projectMetadata.empty")}</dd></div>)}

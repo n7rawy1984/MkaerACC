@@ -6,7 +6,7 @@
 .payroll-register-print table {width:100%;table-layout:fixed;border-collapse:collapse;font-size:11px;margin-top:12px;}
 .payroll-register-print th,.payroll-register-print td {border:1px solid #999;padding:5px;overflow-wrap:anywhere;vertical-align:top;}
 .payroll-register-print th {background:#e2e8f0;font-weight:bold;}
-.payroll-register-print td:nth-child(n+6) {text-align:right;font-variant-numeric:tabular-nums;}
+.payroll-register-print :is(td,th):nth-child(n+6) {text-align:end;font-variant-numeric:tabular-nums;}
 .payroll-register-note,.payroll-register-reference {font-size:10px;margin-top:8px;}
 @page payroll-register {size:A4 landscape;margin:10mm;}
 @media print {
@@ -20,3 +20,7 @@
  .payroll-register-print tfoot {display:table-row-group;}
  .payroll-register-print tr {break-inside:avoid;}
 }
+
+.payroll-register-brand {display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.payroll-register-brand img {width:64px;height:40px;object-fit:contain;flex-shrink:0;}
+.payroll-register-print th:nth-child(-n+5) {text-align:start;}

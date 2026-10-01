@@ -36,7 +36,7 @@ export function SupplierPartyForm({ supplier, disabled, onSave, onCancel }: {
       {(["name", "code", "trn", "contact_person", "phone", "email", "address", "notes"] as const).map((field) => <Field key={field} label={t(`supplierMutation.${field}`)} required={field === "name"}>
         {field === "address" || field === "notes"
           ? <textarea name={field} className={inputClassName} value={input[field] ?? ""} onChange={(e) => setInput({ ...input, [field]: e.target.value })} />
-          : <input name={field} type="text" className={inputClassName} value={input[field] ?? ""} required={field === "name"} onChange={(e) => setInput({ ...input, [field]: e.target.value })} />}
+          : <input dir={field === "email" || field === "phone" || field === "trn" || field === "code" ? "ltr" : undefined} name={field} type="text" className={inputClassName} value={input[field] ?? ""} required={field === "name"} onChange={(e) => setInput({ ...input, [field]: e.target.value })} />}
       </Field>)}
       {invalid && <p role="alert" className="text-sm text-red-700">{t("supplierMutation.invalid")}</p>}
       <button type="submit" className="rounded-lg bg-[var(--tenant-primary)] px-4 py-2 text-sm text-white disabled:opacity-50">{t("supplierMutation.save")}</button>

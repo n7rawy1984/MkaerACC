@@ -140,7 +140,7 @@ export function ExpenseForm({ onDone }: { onDone: () => void }) {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
         <Field label={t("common.date")} required error={errors.date}>
-          <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className={inputClassName} />
+          <input dir="ltr" type="date" value={date} onChange={(e) => setDate(e.target.value)} className={inputClassName} />
         </Field>
         <Field label={t("expenseForm.category")} required error={errors.categoryId}>
           <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} className={inputClassName}>
@@ -191,7 +191,7 @@ export function ExpenseForm({ onDone }: { onDone: () => void }) {
 
       <div className="grid grid-cols-2 gap-4">
         <Field label={t("expenseForm.netAmountAed")} required error={errors.netAmount}>
-          <input
+          <input dir="ltr"
             type="number"
             min="0"
             step="0.01"
@@ -212,7 +212,7 @@ export function ExpenseForm({ onDone }: { onDone: () => void }) {
 
       {vatMode === "MANUAL" && (
         <Field label={t("field.vatAmountAed")} required error={errors.manualVatAmount}>
-          <input
+          <input dir="ltr"
             type="number"
             min="0"
             step="0.01"

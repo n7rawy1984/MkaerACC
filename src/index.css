@@ -25,3 +25,12 @@ body {
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
+/* Arabic joins in logical Unicode order; Latin tracking can break its shaping. */
+html[lang="ar"] :is(h1, h2, h3, h4, h5, h6, p, span, label, button, a, th, td, summary) {
+  letter-spacing: normal;
+}
+
+:where(input, textarea, select, th, td) { text-align: start; }
+:where(input[dir="ltr"]) { unicode-bidi: isolate; }
+:where(th, td) { overflow-wrap: anywhere; }

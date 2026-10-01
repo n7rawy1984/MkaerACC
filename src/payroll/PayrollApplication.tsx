@@ -1,3 +1,5 @@
+import { useTenantSettings } from "../tenant/TenantSettingsContext";
+import { TenantBrandMark } from "../tenant/TenantBrandMark";
 import PayrollRegisterOutput from './PayrollRegisterOutput';
 import PayrollPosting from './PayrollPosting';
 import {useEffect,useRef,useState} from 'react';
@@ -14,8 +16,10 @@ const button='rounded border border-slate-300 px-3 py-2 disabled:opacity-50';
 function failure(error:unknown,t:PayrollLabels){return error instanceof Error&&error.message==='STALE'?t.staleError:error instanceof Error&&error.message==='POLICY'?t.policy:t.error;}
 export default function PayrollApplication(){
  const {state,signOut,showCompanySelector}=useAuth();const {locale}=useI18n();const t=payrollText[locale];
+ const branding = useTenantSettings();
+ const displayName = branding.phase === 'READY' ? branding.settings.effectiveDisplayName : state.phase === 'TENANT_READY' ? state.activeTenant.companyName : '';
  if(state.phase!=='TENANT_READY')return null;
- return <div className="min-h-screen bg-slate-50 p-4 sm:p-6"><header className="mx-auto mb-5 flex max-w-6xl flex-wrap items-center justify-between gap-3"><h1 className="text-xl font-semibold">{state.activeTenant.companyName} · {t.title}</h1>
+ return <div className="min-h-screen bg-slate-50 p-4 sm:p-6"><header className="mx-auto mb-5 flex max-w-6xl flex-wrap items-center justify-between gap-3"><div className="flex min-w-0 items-center gap-3"><TenantBrandMark logoUrl={branding.phase === "READY" ? branding.settings.logoUrl : null}/><h1 className="min-w-0 break-words text-xl font-semibold"><bdi>{displayName}</bdi> · {t.title}</h1></div>
  <div className="flex flex-wrap gap-2"><Link className={button} to="/">{t.back}</Link>{state.memberships.length>1&&<button className={button} onClick={showCompanySelector}>{t.switchCompany}</button>}<LanguageButton/><button className={button} onClick={()=>void signOut()}>{t.signOut}</button></div></header>
  <PayrollContent key={`${state.profile.userId}:${state.activeTenant.companyId}:${state.activeTenant.role}`} userId={state.profile.userId} companyId={state.activeTenant.companyId} role={state.activeTenant.role} companyName={state.activeTenant.companyName}/></div>;
 }
@@ -33,7 +37,7 @@ function Profiles({userId,companyId,t}:{userId:string;companyId:string;t:Payroll
  const reload=()=>setRevision(v=>v+1);
  return <section className="space-y-4"><p>{t.fullMonth}</p><button className={button} onClick={reload}>{t.reload}</button>{error&&<p role="alert">{t.error}</p>}{!data&&!error&&<p role="status">{t.loading}</p>}
  {data&&<><ProfileForm key={`new:${revision}`} userId={userId} companyId={companyId} data={data} t={t} done={reload}/>{!data.profiles.length&&<p>{t.emptyProfiles}</p>}
- {data.profiles.map(p=><article key={`${p.id}:${p.version}`} className="min-w-0 rounded border p-3"><h2 className="font-semibold"><bdi>{p.payroll_id} · {p.employee_name}</bdi></h2><p><bdi>{displayPayrollMoney(p.monthly_salary_minor)}</bdi> · {p.status==='ACTIVE'?t.active:t.inactive}{p.employee_status!=='ACTIVE'?` · ${t.employeeInactive}`:''}</p><p><bdi>{p.profession} · {p.work_station} · {p.payroll_type} · {p.payment_type}</bdi></p><ProfileForm userId={userId} companyId={companyId} data={data} profile={p} t={t} done={reload}/></article>)}</>}
+ {data.profiles.map(p=><article key={`${p.id}:${p.version}`} className="min-w-0 rounded border p-3"><h2 className="font-semibold"><bdi dir="ltr">{p.payroll_id}</bdi> · <bdi>{p.employee_name}</bdi></h2><p><bdi dir="ltr">{displayPayrollMoney(p.monthly_salary_minor)}</bdi> · {p.status==='ACTIVE'?t.active:t.inactive}{p.employee_status!=='ACTIVE'?` · ${t.employeeInactive}`:''}</p><p><bdi>{p.profession} · {p.work_station} · {p.payroll_type} · {p.payment_type}</bdi></p><ProfileForm userId={userId} companyId={companyId} data={data} profile={p} t={t} done={reload}/></article>)}</>}
  </section>;
 }
 function ProfileForm({userId,companyId,data,profile,t,done}:{userId:string;companyId:string;data:PayrollProfiles;profile?:PayrollProfile;t:PayrollLabels;done:()=>void}){
@@ -46,14 +50,14 @@ function ProfileForm({userId,companyId,data,profile,t,done}:{userId:string;compa
   }catch(e){if(live.current)setError(failure(e,t));}finally{sending.current=false;if(live.current)setBusy(false);}}
  return <details><summary>{profile?t.edit:t.create}</summary><form className="mt-3" onSubmit={e=>{e.preventDefault();void save(e.currentTarget);}}><fieldset disabled={busy||!!error} className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
  {!profile&&<label>{t.employee}<select className={field} name="employee" required><option value="">{t.select}</option>{data.employees.filter(e=>!data.profiles.some(p=>p.employee_id===e.id)).map(e=><option key={e.id} value={e.id}>{e.name}</option>)}</select></label>}
- {([['payrollId',t.payrollId,profile?.payroll_id,80],['type',t.type,profile?.payroll_type,100],['profession',t.profession,profile?.profession,200],['station',t.station,profile?.work_station,200],['payment',t.payment,profile?.payment_type,100]] as const).map(([name,label,value,max])=><label key={name}>{label}<input className={field} name={name} defaultValue={value??''} maxLength={max} required/></label>)}
+ {([['payrollId',t.payrollId,profile?.payroll_id,80],['type',t.type,profile?.payroll_type,100],['profession',t.profession,profile?.profession,200],['station',t.station,profile?.work_station,200],['payment',t.payment,profile?.payment_type,100]] as const).map(([name,label,value,max])=><label key={name}>{label}<input dir={name === "payrollId" ? "ltr" : undefined} className={field} name={name} defaultValue={value??''} maxLength={max} required/></label>)}
  <label>{t.project}<select className={field} name="project" defaultValue={profile?.default_project_id??''}><option value="">{t.none}</option>{data.projects.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}</select></label>
- <label>{t.salary}<input className={field} name="salary" inputMode="decimal" defaultValue={profile?displayPayrollMoney(profile.monthly_salary_minor):''} required pattern="[0-9]+(\.[0-9]{1,2})?"/></label>
+ <label>{t.salary}<input dir="ltr" className={field} name="salary" inputMode="decimal" defaultValue={profile?displayPayrollMoney(profile.monthly_salary_minor):''} required pattern="[0-9]+(\.[0-9]{1,2})?"/></label>
  <label>{t.status}<select className={field} name="status" defaultValue={profile?.status??'ACTIVE'}><option value="ACTIVE">{t.active}</option><option value="INACTIVE">{t.inactive}</option></select></label><button className={button}>{t.save}</button></fieldset>
  {error&&<><p role="alert">{error}</p><button type="button" className={button} onClick={done}>{t.reload}</button></>}</form></details>;
 }
 function Draft({userId,companyId,companyName,role,t}:{userId:string;companyId:string;companyName:string;role:string;t:PayrollLabels}){
- const [month,setMonth]=useState(()=>new Date().toISOString().slice(0,7));return <section className="space-y-4"><label className="block max-w-xs">{t.month}<input className={field} type="month" value={month} onChange={e=>setMonth(e.target.value)}/></label>
+ const [month,setMonth]=useState(()=>new Date().toISOString().slice(0,7));return <section className="space-y-4"><label className="block max-w-xs">{t.month}<input dir="ltr" className={field} type="month" value={month} onChange={e=>setMonth(e.target.value)}/></label>
  {/^\d{4}-\d{2}$/.test(month)&&<DraftMonth companyName={companyName} key={month} userId={userId} companyId={companyId} month={`${month}-01`} role={role} t={t}/>}</section>;
 }
 function DraftMonth({userId,companyId,companyName,month,role,t}:{userId:string;companyId:string;companyName:string;month:string;role:string;t:PayrollLabels}){
@@ -105,7 +109,7 @@ function AdjustmentForm({userId,companyId,row,adjustment,t,done}:{userId:string;
   }catch(e){if(live.current)setError(failure(e,t));}finally{sending.current=false;if(live.current)setBusy(false);}}
  return <form ref={formRef} className="mt-3" onSubmit={e=>{e.preventDefault();void save(e.currentTarget,false);}}><fieldset disabled={busy||!!error} className="grid gap-3 sm:grid-cols-2">
  <label>{t.adjustments}<select className={field} name="kind" defaultValue={adjustment?.kind??'ADDITION'}><option value="ADDITION">{t.addition}</option><option value="DEDUCTION">{t.deduction}</option></select></label>
- <label>{t.amount}<input className={field} name="amount" inputMode="decimal" required defaultValue={adjustment?displayPayrollMoney(adjustment.amount_minor):''} pattern="[0-9]+(\.[0-9]{1,2})?"/></label>
+ <label>{t.amount}<input dir="ltr" className={field} name="amount" inputMode="decimal" required defaultValue={adjustment?displayPayrollMoney(adjustment.amount_minor):''} pattern="[0-9]+(\.[0-9]{1,2})?"/></label>
  <label>{t.reason}<input className={field} name="reason" required maxLength={1000} defaultValue={adjustment?.reason??''}/></label>
  {adjustment&&<label>{t.changeReason}<input className={field} name="changeReason" required maxLength={1000}/></label>}
  <button className={button}>{adjustment?t.saveAdjustment:t.add}</button>{adjustment&&!adjustment.voided&&<button className={button} type="button" onClick={()=>{if(formRef.current)void save(formRef.current,true);}}>{t.void}</button>}</fieldset>

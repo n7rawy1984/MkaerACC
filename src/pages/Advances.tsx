@@ -79,7 +79,7 @@ function CustodianPanel({ custodian }: { custodian: Party }) {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="flex w-full flex-col gap-4 px-5 py-4 text-left"
+        className="flex w-full flex-col gap-4 px-5 py-4 text-start"
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">

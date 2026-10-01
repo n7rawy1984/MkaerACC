@@ -93,7 +93,7 @@ export function TreasuryExpensePost({ userId, companyId, role, onPosted }: { use
     {attempt ? <div className="mt-3 space-y-3 break-words">
       <p>{t(attempt.receipt ? "expensePost.confirmed" : "expensePost.frozen")}</p>
       <p><bdi>{attempt.input.description} · {displayMinor(attempt.input.netMinor)} AED</bdi></p>
-      <p>{t("expensePost.request")}: <bdi>{attempt.key}</bdi></p>
+      <p>{t("expensePost.request")}: <bdi dir="ltr">{attempt.key}</bdi></p>
       {attempt.receipt && <p><bdi>{attempt.receipt.expense_reference} · {attempt.receipt.journal_entry_id}</bdi></p>}
       {posted && <p role="status">{t("expensePost.readback")}: <bdi>{displayMinor(posted.net_amount_minor)} / {displayMinor(posted.vat_amount_minor)} / {displayMinor(posted.gross_amount_minor)} AED</bdi> · {t(`expenseRead.${posted.status}`)}</p>}
       <button type="button" disabled={busy || !ready} className={field} onClick={() => void recover(attempt)}>{t(attempt.receipt ? "expensePost.readAgain" : "expensePost.retry")}</button>
@@ -103,17 +103,17 @@ export function TreasuryExpensePost({ userId, companyId, role, onPosted }: { use
       }}>{t("expensePost.new")}</button>}
     </div> : master.phase !== "READY" ? <p role="status">{t("expensePost.masters")}</p> : <form key={formKey} onSubmit={submit} className="mt-4" aria-label={t("expensePost.title")}>
       <fieldset disabled={busy || !ready} className="grid min-w-0 gap-3 sm:grid-cols-2">
-        <label>{t("expensePost.date")}<input name="date" type="date" required className={field} /></label>
+        <label>{t("expensePost.date")}<input dir="ltr" name="date" type="date" required className={field} /></label>
         <label>{t("expensePost.project")}<select value={project} onChange={e => setProject(e.target.value)} className={field}><option value="">{t("expensePost.companyCost")}</option>{master.projects.filter(r => r.companyId === companyId && r.status !== "CLOSED").map(r => <option key={r.id} value={r.id}>{r.code} · {r.name}</option>)}</select></label>
         <label>{t("expensePost.category")}<select name="category" required className={field} defaultValue=""><option value="">{t("expensePost.select")}</option>{master.expenseCategories.filter(r => r.companyId === companyId && r.status === "ACTIVE").map(r => <option key={r.id} value={r.id}>{r.code} · {r.name}</option>)}</select></label>
         <label>{t("expensePost.treasury")}<select name="treasury" key={project} required className={field} defaultValue=""><option value="">{t("expensePost.select")}</option>{master.treasuryAccounts.filter(r => r.companyId === companyId && r.status === "ACTIVE" && (r.projectId === null || r.projectId === project)).map(r => <option key={r.id} value={r.id}>{r.code} · {r.name}</option>)}</select></label>
         <label>{t("expensePost.supplier")}<select name="supplier" className={field} defaultValue=""><option value="">{t("expenseRead.absent")}</option>{master.parties.filter(r => r.companyId === companyId && r.type === "SUPPLIER" && r.status === "ACTIVE").map(r => <option key={r.id} value={r.id}>{r.name}</option>)}</select></label>
-        <label>{t("expensePost.net")}<input name="net" required inputMode="decimal" placeholder="0.00" className={field} /></label>
+        <label>{t("expensePost.net")}<input dir="ltr" name="net" required inputMode="decimal" placeholder="0.00" className={field} /></label>
         <label>{t("expensePost.vat")}<select value={vat} onChange={e => { const mode = e.target.value as TreasuryExpenseInput["vatMode"]; setVat(mode); if (mode !== "ZERO") setInvoice(true); }} className={field}>{(["ZERO", "AUTO_5", "MANUAL"] as const).map(v => <option key={v} value={v}>{t(`expenseRead.${v}`)}</option>)}</select></label>
-        {vat === "MANUAL" && <label>{t("expensePost.manualVat")}<input name="manualVat" required inputMode="decimal" className={field} /></label>}
+        {vat === "MANUAL" && <label>{t("expensePost.manualVat")}<input dir="ltr" name="manualVat" required inputMode="decimal" className={field} /></label>}
         <label>{t("expenseRead.method")}<select name="method" className={field}>{(["CASH", "BANK", "TRANSFER", "CHEQUE", "OTHER"] as const).map(v => <option key={v} value={v}>{t(`expenseRead.${v}`)}</option>)}</select></label>
         <label className="self-center"><input type="checkbox" checked={invoice} disabled={vat !== "ZERO"} onChange={e => setInvoice(e.target.checked)} /> {t("expenseRead.invoice")}</label>
-        {invoice && <label>{t("expenseRead.invoice_number")}<input name="invoice" required maxLength={100} className={field} /></label>}
+        {invoice && <label>{t("expenseRead.invoice_number")}<input dir="ltr" name="invoice" required maxLength={100} className={field} /></label>}
         <label className="sm:col-span-2">{t("expensePost.description")}<textarea name="description" required maxLength={1000} className={field} /></label>
         <label className="sm:col-span-2">{t("expenseRead.notes")}<textarea name="notes" maxLength={2000} className={field} /></label>
         <button type="submit" className="rounded-lg bg-slate-900 px-4 py-2 text-white">{t("expensePost.submit")}</button>

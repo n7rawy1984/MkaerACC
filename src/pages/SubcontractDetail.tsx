@@ -291,7 +291,7 @@ export function SubcontractDetail() {
             <div
               key={row.key}
               onClick={row.onClick}
-              className={`flex w-full items-center justify-between px-5 py-3.5 text-left ${row.onClick ? "cursor-pointer hover:bg-slate-50" : ""}`}
+              className={`flex w-full items-center justify-between px-5 py-3.5 text-start ${row.onClick ? "cursor-pointer hover:bg-slate-50" : ""}`}
             >
               <div className="flex items-center gap-3">
                 <Badge tone={row.kind === "CERTIFICATE" ? "blue" : row.kind === "ADVANCE" ? "amber" : "green"}>
@@ -302,7 +302,7 @@ export function SubcontractDetail() {
                   <p className="text-xs text-slate-400">{formatDate(row.date)}</p>
                 </div>
               </div>
-              <div className="text-right">
+              <div className="text-end">
                 <p className="text-sm font-semibold text-slate-900">{formatAED(row.amount)}</p>
                 {row.kind === "CERTIFICATE" && (
                   <Badge tone={CERT_STATUS_TONE[row.status as CertificateStatus]}>
@@ -361,7 +361,7 @@ export function SubcontractDetail() {
                   setShowPaymentPicker(false);
                   setPayingCertificateId(certificate.id);
                 }}
-                className="flex w-full items-center justify-between rounded-lg border border-slate-200 px-3 py-2.5 text-left hover:bg-slate-50"
+                className="flex w-full items-center justify-between rounded-lg border border-slate-200 px-3 py-2.5 text-start hover:bg-slate-50"
               >
                 <span className="text-sm font-medium text-slate-800">{certificate.certificateNumber}</span>
                 <span className="text-sm font-semibold text-slate-900">

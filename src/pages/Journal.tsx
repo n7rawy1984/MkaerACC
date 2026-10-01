@@ -94,11 +94,11 @@ export function Journal() {
               </div>
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="text-left text-xs uppercase tracking-wide text-slate-400">
+                  <tr className="text-start text-xs uppercase tracking-wide text-slate-400">
                     <th className="px-5 py-2 font-medium">{t("journal.colAccount")}</th>
                     <th className="px-5 py-2 font-medium">{t("journal.colDimension")}</th>
-                    <th className="px-5 py-2 text-right font-medium">{t("journal.colDebit")}</th>
-                    <th className="px-5 py-2 text-right font-medium">{t("journal.colCredit")}</th>
+                    <th className="px-5 py-2 text-end font-medium">{t("journal.colDebit")}</th>
+                    <th className="px-5 py-2 text-end font-medium">{t("journal.colCredit")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -112,10 +112,10 @@ export function Journal() {
                           .filter(Boolean)
                           .join(" · ") || "—"}
                       </td>
-                      <td className="px-5 py-2 text-right text-slate-900">
+                      <td className="px-5 py-2 text-end text-slate-900">
                         {l.debit > 0 ? formatAED(l.debit) : ""}
                       </td>
-                      <td className="px-5 py-2 text-right text-slate-900">
+                      <td className="px-5 py-2 text-end text-slate-900">
                         {l.credit > 0 ? formatAED(l.credit) : ""}
                       </td>
                     </tr>
@@ -124,8 +124,8 @@ export function Journal() {
                     <td className="px-5 py-2 text-slate-500" colSpan={2}>
                       {t("journal.total")}
                     </td>
-                    <td className="px-5 py-2 text-right text-slate-900">{formatAED(debitTotal)}</td>
-                    <td className="px-5 py-2 text-right text-slate-900">{formatAED(creditTotal)}</td>
+                    <td className="px-5 py-2 text-end text-slate-900">{formatAED(debitTotal)}</td>
+                    <td className="px-5 py-2 text-end text-slate-900">{formatAED(creditTotal)}</td>
                   </tr>
                 </tbody>
               </table>

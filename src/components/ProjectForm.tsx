@@ -147,7 +147,7 @@ export function ProjectForm({ project, onDone }: { project?: Project; onDone: ()
 
       <div className="grid grid-cols-2 gap-4">
         <Field label={t("project.form.originalContractValue")} error={errors.originalContractValue}>
-          <input
+          <input dir="ltr"
             type="number"
             min="0"
             step="0.01"
@@ -158,7 +158,7 @@ export function ProjectForm({ project, onDone }: { project?: Project; onDone: ()
           />
         </Field>
         <Field label={t("project.form.budget")} error={errors.budget}>
-          <input
+          <input dir="ltr"
             type="number"
             min="0"
             step="0.01"
@@ -172,10 +172,10 @@ export function ProjectForm({ project, onDone }: { project?: Project; onDone: ()
 
       <div className="grid grid-cols-2 gap-4">
         <Field label={t("project.form.startDate")}>
-          <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className={inputClassName} />
+          <input dir="ltr" type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className={inputClassName} />
         </Field>
         <Field label={t("project.form.expectedCompletionDate")}>
-          <input
+          <input dir="ltr"
             type="date"
             value={expectedCompletionDate}
             onChange={(e) => setExpectedCompletionDate(e.target.value)}

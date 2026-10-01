@@ -154,7 +154,7 @@ export function Expenses() {
                   {t("expenses.paidVia", { source: paidFromLabel(e) })}
                 </p>
               </div>
-              <div className="text-right shrink-0 ps-4">
+              <div className="text-end shrink-0 ps-4">
                 <p className="text-sm font-semibold text-slate-900">{formatAED(e.totalAmount)}</p>
                 {e.vatAmount > 0 && (
                   <p className="text-xs text-slate-400">{t("expenses.inclVat", { amount: formatAED(e.vatAmount) })}</p>

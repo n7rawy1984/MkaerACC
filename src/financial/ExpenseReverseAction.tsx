@@ -90,7 +90,7 @@ export function ExpenseReverseAction({ userId, companyId, role, expense, onRefre
     {busy && <p role="status">{t("expenseReverse.pending")}</p>}
     {attempt ? <div className="space-y-2 break-words">
       <p>{t(posted ? "expenseReverse.confirmed" : attempt.receipt ? "expenseReverse.readError" : "expenseReverse.frozen")}</p>
-      <p>{t("expenseReverse.request")}: <bdi>{attempt.key}</bdi></p>
+      <p>{t("expenseReverse.request")}: <bdi dir="ltr">{attempt.key}</bdi></p>
       {(posted?.reversal_journal_entry_id || attempt.receipt?.reversal_journal_entry_id) && <p>{t("expenseReverse.journal")}: <bdi>{posted?.reversal_journal_entry_id ?? attempt.receipt!.reversal_journal_entry_id}</bdi></p>}
       {!posted && <button type="button" disabled={busy || !ready} className={field} onClick={() => void recover(attempt)}>{t(attempt.receipt ? "expenseReverse.readAgain" : "expenseReverse.retry")}</button>}
       {posted && <button type="button" className={field} onClick={() => {
@@ -99,7 +99,7 @@ export function ExpenseReverseAction({ userId, companyId, role, expense, onRefre
       }}>{t("expenseReverse.dismiss")}</button>}
     </div> : confirming ? <form onSubmit={submit} className="space-y-3" aria-label={t("expenseReverse.confirmTitle")}>
       <p className="text-sm text-red-900">{t("expenseReverse.warning")}</p>
-      <label>{t("expenseReverse.date")}<input name="date" type="date" required className={field} /></label>
+      <label>{t("expenseReverse.date")}<input dir="ltr" name="date" type="date" required className={field} /></label>
       <label>{t("expenseReverse.reason")}<textarea name="reason" required maxLength={1000} className={field} /></label>
       <label><input name="confirmed" type="checkbox" value="yes" required /> {t("expenseReverse.confirmCheck")}</label>
       <div className="flex flex-wrap gap-2"><button type="submit" className="rounded-lg bg-red-800 px-3 py-2 text-white">{t("expenseReverse.confirm")}</button>

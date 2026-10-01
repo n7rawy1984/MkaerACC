@@ -289,7 +289,7 @@ export function Dashboard() {
                     {categoriesById[e.categoryId]?.name}
                   </p>
                 </div>
-                <div className="text-right">
+                <div className="text-end">
                   <p className="text-sm font-semibold text-slate-900">{formatAED(e.totalAmount)}</p>
                   {!e.hasInvoice && <Badge tone="amber">{t("badge.noInvoice")}</Badge>}
                 </div>

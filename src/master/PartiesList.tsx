@@ -86,7 +86,7 @@ export function PartiesList() {
                 ["trn", party.taxRegistrationNumber], ["contact", party.contactPerson],
                 ["phone", party.phone], ["email", party.email], ["address", party.address], ["notes", party.notes],
               ] as const).map(([field, value]) => value !== null && (
-                <div key={field}><dt className="inline font-medium">{t(`productionMaster.${field}`)}: </dt><dd className="inline"><bdi>{value}</bdi></dd></div>
+                <div key={field}><dt className="inline font-medium">{t(`productionMaster.${field}`)}: </dt><dd className="inline"><bdi dir={field === "email" || field === "phone" || field === "trn" ? "ltr" : "auto"}>{value}</bdi></dd></div>
               ))}
             </dl>
             {party.type === "OTHER" && <OtherPartyNameControl party={party} selected={otherActionId === party.id} onSelect={() => { returnFocus.current = null; setEditing(null); setStatusTarget(null); setEmployeeActionId(null); setCustodianActionId(null); setOwnerActionId(null); setSubcontractorActionId(null); setOtherActionId(party.id); }} />}

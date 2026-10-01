@@ -18,8 +18,8 @@ const TONE_STYLES: Record<NonNullable<StatCardProps["tone"]>, string> = {
 
 const TONE_BORDER: Record<NonNullable<StatCardProps["tone"]>, string> = {
   default: "border-slate-200",
-  warning: "border-l-4 border-l-amber-400 border-slate-200",
-  danger: "border-l-4 border-l-rose-400 border-slate-200",
+  warning: "border-s-4 border-s-amber-400 border-slate-200",
+  danger: "border-s-4 border-s-rose-400 border-slate-200",
 };
 
 export function StatCard({ label, value, icon: Icon, tone = "default", hint, format = "currency" }: StatCardProps) {

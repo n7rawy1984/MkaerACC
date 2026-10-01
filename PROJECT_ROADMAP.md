@@ -1,5 +1,7 @@
 # Maker Contracting Accounting System — Project Roadmap
 
+**2026-10-01 presentation checkpoint:** Maker logo + Arabic/RTL source hardening verified locally; Company-settings update, asset deployment and hosted branding/login checks remain operator-deferred. No DB/accounting/fixture/migration change. See [checkpoint record](docs/MAKER_DEMO_BRANDING_ARABIC_RTL.md). P6E/V1 demo acceptance and WPS/Production deferrals remain unchanged.
+
 This is the official living roadmap. Read it with `PROJECT_HANDOFF.md` before development. Architecture planned does not mean implemented.
 
 ## Accepted closure — Single-Company V1 Demo Ready

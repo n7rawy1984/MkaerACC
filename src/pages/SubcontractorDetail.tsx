@@ -143,7 +143,7 @@ export function SubcontractorDetail() {
             <button
               key={c.id}
               onClick={() => navigate(`/subcontracts/${c.id}`)}
-              className="flex w-full items-center justify-between px-5 py-3.5 text-left hover:bg-slate-50"
+              className="flex w-full items-center justify-between px-5 py-3.5 text-start hover:bg-slate-50"
             >
               <div className="flex items-center gap-3">
                 <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 text-slate-500">
@@ -160,7 +160,7 @@ export function SubcontractorDetail() {
                 </div>
               </div>
               <div className="flex items-center gap-6">
-                <div className="text-right">
+                <div className="text-end">
                   <p className="text-sm font-semibold text-slate-900">
                     {formatAED(c.originalContractValue + c.approvedVariations)}
                   </p>

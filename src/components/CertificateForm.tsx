@@ -255,7 +255,7 @@ export function CertificateForm({
             />
           </Field>
           <Field label={t("certificateForm.certificateDate")} required>
-            <input
+            <input dir="ltr"
               type="date"
               value={certificateDate}
               onChange={(e) => setCertificateDate(e.target.value)}
@@ -267,7 +267,7 @@ export function CertificateForm({
 
         <div className="grid grid-cols-2 gap-4">
           <Field label={t("certificateForm.workValueToDateAed")} required error={errors.workValueToDate}>
-            <input
+            <input dir="ltr"
               type="number"
               min="0"
               step="0.01"
@@ -278,7 +278,7 @@ export function CertificateForm({
             />
           </Field>
           <Field label={t("certificateForm.previousCertifiedWorkAed")}>
-            <input
+            <input dir="ltr"
               type="number"
               min="0"
               step="0.01"
@@ -292,7 +292,7 @@ export function CertificateForm({
 
         <div className="grid grid-cols-2 gap-4">
           <Field label={t("certificateForm.currentVariationsAed")} error={errors.currentVariationAmount}>
-            <input
+            <input dir="ltr"
               type="number"
               step="0.01"
               value={currentVariationAmount}
@@ -302,7 +302,7 @@ export function CertificateForm({
             />
           </Field>
           <Field label={t("certificateForm.retentionPercent")} error={errors.retentionPercent}>
-            <input
+            <input dir="ltr"
               type="number"
               min="0"
               max="100"
@@ -316,7 +316,7 @@ export function CertificateForm({
         </div>
 
         <Field label={t("certificateForm.advanceRecoveryAed")} error={errors.advanceRecovery}>
-          <input
+          <input dir="ltr"
             type="number"
             min="0"
             step="0.01"
@@ -384,7 +384,7 @@ export function CertificateForm({
                     </option>
                   ))}
                 </select>
-                <input
+                <input dir="ltr"
                   type="number"
                   min="0"
                   step="0.01"
@@ -423,7 +423,7 @@ export function CertificateForm({
           </Field>
           {vatMode === "MANUAL" && (
             <Field label={t("field.vatAmountAed")}>
-              <input
+              <input dir="ltr"
                 type="number"
                 min="0"
                 step="0.01"
@@ -460,7 +460,7 @@ export function CertificateForm({
                 />
               </Field>
               <Field label={t("certificateForm.taxInvoiceDate")} error={errors.taxInvoiceDate}>
-                <input
+                <input dir="ltr"
                   type="date"
                   value={taxInvoiceDate}
                   onChange={(e) => setTaxInvoiceDate(e.target.value)}

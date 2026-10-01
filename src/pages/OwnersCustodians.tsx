@@ -42,7 +42,7 @@ function PersonCard({
     <Card>
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex w-full items-center justify-between px-5 py-4 text-left"
+        className="flex w-full items-center justify-between px-5 py-4 text-start"
       >
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-slate-500">
@@ -54,7 +54,7 @@ function PersonCard({
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <div className="text-right">
+          <div className="text-end">
             <p className="text-xs text-slate-400">{balanceLabel}</p>
             <p className={`text-sm font-semibold ${balance < 0 ? "text-rose-600" : "text-slate-900"}`}>
               {formatAED(balance)}
@@ -85,7 +85,7 @@ function PersonCard({
                     {formatDate(l.date)} · {l.reference}
                   </p>
                 </div>
-                <div className="text-right">
+                <div className="text-end">
                   <p className="text-slate-600">
                     {isIncrease ? increaseLabel : decreaseLabel} {formatAED(amount)}
                   </p>

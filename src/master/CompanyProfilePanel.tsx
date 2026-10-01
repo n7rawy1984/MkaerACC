@@ -25,7 +25,7 @@ export function CompanyProfilePanel() {
   const blocked = phase === "PENDING" || phase === "ERROR" || phase === "REFRESH_ERROR";
   const close = () => { restoreFocus.current = true; setEditing(null); };
   return <div className="mt-4">
-    <p className="font-medium">{master.company.code} · {master.company.name}</p>
+    <p className="font-medium"><bdi dir="ltr">{master.company.code}</bdi> · <bdi>{master.company.name}</bdi></p>
     <dl className="mt-3 space-y-3">
       {(["legal_name", "trn", "address", "notes"] as const).map((field) => <div key={field}>
         <dt className="text-sm text-slate-500">{t(`companyProfile.${field}`)}</dt>

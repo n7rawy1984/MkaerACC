@@ -49,7 +49,7 @@ function SupplierRow({
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") setOpen((v) => !v);
         }}
-        className="flex w-full cursor-pointer items-center justify-between px-5 py-4 text-left hover:bg-slate-50"
+        className="flex w-full cursor-pointer items-center justify-between px-5 py-4 text-start hover:bg-slate-50"
       >
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-slate-500">
@@ -69,7 +69,7 @@ function SupplierRow({
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <div className="text-right">
+          <div className="text-end">
             <p className="text-xs text-slate-400">{t("suppliers.outstandingBalance")}</p>
             <p className="text-sm font-semibold text-slate-900">{formatAED(balance)}</p>
           </div>
