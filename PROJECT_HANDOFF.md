@@ -1,5 +1,7 @@
 # Maker Contracting Accounting System — Project Handoff
 
+**2026-10-02 Executive Dashboard:** authenticated `/` restored with read-only tenant-scoped V1 KPI/charts, EN/AR and narrow layouts. Focused isolated verification passed; hosted signed-in acceptance remains deferred. No accounting/RLS/migration or environment changes, commit or push. See [bounded record](docs/EXECUTIVE_DASHBOARD_V1.md). This supersedes the prior root-to-Projects presentation only.
+
 **2026-10-01 presentation checkpoint:** Maker logo + Arabic/RTL source hardening verified locally; Company-settings update, asset deployment and hosted branding/login checks remain operator-deferred. No DB/accounting/fixture/migration change. See [checkpoint record](docs/MAKER_DEMO_BRANDING_ARABIC_RTL.md). P6E/V1 demo acceptance and WPS/Production deferrals remain unchanged.
 
 **Read this file and `PROJECT_ROADMAP.md` fully before writing any code.** This file is the complete orientation for a new Claude/AI/developer session. It should be enough, on its own, to understand what the system is, why it exists, what's actually implemented, what's known-incomplete, and what to do next.

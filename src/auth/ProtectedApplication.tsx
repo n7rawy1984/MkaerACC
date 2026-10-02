@@ -36,7 +36,7 @@ function RoutedApplication() {
           <Route path="/no-company" element={<Navigate to="/" replace />} />
           <Route path="/select-company" element={<Navigate to="/" replace />} />
           <Route path="/auth-error" element={<Navigate to="/" replace />} />
-          <Route path="/" element={<TenantReadyApplication view="projects" />} />
+          <Route path="/" element={<TenantReadyApplication view="dashboard" />} />
           <Route path="/company-profile" element={<TenantReadyApplication view="companyProfile" />} />
           <Route path="/projects" element={<TenantReadyApplication view="projects" />} />
           <Route path="/parties" element={<TenantReadyApplication view="parties" />} />

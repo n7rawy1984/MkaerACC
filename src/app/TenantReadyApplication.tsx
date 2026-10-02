@@ -1,3 +1,5 @@
+import ExecutiveDashboard from "../dashboard/ExecutiveDashboard";
+import { LayoutDashboard } from "lucide-react";
 import { ExpenseReadPanel } from "../financial/ExpenseReadPanel";
 import { SupplierPaymentPanel } from "../financial/SupplierPaymentPanel";
 import { SubcontractorAdvancePanel } from "../financial/SubcontractorAdvancePanel";
@@ -20,7 +22,7 @@ import { useTenantSettings } from "../tenant/TenantSettingsContext";
 import { TenantBrandMark } from "../tenant/TenantBrandMark";
 import { useProductionMasterData } from "../master/productionMasterDataContext";
 
-export default function TenantReadyApplication({ view }: { view: "expenses" | "supplierPayments" | "subcontractorAdvances" | "subcontractorCertificates" | "subcontractorPayments" | "retentionReleases" | "retentionPayments" | "companyProfile" | "projects" | "parties" | "expenseCategories" | "accounts" | "treasuryAccounts" | "subcontracts" | "deferred" }) {
+export default function TenantReadyApplication({ view }: { view: "dashboard" | "expenses" | "supplierPayments" | "subcontractorAdvances" | "subcontractorCertificates" | "subcontractorPayments" | "retentionReleases" | "retentionPayments" | "companyProfile" | "projects" | "parties" | "expenseCategories" | "accounts" | "treasuryAccounts" | "subcontracts" | "deferred" }) {
   const t = useT();
   const { state, showCompanySelector, signOut } = useAuth();
   const tenantSettings = useTenantSettings();
@@ -50,8 +52,9 @@ export default function TenantReadyApplication({ view }: { view: "expenses" | "s
           </div>
         </div>
       </header>
-      <main className="mx-auto max-w-4xl px-6 py-16">
+      <main className={view === "dashboard" ? "mx-auto max-w-6xl px-4 py-8 sm:px-6" : "mx-auto max-w-4xl px-6 py-16"}>
         <nav aria-label={t("productionMaster.navigation")} className="mb-6 flex flex-wrap gap-3">
+          <NavLink to="/" end className={({ isActive }) => `flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium ${isActive ? "border-[var(--tenant-primary)] text-[var(--tenant-primary)]" : "border-slate-300 text-slate-600"}`}><LayoutDashboard size={16} aria-hidden="true" />{t("nav.dashboard")}</NavLink>
           {(["companyProfile", "projects", "parties", "expenseCategories", "accounts", "treasuryAccounts", "subcontracts"] as const).map((resource) => (
             <NavLink key={resource} to={resource === "companyProfile" ? "/company-profile" : resource === "treasuryAccounts" ? "/treasury-accounts" : resource === "expenseCategories" ? "/expense-categories" : `/${resource}`} className={({ isActive }) => `rounded-lg border px-3 py-2 text-sm font-medium ${isActive ? "border-[var(--tenant-primary)] text-[var(--tenant-primary)]" : "border-slate-300 text-slate-600"}`}>
               {t(`productionMaster.${resource}`)}
@@ -69,7 +72,7 @@ export default function TenantReadyApplication({ view }: { view: "expenses" | "s
         </nav>
         {(tenantSettings.phase === "MISSING" || tenantSettings.phase === "ERROR") && <p role="alert" className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">{t("auth.tenantSettingsUnavailable")}</p>}
         {tenantSettings.phase === "LOADING" && <p role="status" className="mb-4 text-sm text-slate-500">{t("auth.loadingTenantSettings")}</p>}
-        {view === "expenses" ? <ExpenseReadPanel /> : view === "supplierPayments" ? <SupplierPaymentPanel /> : view === "subcontractorAdvances" ? <SubcontractorAdvancePanel /> : view === "subcontractorCertificates" ? <SubcontractorCertificatePanel /> : view === "subcontractorPayments" ? <SubcontractorPaymentPanel /> : view === "retentionReleases" ? <RetentionReleasePanel /> : view === "retentionPayments" ? <RetentionPaymentPanel /> : view === "deferred" ? (
+        {view === "dashboard" ? <ExecutiveDashboard /> : view === "expenses" ? <ExpenseReadPanel /> : view === "supplierPayments" ? <SupplierPaymentPanel /> : view === "subcontractorAdvances" ? <SubcontractorAdvancePanel /> : view === "subcontractorCertificates" ? <SubcontractorCertificatePanel /> : view === "subcontractorPayments" ? <SubcontractorPaymentPanel /> : view === "retentionReleases" ? <RetentionReleasePanel /> : view === "retentionPayments" ? <RetentionPaymentPanel /> : view === "deferred" ? (
           <section className="rounded-2xl border border-[var(--tenant-accent)] bg-white p-8 shadow-sm">
             <h2 className="text-2xl font-semibold">{t("auth.tenantReadyTitle")}</h2>
             <p className="mt-3 leading-7 text-slate-600">{t("auth.cutoverPending")}</p>
