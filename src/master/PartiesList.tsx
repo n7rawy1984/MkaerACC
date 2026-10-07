@@ -1,3 +1,4 @@
+import { SubcontractCreationPanel } from "./SubcontractCreationPanel";
 import { OtherPartyNameControl } from "./OtherPartyNameControl";
 import { EmployeePartyNameControl } from "./EmployeePartyNameControl";
 import { CustodianPartyNameControl } from "./CustodianPartyNameControl";
@@ -54,6 +55,7 @@ export function PartiesList() {
     {(phase === "ERROR" || phase === "REFRESH_ERROR") && (editing || statusTarget) && <button type="button" className={button} onClick={refreshParties}>{t("supplierMutation.refresh")}</button>}
   </div>;
   return <>
+    <SubcontractCreationPanel kind="party" />
     <div className="mt-4 flex flex-wrap gap-2">
       {canManage && <button type="button" className={button} disabled={blocked} onClick={(event) => { returnFocus.current = event.currentTarget; setStatusTarget(null); setOtherActionId(null); setEmployeeActionId(null); setCustodianActionId(null); setOwnerActionId(null); setSubcontractorActionId(null); setEditing("new"); }}>{t("supplierMutation.create")}</button>}
       <button type="button" className={button} disabled={phase === "PENDING" || master.otherPartyNameMutation.phase === "PENDING" || master.employeePartyNameMutation.phase === "PENDING" || master.custodianPartyNameMutation.phase === "PENDING" || master.ownerPartyNameMutation.phase === "PENDING" || master.subcontractorPartyNameMutation.phase === "PENDING"} onClick={refreshParties}>{t("supplierMutation.refresh")}</button>

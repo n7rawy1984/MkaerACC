@@ -1,3 +1,4 @@
+import { SubcontractCreationPanel } from "./SubcontractCreationPanel";
 import { useLayoutEffect, useRef, useState } from "react";
 import { useAuth } from "../auth/AuthContext";
 import { useT } from "../i18n/I18nContext";
@@ -34,6 +35,7 @@ export function SubcontractsList() {
     {(phase === "ERROR" || phase === "REFRESH_ERROR") && <button type="button" onClick={refresh} className="underline">{t("subcontractMetadata.refresh")}</button>}
   </div>;
   return <div className="min-w-0">
+    <SubcontractCreationPanel kind="subcontract" />
     <button type="button" disabled={phase === "PENDING"} onClick={refresh} className="mt-4 rounded-lg border px-3 py-2 text-sm">{t("subcontractMetadata.refresh")}</button>
     {!master.subcontracts.some(row => row.id === actionId) && message}
     {master.subcontracts.length === 0 && <p role="status" className="mt-4 text-sm text-slate-500">{t("productionMaster.subcontractsEmpty")}</p>}

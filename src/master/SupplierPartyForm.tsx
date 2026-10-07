@@ -4,7 +4,8 @@ import { useT } from "../i18n/I18nContext";
 import { normalizeSupplierParty, type SupplierPartyInput } from "./supplierPartyMutations";
 import type { ProductionParty } from "./masterTypes";
 
-export function SupplierPartyForm({ supplier, disabled, onSave, onCancel }: {
+export function SupplierPartyForm({ supplier, disabled, onSave, onCancel, title }: {
+  title?: string;
   supplier: ProductionParty | null;
   disabled: boolean;
   onSave: (input: SupplierPartyInput) => Promise<void>;
@@ -29,8 +30,8 @@ export function SupplierPartyForm({ supplier, disabled, onSave, onCancel }: {
     setInvalid(!normalized);
     if (normalized) void onSave(normalized);
   };
-  return <form ref={form} onSubmit={submit} className="mt-4 space-y-3 rounded-lg border border-slate-200 p-4" aria-label={t(supplier ? "supplierMutation.edit" : "supplierMutation.create")}>
-    <h3 className="font-semibold">{t(supplier ? "supplierMutation.edit" : "supplierMutation.create")}</h3>
+  return <form ref={form} onSubmit={submit} className="mt-4 space-y-3 rounded-lg border border-slate-200 p-4" aria-label={title ?? t(supplier ? "supplierMutation.edit" : "supplierMutation.create")}>
+    <h3 className="font-semibold">{title ?? t(supplier ? "supplierMutation.edit" : "supplierMutation.create")}</h3>
     {!supplier && <p className="text-sm text-slate-500">{t("supplierMutation.activeOnCreate")}</p>}
     <fieldset disabled={disabled} className="space-y-3">
       {(["name", "code", "trn", "contact_person", "phone", "email", "address", "notes"] as const).map((field) => <Field key={field} label={t(`supplierMutation.${field}`)} required={field === "name"}>
