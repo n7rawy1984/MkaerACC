@@ -1378,6 +1378,23 @@ const ar: Record<TranslationKey, string> = {
   "retentionPaymentReverse.retry": "إعادة محاولة العكس نفسه",
   "retentionPaymentReverse.readAgain": "تحديث الدفعة المعكوسة",
   "retentionPaymentReverse.dismiss": "إغلاق نتيجة العكس المؤكدة",
+  "treasuryMaster.create": "إنشاء خزينة",
+  "treasuryMaster.type": "نوع الخزينة",
+  "treasuryMaster.permanent": "حساب الأستاذ دائم. الإنشاء لا يسجل رصيداً أو تمويلاً.",
+  "treasuryMaster.selectGl": "اختر حساب أصول مؤهلاً",
+  "treasuryMaster.companyWide": "على مستوى الشركة",
+  "treasuryMaster.noGl": "يجب توفير حساب أصول نشط غير مستخدم وغير نظامي ولا يتطلب طرفاً أولاً.",
+  "treasuryMaster.changeStatus": "تغيير حالة الخزينة",
+  "treasuryMaster.selectTreasury": "اختر الخزينة",
+  "treasuryMaster.confirmStatus": "أؤكد تغيير الحالة مع الحفاظ على السجل وربط الأستاذ.",
+  "treasuryMaster.saved": "تم حفظ الخزينة.",
+  "treasuryMaster.invalid": "راجع بيانات الخزينة وحساب الأستاذ المؤهل.",
+  "treasuryMaster.duplicate": "هذا الرمز أو حساب الأستاذ مستخدم بالفعل.",
+  "treasuryMaster.denied": "لا توجد صلاحية لإدارة الخزينة.",
+  "treasuryMaster.conflict": "تغيرت الخزينة. حدّث قبل إعادة المحاولة.",
+  "treasuryMaster.uncertain": "النتيجة غير مؤكدة. حدّث وراجع قبل الإنشاء مجدداً.",
+  "treasuryMaster.refreshError": "تم الحفظ لكن تعذر التحديث. حدّث للتأكد.",
+  "treasuryMaster.review": "تم التحديث. راجع القائمة قبل إعادة المحاولة.",
 };
 
 export default ar;

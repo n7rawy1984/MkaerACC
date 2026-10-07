@@ -1402,6 +1402,23 @@ const en = {
   "retentionPaymentReverse.retry": "Retry same reversal",
   "retentionPaymentReverse.readAgain": "Refresh reversed payment",
   "retentionPaymentReverse.dismiss": "Dismiss confirmed reversal",
+  "treasuryMaster.create": "Create Treasury",
+  "treasuryMaster.type": "Treasury type",
+  "treasuryMaster.permanent": "The GL account is permanent. Creation records no balance or funding.",
+  "treasuryMaster.selectGl": "Select an eligible Asset GL account",
+  "treasuryMaster.companyWide": "Company-wide",
+  "treasuryMaster.noGl": "An unused active non-system Asset account without Party requirements must be provisioned first.",
+  "treasuryMaster.changeStatus": "Change Treasury status",
+  "treasuryMaster.selectTreasury": "Select Treasury",
+  "treasuryMaster.confirmStatus": "Confirm this status change. Existing history and GL mapping are preserved.",
+  "treasuryMaster.saved": "Treasury saved.",
+  "treasuryMaster.invalid": "Check the Treasury fields and eligible GL account.",
+  "treasuryMaster.duplicate": "This code or GL account is already assigned.",
+  "treasuryMaster.denied": "Treasury management is not authorized.",
+  "treasuryMaster.conflict": "Treasury changed. Refresh before retrying.",
+  "treasuryMaster.uncertain": "Result uncertain. Refresh and review before creating again.",
+  "treasuryMaster.refreshError": "Saved, but refresh failed. Refresh to confirm.",
+  "treasuryMaster.review": "Refreshed. Review the list before retrying.",
 } as const;
 
 export default en;

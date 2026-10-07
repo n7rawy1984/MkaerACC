@@ -1,3 +1,4 @@
+import { TreasuryMasterPanel } from "./TreasuryMasterPanel";
 import { TreasuryAccountsList } from "./AccountMasterLists";
 import { useLayoutEffect, useRef, useState } from "react";
 import { useAuth } from "../auth/AuthContext";
@@ -37,6 +38,7 @@ export function TreasuryNamesPanel() {
     {(phase === "ERROR" || phase === "REFRESH_ERROR") && <button type="button" onClick={refresh} className="underline">{t("treasuryName.refresh")}</button>}
   </div>;
   return <div>
+    <TreasuryMasterPanel />
     <button type="button" disabled={phase === "PENDING"} onClick={refresh} className="mt-4 rounded-lg border px-3 py-2 text-sm">{t("treasuryName.refresh")}</button>
     {!master.treasuryAccounts.some(p => p.id === actionId) && message}
     <TreasuryAccountsList treasuryAccounts={master.treasuryAccounts} accounts={master.accounts} renderAction={(treasury) => <>
