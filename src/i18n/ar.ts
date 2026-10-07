@@ -5,6 +5,17 @@ import type {
  TranslationKey } from "./en";
 
 const ar: Record<TranslationKey, string> = {
+  "personCreation.create": "إنشاء موظف / أمين عهدة",
+  "personCreation.project": "إنشاء مشروع",
+  "personCreation.kind": "أدوار الشخص",
+  "personCreation.code": "الرمز",
+  "personCreation.EMPLOYEE": "موظف",
+  "personCreation.CUSTODIAN": "أمين عهدة",
+  "personCreation.EMPLOYEE_CUSTODIAN": "موظف وأمين عهدة",
+  "personCreation.refresh": "تحديث البيانات الأساسية",
+  "personCreation.addCustodian": "إضافة دور أمين عهدة",
+  "personCreation.addEmployee": "إضافة دور موظف",
+
   "executiveDashboard.title": "الرئيسية",
   "executiveDashboard.subtitle": "نظرة إدارية للشركة من سجلات الإصدار الحالي المصرّح لك بالاطلاع عليها.",
   "executiveDashboard.refresh": "تحديث الملخص",

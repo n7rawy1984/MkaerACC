@@ -1,0 +1,112 @@
+-- Development rollback-only master and eligibility checks; no accounting commands invoked.
+begin;
+create temporary table person_results(label text primary key);
+create function pg_temp.assert_true(label text,value boolean) returns void language plpgsql as $$
+begin if value is distinct from true then raise exception 'FAIL: %',label;end if;insert into person_results values(label);end;$$;
+create function pg_temp.check_sql(label text,command text,expected text) returns void language plpgsql as $$
+begin begin execute command;exception when others then if sqlstate=expected then insert into person_results values(label);return;else raise;end if;end;raise exception 'Unexpected success: %',label;end;$$;
+create function pg_temp.expect_message(label text,command text,expected text) returns void language plpgsql as $$
+begin begin execute command;exception when others then if sqlerrm=expected then insert into person_results values(label);return;else raise;end if;end;raise exception 'Unexpected success: %',label;end;$$;
+grant select,insert on person_results to authenticated;
+select set_config('request.jwt.claim.sub',(select user_id::text from public.profiles where status='ACTIVE' order by created_at limit 1),true);
+create temporary table person_before as select 'journals' as key,count(*) as n from public.journal_entries union all select 'salary',count(*) from public.salary_payments union all select 'payroll',count(*) from public.payroll_postings union all select 'advances',count(*) from public.custody_advances union all select 'expenses',count(*) from public.expenses;
+insert into public.companies(id,code,name) values
+ ('98100000-0000-4000-8000-000000000001','VERIFY-PERSON-A','Rollback person Alpha'),
+ ('98100000-0000-4000-8000-000000000002','VERIFY-PERSON-B','Rollback person Beta');
+insert into public.company_memberships(company_id,user_id,role) values('98100000-0000-4000-8000-000000000001',auth.uid(),'ACCOUNTING_ADMIN');
+set local role authenticated;
+select set_config('test.employee',public.create_person_party('98100000-0000-4000-8000-000000000001','{"name":"Rollback Employee","code":"E1","kind":"EMPLOYEE","status":"ACTIVE"}')::text,true);
+select set_config('test.custodian',public.create_person_party('98100000-0000-4000-8000-000000000001','{"name":"Rollback Custodian","code":"C1","kind":"CUSTODIAN","status":"ACTIVE"}')::text,true);
+select set_config('test.dual',public.create_person_party('98100000-0000-4000-8000-000000000001','{"name":"Rollback Dual","code":"D1","kind":"EMPLOYEE_CUSTODIAN","status":"ACTIVE"}')::text,true);
+select set_config('test.project',public.create_project('98100000-0000-4000-8000-000000000001','{"name":"Rollback Project","code":"P1","status":"ACTIVE"}')::text,true);
+select pg_temp.assert_true('one dual identity',(select count(*)=1 from public.parties where id=current_setting('test.dual')::uuid));
+select pg_temp.expect_message('Employee lacks Custodian',$q$select public.post_custody_advance('98100000-0000-4000-8000-000000000001','2026-09-01',current_setting('test.employee')::uuid,'ffffffff-ffff-4fff-8fff-ffffffffffff','ffffffff-ffff-4fff-8fff-ffffffffffff',100,'CASH',null,null,gen_random_uuid())$q$,'Active Custodian not found in company');
+select pg_temp.expect_message('Existing Custodian reaches Project check',$q$select public.post_custody_advance('98100000-0000-4000-8000-000000000001','2026-09-01',current_setting('test.custodian')::uuid,'ffffffff-ffff-4fff-8fff-ffffffffffff','ffffffff-ffff-4fff-8fff-ffffffffffff',100,'CASH',null,null,gen_random_uuid())$q$,'Project not found in company');
+select pg_temp.expect_message('Dual Custodian reaches Project check',$q$select public.post_custody_advance('98100000-0000-4000-8000-000000000001','2026-09-01',current_setting('test.dual')::uuid,'ffffffff-ffff-4fff-8fff-ffffffffffff','ffffffff-ffff-4fff-8fff-ffffffffffff',100,'CASH',null,null,gen_random_uuid())$q$,'Project not found in company');
+select pg_temp.check_sql('Unicode blank person rejected',$q$select public.create_person_party('98100000-0000-4000-8000-000000000001',jsonb_build_object('name',chr(160),'kind','EMPLOYEE','status','ACTIVE'))$q$,'23514');
+select pg_temp.check_sql('Unicode blank Project code rejected',$q$select public.create_project('98100000-0000-4000-8000-000000000001',jsonb_build_object('name','Rejected','code',chr(160),'status','ACTIVE'))$q$,'23514');
+select pg_temp.check_sql('duplicate person code',$q$select public.create_person_party('98100000-0000-4000-8000-000000000001','{"name":"Duplicate","code":" e1 ","kind":"EMPLOYEE","status":"ACTIVE"}')$q$,'23505');
+select pg_temp.check_sql('duplicate project code',$q$select public.create_project('98100000-0000-4000-8000-000000000001','{"name":"Duplicate","code":" p1 ","status":"ACTIVE"}')$q$,'23505');
+select pg_temp.check_sql('person cross Company',$q$select public.create_person_party('98100000-0000-4000-8000-000000000002','{"name":"Denied","kind":"EMPLOYEE","status":"ACTIVE"}')$q$,'42501');
+select pg_temp.check_sql('project cross Company',$q$select public.create_project('98100000-0000-4000-8000-000000000002','{"name":"Denied","code":"P1","status":"ACTIVE"}')$q$,'42501');
+select pg_temp.check_sql('role cross Company',$q$select public.add_party_person_role('98100000-0000-4000-8000-000000000002',current_setting('test.employee')::uuid,'CUSTODIAN')$q$,'42501');
+select pg_temp.check_sql('wrong-Company party',$q$select public.add_party_person_role('98100000-0000-4000-8000-000000000001','ffffffff-ffff-4fff-8fff-ffffffffffff','CUSTODIAN')$q$,'23514');
+select pg_temp.check_sql('arbitrary role denied',$q$select public.add_party_person_role('98100000-0000-4000-8000-000000000001',current_setting('test.employee')::uuid,'SUPPLIER')$q$,'23514');
+select pg_temp.check_sql('caller provenance denied',$q$select public.create_person_party('98100000-0000-4000-8000-000000000001','{"name":"Denied","kind":"EMPLOYEE","status":"ACTIVE","created_by":"ffffffff-ffff-4fff-8fff-ffffffffffff"}')$q$,'22023');
+select pg_temp.check_sql('direct role insert denied',$q$insert into public.party_person_roles(company_id,party_id,role,created_by) values('98100000-0000-4000-8000-000000000001',current_setting('test.employee')::uuid,'CUSTODIAN',auth.uid())$q$,'42501');
+reset role;
+select pg_temp.assert_true('Employee primary compatibility',private.party_has_person_role('98100000-0000-4000-8000-000000000001',current_setting('test.employee')::uuid,'EMPLOYEE'));
+select pg_temp.assert_true('Custodian primary compatibility',private.party_has_person_role('98100000-0000-4000-8000-000000000001',current_setting('test.custodian')::uuid,'CUSTODIAN'));
+select pg_temp.assert_true('Employee without Custodian fails closed',not private.party_has_person_role('98100000-0000-4000-8000-000000000001',current_setting('test.employee')::uuid,'CUSTODIAN'));
+select pg_temp.assert_true('Custodian without Employee fails closed',not private.party_has_person_role('98100000-0000-4000-8000-000000000001',current_setting('test.custodian')::uuid,'EMPLOYEE'));
+select pg_temp.assert_true('dual valid for both',private.party_has_person_role('98100000-0000-4000-8000-000000000001',current_setting('test.dual')::uuid,'EMPLOYEE') and private.party_has_person_role('98100000-0000-4000-8000-000000000001',current_setting('test.dual')::uuid,'CUSTODIAN'));
+set local role authenticated;
+select pg_temp.assert_true('Custodian-only excluded from Attendance selector',not (public.attendance_context('98100000-0000-4000-8000-000000000001')->'employees') @> jsonb_build_array(jsonb_build_object('id',current_setting('test.custodian'))));
+select pg_temp.check_sql('Custodian-only Attendance assignment blocked',$q$select public.save_employee_site_assignment('98100000-0000-4000-8000-000000000001',current_setting('test.custodian')::uuid,current_setting('test.project')::uuid,'2026-09-01','2026-09-30')$q$,'23514');
+select pg_temp.check_sql('Custodian-only payroll blocked',$q$select public.save_payroll_profile('98100000-0000-4000-8000-000000000001',current_setting('test.custodian')::uuid,0,'C1','NORMAL','Driver','Site',current_setting('test.project')::uuid,100000,'CASH','ACTIVE')$q$,'23514');
+select public.add_party_person_role('98100000-0000-4000-8000-000000000001',current_setting('test.custodian')::uuid,'EMPLOYEE');
+select public.add_party_person_role('98100000-0000-4000-8000-000000000001',current_setting('test.custodian')::uuid,'EMPLOYEE');
+select public.save_payroll_profile('98100000-0000-4000-8000-000000000001',current_setting('test.custodian')::uuid,0,'C1','NORMAL','Driver','Site',current_setting('test.project')::uuid,100000,'CASH','ACTIVE');
+select public.save_payroll_profile('98100000-0000-4000-8000-000000000001',current_setting('test.dual')::uuid,0,'D1','NORMAL','Driver','Site',current_setting('test.project')::uuid,100000,'CASH','ACTIVE');
+select public.save_payroll_profile('98100000-0000-4000-8000-000000000001',current_setting('test.employee')::uuid,0,'E1','NORMAL','Driver','Site',current_setting('test.project')::uuid,100000,'CASH','ACTIVE');
+select pg_temp.assert_true('Payroll selector includes both primary types',(public.read_payroll_profiles('98100000-0000-4000-8000-000000000001')->'employees') @> jsonb_build_array(jsonb_build_object('id',current_setting('test.custodian'))));
+select pg_temp.assert_true('additional role replay is idempotent',(select count(*)=1 from public.party_person_roles where party_id=current_setting('test.custodian')::uuid));
+
+-- Three eligibility adapters: preserve effective assignments, Foreman scope, review and locks.
+select pg_temp.assert_true('Custodian-primary Employee in Attendance selector',(public.attendance_context('98100000-0000-4000-8000-000000000001')->'employees') @> jsonb_build_array(jsonb_build_object('id',current_setting('test.custodian'))));
+select public.save_employee_site_assignment('98100000-0000-4000-8000-000000000001',current_setting('test.employee')::uuid,current_setting('test.project')::uuid,'2026-09-01','2026-09-30');
+select public.save_employee_site_assignment('98100000-0000-4000-8000-000000000001',current_setting('test.custodian')::uuid,current_setting('test.project')::uuid,'2026-09-01','2026-09-30');
+select public.save_employee_site_assignment('98100000-0000-4000-8000-000000000001',current_setting('test.dual')::uuid,current_setting('test.project')::uuid,'2026-09-01','2026-09-30');
+select set_config('test.other_project',public.create_project('98100000-0000-4000-8000-000000000001','{"name":"Unassigned rollback Project","code":"P2","status":"ACTIVE"}')::text,true);
+select pg_temp.check_sql('overlapping dual assignment denied',$q$select public.save_employee_site_assignment('98100000-0000-4000-8000-000000000001',current_setting('test.custodian')::uuid,current_setting('test.other_project')::uuid,'2026-09-01','2026-09-30')$q$,'23514');
+reset role;
+insert into public.project_assignments(company_id,project_id,user_id) values('98100000-0000-4000-8000-000000000001',current_setting('test.project')::uuid,auth.uid());
+update public.company_memberships set role='FOREMAN' where company_id='98100000-0000-4000-8000-000000000001';
+set local role authenticated;
+select pg_temp.assert_true('Foreman scoped roster includes all eligible identities',jsonb_array_length(public.attendance_day('98100000-0000-4000-8000-000000000001',current_setting('test.project')::uuid,'2026-09-01')->'rows')=3);
+select pg_temp.assert_true('Foreman context remains Project-scoped',jsonb_array_length(public.attendance_context('98100000-0000-4000-8000-000000000001')->'projects')=1);
+select pg_temp.assert_true('Foreman has no company-wide Employee selector',public.attendance_context('98100000-0000-4000-8000-000000000001')->'employees'='[]'::jsonb);
+select pg_temp.check_sql('Foreman other Project denied',$q$select public.attendance_day('98100000-0000-4000-8000-000000000001',current_setting('test.other_project')::uuid,'2026-09-01')$q$,'42501');
+select pg_temp.check_sql('Foreman foreign Company denied',$q$select public.attendance_context('98100000-0000-4000-8000-000000000002')$q$,'42501');
+select pg_temp.check_sql('Foreman cannot assign staff',$q$select public.save_employee_site_assignment('98100000-0000-4000-8000-000000000001',current_setting('test.employee')::uuid,current_setting('test.other_project')::uuid,'2026-10-01',null)$q$,'42501');
+select public.save_attendance_exception('98100000-0000-4000-8000-000000000001',current_setting('test.project')::uuid,current_setting('test.employee')::uuid,'2026-09-01','FULL_DAY',null,0);
+select public.save_attendance_exception('98100000-0000-4000-8000-000000000001',current_setting('test.project')::uuid,current_setting('test.custodian')::uuid,'2026-09-01','FULL_DAY',null,0);
+select pg_temp.check_sql('Foreman cannot review',$q$select public.confirm_attendance_review('98100000-0000-4000-8000-000000000001','2026-09-01',0)$q$,'42501');
+reset role;
+update public.company_memberships set role='ACCOUNTING_ADMIN' where company_id='98100000-0000-4000-8000-000000000001';
+set local role authenticated;
+select pg_temp.check_sql('Payroll refuses unreviewed Attendance',$q$select public.refresh_payroll_draft('98100000-0000-4000-8000-000000000001','2026-09-01',0)$q$,'23514');
+select public.confirm_attendance_review('98100000-0000-4000-8000-000000000001','2026-09-01',(public.attendance_month('98100000-0000-4000-8000-000000000001','2026-09-01')->'period'->>'revision')::integer);
+select public.refresh_payroll_draft('98100000-0000-4000-8000-000000000001','2026-09-01',0);
+reset role;
+select pg_temp.assert_true('Primary and capability employees use identical Payroll absence formula',(select count(*)=2 and min(net_salary_minor)=96667 and max(net_salary_minor)=96667 from public.payroll_draft_rows where company_id='98100000-0000-4000-8000-000000000001' and employee_id in(current_setting('test.employee')::uuid,current_setting('test.custodian')::uuid)));
+select private.lock_attendance_month('98100000-0000-4000-8000-000000000001','2026-09-01',(select revision from public.attendance_periods where company_id='98100000-0000-4000-8000-000000000001' and month='2026-09-01'));
+set local role authenticated;
+select pg_temp.check_sql('locked Attendance still denies corrections',$q$select public.save_attendance_exception('98100000-0000-4000-8000-000000000001',current_setting('test.project')::uuid,current_setting('test.custodian')::uuid,'2026-09-01','HALF_DAY',null,1,false,'Rollback correction')$q$,'23514');
+select pg_temp.check_sql('locked Attendance still denies review',$q$select public.confirm_attendance_review('98100000-0000-4000-8000-000000000001','2026-09-01',2)$q$,'40001');
+select pg_temp.assert_true('Attendance lock visible unchanged',(public.attendance_day('98100000-0000-4000-8000-000000000001',current_setting('test.project')::uuid,'2026-09-01')->>'locked')::boolean);
+reset role;
+insert into public.parties(company_id,type,name,code) values ('98100000-0000-4000-8000-000000000001','SUPPLIER','Rollback Supplier','S1'),('98100000-0000-4000-8000-000000000001','SUBCONTRACTOR','Rollback Subcontractor','SC1');
+set local role authenticated;
+select pg_temp.check_sql('Supplier cannot gain person role',$q$select public.add_party_person_role('98100000-0000-4000-8000-000000000001',(select id from public.parties where code='S1'),'EMPLOYEE')$q$,'23514');
+select pg_temp.check_sql('Subcontractor cannot gain person role',$q$select public.add_party_person_role('98100000-0000-4000-8000-000000000001',(select id from public.parties where code='SC1'),'CUSTODIAN')$q$,'23514');
+reset role;
+do $$declare r public.company_role;begin
+ foreach r in array array['ACCOUNTANT','MANAGEMENT_VIEWER','PROJECT_MANAGER','PROCUREMENT','DATA_ENTRY','SYSTEM_ADMIN','FOREMAN']::public.company_role[] loop
+ update public.company_memberships set role=r where company_id='98100000-0000-4000-8000-000000000001';
+ set local role authenticated;
+ perform pg_temp.check_sql(r||' person denied',$q$select public.create_person_party('98100000-0000-4000-8000-000000000001','{"name":"Denied","kind":"EMPLOYEE","status":"ACTIVE"}')$q$,'42501');
+ perform pg_temp.check_sql(r||' Project denied',$q$select public.create_project('98100000-0000-4000-8000-000000000001','{"name":"Denied","code":"DENIED","status":"ACTIVE"}')$q$,'42501');
+ perform pg_temp.check_sql(r||' role denied',$q$select public.add_party_person_role('98100000-0000-4000-8000-000000000001',current_setting('test.employee')::uuid,'CUSTODIAN')$q$,'42501');
+ reset role;
+ end loop;
+end;$$;
+update public.company_memberships set role='PROCUREMENT' where company_id='98100000-0000-4000-8000-000000000001';
+set local role authenticated;
+select pg_temp.assert_true('Custodian-primary Employee hidden from Procurement',(select count(*)=0 from public.parties where id=current_setting('test.custodian')::uuid));
+select pg_temp.assert_true('Supplier visible unchanged',(select count(*)=1 from public.parties where code='S1'));
+select pg_temp.assert_true('Subcontractor visible unchanged',(select count(*)=1 from public.parties where code='SC1'));
+reset role;
+select pg_temp.assert_true('no journal or financial record created',not exists(select 1 from person_before b where b.n<>case b.key when 'journals' then (select count(*) from public.journal_entries) when 'salary' then (select count(*) from public.salary_payments) when 'payroll' then (select count(*) from public.payroll_postings) when 'advances' then (select count(*) from public.custody_advances) when 'expenses' then (select count(*) from public.expenses) end));
+select count(*) as passed_checks from person_results;
+rollback;

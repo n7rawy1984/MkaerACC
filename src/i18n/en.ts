@@ -2,6 +2,17 @@
 // location in this file mirrors where it's used. ar.ts must define exactly the same key set —
 // see i18n/I18nContext.tsx for the lookup/fallback behavior and translation-key discipline notes.
 const en = {
+  "personCreation.create": "Create employee / custodian",
+  "personCreation.project": "Create Project",
+  "personCreation.kind": "Person roles",
+  "personCreation.code": "Code",
+  "personCreation.EMPLOYEE": "Employee",
+  "personCreation.CUSTODIAN": "Custodian",
+  "personCreation.EMPLOYEE_CUSTODIAN": "Employee + Custodian",
+  "personCreation.refresh": "Refresh master data",
+  "personCreation.addCustodian": "Add Custodian role",
+  "personCreation.addEmployee": "Add Employee role",
+
   "executiveDashboard.title": "Executive Dashboard",
   "executiveDashboard.subtitle": "Company management overview from current authorized V1 records.",
   "executiveDashboard.refresh": "Refresh summary",

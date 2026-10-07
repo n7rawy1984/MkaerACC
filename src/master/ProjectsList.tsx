@@ -1,3 +1,4 @@
+import { PersonMasterCreationPanel } from "./PersonMasterCreationPanel";
 import { useLayoutEffect, useRef, useState } from "react";
 import { useAuth } from "../auth/AuthContext";
 import { useT } from "../i18n/I18nContext";
@@ -38,6 +39,7 @@ export function ProjectsList() {
     {(phase === "ERROR" || phase === "REFRESH_ERROR") && <button type="button" onClick={refresh} className="underline">{t("projectMetadata.refresh")}</button>}
   </div>;
   return <div>
+    <PersonMasterCreationPanel kind="project" />
     <button type="button" disabled={phase === "PENDING"} onClick={refresh} className="mt-4 rounded-lg border px-3 py-2 text-sm">{t("projectMetadata.refresh")}</button>
     {!master.projects.some(p => p.id === actionId) && message}
     {master.projects.length === 0 && <p className="mt-4 text-sm">{t("productionProjects.empty")}</p>}

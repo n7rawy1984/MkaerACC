@@ -111,6 +111,7 @@ export interface ProductionProjectSummary {
 }
 
 export interface ProductionParty {
+  personRoles?: ("EMPLOYEE" | "CUSTODIAN")[];
   id: string;
   companyId: string;
   type: Database["public"]["Enums"]["party_type"];

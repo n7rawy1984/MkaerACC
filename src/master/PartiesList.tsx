@@ -1,3 +1,4 @@
+import { PersonMasterCreationPanel } from "./PersonMasterCreationPanel";
 import { SubcontractCreationPanel } from "./SubcontractCreationPanel";
 import { OtherPartyNameControl } from "./OtherPartyNameControl";
 import { EmployeePartyNameControl } from "./EmployeePartyNameControl";
@@ -56,6 +57,7 @@ export function PartiesList() {
   </div>;
   return <>
     <SubcontractCreationPanel kind="party" />
+    <PersonMasterCreationPanel kind="person" />
     <div className="mt-4 flex flex-wrap gap-2">
       {canManage && <button type="button" className={button} disabled={blocked} onClick={(event) => { returnFocus.current = event.currentTarget; setStatusTarget(null); setOtherActionId(null); setEmployeeActionId(null); setCustodianActionId(null); setOwnerActionId(null); setSubcontractorActionId(null); setEditing("new"); }}>{t("supplierMutation.create")}</button>}
       <button type="button" className={button} disabled={phase === "PENDING" || master.otherPartyNameMutation.phase === "PENDING" || master.employeePartyNameMutation.phase === "PENDING" || master.custodianPartyNameMutation.phase === "PENDING" || master.ownerPartyNameMutation.phase === "PENDING" || master.subcontractorPartyNameMutation.phase === "PENDING"} onClick={refreshParties}>{t("supplierMutation.refresh")}</button>
@@ -81,7 +83,7 @@ export function PartiesList() {
           <li key={party.id} className="py-4 first:pt-0 last:pb-0">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <p className="min-w-0 [overflow-wrap:anywhere] font-medium text-slate-900">{party.code ? `${party.code} · ` : ""}{party.name}</p>
-              <span className="text-sm text-slate-600">{t(`productionMaster.type.${party.type}`)} · {t(`partyStatus.${party.status}`)}</span>
+              <span className="text-sm text-slate-600">{party.personRoles?.length === 2 ? t("personCreation.EMPLOYEE_CUSTODIAN") : t(`productionMaster.type.${party.type}`)} · {t(`partyStatus.${party.status}`)}</span>
             </div>
             <dl className="mt-2 space-y-1 break-words text-sm text-slate-500">
               {([

@@ -1,3 +1,4 @@
+import type { PersonMasterDatabase, PersonRole } from "./personMasterRepository";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "../types/database.generated";
 import type {
@@ -143,7 +144,13 @@ export async function readActiveCompanyParties(
     .order("id", { ascending: true });
   if (error) return { ok: false, error: queryError("parties", error) };
   // RLS-filtered subsets (including zero rows) are authoritative and valid.
-  return { ok: true, data: (data ?? []).filter((row) => row.company_id === activeCompanyId).map(mapPartyRow) };
+  const { data: roles, error: roleError } = await (client as unknown as SupabaseClient<PersonMasterDatabase>)
+    .from("party_person_roles").select("company_id,party_id,role").eq("company_id", activeCompanyId);
+  if (roleError) return { ok: false, error: queryError("parties", roleError) };
+  return { ok: true, data: (data ?? []).filter((row) => row.company_id === activeCompanyId).map(row => ({
+    ...mapPartyRow(row), personRoles: row.type === "EMPLOYEE" || row.type === "CUSTODIAN"
+      ? [...new Set<PersonRole>([row.type, ...(roles ?? []).filter(r => r.company_id === activeCompanyId && r.party_id === row.id && (r.role === "EMPLOYEE" || r.role === "CUSTODIAN")).map(r => r.role)])] : [],
+  })) };
 }
 
 export async function readActiveCompanyExpenseCategories(
