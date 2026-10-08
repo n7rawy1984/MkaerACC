@@ -1,7 +1,7 @@
 import {ReportExport} from '../reports/ReportExport';
 import {postedJournalReport} from '../reports/postedJournalReport';
 import HistoricalImports from "../historical/HistoricalImports";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Building2, Receipt, Truck, Hammer, Landmark, RefreshCw, type LucideIcon } from "lucide-react";
 import { useAuth } from "../auth/AuthContext";
@@ -31,6 +31,11 @@ function DashboardContent({ userId, companyId, role }: { userId: string; company
   const auth=useAuth();const companyName=auth.state.phase==="TENANT_READY"?auth.state.activeTenant.companyName:"";
   const { t, locale } = useI18n(), master = useProductionMasterData();
   const [revision, setRevision] = useState(0);
+  useEffect(() => {
+    const changed = (event: Event) => { if ((event as CustomEvent).detail?.companyId === companyId) setRevision(n => n + 1); };
+    window.addEventListener('historical-source-changed', changed);
+    return () => window.removeEventListener('historical-source-changed', changed);
+  }, [companyId]);
   const masterReady = master.phase === "READY" && master.company.id === companyId
     && [...master.projects, ...master.parties, ...master.expenseCategories].every(row => row.companyId === companyId);
   const read = useDashboardRead(getSupabaseClient(), userId, companyId, role, revision, masterReady);
