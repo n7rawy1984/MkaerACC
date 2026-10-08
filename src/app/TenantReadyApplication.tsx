@@ -52,7 +52,7 @@ export default function TenantReadyApplication({ view }: { view: "dashboard" | "
           </div>
         </div>
       </header>
-      <main className={view === "dashboard" ? "mx-auto max-w-6xl px-4 py-8 sm:px-6" : "mx-auto max-w-4xl px-6 py-16"}>
+      <main className={view === "dashboard" || view === "expenses" ?  "mx-auto max-w-[1600px] px-4 py-8 sm:px-6" : "mx-auto max-w-4xl px-6 py-16"}>
         <nav aria-label={t("productionMaster.navigation")} className="mb-6 flex flex-wrap gap-3">
           <NavLink to="/" end className={({ isActive }) => `flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium ${isActive ? "border-[var(--tenant-primary)] text-[var(--tenant-primary)]" : "border-slate-300 text-slate-600"}`}><LayoutDashboard size={16} aria-hidden="true" />{t("nav.dashboard")}</NavLink>
           {(["companyProfile", "projects", "parties", "expenseCategories", "accounts", "treasuryAccounts", "subcontracts"] as const).map((resource) => (
@@ -61,7 +61,8 @@ export default function TenantReadyApplication({ view }: { view: "dashboard" | "
             </NavLink>
           ))}
           {(state.activeTenant.role === "ACCOUNTING_ADMIN" || state.activeTenant.role === "ACCOUNTANT") && <NavLink to="/attendance" className="rounded-lg border px-3 py-2 text-sm">{t("attendance.title")}</NavLink>}
-          {(state.activeTenant.role === "ACCOUNTING_ADMIN" || state.activeTenant.role === "ACCOUNTANT") && <NavLink to="/payroll" className="rounded-lg border px-3 py-2 text-sm">{t("payroll.title")}</NavLink>}
+          {(["ACCOUNTING_ADMIN","ACCOUNTANT","MANAGEMENT_VIEWER"].includes(state.activeTenant.role)) && <NavLink to="/payroll" className="rounded-lg border px-3 py-2 text-sm">{t("payroll.title")}</NavLink>}
+
           <NavLink to="/expenses" className={({ isActive }) => `rounded-lg border px-3 py-2 text-sm font-medium ${isActive ? "border-[var(--tenant-primary)] text-[var(--tenant-primary)]" : "border-slate-300 text-slate-600"}`}>{t("expenseRead.title")}</NavLink>
           <NavLink to="/supplier-payments" className={({ isActive }) => `rounded-lg border px-3 py-2 text-sm font-medium ${isActive ? "border-[var(--tenant-primary)] text-[var(--tenant-primary)]" : "border-slate-300 text-slate-600"}`}>{t("supplierPaymentRead.title")}</NavLink>
           <NavLink to="/subcontractor-advances" className={({ isActive }) => `rounded-lg border px-3 py-2 text-sm font-medium ${isActive ? "border-[var(--tenant-primary)] text-[var(--tenant-primary)]" : "border-slate-300 text-slate-600"}`}>{t("subcontractorAdvanceRead.title")}</NavLink>

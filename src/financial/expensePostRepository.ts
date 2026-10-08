@@ -65,9 +65,12 @@ export class ExpensePostError extends Error {
   readonly rejected: boolean;
   constructor(rejected: boolean) { super("unresolved"); this.rejected = rejected; }
 }
-export async function postTreasuryExpense(client: SupabaseClient<Database>, companyId: string, key: string, input: TreasuryExpenseInput): Promise<ExpenseReceipt> {
+export async function postTreasuryExpense(client: SupabaseClient<Database>, companyId: string, key: string, input: TreasuryExpenseInput, sourceId?: string): Promise<ExpenseReceipt> {
   const payload = expensePayload(companyId, key, input);
-  const { data, error } = await (client as unknown as SupabaseClient<PostDatabase>).rpc("post_expense", payload);
+  if (sourceId && (!uuid.test(sourceId) || key !== sourceId)) throw new Error("invalid");
+  const { data, error } = sourceId
+    ? await (client as unknown as SupabaseClient).rpc("post_historical_expense", {target_company_id:companyId,target_source_id:sourceId,business_input:payload})
+    : await (client as unknown as SupabaseClient<PostDatabase>).rpc("post_expense", payload);
   // Treat every non-confirmation as unresolved. A replay may fail validation after
   // an earlier committed request, so errors never authorize a fresh key automatically.
   if (error) throw new ExpensePostError(["22003", "22023", "23503", "23514", "42501", "23502", "22P02", "22007"].includes(error.code));

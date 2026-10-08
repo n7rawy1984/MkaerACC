@@ -1,0 +1,10 @@
+.financial-report-output{position:fixed;inset:0;z-index:1000;overflow:auto;background:#fff;color:#172033;padding:20px;font:12px Arial,sans-serif;}
+.financial-report-controls{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:20px;}
+.financial-report-controls button{border:1px solid #64748b;border-radius:6px;padding:8px 16px;background:white;}
+.financial-report-print{min-width:1000px;max-width:1500px;margin:auto;}
+.financial-report-print header{border-bottom:2px solid #334155;padding-bottom:14px;margin-bottom:14px;}
+.financial-report-print h1{font-size:20px;font-weight:bold;}.financial-report-print h2{font-size:16px;margin-top:8px;font-weight:bold;}.financial-report-print h3{font-size:13px;margin:18px 0 8px;font-weight:bold;}
+.financial-report-print table{width:100%;table-layout:fixed;border-collapse:collapse;font-size:10px;}.financial-report-print th,.financial-report-print td{border:1px solid #cbd5e1;padding:6px;vertical-align:top;overflow-wrap:anywhere;text-align:start;}
+.financial-report-print th{background:#e2e8f0;font-weight:bold;}.financial-report-print tbody tr:nth-child(even){background:#f8fafc;}.financial-report-print .money{text-align:right;font-variant-numeric:tabular-nums;white-space:normal;}.financial-report-note{margin:10px 0;font-size:11px;line-height:1.6;}.financial-report-print footer{margin-top:16px;border-top:1px solid #cbd5e1;padding-top:8px;font-size:10px;}
+@page financial-report{size:A4 landscape;margin:12mm;@bottom-right{content:counter(page) " / " counter(pages);font-size:9pt;}}
+@media print{body:has(> .financial-report-output)>:not(.financial-report-output){display:none!important;}.financial-report-output{position:static;overflow:visible;padding:0;}.financial-report-controls{display:none!important;}.financial-report-print{page:financial-report;min-width:0;max-width:none;}.financial-report-print table{font-size:7pt;}.financial-report-print th,.financial-report-print td{padding:3px;}.financial-report-print thead{display:table-header-group;}.financial-report-print tr{break-inside:avoid;}.financial-report-print h3{break-after:avoid;}.financial-report-print header{break-inside:avoid;}}

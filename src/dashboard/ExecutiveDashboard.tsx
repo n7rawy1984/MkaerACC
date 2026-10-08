@@ -1,3 +1,6 @@
+import {ReportExport} from '../reports/ReportExport';
+import {postedJournalReport} from '../reports/postedJournalReport';
+import HistoricalImports from "../historical/HistoricalImports";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Building2, Receipt, Truck, Hammer, Landmark, RefreshCw, type LucideIcon } from "lucide-react";
@@ -25,7 +28,8 @@ function Kpi({ label, value, icon: Icon, hint, warning = false }: { label: strin
   </div>;
 }
 function DashboardContent({ userId, companyId, role }: { userId: string; companyId: string; role: string }) {
-  const { t } = useI18n(), master = useProductionMasterData();
+  const auth=useAuth();const companyName=auth.state.phase==="TENANT_READY"?auth.state.activeTenant.companyName:"";
+  const { t, locale } = useI18n(), master = useProductionMasterData();
   const [revision, setRevision] = useState(0);
   const masterReady = master.phase === "READY" && master.company.id === companyId
     && [...master.projects, ...master.parties, ...master.expenseCategories].every(row => row.companyId === companyId);
@@ -40,6 +44,9 @@ function DashboardContent({ userId, companyId, role }: { userId: string; company
       {masterReady && read.phase !== "DENIED" && <button type="button" disabled={read.phase === "LOADING"} onClick={() => setRevision(n => n + 1)} className="flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm disabled:opacity-50"><RefreshCw size={14} aria-hidden="true" />{t("executiveDashboard.refresh")}</button>}
       {master.phase !== "LOADING" && !masterReady && <button type="button" onClick={() => window.location.reload()} className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm">{t("executiveDashboard.refresh")}</button>}
     </div>
+    <HistoricalImports summary revision={revision} postedSummary={summary}/>
+    <h2 className="text-xl font-semibold text-slate-900">{locale === "ar" ? "الحسابات المرحلة" : "Posted Accounting"}</h2>
+    {(["ACCOUNTING_ADMIN","ACCOUNTANT","MANAGEMENT_VIEWER"].includes(role))&&<ReportExport build={()=>postedJournalReport(companyId,companyName,locale)}/>}
     {master.phase === "LOADING" && <p role="status">{t("executiveDashboard.loading")}</p>}
     {master.phase !== "LOADING" && !masterReady && <p role="alert" className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">{t("executiveDashboard.error")}</p>}
     {masterReady && master.phase === "READY" && <>

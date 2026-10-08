@@ -1,0 +1,18 @@
+import {useEffect,useState} from 'react';
+import type {SupabaseClient} from '@supabase/supabase-js';
+import {getSupabaseClient} from '../lib/supabase';
+import type {SourceRecord} from './sourceModel';
+export const sourceClient=()=>getSupabaseClient() as unknown as SupabaseClient;
+export function useHistoricalSources(companyId:string,allowed:boolean,recordType?:'GENERAL'|'PAYROLL',externalRevision=0,canReadPayroll=false){
+ const [revision,setRevision]=useState(0);const [state,setState]=useState<{scope:string;rows:SourceRecord[];loading:boolean;error:boolean}>({scope:'',rows:[],loading:true,error:false});
+ const scope=companyId+':'+(recordType??'ALL');
+ useEffect(()=>{const changed=(event:Event)=>{if((event as CustomEvent).detail?.companyId===companyId)setRevision(n=>n+1);};window.addEventListener('historical-source-changed',changed);return()=>window.removeEventListener('historical-source-changed',changed);},[companyId]);
+ useEffect(()=>{let live=true;if(!allowed)return;setState(old=>({scope,rows:old.scope===scope?old.rows:[],loading:true,error:false}));
+ void(async()=>{try{const rows:SourceRecord[]=[];for(let offset=0;;offset+=500){let q=sourceClient().from('historical_source_records').select('id,company_id,source_reference,source_file,source_month,record_type,source_date,description,outflow_minor::text,funding_minor::text,payroll_net_minor::text,raw_source,classification,completion,review_status,updated_at,expense_id,payroll_entitlement_id,cash_treasury_id,payroll_profile_id,expense:expenses!historical_source_records_company_id_expense_id_fkey(status,expense_reference,posted_journal_entry_id),cash_treasury:treasury_accounts!historical_source_records_company_id_cash_treasury_id_fkey(code)').eq('company_id',companyId);if(recordType)q=q.eq('record_type',recordType);const {data,error}=await q.order('source_reference').range(offset,offset+499);if(!live)return;if(error)throw Error('read');const batch=data as unknown as SourceRecord[];if(batch.some(r=>r.company_id&&r.company_id!==companyId))throw Error('scope');rows.push(...batch.filter(r=>!recordType||r.record_type===recordType));if(batch.length<500)break;}const linked=rows.filter(r=>r.payroll_entitlement_id);if(linked.length&&canReadPayroll){
+ const {data:entitlements,error:ee}=await sourceClient().from('payroll_entitlements').select('id,company_id,payroll_id').eq('company_id',companyId).in('id',linked.map(r=>r.payroll_entitlement_id!));if(!live)return;if(ee||!entitlements||entitlements.length!==new Set(linked.map(r=>r.payroll_entitlement_id)).size||entitlements.some(e=>e.company_id!==companyId))throw Error('payroll read');
+ const {data:reversals,error:re}=await sourceClient().from('payroll_reversals').select('company_id,payroll_id').eq('company_id',companyId).in('payroll_id',entitlements.map(e=>e.payroll_id));if(!live)return;if(re||!reversals||reversals.some(e=>e.company_id!==companyId))throw Error('payroll status');
+ for(const r of linked){const entitlement=entitlements.find(e=>e.id===r.payroll_entitlement_id);r.payroll_status=reversals.some(e=>e.payroll_id===entitlement?.payroll_id)?'REVERSED':'POSTED';}
+ }else for(const r of linked)r.payroll_status='LINKED';if(live)setState({scope,rows,loading:false,error:false});}catch{if(live)setState(old=>({...old,scope,loading:false,error:true}));}})();return()=>{live=false;};
+ },[companyId,scope,recordType,allowed,revision,externalRevision,canReadPayroll]);
+ return {rows:allowed&&state.scope===scope?state.rows:[],loading:allowed&&(state.scope!==scope||state.loading),error:allowed&&state.scope===scope&&state.error,refresh:()=>setRevision(n=>n+1)};
+}
