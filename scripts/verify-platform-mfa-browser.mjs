@@ -1,0 +1,65 @@
+import assert from 'node:assert/strict';
+import {chromium} from 'playwright';
+import {startPlatformFixtureServer} from './platform-fixture-server.mjs';
+const {db,server,base}=await startPlatformFixtureServer();let browser,checks=0;
+const check=(v,label)=>{assert(v,label);checks++;};
+try {
+ browser=await chromium.launch({headless:true});const page=await browser.newPage();const errors=[],requests=[];
+ page.on('pageerror',e=>errors.push(e.message));
+ page.on('request',r=>{if(r.url().endsWith('/__platform_rpc')){const data=r.postDataJSON();if(data.name==='platform_admin_command')requests.push(data.args.request_id);}});
+ await page.route('**/*',r=>new URL(r.request().url()).hostname==='127.0.0.1'?r.continue():r.abort());
+ await page.goto(base+'/platform');
+ await page.locator('input[name="code"]').fill('123456');await page.getByRole('button',{name:'Verify',exact:true}).click();
+ await page.locator('.platform-stats strong').first().waitFor();
+ await page.evaluate(()=>{window.platformFixture.totpAgeSeconds=660;window.dispatchEvent(new Event('focus'));window.platformFixture.emit('TOKEN_REFRESHED');});
+ for(const tab of ['customers','users','entities','settings']) {
+  await page.locator(`nav a[href="/platform/${tab}"]`).click();await page.locator('table').waitFor();
+  check(await page.getByRole('alert').count()===0,'ordinary AAL2 navigation after ten minutes has no MFA/error');
+ }
+ await page.locator('nav a[href="/platform/customers"]').click();await page.locator('table').waitFor();
+ const begin=async(code)=>{await page.getByRole('button',{name:'New customer',exact:true}).click();await page.locator('dialog [name="code"]').fill(code);await page.locator('dialog [name="name"]').fill('Synthetic P1 customer');await page.locator('dialog [name="confirm"]').check();await page.locator('dialog button[type="submit"]').click();await page.locator('dialog input[name="code"]').waitFor();};
+ await begin('P1-RESUME');
+ check((await db.query('select count(*)::int n from private.platform_customers')).rows[0].n===0,'stale confirmed mutation has no effect before real step-up');
+ check(await page.locator('nav').isVisible(),'step-up is scoped to action, preserving console');
+ await page.locator('dialog input[name="code"]').fill('000000');await page.locator('dialog').getByRole('button',{name:'Verify',exact:true}).click();
+ await page.locator('dialog [role="alert"]').waitFor();
+ check((await db.query('select count(*)::int n from private.platform_customers')).rows[0].n===0,'invalid authenticator code never resumes mutation');
+ await page.locator('dialog input[name="code"]').fill('123456');await page.locator('dialog').getByRole('button',{name:'Verify',exact:true}).click();
+ await page.locator('dialog [name="confirmResume"]').waitFor();
+ check((await db.query('select count(*)::int n from private.platform_customers')).rows[0].n===0,'successful MFA alone never executes intended action');
+ await page.locator('dialog').getByRole('button',{name:'Confirm and continue',exact:true}).click();
+ check(requests.length===1,'unchecked confirmation cannot send a mutation');
+ await page.locator('dialog [name="confirmResume"]').check();await page.locator('dialog').getByRole('button',{name:'Confirm and continue',exact:true}).click();
+ await page.getByRole('dialog').waitFor({state:'hidden'});await page.getByRole('cell',{name:'Synthetic P1 customer',exact:true}).waitFor();
+ check(requests.length===2&&requests[0]===requests[1],'same intended request/idempotency ID resumed only after explicit confirmation');
+ check((await db.query('select count(*)::int n from private.platform_customers')).rows[0].n===1,'exactly one customer created');
+ await page.evaluate(()=>window.platformFixture.totpAgeSeconds=660);await begin('P1-CANCEL');
+ await page.keyboard.press('Escape');
+ check((await db.query('select count(*)::int n from private.platform_customers')).rows[0].n===1,'canceling action-scoped MFA creates no effects');
+ await page.locator('dialog').getByRole('button',{name:'Clear rejected request',exact:true}).click();await page.keyboard.press('Escape');
+ // Delivery UI contract only: no email provider or live Edge Function is invoked.
+ const id=n=>`b0000000-0000-4000-8000-${String(n).padStart(12,'0')}`;
+ await db.query("insert into public.companies(id,code,name) values($1,'P1-DELIVERY','Synthetic delivery Company')",[id(700)]);
+ await db.query("insert into private.platform_invitations(id,company_id,email,role,created_by) values($1,$2,'recipient@example.invalid','ACCOUNTANT',$3)",[id(701),id(700),id(1)]);
+ await db.query('insert into private.platform_delivery_jobs(invitation_id) values($1)',[id(701)]);
+ await page.evaluate(()=>window.platformFixture.mockDelivery=true);
+ await page.locator('nav a[href="/platform/invitations"]').click();await page.locator('table').waitFor();
+ await page.getByRole('button',{name:'Attempt delivery',exact:true}).click();
+ check(await page.evaluate(()=>window.platformFixture.deliveryAttempts)===0,'delivery requires explicit confirmation before any invocation');
+ await page.locator('dialog [name="confirmResume"]').check();await page.locator('dialog').getByRole('button',{name:'Confirm and continue',exact:true}).click();
+ await page.locator('dialog input[name="code"]').waitFor();
+ check(await page.evaluate(()=>window.platformFixture.deliveredCount)===0,'stale delivery opens step-up without sending');
+ await page.locator('dialog input[name="code"]').fill('123456');await page.locator('dialog').getByRole('button',{name:'Verify',exact:true}).click();
+ await page.locator('dialog [name="confirmResume"]').waitFor();
+ check(await page.evaluate(()=>window.platformFixture.deliveredCount)===0,'delivery never resumes automatically after MFA');
+ await page.locator('dialog [name="confirmResume"]').check();await page.locator('dialog').getByRole('button',{name:'Confirm and continue',exact:true}).click();
+ await page.getByRole('dialog').waitFor({state:'hidden'});
+ check(await page.evaluate(()=>window.platformFixture.deliveryAttempts===2&&window.platformFixture.deliveredCount===1),'explicit reconfirmation resumes exactly one mock delivery');
+ await page.evaluate(()=>{window.platformFixture.denied=true;window.dispatchEvent(new Event('focus'));});
+ await page.getByRole('alert').filter({hasText:'Platform access is unavailable'}).waitFor();
+ check(await page.locator('table').count()===0,'revocation still clears privileged content');
+ await page.getByRole('button',{name:'Sign in with another account',exact:true}).click();
+ await page.locator('input[autocomplete="current-password"]').waitFor();checks++;
+ check(errors.length===0,errors.join('\n'));
+ console.log(`PASS: ${checks} P1 MFA browser assertions; stale AAL2 navigation, token refresh, action-scoped step-up, explicit reconfirmation, same-ID resume, cancellation and revocation. Local fixtures only.`);
+} finally {await browser?.close();await server.close();await db.close();}

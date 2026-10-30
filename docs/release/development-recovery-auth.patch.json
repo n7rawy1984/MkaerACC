@@ -1,0 +1,4 @@
+{
+  "mailer_templates_recovery_content": "<!doctype html>\n<html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"referrer\" content=\"no-referrer\"></head><body>\n  <h1>NARVO ERP password recovery</h1>\n  <p><a href=\"{{ if .RedirectTo }}{{ .RedirectTo }}{{ else }}{{ .SiteURL }}/auth/callback{{ end }}?token_hash={{ .TokenHash }}&amp;type=recovery\">Choose a new password</a></p>\n  <p>If you did not request password recovery, ignore this message. Do not forward this link.</p>\n  <p>Password recovery does not remove the Platform Owner authenticator requirement.</p>\n</body></html>\n",
+  "uri_allow_list": "https://maker-eosin.vercel.app,http://localhost:5173,http://127.0.0.1:5173,https://maker-eosin.vercel.app/auth/callback,http://localhost:5173/auth/callback,http://127.0.0.1:5173/auth/callback"
+}

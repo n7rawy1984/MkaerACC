@@ -1,0 +1,72 @@
+// Focused P1 guard split: real local PostgreSQL, synthetic signed-claim scaffold.
+import assert from 'node:assert/strict';
+import {readFileSync,readdirSync} from 'node:fs';
+import {execFileSync} from 'node:child_process';
+import {createHash,randomUUID} from 'node:crypto';
+import {platformTestDatabase} from './verify-platform-database.mjs';
+const migration='20261030120000_platform_read_mfa_freshness.sql';
+const files=readdirSync('supabase/migrations').filter(x=>x.endsWith('.sql')).sort();
+const original=execFileSync('git',['ls-tree','-r','--name-only','9da8612ac0f9e9e92efa0b9eb417af0311cfc2e3','--','supabase/migrations']).toString().trim().split('\n');
+assert.equal(original.length,56);assert.equal(files.length,61);assert.equal(files.at(-1),migration);
+for(const name of original) assert(readFileSync(name).equals(execFileSync('git',['show',`9da8612ac0f9e9e92efa0b9eb417af0311cfc2e3:${name}`])));
+const legacy=readFileSync('scripts/verify-platform-release.mjs','utf8');
+const frozen=[...legacy.matchAll(/'(20261028\d+_[^']+\.sql)': '([a-f0-9]{64})'/g)];assert.equal(frozen.length,4);
+for(const [,name,hash] of frozen) assert.equal(createHash('sha256').update(readFileSync('supabase/migrations/'+name)).digest('hex'),hash);
+const {db}=await platformTestDatabase(undefined,{through:'20261028123000'});
+const id=n=>`e0000000-0000-4000-8000-${String(n).padStart(12,'0')}`;
+const owner=id(1),ordinary=id(2),company=id(3),session=id(4),factor=id(5);
+const q=async(s,args=[]) => (await db.query(s,args)).rows;
+let checks=0;const check=(v,label)=>{assert(v,label);checks++;};
+const controls=()=>q("select n.nspname,p.proname,pg_get_functiondef(p.oid) source,p.proacl::text acl from pg_proc p join pg_namespace n on n.oid=p.pronamespace where (n.nspname='private' and p.proname='platform_actor') or (n.nspname='public' and p.proname in ('platform_admin_command','platform_invitation_command','claim_platform_delivery','finish_platform_delivery','accept_platform_invitation')) order by n.nspname,p.proname");
+const policies=()=>q("select schemaname,tablename,policyname,roles,cmd,qual,with_check from pg_policies order by schemaname,tablename,policyname");
+const readBodies=()=>q("select proname,prosrc,proacl::text acl from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname='public' and proname in ('get_platform_overview','list_platform_entities','platform_directory','list_platform_invitations') order by proname");
+const as=(sql,args=[],patch={})=>db.transaction(async tx=>{
+  const claims={sub:owner,session_id:session,aal:'aal2',iat:Math.floor(Date.now()/1000),amr:[{method:'totp',timestamp:Math.floor(Date.now()/1000)-660}],...patch};
+  await tx.query("select set_config('request.jwt.claims',$1,true)",[JSON.stringify(claims)]);await tx.exec('set local role authenticated');return (await tx.query(sql,args)).rows;
+});
+const deny=async(fn,label,message)=>{await assert.rejects(fn,e=>e.code==='42501'&&(!message||e.message===message),label);checks++;};
+try {
+ const before=await controls(),beforePolicies=await policies(),beforeReads=await readBodies();
+ await db.exec(readFileSync('supabase/migrations/'+migration,'utf8'));
+ assert.deepEqual(await controls(),before);checks++;
+ assert.deepEqual(await policies(),beforePolicies);checks++;
+ const afterReads=await readBodies();
+ for(let i=0;i<beforeReads.length;i++) {assert.equal(afterReads[i].prosrc,beforeReads[i].prosrc.replace('perform private.platform_actor();','perform private.platform_read_actor();'));assert.equal(afterReads[i].acl,beforeReads[i].acl);checks++;}
+ check((await q("select has_function_privilege('authenticated','private.platform_read_actor()','execute') allowed"))[0].allowed===false,'private read guard has no browser execute');
+ check((await q("select has_function_privilege('service_role','private.platform_read_actor()','execute') allowed"))[0].allowed===false,'service role cannot call private guard');
+ for(const uid of [owner,ordinary]) await q('insert into auth.users(id,email,email_confirmed_at) values($1,$2,now())',[uid,uid+'@example.invalid']);
+ await q('insert into private.system_administrators(user_id) values($1)',[owner]);
+ await q("insert into auth.mfa_factors(id,user_id,factor_type,status) values($1,$2,'totp','verified')",[factor,owner]);
+ await q("insert into auth.sessions(id,user_id,aal,factor_id) values($1,$2,'aal2',$3)",[session,owner,factor]);
+ await q("insert into public.companies(id,code,name) values($1,'MFA-BOUNDARY','Synthetic protected ledger')",[company]);
+ const readSql=['select public.get_platform_overview() result','select public.list_platform_entities() result',"select public.platform_directory('customers') result","select public.platform_directory('users') result","select public.platform_directory('memberships') result","select public.platform_directory('audit') result","select public.platform_directory('settings') result",'select public.list_platform_invitations() result'];
+ check((await as('select public.get_platform_context() result'))[0].result.step_up_required===false,'stale TOTP AAL2 context does not request MFA');
+ for(const sql of readSql) {check((await as(sql))[0].result!==null,'AAL2 browsing survives stale TOTP');await deny(()=>as(sql,[],{aal:'aal1'}),'AAL1 read blocked','MFA_REQUIRED');await deny(()=>as(sql,[],{sub:ordinary}),'non-owner read blocked','Denied');}
+ check((await as('select public.get_platform_context() result',[],{aal:'aal1'}))[0].result.step_up_required===true,'initial AAL1 must verify MFA');
+ const input={code:'AFTER-STEP-UP',name:'Synthetic guarded action'};
+ const write=patch=>as("select public.platform_admin_command('create_customer',$1,$2::jsonb) result",[randomUUID(),JSON.stringify(input)],patch);
+ await deny(()=>write({}),'stale TOTP blocks mutation despite fresh JWT iat','MFA_REQUIRED');
+ await deny(()=>as("select public.platform_invitation_command('invite',$1,'{}'::jsonb)",[randomUUID()]),'invitation mutation still requires fresh TOTP','MFA_REQUIRED');
+ await deny(()=>as('select public.claim_platform_delivery($1)',[randomUUID()]),'delivery lease still requires fresh TOTP','MFA_REQUIRED');
+ await deny(()=>write({amr:[{method:'password',timestamp:Math.floor(Date.now()/1000)}]}),'signed password method is not TOTP','MFA_REQUIRED');
+ check((await q('select count(*)::int n from private.platform_customers'))[0].n===0,'denied stale writes leave no customer');
+ check((await write({amr:[{method:'totp',timestamp:Math.floor(Date.now()/1000)}]}))[0].result.status==='CONFIRMED','genuine fresh TOTP permits authorized mutation');
+ await q("update auth.sessions set aal='aal1' where id=$1",[session]);
+ await deny(()=>as(readSql[0]),'live server downgrade defeats old AAL2 JWT','MFA_REQUIRED');
+ await q("update auth.sessions set aal='aal2',not_after=now()-interval '1 second' where id=$1",[session]);
+ await deny(()=>as('select public.get_platform_context()'),'expired session is rejected, not routed into MFA','Session revoked');
+ await q('update auth.sessions set not_after=null where id=$1',[session]);
+ await q("update private.system_administrators set status='INACTIVE' where user_id=$1",[owner]);
+ await deny(()=>as('select public.get_platform_context()'),'inactive owner remains denied','Denied');
+ await q("update private.system_administrators set status='ACTIVE' where user_id=$1",[owner]);
+ await q("update public.profiles set status='INACTIVE' where user_id=$1",[owner]);
+ await deny(()=>as(readSql[0]),'inactive profile remains denied','Denied');
+ await q("update public.profiles set status='ACTIVE' where user_id=$1",[owner]);
+ await q("update auth.mfa_factors set status='unverified' where id=$1",[factor]);
+ await deny(()=>as(readSql[0]),'removed verified factor cannot retain AAL2 read access','MFA_REQUIRED');
+ await q("update auth.mfa_factors set status='verified' where id=$1",[factor]);
+ check((await as('select count(*)::int n from public.companies'))[0].n===0,'owner gets no direct cross-tenant Company access');
+ check((await as('select count(*)::int n from public.journal_entries'))[0].n===0,'owner gets no financial access');
+ check((await q('select count(*)::int n from public.company_memberships where user_id=$1',[owner]))[0].n===0,'no membership invented');
+ console.log(`PASS: ${checks} focused MFA/authorization assertions; original60 files frozen, write bodies/ACLs and RLS unchanged, stale AAL2 reads allowed, mutations still fresh-TOTP guarded. No hosted migration.`);
+} finally {await db.close();}

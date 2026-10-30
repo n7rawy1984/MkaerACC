@@ -11,7 +11,21 @@
     "lint": "oxlint",
     "verify:p6a-boundary": "node scripts/verify-p6a-boundary.mjs",
     "verify:p6c-boundary": "node scripts/verify-p6c-boundary.mjs",
-    "preview": "vite preview"
+    "verify:platform:db": "node scripts/verify-platform-security.mjs",
+    "verify:platform:delivery": "node scripts/verify-platform-delivery.mjs",
+    "verify:platform:function": "node scripts/verify-platform-function.mjs",
+    "verify:platform:callback": "node scripts/verify-platform-callback.mjs",
+    "verify:platform:release": "node scripts/verify-platform-release.mjs",
+    "verify:platform:browser": "node scripts/verify-platform-browser.mjs",
+    "platform:preview": "node scripts/preview-platform-console.mjs",
+    "preview": "vite preview",
+    "verify:platform:revocation": "node scripts/verify-platform-revocation.mjs",
+    "verify:platform:concurrency": "node scripts/verify-platform-concurrency.mjs",
+    "verify:platform:access": "node scripts/verify-platform-access.mjs",
+    "verify:platform:loading": "node scripts/verify-platform-loading.mjs",
+    "verify:platform:owner-transfer": "node scripts/verify-platform-owner-transfer.mjs",
+    "verify:platform:mfa": "node scripts/verify-platform-mfa.mjs",
+    "verify:platform:mfa:browser": "node scripts/verify-platform-mfa-browser.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.4",
@@ -23,6 +37,7 @@
     "write-excel-file": "4.1.1"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "0.5.12",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^24.13.3",
     "@types/react": "^19.2.18",

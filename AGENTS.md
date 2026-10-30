@@ -113,7 +113,7 @@ For significant implementation or review work, record files/migrations changed, 
 
 ## Frontend/backend boundary
 
-Until P6, the frontend remains localStorage and the production-style backend lives in Supabase Development. Never introduce hybrid financial writes. P6 is the controlled Auth/tenant/white-label and repository/data cutover.
+The P6 cutover is implemented within its documented Development scope: `supabase-auth` uses database authority; localStorage business data remains isolated in `local-demo`. Never introduce hybrid financial writes or production fallback to demo data. Platform administration has independent server-validated authority and never replaces Company membership or financial RLS. Local platform code/migration files do not imply hosted activation.
 
 ## Pre-production gate
 

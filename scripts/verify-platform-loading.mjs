@@ -1,0 +1,76 @@
+import assert from 'node:assert/strict';
+import {chromium} from 'playwright';
+import {startPlatformFixtureServer} from './platform-fixture-server.mjs';
+const {db,server,base}=await startPlatformFixtureServer();
+let browser,checks=0;
+const check=(v,label)=>{assert(v,label);checks++;};
+try {
+  browser=await chromium.launch({headless:true});
+  const page=await browser.newPage();const errors=[];
+  page.on('pageerror',e=>errors.push(e.message));
+  await page.route('**/*',r=>new URL(r.request().url()).hostname==='127.0.0.1'?r.continue():r.abort());
+  await page.clock.install();
+  await page.goto(base+'/platform?fixture_auth_stall=1');
+  await page.waitForFunction(()=>Boolean(window.platformFixture));
+  await page.clock.runFor(6000);
+  await page.getByRole('alert').waitFor();
+  check(await page.locator('main code').textContent()==='auth_session · REQUEST_TIMEOUT','unresolved SDK session becomes a precise bounded failure');
+  check(await page.evaluate(()=>!window.platformFixture.calls.includes('get_platform_context')),'stalled session never invokes a privileged RPC');
+  await page.evaluate(()=>window.platformFixture.hangSession=false);
+  await page.getByRole('button',{name:'Retry',exact:true}).click();
+  await page.getByRole('heading',{name:'Verify your authenticator',exact:true}).waitFor();checks++;
+
+  await page.goto(base+'/platform?fixture_rpc_stall=get_platform_context');
+  await page.waitForFunction(()=>window.platformFixture?.calls.includes('get_platform_context'));
+  await page.evaluate(()=>{for(let i=0;i<20;i++){window.dispatchEvent(new Event('focus'));document.dispatchEvent(new Event('visibilitychange'));window.platformFixture.emit('SIGNED_IN');}});
+  check(await page.evaluate(()=>window.platformFixture.calls.filter(x=>x==='get_platform_context').length)===1,'focus/visibility/Auth storms coalesce one pending context read');
+  await page.clock.runFor(11000);
+  await page.getByRole('alert').waitFor();
+  check(await page.locator('main code').textContent()==='get_platform_context · REQUEST_TIMEOUT','unresolved context RPC leaves loading with exact operation/code');
+  await page.evaluate(()=>{window.platformFixture.hangRpc=null;window.platformFixture.releaseRpc();});
+  await page.waitForTimeout(150);
+  check(await page.getByRole('heading',{name:'Verify your authenticator',exact:true}).count()===0,'late timed-out success cannot grant access or replace the error');
+  await page.clock.runFor(61000);
+  check(await page.evaluate(()=>window.platformFixture.calls.filter(x=>x==='get_platform_context').length)===1,'background poll does not erase failure or automatically retry');
+  await page.getByRole('button',{name:'Retry',exact:true}).click();
+  await page.getByRole('heading',{name:'Verify your authenticator',exact:true}).waitFor();checks++;
+
+  await page.goto(base+'/platform?fixture_mfa_stall=1');
+  await page.getByRole('heading',{name:'Verify your authenticator',exact:true}).waitFor();
+  await page.clock.runFor(11000);
+  await page.getByRole('alert').waitFor();
+  check(await page.locator('main code').textContent()==='mfa_factors · REQUEST_TIMEOUT','MFA lookup cannot leave an unresolved loading state');
+  check(await page.getByRole('button',{name:'Set up authenticator',exact:true}).isDisabled(),'unknown factor state cannot enable enrollment');
+  await page.evaluate(()=>window.platformFixture.hangFactors=false);
+  await page.getByRole('button',{name:'Retry',exact:true}).click();
+  await page.getByRole('button',{name:'Verify',exact:true}).waitFor();
+  check(await page.evaluate(()=>window.platformFixture.enrollmentCalls===0),'lookup retry preserves the existing verified authenticator');
+
+  await page.goto(base+'/platform?fixture_rpc_stall=get_platform_overview');
+  await page.getByRole('heading',{name:'Verify your authenticator',exact:true}).waitFor();
+  await page.locator('input[name="code"]').fill('123456');
+  await page.getByRole('button',{name:'Verify',exact:true}).click();
+  await page.waitForFunction(()=>window.platformFixture.calls.includes('get_platform_overview'));
+  await page.clock.runFor(11000);
+  await page.getByRole('alert').waitFor();
+  check(await page.locator('main code').textContent()==='get_platform_overview · REQUEST_TIMEOUT','Overview has its own bounded actionable failure');
+  await page.evaluate(()=>{window.platformFixture.hangRpc=null;window.platformFixture.releaseRpc();});
+  await page.waitForTimeout(150);
+  check(await page.locator('.platform-stats').count()===0,'late Overview response cannot populate timed-out data');
+  await page.getByRole('button',{name:'Retry',exact:true}).click();
+  await page.locator('.platform-stats strong').first().waitFor();
+  check((await page.locator('.platform-stats strong').allTextContents()).every(x=>/^\d+$/.test(x)),'explicit retry loads actual isolated database counters after verified MFA');
+  const malformed = async route => {
+    if (route.request().postDataJSON().name==='get_platform_overview') await route.fulfill({json:{data:null,error:null}});
+    else await route.continue();
+  };
+  await page.route('**/__platform_rpc',malformed);
+  await page.getByRole('button',{name:'Refresh',exact:true}).click();
+  await page.getByRole('alert').waitFor();
+  check(await page.locator('main code').textContent()==='get_platform_overview · INVALID_RESPONSE','null successful response cannot produce another endless Overview loader');
+  await page.unroute('**/__platform_rpc',malformed);
+  await page.getByRole('button',{name:'Retry',exact:true}).click();
+  await page.locator('.platform-stats strong').first().waitFor();checks++;
+  check(errors.length===0,errors.join('\n'));
+  console.log(`PASS: ${checks} focused loading browser assertions; bounded session/context/Overview, event coalescing, late-result rejection and safe retry. Disposable local database; no hosted Auth or financial writes.`);
+} finally {await browser?.close();await server.close();await db.close();}

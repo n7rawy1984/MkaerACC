@@ -32,6 +32,7 @@ export function dependencyGraph(entry) {
 }
 // Existing command recovery envelopes only; these files are not local business stores.
 const sessionRecoveryFiles=new Set([
+ 'src/platform/platformRecovery.ts',
  'src/payroll/PayrollPosting.tsx',
  ...['SupplierPaymentReverseAction','SupplierCreditExpensePost','RetentionPaymentReverseAction',
  'SubcontractorAdvancePost','RetentionPaymentPost','SubcontractorAdvanceReverseAction',

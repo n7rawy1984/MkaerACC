@@ -412,3 +412,15 @@ enabled = true
 # declarative_schema_path = "./schemas"
 # JSON string passed through to pg-delta SQL formatting.
 # format_options = "{\"keywordCase\":\"upper\",\"indent\":2,\"maxWidth\":80,\"commaStyle\":\"trailing\"}"
+
+# Local preparation only; this does not update hosted Auth templates.
+[auth.email.template.invite]
+subject = "NARVO ERP invitation"
+content_path = "./supabase/templates/platform-invite.html"
+
+[auth.email.template.recovery]
+subject = "NARVO ERP password recovery"
+content_path = "./supabase/templates/platform-recovery.html"
+
+[functions.platform-invitation-delivery]
+verify_jwt = true

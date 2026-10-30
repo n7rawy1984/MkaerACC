@@ -1,6 +1,9 @@
 import PayrollApplication from "../payroll/PayrollApplication";
 import AttendanceApplication from "../attendance/AttendanceApplication";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import PlatformApplication from "../platform/PlatformApplication";
+import AuthCallback from "../platform/AuthCallback";
+import RecoveryRequest from "../platform/RecoveryRequest";
 import { useT } from "../i18n/I18nContext";
 import { getSupabaseClient } from "../lib/supabase";
 import TenantReadyApplication from "../app/TenantReadyApplication";
@@ -20,6 +23,14 @@ function LoadingPage() {
 
 function RoutedApplication() {
   const { state, syncCompanyLegalName } = useAuth();
+  const location = useLocation();
+  // Platform authority and invitation completion do not depend on Company membership.
+  const callbackParams = new URLSearchParams(location.search);
+  const callbackFragment = new URLSearchParams(location.hash.slice(1));
+  const recoveryLanding = ["token_hash", "code", "error", "error_code", "error_description"].some(key => callbackParams.has(key)) || callbackParams.get("type") === "recovery" || ["access_token", "refresh_token", "error", "type"].some(key => callbackFragment.has(key));
+  if (location.pathname === "/auth/callback" || recoveryLanding) return <AuthCallback client={getSupabaseClient()} />;
+  if (location.pathname === "/auth/recovery") return <RecoveryRequest client={getSupabaseClient()} />;
+  if (location.pathname === "/platform" || location.pathname.startsWith("/platform/")) return <PlatformApplication client={getSupabaseClient()} />;
   if (state.phase === "INITIALIZING_AUTH" || state.phase === "LOADING_IDENTITY") return <LoadingPage />;
   if (state.phase === "SIGNED_OUT") return <Routes><Route path="/login" element={<LoginPage />} /><Route path="*" element={<Navigate to="/login" replace />} /></Routes>;
   if (state.phase === "NO_ACTIVE_COMPANY") return <Routes><Route path="/no-company" element={<NoCompanyPage />} /><Route path="*" element={<Navigate to="/no-company" replace />} /></Routes>;

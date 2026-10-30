@@ -1,3 +1,125 @@
+**Real-browser acceptance — 2026-10-31 (owner-reported PASS):** the existing real Platform Owner session remained usable for approximately one hour of navigation without repeated MFA prompts. This closes the sustained browsing acceptance check following the applied P1 migration and20/20 postflight. Invitation end-to-end acceptance, sensitive-operation real-session MFA/reconfirmation testing, and Vercel deployment acceptance remain **PENDING**. No invitation, privileged mutation or deployment is implied by the navigation result. This release batch is local documentation/staging/commit only; push and deployment require separate authorization. Earlier pending browsing/owner-access statements below are historical.
+
+**P1 MFA UX correction — 2026-10-30: DEVELOPMENT MIGRATION APPLIED / POSTFLIGHT VERIFIED.** Explicitly approved SHA-pinned `20261030120000_platform_read_mfa_freshness.sql` applied only to eqnzueginpkskbnqvgoc after fresh guards and exact canonical dry-run. Hosted history61; all20 postflight checks pass, original60 history and54 data fingerprints unchanged, journals balanced; existing roles/grants/RLS/owner and fresh-TOTP mutation guards unchanged. AAL2 browsing no longer has a ten-minute freshness gate; local actions use genuine MFA plus explicit reconfirmation. Sustained real-session browsing is owner-reported PASS (31October); sensitive-operation real-session acceptance remains PENDING. No frontend/Edge/public deployment, email, backup or financial operation. See [scope and actual execution](docs/PLATFORM_MFA_READ_WRITE_SEPARATION.md). Earlier pending-migration/owner-access statements below are historical.
+
+# Owner transfer applied and verified — 2026-10-29
+
+Explicitly approved exact operational SQL applied to Development eqnzueginpkskbnqvgoc. Existing Auth ebcf7115-6cd9-49be-af25-8e57b5befd75 is now the sole ACTIVE PLATFORM_OWNER; original e1ef565b registry row retained INACTIVE with epoch0→1. Exactly one immutable operational audit. Fresh pre/post checks pass; all10 Auth/profile/session/MFA/membership/financial fingerprints match, including528 journals/1102 lines/248 historical sources. Authorization functions/grants unchanged. No account recreation, password/MFA/session reset, financial write, migration, backup, deployment, email, commit or push. Real target TOTP count0: next is Retry in the existing target session, then real MFA enrollment/verification and actual Overview acceptance (DEFERRED). See [actual transfer record](docs/PLATFORM_OWNER_TRANSFER.md). Prior approval-pending statements are historical.
+
+---
+
+# Intended owner selected; guarded transfer awaits approval — 2026-10-29
+
+Product owner selected existing Auth UUID ebcf7115-6cd9-49be-af25-8e57b5befd75 as intended owner. This was identity selection only, not hosted execution approval. Prepared exact Development operational SQL: original e1ef565b registry entry INACTIVE, selected existing account ACTIVE/PLATFORM_OWNER, one active owner, source epoch advanced and immutable audit.20 isolated checks pass, including Auth/MFA/session/profile/membership/financial preservation and continued MFA enforcement. Hosted registry is UNCHANGED; explicit transfer approval and fresh pre/post checks are still required. No hosted rehearsal, backup operation, account creation, deployment, commit or push. See [reviewed transfer](docs/PLATFORM_OWNER_TRANSFER.md).
+
+---
+
+# Existing owner identity check — 2026-10-29
+
+Fresh targeted Development check confirms e1ef565b-c54d-4b52-bba3-360a03da7aa3 is correctly linked across Auth/profile/ACTIVE PLATFORM_OWNER registry, matching the8October approved bootstrap. Today's signed-in ebcf7115-6cd9-49be-af25-8e57b5befd75 was created29October and has no registry row; its owner predicate is false before MFA. No identity recreation or automatic privilege repair is justified. Intended UUID confirmation pending; changing the designated owner requires a separately approved guarded transfer preserving one active owner, financial memberships and MFA. No hosted changes. See [targeted identity report](docs/PLATFORM_OWNER_IDENTITY_CHECK.md).
+
+---
+
+# Current platform loading blocker correction — 2026-10-29
+
+Confirmed unbounded Auth/RPC/MFA waits and overlapping read lifecycle; fixed with5-second session/10-second operation deadlines, coalescing/cancellation, stable actionable failures and safe read Retry. Null Overview responses now fail explicitly. Latest hosted context requests still fail403/42501 Denied; no actual owner Overview success is claimed.25 focused access,17 loading-browser and49 existing browser checks recorded; real refreshed-tab acceptance DEFERRED. Existing console retained; no hosted writes, permissions/migrations, financial, backup, SMTP or deployment operations. See [focused loading fix](docs/PLATFORM_LOADING_FIX.md).
+
+---
+
+# Real owner access acceptance diagnosis — 2026-10-29
+
+Hosted `get_platform_context` fails403/42501 with exact `Denied`; Overview is not reached. The registered active PLATFORM_OWNER has no session/verified TOTP; the only current recent AAL1 session belongs to another identity. No role/grant defect found. Local UI now distinguishes authority/session denial, exposes safe RPC/code and provides account switching.8 targeted and49 browser checks plus build/lint/boundary pass. Rebuilt private preview; real owner sign-in/MFA/hosted Overview remains DEFERRED. No hosted write, migration, financial, backup, deployment, commit or push operation. See [focused access diagnosis](docs/PLATFORM_OWNER_ACCESS_FIX.md).
+
+---
+
+# Real password recovery acceptance fix — 2026-10-29
+
+Local recovery-session verification and `/platform` landing handling corrected;41 protocol/template and47 isolated browser assertions pass. Hosted inspection confirmed the old ConfirmationURL template and missing callback allowlist paths. Owner explicitly authorized the exact two-field Development patch; it is applied and both values read back correctly. Critical Auth settings verified; full-response comparison had an unattributed additional difference, documented in the focused record. No further hosted write/user change/email occurred. Real recovery/password/MFA acceptance remains pending. See [focused recovery record](docs/PLATFORM_PASSWORD_RECOVERY_FIX.md). No financial/migration, backup, public deployment, commit or push changes.
+
+---
+
+# Platform Owner Development database activation — 2026-10-29
+
+**EXACT FOUR MIGRATIONS APPLIED / IMMEDIATE POSTFLIGHT PASS / REAL APP ACCEPTANCE PENDING.** Target only `MakerACC-Development` (`eqnzueginpkskbnqvgoc`). Applied1200/1210/1220/1230 with the approved SHA256 values, private existing credential and guarded canonical dry-run/apply. No login-role initialization, Vault/roles/seeds branch, reset/rollback or other project. Hosted history now60; all original56 history rows and54 original datasets preserved (only three expected additive platform fields excluded from old-data hash comparison). Journals balance. Approved owner only has PLATFORM_OWNER and still zero Company memberships. Existing SQL files are now applied/frozen; future defects require forward correction.
+
+Actual hosted postflight verified original schema/function/grant/RLS preservation, eight private forced-RLS tables with no client grants, all19 new function bodies matching canonical SQL and minimal execution grants/search paths. Actual anonymous context RPC denied401/42501. No real owner MFA/hosted fixture acceptance is claimed. The owner explicitly accepted incomplete independent custody/second-machine recovery risk for this Development batch only; full disaster recovery is NOT complete. No backup/key/custody/recovery operations occurred.
+
+Real Development build and private loopback smoke pass at `http://127.0.0.1:5173/platform`; no synthetic Auth/MFA or privileged credentials in client. Owner can perform real sign-in/TOTP acceptance privately; no fixture Company/user/membership changes or emails requested. Hosted templates/function remain prepared and unchanged; no public/Production deployment, financial mutation, commit or push. See the single [actual execution record](docs/PLATFORM_ACTIVATION_EXECUTION.md). Evidence `/tmp/narvo-platform-development-activation/`.
+
+---
+
+# Final guarded activation preflight — 2026-10-29
+
+Requested read-only preflight PASS for exact Development identity, original56/approved four-file allowlist, sole approved owner, current financial preservation and unchanged schema/authorization metadata. Hosted history remains56; no platform migration applied. Snapshot14:16 Dubai:53 application tables match exactly; profile count288→289, with all original288 rows unchanged and one new confirmed Auth-linked profile created12:43:46 Dubai having no memberships/registry entry. Owner explicitly confirmed that inventory addition was intentional and approved; the exception is closed, with the original financial/profile baseline preserved and no hosted modification.
+
+The owner schedules independent recovery separately but explicitly preserves the mandatory release-gate boundary. Gate remains unmet; no backup/key/custody/recovery operations or information requests. To activate before that work is complete requires an explicit Development-only release-policy change, not claiming recovery passed. Prepared only: exact two-template Auth configuration patch; existing function/Vercel preparation unchanged. No hosted mutations, emails, Production deployment, commit or push. See [single activation checklist](docs/PLATFORM_ACTIVATION_EXECUTION.md) for precise boundary and shortest next sequence.
+
+---
+
+# SMTP transport and canonical dry-run checkpoint — 2026-10-29
+
+Owner verified Resend domain `elnahrawy.com`, custom Supabase Development SMTP, sender `NARVO ERP <no-reply@elnahrawy.com>`, Delivered status and recipient receipt. Test recipient was an existing historical Auth user: transport PASS, no claim of new-user onboarding or Platform invitation acceptance. Owner also verified linked canonical dry-run lists exactly the four approved platform migrations and release allowlist preserves the original56/hashes. These prior setup blockers are closed; do not repeat them unnecessarily or request another SMTP provider setup.
+
+Targeted read-only GET independently confirms Development identity, configured SMTP/sender, existing SiteURL and enabled TOTP. Hosted invite/recovery templates still lack TokenHash; `platform-invitation-delivery` remains undeployed. Local template/delivery checks pass (30/21), with a new offline Edge entrypoint/pinned-SDK TypeScript/JWT-config check; actual Deno bundling/runtime/hosted invitation acceptance remains unverified. Existing-app deployment preparation retained; no Production deployment authorized.
+
+The mandatory owner-managed release gate remains unmet; no hosted migrations, config/user/Company/financial writes, additional emails, backup/key/custody/recovery operations, commit or push. Next action after gate clearance is the [minimal controlled activation sequence](docs/PLATFORM_ACTIVATION_EXECUTION.md), using the existing Vercel/Supabase application and approved exact four-file batch. Independent disaster recovery is not claimed complete; do not request operational backup/custody information.
+
+---
+
+# Existing-application Platform Owner continuation — 2026-10-29
+
+**LOCAL MFA/EMAIL READINESS VERIFIED / HOSTED ACTIVATION STILL BLOCKED.** The owner selected the existing Vercel project and `https://maker-eosin.vercel.app/platform`; no new project/domain/permanent Preview. A temporary Preview in that same project is optional only if needed for safe validation. No live deployment before database activation and compatibility/security gates.
+
+Backup, encryption, key management, custody, transfers, deletion and recovery arrangements are handled separately by the owner. Do not perform related operations or request destinations, keys, devices or custody information again. Preserve dated verified evidence; independent disaster recovery is not marked complete and the mandatory release gate remains unmet. No related operations occurred in this continuation.
+
+Fixed local MFA factor lookup/enrollment races and failure retry, preserved other unfinished authenticator setups, reused factors verified in another tab, and corrected false password/sign-out completion with a sign-out-only retry.40 browser,30 callback/template and21 delivery assertions pass; offline migration guard passes with all four SQL hashes unchanged. Existing-origin server configuration/email/deployment instructions are prepared. Real Auth/MFA/email acceptance and hosted migration/publication remain unperformed; no financial mutation, hosted changes, commit or push.
+
+See the single [current execution checklist](docs/PLATFORM_ACTIVATION_EXECUTION.md) and [existing-application release instructions](deploy/PLATFORM_PREVIEW.md). Earlier destination/independent Preview requests below are superseded by this direction.
+
+---
+
+# P0 activation execution — 2026-10-29
+
+**LOCAL RELEASE PREPARATION VERIFIED / CONDITIONAL HOSTED ACTIVATION BLOCKED.** The latest owner instruction conditionally authorizes only the four Development migrations after all mandatory gates pass. Independent off-device encrypted backup/key custody and second-machine restoration remain unmet; no waiver is inferred. Hosted history remains56, all54 application fingerprints match H3/H6, journals balance and the approved owner still has zero Company memberships/factors/sessions. No hosted mutation or deployment occurred.
+
+Implemented local token-hash email templates/configuration, strict callback credential parsing/no-referrer policy, tested browser callback cleanup and an offline release allowlist guard. Fresh PostgreSQL17 native-clone four-migration rehearsal preserved all54 original datasets and132 existing function definitions;31 browser,30 callback and18 delivery assertions pass, as do build/P6A/lint (ten existing warnings). H3/H4/H6 and HDD artifacts remain unchanged; no plaintext dump detected inside copied packages. Real provider/MFA/Preview acceptance remains pending.
+
+See the single [activation execution checklist and report](docs/PLATFORM_ACTIVATION_EXECUTION.md), [email deployment preparation](supabase/templates/README.md) and [ordered activation procedure](docs/PLATFORM_DEVELOPMENT_ACTIVATION_PLAN.md). Next: owner-controlled independent recovery destinations/recipient/second machine and an isolated Preview origin; provide credentials only through protected local configuration. No Production release, real email/user/entity creation, financial mutation, backup deletion, commit or push.
+
+---
+
+# P0-H8 pre-activation readiness — 2026-10-29
+
+**READ-ONLY AUDIT COMPLETE / LOCAL NATIVE-CLONE MIGRATION REHEARSAL PASS / HOSTED ACTIVATION NOT AUTHORIZED.** Current Development history is56; all four platform migrations remain unapplied. All54 application fingerprints still match H3/H6; journals balance. Current schema/grants/role metadata match prior baselines. HDD recovery copies are byte-identical with required permissions; off-device key/backup custody and second-machine recovery remain outstanding. Owner has zero Company memberships and no verified TOTP factor/session; hosted TOTP is enabled. Token-hash email configuration, function deployment and actual-owner/hosted acceptance remain future gates.
+
+See [P0-H8 verified readiness](docs/PLATFORM_PRE_ACTIVATION_READINESS.md) and [future controlled Development activation procedure](docs/PLATFORM_DEVELOPMENT_ACTIVATION_PLAN.md). These supersede earlier remote-unknown status labels without implying hosted acceptance. No hosted changes/deployment, financial mutation, backup deletion, commit or push. Platform Owner remains the sole immediate track; unrelated backlog stays deferred.
+
+---
+
+# P0 security correction — local checkpoint, 2026-10-28
+
+**LOCAL SECURITY FIX COMPLETE / HOSTED SECURITY UNVERIFIED / REMOTE ACTIVATION NOT AUTHORIZED.** This supersedes the earlier local-console readiness checkpoint below. Platform Owner P0 remains the only immediate development track under the unchanged V1.6 master plan; all unrelated backlog stays deferred.
+
+The confirmed stale-invitation revocation defect is corrected by new forward migration `20261028123000_platform_invitation_revocation.sql`: atomic invitation/outbox invalidation, Company-scoped email and stable user-ID generations, recipient/issuer status epochs and independent acceptance checks. All preceding 59 migrations, including the original 56, remain byte-for-byte unchanged. Hosted history is unverified; no remote application is claimed. Existing pending invitations must be reissued after upgrade; historical restored memberships need authorized review if any environment ran the vulnerable implementation.
+
+Executed local evidence: 44 permanent revocation assertions plus baseline/upgrade reproduction; eight genuinely overlapping independent PostgreSQL-session races; 84 platform DB/security assertions; 18 delivery assertions; 27 browser assertions; P6A/P6E Auth/tenant, build/typecheck and lint pass (ten warnings already present at the start of this correction). The known P6C blanket-RPC and Executive Dashboard Payroll-link verifier failures remain recorded. Synthetic populated financial fingerprints and financial/accounting/historical/Payroll/Attendance source are unchanged. No hosted mutations, real emails, configuration changes, commit/push or deployment.
+
+See [P0 security correction evidence](docs/PLATFORM_INVITATION_REVOCATION_SECURITY.md) for locking, T01–T15, changed files, limitations and hosted prerequisites. Next: read-only Development compatibility/alignment/owner/MFA preflight when approved credentials are available. Hosted activation remains NO-GO without explicit authorization and hosted acceptance; local tests do not supply that acceptance.
+
+---
+
+# Platform Owner Console — local implementation checkpoint, 2026-10-28
+
+The current user instruction and supplied NARVO ERP V1.6 master plan supersede the older A–D next-session priorities below: **Platform Owner Console is the sole immediate development track until hosted acceptance.** All unrelated backlog remains preserved and deferred.
+
+Local implementation now includes the independent `/platform` Auth/MFA boundary, customer/entity provisioning, reversible lifecycle, membership/user administration, invitation outbox and trusted-delivery integration, audit, settings and plan metadata. Three new forward migration files (`20261028120000`, `20261028121000`, `20261028122000`) are **not applied to hosted Development**. Existing accounting modules, 56 prior migration files, real entities/projects and source/journal data were not changed. New entities are draft/incomplete; platform authority grants no financial access.
+
+See [PLATFORM_OWNER_CONSOLE](docs/PLATFORM_OWNER_CONSOLE.md) for files, policy, local preview/test commands, verification limits and the controlled remote activation procedure. Local evidence uses isolated PostgreSQL and synthetic Auth/browser fixtures; it is not actual Supabase owner/MFA/email acceptance. The known P6C blanket-RPC verifier failure is retained, not suppressed. No commit, push, deploy, live bootstrap/role grant, hosted migration/configuration change, email or financial mutation was performed. Next step after final local verification is a separately authorized Development activation/acceptance batch, not unrelated roadmap implementation.
+
+Earlier dated sections remain historical evidence.
+
+---
+
 # Closed real-data Development checkpoint — 2026-10-08
 
 Development stopped for today. This closure supersedes earlier current-state/next-step labels below; earlier entries remain historical evidence.

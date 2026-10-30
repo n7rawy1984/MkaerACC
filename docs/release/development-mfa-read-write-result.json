@@ -1,0 +1,52 @@
+{
+  "target": "eqnzueginpkskbnqvgoc",
+  "postflight_at": "2026-10-29T20:47:18.214472+00:00",
+  "checks": {
+    "cli_exact_candidate": true,
+    "history_exact61": true,
+    "original60_history_unchanged": true,
+    "all54_datasets_unchanged": true,
+    "journals_balanced": true,
+    "owner_registry_unchanged": true,
+    "policies_unchanged": true,
+    "columns_unchanged": true,
+    "constraints_unchanged": true,
+    "tables_unchanged": true,
+    "roles_unchanged": true,
+    "role_memberships_unchanged": true,
+    "schema_acl_unchanged": true,
+    "default_acls_unchanged": true,
+    "existing_function_privileges_unchanged": true,
+    "only_one_new_private_helper": true,
+    "helper_definer_fixed_path": true,
+    "twenty_platform_function_bodies_match": true,
+    "private_helper_no_client_execute": true,
+    "all_other_function_bodies_unchanged": true
+  },
+  "pass": true,
+  "history_count": 61,
+  "hosted_mfa_browser_acceptance": "DEFERRED",
+  "financial_counts": {
+    "historical_source_records": 248,
+    "journal_entries": 528,
+    "journal_lines": 1102
+  },
+  "migration": "20261030120000_platform_read_mfa_freshness.sql",
+  "sha256": "263a8c7c18206a4f4f138e5f6ce279a91f3482bd8ea668e034799c6776e3aace",
+  "owner_approval": "Explicit approval of this exact Development migration in conversation",
+  "frontend_deployed": false,
+  "edge_function_deployed": false,
+  "backup_operations": false,
+  "production_touched": false,
+  "subsequent_browser_acceptance": {
+    "reported_date": "2026-10-31",
+    "evidence_source": "Product owner report of existing real browser session",
+    "sustained_platform_navigation": "PASS",
+    "approximate_duration_minutes": 60,
+    "repeated_mfa_prompts": false,
+    "invitation_end_to_end_acceptance": "PENDING",
+    "sensitive_operation_real_session_acceptance": "PENDING",
+    "vercel_deployment_acceptance": "PENDING",
+    "note": "Original timestamped postflight fields above retain their historical meaning; this is subsequent owner-reported acceptance."
+  }
+}
