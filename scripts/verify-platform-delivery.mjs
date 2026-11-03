@@ -25,3 +25,9 @@ const sendsBefore=sends;
 response=await make({claim:async()=>{throw Error('MFA_REQUIRED');}})(request());
 assert.equal(response.status,403);assert.equal((await response.json()).error,'MFA_REQUIRED');assert.equal(sends,sendsBefore);
 console.log('PASS: stale-MFA delivery returns safe actionable code before any email attempt.');
+
+const beforeExisting=sends;
+response=await make({deliver:async()=>{throw Error('EXISTING_USER_SIGN_IN_REQUIRED');}})(request());
+assert.equal(response.status,409);assert.equal((await response.json()).error,'EXISTING_USER_SIGN_IN_REQUIRED');
+assert.equal(finishes.at(-1)[2],'AUTH_DELIVERY_FAILED');assert.equal(sends,beforeExisting);
+console.log('PASS: existing identity returns sign-in/review guidance, no duplicate create/recovery fallback, delivery failure recorded.');

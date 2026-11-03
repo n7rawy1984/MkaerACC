@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import ts from 'typescript';
+const load=p=>{const m={exports:{}};new Function('module','exports',ts.transpileModule(readFileSync(p,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText)(m,m.exports);return m.exports;};
+const {navigationForRole}=load('src/workspace/workspaceNavigation.ts'),{workspaceText}=load('src/workspace/workspaceText.ts');const checks=[];
+const check=(v,s)=>{assert(v,s);checks.push(s);};
+check(JSON.stringify(Object.keys(workspaceText.en).sort())===JSON.stringify(Object.keys(workspaceText.ar).sort()),'workspace translation keys EN/AR match');
+for(const role of ['ACCOUNTING_ADMIN','ACCOUNTANT','MANAGEMENT_VIEWER','PROJECT_MANAGER','PROCUREMENT','DATA_ENTRY','SYSTEM_ADMIN']){const groups=navigationForRole(role),items=groups.flatMap(g=>g.items);check(new Set(items.map(i=>i.path)).size===items.length,role+': no duplicate route entries');check(items.every(i=>!i.path.startsWith('/platform')),role+': no Platform authority link');if(['SYSTEM_ADMIN','PROJECT_MANAGER','PROCUREMENT','DATA_ENTRY'].includes(role))check(!items.some(i=>['/accounts','/accounting-reports','/supplier-payments','/payroll'].includes(i.path)),role+': no sensitive financial/Payroll navigation');}
+check(navigationForRole('ACCOUNTING_ADMIN').length===8,'operator has eight implemented navigation sections');
+const baseline=process.env.M2_BASELINE_SHA256?JSON.parse(readFileSync(process.env.M2_BASELINE_SHA256,'utf8')):{};
+const protectedFiles=Object.keys(baseline).filter(p=>p.startsWith('supabase/')||p.startsWith('src/platform/')||p.startsWith('src/financial/')||p.startsWith('src/reports/')||['src/dashboard/dashboardRead.ts','src/dashboard/dashboardSummary.ts','src/dashboard/useDashboardRead.ts','src/historical/SourceEditor.tsx','src/historical/HistoricalImports.tsx','src/historical/sourceDatePresentation.ts','src/historical/sourceModel.ts','src/master/SubcontractsList.tsx','src/i18n/en.ts','src/i18n/ar.ts'].includes(p));
+for(const p of protectedFiles)assert.equal(createHash('sha256').update(readFileSync(p)).digest('hex'),baseline[p],p);
+if(protectedFiles.length)check(true,'financial, reports, source aggregation, M1, SQL, Edge and Platform Owner protected hashes unchanged');
+for(const name of ['Payroll','Attendance']){const p=`src/${name.toLowerCase()}/${name}Application.tsx`;if(!process.env.M2_BEFORE_DIRECTORY)continue;const old=readFileSync(process.env.M2_BEFORE_DIRECTORY+'/'+p,'utf8'),current=readFileSync(p,'utf8');const marker='export function '+name+'Content';const strip=s=>s.slice(s.indexOf(marker)).replaceAll('<main ','<section ').replaceAll('</main>','</section>');check(strip(old)===strip(current),name+': content/financial handlers unchanged except semantic container tag');}
+mkdirSync('/tmp/narvo-m2',{recursive:true});writeFileSync('/tmp/narvo-m2/unit-result.json',JSON.stringify({status:'PASS',checks:checks.length,details:checks,protected_files:protectedFiles.length,hosted:false},null,2));console.log(`PASS: ${checks.length} workspace translation/navigation/preservation checks; ${protectedFiles.length} protected sources unchanged.`);

@@ -1,3 +1,5 @@
+**Targeted green/contrast correction — LOCAL VERIFIED.** Restored historical medium green `#087E68`; corrected sidebar cascade and month-header foreground/background pairs. Arabic RTL 1366×768: 92 focused checks across five themes pass; Production build passes. No layout, business, hosted, storage or deployment changes. [Correction details](docs/PREMIUM_ENTERPRISE_UI.md#targeted-greencontrast-correction--2026-11-03).
+
 **Premium UI implementation — 2026-11-03: LOCAL IMPLEMENTATION VERIFIED.** Refined Signature Emerald replaces the heavy visual execution; five shared themes and persisted Appearance control are implemented in both consoles. Projects, Parties and Subcontracts have structured record layouts; shared module typography, tables, forms and surfaces updated. No business logic, SQL, hosted data or deployment changes. Earlier R0 candidate/visual checkpoints below are historical and do not include this update. [Scope and verification](docs/PREMIUM_ENTERPRISE_UI.md).
 
 # NARVO ERP — Master Roadmap V2.0

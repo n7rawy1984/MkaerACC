@@ -56,7 +56,8 @@ try{
  check(await page.locator('.platform-stats, table').count()===0,'account switch clears privileged content and displays real sign-in');
  check(await page.evaluate(()=>!window.platformFixture.calls.some(c=>/journal|expense|treasury|payroll|projects/.test(c))),'no financial queries');
  await page.goto(base + '/auth/callback?invitation_id=b0000000-0000-4000-8000-000000000099&token_hash=synthetic-callback-only&type=invite');
- await page.getByRole('button', {name:'Accept invitation',exact:true}).waitFor();
+ await page.getByRole('alert').waitFor();
+ check(await page.getByRole('button', {name:'Accept invitation',exact:true}).count()===0,'unavailable invitation does not expose an acceptance action');
  check(!page.url().includes('token_hash')&&!page.url().includes('synthetic-callback-only'),'callback removes credentials from browser URL');
  check(JSON.stringify(await page.evaluate(()=>window.platformFixture.callbackCalls))==='["invite"]','callback verifies supported invite exactly once');
  await page.goto(base + '/auth/callback?code=synthetic-code&token_hash=synthetic-hash&type=invite');

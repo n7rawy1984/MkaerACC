@@ -34,7 +34,7 @@ try {
  const tables=['projects','accounts','treasury_accounts','subcontracts','expenses','journal_entries','journal_lines','historical_source_records'];
  const fingerprints=async()=>Object.fromEntries(await Promise.all(tables.map(async table=>[table,(await q(`select md5(coalesce(jsonb_agg(to_jsonb(t) order by id)::text,'[]')) hash from public.${table} t`))[0].hash])));
  const before=await fingerprints();
- check(files.length===61 && files.at(-1)==='20261030120000_platform_read_mfa_freshness.sql','all reviewed migrations execute');
+ check(files.filter(f=>f.slice(0,14)<='20261031120000').length===62 && files.includes('20261031120000_platform_invitation_onboarding.sql'),'all reviewed migrations execute');
  const securedFunctions=await q("select p.proname,p.proconfig from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname in ('public','private') and (p.proname like '%platform%' or p.proname in ('get_platform_context','list_platform_entities','get_platform_overview','accept_platform_invitation','claim_platform_delivery','finish_platform_delivery')) and p.prosecdef");
  check(securedFunctions.length>=10 && securedFunctions.every(p=>p.proconfig?.includes('search_path=""')),'all platform definer functions have fixed empty search path');
  check((await q("select count(*)::int n from pg_class c join pg_namespace n on n.oid=c.relnamespace where n.nspname='private' and c.relname like 'platform_%' and c.relkind='r' and (not c.relrowsecurity or not c.relforcerowsecurity)"))[0].n===0,'platform tables force RLS');

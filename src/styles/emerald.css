@@ -39,14 +39,14 @@
 :is(.company-workspace,.workspace-standalone) :is(button[class*="bg-slate-900"]):hover:not(:disabled) {background:var(--erp-primary-hover);color:var(--erp-inverse)}
 :is(.platform-app,.company-workspace) :is(button[class*="text-rose-"],button[class*="text-red-"],.erp-destructive) {background:var(--erp-danger-bg);color:var(--erp-danger-text);border-color:var(--erp-danger-border)}
 :is(.platform-app,.company-workspace) :is(button[class*="text-rose-"],button[class*="text-red-"],.erp-destructive):hover:not(:disabled) {background:var(--erp-danger-action);color:var(--erp-inverse)}
-/* Explicit inverse pairings: light muted text must never inherit onto light content. */
+/* Navigation pairs are explicit for light sidebars and medium-brand selected items. */
 :is(.platform-sidebar,.platform-navigation-dialog,.workspace-sidebar,.workspace-navigation-dialog) {background:var(--erp-sidebar);color:var(--erp-nav-text);scrollbar-color:var(--erp-nav-muted) transparent}
 :is(.platform-sidebar,.platform-navigation-dialog,.workspace-sidebar,.workspace-navigation-dialog) :is(a,button,summary) {color:var(--erp-nav-text);background:transparent;border-color:transparent}
-:is(.platform-sidebar,.platform-navigation-dialog,.workspace-sidebar,.workspace-navigation-dialog) :is(a,button,summary):hover {background:var(--erp-nav-selected);color:var(--erp-inverse)}
+:is(.platform-sidebar,.platform-navigation-dialog,.workspace-sidebar,.workspace-navigation-dialog) :is(a,button,summary):hover {background:var(--erp-nav-hover);color:var(--erp-nav-hover-text)}
 :is(.platform-sidebar,.platform-navigation-dialog,.workspace-sidebar,.workspace-navigation-dialog) :is(a,button,summary):focus-visible {outline-color:var(--erp-focus-inverse)}
-:is(.platform-sidebar,.platform-navigation-dialog,.workspace-sidebar,.workspace-navigation-dialog) :is(a.active,a[aria-current=page]) {background:var(--erp-nav-selected);color:var(--erp-inverse);border-inline-start:3px solid var(--erp-nav-selected-edge);box-shadow:none}
+:is(.platform-sidebar,.platform-navigation-dialog,.workspace-sidebar,.workspace-navigation-dialog) :is(a.active,a[aria-current=page]) {background:var(--erp-nav-selected);color:var(--erp-nav-selected-text);border-inline-start:3px solid var(--erp-nav-selected-edge);box-shadow:none}
 :is(.platform-sidebar,.platform-navigation-dialog,.workspace-sidebar,.workspace-navigation-dialog) :is(small,em,.platform-nav-group>p) {color:var(--erp-nav-muted)}
-:is(.workspace-brand-icon,.platform-brand-symbol,.workspace-tenant,.platform-owner-card) {background:var(--erp-nav-selected);color:var(--erp-nav-text);border-color:var(--erp-nav-muted)}
+:is(.workspace-brand-icon,.platform-brand-symbol,.workspace-tenant,.platform-owner-card) {background:var(--erp-secondary-bg);color:var(--erp-nav-text);border-color:var(--erp-nav-muted)}
 :is(.workspace-tenant,.platform-owner-card) :is(small,strong,span,bdi) {color:var(--erp-nav-text)}
 :is(.workspace-nav-group summary,.workspace-sidebar-footer>span,.workspace-brand em) {color:var(--erp-nav-text)}
 .platform-brand small {color:var(--erp-nav-selected-edge)}
@@ -82,7 +82,7 @@
 .suite-view-switch a:first-child {background:var(--erp-secondary-bg)}
 /* The six-stage diagram uses a restrained brand family, no decorative gradients. */
 .integrated-cycle {--cycle-navy:var(--erp-text);--cycle-line:var(--erp-border);--cycle-cyan:var(--erp-primary);--cycle-green:var(--erp-primary);--cycle-orange:var(--erp-primary)}
-.integrated-cycle :is(.cycle-stage-heading,.cycle-stage-4 .cycle-stage-heading,.cycle-stage-5 .cycle-stage-heading,.cycle-stage-6 .cycle-stage-heading,.cycle-month h3) {background:var(--erp-nav-selected);color:var(--erp-inverse)}
+.integrated-cycle :is(.cycle-stage-heading,.cycle-stage-4 .cycle-stage-heading,.cycle-stage-5 .cycle-stage-heading,.cycle-stage-6 .cycle-stage-heading,.cycle-month h3) {background:var(--erp-primary);color:var(--erp-inverse)}
 .integrated-cycle :is(.cycle-stage-heading h2,.cycle-stage-heading p) {color:var(--erp-inverse)}
 .integrated-cycle :is(.cycle-workflow-card,.cycle-process .cycle-workflow-card) {background:var(--erp-surface-subtle)}
 .integrated-cycle .cycle-statement-preview span {background:var(--erp-border)}
@@ -123,7 +123,7 @@
 .workspace-route-body :is(dt,.suite-scope-note,.suite-section-heading p),.cycle-metric small,.cycle-capability {font-size:15px;line-height:1.7}
 .cycle-month dt {font-size:15px}
 .platform-owner-card {border-radius:var(--erp-radius-control);padding:var(--erp-space-3)}
-:is(.platform-brand,.workspace-brand):is(:hover,:focus-visible) :is(small,em) {color:var(--erp-inverse)}
+:is(.platform-brand,.workspace-brand):is(:hover,:focus-visible) :is(small,em) {color:var(--erp-nav-text)}
 .company-workspace.workspace-suite {background:var(--erp-background)}
 .company-workspace .suite-data-table th,.platform-app .platform-table-wrap th {background:var(--erp-table-header);color:var(--erp-secondary)}
 .company-workspace .suite-data-table tbody tr:nth-child(even),.platform-app .platform-table-wrap tbody tr:nth-child(even) {background:var(--erp-surface-subtle)}

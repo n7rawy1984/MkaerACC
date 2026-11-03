@@ -3,7 +3,7 @@ import {Check, Palette} from 'lucide-react';
 import {useI18n} from '../i18n/I18nContext';
 
 const themes = [
-  {id:'emerald', en:'Signature Emerald', ar:'الزمرد المميز', color:'#13856A'},
+  {id:'emerald', en:'Signature Emerald', ar:'الزمرد المميز', color:'#087E68'},
   {id:'sapphire', en:'Royal Sapphire', ar:'الياقوت الملكي', color:'#315DB4'},
   {id:'graphite', en:'Executive Graphite', ar:'الجرافيت التنفيذي', color:'#485461'},
   {id:'champagne', en:'Warm Champagne', ar:'الشمبانيا الدافئة', color:'#86652D'},

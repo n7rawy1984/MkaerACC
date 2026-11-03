@@ -17,7 +17,7 @@ try {
  for(const name of ['Royal Sapphire','Executive Graphite','Warm Champagne','Modern Teal','Signature Emerald']) {
   await page.locator('.theme-selector>summary').click();await page.getByRole('radio',{name,exact:true}).check();
   const color=await page.evaluate(()=>getComputedStyle(document.documentElement).getPropertyValue('--erp-primary').trim());
-  check(color===({'Royal Sapphire':'#315DB4','Executive Graphite':'#485461','Warm Champagne':'#86652D','Modern Teal':'#087D89','Signature Emerald':'#13856A'})[name],name+' applies immediately');
+  check(color===({'Royal Sapphire':'#315DB4','Executive Graphite':'#485461','Warm Champagne':'#86652D','Modern Teal':'#087D89','Signature Emerald':'#087E68'})[name],name+' applies immediately');
   await page.keyboard.press('Escape');check(await page.locator('.theme-selector>summary').evaluate(e=>e===document.activeElement),'Escape restores focus');
   await page.addScriptTag({content:readFileSync('/tmp/narvo-owner-redesign-tools/node_modules/axe-core/axe.min.js','utf8')});
   const themeScan=await page.evaluate(()=>window.axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa']}}));

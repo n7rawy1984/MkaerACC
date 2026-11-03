@@ -1,0 +1,60 @@
+# Manual subscription lifecycle — remaining Development acceptance
+
+**Latest lifecycle execution — 2026-11-01: PASS within approved Development scope.** Controlled expiry and cancellation each passed persisted/audit/preservation and fresh recipient identity/read acceptance; final Trial renewal is verified through2026-12-31, renewal2027-01-01, subscription4/Company8. Exactly one current row, total4 audits/receipts including initial assignment. All17 historical Companies/46 Company-owned tables and memberships/accounts/Main Cash/financial records preserved. No financial posting or new hosted write-denial probe; prior deterministic/concurrency enforcement evidence retained. Earlier baseline/pending/approval-proposal labels below are historical. [Actual execution and limits](MANUAL_COMPANY_SUBSCRIPTIONS_LIFECYCLE_EXECUTION.md). No further mutation authorized.
+
+2026-11-01. **READ-ONLY CHECKS PASS / HOSTED TRANSITION BROWSER ACCEPTANCE PENDING.** [Execution evidence](release/development-manual-subscriptions-lifecycle-readiness-result.json). Current stage: final service-lifecycle acceptance preparation. Implementation, migration/Preview activation, first Trial and identity-bound recipient workspace display are already verified; no prior suites were repeated. This report authorizes no mutation.
+
+## Current exact baseline
+
+Fresh explicit READ ONLY transaction on `MakerACC-Development` / `eqnzueginpkskbnqvgoc` confirms64 migrations; `NARVO-INVITE-TEST-20261101` / `23ec33fa-8045-468d-bbdb-0c06d0a816f6`, ACTIVE, Company version5, accounting COMPLETE. Exactly one subscription, version1, TRIAL plan/recorded/effective state, 2026-11-01–2026-12-01 inclusive, renewal2026-12-02; MANUAL_OTHER, NOT_REQUIRED, NULL reference. Exactly one subscription audit and one confirmed receipt. Recipient has only the intended active ACCOUNTING_ADMIN membership and zero Platform Owner registry entries.
+
+The previous [live recipient identity reconciliation](TEST_SESSION_IDENTITY_RECONCILIATION.md) binds current accepted workspace/foundation-status/Trial display to `n7rawy19840@gmail.com` / `0137311f-5ab7-491d-b101-8eda15b5830f`. It does not bind an arbitrary future tab or restore earlier unsupported browser attribution. No new browser/session inspection was needed in this read-only preparation.
+
+## Verified behavior and strength of evidence
+
+| Contract | Evidence and result | Remaining limit |
+| --- | --- | --- |
+| Inclusive dates and renewal | Fresh hosted immutable evaluator: Trial on2026-12-01; Expired on2026-12-02; renewal due2026-12-02. Synthetic extension through2026-12-31 evaluates Trial onDec2, renewal2027-01-01. | No persisted period change or actual midnight observation. |
+| Cancelled/explicit Expired/scheduled | Fresh nonpersisted composites: Cancelled and explicit Expired override otherwise-valid dates; day before start is Scheduled. | Not hosted owner mutation or recipient transition rendering. |
+| Expired/Cancelled access | Canonical guard and unchanged reviewed sources preserve active-member role-scoped reads, existing-master maintenance, legitimate settlements/reversals; block new masters/business and specified operational draft edits. Local63 checks and native13 schedules retain read/denial/rollback evidence. | No new hosted limited-state command test. Normal permissions, lifecycle, dimensions, balances and reversal dependencies still apply. |
+| Successful financial access | Existing disposable-engine test actually settled an existing supplier payable and reversed an existing expense after expiry. Native expiry/cancellation probes reached missing-source23503 rather than subscription denial42501. Both limited states use the same guard path. | Cancellation probes do not prove successful financial settlement/reversal. Native probes and this batch create no financial documents. |
+| Renewal | Existing local test updates the same row, restores FULL and successful new posting; Company status/memberships unchanged. | No genuine owner/recipient hosted renewal journey yet. Trial extension is supported; Standard/Active requires separate selected billing values. |
+| Duplicates, audit and versions | Existing63/13 evidence: Company primary key, lock ordering, normalized actor/request receipts; same-intent replay recovers once, changed intent22023, stale subscription40001; one audit/receipt per effective change; late audit failure rolls back. Subscription change invalidates stale Company lifecycle version. Fresh row/audit/receipt counts all1. | No live replay/stale mutation is required. Company version is a separate guard, not an input field to set_company_subscription. |
+
+Six fresh hosted evaluations use SELECT, `jsonb_populate_record` and the immutable effective-state function. They do not write synthetic rows, change clocks or invoke subscription/financial commands. Reviewed migration/source hashes still match retained native-race evidence. Existing hosted source/grant/trigger validation is retained from activation, not represented as repeated here. No general audit, concurrency rerun, build or migration dry-run was necessary for unchanged application sources.
+
+Expiry is evaluated on each operation using server Asia/Dubai date; no expiry job or persistent state/version/audit update is implied by natural rollover. Explicit owner date/state changes do create audited versions. UI refreshes on focus/every60seconds; database restrictions do not depend on that display refresh. Limited access is distinct from Company suspension. Unmanaged historical Companies retain their existing compatibility access.
+
+## Smallest additional hosted/browser sequence — proposal only
+
+To close the real owner/member transition-display gap now, separately approve exactly three updates to the same isolated Company, with **no payment recording**, no financial commands and no historical enrollment. Common values: existing TRIAL plan, MANUAL_OTHER, NOT_REQUIRED, NULL reference. Use the existing owner workflow, genuine fresh MFA and explicit reconfirmation each time.
+
+| Step | Expected subscription / Company version | Approved-value proposal | Expected result |
+| --- | --- | --- | --- |
+| 1 Controlled date expiry | 1 / 5 | Recorded TRIAL;2026-10-01–2026-10-31; reason `Development E2E subscription lifecycle: controlled date expiry` | Derived EXPIRED/LIMITED, versions2/6. No server clock manipulation. |
+| 2 Cancel during valid period | 2 / 6 | CANCELLED;2026-11-01–2026-12-01; reason `Development E2E subscription lifecycle: controlled cancellation` | CANCELLED/LIMITED despite valid dates, versions3/7. |
+| 3 Renew/reactivate Trial | 3 / 7 | TRIAL;2026-11-01–2026-12-31; reason `Development E2E subscription lifecycle: trial renewal acceptance` | TRIAL/FULL throughDec31, renewal2027-01-01; versions4/8. |
+
+**Decision requiring approval:** this sequence deliberately ends with an extended **Trial**, not a paid Standard subscription, and changes the current expiry fromDec1 toDec31. No charge/payment is asserted. If the owner wants Standard/Active instead, exact period/manual-payment fields must be separately selected and approved; do not silently substitute them. All dates must be revalidated against the actual Dubai date before execution. Stop on any baseline mismatch.
+
+For each approved step:
+
+1. Freshly guard exact Development target, Company identity/ACTIVE/COMPLETE, both versions and one current row. Capture scoped historical/company/financial/membership preservation baselines before the first mutation; after each step only the specified subscription/entity metadata and its audit/receipt may change. Preserve the11 accounts/Main Cash and Stage D membership.
+2. Submit one owner command with one request UUID. If response is uncertain, reconcile read-only before any further action; never automatically repeat or replace a potentially committed command. Same-key recovery is already locally verified and needs no deliberate hosted replay test.
+3. Read back same Company subscription row, expected effective/access/date/version, Company version increment, one new matching before/after audit and one confirmed receipt. After all3 successful commands expect one current row, subscription version4, Company version8, total4 subscription audit events and4 confirmed receipts. No Company status/membership/accounting changes.
+4. In the recipient browser, establish exact live Auth identity privately again before attributing observations; use the existing SDK safe getUser field check if needed, never export tokens. At both limited stages inspect Expired/Cancelled banner and explanation, workspace/read views and existing accounts/Treasury. After renewal inspect Trial/FULL-period display, valid-throughDec31 and renewalJan1, with limited warning removed. Owner directory must agree. Normal refresh/focus is sufficient; no clock change, session sharing or credentials in chat.
+5. Stop at a mismatch and report the committed state; do not silently restore, delete, reenroll or add unapproved updates. If the sequence stops at a limited state, completing the remaining explicitly approved steps requires reconciliation; no automatic rollback is authorized. Successful changes remain audited and cannot be undone by deleting history.
+
+These three hosted changes are necessary only to close the **current real-browser transition** gap immediately; they are not needed to re-prove the already-passing deterministic contracts. Waiting for naturalDec2 expiry can avoid the first date mutation, but will not test cancellation or renewal. No hosted mutation was performed now.
+
+## Financial and denial-test boundaries
+
+Read-only views do not prove an attempted write was denied or that a settlement/reversal committed. Keep server enforcement acceptance supported by existing deterministic/concurrency evidence. A fresh hosted attempted new-master write, even expected to reject, needs an additional explicit scope naming the command/payload and accounting for an unexpected success; it is not part of the three read/display steps. No new business is created after renewal merely to prove FULL.
+
+The isolated Company has no approved existing financial obligations or correction fixtures for successful settlement/reversal. Do not invent them or use historical Companies. If a new hosted successful financial proof is demanded, separately design and approve disposable synthetic Company-scoped masters, actual business event/source, balanced posting, settlement/reversal amounts/dimensions and preservation checks. This is a separate financial acceptance gate, not a prerequisite to this limited subscription-display acceptance and not authorized here. OWNER_CURRENT/funding remains excluded.
+
+## Completion categories and next approval
+
+Business/access contracts **VERIFIED** by retained local/runtime evidence plus fresh pure hosted dates; genuine hosted transition browser journey **DEFERRED**. Authorization/version/audit contracts **VERIFIED within retained scoped evidence**, no new broad audit. Database current state/source hashes/pure evaluations **VERIFIED**; schema/migration changes **NOT APPLICABLE**. Deployment/configuration **NOT APPLICABLE**. Testing: six new read-only evaluations **PASS**, previous63/9/13 retained; new owner/recipient transition and successful hosted financial tests **DEFERRED**. Documentation/evidence **RECORDED**. Historical preservation evidence retained; this batch is read-only and performs no new full financial fingerprint audit. No Production, Vercel, Auth, membership, financial, migration, deployment or Git-history change.
+
+Exact next approval: authorize only the three proposed Development TRIAL lifecycle updates above, their expected version progression, exact dates/manual fields/reasons, genuine owner MFA, safe identity-bound recipient read-only acceptance and scoped preservation/audit/receipt checks. No other Company/subscription, payment record, financial command, deliberate replay/stale write, migration, deployment or configuration action. Commercial/Production readiness remains separate. **Stop before every hosted mutation until that approval.**

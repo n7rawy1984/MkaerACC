@@ -5,7 +5,7 @@ import {execFileSync} from 'node:child_process';
 import {createHash,randomUUID} from 'node:crypto';
 import {platformTestDatabase} from './verify-platform-database.mjs';
 const migration='20261030120000_platform_read_mfa_freshness.sql';
-const files=readdirSync('supabase/migrations').filter(x=>x.endsWith('.sql')).sort();
+const files=readdirSync('supabase/migrations').filter(x=>x.endsWith('.sql') && x.slice(0,14)<='20261030120000').sort();
 const original=execFileSync('git',['ls-tree','-r','--name-only','9da8612ac0f9e9e92efa0b9eb417af0311cfc2e3','--','supabase/migrations']).toString().trim().split('\n');
 assert.equal(original.length,56);assert.equal(files.length,61);assert.equal(files.at(-1),migration);
 for(const name of original) assert(readFileSync(name).equals(execFileSync('git',['show',`9da8612ac0f9e9e92efa0b9eb417af0311cfc2e3:${name}`])));

@@ -1,0 +1,83 @@
+/* Preview-only adapter: requires a data attribute injected by the comparison runner.
+   Product styles, spacing, typography and default theme remain unchanged. */
+html[data-narvo-theme] :is(.platform-app,.platform-dialog,.platform-navigation-dialog,.company-workspace){
+ --po-ink:var(--n-text);--po-muted:var(--n-muted);--po-line:var(--n-border);--po-teal:var(--n-primary);--po-teal-dark:var(--n-primary-hover);--po-canvas:var(--n-background);
+ --ws-bg:var(--n-background);--ws-ink:var(--n-text);--ws-line:var(--n-border);--ws-muted:var(--n-muted);--ws-navy:var(--n-sidebar);--ws-teal:var(--n-primary);
+ --suite-border:var(--n-border);--suite-muted:var(--n-muted);--suite-teal:var(--n-primary);--tenant-primary:var(--n-primary);--tenant-accent:var(--n-primary);
+ background:var(--n-background)!important;color:var(--n-text)!important;
+}
+html[data-narvo-theme] :is(.platform-app,.company-workspace) :is(p,span,div,dt,dd,strong,small,li,label,h1,h2,h3,h4,bdi,summary,legend){color:inherit!important}
+html[data-narvo-theme] :is(.platform-app,.company-workspace) :is(article,section,fieldset,table){border-color:var(--n-border)!important}
+html[data-narvo-theme] :is(.platform-topbar,.workspace-topbar,.platform-panel,.platform-toolbar,.platform-table-wrap,.platform-stats article,.suite-section-card,.suite-table-region,.suite-financial-card,.workspace-report-grid>article,.workspace-module,.cycle-stage,.cycle-report-panel,.cycle-existing-details){background:var(--n-surface)!important;color:var(--n-text)!important;border-color:var(--n-border)!important;box-shadow:none!important}
+html[data-narvo-theme] :is(.platform-page-title p,.platform-eyebrow,.platform-overview-footer,.platform-directory-meta,.platform-app-footer,.platform-section-title p,.platform-muted,.commercial-resume,.commercial-state-summary dt,.workspace-page-header p,.workspace-page-header nav,.workspace-footer,.suite-section-heading p,.suite-form-field>span,.suite-scope-note,.cycle-evidence-note,.cycle-title p,.cycle-stage-heading p){color:var(--n-muted)!important}
+html[data-narvo-theme] :is(.platform-sidebar,.platform-navigation-dialog,.workspace-sidebar,.workspace-navigation-dialog){background:var(--n-sidebar)!important;color:var(--n-nav-text)!important;border-color:var(--n-nav-muted)!important}
+html[data-narvo-theme] :is(.platform-sidebar,.platform-navigation-dialog,.workspace-sidebar,.workspace-navigation-dialog) :is(a,button,summary){color:var(--n-nav-text)!important;background:transparent!important;border-color:var(--n-nav-muted)!important}
+html[data-narvo-theme] :is(.platform-sidebar,.platform-navigation-dialog,.workspace-sidebar,.workspace-navigation-dialog) :is(small,em,.platform-nav-group>p,.workspace-nav-group>summary,.workspace-tenant){color:var(--n-nav-muted)!important}
+html[data-narvo-theme] :is(.platform-brand-symbol,.workspace-brand>span:first-child,.platform-owner-card>span){background:var(--n-nav-selected)!important;color:var(--n-inverse)!important;border-color:var(--n-nav-selected-edge)!important}
+html[data-narvo-theme] :is(.platform-sidebar,.platform-navigation-dialog,.workspace-sidebar,.workspace-navigation-dialog) :is(a[aria-current=page],a.active){background:var(--n-nav-selected)!important;color:var(--n-inverse)!important;border-color:var(--n-nav-selected-edge)!important}
+html[data-narvo-theme] :is(.platform-sidebar,.platform-navigation-dialog,.workspace-sidebar,.workspace-navigation-dialog) :is(a,button,summary):hover{background:var(--n-nav-selected)!important;color:var(--n-inverse)!important}
+html[data-narvo-theme] :is(.platform-app,.platform-dialog,.company-workspace) :is(button,a[class*="button"],.suite-export-options>summary){background:var(--n-secondary-bg)!important;color:var(--n-action-text)!important;border-color:var(--n-input-border)!important;box-shadow:none!important}
+html[data-narvo-theme] :is(.platform-app,.platform-dialog,.company-workspace) button:hover:not(:disabled){background:var(--n-secondary-hover)!important;color:var(--n-primary-hover)!important}
+html[data-narvo-theme] :is(.platform-primary,.suite-primary,.workspace-action-links>a:first-child,.workspace-route-body button[class*="bg-slate-900"],.workspace-route-body button[class*="bg-[var("]){background:var(--n-primary)!important;color:var(--n-inverse)!important;border-color:var(--n-action-text)!important}
+html[data-narvo-theme] :is(.platform-primary,.suite-primary,.workspace-action-links>a:first-child,.workspace-route-body button[class*="bg-slate-900"],.workspace-route-body button[class*="bg-[var("]):hover:not(:disabled){background:var(--n-primary-hover)!important;color:var(--n-inverse)!important;border-color:var(--n-primary-hover)!important}
+html[data-narvo-theme] :is(.platform-app,.platform-dialog,.company-workspace) a{color:var(--n-action-text)!important}
+html[data-narvo-theme] :is(.platform-sidebar,.platform-navigation-dialog,.workspace-sidebar,.workspace-navigation-dialog) a{color:var(--n-nav-text)!important}
+html[data-narvo-theme] :is(.platform-sidebar,.platform-navigation-dialog,.workspace-sidebar,.workspace-navigation-dialog) a[aria-current=page]{color:var(--n-inverse)!important}
+html[data-narvo-theme] :is(.platform-app,.platform-dialog,.company-workspace) :is(input,textarea,select){background:var(--n-surface)!important;color:var(--n-text)!important;border-color:var(--n-input-border)!important;box-shadow:none!important;accent-color:var(--n-primary)}
+html[data-narvo-theme] :is(.platform-app,.company-workspace) :is(input,textarea)::placeholder{color:var(--n-muted)!important;opacity:1}
+html[data-narvo-theme] :is(.platform-app,.platform-dialog,.company-workspace) :is(button,input,textarea,select,a,summary):focus-visible{outline:3px solid var(--n-focus)!important;outline-offset:3px!important;box-shadow:none!important}
+html[data-narvo-theme] :is(.platform-sidebar,.platform-navigation-dialog,.workspace-sidebar,.workspace-navigation-dialog) :is(button,a,summary):focus-visible{outline-color:var(--n-focus-inverse)!important}
+html[data-narvo-theme] :is(.platform-app,.platform-dialog,.company-workspace) :is(button,input,select):disabled{background:var(--n-disabled-bg)!important;color:var(--n-disabled-text)!important;border-color:var(--n-disabled-border)!important;opacity:1!important}
+html[data-narvo-theme] :is(.platform-app,.company-workspace) :is(th,.suite-data-table th){background:var(--n-table-header)!important;color:var(--n-secondary)!important;border-color:var(--n-border)!important}
+html[data-narvo-theme] :is(.platform-app,.company-workspace) :is(td,.suite-data-table td){color:var(--n-text)!important;border-color:var(--n-border)!important}
+html[data-narvo-theme] :is(.platform-app,.company-workspace) tbody tr{background:var(--n-surface)!important}
+html[data-narvo-theme] :is(.platform-app,.company-workspace) tbody tr:nth-child(even){background:var(--n-surface-subtle)!important}
+html[data-narvo-theme] :is(.platform-app,.company-workspace) tbody tr:hover{background:var(--n-table-hover)!important}
+html[data-narvo-theme] :is(.suite-data-table,.platform-app table) td:last-child{background:inherit!important}
+html[data-narvo-theme] :is(.platform-badge-positive,.commercial-steps li[data-complete=true],.platform-success){color:var(--n-success-text)!important;background:var(--n-success-bg)!important;border-color:var(--n-success-border)!important}
+html[data-narvo-theme] :is(.platform-badge-warning){color:var(--n-warning-text)!important;background:var(--n-warning-bg)!important;border-color:var(--n-warning-border)!important}
+html[data-narvo-theme] :is(.platform-badge-negative,.platform-error,.suite-error,[role=alert]){color:var(--n-danger-text)!important;background:var(--n-danger-bg)!important;border-color:var(--n-danger-border)!important}
+html[data-narvo-theme] :is(.platform-badge-neutral){color:var(--n-neutral-text)!important;background:var(--n-neutral-bg)!important;border-color:var(--n-neutral-border)!important}
+html[data-narvo-theme] .commercial-steps li[data-complete=false]{background:var(--n-surface-subtle)!important;color:var(--n-secondary)!important;border-color:var(--n-border)!important}
+html[data-narvo-theme] .commercial-steps li[aria-current=step]{outline-color:var(--n-focus)!important}
+html[data-narvo-theme] :is(.commercial-next,.platform-stat-label>span,.platform-queue-icon,.platform-avatar,.platform-chart-track,.platform-chart-empty){background:var(--n-secondary-bg)!important;color:var(--n-action-text)!important;border-color:var(--n-action-text)!important}
+html[data-narvo-theme] :is(.platform-chart-active){background:var(--n-info-text)!important}
+html[data-narvo-theme] .platform-chart-suspended{background:var(--n-warning-text)!important}
+html[data-narvo-theme] .platform-chart-archived{background:var(--n-neutral-text)!important}
+html[data-narvo-theme] .platform-chart-other{background:var(--n-neutral-border)!important}
+html[data-narvo-theme] :is(.platform-stat-note,.platform-stat-label,.platform-chart-legend,.platform-chart-total>span,.platform-queue-link,.platform-reference){color:var(--n-secondary)!important}
+html[data-narvo-theme] :is(.workspace-status,.workspace-status>aside,.workspace-status>p,.suite-view-switch,.suite-section-heading,.suite-filter-bar,.expense-page-summary,.cycle-period-banner){background:var(--n-surface-subtle)!important;color:var(--n-secondary)!important;border-color:var(--n-border)!important}
+html[data-narvo-theme] .integrated-cycle{--cycle-navy:var(--n-sidebar);--cycle-line:var(--n-border);--cycle-cyan:var(--n-primary);--cycle-green:var(--n-primary);--cycle-orange:var(--n-primary);color:var(--n-text)!important}
+html[data-narvo-theme] :is(.cycle-title,.cycle-wordmark,.cycle-stage-heading,.cycle-month,.cycle-month dt,.cycle-month dd,.cycle-month h3,.cycle-workflow-card,.cycle-workflow-card strong,.cycle-report-panel h3,.cycle-metric,.cycle-financial-metric-card,.cycle-process>li,.cycle-statement-preview,.cycle-icon,.cycle-capability){background:var(--n-surface)!important;color:var(--n-text)!important;border-color:var(--n-border)!important;background-image:none!important}
+html[data-narvo-theme] :is(.cycle-stage-heading,.cycle-month h3,.cycle-icon,.cycle-stage-number){background:var(--n-secondary-bg)!important;color:var(--n-action-text)!important;background-image:none!important}
+html[data-narvo-theme] :is(.cycle-month h3,.cycle-stage-number){border-color:var(--n-input-border)!important}
+html[data-narvo-theme] :is(.cycle-month dt,.cycle-month dd,.cycle-month dl>div,.cycle-statement-preview>div){background:var(--n-surface)!important;background-image:none!important}
+html[data-narvo-theme] :is(.cycle-month-grid,.cycle-stage-body,.cycle-process){background:transparent!important}
+html[data-narvo-theme] :is(.cycle-supported-reports,.cycle-report-link,.cycle-capability){background:var(--n-secondary-bg)!important;color:var(--n-action-text)!important}
+html[data-narvo-theme] :is(.cycle-report-unavailable,.cycle-metric-unavailable,.cycle-workflow-unavailable){background:var(--n-neutral-bg)!important;color:var(--n-neutral-text)!important}
+html[data-narvo-theme] .suite-financial-card :is(p,bdi),html[data-narvo-theme] .cycle-metric>bdi{color:var(--n-text)!important}
+html[data-narvo-theme] :is(.company-workspace,.platform-app) [class*="bg-green-"]{background:var(--n-success-bg)!important;color:var(--n-success-text)!important}
+html[data-narvo-theme] :is(.company-workspace,.platform-app) [class*="bg-amber-"]{background:var(--n-warning-bg)!important;color:var(--n-warning-text)!important}
+html[data-narvo-theme] :is(.company-workspace,.platform-app) [class*="bg-slate-"]{background:var(--n-neutral-bg)!important;color:var(--n-neutral-text)!important}
+/* Stable motion across all captures; does not enter the production bundle. */
+html[data-narvo-theme] *{animation:none!important;transition:none!important}
+
+/* Override the old selected-navigation inset accent in every preview theme. */
+html[data-narvo-theme] .platform-nav-group a.active{box-shadow:inset 3px 0 var(--n-nav-selected-edge)!important}
+html[data-narvo-theme][dir=rtl] .platform-nav-group a.active{box-shadow:inset -3px 0 var(--n-nav-selected-edge)!important}
+html[data-narvo-theme] .workspace-tenant{background:var(--n-nav-selected)!important;border-color:var(--n-nav-muted)!important}
+html[data-narvo-theme] :is(.platform-sidebar,.workspace-sidebar,.platform-navigation-dialog,.workspace-navigation-dialog) button{background:transparent!important;color:var(--n-nav-text)!important;border-color:var(--n-nav-muted)!important}
+html[data-narvo-theme] :is(.platform-sidebar,.workspace-sidebar,.platform-navigation-dialog,.workspace-navigation-dialog) button:hover{background:var(--n-nav-selected)!important;color:var(--n-inverse)!important}
+
+/* Legacy utility badges are mapped by role, never by the sign of a monetary value. */
+html[data-narvo-theme] :is(.company-workspace,.platform-app) [class*="bg-emerald-"]{background:var(--n-success-bg)!important;color:var(--n-success-text)!important}
+html[data-narvo-theme] :is(.company-workspace,.platform-app) [class*="bg-blue-"]{background:var(--n-info-bg)!important;color:var(--n-info-text)!important}
+html[data-narvo-theme] :is(.company-workspace,.platform-app) [class*="bg-rose-"]{background:var(--n-danger-bg)!important;color:var(--n-danger-text)!important}
+html[data-narvo-theme] :is(.company-workspace,.platform-app) button[class*="text-red-"]{background:var(--n-danger-bg)!important;color:var(--n-danger-text)!important;border-color:var(--n-danger-border)!important}
+html[data-narvo-theme] :is(.company-workspace,.platform-app) button[class*="text-red-"]:hover{background:var(--n-danger-action)!important;color:var(--n-inverse)!important}
+
+html[data-narvo-theme] .platform-app .platform-sidebar button,html[data-narvo-theme] .company-workspace .workspace-sidebar button,html[data-narvo-theme] .platform-navigation-dialog.platform-navigation-dialog button,html[data-narvo-theme] .workspace-navigation-dialog.workspace-navigation-dialog button{background:transparent!important;color:var(--n-nav-text)!important;border-color:var(--n-nav-muted)!important}
+html[data-narvo-theme] .platform-app .platform-sidebar button:hover,html[data-narvo-theme] .company-workspace .workspace-sidebar button:hover{background:var(--n-nav-selected)!important;color:var(--n-inverse)!important}
+
+/* The selected Company card is an elevated dark layer, not the sidebar base. */
+html[data-narvo-theme] .company-workspace .workspace-sidebar .workspace-tenant,html[data-narvo-theme] .company-workspace .workspace-sidebar .workspace-tenant :is(small,strong,span,bdi){color:var(--n-nav-text)!important}

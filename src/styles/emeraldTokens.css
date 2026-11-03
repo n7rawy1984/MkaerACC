@@ -28,7 +28,7 @@
   --erp-disabled-border: #7C899B;
   --erp-financial-positive: #1A6141;
   --erp-financial-negative: #9D2835;
-  --erp-sidebar: #102A27;
+  --erp-sidebar: #F5FAF7;
   --erp-background: #F5F8F6;
   --erp-primary: #087E68;
   --erp-action-text: #076B59;
@@ -39,11 +39,14 @@
   --erp-border: #DEE9E3;
   --erp-input-border: #70887E;
   --erp-focus: #087E68;
-  --erp-focus-inverse: #A5E1CF;
-  --erp-nav-text: #C8DED6;
-  --erp-nav-muted: #A6C5B9;
-  --erp-nav-selected: #185A4B;
-  --erp-nav-selected-edge: #A5E1CF;
+  --erp-focus-inverse: var(--erp-focus);
+  --erp-nav-text: #294B40;
+  --erp-nav-muted: #536562;
+  --erp-nav-selected-text: var(--erp-inverse);
+  --erp-nav-hover: var(--erp-secondary-hover);
+  --erp-nav-hover-text: var(--erp-action-text);
+  --erp-nav-selected: var(--erp-primary);
+  --erp-nav-selected-edge: var(--erp-primary-hover);
   --erp-table-header: #EDF3EF;
   --erp-table-hover: #E7F3ED;
   --erp-surface-subtle: #EFF4F1;
