@@ -1,8 +1,11 @@
-import { useT } from "../i18n/I18nContext";
+import { useT, useI18n } from "../i18n/I18nContext";
 import { AuthFrame } from "./AuthFrame";
 import { useAuth } from "./AuthContext";
 
+import {roleLabel} from "../i18n/roleLabels";
+
 export function CompanySelectPage() {
+  const {locale}=useI18n();
   const t = useT();
   const { state, chooseCompany, signOut } = useAuth();
   if (state.phase !== "SELECTING_COMPANY") return null;
@@ -14,7 +17,7 @@ export function CompanySelectPage() {
         {state.memberships.map((membership) => (
           <button key={membership.membershipId} type="button" onClick={() => chooseCompany(membership.companyId)} className="flex w-full items-center justify-between rounded-xl border border-slate-200 p-4 text-start hover:border-blue-400 hover:bg-blue-50">
             <span><span className="block font-medium"><bdi>{membership.companyName}</bdi></span><span className="mt-1 block text-xs text-slate-500"><bdi dir="ltr">{membership.companyCode}</bdi></span></span>
-            <span className="text-xs text-slate-600"><bdi dir="ltr">{membership.role}</bdi></span>
+            <span className="text-xs text-slate-600"><bdi>{roleLabel(membership.role,locale)}</bdi></span>
           </button>
         ))}
       </div>

@@ -20,11 +20,11 @@ export function CompanyAccountingSetupStatus({ companyId }: { companyId: string 
   if (!status || status === "UNASSESSED") return null; // Existing books are never classified or blocked.
   const messages = locale === "ar" ? {
     INCOMPLETE: "الشركة مفعلة؛ التأسيس المحاسبي قيد الاستكمال. اطلب من مالك المنصة استكمال تأسيس الشركة الفارغة.",
-    COMPLETE: "اكتمل التأسيس المحاسبي الأساسي. التمويل والبيانات التشغيلية ومتطلبات كل عملية خطوات مستقلة.",
+    COMPLETE: "اكتمل الإعداد المحاسبي الأولي. استكمل التمويل والسجلات التشغيلية قبل إدخال المعاملات.",
     UNAVAILABLE: "تعذر التحقق من حالة التأسيس المحاسبي. أعد تحميل الصفحة للتحقق؛ لم يُنفذ أي تأسيس تلقائي.",
   } : {
-    INCOMPLETE: "Company activated; accounting setup pending. Ask the Platform Owner to provision this new empty company.",
-    COMPLETE: "Accounting foundation complete. Funding, business masters and each operation's prerequisites remain separate.",
+    INCOMPLETE: "Company activated; accounting setup pending. Ask the Platform Owner to complete initial accounting setup.",
+    COMPLETE: "Initial accounting setup complete. Set up funding and operational records before entering transactions.",
     UNAVAILABLE: "Accounting setup status could not be verified. Reload to check; no automatic provisioning was performed.",
   };
   return <p role="status" className="mb-4 rounded-lg border border-slate-200 p-3 text-sm">{messages[status as keyof typeof messages]}</p>;

@@ -31,11 +31,11 @@ export function CompanySubscriptionStatus({companyId}:{companyId:string}) {
 function SubscriptionBanner({row}:{row:Subscription|null}) {
   const {locale}=useI18n();
   if (!row) return <p role="status">{locale === "ar" ? "تعذر التحقق من حالة الاشتراك. أعد تحميل الصفحة." : "Subscription status could not be verified. Reload to check."}</p>;
-  const states = locale === "ar" ? { UNMANAGED: "غير منضم", TRIAL: "تجريبي", ACTIVE: "نشط", EXPIRED: "منتهٍ", CANCELLED: "ملغى", SCHEDULED: "لم يبدأ" } : { UNMANAGED: "Not enrolled", TRIAL: "Trial", ACTIVE: "Active", EXPIRED: "Expired", CANCELLED: "Cancelled", SCHEDULED: "Not started" };
+  const states = locale === "ar" ? { UNMANAGED: "دون اشتراك", TRIAL: "تجريبي", ACTIVE: "نشط", EXPIRED: "منتهٍ", CANCELLED: "ملغى", SCHEDULED: "لم يبدأ" } : { UNMANAGED: "No subscription", TRIAL: "Trial", ACTIVE: "Active", EXPIRED: "Expired", CANCELLED: "Cancelled", SCHEDULED: "Not started" };
   return <aside role="status" className="border-b border-slate-200 bg-slate-50 px-6 py-3 text-sm">
     <b>{locale === "ar" ? "الاشتراك: " : "Subscription: "}{row.state === "UNMANAGED" && row.access === "FULL" ? locale === "ar" ? "شركة داخلية" : "Internal company" : states[row.state as keyof typeof states]}</b>
     {row.ends_on && <> · {locale === "ar" ? "صالح حتى: " : "Valid through: "}<bdi dir="ltr">{row.ends_on}</bdi> · {locale === "ar" ? "موعد التجديد: " : "Renewal due: "}<bdi dir="ltr">{row.renewal_due_on}</bdi></>}
-    {row.access === "LIMITED" && <p>{locale === "ar" ? "القراءة وتسوية الالتزامات القائمة وعكسها وصيانة بياناتها متاحة حسب الدور. الأعمال الجديدة تحتاج اكتمال التهيئة واشتراكًا صالحًا." : "Reads, existing settlements/reversals and existing-master maintenance remain available under your role. New business requires completed commercial onboarding and an effective subscription."}</p>}
+    {row.access === "LIMITED" && <p>{locale === "ar" ? "يتاح عرض السجلات وتسوية الالتزامات القائمة وعكسها وتحديث بياناتها حسب الصلاحيات. تتطلب المعاملات الجديدة استكمال إعداد الشركة واشتراكًا ساريًا." : "Viewing records, permitted settlements, reversals and updates to existing master data remain available. New transactions require completed company setup and an active subscription."}</p>}
     {row.state === "UNMANAGED" && <p>{row.access === "FULL" ? locale === "ar" ? "وصول الشركة الداخلية القائم متاح دون اشتراك تجاري مطلوب." : "Existing internal Company access remains available; a commercial subscription is not required." : locale === "ar" ? "الإعداد التجاري قيد الاستكمال. تواصل مع مالك المنصة لإتمام التهيئة." : "Commercial setup is pending. Contact the Platform Owner to complete onboarding."}</p>}
   </aside>;
 }
