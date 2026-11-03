@@ -14,6 +14,12 @@ export type Database = {
   }
   public: {
     Tables: {
+      source_project_assignment_events: {
+        Row: {id:string;company_id:string;request_id:string;actor_id:string;reason:string;input_hash:string;changes:Json;created_at:string};
+        Insert: {company_id:string;request_id:string;actor_id:string;reason:string;input_hash:string;changes:Json;id?:string;created_at?:string};
+        Update: {reason?:string}; Relationships: [];
+      }
+
       project_activation_events: {
         Row: { id: string; company_id: string; project_id: string; request_id: string; actor_id: string; reason: string; input_hash: string; previous_status: "PLANNING"; new_status: "ACTIVE"; previous_updated_at: string; project_updated_at: string; activated_at: string };
         Insert: { company_id: string; project_id: string; request_id: string; actor_id: string; reason: string; input_hash: string; previous_status: "PLANNING"; new_status: "ACTIVE"; previous_updated_at: string; project_updated_at: string; id?: string; activated_at?: string };
@@ -3285,6 +3291,8 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      assign_source_projects: {Args:{target_company_id:string;request_id:string;items:Json;reason:string};Returns:Json};
+
       activate_project: { Args: { target_company_id: string; target_project_id: string; expected_updated_at: string; request_id: string; reason: string }; Returns: Json };
 
       approve_post_subcontractor_certificate: {

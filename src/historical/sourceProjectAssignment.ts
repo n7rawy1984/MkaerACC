@@ -1,0 +1,24 @@
+import type {ProductionProjectSummary} from '../master/masterTypes';
+import {sourceAccounting,sourceCurrentAmount,sourceValue,type SourceRecord} from './sourceModel';
+import type {FinancialReport} from '../reports/reportExport';
+export type AssignmentItem={source_id:string;expected_updated_at:string;scope:'PROJECT'|'COMPANY';project_id:string|null};
+export type AssignmentAttempt={request_id:string;items:AssignmentItem[];reason:string};
+export type AssignmentEvent={id:string;company_id:string;request_id:string;actor_id:string;reason:string;created_at:string;changes:{source_id:string;source_reference:string;previous_scope:string|null;previous_project_id:string|null;scope:string;project_id:string|null}[]};
+export function assignmentBlock(row:SourceRecord,companyId:string):string|null {
+ if(row.company_id!==companyId)return 'foreign';
+ if(row.expense_id||row.payroll_entitlement_id)return 'posted';
+ if(row.review_status==='CANCELLED')return 'archived';
+ if(row.record_type!=='GENERAL'||sourceValue(row,'nature',row.classification.nature)!=='EXPENSE'||!/^\d+$/.test(row.outflow_minor??'')||BigInt(row.outflow_minor??'0')<=0n)return 'nature';
+ const amount=sourceCurrentAmount(row);if(!amount||!/^\d+$/.test(amount)||BigInt(amount)<=0n)return 'amount';
+ return null;
+}
+export function assignmentReport(rows:SourceRecord[],companyId:string,company:string,projects:ProductionProjectSummary[],locale:'en'|'ar',attempt:AssignmentAttempt|null,events:AssignmentEvent[]):FinancialReport {
+ if(rows.some(r=>r.company_id!==companyId)||events.some(e=>e.company_id!==companyId))throw Error('Company changed');
+ const ar=locale==='ar',project=(id:string|null|undefined)=>id?(projects.find(p=>p.companyId===companyId&&p.id===id)?.code??id):'—';
+ const scope=(value:string|null|undefined)=>value==='PROJECT'?(ar?'مشروع':'Project'):value==='COMPANY'?(ar?'مصروفات الشركة':'Company overhead'):(ar?'غير محدد':'Unassigned');
+ const months=[...new Set(rows.map(r=>r.source_month))].sort();
+ const eligible=attempt?rows.filter(r=>attempt.items.some(i=>i.source_id===r.id)):[];
+ const total=eligible.reduce((n,r)=>n+BigInt(sourceCurrentAmount(r)!),0n).toString();
+ const status=(r:SourceRecord)=>({POSTED:ar?'مرحل':'Posted',REVERSED:ar?'معكوس':'Reversed',LINKED:ar?'مرتبط':'Linked',DRAFT:ar?'مسودة مراجعة':'Reviewed draft',NEEDS_COMPLETION:ar?'غير مرحل':'Unposted'})[sourceAccounting(r)];
+ return {company,title:ar?'تخصيص مصادر المصروفات':'Expense source assignment',period:months.join(', ')||(ar?'لا توجد فترة':'No period'),locale,generated:new Date().toISOString(),filename:'expense-source-assignment',note:ar?'مبالغ المصدر وليست تكاليف مرحلة. المقترحات لا تغير المحاسبة. الإجمالي للمصادر المختارة غير المرحلة فقط.':'Source amounts, not posted project costs. Proposals do not change accounting. Total covers selected unposted sources only.',sections:[{title:ar?'مصادر المصروفات':'Expense sources',headers:ar?['المرجع','التاريخ','الوصف','مبلغ المصدر (درهم)','الحالة','التخصيص الحالي','المشروع الحالي','التخصيص المقترح','المشروع المقترح']:['Reference','Date','Description','Source amount (AED)','Status','Current assignment','Current Project','Proposed assignment','Proposed Project'],rows:[...rows.map(r=>{const proposed=attempt?.items.find(i=>i.source_id===r.id);const amount=sourceCurrentAmount(r);return [r.source_reference,sourceValue(r,'date',r.source_date),sourceValue(r,'description',r.description),amount&&/^\d+$/.test(amount)?{minor:amount}:null,r.review_status==='CANCELLED'?(ar?'مؤرشف':'Archived'):status(r),scope(r.allocation_scope),project(r.assigned_project_id??r.expense?.project_id),proposed?scope(proposed.scope):'—',project(proposed?.project_id)];}),[ar?'إجمالي المصادر المختارة غير المرحلة':'Selected unposted source total',null,null,{minor:total},null,null,null,null,null]]},{title:ar?'آخر 50 عملية تخصيص':'Latest 50 assignment batches',headers:ar?['الوقت','المستخدم','السبب','مرجع الطلب','عدد المصادر']:['Time','Actor reference','Reason','Request reference','Source count'],rows:events.map(e=>[e.created_at,e.actor_id,e.reason,e.request_id,e.changes.length])}]};
+}

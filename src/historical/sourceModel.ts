@@ -4,9 +4,10 @@ export type SourceRecord = {
  outflow_minor: string | null; funding_minor: string | null; payroll_net_minor: string | null;
  raw_source: Record<string, unknown>; classification: Record<string, unknown>;
  completion: Record<string, unknown>; review_status: string; updated_at: string;
+ allocation_scope?:'PROJECT'|'COMPANY'|null; assigned_project_id?:string|null;
  expense_id: string | null; payroll_entitlement_id: string | null; cash_treasury_id: string | null; payroll_profile_id: string | null;
  payroll_status?:'POSTED'|'REVERSED'|'LINKED';
- expense?: {status: string; expense_reference?:string;posted_journal_entry_id?:string} | null; cash_treasury?: {code: string} | null;
+ expense?: {status: string;project_id?:string|null; expense_reference?:string;posted_journal_entry_id?:string} | null; cash_treasury?: {code: string} | null;
 };
 export const sourceValue = (r: SourceRecord, key: string, fallback: unknown = '') => String(r.completion[key] ?? fallback ?? '');
 export function decimalMinor(value: string): string {

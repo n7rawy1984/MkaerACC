@@ -6,7 +6,7 @@ import { canPostExpense, normalizeExpenseInput, parseAED, type TreasuryExpenseIn
 import { attemptStorageKey, loadAttempt, saveAttempt, sendAttempt, type ExpenseAttempt } from "./expensePostAttempt";
 import { displayMinor, readExpenseById, type ExpenseRead } from "./expenseRepository";
 
-export function TreasuryExpensePost({ userId, companyId, role, onPosted, source }: { userId: string; companyId: string; role: string; onPosted: (receipt?:ExpenseReceipt) => void; source?:{id:string;date:string;description:string;treasuryId:string;categoryId:string;grossMinor?:string} }) {
+export function TreasuryExpensePost({ userId, companyId, role, onPosted, source }: { userId: string; companyId: string; role: string; onPosted: (receipt?:ExpenseReceipt) => void; source?:{id:string;date:string;description:string;treasuryId:string;categoryId:string;grossMinor?:string;projectId?:string|null;assignmentScope?:'PROJECT'|'COMPANY'|null} }) {
   const t = useT();
   const master = useProductionMasterData();
   // Parent keys this component by actor/Company/role; restore only that scope.
@@ -20,7 +20,7 @@ export function TreasuryExpensePost({ userId, companyId, role, onPosted, source 
   const [message, setMessage] = useState<"invalid" | "unresolved" | "rejected" | "readError" | "storageError" | "denied" | null>(initial.ready || initial.foreign ? null : "storageError");
   const [sourceError,setSourceError]=useState<string|null>(null);
   const [posted, setPosted] = useState<ExpenseRead | null>(null);
-  const [project, setProject] = useState("");
+  const [project, setProject] = useState(source?.projectId??"");
   const [vat, setVat] = useState<TreasuryExpenseInput["vatMode"]|"">(source?"":"ZERO");
   const [invoice, setInvoice] = useState(false);
   const [formKey, setFormKey] = useState(0);
@@ -112,7 +112,7 @@ export function TreasuryExpensePost({ userId, companyId, role, onPosted, source 
     </div> : master.phase !== "READY" ? <p role="status">{t("expensePost.masters")}</p> : <form key={formKey} onSubmit={submit} className="mt-4" aria-label={t("expensePost.title")}>
       <fieldset disabled={busy || !ready} className="grid min-w-0 gap-3 sm:grid-cols-2">
         <label>{t("expensePost.date")}<input dir="ltr" name="date" defaultValue={source?.date} readOnly={!!source} type="date" required className={field} /></label>
-        <label>{t("expensePost.project")}<select value={project} onChange={e => setProject(e.target.value)} className={field}><option value="">{t("expensePost.companyCost")}</option>{master.projects.filter(r => r.companyId === companyId && r.status !== "CLOSED").map(r => <option key={r.id} value={r.id}>{r.code} · {r.name}</option>)}</select></label>
+        <label>{t("expensePost.project")}<select disabled={!!source?.assignmentScope} value={project} onChange={e => setProject(e.target.value)} className={field}><option value="">{t("expensePost.companyCost")}</option>{master.projects.filter(r => r.companyId === companyId && r.status !== "CLOSED").map(r => <option key={r.id} value={r.id}>{r.code} · {r.name}</option>)}</select></label>
         <label>{t("expensePost.category")}<select name="category" required className={field} defaultValue={source?.categoryId??""}><option value="">{t("expensePost.select")}</option>{master.expenseCategories.filter(r => r.companyId === companyId && r.status === "ACTIVE").map(r => <option key={r.id} value={r.id}>{r.code} · {r.name}</option>)}</select></label>
         <label>{t("expensePost.treasury")}<select name="treasury" key={project} required className={field} defaultValue={source?.treasuryId??""}><option value="">{t("expensePost.select")}</option>{master.treasuryAccounts.filter(r => (!source||r.id===source.treasuryId) && r.companyId === companyId && r.status === "ACTIVE" && (r.projectId === null || r.projectId === project)).map(r => <option key={r.id} value={r.id}>{r.code} · {r.name}</option>)}</select></label>
         <label>{t("expensePost.supplier")}<select name="supplier" className={field} defaultValue=""><option value="">{t("expenseRead.absent")}</option>{master.parties.filter(r => r.companyId === companyId && r.type === "SUPPLIER" && r.status === "ACTIVE").map(r => <option key={r.id} value={r.id}>{r.name}</option>)}</select></label>
