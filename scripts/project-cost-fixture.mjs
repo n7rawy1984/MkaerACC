@@ -1,8 +1,8 @@
 // Synthetic local database only; no hosted URL/configuration accepted.
 import{platformTestDatabase}from'./verify-platform-database.mjs';
 export const costId=n=>`e5000000-0000-4000-8000-${String(n).padStart(12,'0')}`;
-export async function projectCostFixture(){
- const{db}=await platformTestDatabase(undefined,{through:'20261101130000'}),id=costId,company=id(10),foreignCompany=id(11),admin=id(1),viewer=id(2),foreign=id(3),accountant=id(4),manager=id(5),project=id(20),project2=id(21),cash=id(30),cost=id(31),overhead=id(32),payable=id(33),wip=id(34),treasury=id(35),category=id(36);
+export async function projectCostFixture(database){
+ const{db}=await platformTestDatabase(database,{through:'20261101130000'}),id=costId,company=id(10),foreignCompany=id(11),admin=id(1),viewer=id(2),foreign=id(3),accountant=id(4),manager=id(5),project=id(20),project2=id(21),cash=id(30),cost=id(31),overhead=id(32),payable=id(33),wip=id(34),treasury=id(35),category=id(36);
  for(const uid of[admin,viewer,foreign,accountant,manager])await db.query('insert into auth.users(id,email) values($1,$2)',[uid,uid+'@example.invalid']);
  for(const cid of[company,foreignCompany])await db.query("insert into public.companies(id,code,name) values($1,$2,'Synthetic cost Company')",[cid,cid]);
  for(const[uid,cid,role]of[[admin,company,'ACCOUNTING_ADMIN'],[viewer,company,'MANAGEMENT_VIEWER'],[accountant,company,'ACCOUNTANT'],[manager,company,'PROJECT_MANAGER'],[foreign,foreignCompany,'ACCOUNTING_ADMIN']])await db.query('insert into public.company_memberships(company_id,user_id,role) values($1,$2,$3)',[cid,uid,role]);
@@ -19,11 +19,11 @@ export async function projectCostFixture(){
  await journal(53,'2026-09-23','COMPANY_RENT',null,overhead,cash,'5000');
  await journal(54,'2026-09-24','PROJECT_ADJUSTMENT',project2,cost,payable,'7000');
  await db.query("update public.projects set status='CLOSED' where id=$1",[project]);
- const allowed=new Set(['projects','accounts','journal_entries','journal_lines','expenses','subcontractor_certificates']);
+ const allowed=new Set(['projects','accounts','journal_entries','journal_lines','expenses','subcontractor_certificates','expense_correction_reviews']);
  async function read(actor,table,columns,filters=[],limit=500){
   if(!allowed.has(table)||!filters.some(([op,k,v])=>op==='eq'&&k==='company_id'&&v===company))throw Error('Unscoped fixture query');
-  const values=[],clauses=[];for(const[op,key,value]of filters){if(!['company_id','id','posting_date','journal_entry_id'].includes(key))throw Error('Fixture filter');if(op==='in'){if(!Array.isArray(value))throw Error('Fixture list');const placeholders=value.map(v=>{values.push(v);return '$'+values.length;});clauses.push(key+' in ('+placeholders.join(',')+')');}else{const operator={eq:'=',gt:'>',gte:'>=',lte:'<='}[op];if(!operator)throw Error('Fixture operator');values.push(value);clauses.push(key+operator+'$'+values.length);}}
-  if(!/^[a-z_,:]+$/.test(columns))throw Error('Fixture projection');
+  const values=[],clauses=[];for(const[op,key,value]of filters){if(!['company_id','id','posting_date','journal_entry_id','expense_id'].includes(key))throw Error('Fixture filter');if(op==='in'){if(!Array.isArray(value))throw Error('Fixture list');const placeholders=value.map(v=>{values.push(v);return '$'+values.length;});clauses.push(key+' in ('+placeholders.join(',')+')');}else{const operator={eq:'=',gt:'>',gte:'>=',lte:'<='}[op];if(!operator)throw Error('Fixture operator');values.push(value);clauses.push(key+operator+'$'+values.length);}}
+  if(!(columns==='*'&&table==='expense_correction_reviews')&&!/^[a-z_,:]+$/.test(columns))throw Error('Fixture projection');
   const sqlColumns=columns.split(',').map(c=>c==='posting_date'?'posting_date::text':c).join(',');
   return as(actor,'select '+sqlColumns+' from public.'+table+' where '+clauses.join(' and ')+' order by id limit '+Math.min(limit,500),values);
  }

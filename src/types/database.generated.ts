@@ -3291,6 +3291,8 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      record_expense_correction_review: {Args:{target_company_id:string;target_expense_id:string;expected_updated_at:string;expected_latest_review_id:string|null;request_id:string;kind:string;proposed_project_id:string|null;requested_effective_date:string;reason:string};Returns:Json};
+
       assign_source_projects: {Args:{target_company_id:string;request_id:string;items:Json;reason:string};Returns:Json};
 
       activate_project: { Args: { target_company_id: string; target_project_id: string; expected_updated_at: string; request_id: string; reason: string }; Returns: Json };

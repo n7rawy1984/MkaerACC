@@ -1,3 +1,5 @@
+**Hosted history checkpoint:** this session observed migration66 already applied among67 hosted versions, then applied review-only migration68. Earlier unapplied statements below are historical. This does not establish hosted workflow acceptance or authorize frontend release. [Current evidence](EXPENSE_CORRECTION_REVIEWS.md).
+
 # M3 / PRJ-01 — Project activation
 
 Implemented and verified locally: an Accounting administrator can activate a Planning project from Projects, supply a reason and explicitly confirm. Project identity and existing dimensions remain stable. An immutable Company-scoped event records the authenticated actor, normalized reason, previous/new status, request ID and exact project versions. The history remains readable after reload. No journal, cost, payment or subscription change occurs.

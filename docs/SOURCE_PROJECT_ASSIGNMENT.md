@@ -1,3 +1,5 @@
+**Hosted history checkpoint:** this session observed migration67 already applied among67 hosted versions, then applied review-only migration68. Earlier unapplied statements below are historical. This does not establish hosted workflow acceptance or authorize frontend release. [Current evidence](EXPENSE_CORRECTION_REVIEWS.md).
+
 # M3 / PRJ-02 — Expense source assignment
 
 Implemented locally: the existing Expenses source workspace now provides explicit whole-source assignment to a Company Project or Company overhead. The operator selects up to 100 eligible sources from the current filters, supplies a reason, reviews the exact source total and confirms one atomic batch. No Project is inferred from a worksheet name. Projects remain analytic dimensions, never GL accounts.

@@ -15,3 +15,7 @@
 @media(min-width:901px){.historical-data-table th:last-child,.expense-posted-table th:last-child{position:sticky;inset-inline-end:0;z-index:4;box-shadow:-2px 0 5px #143c4e0d}.historical-data-table td:last-child,.expense-posted-table td:last-child{position:sticky;inset-inline-end:0;z-index:1;background:var(--erp-surface);box-shadow:-2px 0 5px #143c4e0d}.suite-data-table tbody tr:nth-child(even)>td:last-child{background:var(--erp-surface)}.suite-data-table tbody tr:hover>td:last-child{background:var(--erp-secondary-bg)}}
 /* Lifecycle labels remain readable in dense registers, including narrow viewports. */
 .expense-posted-table th:nth-child(3),.expense-posted-table .expense-status{min-width:88px;white-space:nowrap;overflow-wrap:normal;word-break:normal}
+
+/* Expense monetary columns: shared Company UI, RTL/LTR; amounts unchanged. */
+.historical-workspace .expense-amount,
+.expense-posted-table .suite-numeric {text-align:center;vertical-align:middle}
