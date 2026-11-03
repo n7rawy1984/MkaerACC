@@ -1,3 +1,5 @@
+**Shared-cost extension:** [migration70 implementation](SHARED_COST_ALLOCATION.md) extends this same receipt/reversal/period mechanism with documented split plans. Earlier split-allocation limitations below describe the original migration69 checkpoint; unsupported sources and periods remain excluded.
+
 # M3 — Project-cost correction execution
 
 Implemented on 2026-11-03: controlled execution extends the existing immutable Expense correction reviews. This is a bounded allocation increment; M3 remains incomplete. Hosted migration and validation status are recorded below and in the release evidence.
