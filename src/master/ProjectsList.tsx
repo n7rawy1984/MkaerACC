@@ -1,3 +1,4 @@
+import {ProjectActivation} from './ProjectActivation';
 import {RecordIdentity} from '../components/ui/RecordIdentity';
 import {StatusBadge} from '../workspace/workspaceUi';
 import { PersonMasterCreationPanel } from "./PersonMasterCreationPanel";
@@ -53,6 +54,7 @@ export function ProjectsList() {
         </dl>
         {canEdit && <button type="button" disabled={blocked || !!editing} onClick={event => { origin.current = event.currentTarget; setActionId(project.id); setEditing(project); }} className="mt-3 rounded-lg border px-3 py-2 text-sm disabled:opacity-50">{t("projectMetadata.edit")}</button>}
         {editing?.id === project.id && canEdit && <ProjectMetadataForm project={editing} disabled={blocked} onCancel={close} onSave={async input => { if (await master.saveProjectMetadata({ project: editing, input })) close(); }} />}
+        <ProjectActivation key={`${state.profile.userId}:${state.activeTenant.companyId}:${project.id}`} project={project} disabled={blocked || !!editing} onRefresh={master.refreshProjects}/>
         {actionId === project.id && message}
       </li>)}
     </ul>
