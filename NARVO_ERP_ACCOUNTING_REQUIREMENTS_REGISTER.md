@@ -28,7 +28,7 @@ Accountant/domain expert owns financial treatment approval; product owner owns c
 | FIN-04 | Universal reporting/reconciliation; retained | PARTIAL: posted journal/expense and source exports E7; complete statements unverified | M5B | Opening completeness, statement basis, classification |
 | PRJ-01 | Reusable project lifecycle; generalized | PARTIAL: creation/metadata E7 plus audited Planning→Active locally implemented; migration66 and hosted verification pending | M3 | Remaining transitions, closure/reopen authority |
 | PRJ-02 | Reusable allocation control; revised | PARTIAL: atomic whole-source unposted Project/Company assignment locally implemented; migration67/hosted verification pending; posted corrections and split allocation incomplete | M3 | Approved dimensions and posted correction method |
-| PRJ-03 | Cost-accounting policy; generalized | PARTIAL cost/overhead keys and single-project payroll E4/E5; allocation/WIP expansion planned | F0, M3, C2, I4 | Direct/indirect allocation and capitalization |
+| PRJ-03 | Cost-accounting policy; generalized | PARTIAL cost/overhead keys and payroll E4/E5; posted Project-cost ledger locally verified; split/indirect allocation and WIP policy incomplete | F0, M3, C2, I4 | Direct/indirect allocation and capitalization |
 | EXP-01 | Historical Save/date UX bug and lifecycle clarity; superseded scoped repair | M1 labels/date evidence implemented and accepted package E2/E3; universal draft workflow remains PARTIAL | M3 | Preserve source save versus actual financial post |
 | EXP-02 | Universal event classification; revised | PARTIAL specialized commands; many nonexpense source types unsupported E7 | F0, M4, M5A | Loans/funding/drawings/deposit and recovery meanings |
 | EXP-03 | Universal dimensions plus tax/company policy; retained | PARTIAL Treasury/AP/custodian/owner modes and VAT controls E4; tax readiness not certified | F0, M3, I3 | Invoice validity, VAT timing/base/recoverability |
@@ -92,7 +92,7 @@ Workflow: read-only preview of source/current canonical link, evidence, proposed
 
 ## PRJ-03 — Project, overhead and WIP cost policy
 
-Provenance: S4 PRJ-03; V1.6 §0.4/§1.1/§4 P1-C; S2/S3. PARTIAL E4/E5: Project cost versus Company expense keys, subcontract cost and one payroll allocation exist. Project is a dimension, not a GL account or source of money.
+Provenance: S4 PRJ-03; V1.6 §0.4/§1.1/§4 P1-C; S2/S3. PARTIAL E4/E5: Project cost versus Company expense keys, subcontract cost and one payroll allocation exist. Project is a dimension, not a GL account or source of money. The [posted cost ledger increment](docs/PROJECT_COST_LEDGER.md) now locally reconciles existing EXPENSE-account movements by Project/Company and posting period, preserving reversal/source lineage and Payroll RLS, with exact bilingual Excel/PDF totals. This is reporting existing posted facts; allocation, capitalization and recognition policy remains unresolved.
 
 Workflow: classify direct cost/overhead/asset/advance; recognize once through originating document; where approved, allocate indirect costs/labor/materials using explicit basis/version and reconcile totals. Decide project WIP capitalization and revenue-related cost release separately from operational assignment. Acceptance: allocation sums exactly to originating cost, no cash-based duplication, overhead and project views reconcile, inactive-project settlements permitted. DECISION REQUIRED: allocation basis, timing/WIP, capitalization and corrections; F0/M3/C2/I4, FIN-04/05, HR-02, INV-01.
 
