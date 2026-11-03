@@ -3291,6 +3291,11 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      set_project_correction_period:{Args:{target_company_id:string;request_id:string;state:string;reason:string};Returns:Json};
+      get_project_correction_eligibility:{Args:{target_company_id:string;target_review_id:string};Returns:Json};
+      execute_project_cost_correction:{Args:{target_company_id:string;target_review_id:string;request_id:string;unreconciled_confirmed:boolean;evidence_reference:string};Returns:Json};
+      reverse_project_cost_correction:{Args:{target_company_id:string;target_correction_id:string;request_id:string;reason:string};Returns:Json};
+
       record_expense_correction_review: {Args:{target_company_id:string;target_expense_id:string;expected_updated_at:string;expected_latest_review_id:string|null;request_id:string;kind:string;proposed_project_id:string|null;requested_effective_date:string;reason:string};Returns:Json};
 
       assign_source_projects: {Args:{target_company_id:string;request_id:string;items:Json;reason:string};Returns:Json};

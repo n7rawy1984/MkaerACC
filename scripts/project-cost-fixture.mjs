@@ -19,12 +19,12 @@ export async function projectCostFixture(database){
  await journal(53,'2026-09-23','COMPANY_RENT',null,overhead,cash,'5000');
  await journal(54,'2026-09-24','PROJECT_ADJUSTMENT',project2,cost,payable,'7000');
  await db.query("update public.projects set status='CLOSED' where id=$1",[project]);
- const allowed=new Set(['projects','accounts','journal_entries','journal_lines','expenses','subcontractor_certificates','expense_correction_reviews']);
+ const allowed=new Set(['projects','accounts','journal_entries','journal_lines','expenses','subcontractor_certificates','expense_correction_reviews','project_cost_corrections','project_cost_correction_reversals','project_correction_period_events']);
  async function read(actor,table,columns,filters=[],limit=500){
   if(!allowed.has(table)||!filters.some(([op,k,v])=>op==='eq'&&k==='company_id'&&v===company))throw Error('Unscoped fixture query');
   const values=[],clauses=[];for(const[op,key,value]of filters){if(!['company_id','id','posting_date','journal_entry_id','expense_id'].includes(key))throw Error('Fixture filter');if(op==='in'){if(!Array.isArray(value))throw Error('Fixture list');const placeholders=value.map(v=>{values.push(v);return '$'+values.length;});clauses.push(key+' in ('+placeholders.join(',')+')');}else{const operator={eq:'=',gt:'>',gte:'>=',lte:'<='}[op];if(!operator)throw Error('Fixture operator');values.push(value);clauses.push(key+operator+'$'+values.length);}}
   if(!(columns==='*'&&table==='expense_correction_reviews')&&!/^[a-z_,:]+$/.test(columns))throw Error('Fixture projection');
-  const sqlColumns=columns.split(',').map(c=>c==='posting_date'?'posting_date::text':c).join(',');
+  const sqlColumns=columns.split(',').map(c=>['posting_date','correction_date','reversal_date','month'].includes(c)?c+'::text':c).join(',');
   return as(actor,'select '+sqlColumns+' from public.'+table+' where '+clauses.join(' and ')+' order by id limit '+Math.min(limit,500),values);
  }
  function client(actor=admin){return {from(table){let columns='',limit=500;const filters=[];const q={select(c){columns=c;return q},eq(k,v){filters.push(['eq',k,v]);return q},gte(k,v){filters.push(['gte',k,v]);return q},lte(k,v){filters.push(['lte',k,v]);return q},gt(k,v){filters.push(['gt',k,v]);return q},in(k,v){filters.push(['in',k,v]);return q},order(){return q},limit(n){limit=n;return q},then(done){return read(actor,table,columns,filters,limit).then(data=>({data,error:null}),e=>({data:null,error:{code:e.code??'FIXTURE'}})).then(done)}};return q}};}

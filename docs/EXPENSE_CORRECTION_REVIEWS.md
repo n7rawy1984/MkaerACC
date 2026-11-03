@@ -1,3 +1,5 @@
+**Execution update — 2026-11-03.** The review records below remain immutable REVIEW_REQUIRED proposals. A separate bounded execution/reversal workflow now derives posted/reversed status from linked financial evidence; see [Project-cost correction execution](PROJECT_COST_CORRECTION_EXECUTION.md). Earlier execution-incomplete/policy statements describe the review-only checkpoint and still apply to unsupported scenarios.
+
 # M3 — Posted-cost correction review and audit
 
 Implemented: posted/reversed Expenses now provide a persistent correction-review workflow for Project/cost-center allocation, financial classification and full-document reversal. Accounting administrator records the original Expense/journal, proposed Project or explicit Company overhead, requested accounting date and reason. The server derives the actor, captures dependency evidence, and appends immutable versioned reviews. Accounting/Management readers may inspect and export evidence. The Expenses **Correct** action opens this review; the existing explicit **Reverse / Cancel** path retains its existing authority and financial safeguards.
