@@ -33,7 +33,7 @@ export function ExpenseReadContent({ userId, companyId, role }: { userId: string
   const refresh = () => { setPage(0); setRevision(value => value + 1); };
   const summary=state.phase==='READY'?expensePageSummary(state.rows):null;
   const amountState=state.phase==='LOADING'?'LOADING':state.phase==='ERROR'?'ERROR':null;
-  const columns=[{key:'reference',title:u('reference')},{key:'date',title:u('date')},{key:'description',title:u('description')},{key:'status',title:t('common.status')},...(['net_amount_minor','vat_amount_minor','gross_amount_minor'] as const).map(key=>({key,title:t(`expenseRead.${key}`),numeric:true})),{key:'actions',title:u('viewDetails')}];
+  const columns=[{key:'date',title:u('date')},{key:'description',title:u('description')},{key:'status',title:t('common.status')},...(['net_amount_minor','vat_amount_minor','gross_amount_minor'] as const).map(key=>({key,title:t(`expenseRead.${key}`),numeric:true})),{key:'actions',title:u('viewDetails')}];
   return <section className="expenses-workspace">
     <nav className="suite-view-switch" aria-label={locale==='ar'?'أقسام المصروفات':'Expense sections'}><a href="#expense-source-review">{u('sources')}</a><a href="#expense-posted-register">{u('posted')}</a>{canPostExpense(role)&&businessAccess==='FULL'&&<a href="#new-expense" onClick={()=>{const d=document.getElementById('new-expense');if(d instanceof HTMLDetailsElement)d.open=true;}}>{u('entry')}</a>}</nav>
     {canPostExpense(role)&&businessAccess!=='FULL'&&<p role="status" className="suite-scope-note">{u(businessAccess==='UNKNOWN'?'unverified':'renew')}</p>}
@@ -41,7 +41,7 @@ export function ExpenseReadContent({ userId, companyId, role }: { userId: string
     {canPostExpense(role) && <details open={window.location.hash==="#new-expense"} id="new-expense" className="mt-6 rounded-xl border p-4"><summary className="cursor-pointer font-semibold">{locale==="ar"?"مصروف جديد / بديل مصحح":"New Expense / corrected replacement"}</summary><p className="mt-3 text-sm text-slate-500">{locale==="ar"?"للتصحيح، اعكس المستند الأصلي أولاً ثم أدخل البديل بعد مراجعة الأثر النقدي والضريبي.":"For a correction, reverse the original document first, then enter its replacement after reviewing cash and VAT effects."}</p><TreasuryExpensePost userId={userId} companyId={companyId} role={role} onPosted={refresh} /></details>}
     {canPostExpense(role) && <details id="supplier-credit" open={window.location.hash==="#supplier-credit"} className="mt-4 rounded-xl border p-4"><summary className="cursor-pointer font-semibold">{locale==="ar"?"مصروف آجل على مورد":"New Supplier Credit Expense"}</summary><SupplierCreditExpensePost userId={userId} companyId={companyId} role={role} onPosted={refresh} /></details>}
     </ContentSection>}
-    <ContentSection id="expense-source-review"><HistoricalImports recordType="GENERAL" onPosted={refresh}/></ContentSection>
+    <ContentSection id="expense-source-review"><HistoricalImports recordType="GENERAL" showReference={false} onPosted={refresh}/></ContentSection>
     <ContentSection id="expense-posted-register" title={locale==='ar'?'المصروفات المرحلة والتصحيح':'Posted Expenses & corrections'} description={u('registerNote')} actions={<><ReportExport build={()=>postedExpenseReport(companyId,companyName,locale)}/><button type="button" onClick={refresh} disabled={state.phase==='LOADING'}>{t('expenseRead.refresh')}</button></>}>
     <div role="group" className="expense-page-summary" aria-label={u('pageScope')}>
       <FinancialSummaryCard label={u('postedCount')} value={summary?String(summary.count):state.phase==='LOADING'?t('expenseRead.loading'):'—'} state={amountState??(summary?.count===0?'VERIFIED_ZERO':'AVAILABLE')} description={u('pageScope')}/>
@@ -53,7 +53,7 @@ export function ExpenseReadContent({ userId, companyId, role }: { userId: string
     {state.phase==='READY'&&<>
      {state.rows.length===0&&<EmptyState>{t('expenseRead.empty')}</EmptyState>}
      <DataTable label={t('expenseRead.title')} className="expense-posted-table" columns={columns}>{state.rows.map(row=><tr key={row.id}>
-      <td className="suite-reference"><bdi dir="ltr">{row.expense_reference}</bdi></td><td className="suite-date"><bdi>{sourceDatePresentation(row.expense_date,locale).label}</bdi></td><td className="suite-description"><ExpandableText text={row.description} label={u('expandDescription')}/></td><td><StatusBadge status={row.status}>{t(`expenseRead.${row.status}`)}</StatusBadge></td>
+      <td className="suite-date"><bdi>{sourceDatePresentation(row.expense_date,locale).label}</bdi></td><td className="suite-description"><ExpandableText text={row.description} label={u('expandDescription')}/></td><td className="expense-status"><StatusBadge status={row.status}>{t(`expenseRead.${row.status}`)}</StatusBadge></td>
       {(['net_amount_minor','vat_amount_minor','gross_amount_minor'] as const).map(field=><td key={field} className="suite-numeric"><bdi dir="ltr">{dashboardAED(row[field])}</bdi></td>)}
       <td className="suite-row-actions">
         <details className="mt-3"><summary className="cursor-pointer">{t("expenseRead.details")}</summary><dl className="mt-2 space-y-2 text-sm">
