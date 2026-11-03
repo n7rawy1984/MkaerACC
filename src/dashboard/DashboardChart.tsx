@@ -3,7 +3,7 @@ import { Card, CardHeader } from "../components/ui/Card";
 import { useI18n } from "../i18n/I18nContext";
 import { dashboardAED, dashboardChartRows, type DashboardGroup } from "./dashboardSummary";
 
-const colors = ["#0d766f", "#365f7b", "#986411", "#6e588c", "#ad4759"];
+const colors = ["var(--erp-chart-1)", "var(--erp-chart-2)", "var(--erp-chart-3)", "var(--erp-chart-4)", "var(--erp-danger-text)"];
 export function DashboardChart({ title, subtitle, groups }: { title: string; subtitle: string; groups: DashboardGroup[] }) {
   const { t, dir } = useI18n(), rtl = dir === "rtl";
   const rows = dashboardChartRows(groups);
@@ -13,11 +13,11 @@ export function DashboardChart({ title, subtitle, groups }: { title: string; sub
       <div className="px-3 pt-4" dir="ltr" style={{ height: Math.max(180, rows.length * 42 + 32) }} aria-hidden="true">
         <ResponsiveContainer width="100%" height="100%" minWidth={0}>
           <BarChart accessibilityLayer={false} data={rows} layout="vertical" margin={{ top: 4, right: 8, bottom: 4, left: 8 }}>
-            <CartesianGrid horizontal={false} stroke="#e2e8f0" />
+            <CartesianGrid horizontal={false} stroke="var(--erp-border)" />
             <XAxis type="number" hide domain={[0, 100]} reversed={rtl} />
             <YAxis type="category" dataKey="label" width={100} orientation={rtl ? "right" : "left"} axisLine={false} tickLine={false}
-              tick={({ x, y, payload }) => <text x={x} y={y} dy={4} textAnchor="end" direction={dir} unicodeBidi="plaintext" fill="#64748b" fontSize={11}>{String(payload.value).length > 16 ? `${String(payload.value).slice(0, 15)}…` : payload.value}</text>} />
-            <Tooltip cursor={{ fill: "#f8fafc" }} content={({ active, payload }) => active && payload?.[0] ? <div dir={dir} className="max-w-64 rounded-lg border border-slate-200 bg-white p-3 text-sm shadow-sm"><p><bdi>{payload[0].payload.label}</bdi></p><p><bdi dir="ltr">{dashboardAED(payload[0].payload.minor)}</bdi></p></div> : null} />
+              tick={({ x, y, payload }) => <text x={x} y={y} dy={4} textAnchor="end" direction={dir} unicodeBidi="plaintext" fill="var(--erp-muted)" fontSize={14}>{String(payload.value).length > 16 ? `${String(payload.value).slice(0, 15)}…` : payload.value}</text>} />
+            <Tooltip cursor={{ fill: "var(--erp-surface-subtle)" }} content={({ active, payload }) => active && payload?.[0] ? <div dir={dir} className="max-w-64 rounded-lg border border-slate-200 bg-white p-3 text-sm shadow-sm"><p><bdi>{payload[0].payload.label}</bdi></p><p><bdi dir="ltr">{dashboardAED(payload[0].payload.minor)}</bdi></p></div> : null} />
             <Bar dataKey="weight" radius={4} isAnimationActive={false}>
               {rows.map((row, i) => <Cell key={row.id} fill={colors[i % colors.length]} />)}
             </Bar>

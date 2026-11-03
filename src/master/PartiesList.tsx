@@ -1,3 +1,4 @@
+import {RecordIdentity} from '../components/ui/RecordIdentity';
 import {StatusBadge} from '../workspace/workspaceUi';
 import { PersonMasterCreationPanel } from "./PersonMasterCreationPanel";
 import { SubcontractCreationPanel } from "./SubcontractCreationPanel";
@@ -79,19 +80,16 @@ export function PartiesList() {
     }} />}
     <p className="mt-3 text-sm text-slate-500">{t("productionMaster.partyVisibility")}</p>
     {master.parties.length === 0 ? <p role="status" className="mt-4 text-sm text-slate-500">{t("productionMaster.partiesEmpty")}</p> : (
-      <ul className="mt-5 divide-y divide-slate-200" aria-label={t("productionMaster.parties")}>
+      <ul className="enterprise-record-list mt-5" aria-label={t("productionMaster.parties")}>
         {master.parties.map((party) => (
           <li key={party.id} className="py-4 first:pt-0 last:pb-0">
-            <div className="flex flex-wrap items-start justify-between gap-3">
-              <p className="min-w-0 [overflow-wrap:anywhere] font-medium text-slate-900">{party.code ? `${party.code} · ` : ""}{party.name}</p>
-              <span className="text-sm text-slate-600">{party.personRoles?.length === 2 ? t("personCreation.EMPLOYEE_CUSTODIAN") : t(`productionMaster.type.${party.type}`)}</span><StatusBadge status={party.status}>{t(`partyStatus.${party.status}`)}</StatusBadge>
-            </div>
+            <RecordIdentity code={party.code} name={party.name} kind={party.personRoles?.length === 2 ? t("personCreation.EMPLOYEE_CUSTODIAN") : t(`productionMaster.type.${party.type}`)} status={<StatusBadge status={party.status}>{t(`partyStatus.${party.status}`)}</StatusBadge>}/>
             <dl className="mt-2 space-y-1 break-words text-sm text-slate-500">
               {([
                 ["trn", party.taxRegistrationNumber], ["contact", party.contactPerson],
                 ["phone", party.phone], ["email", party.email], ["address", party.address], ["notes", party.notes],
               ] as const).map(([field, value]) => value !== null && (
-                <div key={field}><dt className="inline font-medium">{t(`productionMaster.${field}`)}: </dt><dd className="inline"><bdi dir={field === "email" || field === "phone" || field === "trn" ? "ltr" : "auto"}>{value}</bdi></dd></div>
+                <div key={field} className={field === "notes" || field === "address" ? "record-detail-wide" : undefined}><dt className="font-medium">{t(`productionMaster.${field}`)}</dt><dd><bdi dir={field === "email" || field === "phone" || field === "trn" ? "ltr" : "auto"}>{value}</bdi></dd></div>
               ))}
             </dl>
             {party.type === "OTHER" && <OtherPartyNameControl party={party} selected={otherActionId === party.id} onSelect={() => { returnFocus.current = null; setEditing(null); setStatusTarget(null); setEmployeeActionId(null); setCustodianActionId(null); setOwnerActionId(null); setSubcontractorActionId(null); setOtherActionId(party.id); }} />}
@@ -99,7 +97,7 @@ export function PartiesList() {
             {party.type === "CUSTODIAN" && <CustodianPartyNameControl party={party} selected={custodianActionId === party.id} onSelect={() => { returnFocus.current = null; setEditing(null); setStatusTarget(null); setOtherActionId(null); setEmployeeActionId(null); setOwnerActionId(null); setSubcontractorActionId(null); setCustodianActionId(party.id); }} />}
             {party.type === "OWNER" && <OwnerPartyNameControl party={party} selected={ownerActionId === party.id} onSelect={() => { returnFocus.current = null; setEditing(null); setStatusTarget(null); setOtherActionId(null); setEmployeeActionId(null); setCustodianActionId(null); setSubcontractorActionId(null); setOwnerActionId(party.id); }} />}
             {party.type === "SUBCONTRACTOR" && <SubcontractorPartyNameControl party={party} selected={subcontractorActionId === party.id} onSelect={() => { returnFocus.current = null; setEditing(null); setStatusTarget(null); setOtherActionId(null); setEmployeeActionId(null); setCustodianActionId(null); setOwnerActionId(null); setSubcontractorActionId(party.id); }} />}
-            {canManage && party.type === "SUPPLIER" && <div className="mt-3 flex flex-wrap gap-2">
+            {canManage && party.type === "SUPPLIER" && <div className="record-actions">
               <button type="button" className={button} disabled={blocked} onClick={(event) => { returnFocus.current = event.currentTarget; setStatusTarget(null); setOtherActionId(null); setEmployeeActionId(null); setCustodianActionId(null); setOwnerActionId(null); setSubcontractorActionId(null); setEditing(party); }}>{t("supplierMutation.edit")}</button>
               <button type="button" className={button} disabled={blocked} onClick={(event) => { returnFocus.current = event.currentTarget; setEditing(null); setOtherActionId(null); setEmployeeActionId(null); setCustodianActionId(null); setOwnerActionId(null); setSubcontractorActionId(null); setStatusTarget(party); }}>{t(party.status === "ACTIVE" ? "supplierMutation.deactivate" : "supplierMutation.reactivate")}</button>
             </div>}

@@ -51,7 +51,8 @@ export function assertProductionBoundary(root){
   if(/\.[cm]?[jt]sx?$/.test(file)){
    const source=readFileSync(file,'utf8');
    if(/\bsessionStorage\b/.test(source)&&!sessionRecoveryFiles.has(path))throw Error('Unapproved production sessionStorage use: '+path);
-   if(/\blocalStorage\b/.test(source)&&!['src/auth/AuthContext.tsx','src/i18n/I18nContext.tsx'].includes(path))throw Error('Unapproved production localStorage use: '+path);
+   // Appearance module persists one validated UI preference, never Company/business data.
+   if(/\blocalStorage\b/.test(source)&&!['src/auth/AuthContext.tsx','src/i18n/I18nContext.tsx','src/theme/ThemeSwitcher.tsx'].includes(path))throw Error('Unapproved production localStorage use: '+path);
   }
  }
  return graph;

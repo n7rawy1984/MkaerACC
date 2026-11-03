@@ -1,3 +1,4 @@
+import {RecordIdentity} from '../components/ui/RecordIdentity';
 import {StatusBadge} from '../workspace/workspaceUi';
 import { PersonMasterCreationPanel } from "./PersonMasterCreationPanel";
 import { useLayoutEffect, useRef, useState } from "react";
@@ -44,12 +45,11 @@ export function ProjectsList() {
     <button type="button" disabled={phase === "PENDING"} onClick={refresh} className="mt-4 rounded-lg border px-3 py-2 text-sm">{t("projectMetadata.refresh")}</button></div>
     {!master.projects.some(p => p.id === actionId) && message}
     {master.projects.length === 0 && <p className="mt-4 text-sm">{t("productionProjects.empty")}</p>}
-    <ul className="mt-5 divide-y divide-slate-200" aria-label={t("productionProjects.title")}>
+    <ul className="enterprise-record-list mt-5" aria-label={t("productionProjects.title")}>
       {master.projects.map(project => <li key={project.id} className="min-w-0 break-words py-4">
-        <p className="font-medium"><bdi dir="ltr">{project.code}</bdi> · <bdi>{project.name}</bdi></p>
-        <StatusBadge status={project.status}>{t(`projectStatus.${project.status}`)}</StatusBadge>
+        <RecordIdentity code={project.code} name={project.name} status={<StatusBadge status={project.status}>{t(`projectStatus.${project.status}`)}</StatusBadge>}/>
         <dl className="mt-2 space-y-2 text-sm">
-          {(["client_name", "location", "contract_number", "notes"] as const).map(field => <div key={field}><dt className="text-slate-500">{t(`projectMetadata.${field}`)}</dt><dd className="whitespace-pre-wrap">{(field === "client_name" ? project.clientName : field === "contract_number" ? project.contractNumber : project[field]) ?? t("projectMetadata.empty")}</dd></div>)}
+          {(["client_name", "location", "contract_number", "notes"] as const).map(field => <div key={field} className={field === "notes" ? "record-detail-wide" : undefined}><dt className="text-slate-500">{t(`projectMetadata.${field}`)}</dt><dd className="whitespace-pre-wrap">{(field === "client_name" ? project.clientName : field === "contract_number" ? project.contractNumber : project[field]) ?? t("projectMetadata.empty")}</dd></div>)}
         </dl>
         {canEdit && <button type="button" disabled={blocked || !!editing} onClick={event => { origin.current = event.currentTarget; setActionId(project.id); setEditing(project); }} className="mt-3 rounded-lg border px-3 py-2 text-sm disabled:opacity-50">{t("projectMetadata.edit")}</button>}
         {editing?.id === project.id && canEdit && <ProjectMetadataForm project={editing} disabled={blocked} onCancel={close} onSave={async input => { if (await master.saveProjectMetadata({ project: editing, input })) close(); }} />}

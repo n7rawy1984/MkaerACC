@@ -1,0 +1,178 @@
+{
+  "status": "PASS_WITH_DOCUMENTED_SCOPE",
+  "date": "2026-11-03",
+  "environment": "isolated localhost fixtures only",
+  "build": "npm run build PASS; final CSS-only Vite rebuild PASS (existing chunk-size warning)",
+  "lint": "focused oxlint PASS",
+  "units": {
+    "status": "PASS",
+    "checks": 18,
+    "details": [
+      "page-only posted net remains exact above Number range",
+      "page gross remains exact",
+      "draft/reversed excluded from posted summary",
+      "summary does not mutate documents",
+      "successful empty page establishes zero scope only",
+      "unknown subscription cannot enable entry",
+      "foreign subscription cannot enable entry",
+      "limited access remains explicit",
+      "verified full access remains available",
+      "missing invoice evidence is not verified zero",
+      "empty successful filtered set has known zero aggregate",
+      "unknown Payroll amount stays unavailable",
+      "explicit corrected zero remains known",
+      "shared UI EN/AR key parity",
+      "src/financial/ExpenseReadPanel.tsx: syntax",
+      "src/historical/HistoricalImports.tsx: syntax",
+      "src/workspace/workspaceUi.tsx: syntax",
+      "src/workspace/CompanyWorkspaceShell.tsx: syntax"
+    ],
+    "protectedFiles": 0,
+    "hosted": false
+  },
+  "browserSuites": {
+    "themes": {
+      "suite": "themes",
+      "checks": [
+        "Default Signature Emerald",
+        "Royal Sapphire applies immediately",
+        "Escape restores focus",
+        "Executive Graphite applies immediately",
+        "Escape restores focus",
+        "Warm Champagne applies immediately",
+        "Escape restores focus",
+        "Modern Teal applies immediately",
+        "Escape restores focus",
+        "Signature Emerald applies immediately",
+        "Escape restores focus",
+        "Native radio arrow-key selection",
+        "Preference restored after reload",
+        "Preference shared with Platform Console",
+        "No runtime errors",
+        "No external requests",
+        "No platform commands",
+        "Focused accessibility scans"
+      ],
+      "errors": [],
+      "external": [],
+      "scans": [
+        {
+          "theme": "Royal Sapphire",
+          "violations": [],
+          "incomplete": []
+        },
+        {
+          "theme": "Executive Graphite",
+          "violations": [],
+          "incomplete": []
+        },
+        {
+          "theme": "Warm Champagne",
+          "violations": [],
+          "incomplete": []
+        },
+        {
+          "theme": "Modern Teal",
+          "violations": [],
+          "incomplete": []
+        },
+        {
+          "theme": "Signature Emerald",
+          "violations": [],
+          "incomplete": []
+        }
+      ],
+      "status": "PASS"
+    },
+    "mobile": {
+      "suite": "mobile",
+      "checks": [
+        "Default Signature Emerald",
+        "/projects 390 ar no page overflow",
+        "/projects real module rendered",
+        "/projects strong record hierarchy",
+        "No financial commands /projects",
+        "/parties?employees=1 390 ar no page overflow",
+        "/parties?employees=1 real module rendered",
+        "/parties?employees=1 strong record hierarchy",
+        "No financial commands /parties?employees=1",
+        "/expenses 390 ar no page overflow",
+        "/expenses real module rendered",
+        "No financial commands /expenses",
+        "/platform/onboarding 390 ar no page overflow",
+        "/platform/onboarding real module rendered",
+        "No runtime errors",
+        "No external requests",
+        "No platform commands",
+        "Focused accessibility scans"
+      ],
+      "errors": [],
+      "external": [],
+      "scans": [
+        {
+          "route": "/projects",
+          "width": 390,
+          "locale": "ar",
+          "violations": [],
+          "incomplete": []
+        },
+        {
+          "route": "/parties?employees=1",
+          "width": 390,
+          "locale": "ar",
+          "violations": [],
+          "incomplete": []
+        },
+        {
+          "route": "/platform/onboarding",
+          "width": 390,
+          "locale": "ar",
+          "violations": [],
+          "incomplete": []
+        }
+      ],
+      "status": "PASS"
+    },
+    "onboarding": {
+      "suite": "onboarding",
+      "checks": [
+        "Default Signature Emerald",
+        "/platform/onboarding 1440 en no page overflow",
+        "/platform/onboarding real module rendered",
+        "No runtime errors",
+        "No external requests",
+        "No platform commands",
+        "Focused accessibility scans"
+      ],
+      "errors": [],
+      "external": [],
+      "scans": [
+        {
+          "route": "/platform/onboarding",
+          "width": 1440,
+          "locale": "en",
+          "violations": [],
+          "incomplete": []
+        }
+      ],
+      "status": "PASS"
+    }
+  },
+  "initialReview": {
+    "layoutCases": 13,
+    "checksBeforeContrastFinding": 58,
+    "confirmedDefect": "Onboarding secondary button contrast 4.33:1 on tinted background; fixed with semantic action-text token and rerun in English and Arabic.",
+    "timeouts": "Some concurrent verification attempts timed out or were interrupted; final split suites completed successfully."
+  },
+  "preservation": {
+    "canonicalMigrations": 65,
+    "protectedSourceAndMigrationFiles": 188,
+    "recordEventHandlerComparisons": 3,
+    "productionDependencyGraphFiles": 212
+  },
+  "limitations": [
+    "Every module/state and assistive technology is not exhaustively certified.",
+    "Shared styles update existing operational layouts; bespoke record restructuring covers Projects, Parties and Subcontracts.",
+    "No hosted or deployment verification was performed."
+  ]
+}
