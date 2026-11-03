@@ -15,21 +15,22 @@ import {payrollAllowed,payrollRequest,decodeDraft,decodeProfiles,displayPayrollM
 const field='block w-full min-w-0 rounded border border-slate-300 bg-white p-2';
 const button='rounded border border-slate-300 px-3 py-2 disabled:opacity-50';
 function failure(error:unknown,t:PayrollLabels){return error instanceof Error&&error.message==='STALE'?t.staleError:error instanceof Error&&error.message==='POLICY'?t.policy:t.error;}
-export default function PayrollApplication(){
+export default function PayrollApplication({embedded=false}:{embedded?:boolean}={}){
  const {state,signOut,showCompanySelector}=useAuth();const {locale}=useI18n();const t=payrollText[locale];
  const branding = useTenantSettings();
  const displayName = branding.phase === 'READY' ? branding.settings.effectiveDisplayName : state.phase === 'TENANT_READY' ? state.activeTenant.companyName : '';
  if(state.phase!=='TENANT_READY')return null;
- return <div className="min-h-screen bg-slate-50 p-4 sm:p-6"><header className="mx-auto mb-5 flex max-w-[1600px] flex-wrap items-center justify-between gap-3"><div className="flex min-w-0 items-center gap-3"><TenantBrandMark logoUrl={branding.phase === "READY" ? branding.settings.logoUrl : null}/><h1 className="min-w-0 break-words text-xl font-semibold"><bdi>{displayName}</bdi> · {t.title}</h1></div>
+ if(embedded)return <section className="workspace-module"><PayrollContent key={`${state.profile.userId}:${state.activeTenant.companyId}:${state.activeTenant.role}`} userId={state.profile.userId} companyId={state.activeTenant.companyId} role={state.activeTenant.role} companyName={state.activeTenant.companyName}/></section>;
+ return <div className="workspace-standalone min-h-screen bg-slate-50 p-4 sm:p-6"><header className="mx-auto mb-5 flex max-w-[1600px] flex-wrap items-center justify-between gap-3"><div className="flex min-w-0 items-center gap-3"><TenantBrandMark logoUrl={branding.phase === "READY" ? branding.settings.logoUrl : null}/><h1 className="min-w-0 break-words text-xl font-semibold"><bdi>{displayName}</bdi> · {t.title}</h1></div>
  <div className="flex flex-wrap gap-2"><Link className={button} to="/">{t.back}</Link><Link className={button} to="/attendance">Attendance / الحضور</Link>{state.memberships.length>1&&<button className={button} onClick={showCompanySelector}>{t.switchCompany}</button>}<LanguageButton/><button className={button} onClick={()=>void signOut()}>{t.signOut}</button></div></header>
  <PayrollContent key={`${state.profile.userId}:${state.activeTenant.companyId}:${state.activeTenant.role}`} userId={state.profile.userId} companyId={state.activeTenant.companyId} role={state.activeTenant.role} companyName={state.activeTenant.companyName}/></div>;
 }
 export function PayrollContent({userId,companyId,companyName=companyId,role}:{userId:string;companyId:string;companyName?:string;role:string}){
  const {locale}=useI18n();const t=payrollText[locale];const [tab,setTab]=useState<'profiles'|'draft'|'source'>(()=>new URLSearchParams(window.location.search).get('view')==='register'?'draft':'source');const [source,setSource]=useState<SourceRecord|undefined>();
- if(role==='MANAGEMENT_VIEWER')return <main className="mx-auto max-w-[1600px] rounded-xl border bg-white p-4 sm:p-6"><HistoricalImports recordType="PAYROLL"/></main>;
+ if(role==='MANAGEMENT_VIEWER')return <section className="mx-auto max-w-[1600px] rounded-xl border bg-white p-4 sm:p-6"><HistoricalImports recordType="PAYROLL"/></section>;
  if(!payrollAllowed(role))return <p role="alert">{t.denied}</p>;
- return <main className="mx-auto max-w-[1600px] space-y-4 rounded-xl border bg-white p-4 sm:p-6"><p>{t.scope}</p><div className="flex gap-2"><button className={button} onClick={()=>setTab('source')}>Source Payroll / رواتب المصدر</button><button className={button} onClick={()=>setTab('profiles')}>{t.profiles}</button><button className={button} onClick={()=>setTab('draft')}>{t.register}</button></div>
- {tab==='source'?<HistoricalImports recordType="PAYROLL" onComplete={r=>{setSource(r);setTab(r.payroll_entitlement_id?'draft':'profiles');}}/>:tab==='profiles'?<Profiles source={source} userId={userId} companyId={companyId} t={t}/>:<Draft initialMonth={source?String(source.completion.salary_month??source.source_month):new URLSearchParams(window.location.search).get("month")??undefined} userId={userId} companyName={companyName} companyId={companyId} role={role} t={t}/>}</main>;
+ return <section className="mx-auto max-w-[1600px] space-y-4 rounded-xl border bg-white p-4 sm:p-6"><p>{t.scope}</p><div className="flex gap-2"><button className={button} onClick={()=>setTab('source')}>Source Payroll / رواتب المصدر</button><button className={button} onClick={()=>setTab('profiles')}>{t.profiles}</button><button className={button} onClick={()=>setTab('draft')}>{t.register}</button></div>
+ {tab==='source'?<HistoricalImports recordType="PAYROLL" onComplete={r=>{setSource(r);setTab(r.payroll_entitlement_id?'draft':'profiles');}}/>:tab==='profiles'?<Profiles source={source} userId={userId} companyId={companyId} t={t}/>:<Draft initialMonth={source?String(source.completion.salary_month??source.source_month):new URLSearchParams(window.location.search).get("month")??undefined} userId={userId} companyName={companyName} companyId={companyId} role={role} t={t}/>}</section>;
 }
 function Profiles({userId,companyId,t,source}:{source?:SourceRecord;userId:string;companyId:string;t:PayrollLabels}){
  const [revision,setRevision]=useState(0);const [load,setLoad]=useState<{revision:number;data?:PayrollProfiles;error?:boolean}|null>(null);

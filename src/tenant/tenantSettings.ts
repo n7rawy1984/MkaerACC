@@ -3,8 +3,8 @@ import type { Locale } from "../i18n/I18nContext";
 export const PLATFORM_PRESENTATION = {
   displayName: "Contracting Accounts",
   faviconUrl: "/favicon.svg",
-  primaryColor: "#0f172a",
-  accentColor: "#2563eb",
+  primaryColor: "#087E68",
+  accentColor: "#076B59",
 } as const;
 
 export interface TenantSettings {

@@ -1,0 +1,148 @@
+/* Scoped product refinements. No demo, authentication, tenant identity or business rules. */
+:is(.platform-app,.platform-dialog,.platform-navigation-dialog,.company-workspace,.workspace-standalone) {
+  --po-ink:var(--erp-text);--po-muted:var(--erp-muted);--po-line:var(--erp-border);
+  --po-teal:var(--erp-primary);--po-teal-dark:var(--erp-primary-hover);--po-canvas:var(--erp-background);
+  --ws-navy:var(--erp-sidebar);--ws-teal:var(--erp-primary);--ws-ink:var(--erp-text);
+  --ws-muted:var(--erp-muted);--ws-line:var(--erp-border);--ws-bg:var(--erp-background);
+  --suite-border:var(--erp-border);--suite-muted:var(--erp-muted);--suite-teal:var(--erp-primary);
+  font-family:var(--erp-font);font-synthesis:none;
+}
+/* Specific component aliases remain in their scoped stylesheets; these rules consolidate primitives. */
+:is(.platform-app,.company-workspace,.workspace-standalone) {background:var(--erp-background);color:var(--erp-text)}
+:is(.platform-app,.platform-dialog,.company-workspace,.workspace-standalone) :where(h1,h2,h3) {text-wrap:pretty}
+:is(.platform-app,.platform-dialog,.company-workspace,.workspace-standalone) :where(button,input,select,textarea,summary,a) {touch-action:manipulation}
+:is(.platform-app,.platform-dialog,.company-workspace,.workspace-standalone) :where(button,input,select,textarea) {font:inherit;line-height:1.5;border-radius:var(--erp-radius-control)}
+:is(.platform-app,.platform-dialog,.company-workspace,.workspace-standalone) :where(input:not([type=checkbox]):not([type=radio]),select,textarea) {min-height:40px;border:1px solid var(--erp-input-border);background:var(--erp-surface);color:var(--erp-text);padding:var(--erp-space-2) 10px;max-width:100%}
+:is(.platform-app,.platform-dialog,.company-workspace,.workspace-standalone) :where(input,textarea)::placeholder {color:var(--erp-muted);opacity:1}
+:is(.platform-app,.platform-dialog,.company-workspace,.workspace-standalone) :where(input[type=checkbox],input[type=radio]) {accent-color:var(--erp-primary);min-width:18px;min-height:18px}
+:is(.platform-app,.platform-dialog,.company-workspace,.workspace-standalone) :where(input,select,textarea)[aria-invalid=true] {border-color:var(--erp-danger-border);outline-color:var(--erp-danger-action)}
+:is(.platform-app,.platform-dialog,.company-workspace,.workspace-standalone) :where(button,a,summary,input,select,textarea,[tabindex]):focus-visible {outline:3px solid var(--erp-focus);outline-offset:3px;box-shadow:none}
+:is(.platform-app,.platform-dialog,.company-workspace,.workspace-standalone) :where(button) {min-height:36px;padding:7px var(--erp-space-3);border:1px solid var(--erp-input-border);background:var(--erp-secondary-bg);color:var(--erp-action-text);font-weight:600}
+:is(.platform-app,.platform-dialog,.company-workspace,.workspace-standalone) :where(button):hover:not(:disabled) {background:var(--erp-secondary-hover);color:var(--erp-primary-hover)}
+:is(.platform-app,.platform-dialog,.company-workspace,.workspace-standalone) :where(button,input,select,textarea):disabled {background:var(--erp-disabled-bg);color:var(--erp-disabled-text);border-color:var(--erp-disabled-border);opacity:1;cursor:not-allowed}
+:is(.platform-app,.company-workspace) :where(a) {color:var(--erp-action-text)}
+:is(.platform-app,.company-workspace) :where(p,td,dd,li,bdi) {overflow-wrap:anywhere}
+:is(.platform-app,.company-workspace) :where(table) {font-variant-numeric:tabular-nums;line-height:1.65}
+:is(.platform-app,.company-workspace) :where(th,td) {border-color:var(--erp-border)}
+:is(.platform-app,.company-workspace) :where(th) {background:var(--erp-table-header);color:var(--erp-secondary);font-weight:650}
+:is(.platform-app,.company-workspace) :where(tbody tr:hover) {background:var(--erp-table-hover)}
+:is(.platform-app,.company-workspace) :where(summary) {min-height:32px;padding-block:4px}
+:is(.platform-app,.company-workspace) :where(tbody a,tbody button) {min-height:32px;display:inline-flex;align-items:center;padding:5px 9px}
+:is(.platform-app,.company-workspace) :where(tbody details) {margin-block:6px}
+:is(.platform-app,.platform-dialog,.company-workspace) :where([role=alert]) {color:var(--erp-danger-text);background:var(--erp-danger-bg);border-color:var(--erp-danger-border)}
+:is(.platform-panel,.platform-stats article,.suite-section-card,.cycle-stage,.workspace-report-grid>article) {border-radius:var(--erp-radius-card);box-shadow:var(--erp-shadow)}
+:is(.platform-dialog,.workspace-navigation-dialog) {border-radius:var(--erp-radius-dialog);box-shadow:var(--erp-shadow-dialog)}
+.platform-app .platform-primary,.platform-dialog button[type=submit],.company-workspace .suite-primary {background:var(--erp-primary);color:var(--erp-inverse);border-color:var(--erp-primary)}
+.platform-app .platform-primary:hover:not(:disabled),.platform-dialog button[type=submit]:hover:not(:disabled),.company-workspace .suite-primary:hover {background:var(--erp-primary-hover);color:var(--erp-inverse)}
+/* Existing utility-based controls join the shared primitives without changing their event handlers. */
+:is(.company-workspace,.workspace-standalone) :is(button[class*="bg-slate-900"]) {background:var(--erp-primary);color:var(--erp-inverse);border-color:var(--erp-primary)}
+:is(.company-workspace,.workspace-standalone) :is(button[class*="bg-slate-900"]):hover:not(:disabled) {background:var(--erp-primary-hover);color:var(--erp-inverse)}
+:is(.platform-app,.company-workspace) :is(button[class*="text-rose-"],button[class*="text-red-"],.erp-destructive) {background:var(--erp-danger-bg);color:var(--erp-danger-text);border-color:var(--erp-danger-border)}
+:is(.platform-app,.company-workspace) :is(button[class*="text-rose-"],button[class*="text-red-"],.erp-destructive):hover:not(:disabled) {background:var(--erp-danger-action);color:var(--erp-inverse)}
+/* Explicit inverse pairings: light muted text must never inherit onto light content. */
+:is(.platform-sidebar,.platform-navigation-dialog,.workspace-sidebar,.workspace-navigation-dialog) {background:var(--erp-sidebar);color:var(--erp-nav-text);scrollbar-color:var(--erp-nav-muted) transparent}
+:is(.platform-sidebar,.platform-navigation-dialog,.workspace-sidebar,.workspace-navigation-dialog) :is(a,button,summary) {color:var(--erp-nav-text);background:transparent;border-color:transparent}
+:is(.platform-sidebar,.platform-navigation-dialog,.workspace-sidebar,.workspace-navigation-dialog) :is(a,button,summary):hover {background:var(--erp-nav-selected);color:var(--erp-inverse)}
+:is(.platform-sidebar,.platform-navigation-dialog,.workspace-sidebar,.workspace-navigation-dialog) :is(a,button,summary):focus-visible {outline-color:var(--erp-focus-inverse)}
+:is(.platform-sidebar,.platform-navigation-dialog,.workspace-sidebar,.workspace-navigation-dialog) :is(a.active,a[aria-current=page]) {background:var(--erp-nav-selected);color:var(--erp-inverse);border-inline-start:3px solid var(--erp-nav-selected-edge);box-shadow:none}
+:is(.platform-sidebar,.platform-navigation-dialog,.workspace-sidebar,.workspace-navigation-dialog) :is(small,em,.platform-nav-group>p) {color:var(--erp-nav-muted)}
+:is(.workspace-brand-icon,.platform-brand-symbol,.workspace-tenant,.platform-owner-card) {background:var(--erp-nav-selected);color:var(--erp-nav-text);border-color:var(--erp-nav-muted)}
+:is(.workspace-tenant,.platform-owner-card) :is(small,strong,span,bdi) {color:var(--erp-nav-text)}
+:is(.workspace-nav-group summary,.workspace-sidebar-footer>span,.workspace-brand em) {color:var(--erp-nav-text)}
+.platform-brand small {color:var(--erp-nav-selected-edge)}
+/* Shared status roles carry text labels; brand does not imply success or financial gain. */
+.erp-badge {display:inline-flex;align-items:center;gap:5px;border:1px solid;border-radius:999px;padding:3px 9px;font-size:12px;font-weight:600;line-height:1.5;max-width:100%;overflow-wrap:anywhere}
+.erp-badge-neutral {background:var(--erp-neutral-bg);color:var(--erp-neutral-text);border-color:var(--erp-neutral-border)}
+.erp-badge-success {background:var(--erp-success-bg);color:var(--erp-success-text);border-color:var(--erp-success-border)}
+.erp-badge-warning {background:var(--erp-warning-bg);color:var(--erp-warning-text);border-color:var(--erp-warning-border)}
+.erp-badge-danger {background:var(--erp-danger-bg);color:var(--erp-danger-text);border-color:var(--erp-danger-border)}
+.erp-badge-info {background:var(--erp-info-bg);color:var(--erp-info-text);border-color:var(--erp-info-border)}
+.erp-badge-pending {background:var(--erp-pending-bg);color:var(--erp-pending-text);border-color:var(--erp-pending-border)}
+.platform-app .platform-badge {font-size:12px}
+.platform-badge-positive,.commercial-steps li[data-complete=true],.platform-success {background:var(--erp-success-bg);color:var(--erp-success-text);border-color:var(--erp-success-border)}
+.platform-badge-warning {background:var(--erp-warning-bg);color:var(--erp-warning-text);border-color:var(--erp-warning-border)}
+.platform-badge-negative {background:var(--erp-danger-bg);color:var(--erp-danger-text);border-color:var(--erp-danger-border)}
+.platform-badge-neutral {background:var(--erp-neutral-bg);color:var(--erp-neutral-text);border-color:var(--erp-neutral-border)}
+.commercial-steps li[data-complete=false] {background:var(--erp-surface-subtle);color:var(--erp-secondary)}
+.commercial-next {background:var(--erp-secondary-bg);color:var(--erp-action-text);border-color:var(--erp-primary)}
+/* Dense reading surfaces have neutral amounts and stable digit widths. */
+.suite-data-table :is(th,td).suite-numeric,.suite-financial-card>p,.cycle-metric>bdi {font-variant-numeric:tabular-nums;color:var(--erp-text)}
+.suite-data-table .suite-numeric {white-space:nowrap;text-align:end}
+.suite-data-table td:last-child {background:inherit}
+.workspace-page-header h1 {font-size:clamp(24px,2vw,30px);font-weight:720;line-height:1.35;letter-spacing:-.02em}
+.workspace-page-header p,.suite-section-heading p {font-size:13px;line-height:1.8;color:var(--erp-muted)}
+.workspace-route-body :where(label,summary) {font-size:13px}
+.workspace-route-body :where(input,select,textarea,button) {font-size:13px}
+.suite-data-table {font-size:13px}
+.suite-data-table :is(th,td) {padding:var(--erp-space-3)}
+.suite-filter-bar {background:var(--erp-surface-subtle);border-color:var(--erp-border);border-radius:var(--erp-radius-control)}
+.suite-financial-card,.suite-section-card {background:var(--erp-surface);border-color:var(--erp-border)}
+.workspace-route-body .suite-primary {color:var(--erp-inverse);background:var(--erp-primary)}
+.workspace-route-body .suite-view-switch a {color:var(--erp-action-text);min-height:36px;display:inline-flex;align-items:center}
+.suite-view-switch a:first-child {background:var(--erp-secondary-bg)}
+/* The six-stage diagram uses a restrained brand family, no decorative gradients. */
+.integrated-cycle {--cycle-navy:var(--erp-text);--cycle-line:var(--erp-border);--cycle-cyan:var(--erp-primary);--cycle-green:var(--erp-primary);--cycle-orange:var(--erp-primary)}
+.integrated-cycle :is(.cycle-stage-heading,.cycle-stage-4 .cycle-stage-heading,.cycle-stage-5 .cycle-stage-heading,.cycle-stage-6 .cycle-stage-heading,.cycle-month h3) {background:var(--erp-nav-selected);color:var(--erp-inverse)}
+.integrated-cycle :is(.cycle-stage-heading h2,.cycle-stage-heading p) {color:var(--erp-inverse)}
+.integrated-cycle :is(.cycle-workflow-card,.cycle-process .cycle-workflow-card) {background:var(--erp-surface-subtle)}
+.integrated-cycle .cycle-statement-preview span {background:var(--erp-border)}
+.integrated-cycle .cycle-title {border-color:var(--erp-border)}
+@media(max-width:600px) {
+ :is(.platform-app,.company-workspace,.workspace-standalone) :where(button,a[role=button]) {min-height:40px}
+ .workspace-page-header h1 {font-size:24px}
+ .workspace-page-header p {font-size:12px}
+ .workspace-route-body :where(label,summary) {font-size:13px}
+ .suite-basic-filters {gap:var(--erp-space-3)}
+ .suite-data-table {min-width:950px}
+ .platform-dialog {max-width:calc(100vw - 24px)}
+}
+@media(prefers-reduced-motion:reduce) {
+ :is(.platform-app,.company-workspace,.workspace-standalone) *, :is(.platform-app,.company-workspace) *::before {animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+/* Transitional utility compatibility on existing forms/cards, with explicit semantic roles. */
+:is(.company-workspace,.platform-app) :is(.text-slate-400,.text-slate-500,.text-slate-600,.text-gray-500,.text-gray-600) {color:var(--erp-muted)}
+:is(.company-workspace,.platform-app) :is(.text-slate-700,.text-slate-800,.text-slate-900) {color:var(--erp-text)}
+:is(.company-workspace,.platform-app) :is(.text-blue-700,.text-blue-800) {color:var(--erp-info-text)}
+:is(.company-workspace,.platform-app) :is(.bg-blue-50,.bg-blue-100) {background:var(--erp-info-bg)}
+:is(.company-workspace,.platform-app) :is(.text-rose-700,.text-rose-800,.text-red-700,.text-red-800) {color:var(--erp-danger-text)}
+:is(.company-workspace,.platform-app) :is(.bg-rose-50,.bg-red-50) {background:var(--erp-danger-bg)}
+:is(.company-workspace,.platform-app) :is(.text-amber-700,.text-amber-800,.text-amber-900) {color:var(--erp-warning-text)}
+:is(.company-workspace,.platform-app) :is(.bg-amber-50,.bg-amber-100) {background:var(--erp-warning-bg)}
+:is(.company-workspace,.platform-app) :is(.text-emerald-700,.text-emerald-800) {color:var(--erp-success-text)}
+:is(.company-workspace,.platform-app) :is(.bg-emerald-50,.bg-emerald-100) {background:var(--erp-success-bg)}
+:is(.company-workspace,.platform-app) :is(.bg-slate-50,.bg-slate-100) {background:var(--erp-surface-subtle)}
+:is(.company-workspace,.platform-app) .erp-badge-info {color:var(--erp-info-text);background:var(--erp-info-bg)}
+:is(.company-workspace,.platform-app) .erp-badge-success {color:var(--erp-success-text);background:var(--erp-success-bg)}
+
+.platform-sidebar .platform-owner-card :is(small,strong,span),.platform-navigation-dialog .platform-owner-card :is(small,strong,span),.workspace-sidebar .workspace-tenant :is(small,strong,span) {color:var(--erp-nav-text)}
+/* Higher specificity than the legacy scoped form rules, without utility-wide resets. */
+:is(.company-workspace,.platform-app,.platform-dialog) :is(input:not([type=checkbox]):not([type=radio]),select,textarea) {border-color:var(--erp-input-border);background:var(--erp-surface);color:var(--erp-text);min-height:40px}
+:is(.company-workspace,.platform-app,.platform-dialog) :is(button,input,select,textarea):disabled {opacity:1;color:var(--erp-disabled-text);background:var(--erp-disabled-bg);border-color:var(--erp-disabled-border)}
+:is(.company-workspace,.platform-app,.platform-dialog) :is(button,a,summary,input,select,textarea,[tabindex]):focus-visible {outline:3px solid var(--erp-focus);outline-offset:3px}
+:is(.workspace-sidebar,.platform-sidebar,.platform-navigation-dialog,.workspace-navigation-dialog) :is(button,a,summary):focus-visible {outline-color:var(--erp-focus-inverse)}
+.workspace-route-body :is(dt,.suite-scope-note,.suite-section-heading p),.cycle-metric small,.cycle-capability {font-size:12px;line-height:1.7}
+.cycle-month dt {font-size:12px}
+.platform-owner-card {border-radius:var(--erp-radius-control);padding:var(--erp-space-3)}
+:is(.platform-brand,.workspace-brand):is(:hover,:focus-visible) :is(small,em) {color:var(--erp-inverse)}
+.company-workspace.workspace-suite {background:var(--erp-background)}
+.company-workspace .suite-data-table th,.platform-app .platform-table-wrap th {background:var(--erp-table-header);color:var(--erp-secondary)}
+.company-workspace .suite-data-table tbody tr:nth-child(even),.platform-app .platform-table-wrap tbody tr:nth-child(even) {background:var(--erp-surface-subtle)}
+.company-workspace .suite-data-table tbody tr:hover,.platform-app .platform-table-wrap tbody tr:hover {background:var(--erp-table-hover)}
+.company-workspace .suite-data-table td:last-child {background:inherit}
+.platform-app .platform-error,.company-workspace .suite-error,.company-workspace .cycle-read-error {background:var(--erp-danger-bg);color:var(--erp-danger-text);border-color:var(--erp-danger-border)}
+.platform-app .platform-success,.platform-app .commercial-steps li[data-complete=true] {background:var(--erp-success-bg);color:var(--erp-success-text);border-color:var(--erp-success-border)}
+/* Workflow categories use brand icons; warning/danger are reserved for real state. */
+.integrated-cycle :is(.cycle-icon,.cycle-row-icon) {color:var(--erp-action-text);background:var(--erp-secondary-bg)}
+@media(max-width:600px) {
+ /* The last toolbar disclosure opens inward in both RTL and LTR. */
+ .company-workspace .suite-export-options>div {inset-inline-start:auto;inset-inline-end:0;min-width:min(240px,calc(100vw - 48px));max-width:calc(100vw - 48px)}
+}
+:is(.company-workspace,.platform-app) :is(.text-rose-500,.text-red-500) {color:var(--erp-danger-text)}
+/* Match the shared focus selector's specificity on inverse surfaces. */
+.company-workspace .workspace-sidebar :is(a,button,summary):focus-visible,
+.platform-app .platform-sidebar :is(a,button,summary):focus-visible,
+.company-workspace .workspace-navigation-dialog :is(a,button,summary):focus-visible,
+.platform-navigation-dialog[open] :is(a,button,summary):focus-visible {outline-color:var(--erp-focus-inverse)}
+/* Explicit tenant-branded actions retain their configured color and inverse text. */
+.company-workspace button[class*="bg-[var("]:not(:disabled),
+.company-workspace button[class*="bg-[var("]:hover:not(:disabled) {background:var(--tenant-primary,var(--erp-primary));color:var(--erp-inverse);border-color:var(--tenant-primary,var(--erp-primary))}

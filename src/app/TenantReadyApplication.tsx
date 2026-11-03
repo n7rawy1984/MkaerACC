@@ -1,5 +1,5 @@
+import {ContentSection,LoadingState,ErrorState} from '../workspace/workspaceUi';
 import ExecutiveDashboard from "../dashboard/ExecutiveDashboard";
-import { LayoutDashboard } from "lucide-react";
 import { ExpenseReadPanel } from "../financial/ExpenseReadPanel";
 import { SupplierPaymentPanel } from "../financial/SupplierPaymentPanel";
 import { SubcontractorAdvancePanel } from "../financial/SubcontractorAdvancePanel";
@@ -14,76 +14,27 @@ import { PartiesList } from "../master/PartiesList";
 import { ExpenseCategoriesList } from "../master/ExpenseCategoriesList";
 import { SubcontractsList } from "../master/SubcontractsList";
 import { TreasuryNamesPanel } from "../master/TreasuryNamesPanel";
-import { NavLink } from "react-router-dom";
-import { LanguageButton } from "../auth/AuthFrame";
 import { useAuth } from "../auth/AuthContext";
 import { useT } from "../i18n/I18nContext";
-import { useTenantSettings } from "../tenant/TenantSettingsContext";
-import { TenantBrandMark } from "../tenant/TenantBrandMark";
 import { useProductionMasterData } from "../master/productionMasterDataContext";
 
 export default function TenantReadyApplication({ view }: { view: "dashboard" | "expenses" | "supplierPayments" | "subcontractorAdvances" | "subcontractorCertificates" | "subcontractorPayments" | "retentionReleases" | "retentionPayments" | "companyProfile" | "projects" | "parties" | "expenseCategories" | "accounts" | "treasuryAccounts" | "subcontracts" | "deferred" }) {
   const t = useT();
-  const { state, showCompanySelector, signOut } = useAuth();
-  const tenantSettings = useTenantSettings();
+  const { state } = useAuth();
   const masterData = useProductionMasterData();
   if (state.phase !== "TENANT_READY") return null;
-  const displayName = tenantSettings.phase === "READY"
-    ? tenantSettings.settings.effectiveDisplayName
-    : state.activeTenant.companyName;
-  const businessIdentity = masterData.phase === "READY"
-    ? masterData.company.legalName
-      ? `${masterData.company.name} · ${masterData.company.legalName}`
-      : masterData.company.name
-    : state.activeTenant.companyLegalName ?? state.activeTenant.companyName;
-  return (
-    <div className="min-h-screen bg-slate-50">
-      <header className="border-b border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-4">
-          <div className="flex min-w-0 items-center gap-3">
-            <TenantBrandMark logoUrl={tenantSettings.phase === "READY" ? tenantSettings.settings.logoUrl : null} />
-            <div className="min-w-0 break-words"><p className="text-xs font-medium uppercase tracking-wide text-slate-500">{t("auth.activeCompany")}</p><h1 className="text-lg font-semibold"><bdi>{displayName}</bdi></h1><p className="text-xs text-slate-500"><bdi>{businessIdentity}</bdi></p></div>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="rounded-lg bg-slate-100 px-3 py-2 text-sm"><span className="text-slate-500">{t("auth.role")}:</span> <bdi dir="ltr">{state.activeTenant.role}</bdi></span>
-            {state.memberships.length > 1 && <button type="button" onClick={showCompanySelector} className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium">{t("auth.switchCompany")}</button>}
-            <LanguageButton />
-            <button type="button" onClick={() => void signOut()} className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium">{t("auth.signOut")}</button>
-          </div>
-        </div>
-      </header>
-      <main className={view === "dashboard" || view === "expenses" ?  "mx-auto max-w-[1600px] px-4 py-8 sm:px-6" : "mx-auto max-w-4xl px-6 py-16"}>
-        <nav aria-label={t("productionMaster.navigation")} className="mb-6 flex flex-wrap gap-3">
-          <NavLink to="/" end className={({ isActive }) => `flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium ${isActive ? "border-[var(--tenant-primary)] text-[var(--tenant-primary)]" : "border-slate-300 text-slate-600"}`}><LayoutDashboard size={16} aria-hidden="true" />{t("nav.dashboard")}</NavLink>
-          {(["companyProfile", "projects", "parties", "expenseCategories", "accounts", "treasuryAccounts", "subcontracts"] as const).map((resource) => (
-            <NavLink key={resource} to={resource === "companyProfile" ? "/company-profile" : resource === "treasuryAccounts" ? "/treasury-accounts" : resource === "expenseCategories" ? "/expense-categories" : `/${resource}`} className={({ isActive }) => `rounded-lg border px-3 py-2 text-sm font-medium ${isActive ? "border-[var(--tenant-primary)] text-[var(--tenant-primary)]" : "border-slate-300 text-slate-600"}`}>
-              {t(`productionMaster.${resource}`)}
-            </NavLink>
-          ))}
-          {(state.activeTenant.role === "ACCOUNTING_ADMIN" || state.activeTenant.role === "ACCOUNTANT") && <NavLink to="/attendance" className="rounded-lg border px-3 py-2 text-sm">{t("attendance.title")}</NavLink>}
-          {(["ACCOUNTING_ADMIN","ACCOUNTANT","MANAGEMENT_VIEWER"].includes(state.activeTenant.role)) && <NavLink to="/payroll" className="rounded-lg border px-3 py-2 text-sm">{t("payroll.title")}</NavLink>}
-
-          <NavLink to="/expenses" className={({ isActive }) => `rounded-lg border px-3 py-2 text-sm font-medium ${isActive ? "border-[var(--tenant-primary)] text-[var(--tenant-primary)]" : "border-slate-300 text-slate-600"}`}>{t("expenseRead.title")}</NavLink>
-          <NavLink to="/supplier-payments" className={({ isActive }) => `rounded-lg border px-3 py-2 text-sm font-medium ${isActive ? "border-[var(--tenant-primary)] text-[var(--tenant-primary)]" : "border-slate-300 text-slate-600"}`}>{t("supplierPaymentRead.title")}</NavLink>
-          <NavLink to="/subcontractor-advances" className={({ isActive }) => `rounded-lg border px-3 py-2 text-sm font-medium ${isActive ? "border-[var(--tenant-primary)] text-[var(--tenant-primary)]" : "border-slate-300 text-slate-600"}`}>{t("subcontractorAdvanceRead.title")}</NavLink>
-          <NavLink to="/subcontractor-payments" className={({ isActive }) => `rounded-lg border px-3 py-2 text-sm font-medium ${isActive ? "border-[var(--tenant-primary)] text-[var(--tenant-primary)]" : "border-slate-300 text-slate-600"}`}>{t("subcontractorPaymentRead.title")}</NavLink>
-          <NavLink to="/retention-payments" className={({ isActive }) => `rounded-lg border px-3 py-2 text-sm font-medium ${isActive ? "border-[var(--tenant-primary)] text-[var(--tenant-primary)]" : "border-slate-300 text-slate-600"}`}>{t("retentionPaymentRead.title")}</NavLink>
-          <NavLink to="/retention-releases" className={({ isActive }) => `rounded-lg border px-3 py-2 text-sm font-medium ${isActive ? "border-[var(--tenant-primary)] text-[var(--tenant-primary)]" : "border-slate-300 text-slate-600"}`}>{t("retentionReleaseRead.title")}</NavLink>
-          <NavLink to="/subcontractor-certificates" className={({ isActive }) => `rounded-lg border px-3 py-2 text-sm font-medium ${isActive ? "border-[var(--tenant-primary)] text-[var(--tenant-primary)]" : "border-slate-300 text-slate-600"}`}>{t("certificateRead.title")}</NavLink>
-        </nav>
-        {(tenantSettings.phase === "MISSING" || tenantSettings.phase === "ERROR") && <p role="alert" className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">{t("auth.tenantSettingsUnavailable")}</p>}
-        {tenantSettings.phase === "LOADING" && <p role="status" className="mb-4 text-sm text-slate-500">{t("auth.loadingTenantSettings")}</p>}
+  return <div className="workspace-module-content">
         {view === "dashboard" ? <ExecutiveDashboard /> : view === "expenses" ? <ExpenseReadPanel /> : view === "supplierPayments" ? <SupplierPaymentPanel /> : view === "subcontractorAdvances" ? <SubcontractorAdvancePanel /> : view === "subcontractorCertificates" ? <SubcontractorCertificatePanel /> : view === "subcontractorPayments" ? <SubcontractorPaymentPanel /> : view === "retentionReleases" ? <RetentionReleasePanel /> : view === "retentionPayments" ? <RetentionPaymentPanel /> : view === "deferred" ? (
-          <section className="rounded-2xl border border-[var(--tenant-accent)] bg-white p-8 shadow-sm">
-            <h2 className="text-2xl font-semibold">{t("auth.tenantReadyTitle")}</h2>
+          <ContentSection className="workspace-master-module">
+            <h2>{t("auth.tenantReadyTitle")}</h2>
             <p className="mt-3 leading-7 text-slate-600">{t("auth.cutoverPending")}</p>
-          </section>
+          </ContentSection>
         ) : (
-          <section className="rounded-2xl border border-[var(--tenant-accent)] bg-white p-8 shadow-sm">
-            <h2 className="text-2xl font-semibold">{t(`productionMaster.${view}`)}</h2>
-            {masterData.phase === "LOADING" && <p role="status" className="mt-4 text-sm text-slate-500">{t("productionMaster.loading")}</p>}
+          <ContentSection className="workspace-master-module">
+
+            {masterData.phase === "LOADING" && <LoadingState>{t("productionMaster.loading")}</LoadingState>}
             {masterData.phase === "MISSING_COMPANY" && <p role="alert" className="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">{t("productionProjects.companyUnavailable")}</p>}
-            {masterData.phase === "ERROR" && <p role="alert" className="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900">{t("productionMaster.error")}</p>}
+            {masterData.phase === "ERROR" && <ErrorState>{t("productionMaster.error")}</ErrorState>}
             {view === "subcontracts" && <p className="mt-3 text-sm text-slate-500">{t("productionMaster.subcontractsMetadataScope")}</p>}
             {view === "subcontracts" && masterData.phase === "READY" && <SubcontractsList />}
             {view === "accounts" && masterData.phase === "READY" && <AccountNamesPanel />}
@@ -92,9 +43,7 @@ export default function TenantReadyApplication({ view }: { view: "dashboard" | "
             {view === "companyProfile" && masterData.phase === "READY" && <CompanyProfilePanel />}
             {view === "parties" && masterData.phase === "READY" && <PartiesList />}
             {view === "expenseCategories" && masterData.phase === "READY" && <ExpenseCategoriesList />}
-          </section>
+          </ContentSection>
         )}
-      </main>
-    </div>
-  );
+    </div>;
 }

@@ -1,3 +1,4 @@
+import {StatusBadge} from '../workspace/workspaceUi';
 import { PersonMasterCreationPanel } from "./PersonMasterCreationPanel";
 import { SubcontractCreationPanel } from "./SubcontractCreationPanel";
 import { OtherPartyNameControl } from "./OtherPartyNameControl";
@@ -56,13 +57,13 @@ export function PartiesList() {
     {(phase === "ERROR" || phase === "REFRESH_ERROR") && (editing || statusTarget) && <button type="button" className={button} onClick={refreshParties}>{t("supplierMutation.refresh")}</button>}
   </div>;
   return <>
-    <SubcontractCreationPanel kind="party" />
+    <div className="suite-master-toolbar"><SubcontractCreationPanel kind="party" />
     <PersonMasterCreationPanel kind="person" />
     <div className="mt-4 flex flex-wrap gap-2">
       {canManage && <button type="button" className={button} disabled={blocked} onClick={(event) => { returnFocus.current = event.currentTarget; setStatusTarget(null); setOtherActionId(null); setEmployeeActionId(null); setCustodianActionId(null); setOwnerActionId(null); setSubcontractorActionId(null); setEditing("new"); }}>{t("supplierMutation.create")}</button>}
       <button type="button" className={button} disabled={phase === "PENDING" || master.otherPartyNameMutation.phase === "PENDING" || master.employeePartyNameMutation.phase === "PENDING" || master.custodianPartyNameMutation.phase === "PENDING" || master.ownerPartyNameMutation.phase === "PENDING" || master.subcontractorPartyNameMutation.phase === "PENDING"} onClick={refreshParties}>{t("supplierMutation.refresh")}</button>
     </div>
-    {!otherActionId && master.otherPartyNameMutation.phase === "ERROR" && <p role="alert" className="mt-3 text-sm">{t(`otherPartyName.${master.otherPartyNameMutation.error ?? "uncertain"}`)} {t("otherPartyName.refreshRequired")}</p>}
+    </div>{!otherActionId && master.otherPartyNameMutation.phase === "ERROR" && <p role="alert" className="mt-3 text-sm">{t(`otherPartyName.${master.otherPartyNameMutation.error ?? "uncertain"}`)} {t("otherPartyName.refreshRequired")}</p>}
     {!otherActionId && master.otherPartyNameMutation.phase === "REFRESH_ERROR" && <p role="alert" className="mt-3 text-sm">{t("otherPartyName.refreshError")}</p>}
     {!employeeActionId && master.employeePartyNameMutation.phase === "ERROR" && <p role="alert" className="mt-3 text-sm">{t(`employeePartyName.${master.employeePartyNameMutation.error ?? "uncertain"}`)} {t("employeePartyName.refreshRequired")}</p>}
     {!employeeActionId && master.employeePartyNameMutation.phase === "REFRESH_ERROR" && <p role="alert" className="mt-3 text-sm">{t("employeePartyName.refreshError")}</p>}
@@ -83,7 +84,7 @@ export function PartiesList() {
           <li key={party.id} className="py-4 first:pt-0 last:pb-0">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <p className="min-w-0 [overflow-wrap:anywhere] font-medium text-slate-900">{party.code ? `${party.code} · ` : ""}{party.name}</p>
-              <span className="text-sm text-slate-600">{party.personRoles?.length === 2 ? t("personCreation.EMPLOYEE_CUSTODIAN") : t(`productionMaster.type.${party.type}`)} · {t(`partyStatus.${party.status}`)}</span>
+              <span className="text-sm text-slate-600">{party.personRoles?.length === 2 ? t("personCreation.EMPLOYEE_CUSTODIAN") : t(`productionMaster.type.${party.type}`)}</span><StatusBadge status={party.status}>{t(`partyStatus.${party.status}`)}</StatusBadge>
             </div>
             <dl className="mt-2 space-y-1 break-words text-sm text-slate-500">
               {([

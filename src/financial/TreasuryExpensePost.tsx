@@ -124,7 +124,8 @@ export function TreasuryExpensePost({ userId, companyId, role, onPosted, source 
         {invoice && <label>{t("expenseRead.invoice_number")}<input dir="ltr" name="invoice" required maxLength={100} className={field} /></label>}
         <label className="sm:col-span-2">{t("expensePost.description")}<textarea name="description" defaultValue={source?.description} readOnly={!!source} required maxLength={1000} className={field} /></label>
         <label className="sm:col-span-2">{t("expenseRead.notes")}<textarea name="notes" maxLength={2000} className={field} /></label>
-        <button type="submit" className="rounded-lg bg-slate-900 px-4 py-2 text-white">{t("expensePost.submit")}</button>
+        <p className="sm:col-span-2 text-sm text-slate-600">{t("expensePost.actionHelp")}</p>
+        <button type="submit" aria-label={t("expensePost.submit")} aria-busy={busy} className="min-h-10 rounded-lg bg-slate-900 px-4 py-2 font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900">{t("expensePost.submit")}</button>
       </fieldset>
     </form>}
   </section>;

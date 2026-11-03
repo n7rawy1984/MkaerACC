@@ -1,3 +1,6 @@
+import {CycleFoundation} from '../workspace/CycleFoundation';
+import {WorkspaceQuickActions} from '../workspace/WorkspaceQuickActions';
+import {useWorkspaceText} from '../workspace/useWorkspaceText';
 import {ReportExport} from '../reports/ReportExport';
 import {postedJournalReport} from '../reports/postedJournalReport';
 import HistoricalImports from "../historical/HistoricalImports";
@@ -15,21 +18,23 @@ import { useDashboardRead } from "./useDashboardRead";
 import { dashboardAED, summarizeDashboard, type DashboardSummary } from "./dashboardSummary";
 import { DashboardChart } from "./DashboardChart";
 
-export default function ExecutiveDashboard() {
+export default function ExecutiveDashboard() {return <CycleFoundation details={<LegacyExecutiveDashboard/>}/>;}
+function LegacyExecutiveDashboard() {
   const { state } = useAuth();
   if (state.phase !== "TENANT_READY") return null;
   return <DashboardContent key={`${state.profile.userId}:${state.activeTenant.companyId}:${state.activeTenant.role}`} userId={state.profile.userId} companyId={state.activeTenant.companyId} role={state.activeTenant.role} />;
 }
 function Kpi({ label, value, icon: Icon, hint, warning = false }: { label: string; value: string; icon: LucideIcon; hint?: string; warning?: boolean }) {
-  return <div className={`min-w-0 rounded-xl border bg-white p-5 shadow-sm ${warning ? "border-s-4 border-s-amber-400 border-slate-200" : "border-slate-200"}`}>
-    <div className="flex items-start justify-between gap-3"><p className="text-xs font-medium text-slate-500">{label}</p><span className={`shrink-0 rounded-lg p-2 ${warning ? "bg-amber-50 text-amber-700" : "bg-slate-100 text-slate-600"}`}><Icon size={17} aria-hidden="true" /></span></div>
-    <p className="mt-3 break-words text-2xl font-semibold text-slate-900"><bdi dir="ltr" className="tabular-nums">{value}</bdi></p>
-    {hint && <p className="mt-2 text-xs leading-5 text-slate-500">{hint}</p>}
+  return <div className={`workspace-kpi ${warning ? "workspace-kpi-warning" : ""}`}>
+    <div><p>{label}</p><span className="workspace-kpi-icon"><Icon size={18} aria-hidden="true"/></span></div>
+    <p className="workspace-kpi-value"><bdi dir="ltr" className="tabular-nums">{value}</bdi></p>
+    {hint&&<p className="workspace-kpi-hint">{hint}</p>}
   </div>;
 }
 function DashboardContent({ userId, companyId, role }: { userId: string; companyId: string; role: string }) {
   const auth=useAuth();const companyName=auth.state.phase==="TENANT_READY"?auth.state.activeTenant.companyName:"";
   const { t, locale } = useI18n(), master = useProductionMasterData();
+  const w=useWorkspaceText();
   const [revision, setRevision] = useState(0);
   useEffect(() => {
     const changed = (event: Event) => { if ((event as CustomEvent).detail?.companyId === companyId) setRevision(n => n + 1); };
@@ -44,18 +49,18 @@ function DashboardContent({ userId, companyId, role }: { userId: string; company
     try { return summarizeDashboard(master, read.data, t("executiveDashboard.companyOverhead")); }
     catch { return null; }
   }, [masterReady, master, read, t]);
-  return <section aria-labelledby="executive-dashboard-title" className="min-w-0 space-y-6">
-    <div className="flex flex-wrap items-start justify-between gap-3"><div><h2 id="executive-dashboard-title" className="text-2xl font-semibold text-slate-900">{t("executiveDashboard.title")}</h2><p className="mt-1 max-w-3xl text-sm leading-6 text-slate-500">{t("executiveDashboard.subtitle")}</p></div>
+  return <section aria-labelledby="executive-dashboard-title" className="workspace-dashboard min-w-0 space-y-6">
+    <WorkspaceQuickActions/>
+    <div className="workspace-section-heading"><div><h2 id="executive-dashboard-title" className="text-2xl font-semibold text-slate-900">{w("posted")}</h2><p className="mt-1 max-w-3xl text-sm leading-6 text-slate-500">{w("postedNote")}</p></div>
       {masterReady && read.phase !== "DENIED" && <button type="button" disabled={read.phase === "LOADING"} onClick={() => setRevision(n => n + 1)} className="flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm disabled:opacity-50"><RefreshCw size={14} aria-hidden="true" />{t("executiveDashboard.refresh")}</button>}
       {master.phase !== "LOADING" && !masterReady && <button type="button" onClick={() => window.location.reload()} className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm">{t("executiveDashboard.refresh")}</button>}
     </div>
-    <HistoricalImports summary revision={revision} postedSummary={summary}/>
-    <h2 className="text-xl font-semibold text-slate-900">{locale === "ar" ? "الحسابات المرحلة" : "Posted Accounting"}</h2>
+    <section className="workspace-dashboard-section" aria-label={w("posted")}>
     {(["ACCOUNTING_ADMIN","ACCOUNTANT","MANAGEMENT_VIEWER"].includes(role))&&<ReportExport build={()=>postedJournalReport(companyId,companyName,locale)}/>}
     {master.phase === "LOADING" && <p role="status">{t("executiveDashboard.loading")}</p>}
     {master.phase !== "LOADING" && !masterReady && <p role="alert" className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">{t("executiveDashboard.error")}</p>}
     {masterReady && master.phase === "READY" && <>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="workspace-posted-kpis">
         <Kpi label={t("executiveDashboard.activeProjects")} value={String(master.projects.filter(p => p.status === "ACTIVE").length)} icon={Building2} />
         {summary && <>
           <Kpi label={t("executiveDashboard.postedExpenseNet")} value={dashboardAED(summary.postedExpenseNet)} icon={Receipt} hint={t("executiveDashboard.expenseScope")} />
@@ -78,6 +83,10 @@ function DashboardContent({ userId, companyId, role }: { userId: string; company
         {summary.recentExpenses.length === 0 ? <p className="p-5 text-sm text-slate-500">{t("executiveDashboard.noData")}</p> : <ul className="divide-y divide-slate-100">{summary.recentExpenses.map(expense => <li key={expense.id} className="flex flex-wrap items-baseline justify-between gap-3 px-5 py-3"><div className="min-w-0 break-words"><p className="font-medium"><bdi>{expense.description}</bdi></p><p className="mt-1 text-xs text-slate-500"><bdi dir="ltr">{expense.expense_reference}</bdi> · <bdi dir="ltr">{expense.expense_date}</bdi></p></div><bdi dir="ltr" className="text-sm font-semibold tabular-nums">{dashboardAED(expense.net_amount_minor)}</bdi></li>)}</ul>}
       </Card>}
     </>}
+    </section>
+    {['ACCOUNTING_ADMIN','ACCOUNTANT','MANAGEMENT_VIEWER','PROJECT_MANAGER'].includes(role)&&<aside className="workspace-guidance">{w('treasuryNote')} <Link to="/treasury-accounts">{w('viewTreasury')}</Link></aside>}
+    <section className="workspace-dashboard-section" aria-label={w('source')}><div className="workspace-section-heading"><p>{w('sourceNote')}</p></div><HistoricalImports summary revision={revision} postedSummary={summary}/></section>
+    <aside className="workspace-guidance"><strong>{w('pendingTitle')}</strong><p>{w('pendingNote')}</p></aside>
   </section>;
 }
 function ProjectOverview({ projects, financial }: { projects: (ProductionProjectSummary | DashboardSummary["projects"][number])[]; financial: boolean }) {

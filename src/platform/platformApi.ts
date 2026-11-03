@@ -4,12 +4,14 @@ import { platformDeadline, PlatformDeadlineError, type ReadOptions } from "./pla
 
 export const companyRoles = ["ACCOUNTING_ADMIN", "ACCOUNTANT", "PROJECT_MANAGER", "DATA_ENTRY", "PROCUREMENT", "MANAGEMENT_VIEWER", "FOREMAN"] as const;
 export type CompanyAccessRole = typeof companyRoles[number];
-export type Resource = "entities" | "customers" | "users" | "memberships" | "invitations" | "audit" | "settings";
+export type Resource = "entities" | "customers" | "users" | "memberships" | "invitations" | "audit" | "settings" | "subscriptions";
 export type PlatformRow = Record<string, string | number | boolean | null | Record<string, unknown>>;
 export interface Directory { items: PlatformRow[]; has_more: boolean; }
 export interface PlatformContext { user_id: string; role: "PLATFORM_OWNER"; step_up_required: boolean; }
 export interface Receipt { id: string; request_id: string; command: string; status: "CONFIRMED"; }
 export type AdminCommand =
+  | { name: "set_subscription"; input: { id: string; version: string; plan_key: string; subscription_state: string; starts_on: string; ends_on: string; billing_method: string; payment_status: string; payment_reference?: string; reason: string } }
+  | { name: "provision_accounting"; input: { id: string; version: string; code: string; treasury_name: string; treasury_type: string; bank_name?: string; reason: string } }
   | { name: "create_customer"; input: { code: string; name: string; contact_email?: string } }
   | { name: "update_customer"; input: { id: string; version: string; name: string; contact_email?: string } }
   | { name: "create_entity"; input: { code: string; name: string; tenant_slug: string; locale: string; entity_kind: string; initial_admin_id?: string; customer_id?: string; legal_name?: string; trn?: string; address?: string; region?: string } }
@@ -22,7 +24,7 @@ export type AdminCommand =
   | { name: "resend"; input: { id: string; version: string } }
   | { name: "revoke"; input: { id: string; version: string; reason: string } };
 export type PendingCommand = { command: AdminCommand; requestId: string };
-export type PlatformErrorKind = "denied" | "mfa" | "conflict" | "duplicate" | "invalid" | "uncertain";
+export type PlatformErrorKind = "denied" | "mfa" | "conflict" | "duplicate" | "invalid" | "uncertain" | "existing_user";
 type AuthOperation = "auth_session" | "mfa_factors" | "mfa_enroll" | "mfa_unenroll" | "mfa_verify";
 export class PlatformError extends Error {
   kind: PlatformErrorKind;
@@ -37,7 +39,7 @@ export class PlatformError extends Error {
 export const isUuid = (value: unknown): value is string => typeof value === "string" && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);
 // These functions are provided by the canonical platform migrations. Keep the existing
 // generated financial model intact; this transport accepts only this named RPC set.
-type RpcName = "get_platform_context" | "get_platform_overview" | "list_platform_entities" | "platform_directory" | "list_platform_invitations" | "platform_admin_command" | "platform_invitation_command" | "accept_platform_invitation";
+type RpcName = "get_platform_onboarding" | "set_company_subscription" | "list_company_subscriptions" | "get_my_company_subscription" | "provision_company_accounting" | "get_platform_context" | "get_platform_overview" | "list_platform_entities" | "platform_directory" | "list_platform_invitations" | "platform_admin_command" | "platform_invitation_command" | "accept_platform_invitation" | "get_my_platform_invitation";
 export interface PlatformTransport { rpc(name: RpcName, args?: Record<string, unknown>, options?: { signal?: AbortSignal }): PromiseLike<{ data: unknown; error: { code?: string; message?: string } | null }>; }
 export function transport(client: SupabaseClient<Database>): PlatformTransport {
   const rpcClient = client as unknown as { rpc: (name: RpcName, args?: Record<string, unknown>) => ReturnType<PlatformTransport["rpc"]> & { abortSignal?: (signal: AbortSignal) => ReturnType<PlatformTransport["rpc"]> } };
@@ -92,14 +94,36 @@ export async function platformAuthRequest<T extends { error: { code?: string } |
 }
 export async function readDirectory(api: PlatformTransport, resource: Resource, offset = 0, search = "", size = 25): Promise<Directory> {
   const args = { page_offset: offset, page_size: size, search: search.trim() };
-  const data = await callPlatform(api, resource === "entities" ? "list_platform_entities" : resource === "invitations" ? "list_platform_invitations" : "platform_directory", resource === "entities" || resource === "invitations" ? args : { ...args, resource });
+  const data = await callPlatform(api, resource === "subscriptions" ? "list_company_subscriptions" : resource === "entities" ? "list_platform_entities" : resource === "invitations" ? "list_platform_invitations" : "platform_directory", resource === "entities" || resource === "invitations" || resource === "subscriptions" ? args : { ...args, resource });
   if (!object(data) || !Array.isArray(data.items) || data.items.length > size || data.items.some(row => !object(row)) || typeof data.has_more !== "boolean") throw new PlatformError("uncertain");
   return data as unknown as Directory;
 }
 export async function sendPlatformCommand(api: PlatformTransport, pending: PendingCommand): Promise<Receipt> {
   if (!isUuid(pending.requestId)) throw new PlatformError("invalid");
   const invitation = ["invite", "resend", "revoke"].includes(pending.command.name);
-  const data = await callPlatform(api, invitation ? "platform_invitation_command" : "platform_admin_command", { command_name: pending.command.name, request_id: pending.requestId, business_input: pending.command.input });
+  const data = await callPlatform(api, pending.command.name === "set_subscription" ? "set_company_subscription" : pending.command.name === "provision_accounting" ? "provision_company_accounting" : invitation ? "platform_invitation_command" : "platform_admin_command", { ...(["provision_accounting", "set_subscription"].includes(pending.command.name) ? {} : { command_name: pending.command.name }), request_id: pending.requestId, business_input: pending.command.input });
   if (!object(data) || !isUuid(data.id) || data.request_id !== pending.requestId || data.status !== "CONFIRMED" || data.command !== (invitation ? `invitation_${pending.command.name}` : pending.command.name)) throw new PlatformError("uncertain");
   return data as unknown as Receipt;
+}
+
+export interface RecipientInvitation {
+  user_id: string; invitation_id: string; company_id: string; company_name: string;
+  role: CompanyAccessRole; state: "PENDING" | "ACCEPTED"; password_required: boolean; company_active: boolean;
+}
+export async function readRecipientInvitation(api: PlatformTransport, invitationId: string): Promise<RecipientInvitation> {
+  const data = await callPlatform(api, "get_my_platform_invitation", { invitation_id: invitationId });
+  if (!object(data) || !isUuid(data.user_id) || data.invitation_id !== invitationId || !isUuid(data.company_id)
+    || typeof data.company_name !== "string" || !companyRoles.includes(data.role as CompanyAccessRole)
+    || !["PENDING", "ACCEPTED"].includes(String(data.state)) || typeof data.password_required !== "boolean" || typeof data.company_active !== "boolean") {
+    throw new PlatformError("uncertain", { operation: "get_my_platform_invitation", code: "INVALID_RESPONSE" });
+  }
+  return data as unknown as RecipientInvitation;
+}
+
+export interface CommercialReadiness {customer:boolean;active:boolean;administrator:boolean;foundation:boolean;subscription:boolean;legacy_eligible:boolean;legacy_access:boolean;ready:boolean;subscription_state:string}
+export interface OnboardingCompany extends PlatformRow {id:string;name:string;code:string;readiness:CommercialReadiness & Record<string, string|boolean>;pending_admin_invitations:number}
+export async function readOnboarding(api:PlatformTransport,args:{target_customer_id?:string;target_company_id?:string;page_offset:number;search:string}, options?:ReadOptions):Promise<{items:OnboardingCompany[];has_more:boolean}> {
+  const data=await callPlatform(api,"get_platform_onboarding",args,options);
+  if(!object(data)||!Array.isArray(data.items)||typeof data.has_more!=="boolean"||data.items.some(r=>!object(r)||!isUuid(r.id)||typeof r.name!=="string"||!object(r.readiness)||["customer","active","administrator","foundation","subscription","legacy_eligible","legacy_access","ready"].some(k=>typeof (r.readiness as Record<string,unknown>)[k]!=="boolean")))throw new PlatformError("uncertain");
+  return data as unknown as {items:OnboardingCompany[];has_more:boolean};
 }

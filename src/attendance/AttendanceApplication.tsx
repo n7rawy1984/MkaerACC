@@ -12,13 +12,14 @@ import { absenceHalfUnits, attendanceRequest, attendanceRole, attendanceStaff, c
 
 const field = 'block w-full min-w-0 rounded border border-slate-300 bg-white p-2';
 const button = 'rounded border border-slate-300 px-3 py-2 disabled:opacity-50';
-export default function AttendanceApplication() {
+export default function AttendanceApplication({embedded=false}:{embedded?:boolean}={}) {
  const { state, signOut, showCompanySelector } = useAuth();
  const { locale } = useI18n(); const t = attendanceText[locale];
  const branding = useTenantSettings();
  const displayName = branding.phase === 'READY' ? branding.settings.effectiveDisplayName : state.phase === 'TENANT_READY' ? state.activeTenant.companyName : '';
  if (state.phase !== 'TENANT_READY') return null;
- return <div className="min-h-screen bg-slate-50 p-4 sm:p-6"><header className="mx-auto mb-6 flex max-w-5xl flex-wrap items-center justify-between gap-3">
+ if(embedded)return <section className="workspace-module"><AttendanceContent key={`${state.profile.userId}:${state.activeTenant.companyId}:${state.activeTenant.role}`} userId={state.profile.userId} companyId={state.activeTenant.companyId} role={state.activeTenant.role}/></section>;
+ return <div className="workspace-standalone min-h-screen bg-slate-50 p-4 sm:p-6"><header className="mx-auto mb-6 flex max-w-5xl flex-wrap items-center justify-between gap-3">
   <div className="flex min-w-0 items-center gap-3"><TenantBrandMark logoUrl={branding.phase === "READY" ? branding.settings.logoUrl : null}/><h1 className="min-w-0 break-words text-xl font-semibold"><bdi>{displayName}</bdi> · {t.title}</h1></div><div className="flex flex-wrap gap-2">
   {state.activeTenant.role !== 'FOREMAN' && <Link className={button} to="/">{t.back}</Link>}
   {state.memberships.length > 1 && <button className={button} onClick={showCompanySelector}>{t.switchCompany}</button>}
@@ -45,7 +46,7 @@ export function AttendanceContent({ userId, companyId, role }: { userId: string;
   return () => { current = false; };
  }, [userId, companyId, role, revision]);
  if (!attendanceRole(role)) return <p role="alert">{t.denied}</p>;
- return <main className="mx-auto max-w-5xl space-y-4 rounded-xl border bg-white p-4 sm:p-6">
+ return <section className="mx-auto max-w-5xl space-y-4 rounded-xl border bg-white p-4 sm:p-6">
   <p>{t.scope}</p><p className="text-sm text-slate-500">{t.utc}</p>
   <div className="flex flex-wrap gap-2"><button className={button} onClick={() => setTab('day')}>{t.day}</button>
    {attendanceStaff(role) && <button className={button} onClick={() => setTab('review')}>{t.review}</button>}
@@ -58,7 +59,7 @@ export function AttendanceContent({ userId, companyId, role }: { userId: string;
    {project && date && date <= context.today && <DayPanel key={`${project}:${date}`} userId={userId} companyId={companyId} role={role} project={project} date={date} t={t} />}
   </> : <><label className="block max-w-xs">{t.month}<input dir="ltr" className={field} type="month" value={month} max={context.today.slice(0, 7)} onChange={e => setMonth(e.target.value)} /></label>
    {month && <MonthPanel key={month} userId={userId} companyId={companyId} role={role} month={`${month}-01`} context={context} t={t} />}</>)}
- </main>;
+ </section>;
 }
 function DayPanel({ userId, companyId, role, project, date, t }: { userId: string; companyId: string; role: string; project: string; date: string; t: AttendanceLabels }) {
  const [loaded, setLoaded] = useState<{ revision: number; data: DaySnapshot } | null>(null); const [errorRevision, setErrorRevision] = useState<number | null>(null); const [revision, setRevision] = useState(0);

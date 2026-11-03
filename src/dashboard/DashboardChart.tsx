@@ -3,7 +3,7 @@ import { Card, CardHeader } from "../components/ui/Card";
 import { useI18n } from "../i18n/I18nContext";
 import { dashboardAED, dashboardChartRows, type DashboardGroup } from "./dashboardSummary";
 
-const colors = ["#2563eb", "#0d9488", "#d97706", "#7c3aed", "#e11d48"];
+const colors = ["#0d766f", "#365f7b", "#986411", "#6e588c", "#ad4759"];
 export function DashboardChart({ title, subtitle, groups }: { title: string; subtitle: string; groups: DashboardGroup[] }) {
   const { t, dir } = useI18n(), rtl = dir === "rtl";
   const rows = dashboardChartRows(groups);
@@ -12,7 +12,7 @@ export function DashboardChart({ title, subtitle, groups }: { title: string; sub
     {rows.length === 0 ? <p className="p-6 text-sm text-slate-500">{t("executiveDashboard.noData")}</p> : <>
       <div className="px-3 pt-4" dir="ltr" style={{ height: Math.max(180, rows.length * 42 + 32) }} aria-hidden="true">
         <ResponsiveContainer width="100%" height="100%" minWidth={0}>
-          <BarChart data={rows} layout="vertical" margin={{ top: 4, right: 8, bottom: 4, left: 8 }}>
+          <BarChart accessibilityLayer={false} data={rows} layout="vertical" margin={{ top: 4, right: 8, bottom: 4, left: 8 }}>
             <CartesianGrid horizontal={false} stroke="#e2e8f0" />
             <XAxis type="number" hide domain={[0, 100]} reversed={rtl} />
             <YAxis type="category" dataKey="label" width={100} orientation={rtl ? "right" : "left"} axisLine={false} tickLine={false}

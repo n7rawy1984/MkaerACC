@@ -36,7 +36,7 @@ export function PersonMasterCreationPanel({kind}:{kind:"person"|"project"}) {
  const recover=async()=>{if(lock.current)return;const committed=message==="refreshError";lock.current=true;setBusy(true);close();try{setMessage(await refresh()?committed?"saved":"review":committed?"refreshError":"uncertain");}catch{setMessage(committed?"refreshError":"uncertain");}finally{lock.current=false;setBusy(false);}};
  const label=t(kind==="person"?"personCreation.create":"personCreation.project");
  return <section className="mt-4 min-w-0">
-  <button ref={origin} disabled={blocked||open} onClick={()=>{setMessage("");setOpen(true);}} className="rounded-lg border px-3 py-2 text-sm disabled:opacity-50">{label}</button>
+  <button ref={origin} disabled={blocked||open} onClick={()=>{setMessage("");setOpen(true);}} className="suite-primary rounded-lg border px-3 py-2 text-sm disabled:opacity-50">{label}</button>
   {message&&<p className="mt-3 text-sm" role={message==="saved"?"status":"alert"}>{t(`masterCreation.${message}` as never)}</p>}
   {busy&&<p role="status">{t("supplierMutation.pending")}</p>}
   {(message==="uncertain"||message==="refreshError")&&<button disabled={busy} onClick={()=>void recover()} className="mt-2 underline">{t("personCreation.refresh")}</button>}

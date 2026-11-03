@@ -1,3 +1,7 @@
+import { CompanyWorkspaceShell } from "../workspace/CompanyWorkspaceShell";
+import { AccountingCycle } from "../workspace/AccountingCycle";
+import { WorkspaceReports } from "../workspace/WorkspaceReports";
+import { CompanySubscriptionProvider, CompanySubscriptionStatus } from "../master/CompanySubscriptionStatus";
 import PayrollApplication from "../payroll/PayrollApplication";
 import AttendanceApplication from "../attendance/AttendanceApplication";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
@@ -36,13 +40,16 @@ function RoutedApplication() {
   if (state.phase === "NO_ACTIVE_COMPANY") return <Routes><Route path="/no-company" element={<NoCompanyPage />} /><Route path="*" element={<Navigate to="/no-company" replace />} /></Routes>;
   if (state.phase === "SELECTING_COMPANY") return <Routes><Route path="/select-company" element={<CompanySelectPage />} /><Route path="*" element={<Navigate to="/select-company" replace />} /></Routes>;
   if (state.phase === "IDENTITY_LOAD_ERROR") return <Routes><Route path="/auth-error" element={<AuthErrorPage />} /><Route path="*" element={<Navigate to="/auth-error" replace />} /></Routes>;
-  if (state.activeTenant.role === "FOREMAN") return <Routes><Route path="/attendance" element={<AttendanceApplication />} /><Route path="*" element={<Navigate to="/attendance" replace />} /></Routes>;
+  if (state.activeTenant.role === "FOREMAN") return <><CompanySubscriptionStatus key={`${state.profile.userId}:${state.activeTenant.companyId}`} companyId={state.activeTenant.companyId} /><Routes><Route path="/attendance" element={<AttendanceApplication />} /><Route path="*" element={<Navigate to="/attendance" replace />} /></Routes></>;
   return (
     <SupabaseTenantSettingsProvider key={`${state.profile.userId}:${state.activeTenant.companyId}`} client={getSupabaseClient()} profile={state.profile} tenant={state.activeTenant}>
       <ProductionMasterDataProvider onCompanyProfileRefreshed={syncCompanyLegalName} key={`${state.profile.userId}:${state.activeTenant.companyId}:${state.activeTenant.role}`} role={state.activeTenant.role} client={getSupabaseClient()} userId={state.profile.userId} activeCompanyId={state.activeTenant.companyId}>
-        <Routes>
-          <Route path="/payroll" element={<PayrollApplication />} />
-          <Route path="/attendance" element={<AttendanceApplication />} />
+        <CompanySubscriptionProvider key={`${state.profile.userId}:${state.activeTenant.companyId}:${state.activeTenant.role}`} companyId={state.activeTenant.companyId}>
+        <CompanyWorkspaceShell><Routes>
+          <Route path="/payroll" element={<PayrollApplication embedded />} />
+          <Route path="/attendance" element={<AttendanceApplication embedded />} />
+          <Route path="/accounting-cycle" element={<AccountingCycle />} />
+          <Route path="/accounting-reports" element={<WorkspaceReports />} />
           <Route path="/login" element={<Navigate to="/" replace />} />
           <Route path="/no-company" element={<Navigate to="/" replace />} />
           <Route path="/select-company" element={<Navigate to="/" replace />} />
@@ -64,7 +71,8 @@ function RoutedApplication() {
           <Route path="/subcontracts" element={<TenantReadyApplication view="subcontracts" />} />
           <Route path="/treasury-accounts" element={<TenantReadyApplication view="treasuryAccounts" />} />
           <Route path="*" element={<TenantReadyApplication view="deferred" />} />
-        </Routes>
+        </Routes></CompanyWorkspaceShell>
+        </CompanySubscriptionProvider>
       </ProductionMasterDataProvider>
     </SupabaseTenantSettingsProvider>
   );

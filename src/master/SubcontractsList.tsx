@@ -5,6 +5,7 @@ import { useT } from "../i18n/I18nContext";
 import { SubcontractMetadataForm } from "./SubcontractMetadataForm";
 import { useProductionMasterData } from "./productionMasterDataContext";
 import type { ProductionSubcontract } from "./masterTypes";
+import { dashboardAED } from "../dashboard/dashboardSummary";
 
 export function SubcontractsList() {
   const t = useT();
@@ -48,7 +49,7 @@ export function SubcontractsList() {
           <div className="min-w-0"><dt className="font-medium">{t("productionMaster.scopeOfWork")}</dt><dd className="min-w-0 whitespace-pre-wrap break-words"><bdi>{contract.scopeOfWork}</bdi></dd></div>
           <div><dt className="font-medium">{t("productionMaster.projectId")}</dt><dd><bdi dir="ltr">{contract.projectId}</bdi><span className="block">{project ? <><bdi dir="ltr">{project.code}</bdi> · <bdi>{project.name}</bdi></> : t("productionMaster.projectDetailsUnavailable")}</span></dd></div>
           <div><dt className="font-medium">{t("productionMaster.subcontractorId")}</dt><dd><bdi dir="ltr">{contract.subcontractorId}</bdi><span className="block">{party ? <bdi>{party.code !== null ? `${party.code} · ` : ""}{party.name}</bdi> : t("productionMaster.partyDetailsUnavailable")}</span></dd></div>
-          {([ ["originalContractValueMinor", contract.originalContractValueMinor], ["approvedVariationsMinor", contract.approvedVariationsMinor], ["startDate", contract.startDate], ["expectedEndDate", contract.expectedEndDate], ["notes", contract.notes] ] as const).map(([field, value]) => value !== null && <div className="min-w-0" key={field}><dt className="inline font-medium">{t(`productionMaster.${field}`)}: </dt><dd className="inline min-w-0 whitespace-pre-wrap break-words"><bdi dir={field === "notes" ? "auto" : "ltr"}>{value}</bdi></dd></div>)}
+          {([ ["originalContractValueMinor", contract.originalContractValueMinor], ["approvedVariationsMinor", contract.approvedVariationsMinor], ["startDate", contract.startDate], ["expectedEndDate", contract.expectedEndDate], ["notes", contract.notes] ] as const).map(([field, value]) => value !== null && <div className="min-w-0" key={field}><dt className="inline font-medium">{t(`productionMaster.${field}`)}: </dt><dd className="inline min-w-0 whitespace-pre-wrap break-words"><bdi dir={field === "notes" ? "auto" : "ltr"}>{field === "originalContractValueMinor" || field === "approvedVariationsMinor" ? dashboardAED(value) : value}</bdi></dd></div>)}
           <div><dt className="inline font-medium">{t("productionMaster.retentionRate")}: </dt><dd className="inline"><bdi dir="ltr">{Math.floor(contract.retentionBps / 100)}.{String(contract.retentionBps % 100).padStart(2, "0")}%</bdi></dd></div>
         </dl>
         {canEdit && <button type="button" disabled={blocked || !!editing} onClick={event => { origin.current = event.currentTarget; setActionId(contract.id); setEditing(contract); }} className="mt-3 rounded-lg border px-3 py-2 text-sm disabled:opacity-50">{t("subcontractMetadata.edit")}</button>}

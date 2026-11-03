@@ -25,7 +25,17 @@
     "verify:platform:loading": "node scripts/verify-platform-loading.mjs",
     "verify:platform:owner-transfer": "node scripts/verify-platform-owner-transfer.mjs",
     "verify:platform:mfa": "node scripts/verify-platform-mfa.mjs",
-    "verify:platform:mfa:browser": "node scripts/verify-platform-mfa-browser.mjs"
+    "verify:platform:mfa:browser": "node scripts/verify-platform-mfa-browser.mjs",
+    "verify:platform:onboarding": "node scripts/verify-platform-onboarding.mjs",
+    "verify:platform:onboarding:browser": "node scripts/verify-platform-onboarding-browser.mjs",
+    "verify:company-accounting": "node scripts/verify-company-accounting-provisioning.mjs",
+    "verify:company-accounting:browser": "node scripts/verify-company-accounting-provisioning-browser.mjs",
+    "verify:subscriptions": "node scripts/verify-manual-subscriptions.mjs",
+    "verify:subscriptions:browser": "node scripts/verify-manual-subscriptions-browser.mjs",
+    "verify:platform:ui": "node scripts/verify-platform-ui.mjs",
+    "verify:commercial-onboarding": "node scripts/verify-commercial-onboarding.mjs",
+    "verify:commercial-onboarding:browser": "node scripts/verify-commercial-onboarding-browser.mjs",
+    "verify:commercial-onboarding:native": "python3 scripts/verify-commercial-onboarding-native.py"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.4",

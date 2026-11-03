@@ -7,9 +7,10 @@ import { useAuth } from "../auth/AuthContext";
 import { useI18n } from "../i18n/I18nContext";
 import { callPlatform, isUuid, transport } from "./platformApi";
 import { platformText } from "./platformText";
+import InvitationOnboarding from "./InvitationOnboarding";
 import { assertPasswordSession, establishCallbackSession, type PasswordSession } from "./callbackSession";
 
-export default function AuthCallback({ client }: { client: SupabaseClient<Database> }) {
+function RecoveryCallback({ client }: { client: SupabaseClient<Database> }) {
   const { locale } = useI18n(); const t = platformText[locale]; const { retry } = useAuth();
   const [phase, setPhase] = useState<"loading" | "ready" | "error" | "accepted" | "passwordSaved" | "signOutError">("loading");
   const [busy, setBusy] = useState(false); const [initial] = useState(() => new URL(window.location.href));
@@ -59,4 +60,9 @@ export default function AuthCallback({ client }: { client: SupabaseClient<Databa
       {passwordAllowed && <><h2 className="mt-5">{t.recovery}</h2><form onSubmit={event => void password(event)}><label>{t.password}<input className="block w-full border rounded p-2 my-3" type="password" name="password" minLength={12} maxLength={128} autoComplete="new-password" required/></label>{factor && <label>{t.authenticatorCode}<input className="block w-full border rounded p-2 my-3" name="code" inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6}" required/></label>}{mfaError && <p role="alert">{t.mfa}</p>}<button disabled={busy}>{busy ? t.pending : t.save}</button></form></>}
     </>}<p className="mt-5"><Link to="/auth/recovery">{t.recoveryRequest}</Link> · <Link to="/">{t.accounting}</Link> · <Link to="/platform">{t.title}</Link></p>
   </AuthFrame>;
+}
+
+export default function AuthCallback({ client }: { client: SupabaseClient<Database> }) {
+  const invitationId = new URL(window.location.href).searchParams.get("invitation_id");
+  return invitationId !== null ? <InvitationOnboarding key={invitationId} client={client} invitationId={invitationId}/> : <RecoveryCallback client={client}/>;
 }

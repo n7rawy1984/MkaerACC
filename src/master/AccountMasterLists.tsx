@@ -1,3 +1,4 @@
+import {StatusBadge} from '../workspace/workspaceUi';
 import type { ReactNode } from "react";
 import { useT } from "../i18n/I18nContext";
 import { findVisibleAccount } from "./accountPresentation";
@@ -18,7 +19,7 @@ export function AccountsList({ accounts, renderAction }: { accounts: ProductionA
         <li key={account.id} className="break-words py-4 first:pt-0 last:pb-0">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <p className="font-medium text-slate-900"><><bdi dir="ltr">{account.code}</bdi> · <bdi>{account.name}</bdi></></p>
-            <span className="text-sm text-slate-600">{t(`productionMaster.accountType.${account.accountType}`)} · {t(`partyStatus.${account.status}`)}</span>
+            <span className="text-sm text-slate-600">{t(`productionMaster.accountType.${account.accountType}`)}</span><StatusBadge status={account.status}>{t(`partyStatus.${account.status}`)}</StatusBadge>
           </div>
           <dl className="mt-2 space-y-2 text-sm text-slate-500">
             <div><dt className="font-medium">{t("productionMaster.parentAccount")}</dt><dd>{account.parentAccountId === null ? t("productionMaster.noParent") : <AccountReference accounts={accounts} companyId={account.companyId} accountId={account.parentAccountId} />}</dd></div>
@@ -41,7 +42,7 @@ export function TreasuryAccountsList({ treasuryAccounts, accounts, renderAction 
         <li key={treasury.id} className="break-words py-4 first:pt-0 last:pb-0">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <p className="font-medium text-slate-900"><><bdi dir="ltr">{treasury.code}</bdi> · <bdi>{treasury.name}</bdi></></p>
-            <span className="text-sm text-slate-600">{t(`treasuryType.${treasury.type}`)} · {t(`partyStatus.${treasury.status}`)}</span>
+            <span className="text-sm text-slate-600">{t(`treasuryType.${treasury.type}`)}</span><StatusBadge status={treasury.status}>{t(`partyStatus.${treasury.status}`)}</StatusBadge>
           </div>
           <dl className="mt-2 space-y-2 text-sm text-slate-500">
             <div><dt className="font-medium">{t("productionMaster.permanentGlAccount")}</dt><dd><AccountReference accounts={accounts} companyId={treasury.companyId} accountId={treasury.glAccountId} /></dd></div>

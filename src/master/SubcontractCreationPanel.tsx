@@ -60,7 +60,7 @@ export function SubcontractCreationPanel({ kind }: { kind: "party" | "subcontrac
   const blocked = busy || message === "uncertain" || message === "refreshError";
   const label = t(kind === "party" ? "masterCreation.party" : "masterCreation.subcontract");
   return <section className="mt-4 min-w-0">
-    <button ref={origin} type="button" disabled={busy || open || blocked} onClick={() => { setMessage(""); setOpen(true); }} className="rounded-lg border px-3 py-2 text-sm disabled:opacity-50">{label}</button>
+    <button ref={origin} type="button" disabled={busy || open || blocked} onClick={() => { setMessage(""); setOpen(true); }} className="suite-primary rounded-lg border px-3 py-2 text-sm disabled:opacity-50">{label}</button>
     {message && <p className="mt-3 text-sm" role={message === "saved" ? "status" : "alert"}>{t(`masterCreation.${message}` as never)}</p>}
     {busy && <p role="status">{t("supplierMutation.pending")}</p>}
     {(message === "uncertain" || message === "refreshError") && <button type="button" disabled={busy} className="mt-2 underline" onClick={() => { void recover(); }}>{t("supplierMutation.refresh")}</button>}
