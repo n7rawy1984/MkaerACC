@@ -1,3 +1,5 @@
+**Current closure extension:** [Controlled administrative closure](PROJECT_CLOSURE.md) now implements supported Completed→Closed cases (migration75 applied) with non-waivable readiness checks and preserved later settlement. This migration74 operational workflow/history remains unchanged; earlier closure-policy statements below record that increment. Closed reopening and unsupported cases remain incomplete.
+
 # M3 / PRJ-01 — Controlled Project lifecycle
 
 Implemented 2026-11-04: ACTIVE → ON_HOLD, ON_HOLD → ACTIVE, ACTIVE → COMPLETED and COMPLETED → ACTIVE. These are immediate operational transitions, authorized for the existing Accounting administrator with `project.manage`, using the same Company Project UUID. Existing Planning → Active activation and its independent audit are unchanged. ON_HOLD → COMPLETED is not introduced: resume before completing. CLOSED is not reachable through the new command and CLOSED → ACTIVE remains unavailable.

@@ -1,3 +1,4 @@
+import {ProjectClosure} from './ProjectClosure';
 import {ProjectLifecycle} from './ProjectLifecycle';
 import {ProjectActivation} from './ProjectActivation';
 import {RecordIdentity} from '../components/ui/RecordIdentity';
@@ -57,6 +58,7 @@ export function ProjectsList() {
         {editing?.id === project.id && canEdit && <ProjectMetadataForm project={editing} disabled={blocked} onCancel={close} onSave={async input => { if (await master.saveProjectMetadata({ project: editing, input })) close(); }} />}
         <ProjectActivation key={`${state.profile.userId}:${state.activeTenant.companyId}:${project.id}`} project={project} disabled={blocked || !!editing} onRefresh={master.refreshProjects}/>
         <ProjectLifecycle project={project} disabled={blocked || !!editing} onRefresh={master.refreshProjects}/>
+        <ProjectClosure project={project} disabled={blocked || !!editing} onRefresh={master.refreshProjects}/>
         {actionId === project.id && message}
       </li>)}
     </ul>
