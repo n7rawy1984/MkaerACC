@@ -1,3 +1,5 @@
+**2026-11-04 local integration update:** The supported funding/withdrawal/personal reimbursement increment now reuses this capability. CASH was supported by canonical75; the former UI-only prohibition is removed with new migration77 recorded-funds safeguards. Approved new release order is local76→77, then matching frontend, after recovery/impact/explicit approval. Classified controls, direct-holder source tracing, separate personal payables and bilingual report integration are documented in [Financial Operations Integration](FINANCIAL_OPERATIONS_INTEGRATION.md). Nothing in this update is hosted-activated; older scope limitations below remain historical.
+
 # CON-05 — Scoped Party statements
 
 Implemented locally on 2026-11-04 in the existing Company Workspace Accounting Reports. No migration is required. Migration73 and all financial commands, RLS, role permissions, business records and themes are unchanged. No hosted access, commit, push or frontend deployment occurred in this increment.

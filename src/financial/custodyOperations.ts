@@ -3,7 +3,7 @@ import {custodyRows} from './custodyRead';
 import {parseAED,normalizeExpenseInput,expensePayload} from './expensePostRepository';
 import {validCostDate} from '../reports/projectCostLedger';
 export type CustodyOperation='ADVANCE'|'EXPENSE'|'RETURN'|'SETTLEMENT'|'REVERSE_ADVANCE'|'REVERSE_RETURN'|'REVERSE_EXPENSE';
-export type CustodyInput={operation:CustodyOperation;holder:string;date:string;project:string|null;treasury:string|null;amount:string;method:string;reference:string;notes:string;description:string;category:string;vat:'ZERO'|'AUTO_5'|'MANUAL';manualVat:string;invoice:boolean;invoiceNumber:string;expenses:string[];document:string;reason:string};
+export type CustodyInput={supplier?:string|null;operation:CustodyOperation;holder:string;date:string;project:string|null;treasury:string|null;amount:string;method:string;reference:string;notes:string;description:string;category:string;vat:'ZERO'|'AUTO_5'|'MANUAL';manualVat:string;invoice:boolean;invoiceNumber:string;expenses:string[];document:string;reason:string};
 export type CustodyReceipt={id:string;reference:string;journal:string|null;replayed:boolean};
 export type CustodyAttempt={version:1;user:string;company:string;key:string;input:CustodyInput;receipt?:CustodyReceipt};
 export const custodyWriter=(role:string)=>role==='ACCOUNTING_ADMIN'||role==='ACCOUNTANT';
@@ -18,7 +18,7 @@ export function normalizeCustodyInput(raw:CustodyInput):CustodyInput{
  if(i.operation==='EXPENSE'){
   // Reuse the established Expense VAT/invoice/description validation; the dummy
   // validation Treasury is the authenticated holder UUID, never sent as Treasury.
-  const normalized=normalizeExpenseInput({date:i.date,projectId:i.project,categoryId:i.category,supplierId:null,treasuryId:i.holder,description:i.description,netMinor:i.amount,vatMode:i.vat,manualVatMinor:i.vat==='MANUAL'?parseAED(i.manualVat):null,paymentMethod:i.method as 'CASH',hasInvoice:i.invoice,invoiceNumber:i.invoice?i.invoiceNumber:null,notes:i.notes||null});
+  const normalized=normalizeExpenseInput({date:i.date,projectId:i.project,categoryId:i.category,supplierId:i.supplier??null,treasuryId:i.holder,description:i.description,netMinor:i.amount,vatMode:i.vat,manualVatMinor:i.vat==='MANUAL'?parseAED(i.manualVat):null,paymentMethod:i.method as 'CASH',hasInvoice:i.invoice,invoiceNumber:i.invoice?i.invoiceNumber:null,notes:i.notes||null});
   i.description=normalized.description;i.invoiceNumber=normalized.invoiceNumber??'';i.manualVat=normalized.manualVatMinor??'';
  }}return i;
 }
@@ -31,7 +31,7 @@ export function custodyCommand(company:string,key:string,i:CustodyInput){
  case 'ADVANCE':return{name:'post_custody_advance',args:{...common,target_advance_date:i.date,target_project_id:i.project}};
  case 'RETURN':return{name:'post_custody_cash_return',args:{...common,target_return_date:i.date}};
  case 'SETTLEMENT':return{name:'finalize_custody_settlement',args:{target_company_id:company,target_settlement_date:i.date,target_custodian_id:i.holder,target_expense_ids:i.expenses,target_expected_total_minor:i.amount,target_notes:i.notes||null}};
- case 'EXPENSE':return{name:'post_expense',args:{...expensePayload(company,key,{date:i.date,projectId:i.project,categoryId:i.category,supplierId:null,treasuryId:i.holder,description:i.description,netMinor:i.amount,vatMode:i.vat,manualVatMinor:i.vat==='MANUAL'?i.manualVat:null,paymentMethod:i.method as 'CASH',hasInvoice:i.invoice,invoiceNumber:i.invoice?i.invoiceNumber:null,notes:[i.reference,i.notes].filter(Boolean).join('\n')||null}),target_funding_mode:'CUSTODIAN',target_treasury_account_id:null,target_paid_by_party_id:i.holder}};
+ case 'EXPENSE':return{name:'post_expense',args:{...expensePayload(company,key,{date:i.date,projectId:i.project,categoryId:i.category,supplierId:i.supplier??null,treasuryId:i.holder,description:i.description,netMinor:i.amount,vatMode:i.vat,manualVatMinor:i.vat==='MANUAL'?i.manualVat:null,paymentMethod:i.method as 'CASH',hasInvoice:i.invoice,invoiceNumber:i.invoice?i.invoiceNumber:null,notes:[i.reference,i.notes].filter(Boolean).join('\n')||null}),target_funding_mode:'CUSTODIAN',target_treasury_account_id:null,target_paid_by_party_id:i.holder}};
  default:{const name=i.operation==='REVERSE_ADVANCE'?'reverse_custody_advance':i.operation==='REVERSE_RETURN'?'reverse_custody_cash_return':'reverse_expense',id=i.operation==='REVERSE_ADVANCE'?'target_custody_advance_id':i.operation==='REVERSE_RETURN'?'target_custody_cash_return_id':'target_expense_id';return{name,args:{...base,[id]:i.document,target_reversal_date:i.date,target_reason:i.reason}};}
  }
 }

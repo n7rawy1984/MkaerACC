@@ -1,3 +1,5 @@
+**2026-11-04 local integration update:** The supported funding/withdrawal/personal reimbursement increment now reuses this capability. CASH was supported by canonical75; the former UI-only prohibition is removed with new migration77 recorded-funds safeguards. Approved new release order is local76→77, then matching frontend, after recovery/impact/explicit approval. Classified controls, direct-holder source tracing, separate personal payables and bilingual report integration are documented in [Financial Operations Integration](FINANCIAL_OPERATIONS_INTEGRATION.md). Nothing in this update is hosted-activated; older scope limitations below remain historical.
+
 # V1 Treasury master provisioning — Development implementation complete
 
 2026-10-08. Treasury master data only. No real Company, platform administrator, Treasury, opening balance, funding/inflow, receipt, transfer, Expense, payment or journal created. No XLSX import. Authorized local delivery is recorded below; no push. Staging/Production untouched.

@@ -35,6 +35,7 @@ const sessionRecoveryFiles=new Set([
  'src/platform/platformRecovery.ts',
  'src/payroll/PayrollPosting.tsx',
  ...['SupplierPaymentReverseAction','SupplierCreditExpensePost','RetentionPaymentReverseAction',
+ 'OperationalFinanceWorkspace',
  'CustodyWorkspace', // Actor/Company-scoped frozen command recovery only; never a balance store.
  'SubcontractorAdvancePost','RetentionPaymentPost','SubcontractorAdvanceReverseAction',
  'SubcontractorCertificateApproveAction','TreasuryExpensePost','SubcontractorPaymentPost',

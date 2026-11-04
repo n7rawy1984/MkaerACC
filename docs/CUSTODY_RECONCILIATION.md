@@ -1,3 +1,5 @@
+**2026-11-04 local integration update:** The supported funding/withdrawal/personal reimbursement increment now reuses this capability. CASH was supported by canonical75; the former UI-only prohibition is removed with new migration77 recorded-funds safeguards. Approved new release order is local76→77, then matching frontend, after recovery/impact/explicit approval. Classified controls, direct-holder source tracing, separate personal payables and bilingual report integration are documented in [Financial Operations Integration](FINANCIAL_OPERATIONS_INTEGRATION.md). Nothing in this update is hosted-activated; older scope limitations below remain historical.
+
 # Operational Go-Live — custody reconciliation
 
 Implemented locally on 2026-11-04. This is the next bounded CUS-03 increment, not completion of the Treasury/Custody program or authorization for production import/publication.

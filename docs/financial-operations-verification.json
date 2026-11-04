@@ -1,0 +1,137 @@
+{
+  "date": "2026-11-04",
+  "scope": "Supported operational financial integration; entire financial domain remains incomplete",
+  "environment": "LOCAL_ISOLATED_FIXTURES_ONLY",
+  "verification": {
+    "priority-financial-db": {
+      "status": "PASS",
+      "checks": 24,
+      "artifact": "/tmp/narvo-priority-financial-db.json"
+    },
+    "operational-liability-db": {
+      "status": "PASS",
+      "checks": 43,
+      "artifact": "/tmp/narvo-operational-liability-db.json"
+    },
+    "priority-financial-races": {
+      "status": "PASS",
+      "checks": 3,
+      "artifact": "/tmp/narvo-priority-financial-races.json"
+    },
+    "operational-finance-races": {
+      "status": "PASS",
+      "checks": 6,
+      "artifact": "/tmp/narvo-operational-finance-races.json"
+    },
+    "priority-financial-browser": {
+      "status": "PASS",
+      "checks": 16,
+      "artifact": "/tmp/narvo-priority-financial-browser.json"
+    },
+    "operational-finance-browser": {
+      "status": "PASS",
+      "checks": 9,
+      "artifact": "/tmp/narvo-operational-finance-browser.json"
+    },
+    "priority-financial-exports": {
+      "status": "PASS",
+      "checks": 4,
+      "artifact": "/tmp/narvo-priority-financial-exports.json"
+    },
+    "operational-finance-exports": {
+      "status": "PASS",
+      "checks": 4,
+      "artifact": "/tmp/narvo-operational-finance-exports.json"
+    }
+  },
+  "productionBuild": "PASS",
+  "focusedLint": "PASS_WITH_2_INFORMATIONAL_RECOVERY_EFFECT_WARNINGS",
+  "productionImportBoundary": "PASS",
+  "changedFileSecretPatternScan": "PASS",
+  "gitDiffCheck": "PASS",
+  "migrations": [
+    {
+      "version": 76,
+      "path": "supabase/migrations/20261104180000_financial_operation_evidence.sql",
+      "sha256": "603200db1a5458797df3d3b35dd8a9d6fa8b916ef6ac47d6437b44ce6cc3ee64",
+      "isolatedLocalApplication": "PASS",
+      "hostedApplication": "NOT_APPLIED_BY_THIS_SESSION"
+    },
+    {
+      "version": 77,
+      "path": "supabase/migrations/20261104190000_operational_liability_posting.sql",
+      "sha256": "e0595e8770f3b0af41dcb398588043b74474b7c1d86865e2634e169169a16887",
+      "isolatedLocalApplication": "PASS",
+      "hostedApplication": "NOT_APPLIED_BY_THIS_SESSION"
+    }
+  ],
+  "hostedAlignmentAndDryRun": "NOT_PERFORMED; future target/recovery/impact/approval gate",
+  "hostedFinancialWrites": false,
+  "hostedAcceptance": "NOT_PERFORMED",
+  "deployment": "NOT_PERFORMED",
+  "gitCommitPushMerge": "NOT_PERFORMED",
+  "definitionOfDone": {
+    "businessAccounting": "VERIFIED_LOCAL_SUPPORTED_SCOPE",
+    "securityAuthorization": "VERIFIED_LOCAL_FOCUSED_SCOPE",
+    "database": "VERIFIED_LOCAL_ONLY; MIGRATIONS_PENDING",
+    "testing": "VERIFIED_LOCAL",
+    "documentation": "VERIFIED",
+    "deploymentRecoveryHostedAcceptance": "DEFERRED; BLOCKS_ACTIVATION"
+  },
+  "remainingGates": [
+    "Demonstrated recovery and isolated restore rehearsal",
+    "Existing dated Treasury/holder balance and opening evidence impact review",
+    "Explicit target/alignment/hash/migration authorization",
+    "Hosted postflight and human workflow acceptance; separately approved frontend publication"
+  ],
+  "unsupportedCategories": [
+    "Capital reductions and dividends/distributions",
+    "Partner overdrafts and financing cost/interest policies",
+    "Inventory/assets/prepayments and unsupported tax treatments",
+    "Certified historical opening/import, bank matching and complete physical reconciliation/fiscal closing"
+  ],
+  "filesChanged": [
+    "NARVO_ERP_ACCOUNTING_REQUIREMENTS_REGISTER.md",
+    "NARVO_ERP_MASTER_ROADMAP_V2.0.md",
+    "PROJECT_HANDOFF.md",
+    "PROJECT_ROADMAP.md",
+    "docs/CUSTODY_OPERATIONS.md",
+    "docs/CUSTODY_RECONCILIATION.md",
+    "docs/FINANCIAL_OPERATIONS_INTEGRATION.md",
+    "docs/PARTY_STATEMENTS.md",
+    "docs/V1_TREASURY_MASTER_PROVISIONING.md",
+    "docs/financial-operations-verification.json",
+    "scripts/fixtures/priority-financial.tsx",
+    "scripts/priority-financial-browser-server.mjs",
+    "scripts/priority-financial-fixture.mjs",
+    "scripts/production-boundary.mjs",
+    "scripts/verify-custody-operations-browser.mjs",
+    "scripts/verify-operational-finance-browser.mjs",
+    "scripts/verify-operational-finance-exports.py",
+    "scripts/verify-operational-finance-races.mjs",
+    "scripts/verify-operational-liability-posting.mjs",
+    "scripts/verify-priority-financial-browser.mjs",
+    "scripts/verify-priority-financial-exports.py",
+    "scripts/verify-priority-financial-integration.mjs",
+    "scripts/verify-priority-financial-races.mjs",
+    "src/app/TenantReadyApplication.tsx",
+    "src/auth/ProtectedApplication.tsx",
+    "src/financial/CustodyWorkspace.tsx",
+    "src/financial/ExpenseReadPanel.tsx",
+    "src/financial/FinancialEvidenceWorkspace.tsx",
+    "src/financial/OperationalFinanceWorkspace.tsx",
+    "src/financial/custodyOperations.ts",
+    "src/financial/financialEvidence.ts",
+    "src/financial/operationalFinance.ts",
+    "src/reports/PartyStatement.tsx",
+    "src/reports/TreasuryMovements.tsx",
+    "src/reports/custodyReconciliation.ts",
+    "src/reports/partyStatement.ts",
+    "src/reports/postedExpenseReport.ts",
+    "src/reports/projectCostLedger.ts",
+    "src/workspace/workspaceNavigation.ts",
+    "src/workspace/workspaceText.ts",
+    "supabase/migrations/20261104180000_financial_operation_evidence.sql",
+    "supabase/migrations/20261104190000_operational_liability_posting.sql"
+  ]
+}

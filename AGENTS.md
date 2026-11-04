@@ -94,7 +94,9 @@ CI/CD is a tracked engineering concern, but current GitHub/Vercel flow must not 
 
 Before real production go-live, evaluate application and database monitoring, error visibility, Auth failures, failed financial commands, audit trail, backups, restoration testing, incident response, deployment history, failed-release recovery, and justified performance/resource monitoring. These remain Production Readiness/P10/audit concerns until actually implemented.
 
-Production readiness must define backup scope, frequency, retention, restoration procedure, restoration authorization, recovery expectations, and restoration verification. An untested backup is not sufficient production assurance.
+Product Owner policy update — 2026-11-04: active-development Production releases use risk-based recovery gates. A full database restoration rehearsal is not required before each ordinary milestone deployment and must not be silently reinstated as such a gate. Full restoration rehearsal and comprehensive disaster-recovery verification are DEFERRED to the final operational-readiness/disaster-recovery milestone, where backup scope, frequency, retention, restoration procedure/authorization, recovery expectations and demonstrated restoration must be verified before final operational-readiness acceptance.
+
+Ordinary releases still require exact authorized Supabase target verification, canonical migration alignment and dependencies, deployed-client compatibility, focused accounting/authorization evidence, financial-data preservation, non-destructive migration execution, relevant backup integrity/scope checks and read-only post-deployment verification. Record untested restoration as a recovery limitation; an integrity-verified backup file is not a tested recovery procedure or recovery guarantee. High-risk destructive or irreversible changes require specific Product Owner approval before execution. This policy update does not authorize financial-data rewriting, weakened RLS, automatic cleanup or unrelated infrastructure changes.
 
 ## Phase completion and Definition of Done
 

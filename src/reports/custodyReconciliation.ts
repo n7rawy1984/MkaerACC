@@ -14,7 +14,7 @@ export function reconcileCustody(statement:StatementResult):CustodyReconciliatio
  const rows:CustodyMovement[]=[];
  for(const g of groups){opening+=BigInt(g.opening);closing+=BigInt(g.closing);
   for(const r of g.rows){const net=BigInt(r.debit)-BigInt(r.credit);let f=0n,s=0n,t=0n,o=0n;
-   if(r.type==='CUSTODY_ADVANCE')f=net;else if(r.type==='EXPENSE')s=-net;else if(r.type==='CUSTODY_CASH_RETURN')t=-net;else o=net;
+   if(['CUSTODY_ADVANCE','PARTNER_LOAN_FUNDING','PARTNER_CAPITAL_FUNDING','PARTNER_ADDITIONAL_CAPITAL_FUNDING','PARTNER_CURRENT_FUNDING'].includes(r.type))f=net;else if(r.type==='EXPENSE')s=-net;else if(r.type==='CUSTODY_CASH_RETURN')t=-net;else o=net;
    funding+=f;spending+=s;returned+=t;other+=o;
    rows.push({...r,funding:String(f),spending:String(s),returned:String(t),other:String(o)});
   }
