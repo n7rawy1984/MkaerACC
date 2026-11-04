@@ -34,7 +34,7 @@ Accountant/domain expert owns financial treatment approval; product owner owns c
 | EXP-03 | Universal dimensions plus tax/company policy; retained | PARTIAL Treasury/AP/custodian/owner modes and VAT controls E4; tax readiness not certified | F0, M3, I3 | Invoice validity, VAT timing/base/recoverability |
 | CON-01 | Construction commercial model; generalized | PARTIAL fixed original amount; unknown-total unit-rate/hybrid and BOQ not complete E7/E4 | M4 | Quantity certification, limits and variations |
 | CON-02 | Universal event separation in construction; retained | PARTIAL: substantial P5 advance/certificate/payment/retention backend and P6D paths E4 | F0, M4 | Tax/deduction waterfall and actual evidence |
-| CON-03 | Reusable party/contract master quality; generalized | PARTIAL Supplier metadata/status versus Subcontractor name-only E7 | M3, M4, I1 | Trade-license verification/duplicate policy |
+| CON-03 | Reusable party/contract master quality; generalized | PARTIAL: Supplier/Subcontractor business metadata, controlled status, audit and exports implemented locally (migration73; latest checkpoint); secure documents incomplete | M3, M4, I1 | Trade-license verification/duplicate policy |
 | CON-04 | Construction cumulative certification; retained | PARTIAL cumulative monetary work exists E4; measured unit quantities not complete | M4 | Measurement approval and applied retention/VAT |
 | CUS-01 | Universal person-scoped custody; revised | PARTIAL approved pooled receivable backend E4; integrated statement/UI/source funding incomplete | F0, M4 | Physical custody versus receivable and funding source |
 | CUS-02 | Configurable owner/employee transactions; revised | PARTIAL existing expense OWNER mode; dedicated drawings/employee reimbursement/recovery not established | F0, M4, H3 | Ownership/legal nature, account type and recovery |
@@ -136,7 +136,7 @@ Acceptance: agreement causes no journal; certification creates no cash; contract
 
 ## CON-03 — Party identity, legal metadata and documents
 
-Provenance: S4 CON-03; V1.6 §1.2/§4 P1-F/P2 (`MAKERACC-PARTY-002`). Generalize missing trade-license fields and name-only Subcontractor edit. PARTIAL E7: Supplier has fuller edit/status while other party controls are narrow. Do not claim Supplier behavior applies to Subcontractors.
+Provenance: S4 CON-03; V1.6 §1.2/§4 P1-F/P2 (`MAKERACC-PARTY-002`). Generalize missing trade-license fields and name-only Subcontractor edit. Business Supplier/Subcontractor metadata, reasoned lifecycle, immutable audit, duplicate warnings and bilingual master exports are now locally implemented; migration73 status is in the latest checkpoint and [implementation record](docs/PARTY_BUSINESS_MASTER_LIFECYCLE.md). Secure documents and broader personal-party lifecycle remain incomplete.
 
 Workflow maintains one Company party across projects/contracts; full authorized contact/legal/TRN/license-authority/expiry metadata; duplicate warning (not automatic merge); safe deactivate/reactivate preserving existing settlements; contract-specific notes/evidence belong to contract, not general identity. Trade license and TRN are distinct. Documents use OPS-01, not public URLs.
 
@@ -262,7 +262,7 @@ Acceptance M3: no lost/duplicated source/payment/history; permissions and separa
 
 ### CON-05 — Safe party lifecycle and scoped statements
 
-Provenance: V1.6 §4 P1-F (`MAKERACC-PARTY-002`), beyond S4 CON-03 metadata summary. Generalizable master-data and accounting-history control; PARTIAL Supplier status/metadata exists, Subcontractor name-only E7. Workflow authorized edit/deactivate/reactivate preserving IDs/audit; existing payable settlement remains possible; same party reused across contracts/projects; statements filter without duplicating balances.
+Provenance: V1.6 §4 P1-F (`MAKERACC-PARTY-002`), beyond S4 CON-03 metadata summary. Generalizable master-data and accounting-history control; PARTIAL: business-party edit/deactivate/reactivate, reasons, audit, isolation and existing-settlement compatibility implemented locally (migration73; latest checkpoint); consolidated scoped statements incomplete. Workflow authorized edit/deactivate/reactivate preserving IDs/audit; existing payable settlement remains possible; same party reused across contracts/projects; statements filter without duplicating balances.
 
 Acceptance M3/M4: linked party cannot be hard-deleted; no cascade deletes accounting; active choice required for new work, existing legitimate payments allowed after inactivity; stale versions/foreign roles/Company rejected; duplicate-warning normalization does not merge financial identities. Notes relocation requires original evidence and authorization, no automatic payment creation. Dependency CON-03, QA-01, FIN-04. Scope of unused-master deletion and privacy policy needs design, not a demand for delete-everywhere UI.
 

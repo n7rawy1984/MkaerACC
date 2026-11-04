@@ -96,7 +96,7 @@ export async function readActiveCompanyProjects(
   };
 }
 
-export function mapPartyRow(row: Database["public"]["Tables"]["parties"]["Row"]): ProductionParty {
+export function mapPartyRow(row: Pick<Database["public"]["Tables"]["parties"]["Row"], "id" | "company_id" | "type" | "name" | "code" | "trn" | "contact_person" | "phone" | "email" | "address" | "status" | "notes" | "created_at" | "created_by" | "updated_at" | "updated_by">): ProductionParty {
   return {
     id: row.id,
     companyId: row.company_id,

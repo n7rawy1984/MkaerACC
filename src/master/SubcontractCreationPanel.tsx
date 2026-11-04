@@ -64,7 +64,7 @@ export function SubcontractCreationPanel({ kind }: { kind: "party" | "subcontrac
     {message && <p className="mt-3 text-sm" role={message === "saved" ? "status" : "alert"}>{t(`masterCreation.${message}` as never)}</p>}
     {busy && <p role="status">{t("supplierMutation.pending")}</p>}
     {(message === "uncertain" || message === "refreshError") && <button type="button" disabled={busy} className="mt-2 underline" onClick={() => { void recover(); }}>{t("supplierMutation.refresh")}</button>}
-    {open && kind === "party" && <SupplierPartyForm title={label} supplier={null} disabled={blocked} onCancel={close} onSave={async raw => { const input = normalizeSupplierParty(raw); if (input) await save({ ...input }); else setMessage("invalid"); }} />}
+    {open && kind === "party" && <SupplierPartyForm existingParties={master.parties} title={label} supplier={null} disabled={blocked} onCancel={close} onSave={async raw => { const input = normalizeSupplierParty(raw); if (input) await save({ ...input }); else setMessage("invalid"); }} />}
     {open && kind === "subcontract" && <form onSubmit={submit} className="mt-4 min-w-0 space-y-3 rounded-lg border p-4" aria-label={label}>
       <fieldset disabled={blocked} className="space-y-3">
         <Field label={t("subcontractForm.project")} required><select autoFocus required name="project_id" className={inputClassName}><option value="">{t("common.selectEllipsis")}</option>{master.projects.filter(p => p.companyId === companyId && p.status !== "CLOSED").map(p => <option key={p.id} value={p.id}>{p.code} · {p.name}</option>)}</select></Field>

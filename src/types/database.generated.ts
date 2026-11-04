@@ -1180,6 +1180,15 @@ export type Database = {
       }
       parties: {
         Row: {
+          legal_name: string | null
+          business_classification: string | null
+          trade_license_number: string | null
+          trade_license_authority: string | null
+          trade_license_expiry: string | null
+          country_code: string | null
+          region: string | null
+          payment_terms: string | null
+
           address: string | null
           code: string | null
           company_id: string
@@ -1198,6 +1207,15 @@ export type Database = {
           updated_by: string | null
         }
         Insert: {
+          legal_name?: string | null
+          business_classification?: string | null
+          trade_license_number?: string | null
+          trade_license_authority?: string | null
+          trade_license_expiry?: string | null
+          country_code?: string | null
+          region?: string | null
+          payment_terms?: string | null
+
           address?: string | null
           code?: string | null
           company_id: string
@@ -1216,6 +1234,15 @@ export type Database = {
           updated_by?: string | null
         }
         Update: {
+          legal_name?: string | null
+          business_classification?: string | null
+          trade_license_number?: string | null
+          trade_license_authority?: string | null
+          trade_license_expiry?: string | null
+          country_code?: string | null
+          region?: string | null
+          payment_terms?: string | null
+
           address?: string | null
           code?: string | null
           company_id?: string
@@ -3294,6 +3321,8 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      preview_party_business_change:{Args:{target_company_id:string;target_party_id:string;expected_updated_at:string;patch:Json;target_status:string|null};Returns:Json};
+      update_party_business_master:{Args:{target_company_id:string;target_party_id:string;expected_updated_at:string;request_id:string;patch:Json;target_status:string|null;reason:string|null;duplicates_acknowledged:boolean};Returns:Json};
       set_project_correction_period:{Args:{target_company_id:string;request_id:string;state:string;reason:string};Returns:Json};
       get_project_correction_eligibility:{Args:{target_company_id:string;target_review_id:string};Returns:Json};
       confirm_source_expense_allocation: { Args: { target_company_id:string;target_source_id:string;expected_updated_at:string;expected_allocation_id:string|null;request_id:string;plan:Json;reason:string;basis_approved:boolean };Returns:Json };

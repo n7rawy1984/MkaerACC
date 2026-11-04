@@ -1,3 +1,4 @@
+import {PartyBusinessControl,BusinessPartyExports} from './PartyBusinessControl';
 import {RecordIdentity} from '../components/ui/RecordIdentity';
 import {StatusBadge} from '../workspace/workspaceUi';
 import { PersonMasterCreationPanel } from "./PersonMasterCreationPanel";
@@ -6,38 +7,31 @@ import { OtherPartyNameControl } from "./OtherPartyNameControl";
 import { EmployeePartyNameControl } from "./EmployeePartyNameControl";
 import { CustodianPartyNameControl } from "./CustodianPartyNameControl";
 import { OwnerPartyNameControl } from "./OwnerPartyNameControl";
-import { SubcontractorPartyNameControl } from "./SubcontractorPartyNameControl";
 import { useLayoutEffect, useRef, useState } from "react";
 import { useAuth } from "../auth/AuthContext";
 import { useT } from "../i18n/I18nContext";
 import { useProductionMasterData } from "./productionMasterDataContext";
 import { SupplierPartyForm } from "./SupplierPartyForm";
-import type { ProductionParty } from "./masterTypes";
 
 export function PartiesList() {
   const t = useT();
   const { state } = useAuth();
   const master = useProductionMasterData();
-  const [editing, setEditing] = useState<ProductionParty | "new" | null>(null);
+  const [editing, setEditing] = useState<"new" | null>(null);
   const [otherActionId, setOtherActionId] = useState<string | null>(null);
   const [employeeActionId, setEmployeeActionId] = useState<string | null>(null);
   const [custodianActionId, setCustodianActionId] = useState<string | null>(null);
   const [ownerActionId, setOwnerActionId] = useState<string | null>(null);
   const [subcontractorActionId, setSubcontractorActionId] = useState<string | null>(null);
-  const [statusTarget, setStatusTarget] = useState<ProductionParty | null>(null);
-  const confirmation = useRef<HTMLDivElement>(null);
   const feedbackPanel = useRef<HTMLDivElement>(null);
   const returnFocus = useRef<HTMLButtonElement | null>(null);
   useLayoutEffect(() => {
-    if (statusTarget && confirmation.current) {
-      confirmation.current.focus({ preventScroll: true });
-      confirmation.current.scrollIntoView({ block: "nearest" });
-    } else if (!editing && !statusTarget && returnFocus.current?.isConnected) {
+    if (!editing && returnFocus.current?.isConnected) {
       returnFocus.current.focus({ preventScroll: true });
       returnFocus.current.scrollIntoView({ block: "nearest" });
       returnFocus.current = null;
     }
-  }, [editing, statusTarget]);
+  }, [editing]);
   useLayoutEffect(() => {
     if (master.supplierMutation.phase === "ERROR" || master.supplierMutation.phase === "REFRESH_ERROR") {
       feedbackPanel.current?.focus({ preventScroll: true });
@@ -49,19 +43,19 @@ export function PartiesList() {
   const phase = master.supplierMutation.phase;
   const blocked = master.otherPartyNameMutation.phase === "PENDING" || master.employeePartyNameMutation.phase === "PENDING" || master.custodianPartyNameMutation.phase === "PENDING" || master.ownerPartyNameMutation.phase === "PENDING" || master.subcontractorPartyNameMutation.phase === "PENDING" || phase === "PENDING" || phase === "ERROR" || phase === "REFRESH_ERROR";
   const button = "rounded-lg border border-slate-300 px-3 py-2 text-sm disabled:opacity-50";
-  const refreshParties = () => { setEditing(null); setStatusTarget(null); setOtherActionId(null); setEmployeeActionId(null); setCustodianActionId(null); setOwnerActionId(null); setSubcontractorActionId(null); void (master.subcontractorPartyNameMutation.phase === "ERROR" || master.subcontractorPartyNameMutation.phase === "REFRESH_ERROR" ? master.refreshSubcontractorPartyNames() : master.ownerPartyNameMutation.phase === "ERROR" || master.ownerPartyNameMutation.phase === "REFRESH_ERROR" ? master.refreshOwnerPartyNames() : master.custodianPartyNameMutation.phase === "ERROR" || master.custodianPartyNameMutation.phase === "REFRESH_ERROR" ? master.refreshCustodianPartyNames() : master.employeePartyNameMutation.phase === "ERROR" || master.employeePartyNameMutation.phase === "REFRESH_ERROR" ? master.refreshEmployeePartyNames() : master.otherPartyNameMutation.phase === "ERROR" || master.otherPartyNameMutation.phase === "REFRESH_ERROR" ? master.refreshOtherPartyNames() : master.refreshParties()); };
+  const refreshParties = () => { setEditing(null); setOtherActionId(null); setEmployeeActionId(null); setCustodianActionId(null); setOwnerActionId(null); setSubcontractorActionId(null); void (master.subcontractorPartyNameMutation.phase === "ERROR" || master.subcontractorPartyNameMutation.phase === "REFRESH_ERROR" ? master.refreshSubcontractorPartyNames() : master.ownerPartyNameMutation.phase === "ERROR" || master.ownerPartyNameMutation.phase === "REFRESH_ERROR" ? master.refreshOwnerPartyNames() : master.custodianPartyNameMutation.phase === "ERROR" || master.custodianPartyNameMutation.phase === "REFRESH_ERROR" ? master.refreshCustodianPartyNames() : master.employeePartyNameMutation.phase === "ERROR" || master.employeePartyNameMutation.phase === "REFRESH_ERROR" ? master.refreshEmployeePartyNames() : master.otherPartyNameMutation.phase === "ERROR" || master.otherPartyNameMutation.phase === "REFRESH_ERROR" ? master.refreshOtherPartyNames() : master.refreshParties()); };
   const feedback = <div ref={feedbackPanel} tabIndex={-1}>
     {phase === "PENDING" && <p role="status" className="mt-3 text-sm">{t("supplierMutation.pending")}</p>}
     {phase === "SAVED" && <p role="status" className="mt-3 text-sm text-green-800">{t("supplierMutation.saved")}</p>}
     {phase === "ERROR" && <p role="alert" className="mt-3 text-sm text-red-700">{t(`supplierMutation.${master.supplierMutation.error ?? "uncertain"}`)} {t("supplierMutation.refreshRequired")}</p>}
     {phase === "REFRESH_ERROR" && <p role="alert" className="mt-3 text-sm text-red-700">{t("supplierMutation.refreshError")}</p>}
-    {(phase === "ERROR" || phase === "REFRESH_ERROR") && (editing || statusTarget) && <button type="button" className={button} onClick={refreshParties}>{t("supplierMutation.refresh")}</button>}
+    {(phase === "ERROR" || phase === "REFRESH_ERROR") && !!editing && <button type="button" className={button} onClick={refreshParties}>{t("supplierMutation.refresh")}</button>}
   </div>;
   return <>
     <div className="suite-master-toolbar"><SubcontractCreationPanel kind="party" />
     <PersonMasterCreationPanel kind="person" />
     <div className="mt-4 flex flex-wrap gap-2">
-      {canManage && <button type="button" className={button} disabled={blocked} onClick={(event) => { returnFocus.current = event.currentTarget; setStatusTarget(null); setOtherActionId(null); setEmployeeActionId(null); setCustodianActionId(null); setOwnerActionId(null); setSubcontractorActionId(null); setEditing("new"); }}>{t("supplierMutation.create")}</button>}
+      {canManage && <button type="button" className={button} disabled={blocked} onClick={(event) => { returnFocus.current = event.currentTarget; setOtherActionId(null); setEmployeeActionId(null); setCustodianActionId(null); setOwnerActionId(null); setSubcontractorActionId(null); setEditing("new"); }}>{t("supplierMutation.create")}</button>}
       <button type="button" className={button} disabled={phase === "PENDING" || master.otherPartyNameMutation.phase === "PENDING" || master.employeePartyNameMutation.phase === "PENDING" || master.custodianPartyNameMutation.phase === "PENDING" || master.ownerPartyNameMutation.phase === "PENDING" || master.subcontractorPartyNameMutation.phase === "PENDING"} onClick={refreshParties}>{t("supplierMutation.refresh")}</button>
     </div>
     </div>{!otherActionId && master.otherPartyNameMutation.phase === "ERROR" && <p role="alert" className="mt-3 text-sm">{t(`otherPartyName.${master.otherPartyNameMutation.error ?? "uncertain"}`)} {t("otherPartyName.refreshRequired")}</p>}
@@ -74,10 +68,11 @@ export function PartiesList() {
     {!ownerActionId && master.ownerPartyNameMutation.phase === "REFRESH_ERROR" && <p role="alert" className="mt-3 text-sm">{t("ownerPartyName.refreshError")}</p>}
     {!subcontractorActionId && master.subcontractorPartyNameMutation.phase === "ERROR" && <p role="alert" className="mt-3 text-sm">{t(`subcontractorPartyName.${master.subcontractorPartyNameMutation.error ?? "uncertain"}`)} {t("subcontractorPartyName.refreshRequired")}</p>}
     {!subcontractorActionId && master.subcontractorPartyNameMutation.phase === "REFRESH_ERROR" && <p role="alert" className="mt-3 text-sm">{t("subcontractorPartyName.refreshError")}</p>}
-    {(!editing && !statusTarget || editing === "new") && feedback}
-    {canManage && editing === "new" && <SupplierPartyForm supplier={null} disabled={blocked} onCancel={() => setEditing(null)} onSave={async (input) => {
+    {(!editing || editing === "new") && feedback}
+    {canManage && editing === "new" && <SupplierPartyForm existingParties={master.parties} supplier={null} disabled={blocked} onCancel={() => setEditing(null)} onSave={async (input) => {
       if (await master.saveSupplierParty({ kind: "create", input })) setEditing(null);
     }} />}
+    <BusinessPartyExports/>
     <p className="mt-3 text-sm text-slate-500">{t("productionMaster.partyVisibility")}</p>
     {master.parties.length === 0 ? <p role="status" className="mt-4 text-sm text-slate-500">{t("productionMaster.partiesEmpty")}</p> : (
       <ul className="enterprise-record-list mt-5" aria-label={t("productionMaster.parties")}>
@@ -92,29 +87,12 @@ export function PartiesList() {
                 <div key={field} className={field === "notes" || field === "address" ? "record-detail-wide" : undefined}><dt className="font-medium">{t(`productionMaster.${field}`)}</dt><dd><bdi dir={field === "email" || field === "phone" || field === "trn" ? "ltr" : "auto"}>{value}</bdi></dd></div>
               ))}
             </dl>
-            {party.type === "OTHER" && <OtherPartyNameControl party={party} selected={otherActionId === party.id} onSelect={() => { returnFocus.current = null; setEditing(null); setStatusTarget(null); setEmployeeActionId(null); setCustodianActionId(null); setOwnerActionId(null); setSubcontractorActionId(null); setOtherActionId(party.id); }} />}
-            {party.type === "EMPLOYEE" && <EmployeePartyNameControl party={party} selected={employeeActionId === party.id} onSelect={() => { returnFocus.current = null; setEditing(null); setStatusTarget(null); setOtherActionId(null); setCustodianActionId(null); setOwnerActionId(null); setSubcontractorActionId(null); setEmployeeActionId(party.id); }} />}
-            {party.type === "CUSTODIAN" && <CustodianPartyNameControl party={party} selected={custodianActionId === party.id} onSelect={() => { returnFocus.current = null; setEditing(null); setStatusTarget(null); setOtherActionId(null); setEmployeeActionId(null); setOwnerActionId(null); setSubcontractorActionId(null); setCustodianActionId(party.id); }} />}
-            {party.type === "OWNER" && <OwnerPartyNameControl party={party} selected={ownerActionId === party.id} onSelect={() => { returnFocus.current = null; setEditing(null); setStatusTarget(null); setOtherActionId(null); setEmployeeActionId(null); setCustodianActionId(null); setSubcontractorActionId(null); setOwnerActionId(party.id); }} />}
-            {party.type === "SUBCONTRACTOR" && <SubcontractorPartyNameControl party={party} selected={subcontractorActionId === party.id} onSelect={() => { returnFocus.current = null; setEditing(null); setStatusTarget(null); setOtherActionId(null); setEmployeeActionId(null); setCustodianActionId(null); setOwnerActionId(null); setSubcontractorActionId(party.id); }} />}
-            {canManage && party.type === "SUPPLIER" && <div className="record-actions">
-              <button type="button" className={button} disabled={blocked} onClick={(event) => { returnFocus.current = event.currentTarget; setStatusTarget(null); setOtherActionId(null); setEmployeeActionId(null); setCustodianActionId(null); setOwnerActionId(null); setSubcontractorActionId(null); setEditing(party); }}>{t("supplierMutation.edit")}</button>
-              <button type="button" className={button} disabled={blocked} onClick={(event) => { returnFocus.current = event.currentTarget; setEditing(null); setOtherActionId(null); setEmployeeActionId(null); setCustodianActionId(null); setOwnerActionId(null); setSubcontractorActionId(null); setStatusTarget(party); }}>{t(party.status === "ACTIVE" ? "supplierMutation.deactivate" : "supplierMutation.reactivate")}</button>
-            </div>}
-            {canManage && party.type === "SUPPLIER" && editing && editing !== "new" && editing.id === party.id && <>
-              {feedback}
-              <SupplierPartyForm key={editing.id} supplier={editing} disabled={blocked} onCancel={() => setEditing(null)} onSave={async (input) => {
-                if (await master.saveSupplierParty({ kind: "edit", supplier: editing, input })) setEditing(null);
-              }} />
-            </>}
-            {canManage && statusTarget?.id === party.id && <div ref={confirmation} tabIndex={-1} role="region" aria-label={t(statusTarget.status === "ACTIVE" ? "supplierMutation.deactivateConfirm" : "supplierMutation.reactivateConfirm")} className="mt-4 rounded-lg border border-amber-300 p-4">
-              {feedback}
-              <p className="break-words"><bdi>{statusTarget.code ? `${statusTarget.code} · ` : ""}{statusTarget.name}</bdi></p>
-              <p className="my-2 text-sm">{t(statusTarget.status === "ACTIVE" ? "supplierMutation.deactivateConfirm" : "supplierMutation.reactivateConfirm")}</p>
-              <div className="flex flex-wrap gap-2"><button type="button" disabled={blocked} className={button} onClick={() => {
-                void master.saveSupplierParty({ kind: "status", supplier: statusTarget, status: statusTarget.status === "ACTIVE" ? "INACTIVE" : "ACTIVE" }).then((ok) => { if (ok) setStatusTarget(null); });
-              }}>{t("supplierMutation.confirm")}</button><button type="button" className={button} onClick={() => setStatusTarget(null)}>{t("supplierMutation.close")}</button></div>
-            </div>}
+            {party.type === "OTHER" && <OtherPartyNameControl party={party} selected={otherActionId === party.id} onSelect={() => { returnFocus.current = null; setEditing(null); setEmployeeActionId(null); setCustodianActionId(null); setOwnerActionId(null); setSubcontractorActionId(null); setOtherActionId(party.id); }} />}
+            {party.type === "EMPLOYEE" && <EmployeePartyNameControl party={party} selected={employeeActionId === party.id} onSelect={() => { returnFocus.current = null; setEditing(null); setOtherActionId(null); setCustodianActionId(null); setOwnerActionId(null); setSubcontractorActionId(null); setEmployeeActionId(party.id); }} />}
+            {party.type === "CUSTODIAN" && <CustodianPartyNameControl party={party} selected={custodianActionId === party.id} onSelect={() => { returnFocus.current = null; setEditing(null); setOtherActionId(null); setEmployeeActionId(null); setOwnerActionId(null); setSubcontractorActionId(null); setCustodianActionId(party.id); }} />}
+            {party.type === "OWNER" && <OwnerPartyNameControl party={party} selected={ownerActionId === party.id} onSelect={() => { returnFocus.current = null; setEditing(null); setOtherActionId(null); setEmployeeActionId(null); setCustodianActionId(null); setSubcontractorActionId(null); setOwnerActionId(party.id); }} />}
+            {['SUPPLIER','SUBCONTRACTOR'].includes(party.type)&&<PartyBusinessControl key={state.profile.userId+':'+party.companyId+':'+party.id} party={party}/>}
+
           </li>
         ))}
       </ul>
