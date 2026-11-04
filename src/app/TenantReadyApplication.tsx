@@ -1,3 +1,4 @@
+import {CustodyReconciliation} from '../reports/CustodyReconciliation';
 import {ContentSection,LoadingState,ErrorState} from '../workspace/workspaceUi';
 import ExecutiveDashboard from "../dashboard/ExecutiveDashboard";
 import { ExpenseReadPanel } from "../financial/ExpenseReadPanel";
@@ -38,7 +39,7 @@ export default function TenantReadyApplication({ view }: { view: "dashboard" | "
             {view === "subcontracts" && <p className="mt-3 text-sm text-slate-500">{t("productionMaster.subcontractsMetadataScope")}</p>}
             {view === "subcontracts" && masterData.phase === "READY" && <SubcontractsList />}
             {view === "accounts" && masterData.phase === "READY" && <AccountNamesPanel />}
-            {view === "treasuryAccounts" && masterData.phase === "READY" && <TreasuryNamesPanel />}
+            {view === "treasuryAccounts" && masterData.phase === "READY" && <><TreasuryNamesPanel /><CustodyReconciliation /></>}
             {view === "projects" && masterData.phase === "READY" && <ProjectsList />}
             {view === "companyProfile" && masterData.phase === "READY" && <CompanyProfilePanel />}
             {view === "parties" && masterData.phase === "READY" && <PartiesList />}

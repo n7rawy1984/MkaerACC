@@ -38,7 +38,7 @@ Accountant/domain expert owns financial treatment approval; product owner owns c
 | CON-04 | Construction cumulative certification; retained | PARTIAL cumulative monetary work exists E4; measured unit quantities not complete | M4 | Measurement approval and applied retention/VAT |
 | CUS-01 | Universal person-scoped custody; revised | PARTIAL approved pooled receivable backend E4; integrated statement/UI/source funding incomplete | F0, M4 | Physical custody versus receivable and funding source |
 | CUS-02 | Configurable owner/employee transactions; revised | PARTIAL existing expense OWNER mode; dedicated drawings/employee reimbursement/recovery not established | F0, M4, H3 | Ownership/legal nature, account type and recovery |
-| CUS-03 | Role-specific operational statement; generalized | PARTIAL pooled readers/backend; complete manager statement/reconciliation not verified | M4 | Manager permitted scope and confidential exclusions |
+| CUS-03 | Role-specific operational statement; generalized | PARTIAL posted custody reconciliation and bilingual exports locally verified; physical reconciliation/reimbursements/evidence completeness incomplete | M4 | Manager permitted scope and confidential exclusions |
 | HR-01 | Reusable attendance facts/workflow; retained | PARTIAL exception-only Lite E5; explicit matrix/leave/minutes planned | H1, H2 | HR-03 semantic transition, schedule/leave rules |
 | HR-02 | Reusable payroll accrual/settlement; retained | PARTIAL Lite calculations/post/payment/reversal/exports E5; expanded policies and WPS absent | H1, H3, H4 | Salary/advance/leave/allocation/legal policy |
 | INV-01 | Reusable construction procurement/stock; retained | PLANNED integrated workflow S3; inspected inventory contains no implemented stock module | I1–I5 | Costing, ownership, WIP, VAT, openings/UOM |
@@ -166,7 +166,9 @@ Acceptance: party/account/legal nature signed off; one original cost; linked rei
 
 ## CUS-03 — Manager statement and accountant reconciliation
 
-Provenance: S4 CUS-03; V1.6 §4 P1-A. Generalize received/spent/balance to an authorized Company/person statement. Backend Company accounting readers exist E4; complete manager-facing statement and evidence completeness not verified.
+**2026-11-04 bounded increment:** Posted custody statement/reconciliation is implemented and locally verified for existing Company accounting/reporting roles, including Management Viewer. Signed period funding-minus-spending-minus-returns, GL opening/closing, Project slices, reversals, separate operational settlement status and bilingual Excel/PDF reuse canonical75. Blank August2026 evidence template only; no hosted import/write, new posting command or migration. Physical counts, complete evidence/individual outstanding items, reimbursement liabilities, holder portfolio and historical opening/import remain incomplete. Operational Go-Live now takes priority; no full CUS-03/M4 completion claim. [Implementation](docs/CUSTODY_RECONCILIATION.md).
+
+Provenance: S4 CUS-03; V1.6 §4 P1-A. Generalize received/spent/balance to an authorized Company/person statement. Backend Company accounting readers exist E4; The posted manager-facing custody statement is now locally verified within the bounded scope above; complete operational/evidence reconciliation remains incomplete.
 
 Workflow accountant traces opening/funding/expense/nonexpense/return/reversal and documentary exceptions to GL; manager sees permitted simplified receipts/spending/expected cash/unsupported items/variance with clear source-versus-posted labels. User custody-person linkage and scope must be explicit; no payroll details inherited from management role. Acceptance: control GL agrees, verified zero distinct from missing opening, real/expected cash discrepancy explained, viewer cannot post/edit/reverse, foreign Company/person access denied. DECISION REQUIRED permitted manager scope, evidence and shortfalls; M4, CUS-01/02, FIN-03/04, OPS-01.
 
