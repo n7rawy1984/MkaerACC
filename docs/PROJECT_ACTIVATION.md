@@ -1,3 +1,5 @@
+**Current lifecycle extension:** [Controlled Project lifecycle](PROJECT_LIFECYCLE.md) adds audited operational hold/resume/completion/reopening (migration74 applied); this original activation workflow/history is preserved. Closed transition remains blocked pending policy. Earlier checkpoints below remain historical.
+
 **Hosted history checkpoint:** this session observed migration66 already applied among67 hosted versions, then applied review-only migration68. Earlier unapplied statements below are historical. This does not establish hosted workflow acceptance or authorize frontend release. [Current evidence](EXPENSE_CORRECTION_REVIEWS.md).
 
 # M3 / PRJ-01 — Project activation
