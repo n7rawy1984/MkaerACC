@@ -5,7 +5,7 @@ export type ModuleStatus='AVAILABLE'|'UNDER_DEVELOPMENT'|'REQUIRES_VERIFICATION'
 export type WorkspaceModule={id:ModuleId;label:WorkspaceTextKey|null;translationKey:string;name:readonly[string,string];route:string|null;status:ModuleStatus;access:'EXISTING_ROUTE_ROLE'|'UNAVAILABLE';subscription:'ROLE_SCOPED_READ'|'NEW_BUSINESS_REQUIRES_FULL'|'SETTLEMENTS_PRESERVED';navigation:boolean};
 // The existing navigation/role contract remains the single presentation access source.
 // This registry describes capabilities; database/RPC authorization is authoritative.
-const settlement=['/supplier-payments','/subcontractor-payments','/retention-payments'];
+const settlement=['/custody','/supplier-payments','/subcontractor-payments','/retention-payments'];
 export const moduleRegistry:WorkspaceModule[]=[
  ...workspaceNavigation.flatMap(g=>g.items).map(i=>({id:i.path,label:i.label,translationKey:'workspace.'+i.label,name:[workspaceText.en[i.label],workspaceText.ar[i.label]] as const,route:i.path,status:'AVAILABLE' as const,access:'EXISTING_ROUTE_ROLE' as const,subscription:settlement.includes(i.path)?'SETTLEMENTS_PRESERVED' as const:['/expenses','/subcontracts','/projects','/payroll'].includes(i.path)?'NEW_BUSINESS_REQUIRES_FULL' as const:'ROLE_SCOPED_READ' as const,navigation:true})),
  ...([

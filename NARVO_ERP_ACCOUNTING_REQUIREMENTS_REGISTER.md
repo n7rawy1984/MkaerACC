@@ -150,6 +150,8 @@ Workflow records actual signed measurement/prior approved cumulative quantity/va
 
 ## CUS-01 — Financial custody with one authoritative balance
 
+**CUS-04 / 2026-11-04:** Supported authenticated bank-funded custody entry, custody Expense/VAT, cash/bank returns, no-GL settlement, canonical reversals, source/journal register and bilingual reports are locally implemented/verified. Cash-funded issuance and cash-return reversal remain gated pending verified opening/physical cash/sufficiency controls. Personal-funds reimbursements, physical reconciliation and history import remain incomplete. No migration/hosted change; no full CUS-01/M4 completion. [Workflow and safeguards](docs/CUSTODY_OPERATIONS.md).
+
 Provenance: S4 CUS-01; V1.6 §2/§4 P1-A/§7. Revised proposal: Bareq is a person, not a Company or automatic Treasury. PARTIAL E4 approved balance is Company/custodian journal-derived CUSTODY_ADVANCE receivable, not per-project/per-advance cash buckets.
 
 Workflow Treasury advance Dr custody/Cr Treasury; substantiated custodian expense Dr cost/evidenced VAT, Cr custody once; settlement groups already posted expense IDs and has zero journal effect; return Dr Treasury/Cr custody; exact reversals preserve dimensions. Personal-financed spend/negative shortfall and nonexpense custody disbursements require explicit policy/commands, not fictional advance.
