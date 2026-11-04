@@ -21,3 +21,12 @@ export function allocateSharedCost(amount:string,input:AllocationInput):Allocati
  return {...input,basis:input.basis.trim(),support:input.support.trim(),driver:input.driver?.trim()||null,unit:input.unit?.trim()||null,rounding:'LARGEST_REMAINDER_V1',weight_scale:input.method==='PERCENT'?100:input.method==='DIRECT'?1:1000000,destinations:parts.sort((a,b)=>compare(key(a.project_id),key(b.project_id))).map(d=>({project_id:d.project_id,weight:d.weight,amount_minor:d.minor.toString()}))};
 }
 export function weightDisplay(weight:string,scale:number):string{const w=BigInt(weight),s=BigInt(scale);return s===1n?w.toString():`${w/s}.${(w%s).toString().padStart(String(scale).length-1,'0')}`;}
+
+/** Exact cash-neutral movement, rather than recognizing the source cost again. */
+export function allocationChanges(original:AllocationPlan,corrected:AllocationPlan){
+ const amounts=new Map<string|null,{before:bigint;after:bigint}>();
+ for(const d of original.destinations){const v=amounts.get(d.project_id)??{before:0n,after:0n};v.before+=BigInt(d.amount_minor);amounts.set(d.project_id,v);}
+ for(const d of corrected.destinations){const v=amounts.get(d.project_id)??{before:0n,after:0n};v.after+=BigInt(d.amount_minor);amounts.set(d.project_id,v);}
+ if([...amounts.values()].reduce((n,v)=>n+v.after-v.before,0n)!==0n)throw Error('Allocation totals differ');
+ return [...amounts].sort(([a],[b])=>(a??'~')<(b??'~')?-1:(a??'~')>(b??'~')?1:0).map(([project_id,v])=>({project_id,before_minor:v.before.toString(),after_minor:v.after.toString(),delta_minor:(v.after-v.before).toString()}));
+}

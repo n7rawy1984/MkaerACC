@@ -1,3 +1,5 @@
+**Posted split correction extension — 2026-11-04:** [cash-neutral correction](POSTED_SPLIT_COST_CORRECTIONS.md) now extends the existing receipt/reversal workflow for eligible originally allocated Expenses. Earlier deferrals below describe their historical checkpoints. Wider M3 remains incomplete.
+
 **Pre-posting extension — 2026-11-04:** [source integration](PREPOSTING_SHARED_COST.md) now uses this same plan representation for original eligible cash Expense recognition. Earlier pre-posting deferrals below describe the migration70 checkpoint. Unsupported sources/periods and originally split posted-cost corrections remain separate.
 
 # M3 — Shared cost allocation

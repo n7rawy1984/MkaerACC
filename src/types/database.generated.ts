@@ -3298,6 +3298,7 @@ export type Database = {
       get_project_correction_eligibility:{Args:{target_company_id:string;target_review_id:string};Returns:Json};
       confirm_source_expense_allocation: { Args: { target_company_id:string;target_source_id:string;expected_updated_at:string;expected_allocation_id:string|null;request_id:string;plan:Json;reason:string;basis_approved:boolean };Returns:Json };
       execute_shared_cost_allocation: { Args: { target_company_id: string; target_review_id: string; request_id: string; plan: Json; basis_approved: boolean; unreconciled_confirmed: boolean; evidence_reference: string }; Returns: Json };
+      execute_posted_split_cost_correction: { Args: { target_company_id: string; target_review_id: string; request_id: string; plan: Json; basis_approved: boolean; unreconciled_confirmed: boolean; evidence_reference: string }; Returns: Json };
       execute_project_cost_correction:{Args:{target_company_id:string;target_review_id:string;request_id:string;unreconciled_confirmed:boolean;evidence_reference:string};Returns:Json};
       reverse_project_cost_correction:{Args:{target_company_id:string;target_correction_id:string;request_id:string;reason:string};Returns:Json};
 
