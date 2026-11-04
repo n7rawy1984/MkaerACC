@@ -4,6 +4,7 @@ export type SourceRecord = {
  outflow_minor: string | null; funding_minor: string | null; payroll_net_minor: string | null;
  raw_source: Record<string, unknown>; classification: Record<string, unknown>;
  completion: Record<string, unknown>; review_status: string; updated_at: string;
+ expense_allocation_id?:string|null;
  allocation_scope?:'PROJECT'|'COMPANY'|null; assigned_project_id?:string|null;
  expense_id: string | null; payroll_entitlement_id: string | null; cash_treasury_id: string | null; payroll_profile_id: string | null;
  payroll_status?:'POSTED'|'REVERSED'|'LINKED';

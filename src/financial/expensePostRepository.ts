@@ -2,6 +2,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "../types/database.generated";
 
 export interface TreasuryExpenseInput {
+  sourceAllocationId?:string|null;
   date: string; projectId: string | null; categoryId: string; supplierId: string | null;
   treasuryId: string; description: string; netMinor: string;
   vatMode: "ZERO" | "AUTO_5" | "MANUAL"; manualVatMinor: string | null;
@@ -22,7 +23,7 @@ export function parseAED(value: string): string {
 }
 export function normalizeExpenseInput(input: TreasuryExpenseInput): TreasuryExpenseInput {
   const money = (s: string) => typeof s === "string" && /^\d+$/.test(s) && BigInt(s) >= 1n && BigInt(s) <= 9000000000000000n;
-  if (!input || !/^\d{4}-\d{2}-\d{2}$/.test(input.date) || !Number.isFinite(Date.parse(input.date)) || new Date(input.date).toISOString().slice(0, 10) !== input.date
+  if (!input || (input.sourceAllocationId!==undefined&&!nullableId(input.sourceAllocationId)) || !/^\d{4}-\d{2}-\d{2}$/.test(input.date) || !Number.isFinite(Date.parse(input.date)) || new Date(input.date).toISOString().slice(0, 10) !== input.date
     || !uuid.test(input.categoryId) || !uuid.test(input.treasuryId) || !nullableId(input.projectId) || !nullableId(input.supplierId)
     || !money(input.netMinor) || !["ZERO", "AUTO_5", "MANUAL"].includes(input.vatMode)
     || (input.vatMode === "MANUAL" ? !money(input.manualVatMinor ?? "") : input.manualVatMinor !== null)
@@ -34,7 +35,7 @@ export function normalizeExpenseInput(input: TreasuryExpenseInput): TreasuryExpe
   const notes = input.notes?.trim() || null;
   if (!description || [...description].length > 1000 || (invoiceNumber && [...invoiceNumber].length > 100) || (notes && [...notes].length > 2000)
     || (input.hasInvoice ? !invoiceNumber : invoiceNumber !== null) || (input.vatMode !== "ZERO" && !input.hasInvoice)) throw new Error("invalid");
-  return { date: input.date, projectId: input.projectId, categoryId: input.categoryId, supplierId: input.supplierId,
+  return { ...(input.sourceAllocationId===undefined?{}:{sourceAllocationId:input.sourceAllocationId}),date: input.date, projectId: input.projectId, categoryId: input.categoryId, supplierId: input.supplierId,
     treasuryId: input.treasuryId, description, netMinor: BigInt(input.netMinor).toString(), vatMode: input.vatMode,
     manualVatMinor: input.manualVatMinor === null ? null : BigInt(input.manualVatMinor).toString(),
     paymentMethod: input.paymentMethod, hasInvoice: input.hasInvoice, invoiceNumber, notes };
@@ -69,11 +70,11 @@ export async function postTreasuryExpense(client: SupabaseClient<Database>, comp
   const payload = expensePayload(companyId, key, input);
   if (sourceId && (!uuid.test(sourceId) || key !== sourceId)) throw new Error("invalid");
   const { data, error } = sourceId
-    ? await (client as unknown as SupabaseClient).rpc("post_historical_expense", {target_company_id:companyId,target_source_id:sourceId,business_input:payload})
+    ? await (client as unknown as SupabaseClient).rpc("post_historical_expense", {target_company_id:companyId,target_source_id:sourceId,business_input:{...payload,target_source_allocation_id:input.sourceAllocationId??null}})
     : await (client as unknown as SupabaseClient<PostDatabase>).rpc("post_expense", payload);
   // Treat every non-confirmation as unresolved. A replay may fail validation after
   // an earlier committed request, so errors never authorize a fresh key automatically.
-  if (error) throw new ExpensePostError(["22003", "22023", "23503", "23514", "42501", "23502", "22P02", "22007"].includes(error.code));
+  if (error) throw new ExpensePostError(["22003", "22023", "23503", "23514", "40001", "42501", "23502", "22P02", "22007"].includes(error.code));
   if (!data || data.length !== 1 || !validReceipt(data[0])) throw new ExpensePostError(false);
   return data[0];
 }

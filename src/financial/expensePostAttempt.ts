@@ -23,7 +23,7 @@ export function sendAttempt(client: SupabaseClient<Database>, storage: Storage, 
   if (attempt.receipt) return Promise.resolve(attempt);
   const lock = attemptStorageKey(attempt.userId, attempt.companyId);
   const running = inFlight.get(lock);
-  const signature=JSON.stringify([attempt.sourceId??null,expensePayload(attempt.companyId,attempt.key,attempt.input)]);
+  const signature=JSON.stringify([attempt.sourceId??null,expensePayload(attempt.companyId,attempt.key,attempt.input),attempt.input.sourceAllocationId??null]);
   if (running) {if(running.signature!==signature)return Promise.reject(new Error("unresolved"));return running.promise;}
   const run = (async () => {
     saveAttempt(storage, attempt); // Storage failure must prevent the first send.

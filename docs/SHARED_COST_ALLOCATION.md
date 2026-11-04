@@ -1,3 +1,5 @@
+**Pre-posting extension — 2026-11-04:** [source integration](PREPOSTING_SHARED_COST.md) now uses this same plan representation for original eligible cash Expense recognition. Earlier pre-posting deferrals below describe the migration70 checkpoint. Unsupported sources/periods and originally split posted-cost corrections remain separate.
+
 # M3 — Shared cost allocation
 
 Implemented: eligible posted simple cash Expenses can be allocated across up to20 active Company Projects and explicit Company overhead using the existing correction workflow. This completes the next bounded PRJ-02/PRJ-03 increment, not all M3.
