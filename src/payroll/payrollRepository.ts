@@ -8,7 +8,7 @@ export interface PayrollProfiles { profiles:PayrollProfile[]; employees:{id:stri
 export interface PayrollRow {
  id:string; company_id:string; employee_id:string; included:boolean; employee_name:string; payroll_id:string; payroll_type:string; profession:string;
  work_station:string; default_project_id:string|null; payment_type:string; monthly_salary_minor:string; calendar_days:number; absence_half_units:number;
- absence_deduction_minor:string; additions_minor:string; deductions_minor:string; gross_salary_minor:string; net_salary_minor:string;
+ hr_basis?:{mode:string;cash_net_minor:string;recovery_minor:string;worked_minutes:number;unpaid_minutes:number;weights:Record<string,number>}; absence_deduction_minor:string; additions_minor:string; deductions_minor:string; gross_salary_minor:string; net_salary_minor:string;
 }
 export interface PayrollAdjustment {
  id:string; company_id:string; row_id:string; kind:'ADDITION'|'DEDUCTION'; amount_minor:string; reason:string; voided:boolean; version:number;

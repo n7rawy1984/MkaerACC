@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "checks": [
+    "Real PostgREST POST reads HR for Accounting Admin without25006",
+    "Real PostgREST POST reads HR for Accountant without25006",
+    "Real PostgREST GET supports STABLE HR read",
+    "Unauthorized role/tenant cannot invoke HR projection",
+    "Unauthorized role/tenant cannot invoke HR projection",
+    "Unauthorized role/tenant cannot invoke HR projection",
+    "Unauthorized role/tenant cannot invoke HR projection",
+    "Anonymous HR execution denied",
+    "Management Viewer reads no confidential hr_term_events",
+    "Management Viewer reads no confidential historical_source_records",
+    "Management Viewer reads no confidential historical_source_audit",
+    "Accountant retains historical payroll source/audit visibility",
+    "Pre-cutover Payroll Lite remains readable through actual RPC",
+    "HR and Lite read RPCs change no journals, payroll postings or payments",
+    "Inactive profile denied despite valid JWT",
+    "Inactive membership denied despite valid JWT",
+    "Read authorization remains private and STABLE",
+    "Financial authorization retains all three master/profile/membership row locks",
+    "Financial helper still holds an actual row lock until transaction end",
+    "Posting/payment/reversals preserve original advance and recovery balances",
+    "Focused payroll lifecycle leaves every journal balanced"
+  ],
+  "passed": 21,
+  "transport": "Actual local PostgREST GET/POST with signed synthetic JWTs and native PostgreSQL",
+  "migration_sha256": "b60e0bee43d16a5b7c7f6a5fef225582db0c84085dd9e914608b0ee35046f44f",
+  "hosted": false,
+  "correction_scope": "Only add private STABLE hr_read_actor and redirect read_hr_workspace; reconstructing the prior text gives exact approved9a8ef8 hash. Applied1\u201380 and all write-command source unchanged.",
+  "postgrest_release": "v16.5"
+}

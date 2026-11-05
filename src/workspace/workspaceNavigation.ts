@@ -7,7 +7,7 @@ export const workspaceNavigation:readonly {label:WorkspaceTextKey;items:readonly
  {label:'projects',items:[{label:'projects',path:'/projects',roles:operational}]},
  {label:'financial',items:[{label:'financialEvidence',path:'/financial-evidence',roles:accounting},{label:'custody',path:'/custody',roles:accounting},{label:'expenses',path:'/expenses',roles:operational},{label:'supplierPayments',path:'/supplier-payments',roles:accounting},{label:'treasury',path:'/treasury-accounts',roles:[...accounting,'PROJECT_MANAGER']}]},
  {label:'contracts',items:[{label:'subcontracts',path:'/subcontracts',roles:[...accounting,'PROJECT_MANAGER','PROCUREMENT']},{label:'advances',path:'/subcontractor-advances',roles:accounting},{label:'certificates',path:'/subcontractor-certificates',roles:accounting},{label:'subcontractorPayments',path:'/subcontractor-payments',roles:accounting},{label:'retentionReleases',path:'/retention-releases',roles:accounting},{label:'retentionPayments',path:'/retention-payments',roles:accounting}]},
- {label:'people',items:[{label:'attendance',path:'/attendance',roles:['ACCOUNTING_ADMIN','ACCOUNTANT']},{label:'payroll',path:'/payroll',roles:accounting}]},
+ {label:'people',items:[{label:'attendance',path:'/attendance',roles:['ACCOUNTING_ADMIN','ACCOUNTANT']},{label:'payroll',path:'/payroll',roles:['ACCOUNTING_ADMIN','ACCOUNTANT']}]},
  {label:'accounting',items:[{label:'cycle',path:'/accounting-cycle'},{label:'accounts',path:'/accounts',roles:accounting},{label:'reports',path:'/accounting-reports',roles:accounting}]},
  {label:'settings',items:[{label:'companyProfile',path:'/company-profile'}]},
 ];

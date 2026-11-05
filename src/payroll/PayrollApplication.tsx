@@ -1,3 +1,4 @@
+import {HRWorkspace} from '../hr/HRWorkspace';
 import HistoricalImports, {type SourceRecord} from "../historical/HistoricalImports";
 import { useTenantSettings } from "../tenant/TenantSettingsContext";
 import { TenantBrandMark } from "../tenant/TenantBrandMark";
@@ -27,9 +28,9 @@ export default function PayrollApplication({embedded=false}:{embedded?:boolean}=
 }
 export function PayrollContent({userId,companyId,companyName=companyId,role}:{userId:string;companyId:string;companyName?:string;role:string}){
  const {locale}=useI18n();const t=payrollText[locale];const [tab,setTab]=useState<'profiles'|'draft'|'source'>(()=>new URLSearchParams(window.location.search).get('view')==='register'?'draft':'source');const [source,setSource]=useState<SourceRecord|undefined>();
- if(role==='MANAGEMENT_VIEWER')return <section className="mx-auto max-w-[1600px] rounded-xl border bg-white p-4 sm:p-6"><HistoricalImports recordType="PAYROLL"/></section>;
+
  if(!payrollAllowed(role))return <p role="alert">{t.denied}</p>;
- return <section className="mx-auto max-w-[1600px] space-y-4 rounded-xl border bg-white p-4 sm:p-6"><p>{t.scope}</p><div className="flex gap-2"><button className={button} onClick={()=>setTab('source')}>Source Payroll / رواتب المصدر</button><button className={button} onClick={()=>setTab('profiles')}>{t.profiles}</button><button className={button} onClick={()=>setTab('draft')}>{t.register}</button></div>
+ return <section className="mx-auto max-w-[1600px] space-y-4 rounded-xl border bg-white p-4 sm:p-6"><p>{t.scope}</p><HRWorkspace/><div className="flex gap-2"><button className={button} onClick={()=>setTab('source')}>Source Payroll / رواتب المصدر</button><button className={button} onClick={()=>setTab('profiles')}>{t.profiles}</button><button className={button} onClick={()=>setTab('draft')}>{t.register}</button></div>
  {tab==='source'?<HistoricalImports recordType="PAYROLL" onComplete={r=>{setSource(r);setTab(r.payroll_entitlement_id?'draft':'profiles');}}/>:tab==='profiles'?<Profiles source={source} userId={userId} companyId={companyId} t={t}/>:<Draft initialMonth={source?String(source.completion.salary_month??source.source_month):new URLSearchParams(window.location.search).get("month")??undefined} userId={userId} companyName={companyName} companyId={companyId} role={role} t={t}/>}</section>;
 }
 function Profiles({userId,companyId,t,source}:{source?:SourceRecord;userId:string;companyId:string;t:PayrollLabels}){
@@ -90,9 +91,10 @@ function DraftMonth({userId,companyId,companyName,month,role,t}:{userId:string;c
  </div>;
 }
 function DraftRow({userId,companyId,row,adjustments,t,done}:{userId:string;companyId:string;row:PayrollRow;adjustments:PayrollAdjustment[];t:PayrollLabels;done:()=>void}){
+ const {locale}=useI18n(),ar=locale==='ar';
  return <article className="min-w-0 space-y-3 rounded border p-4"><h2 className="font-semibold"><bdi>{row.payroll_id} · {row.employee_name}</bdi>{!row.included&&` · ${t.excluded}`}</h2>
  <p><bdi>{row.payroll_type} · {row.profession} · {row.work_station} · {row.payment_type}</bdi></p>
- <dl className="grid min-w-0 grid-cols-2 gap-3 lg:grid-cols-4">{([
+ <dl className="grid min-w-0 grid-cols-2 gap-3 lg:grid-cols-4">{(row.hr_basis?[[ar?'أساس راتب الفترة':'Period salary basis',displayPayrollMoney(row.monthly_salary_minor)],[ar?'دقائق العمل':'Worked minutes',String(row.hr_basis.worked_minutes)],[ar?'دقائق غير مدفوعة':'Unpaid minutes',String(row.hr_basis.unpaid_minutes)],[t.gross,displayPayrollMoney(row.gross_salary_minor)],[t.additions,displayPayrollMoney(row.additions_minor)],[t.deductions,displayPayrollMoney(row.deductions_minor)],[ar?'تكلفة الراتب المستحق':'Earned salary cost',displayPayrollMoney(row.net_salary_minor)],[ar?'استرداد سلفة مستقل':'Separate advance recovery',displayPayrollMoney(row.hr_basis.recovery_minor)],[ar?'صافي مستحق الدفع النقدي':'Net cash entitlement',displayPayrollMoney(row.hr_basis.cash_net_minor)]]:[
  [t.salary,displayPayrollMoney(row.monthly_salary_minor)],[t.daily,`≈ ${displayDailySalary(row.monthly_salary_minor,row.calendar_days)}`],
  [t.units,String(row.absence_half_units)],[t.absenceDays,String(row.absence_half_units/2)],[t.payableDays,String(row.calendar_days-row.absence_half_units/2)],
  [t.absenceDeduction,displayPayrollMoney(row.absence_deduction_minor)],[t.additions,displayPayrollMoney(row.additions_minor)],[t.deductions,displayPayrollMoney(row.deductions_minor)],

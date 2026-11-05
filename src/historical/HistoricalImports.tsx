@@ -21,7 +21,7 @@ const field='mt-1 block w-full min-w-0 rounded-lg border border-slate-300 bg-whi
 export default function HistoricalImports({recordType='GENERAL',showReference=true,summary=false,revision=0,onComplete,onPosted,postedSummary}:{recordType?:'GENERAL'|'PAYROLL';showReference?:boolean;summary?:boolean;revision?:number;postedSummary?:DashboardSummary|null;onComplete?:(row:SourceRecord)=>void;onPosted?:()=>void}){
  const {state}=useAuth(),{locale}=useI18n();const ar=locale==='ar';
  const companyId=state.phase==='TENANT_READY'?state.activeTenant.companyId:'',userId=state.phase==='TENANT_READY'?state.profile.userId:'',role=state.phase==='TENANT_READY'?state.activeTenant.role:'';
- const allowed=['ACCOUNTING_ADMIN','ACCOUNTANT','MANAGEMENT_VIEWER'].includes(role),managed=['ACCOUNTING_ADMIN','ACCOUNTANT'].includes(role);
+ const managed=['ACCOUNTING_ADMIN','ACCOUNTANT'].includes(role),allowed=managed||(role==='MANAGEMENT_VIEWER'&&recordType!=='PAYROLL');
  const read=useHistoricalSources(companyId,allowed,summary?undefined:recordType,revision,managed);
  const [basis,setBasis]=useState<ReportingBasis>('SOURCE');
  const [query,setQuery]=useState(''),[month,setMonth]=useState(''),[category,setCategory]=useState(''),[direction,setDirection]=useState(''),[payment,setPayment]=useState(''),[accounting,setAccounting]=useState(''),[activity,setActivity]=useState('ACTIVE'),[sort,setSort]=useState(recordType==='PAYROLL'?'NAME_ASC':'DATE_DESC'),[page,setPage]=useState(0);

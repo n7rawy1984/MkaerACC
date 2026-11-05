@@ -5,7 +5,7 @@ export const registerText={
  en:{title:'Payroll register',draft:'DRAFT',posted:'POSTED',reversed:'REVERSED',excel:'Export Excel',preview:'Print / Save PDF',print:'Print',close:'Close',total:'Total',error:'Output unavailable. Reload payroll and confirm a fresh reviewed draft or an authorized posted snapshot.',note:"Salary per day is approximate and for reference only. Payable days equal calendar days less absence days. The register shows the saved gross pay, additions, deductions and net pay.",columns:['Work Station','Payroll ID','Type','Employee Name','Profession','Monthly Salary','Salary / Day','No. of Days Worked','Gross Salary','Addition','Absence / Deduction Days','Other Deduction','Net Salary']},
  ar:{title:'كشف الرواتب',draft:"مسودة",posted:"مرحّل",reversed:"معكوس",excel:'تصدير Excel',preview:'طباعة / حفظ PDF',print:'طباعة',close:'إغلاق',total:'الإجمالي',error:'تعذر إخراج الكشف. أعد تحميل الرواتب وتأكد من مراجعة المسودة المحدثة أو صلاحية الوصول إلى النسخة المرحّلة.',note:"الراتب اليومي تقريبي وللمرجع فقط. أيام الاستحقاق تساوي أيام الشهر بعد خصم الغياب. يعرض الكشف إجمالي الراتب والإضافات والخصومات والصافي المحفوظ.",columns:['موقع العمل','الرقم الوظيفي','النوع','اسم الموظف','المهنة','الراتب الشهري','الراتب / اليوم','عدد أيام العمل','إجمالي الراتب','الإضافة','أيام الغياب / الخصم','خصومات أخرى','صافي الراتب']}
 };
-export interface PayrollRegister {company:string;month:string;status:string;id:string;locale:'en'|'ar';rows:string[][];totals:string[];filename:string}
+export interface PayrollRegister {company:string;month:string;status:string;id:string;locale:'en'|'ar';rows:string[][];totals:string[];filename:string;columns?:string[];note?:string}
 const money=(n:bigint)=>`${n/100n}.${String(n%100n).padStart(2,'0')}`;
 const days=(n:bigint)=>`${n/2n}${n%2n?'.5':''}`;
 export function makeRegister(raw:unknown,context:RegisterContext,source:RegisterSource,locale:'en'|'ar'):PayrollRegister {
@@ -21,17 +21,21 @@ export function makeRegister(raw:unknown,context:RegisterContext,source:Register
   if(draft.stale||draft.review_valid!==true||!draft.attendance_review_valid||draft.period?.id!==source.id||draft.period?.version!==source.version)throw Error('Review fresh draft first');
  }
  if(!draft.period||draft.period.month!==context.month||!Number.isInteger(draft.period.version)||draft.rows.some(r=>typeof r.included!=='boolean'))throw Error('Invalid month');
+ const explicit=draft.rows.some(r=>r.included&&r.hr_basis?.mode==='EXPLICIT_MINUTES');
  const totals=Array<bigint>(13).fill(0n);
+ const duration=(n:bigint)=>`${n/60n}:${String(n%60n).padStart(2,'0')}`;
  const rows=draft.rows.filter(r=>r.included).map(r=>{
   const text=[r.work_station,r.payroll_id,r.payroll_type,r.employee_name,r.profession];
   if(text.some(v=>typeof v!=='string'))throw Error('Invalid register text');
-  const worked=BigInt(r.calendar_days*2-r.absence_half_units),absence=BigInt(r.absence_half_units);
-  const amounts:[[number,string],[number,string],[number,string],[number,string],[number,string]]=[[5,r.monthly_salary_minor],[8,r.gross_salary_minor],[9,r.additions_minor],[11,r.deductions_minor],[12,r.net_salary_minor]];
+  const worked=BigInt(explicit?r.hr_basis!.worked_minutes:r.calendar_days*2-r.absence_half_units),absence=BigInt(explicit?r.hr_basis!.unpaid_minutes:r.absence_half_units);
+  const deduction=(BigInt(r.deductions_minor)+BigInt(r.hr_basis?.recovery_minor??'0')).toString(),cash=(BigInt(r.net_salary_minor)-BigInt(r.hr_basis?.recovery_minor??'0')).toString();
+  const amounts:[[number,string],[number,string],[number,string],[number,string],[number,string]]=[[5,r.monthly_salary_minor],[8,r.gross_salary_minor],[9,r.additions_minor],[11,deduction],[12,cash]];
   for(const [i,v] of amounts)totals[i]+=BigInt(v);totals[7]+=worked;totals[10]+=absence;
-  return [...text,displayPayrollMoney(r.monthly_salary_minor),displayDailySalary(r.monthly_salary_minor,r.calendar_days),days(worked),displayPayrollMoney(r.gross_salary_minor),displayPayrollMoney(r.additions_minor),days(absence),displayPayrollMoney(r.deductions_minor),displayPayrollMoney(r.net_salary_minor)];
+  return [...text,displayPayrollMoney(r.monthly_salary_minor),explicit?'—':displayDailySalary(r.monthly_salary_minor,r.calendar_days),explicit?duration(worked):days(worked),displayPayrollMoney(r.gross_salary_minor),displayPayrollMoney(r.additions_minor),explicit?duration(absence):days(absence),displayPayrollMoney(deduction),displayPayrollMoney(cash)];
  });
  const t=registerText[locale],status=`${source.kind==='DRAFT'?t.draft:t.posted}${reversed?` · ${t.reversed}`:''}`;
- const total=totals.map((n,i)=>[5,8,9,11,12].includes(i)?money(n):[7,10].includes(i)?days(n):'');total[0]=t.total;
+ const total=totals.map((n,i)=>[5,8,9,11,12].includes(i)?money(n):[7,10].includes(i)?explicit?duration(n):days(n):'');total[0]=t.total;
  const safe=context.companyName.replace(/[^\p{L}\p{N}_-]+/gu,'-').slice(0,60)||'Company';
- return {company:context.companyName,month:context.month.slice(0,7),status,id:source.id,locale,rows,totals:total,filename:`${safe}-Payroll-${context.month.slice(0,7)}-${source.kind}${reversed?'-REVERSED':''}.xlsx`};
+ const columns=[...t.columns];if(explicit){columns[5]=locale==='ar'?'أساس راتب الفترة':'Period salary basis';columns[6]='—';columns[7]=locale==='ar'?'عمل ساعة:دقيقة':'Worked h:mm';columns[10]=locale==='ar'?'غير مدفوع ساعة:دقيقة':'Unpaid h:mm';columns[11]=locale==='ar'?'تخفيضات واسترداد سلف':'Reductions and advance recovery';columns[12]=locale==='ar'?'صافي النقد المستحق':'Net cash entitlement';}
+ return {columns,note:explicit?(locale==='ar'?'الاستحقاق بحسب سياسة دقائق الجدول المعتمدة؛ استرداد السلف تسوية ذمة منفصلة لا يخفض تكلفة الراتب.':'Approved scheduled-minute policy; advance recovery settles a separate receivable and does not reduce earned payroll cost.'):t.note,company:context.companyName,month:context.month.slice(0,7),status,id:source.id,locale,rows,totals:total,filename:`${safe}-Payroll-${context.month.slice(0,7)}-${source.kind}${reversed?'-REVERSED':''}.xlsx`};
 }

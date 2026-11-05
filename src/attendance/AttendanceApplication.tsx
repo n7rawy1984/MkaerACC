@@ -1,3 +1,4 @@
+import {HRWorkspace} from '../hr/HRWorkspace';
 import { useTenantSettings } from "../tenant/TenantSettingsContext";
 import { TenantBrandMark } from "../tenant/TenantBrandMark";
 import { useEffect, useRef, useState } from 'react';
@@ -47,6 +48,7 @@ export function AttendanceContent({ userId, companyId, role }: { userId: string;
  }, [userId, companyId, role, revision]);
  if (!attendanceRole(role)) return <p role="alert">{t.denied}</p>;
  return <section className="mx-auto max-w-5xl space-y-4 rounded-xl border bg-white p-4 sm:p-6">
+  {attendanceStaff(role) && <HRWorkspace/>}
   <p>{t.scope}</p><p className="text-sm text-slate-500">{t.utc}</p>
   <div className="flex flex-wrap gap-2"><button className={button} onClick={() => setTab('day')}>{t.day}</button>
    {attendanceStaff(role) && <button className={button} onClick={() => setTab('review')}>{t.review}</button>}

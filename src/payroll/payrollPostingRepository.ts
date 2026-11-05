@@ -3,7 +3,7 @@ import {exactMinor} from './payrollRepository';
 import type {Database} from '../types/database.generated';
 type FunctionName='prepare_payroll_accounting'|'post_payroll'|'pay_salary'|'reverse_salary_payment'|'reverse_payroll'|'read_payroll_postings';
 export interface Posting {id:string;company_id:string;month:string;reversed:boolean;created_at:string;replaces_id:string|null}
-export interface Entitlement {id:string;company_id:string;payroll_id:string;employee_name:string;project_id:string|null;amount_minor:string;unpaid_minor:string}
+export interface Entitlement {id:string;company_id:string;payroll_id:string;employee_id:string;employee_name:string;project_id:string|null;amount_minor:string;unpaid_minor:string}
 export interface Payment {id:string;company_id:string;entitlement_id:string;amount_minor:string;payment_date:string;reference:string;reversed:boolean}
 export interface State {accounting:{version:number}|null;postings:Posting[];entitlements:Entitlement[];payments:Payment[];treasuries:{id:string;name:string;project_id:string|null}[]}
 export function decodePostings(value:unknown,company:string):State {

@@ -1,0 +1,22 @@
+// Disposable synthetic canonical database. Never accepts a hosted URL or credentials.
+import {platformTestDatabase} from './verify-platform-database.mjs';
+import {randomUUID} from 'node:crypto';
+export async function hrOperationalFixture(database){
+ const {db}=await platformTestDatabase(database,{through:'20261105120000'}),id=n=>`ed030005-0000-4000-8000-${String(n).padStart(12,'0')}`;
+ const company=id(10),other=id(11),admin=id(1),accountant=id(3),viewer=id(4),foreign=id(5),system=id(7),procurement=id(2),person=id(22),p2=id(100),bank=id(120),bankGL=id(121);
+ for(const uid of[admin,accountant,viewer,foreign,system,procurement])await db.query('insert into auth.users(id,email) values($1,$2)',[uid,uid+'@example.invalid']);
+ for(const cid of[company,other])await db.query("insert into public.companies(id,code,name) values($1::uuid,$1::text,'Synthetic HR Company')",[cid]);
+ for(const[actor,cid,role]of[[admin,company,'ACCOUNTING_ADMIN'],[accountant,company,'ACCOUNTANT'],[viewer,company,'MANAGEMENT_VIEWER'],[foreign,other,'ACCOUNTING_ADMIN'],[system,company,'SYSTEM_ADMIN'],[procurement,company,'PROCUREMENT']])await db.query('insert into public.company_memberships(company_id,user_id,role) values($1,$2,$3)',[cid,actor,role]);
+ await db.query("insert into private.company_legacy_eligibility(company_id,reason) values($1,'Isolated synthetic HR fixture')",[company]);
+ await db.query("insert into public.parties(id,company_id,code,name,type) values($1,$2,'EMP-HR','Synthetic Employee','EMPLOYEE')",[person,company]);
+ await db.query("insert into public.projects(id,company_id,code,name,status) values($1,$2,'SITE','Synthetic Site','ACTIVE')",[p2,company]);
+ await db.query("insert into public.accounts(id,company_id,code,name,account_type) values($1,$3,'BANK','Synthetic Bank','ASSET'),($2,$3,'EQUITY','Synthetic opening equity','EQUITY')",[bankGL,id(122),company]);
+ await db.query("insert into public.treasury_accounts(id,company_id,code,name,type,gl_account_id) values($1,$2,'BANK','Synthetic Bank','BANK',$3)",[bank,company,bankGL]);
+ const as=(actor,q,args=[])=>db.transaction(async t=>{await t.query("select set_config('request.jwt.claims',$1,true)",[JSON.stringify({sub:actor})]);await t.exec('set local role authenticated');return(await t.query(q,args)).rows;});
+ await db.transaction(async t=>{await t.query("select set_config('request.jwt.claims',$1,true)",[JSON.stringify({sub:admin})]);await t.query("select private.create_journal($1,'2026-08-01','Synthetic opening only','HISTORICAL',$2,'POST',$3,$4)",[company,randomUUID(),[{account_id:bankGL,treasury_account_id:bank,debit_minor:'100000',credit_minor:'0'},{account_id:id(122),debit_minor:'0',credit_minor:'100000'}],admin]);});
+ const commands=new Set(['command_hr','bulk_hr_attendance','read_hr_workspace','read_payroll_profiles','read_payroll_draft','refresh_payroll_draft','review_payroll_draft','prepare_payroll_accounting','post_payroll','read_payroll_postings','pay_salary','reverse_salary_payment','reverse_payroll']);
+ const quote=s=>{if(!/^[a-z_]+$/.test(s))throw Error('Fixture identifier');return '"'+s+'"'};
+ const rpc=async(actor,name,args)=>{if(!commands.has(name))throw Error('RPC outside fixture');const keys=Object.keys(args);return(await as(actor,'select public.'+quote(name)+'('+keys.map((k,i)=>quote(k)+'=> $'+(i+1)).join(',')+') r',keys.map(k=>args[k])))[0].r};
+ const read=async(actor,table,columns,filters=[],limit=500)=>{if(!['parties','treasury_accounts','expense_categories','projects','accounts','journal_entries','journal_lines','expenses','subcontractor_certificates','project_cost_corrections','project_cost_correction_reversals','expense_correction_reviews','hr_term_events'].includes(table)||!filters.some(([op,k,v])=>op==='eq'&&k==='company_id'&&v===company))throw Error('Unscoped fixture read');const values=[],clauses=filters.map(([op,k,v])=>{if(op==='in')return quote(k)+' in ('+v.map(x=>{values.push(x);return '$'+values.length}).join(',')+')';values.push(v);const operator={eq:'=',gt:'>',gte:'>=',lte:'<='}[op];if(!operator)throw Error('Fixture filter');return quote(k)+operator+'$'+values.length});return as(actor,'select '+columns.split(',').map(c=>{const k=c.replace(/::text$/,'');return quote(k)+(/_minor$|_date$/.test(k)||c.endsWith('::text')?'::text as '+quote(k):'')}).join(',')+' from public.'+quote(table)+' where '+clauses.join(' and ')+' order by id limit '+Math.min(limit,500),values)};
+ return{db,id,company,other,admin,accountant,viewer,foreign,system,procurement,person,p2,bank,bankGL,as,rpc,read};
+}
