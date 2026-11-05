@@ -1,3 +1,5 @@
+**2026-11-05 current state:** preceding Financial Operations release945b725 is published per Product Owner; canonical76/77 are hosted and READ ONLY prefix-aligned. The new certified opening/physical count increment is locally verified only;78 remains unapplied. [New scope and genuine remaining limits](CERTIFIED_OPENINGS_AND_CASH_RECONCILIATION.md). Earlier76/77 local-only and mandatory restoration-rehearsal wording below is historical: it is superseded by the owner-directed AGENTS.md active-development risk-based release policy and actual activation evidence, not a renewed release gate.
+
 # Partner funding, Treasury, Custody and personal reimbursements
 
 2026-11-04 — supported increment implemented and locally verified. **Not hosted-activated or Production-ready.** Canonical baseline 75 is retained; new local migrations 76/77 are unapplied. The owner reports the preceding CUS-03/CUS-04 frontend already published; this increment has not been published.

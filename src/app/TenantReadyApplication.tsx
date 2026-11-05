@@ -1,3 +1,4 @@
+import {OpeningReconciliationWorkspace} from '../financial/OpeningReconciliationWorkspace';
 import {FinancialEvidenceWorkspace} from '../financial/FinancialEvidenceWorkspace';
 import {CustodyWorkspace} from '../financial/CustodyWorkspace';
 import {TreasuryMovements} from '../reports/TreasuryMovements';
@@ -42,7 +43,7 @@ export default function TenantReadyApplication({ view }: { view: "financialEvide
             {view === "subcontracts" && <p className="mt-3 text-sm text-slate-500">{t("productionMaster.subcontractsMetadataScope")}</p>}
             {view === "subcontracts" && masterData.phase === "READY" && <SubcontractsList />}
             {view === "accounts" && masterData.phase === "READY" && <AccountNamesPanel />}
-            {view === "treasuryAccounts" && masterData.phase === "READY" && <><TreasuryNamesPanel /><TreasuryMovements /><CustodyReconciliation /></>}
+            {view === "treasuryAccounts" && masterData.phase === "READY" && <><TreasuryNamesPanel /><OpeningReconciliationWorkspace /><TreasuryMovements /><CustodyReconciliation /></>}
             {view === "projects" && masterData.phase === "READY" && <ProjectsList />}
             {view === "companyProfile" && masterData.phase === "READY" && <CompanyProfilePanel />}
             {view === "parties" && masterData.phase === "READY" && <PartiesList />}
