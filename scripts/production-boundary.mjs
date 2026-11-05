@@ -33,6 +33,7 @@ export function dependencyGraph(entry) {
 // Existing command recovery envelopes only; these files are not local business stores.
 const sessionRecoveryFiles=new Set([
  'src/platform/platformRecovery.ts',
+ 'src/master/CompanyAccountingSetup.tsx', // Actor/Company-scoped setup request retry only; no balances or ledger cache.
  'src/hr/HRWorkspace.tsx', // Frozen actor/Company command retry envelope only; never an HR ledger cache.
  'src/payroll/PayrollPosting.tsx',
  ...['SupplierPaymentReverseAction','SupplierCreditExpensePost','RetentionPaymentReverseAction',

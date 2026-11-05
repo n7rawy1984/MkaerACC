@@ -1,0 +1,5 @@
+// Local canonical PostgreSQL only; never accepts hosted credentials.
+import{hrOperationalFixture}from'./hr-operational-fixture.mjs';import{readFileSync}from'node:fs';
+export async function companySetupFixture(database){const f=await hrOperationalFixture(database);await f.db.exec(readFileSync('supabase/migrations/20261105130000_existing_company_accounting_setup.sql','utf8'));
+const rpc=async(actor,name,args)=>name==='configure_company_accounting'?(await f.as(actor,'select public.configure_company_accounting($1,$2,$3,$4) r',[args.target_company_id,args.target_request_id,args.target_action,args.business_input]))[0].r:f.rpc(actor,name,args);
+const read=async(actor,table,columns,filters=[],limit=500)=>{if(table!=='company_accounting_setup_events')return f.read(actor,table,columns,filters,limit);if(!filters.some(([op,k,v])=>op==='eq'&&k==='company_id'&&v===f.company))throw Error('Unscoped fixture read');return f.as(actor,'select id,action,approval_reference,created_at from public.company_accounting_setup_events where company_id=$1 order by created_at desc limit $2',[f.company,Math.min(limit,500)]);};return{...f,rpc,read};}

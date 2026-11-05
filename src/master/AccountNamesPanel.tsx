@@ -1,3 +1,4 @@
+import {CompanyAccountingSetup} from "./CompanyAccountingSetup";
 import { AccountsList } from "./AccountMasterLists";
 import { useLayoutEffect, useRef, useState } from "react";
 import { useAuth } from "../auth/AuthContext";
@@ -37,6 +38,7 @@ export function AccountNamesPanel() {
     {(phase === "ERROR" || phase === "REFRESH_ERROR") && <button type="button" onClick={refresh} className="underline">{t("accountName.refresh")}</button>}
   </div>;
   return <div>
+    <CompanyAccountingSetup />
     <button type="button" disabled={phase === "PENDING"} onClick={refresh} className="mt-4 rounded-lg border px-3 py-2 text-sm">{t("accountName.refresh")}</button>
     {!master.accounts.some(p => p.id === actionId) && message}
     <AccountsList accounts={master.accounts} renderAction={(account) => <>
