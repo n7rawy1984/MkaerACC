@@ -1,0 +1,141 @@
+{
+  "verified_at": "2026-11-06",
+  "scope": "Whole-source original operating/project cost; specialized non-cost destinations remain handoffs",
+  "database": {
+    "status": "PASS",
+    "checks": [
+      "Incomplete source creates existing canonical draft without posting",
+      "Conversion same-key retry returns one event",
+      "Second source conversion cannot create another active cost draft",
+      "Incomplete pending source cannot review or post",
+      "Wrong role/Company denied conversion",
+      "Wrong role/Company denied conversion",
+      "Wrong role/Company denied conversion",
+      "Wrong role/Company denied conversion",
+      "Generic draft entry cannot bypass source workflow",
+      "Legacy cash wrapper cannot post alongside a bound draft",
+      "Viewer reads draft lineage without write authority",
+      "Cross-Company link read denied",
+      "Cancelled claim retained and a new nonfinancial draft may be prepared",
+      "bank source draft posts once through existing financial command",
+      "bank journal balances exactly",
+      "bank source/draft/document/journal traceability",
+      "bank posted source cannot create a new cost",
+      "cash source draft posts once through existing financial command",
+      "cash journal balances exactly",
+      "cash source/draft/document/journal traceability",
+      "cash posted source cannot create a new cost",
+      "custody source draft posts once through existing financial command",
+      "custody journal balances exactly",
+      "Custody source consumes holder balance once",
+      "custody source/draft/document/journal traceability",
+      "custody posted source cannot create a new cost",
+      "personal source draft posts once through existing financial command",
+      "personal journal balances exactly",
+      "Personal source credits reimbursement liability without cash",
+      "personal source/draft/document/journal traceability",
+      "personal posted source cannot create a new cost",
+      "Personal reversal appears in source lineage",
+      "Source changes invalidate prior draft review",
+      "Posting cannot bypass recorded-funds guard",
+      "Failed posting rolls back both journal and draft transition",
+      "Duplicate warning requires explicit distinct-payment evidence",
+      "Changed duplicate evidence on replay rejected",
+      "Employee advance source cannot be converted to an Expense draft",
+      "Private canonical delegate not browser callable",
+      "Company operating cost uses canonical overhead rather than invented Project",
+      "Posted source cannot be reassigned administratively",
+      "Read-only transaction path returns source lineage without locking writes",
+      "Existing contractor settlement remains once-only and does not duplicate certified Project cost; source handoff only",
+      "Existing overlap candidates require documented distinct-payment clearance",
+      "Existing unbound Expense draft client remains compatible after wrapper migration",
+      "Linking an existing reviewed draft preserves it and invalidates prior review",
+      "Existing draft attachment retry is idempotent",
+      "Attached draft must pass source-specific review before posting",
+      "Existing attached draft follows the same canonical source posting lifecycle",
+      "Project Bank uses actual BANK payment metadata rather than CASH",
+      "Existing employee advance remains an idempotent receivable, not salary Expense; source handoff only"
+    ],
+    "hosted": false
+  },
+  "native_concurrency": {
+    "status": "PASS",
+    "checks": [
+      "Concurrent identical source conversion creates one canonical draft and one binding",
+      "Competing different draft IDs cannot claim the same source",
+      "Concurrent source posting retry creates exactly one financial effect",
+      "Legacy cash wrapper cannot race the new source workflow into a second cost",
+      "Attaching a prior draft fences a competing ordinary-client post and invalidates prior review"
+    ],
+    "hosted": false
+  },
+  "browser": {
+    "status": "PASS",
+    "checks": [
+      "Source opens existing canonical draft form with original working description",
+      "No default VAT fact is inferred for source conversion",
+      "Actual source UI creates one durable source binding without journal",
+      "Cancelled claim remains historical; linking existing unposted draft keeps one active source claim",
+      "Owner/payment/distinct evidence confirmations gate review",
+      "Actual source form reviews the saved canonical draft without posting",
+      "Lost-response source posting retries the identical request and creates exactly one Expense",
+      "Posted source exposes balanced journal and canonical document navigation",
+      "Canonical draft exports preserve original-source identity and posted state",
+      "en source flow direction",
+      "en source drawer fits mobile",
+      "ar source flow direction",
+      "ar source drawer fits mobile",
+      "Viewer has no conversion or draft mutation controls",
+      "No runtime errors or hosted requests"
+    ],
+    "errors": [],
+    "external": [],
+    "hosted": false
+  },
+  "hosted_read_only": {
+    "project": "eqnzueginpkskbnqvgoc",
+    "status": "PASS",
+    "hosted_migrations": 82,
+    "migration83": "LOCAL_ONLY_NOT_APPLIED",
+    "general_sources": 345,
+    "supplemental_sources": 122,
+    "source_fields_match": true,
+    "maker_journals": 0,
+    "maker_expenses": 0,
+    "hosted_write": false,
+    "at": "2026-11-05T19:50:06.265618+00:00"
+  },
+  "migration": {
+    "number": 83,
+    "file": "supabase/migrations/20261105140000_historical_source_expense_drafts.sql",
+    "sha256": "343c2c0107319535fa3a6cb53dbaf11c749f69ebaafffdfa8ea6f1103e21d2e4",
+    "hosted_status": "NOT_APPLIED"
+  },
+  "build": {
+    "status": "PASS",
+    "command": "npm run build",
+    "limitations": "Non-blocking existing bundle-size advisory"
+  },
+  "lint": {
+    "status": "PASS_WITH_WARNINGS",
+    "errors": 0,
+    "limitations": "Known state-in-effect/dependency warnings; no errors",
+    "warnings": 6
+  },
+  "release": {
+    "base": "76298d5b0c86cacc9b5f303dec4c0cabfdc70e8d",
+    "frontend_pushed": false,
+    "vercel_verified": false,
+    "activation_gate": "Separate authorization and preservation postflight for migration83 required BEFORE frontend publication"
+  },
+  "deferred": [
+    "Automatic non-cost source/document binding",
+    "Partial-source recognition and multiple-source consolidation",
+    "Unsupported assets/inventory/prepayments",
+    "Real Maker conversion/posting and authenticated Production acceptance",
+    "Comprehensive go-live security and disaster recovery gates"
+  ],
+  "source_tree_matches_release_candidate": true,
+  "focused_sensitive_artifact_scan": "PASS",
+  "diff_check": "PASS"
+}

@@ -1,6 +1,7 @@
 import {sourceDirection,type SourceRecord} from './sourceModel';
 // Payment-source confirmation is independent of an imported outflow claim.
-export function sourcePaymentState(row:SourceRecord):'PAID'|'RECEIVED'|'UNCONFIRMED'|'NO_CASH'{
+export function sourcePaymentState(row:SourceRecord):'PAID'|'RECEIVED'|'UNCONFIRMED'|'NO_CASH'|'DOCUMENTED'{
+ if(row.source_document?.state==='POSTED')return 'DOCUMENTED';
  const direction=sourceDirection(row);
  if(direction==='NONE')return 'NO_CASH';
  if(!row.cash_treasury_id)return 'UNCONFIRMED';
