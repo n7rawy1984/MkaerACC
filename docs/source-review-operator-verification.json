@@ -1,0 +1,56 @@
+{
+  "status": "PASS",
+  "source_counts": {
+    "original_general": 223,
+    "supplemental_general": 122,
+    "total_general": 345
+  },
+  "browser_checks": [
+    "All345 source references reachable through actual component pagination",
+    "122 supplemental source records supplied to actual UI",
+    "All122 supplemental records open editable source forms without creating Expenses",
+    "Visible duplicate warning navigates to candidate without deleting either source",
+    "Source filename search isolates supplemental122",
+    "Unconfirmed payment is not labelled no cash movement",
+    "Unreviewed guidance does not enable financial posting",
+    "Provisional expense guidance leads to existing module without claiming posting",
+    "Editing working description preserves original evidence and creates no accounting record",
+    "Nested original evidence remains readable",
+    "en direction preserved",
+    "en narrow viewport contains table scrolling",
+    "ar direction preserved",
+    "ar narrow viewport contains table scrolling",
+    "Manager has report/detail access without mutation actions",
+    "Only source completion invoked in local fixture; zero financial commands",
+    "No browser errors or hosted requests"
+  ],
+  "browser_scope": "Actual components with private read-only345-row snapshot and isolated mocked transport; no hosted edits; Production authenticated operator acceptance pending",
+  "build": "PASS after report correction; same complete source tree as isolated release",
+  "lint": "PASS",
+  "hosted_source_preservation": "PASS; read-only; existing sources and19 financial/access tables unchanged",
+  "source_completion_writes": 0,
+  "financial_drafts_created": 0,
+  "accounting_ready": 0,
+  "posted_count": 0,
+  "posted_minor": "0",
+  "migration": "NOT_REQUIRED",
+  "publication": "LOCAL_RELEASE_ONLY; no push/deploy",
+  "limits": [
+    "All122 remain pending; no per-source legal-owner/funding approval invented",
+    "Historical source completion is not canonical Expense creation",
+    "No physical cash or funds invented; financial posting requires exact approved batch",
+    "Cross-Company source transfer and cash-wrapper noncash linking are not introduced"
+  ],
+  "report_workflow_assertions": 24,
+  "pdf_checks": [
+    "en PDF marks payment source unconfirmed",
+    "en PDF includes duplicate warning",
+    "en printed table fits",
+    "en printed table fits",
+    "ar PDF marks payment source unconfirmed",
+    "ar PDF includes duplicate warning",
+    "ar printed table fits",
+    "ar printed table fits"
+  ],
+  "excel_checks": "Both EN/AR actual XLSX packages contain unconfirmed-source label, duplicate warning and original candidate reference"
+}
