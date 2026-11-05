@@ -1,0 +1,316 @@
+{
+  "date": "2026-11-05",
+  "milestone": "Maker Go-Live Phase1 — essential operational expense lifecycle and Project cost trace",
+  "status": "MIGRATION80_APPLIED_HOSTED_POSTFLIGHT_PASS_FRONTEND_UNPUBLISHED",
+  "base_commit": "652bc37ba372bf4fa8bbf454da0bba921f5758fa",
+  "branch": "release/platform-owner-console",
+  "existing_work_preserved": true,
+  "verification": {
+    "database": {
+      "status": "PASS",
+      "count": 43,
+      "checks": [
+        "Incomplete draft saves without accounting effects",
+        "Same request replays one immutable version",
+        "Changed request intent rejected",
+        "Stale version rejected",
+        "Incomplete source review rejected, saved source retained",
+        "Non-accountant or foreign tenant cannot mutate expense drafts",
+        "Non-accountant or foreign tenant cannot mutate expense drafts",
+        "Non-accountant or foreign tenant cannot mutate expense drafts",
+        "Non-accountant or foreign tenant cannot mutate expense drafts",
+        "RLS hides drafts from other Companies",
+        "Management has read-only draft visibility",
+        "Direct draft writes forbidden",
+        "Unreviewed expense cannot post",
+        "Review does not prematurely recognize cost or cash",
+        "Editing reviewed source invalidates review",
+        "Edited source must be reviewed again",
+        "Posting and retry recognize exactly one journal",
+        "Deterministic exact AED conversion and 5% rounding",
+        "Balanced journal with one actual bank credit",
+        "Posted source versions immutable",
+        "Evidence immutable even to fixture owner",
+        "Duplicate original source cannot recognize cost twice",
+        "Unsupported ASSET_REVIEW saved safely but cannot post as operating cost",
+        "Unsupported CONTRACT_EVENT saved safely but cannot post as operating cost",
+        "Unsupported PARTNER_TRANSACTION saved safely but cannot post as operating cost",
+        "Unsupported CUSTODY_TRANSFER saved safely but cannot post as operating cost",
+        "Fractional minor units rejected",
+        "Accounting month must match source date",
+        "Closed Project cannot receive new cost",
+        "Foreign or nonexistent category rejected",
+        "Recoverable VAT without invoice blocked",
+        "Original-recognition acknowledgement mandatory",
+        "Cross-workflow invoice duplication blocked by canonical command",
+        "Failed personal posting rolls back its evidence and review atomically",
+        "Insufficient Treasury funding cannot post through draft wrapper",
+        "Personal funding creates liability without fictitious cash movement",
+        "Personal expense reuses canonical reimbursement recognition",
+        "Unpaid expense recognizes Supplier liability without cash payment",
+        "Cancelled draft retained and cannot post",
+        "Custody Expense reduces holder asset once without a second Treasury movement",
+        "Canonical reversal preserves source and restores custody without duplicate cost",
+        "Personal claim uses canonical exact reversal and immutable liability history",
+        "Closed accounting correction month prevents new draft recognition"
+      ]
+    },
+    "native_postgresql": {
+      "status": "PASS",
+      "checks": [
+        "Concurrent identical save returns one immutable source version",
+        "Concurrent review/edit fences stale source versions",
+        "Concurrent same-key posting recognizes one expense and one balanced journal",
+        "Separate drafts cannot concurrently post the same original evidence",
+        "Repeatable-read stale financial snapshot fails closed"
+      ],
+      "hosted": false
+    },
+    "browser": {
+      "status": "PASS",
+      "checks": [
+        "Actual UI saves incomplete source without validation loss",
+        "Actual form completes required classification and review separately from posting",
+        "Lost posting response retries same command and produces one Expense",
+        "Actual project-cost ledger resolves original evidence and posted source",
+        "en draft Excel/PDF export includes source, company and posting state",
+        "Project cost en export preserves source evidence",
+        "en mobile layout has no page overflow",
+        "ar draft Excel/PDF export includes source, company and posting state",
+        "Project cost ar export preserves source evidence",
+        "ar mobile layout has no page overflow",
+        "Management viewer has report-only controls",
+        "Signed-out session clears expense evidence and receipts",
+        "No runtime errors or hosted/external requests"
+      ],
+      "errors": [],
+      "external": []
+    },
+    "bilingual_artifacts": {
+      "status": "PASS",
+      "checks": [
+        "drafts en XLSX identity/source/status/exact amount/direction",
+        "drafts en actual PDF identity/source and Arabic glyphs where applicable",
+        "drafts ar XLSX identity/source/status/exact amount/direction",
+        "drafts ar actual PDF identity/source and Arabic glyphs where applicable",
+        "costs en XLSX identity/source/status/exact amount/direction",
+        "costs en actual PDF identity/source and Arabic glyphs where applicable",
+        "costs ar XLSX identity/source/status/exact amount/direction",
+        "costs ar actual PDF identity/source and Arabic glyphs where applicable"
+      ]
+    },
+    "production_build": {
+      "status": "PASS",
+      "log": "/tmp/narvo-expense-build.log",
+      "limitation": "Existing bundle-size informational warning"
+    },
+    "focused_lint": {
+      "status": "PASS_WITH_WARNINGS",
+      "errors": 0,
+      "warnings": 3,
+      "scope": "Changed application modules only",
+      "notes": "Scoped lifecycle reset in effect, captured scope dependencies and numeric generation-ref cleanup; not a DOM ref. No infinite effect dependency added."
+    },
+    "production_boundary": {
+      "status": "PASS",
+      "modules": 251
+    },
+    "diff_check": "PASS",
+    "focused_secret_scan": "PASS"
+  },
+  "hosted_alignment": {
+    "result": "PASS",
+    "project": "eqnzueginpkskbnqvgoc",
+    "hosted_count": 79,
+    "canonical_sql_prefix_matches": true,
+    "only_pending": "20261105110000_operational_expense_drafts.sql",
+    "sha256": "e4895288bb829714c77580907b2affa775615c4b7a79a2c82bc5479e1082da41",
+    "dry_run_only_expected_migration": true,
+    "connection_forced_read_only": true,
+    "migration_applied": false,
+    "hosted_business_writes": false,
+    "checkpoint": "Historical local-development dry-run before authorized release; actual activation/postflight supersedes hosted_count79"
+  },
+  "migration": {
+    "number": 80,
+    "file": "supabase/migrations/20261105110000_operational_expense_drafts.sql",
+    "sha256": "e4895288bb829714c77580907b2affa775615c4b7a79a2c82bc5479e1082da41",
+    "applied": true,
+    "additive": true,
+    "existing_functions_modified": false,
+    "backfill": false
+  },
+  "definition_of_done": {
+    "business_accounting": "VERIFIED locally for supported original operating/Project costs; asset/inventory policy and broader workflows DEFERRED",
+    "security_authorization": "VERIFIED focused role/RLS/direct-write tests and constrained SQL review",
+    "database": "VERIFIED hosted80 alignment/schema/preservation with separately disclosed Auth-row drift; no business commands",
+    "deployment": "Local isolated commit prepared; owner push and Vercel publication/acceptance PENDING",
+    "testing": "VERIFIED focused local tests/build/browser/artifacts; hosted operational acceptance DEFERRED",
+    "documentation": "VERIFIED scoped status, limitations and publication boundary recorded"
+  },
+  "not_performed": [
+    "Hosted financial/business commands",
+    "Maker import or cleanup",
+    "Restoration rehearsal",
+    "GitHub push",
+    "Vercel deployment/API verification"
+  ],
+  "remaining": [
+    "Owner normal push and Vercel exact commit/Ready verification",
+    "Production visual/read-only acceptance; actual operator entries require real evidence/authority",
+    "Existing asset/fiscal-close/final Go-Live/security/DR limitations remain"
+  ],
+  "files": [
+    {
+      "path": "NARVO_ERP_ACCOUNTING_REQUIREMENTS_REGISTER.md",
+      "sha256": "6f4622cc4d28cac72f94d9b87a6b019f501608de1054a4939257c1a10f5d173a"
+    },
+    {
+      "path": "NARVO_ERP_MASTER_ROADMAP_V2.0.md",
+      "sha256": "9f0180e161426924c50587a48007d1ca56d09f1553f29d724a5445a977ae3fc5"
+    },
+    {
+      "path": "PROJECT_HANDOFF.md",
+      "sha256": "bbed885f5939fd7b4feed2fb97fbd261cf26f5927623e4567e359ee3d1025b6d"
+    },
+    {
+      "path": "PROJECT_ROADMAP.md",
+      "sha256": "c595310213534c38ee14f7e4677ebec1aece13063bf3be692b39aae155b3cb68"
+    },
+    {
+      "path": "docs/OPERATIONAL_EXPENSE_LIFECYCLE.md",
+      "sha256": "c139d9d5d3d170e8242f4ca3c8c2e353a843123859409c7906f6317067ff4929"
+    },
+    {
+      "path": "scripts/expense-draft-fixture.mjs",
+      "sha256": "ad203751b400548407851df1f1499b23222981a4293994dbba97c0137fe5d937"
+    },
+    {
+      "path": "scripts/fixtures/expense-drafts.tsx",
+      "sha256": "45c2c01d1f8684e28c5a3d998da1f88598559609d1122d7adec2d7aec0d4cc67"
+    },
+    {
+      "path": "scripts/verify-expense-draft-exports.py",
+      "sha256": "0dd1c090f6def8eec66e83a6883aa506736529aeee702b84bb46d7061cdc341d"
+    },
+    {
+      "path": "scripts/verify-expense-drafts-browser.mjs",
+      "sha256": "7573453611cd9471af169396239d5c7367591d066e192cd6dca30f6dbe17106e"
+    },
+    {
+      "path": "scripts/verify-expense-drafts-races.mjs",
+      "sha256": "05d0aa1c9a7c57a6f868f5b2dae66392640842ac35605ec0d8041e659d0a6e48"
+    },
+    {
+      "path": "scripts/verify-expense-drafts.mjs",
+      "sha256": "b707957fafdadeb1245e71611898bd576c6db099c053be9a6eddaf8211821d20"
+    },
+    {
+      "path": "src/financial/ExpenseDraftWorkspace.tsx",
+      "sha256": "33ea8e914d2cda87b37ec2a35056607d8f844435d449c77e79a024068568c8be"
+    },
+    {
+      "path": "src/financial/ExpenseReadPanel.tsx",
+      "sha256": "0e51c5d99e5ea56c2bd87edf91f83eac39504fa411015fba271baaf2bd0432c4"
+    },
+    {
+      "path": "src/financial/expenseDrafts.ts",
+      "sha256": "74b4a5eee1b3943f3bbbdd19f201fad47eb6958ca843fc9fedd1e4b83dc45fb5"
+    },
+    {
+      "path": "src/reports/ProjectCostLedger.tsx",
+      "sha256": "14f036ad66697c4e413722580e84f4891303c0f862059be330c8db85e8eb6158"
+    },
+    {
+      "path": "src/reports/projectCostLedger.ts",
+      "sha256": "1c04d1754e0a0b42b99c2b8ee8e869277b4d51c0366f35172710e8a253bbf911"
+    },
+    {
+      "path": "supabase/migrations/20261105110000_operational_expense_drafts.sql",
+      "sha256": "e4895288bb829714c77580907b2affa775615c4b7a79a2c82bc5479e1082da41"
+    },
+    {
+      "path": "docs/OPERATIONAL_EXPENSE_RELEASE.md",
+      "sha256": "3f66dac3e29351fe33ed90b41af45f1eb7d50d58ab602389a2deefb3fe5b5c55"
+    }
+  ],
+  "hosted_activation": {
+    "result": "APPLIED",
+    "at": "2026-11-05T07:20:31.811031+00:00",
+    "project": "eqnzueginpkskbnqvgoc",
+    "migration": "20261105110000_operational_expense_drafts.sql",
+    "sha256": "e4895288bb829714c77580907b2affa775615c4b7a79a2c82bc5479e1082da41",
+    "method": "Supabase CLI migration up --linked with isolated canonical1–80 package; only80 pending",
+    "financial_commands_invoked": false,
+    "frontend_published": false
+  },
+  "hosted_postflight": {
+    "result": "PASS",
+    "at": "2026-11-05T07:24:05.302411+00:00",
+    "project": "eqnzueginpkskbnqvgoc",
+    "hosted_count": 80,
+    "all_canonical_sql_aligned": true,
+    "migration": "20261105110000_operational_expense_drafts.sql",
+    "sha256": "e4895288bb829714c77580907b2affa775615c4b7a79a2c82bc5479e1082da41",
+    "preservation_tables_unchanged": 55,
+    "preservation_tables_checked": 56,
+    "existing_financial_business_access_preserved": true,
+    "auth_users_hash_unchanged": false,
+    "auth_users_concurrent_drift_disclosed": true,
+    "auth_users_count_and_availability_verified": true,
+    "membership_profile_mfa_platform_owner_preserved": true,
+    "new_table_rows": 0,
+    "forced_rls": true,
+    "immutable_trigger": true,
+    "authenticated_only_command": true,
+    "private_helpers_protected": true,
+    "existing_dependency_definitions_unchanged": true,
+    "private_schema_usage_broadened": false,
+    "existing_journal_expense_contract_guards_unchanged": true,
+    "unbalanced_journals": 0,
+    "maker_legacy_ready_unmanaged": true,
+    "no_pending_migrations": true,
+    "financial_commands_invoked": false,
+    "business_data_backfill": false,
+    "restore_tested": false,
+    "frontend_published": false
+  },
+  "release_base_commit": "652bc37ba372bf4fa8bbf454da0bba921f5758fa",
+  "release_directory": "/tmp/narvo-expense-lifecycle-release-20261105",
+  "release_files": [
+    "NARVO_ERP_ACCOUNTING_REQUIREMENTS_REGISTER.md",
+    "NARVO_ERP_MASTER_ROADMAP_V2.0.md",
+    "PROJECT_HANDOFF.md",
+    "PROJECT_ROADMAP.md",
+    "docs/OPERATIONAL_EXPENSE_LIFECYCLE.md",
+    "docs/OPERATIONAL_EXPENSE_RELEASE.md",
+    "docs/expense-lifecycle-verification.json",
+    "scripts/expense-draft-fixture.mjs",
+    "scripts/fixtures/expense-drafts.tsx",
+    "scripts/verify-expense-draft-exports.py",
+    "scripts/verify-expense-drafts-browser.mjs",
+    "scripts/verify-expense-drafts-races.mjs",
+    "scripts/verify-expense-drafts.mjs",
+    "src/financial/ExpenseDraftWorkspace.tsx",
+    "src/financial/ExpenseReadPanel.tsx",
+    "src/financial/expenseDrafts.ts",
+    "src/reports/ProjectCostLedger.tsx",
+    "src/reports/projectCostLedger.ts",
+    "supabase/migrations/20261105110000_operational_expense_drafts.sql"
+  ],
+  "reviewed_implementation_sha256": {
+    "scripts/expense-draft-fixture.mjs": "ad203751b400548407851df1f1499b23222981a4293994dbba97c0137fe5d937",
+    "scripts/fixtures/expense-drafts.tsx": "45c2c01d1f8684e28c5a3d998da1f88598559609d1122d7adec2d7aec0d4cc67",
+    "scripts/verify-expense-draft-exports.py": "0dd1c090f6def8eec66e83a6883aa506736529aeee702b84bb46d7061cdc341d",
+    "scripts/verify-expense-drafts-browser.mjs": "7573453611cd9471af169396239d5c7367591d066e192cd6dca30f6dbe17106e",
+    "scripts/verify-expense-drafts-races.mjs": "05d0aa1c9a7c57a6f868f5b2dae66392640842ac35605ec0d8041e659d0a6e48",
+    "scripts/verify-expense-drafts.mjs": "b707957fafdadeb1245e71611898bd576c6db099c053be9a6eddaf8211821d20",
+    "src/financial/ExpenseDraftWorkspace.tsx": "33ea8e914d2cda87b37ec2a35056607d8f844435d449c77e79a024068568c8be",
+    "src/financial/ExpenseReadPanel.tsx": "0e51c5d99e5ea56c2bd87edf91f83eac39504fa411015fba271baaf2bd0432c4",
+    "src/financial/expenseDrafts.ts": "74b4a5eee1b3943f3bbbdd19f201fad47eb6958ca843fc9fedd1e4b83dc45fb5",
+    "src/reports/ProjectCostLedger.tsx": "14f036ad66697c4e413722580e84f4891303c0f862059be330c8db85e8eb6158",
+    "src/reports/projectCostLedger.ts": "1c04d1754e0a0b42b99c2b8ee8e869277b4d51c0366f35172710e8a253bbf911",
+    "supabase/migrations/20261105110000_operational_expense_drafts.sql": "e4895288bb829714c77580907b2affa775615c4b7a79a2c82bc5479e1082da41"
+  },
+  "release_verification": "Completed application/SQL/test evidence reused unchanged; focused hosted preflight and postflight actually performed; no test-suite repetition"
+}
