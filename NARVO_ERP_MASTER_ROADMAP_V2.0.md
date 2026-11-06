@@ -1,3 +1,15 @@
+## 2026-11-06 — Priority2 transaction reclassification implemented locally;86 pending
+
+Product Owner reports83–85 APPLIED and LIVE. Priority2 now provides audited unposted routing across Operating Expense, Project Cost, contractor payment/advance, Employee advance, Custody/Treasury, Supplier and other existing financial destinations. Existing83/85 draft claims cancel atomically, preserving raw sources, amounts/dates/attachments/history and requiring fresh source review; routing creates no financial effect.
+
+Posted whole-document correction uses saved/reviewed/Admin-approved plans and canonical atomic reversal/replacement, deriving original amount/funding and enforcing zero net change per funding account/location/holder. AED5,000 Operating Expense→existing contractor liability removes the wrong expense and settles payable without another cash outflow. Original journal lines and first physical payment history remain; source→approval→reversal→replacement trace, exact retry, concurrency, period controls, dependency and persistent HR confidentiality boundaries are enforced. Existing direct allocation and specialized Payroll corrections remain intact.
+
+Supported execution is current-period/today/open-period, zero-VAT, unsplit, verified unreconciled scope. Prior/closed-period, VAT/reconciled/split/dependent/unsupported funding cases stay blocked or specialized; one selected liability per payment. Treasury/other routing does not invent financial events or missing commands. Broader financial, commercial, security and operations obligations remain preserved, including all35 requirement families.
+
+Canonical86 `20261106130000_source_transaction_reclassification.sql` PREPARED / NOT APPLIED. Focused63 DB/5 native concurrency/15 source-drawer browser checks PASS; build PASS; focused lint zero errors/eight non-blocking warnings. Read-only canonical1–85 alignment and sole86 linked dry-run recorded. No real Maker data mutation, hosted fixture/schema application, broad audit, push or deployment; restore/USB remain deferred.
+
+[Scope, policy and lifecycle](docs/SOURCE_TRANSACTION_RECLASSIFICATION.md); [focused evidence](docs/source-reclassification-verification.json). Supported local business/security/DB/testing/documentation VERIFIED;86 activation, frontend release and genuine live acceptance DEFERRED. Isolated release is based on85 in `/tmp/narvo-reclassification-release-20261106`; explicit86 activation/preservation must precede owner publication. After acceptance, next Maker priority3 is Super Admin onboarding for Maker, Green, Villa13 and Al Mazraa. Earlier priority2-not-started/next-step statements below are historical.
+
 ## 2026-11-06 — Source-linked contractor settlement / Employee advance increment prepared (85 LOCAL)
 
 Product Owner reports83/84 APPLIED and both frontend releases LIVE on Vercel Production. Fresh READ-ONLY release preparation confirms GitHub main `b084dcc` and exact hosted canonical1–84 alignment; no independent fresh Vercel/browser-live acceptance claimed. This supersedes earlier83/84 publication-pending notes below for owner-reported live status.

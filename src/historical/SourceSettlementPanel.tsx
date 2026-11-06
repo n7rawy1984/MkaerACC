@@ -12,7 +12,7 @@ const field='mt-1 block w-full min-w-0 rounded-lg border border-slate-300 bg-whi
 const button='min-h-10 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm disabled:opacity-50';
 export function SourceSettlementPanel({row,companyId,userId,role,onPosted}:{row:SourceRecord;companyId:string;userId:string;role:string;onPosted?:()=>void}){
  if(!['ACCOUNTING_ADMIN','ACCOUNTANT'].includes(role))return null;
- return <Panel key={companyId+userId+role+row.id} row={row} cid={companyId} user={userId} admin={role==='ACCOUNTING_ADMIN'} onPosted={onPosted}/>;
+ return <Panel key={companyId+userId+role+row.id+row.updated_at} row={row} cid={companyId} user={userId} admin={role==='ACCOUNTING_ADMIN'} onPosted={onPosted}/>;
 }
 function Panel({row,cid,user,admin,onPosted}:{row:SourceRecord;cid:string;user:string;admin:boolean;onPosted?:()=>void}){
  const {locale}=useI18n(),ar=locale==='ar',t=(en:string,a:string)=>ar?a:en,m=useProductionMasterData();
