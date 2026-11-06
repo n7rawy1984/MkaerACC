@@ -1,3 +1,4 @@
+import {EmployeeManagement} from '../hr/EmployeeManagement';
 import { CompanyWorkspaceShell } from "../workspace/CompanyWorkspaceShell";
 import { AccountingCycle } from "../workspace/AccountingCycle";
 import { WorkspaceReports } from "../workspace/WorkspaceReports";
@@ -47,6 +48,7 @@ function RoutedApplication() {
         <CompanySubscriptionProvider key={`${state.profile.userId}:${state.activeTenant.companyId}:${state.activeTenant.role}`} companyId={state.activeTenant.companyId}>
         <CompanyWorkspaceShell><Routes>
           <Route path="/payroll" element={<PayrollApplication embedded />} />
+          <Route path="/employees" element={<EmployeeManagement />} />
           <Route path="/attendance" element={<AttendanceApplication embedded />} />
           <Route path="/accounting-cycle" element={<AccountingCycle />} />
           <Route path="/accounting-reports" element={<WorkspaceReports />} />

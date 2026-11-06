@@ -1,0 +1,131 @@
+{
+  "verified_at": "2026-11-06",
+  "scope": "Employee master and existing HR/Payroll integration",
+  "database": {
+    "status": "PASS",
+    "checks": [
+      "Registration requires no salary, project, contact or code",
+      "Lost response retry creates one employee",
+      "Duplicate name requires review rather than repeated registration",
+      "Changed request intent rejected",
+      "Unicode whitespace cannot bypass duplicate employee review",
+      "Invisible whitespace is not an audit reason",
+      "Employee details editable through canonical master command",
+      "Concurrent stale edit rejected",
+      "Omitted contact/code fields survive partial edit",
+      "Wrong role or tenant cannot manage employee",
+      "Wrong role or tenant cannot manage employee",
+      "Wrong role or tenant cannot manage employee",
+      "Wrong role or tenant cannot manage employee",
+      "Unused employee master may be deactivated",
+      "Employee master may be reactivated",
+      "Dated salary and default Project feed existing attendance",
+      "Employee profile and reviewed attendance preserve exact canonical payroll calculation",
+      "Active employment cannot be silently dropped by master deactivation",
+      "Salary amendment preserves prior effective term",
+      "Backdated amendment cannot overwrite history",
+      "Ended dated employment permits master deactivation",
+      "Viewer cannot read employee change audit",
+      "Foreign tenant cannot read employee history",
+      "Authorized accountant reads employee audit",
+      "Browser cannot rewrite audit history",
+      "Legacy name correction is also audited",
+      "Duplicate employee code cannot create another record",
+      "Registration, terms and status create no financial journal"
+    ],
+    "hosted": false
+  },
+  "native_concurrency": {
+    "status": "PASS",
+    "checks": [
+      "Concurrent identical request creates one employee and one command receipt",
+      "Competing independent registrations cannot duplicate an unconfirmed same-name employee"
+    ],
+    "hosted": false
+  },
+  "browser": {
+    "status": "PASS",
+    "checks": [
+      "Actual dashboard Employee card is available and links to employees",
+      "Sidebar registry keeps Employee, Attendance and Payroll entries",
+      "Name-only registration and uncertain-response retry create one employee",
+      "Employee profile edits persist and are shown",
+      "Dated employment populates existing attendance calendar",
+      "Payroll and advance history integrations available",
+      "Audited operator change reason is visible",
+      "Salary-free employee Excel register exports",
+      "Employee PDF print view includes Company-scoped register",
+      "en employee direction",
+      "en mobile has no page overflow",
+      "ar employee direction",
+      "ar mobile has no page overflow",
+      "Viewer has directory only, no confidential payroll or mutation form",
+      "Viewer does not request confidential HR RPCs",
+      "No runtime errors or hosted requests"
+    ],
+    "hosted": false
+  },
+  "build": {
+    "status": "PASS",
+    "command": "npm run build",
+    "warning": "Existing non-blocking chunk-size advisory"
+  },
+  "lint": {
+    "status": "PASS_WITH_ONE_WARNING",
+    "errors": 0,
+    "warning": "Existing generation-counter cleanup pattern; no mutable DOM ref is used"
+  },
+  "migration": {
+    "number": 84,
+    "file": "supabase/migrations/20261106110000_employee_master_management.sql",
+    "sha256": "cd5fdf812efdd49e47eae4fa7810f0ebecbd6baeabf5d7ba228184e1da1a3629",
+    "status": "LOCAL_ONLY_NOT_APPLIED"
+  },
+  "hosted": {
+    "project": "eqnzueginpkskbnqvgoc",
+    "history_count": 83,
+    "last": "20261105140000",
+    "readonly_only": true,
+    "Maker_employee_payroll_writes": false
+  },
+  "production_public_probe": {
+    "historical_production_alias": "https://maker-eosin.vercel.app",
+    "http": 200,
+    "entry": "/assets/index-lhCrajol.js",
+    "protected_asset": "/assets/ProtectedApplication-9r7388YN.js",
+    "source83_rpc_marker_present": false,
+    "commit_sha_independently_verified": false,
+    "no_authentication_or_business_requests": true
+  },
+  "linked_dryrun": {
+    "status": "PASS",
+    "only_pending": "20261106110000_employee_master_management.sql",
+    "read_only_connection": true,
+    "applied": false
+  },
+  "release": {
+    "base": "03df444d0e51bc50c6bfc99c5cfc04ae0857a003",
+    "main_at_start": "76298d5b0c86cacc9b5f303dec4c0cabfdc70e8d",
+    "directory": "/tmp/narvo-employee-master-release-20261106",
+    "migration83_candidate_preserved": true,
+    "pushed": false,
+    "deployed": false,
+    "gate": "Complete83 frontend publication/owner verification FIRST; then separately authorize84 activation/preservation postflight BEFORE HR push"
+  },
+  "lifecycle": {
+    "business_accounting": "VERIFIED_LOCAL",
+    "security_authorization": "VERIFIED_LOCAL",
+    "database": "VERIFIED_LOCAL_LINKED_READONLY;84_ACTIVATION_DEFERRED",
+    "testing": "VERIFIED_LOCAL;LIVE_ACCEPTANCE_DEFERRED",
+    "deployment": "DEFERRED",
+    "documentation": "RECONCILED"
+  },
+  "deferred": [
+    "Statutory payroll/WPS and existing advanced HR items",
+    "Actual Company data/policy approvals and real employee registration",
+    "Restore/USB verification until both roadmaps complete"
+  ],
+  "diff_check": "PASS",
+  "focused_sensitive_artifact_scan": "PASS",
+  "candidate_application_matches_verified_workspace": true
+}

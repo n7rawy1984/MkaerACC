@@ -44,7 +44,7 @@ function Profiles({userId,companyId,t,source}:{source?:SourceRecord;userId:strin
  {data.profiles.map(p=><article key={`${p.id}:${p.version}`} className="min-w-0 rounded border p-3"><h2 className="font-semibold"><bdi dir="ltr">{p.payroll_id}</bdi> · <bdi>{p.employee_name}</bdi></h2><p><bdi dir="ltr">{displayPayrollMoney(p.monthly_salary_minor)}</bdi> · {p.status==='ACTIVE'?t.active:t.inactive}{p.employee_status!=='ACTIVE'?` · ${t.employeeInactive}`:''}</p><p><bdi>{p.profession} · {p.work_station} · {p.payroll_type} · {p.payment_type}</bdi></p><ProfileForm source={source && p.payroll_id===String(source.completion.employee_id??source.raw_source["Payroll ID"])?source:undefined} userId={userId} companyId={companyId} data={data} profile={p} t={t} done={reload}/></article>)}</>}
  </section>;
 }
-function ProfileForm({userId,companyId,data,profile,t,done,source}:{source?:SourceRecord;userId:string;companyId:string;data:PayrollProfiles;profile?:PayrollProfile;t:PayrollLabels;done:()=>void}){
+export function ProfileForm({userId,companyId,data,profile,t,done,source}:{source?:SourceRecord;userId:string;companyId:string;data:PayrollProfiles;profile?:PayrollProfile;t:PayrollLabels;done:()=>void}){
  const [busy,setBusy]=useState(false);const [error,setError]=useState<string|null>(null);const live=useRef(true);const sending=useRef(false);
  useEffect(()=>{live.current=true;return()=>{live.current=false;};},[]);
  async function save(form:HTMLFormElement){if(sending.current||error)return;const f=new FormData(form);sending.current=true;setBusy(true);
