@@ -1,0 +1,3 @@
+const{createRequire}=require('node:module'),{resolve,dirname}=require('node:path'),{readFileSync}=require('node:fs');
+const req=createRequire(resolve('package.json')),ts=req('typescript'),cache=new Map();
+function load(p){p=resolve(p);if(cache.has(p))return cache.get(p);const mod={exports:{}};cache.set(p,mod.exports);new Function('require','module','exports',ts.transpileModule(readFileSync(p,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText)(n=>n.startsWith('.')?load(resolve(dirname(p),n+'.ts')):req(n),mod,mod.exports);cache.set(p,mod.exports);return mod.exports}module.exports=load;

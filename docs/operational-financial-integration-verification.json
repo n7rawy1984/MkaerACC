@@ -1,0 +1,158 @@
+{
+  "database": {
+    "status": "PASS",
+    "checks": [
+      "Real reviewed funding debits Bank and credits configured liability without Project cost",
+      "Funding retry retains one canonical journal",
+      "Same funding evidence cannot create another cash receipt",
+      "Direct holder funding increases custody only; no fictional Bank receipt/transfer",
+      "Treasury-to-Custody advance moves assets once without expense",
+      "Custody Project expense recognizes net cost/VAT and consumes gross custody once",
+      "Custody settlement groups posted evidence without another journal or Project cost",
+      "Custody return restores Bank/reduces holder balance without reversing Project cost",
+      "Migration83 source-to-draft Bank Project expense recognizes one cost and one payment",
+      "Personal Project cost creates separate reimbursement liability without Bank/Custody movement",
+      "Mismatched reimbursement Project rolls back document and journal with unchanged Bank",
+      "Matching reimbursement settles original payable without duplicating Project cost",
+      "Reimbursement replay has no second outflow",
+      "Reimbursement document and liability GL retain original Project",
+      "Remaining personal liability bounds reimbursement amount",
+      "Contract advance is a contract-scoped asset, not certification cost",
+      "Certification recognizes work cost/payable and recovers advance without cash",
+      "Migration85 contract source payment settles certification without duplicate cost/outflow",
+      "Contract certification payable and unrecovered advance reconcile independently",
+      "Migration86 corrects Expense to contract settlement without another cash outflow or Project cost",
+      "Original posted journal lines remain immutable",
+      "Treasury distinguishes both accounting-only correction movements",
+      "Treasury funding receipts/payments exclude correction pair while retaining total GL movements",
+      "Direct Partner funding is present in Custody document history without Treasury fiction",
+      "Custody reconciliation agrees with actual GL and finalized settlement membership",
+      "Contract history includes canonical advances and replacement payment lineage",
+      "Contract export distinguishes settlement recognition from a new physical payment",
+      "Project cost report reconciles exact Expense, personal cost and certification GL; settlements/advances add no cost",
+      "Project cost report traces removed incorrect recognition through correction journal",
+      "Accounting Viewer receives safe correction flags without posting authority",
+      "Foreign Company/System Admin/non-accounting readers cannot bypass correction report boundary",
+      "Read command rejects unbounded journal requests",
+      "Report reader cannot reveal a hidden Employee journal even with its UUID",
+      "Former-Employee correction chain exposes accounting-only flag without HR source/payment identities",
+      "Reporting command fixed search path and minimal EXECUTE grants",
+      "Every composed lifecycle journal balances exactly",
+      "en exports keep funding/correction/history columns aligned",
+      "ar exports keep funding/correction/history columns aligned"
+    ],
+    "hosted": false
+  },
+  "allocation": {
+    "status": "PASS",
+    "checks": [
+      "Existing shared source allocation posts once and replays its original document",
+      "Real Cash funding and split Project expense reconcile without duplicate cash outflow",
+      "Confirmed shared cost is allocated across Projects/Company without increasing recognition",
+      "Exact minor-unit residual allocation is retained in operational reporting",
+      "Project-filtered report retains only its authoritative share",
+      "Existing source-to-journal lineage remains available after allocation/report integration"
+    ],
+    "hosted": false
+  },
+  "concurrency": {
+    "status": "PASS",
+    "checks": [
+      "Concurrent reimbursement retry creates one journal and one cash outflow",
+      "Concurrent competing reimbursements cannot overpay the original liability",
+      "Wrong-Project reimbursement remains rejected after concurrent financial work without partial effects",
+      "Concurrent report read sees no partial correction pair; both accounting-only flags appear after commit"
+    ],
+    "hosted": false
+  },
+  "browser": {
+    "status": "PASS",
+    "checks": [
+      "Actual Custody history exposes direct funding and opens its existing origin workspace",
+      "Direct funding has no incorrect Expense/Custody reversal action",
+      "Actual Treasury table labels reversal and replacement as accounting-only movements",
+      "Actual Treasury summary separates funding movement and correction gross totals",
+      "Actual Treasury Excel audit downloads with correction semantics",
+      "Actual PDF audit preserves correction and funding distinctions",
+      "Actual contract register includes advance and corrected payment with original-payment semantics",
+      "Wrong-Project reimbursement evidence cannot select unrelated liability",
+      "Operator sees a practical Project-mismatch explanation",
+      "Matching original liability is visible in actual posting confirmation",
+      "en operational finance UI fits mobile",
+      "ar operational finance UI fits mobile",
+      "Viewer retains read-only operations without financial posting action",
+      "No browser errors or external/hosted requests"
+    ],
+    "errors": [],
+    "external": [],
+    "hosted": false
+  },
+  "preflight": {
+    "status": "PASS",
+    "at": "2026-11-06T09:49:46.062988+00:00",
+    "project": "eqnzueginpkskbnqvgoc",
+    "canonical_applied": 86,
+    "local_canonical": 87,
+    "only_pending": "20261106140000_operational_financial_integration.sql",
+    "sha256": "00022695405f793be7e4c7f7809ec4d797125fd6bd78556d08cf86f76cacedfb",
+    "remote_main": "fc9138d61218484b91156bd698e53f42e6ffffd7",
+    "read_only": true,
+    "applied": false,
+    "business_commands_invoked": false,
+    "live83_86": "Product Owner reports LIVE; no fresh Vercel acceptance claimed"
+  },
+  "migration": {
+    "number": 87,
+    "file": "supabase/migrations/20261106140000_operational_financial_integration.sql",
+    "sha256": "00022695405f793be7e4c7f7809ec4d797125fd6bd78556d08cf86f76cacedfb",
+    "status": "PREPARED_NOT_APPLIED"
+  },
+  "defects_reproduced": {
+    "reimbursement_mismatched_project_accepted_before": true,
+    "mismatched_project_now_rejected_atomically": true,
+    "direct_partner_custody_history_missing_before": true,
+    "contract_advances_history_missing_before": true,
+    "correction_gross_movement_previously_labelled_as_receipts_payments": true
+  },
+  "build": {
+    "status": "PASS",
+    "warning": "Existing bundle-size advisory"
+  },
+  "lint": {
+    "status": "PASS_WITH_WARNINGS",
+    "errors": 0,
+    "warnings": 3,
+    "scope": "Changed application and new focused test files; existing lifecycle patterns"
+  },
+  "exports": {
+    "xlsx": "Actual Chromium download ZIP/XML inspected",
+    "pdf": "Actual report dialog correction/funding content verified"
+  },
+  "environment": {
+    "hosted_schema_changed": false,
+    "hosted_business_commands_invoked": false,
+    "Maker_transactions_modified": false,
+    "pushed": false,
+    "deployed": false,
+    "restore_USB": "DEFERRED_NOT_REOPENED"
+  },
+  "release": {
+    "directory": "/tmp/narvo-operational-integration-release-20261106",
+    "base": "fc9138d61218484b91156bd698e53f42e6ffffd7",
+    "isolated": true,
+    "activation_and_publication_pending": true
+  },
+  "lifecycle": {
+    "supported_local_business_security_database_testing_documentation": "VERIFIED",
+    "hosted87_frontend_release_operator_acceptance": "DEFERRED",
+    "hosted_business_execution": "NOT_APPLICABLE"
+  },
+  "next": "Materials, Inventory and Warehouse ManagementV1; then remaining Maker Employee/Payroll/reporting acceptance, then Green/Villa13/Al Mazraa onboarding; full commercial roadmap preserved",
+  "release_checks": {
+    "diff_check": "PASS",
+    "selected_file_secret_pattern": "PASS",
+    "existing_canonical_migrations_1_86_unchanged": true,
+    "requirement_families_preserved": 35,
+    "production_import_boundary": "PASS_261_DEPENDENCIES"
+  }
+}
