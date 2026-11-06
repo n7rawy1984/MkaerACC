@@ -1,0 +1,132 @@
+{
+  "database": {
+    "status": "PASS",
+    "checks": [
+      "Incomplete source draft is editable and has no financial effect",
+      "Same-key draft retry returns one immutable event",
+      "Changed request replay rejected",
+      "Approval cannot skip complete source review",
+      "Denied role/tenant cannot mutate source settlement",
+      "Denied role/tenant cannot mutate source settlement",
+      "Denied role/tenant cannot mutate source settlement",
+      "Denied role/tenant cannot mutate source settlement",
+      "Stale draft version rejected",
+      "Posting requires explicit approval",
+      "Contract settlement reuses payable command without new Project cost",
+      "Posting retry has one cash outflow and one canonical payment",
+      "Posted source permanently retains its original link",
+      "Posted source dimensions/amount cannot be rewritten",
+      "Source lineage immutable even for trusted update/delete",
+      "One posted document cannot be assigned to two sources",
+      "Link existing payment without a second journal or cash outflow",
+      "Contract advance is contract-scoped asset rather than work cost",
+      "Contract/Project mismatch rejected before approval",
+      "Source changes invalidate approval",
+      "Exact source amount required",
+      "Duplicate warning requires explicit distinct-event clearance",
+      "Pending source can save but cannot approve/post",
+      "Cost draft cannot claim a settlement-bound source",
+      "Cancelling unposted settlement releases claim with retained history",
+      "Settlement cannot claim an existing cost-bound source",
+      "Employee advance delegates to HR receivable without payroll cost",
+      "Source links canonical employee advance and recoverable balance",
+      "Viewer cannot request confidential employee source workspace",
+      "Viewer source status redacts employee financial receipt",
+      "Source/recovery lineage is available in read-only transactions",
+      "Source-linked recovery plan reuses HR idempotency with no cash/cost effect",
+      "Recovery above the approved monthly limit rejected",
+      "Existing Payroll posts one recovery, traced back to the imported advance source",
+      "Recovery does not reduce or duplicate the earned payroll expense",
+      "Payroll recovery transfers payable to receivable without a cash outflow",
+      "Canonical Payroll reversal restores receivable and preserves recovery lineage",
+      "Extended lineage preserves existing83 Expense draft response",
+      "Authenticated direct-write bypass denied by grants",
+      "Viewer cannot read detailed settlement/employee event rows through table access",
+      "Foreign Company source workspace read denied",
+      "Private document matcher cannot be invoked from browser",
+      "Employee source advance cannot invent missing Treasury funds",
+      "Failed post rolls back document and financial effects",
+      "Blank incomplete source date remains editable and readable without posting",
+      "Archived unposted source can cancel its document claim without financial effects",
+      "All resulting journals balance"
+    ],
+    "hosted": false
+  },
+  "concurrency": {
+    "status": "PASS",
+    "checks": [
+      "Concurrent identical source request creates one immutable draft event",
+      "Competing same-version edits preserve winner and reject stale intent",
+      "Expense conversion cannot race settlement into a second active source claim",
+      "Concurrent cancellation releases claim only after committed audit event"
+    ],
+    "hosted": false
+  },
+  "browser": {
+    "status": "PASS",
+    "checks": [
+      "Actual SourceEditor opens source-linked settlement with exact source amount",
+      "Incomplete UI draft is durably saved without a financial document",
+      "Unsaved dimensions cannot approve the previous saved snapshot",
+      "Review and approval are distinct states before posting",
+      "Uncertain response freezes intent for exact retry",
+      "Lost-response posting retry creates one canonical payment",
+      "Source exposes original balanced journal and specialized reversal route",
+      "Actual Employee source UI posts canonical HR advance without an Expense",
+      "Posted source supports recovery approval through the existing HR command",
+      "en source workflow fits mobile",
+      "ar source workflow fits mobile",
+      "Viewer has no source settlement mutation controls",
+      "Viewer never requests confidential settlement workspace",
+      "No runtime errors or hosted requests"
+    ],
+    "errors": [],
+    "external": [],
+    "hosted": false
+  },
+  "preflight": {
+    "status": "PASS",
+    "at": "2026-11-06T07:31:25.744027+00:00",
+    "project": "eqnzueginpkskbnqvgoc",
+    "hosted_canonical_history": 84,
+    "local_canonical_history": 85,
+    "sha256": "2fb783581c911e67b01332926a6ec33ba696921917beacedfd1ac146c11ce100",
+    "only_pending": "20261106120000_source_settlement_workflows.sql",
+    "remote_main": "b084dcc6097c4623c4ce6e1f40c6697e1f5268da",
+    "read_only": true,
+    "applied": false,
+    "business_commands_invoked": false,
+    "live83_84": "Product Owner reports both LIVE; no fresh Vercel verification claimed"
+  },
+  "build": {
+    "status": "PASS",
+    "warning": "Existing bundle-size advisory"
+  },
+  "lint": {
+    "status": "PASS_WITH_WARNINGS",
+    "errors": 0,
+    "warnings": 2
+  },
+  "migration": {
+    "number": 85,
+    "file": "supabase/migrations/20261106120000_source_settlement_workflows.sql",
+    "sha256": "2fb783581c911e67b01332926a6ec33ba696921917beacedfd1ac146c11ce100",
+    "status": "PREPARED_NOT_APPLIED"
+  },
+  "release": {
+    "directory": "/tmp/narvo-source-settlements-release-20261106",
+    "base": "b084dcc6097c4623c4ce6e1f40c6697e1f5268da",
+    "pushed": false,
+    "deployed": false,
+    "gate": "Explicit85 activation authorization and preservation postflight before frontend publication"
+  },
+  "business_commands_on_hosted": false,
+  "Maker_business_mutation": false,
+  "restore_USB": "DEFERRED_NOT_REOPENED",
+  "limitations": [
+    "Single whole source/document; single certified liability in source creation/matching editor",
+    "New creation Treasury-funded; Custody/personal-funded variants not introduced",
+    "Recovery is existing payroll plan/posting/reversal, not a cash employee repayment command",
+    "Live83/84 owner-reported;85 live/human acceptance deferred"
+  ]
+}

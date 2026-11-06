@@ -1,5 +1,5 @@
 export type SourceRecord = {
- source_document?:{draft_id:string;state:string;receipt:{id:string;reference:string;journal:string}|null;reversed:boolean};source_document_unavailable?:boolean;
+ source_document?:{kind?:string;draft_id:string;state:string;receipt:{id:string;reference:string;journal:string}|null;reversed:boolean};source_document_unavailable?:boolean;
  id: string; company_id?: string; source_reference: string; source_file: string; source_month: string;
  record_type: string; source_date: string | null; description: string;
  outflow_minor: string | null; funding_minor: string | null; payroll_net_minor: string | null;
@@ -26,7 +26,7 @@ export function sourceOriginalAmount(r: SourceRecord): string | null {
 export const sourceCurrentAmount = (r:SourceRecord) => r.completion.amount_minor === undefined ? sourceOriginalAmount(r) : String(r.completion.amount_minor);
 export const sourceMonth = (r:SourceRecord) => r.record_type==='PAYROLL'?sourceValue(r,'salary_month',r.source_month):(sourceValue(r,'date',r.source_date)?.slice(0,7)||r.source_month);
 export const sourceDirection = (r:SourceRecord) => BigInt(r.outflow_minor??'0')>0n?'OUT':BigInt(r.funding_minor??'0')>0n?'IN':'NONE';
-export const sourceAccounting = (r:SourceRecord) => r.source_document?.reversed?'REVERSED':r.source_document?.state==='POSTED'?'POSTED':r.source_document?.state==='REVIEWED'?'DOCUMENT_REVIEWED':r.source_document?.state==='DRAFT'?'DOCUMENT_DRAFT':r.source_document_unavailable&&!r.expense_id&&!r.payroll_entitlement_id?'UNAVAILABLE':r.expense?.status==='REVERSED'?'REVERSED':r.expense_id?'POSTED':r.payroll_entitlement_id?(r.payroll_status??'LINKED'):r.review_status==='REVIEWED'?'DRAFT':'NEEDS_COMPLETION';
+export const sourceAccounting = (r:SourceRecord) => r.source_document?.reversed?'REVERSED':r.source_document?.state==='POSTED'?'POSTED':['REVIEWED','APPROVED'].includes(r.source_document?.state??'')?'DOCUMENT_REVIEWED':r.source_document?.state==='DRAFT'?'DOCUMENT_DRAFT':r.source_document_unavailable&&!r.expense_id&&!r.payroll_entitlement_id?'UNAVAILABLE':r.expense?.status==='REVERSED'?'REVERSED':r.expense_id?'POSTED':r.payroll_entitlement_id?(r.payroll_status??'LINKED'):r.review_status==='REVIEWED'?'DRAFT':'NEEDS_COMPLETION';
 export const sourceLinked = (r:SourceRecord) => !!(r.expense_id||r.payroll_entitlement_id||r.source_document?.state==='POSTED');
 export function minorDecimal(v:string|null):string {if(v===null)return '—';const n=BigInt(v),a=n<0n?-n:n;return `${n<0n?'-':''}${a/100n}.${(a%100n).toString().padStart(2,'0')}`;}
 export function minorDisplay(v:string|null):string {return minorDecimal(v).replace(/\B(?=(\d{3})+(?!\d))/g,',');}

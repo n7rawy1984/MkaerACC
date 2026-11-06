@@ -1,0 +1,91 @@
+import assert from 'node:assert/strict';
+import {randomUUID} from 'node:crypto';
+import {readFileSync,writeFileSync} from 'node:fs';
+import {pathToFileURL} from 'node:url';
+import {sourceDraftFixture} from './verify-source-expense-drafts.mjs';
+export async function sourceSettlementFixture(){
+ const f=await sourceDraftFixture();
+ for(const file of ['20261106110000_employee_master_management.sql','20261106120000_source_settlement_workflows.sql'])await f.db.exec(readFileSync('supabase/migrations/'+file,'utf8'));
+ const call=async(actor,a)=>(await f.as(actor,'select public.command_source_settlement($1,$2,$3,$4,$5,$6,$7,$8) r',[a.cid??f.company,a.source_id,a.expected_version,a.request_id,a.action,a.input??{},a.confirmations??{owner:true,payment:true,distinct:true,duplicate_clearance:'Independent signed synthetic event evidence'},a.reason??'Verified synthetic source event']))[0].r;
+ async function source(nature='SUBCONTRACTOR_PAYMENT',patch={}){const id=randomUUID();await f.db.query("insert into public.historical_source_records(id,company_id,source_file,source_hash,source_reference,record_type,source_month,source_date,description,outflow_minor,raw_source,classification,review_status,created_by)values($1::uuid,$2,'synthetic.xlsx',repeat('b',64),$1::text,'GENERAL','2026-11',$7,'Synthetic settlement source',$3,'{}',$4,$5,$6)",[id,f.company,patch.amount??1000,{nature,...patch.classification},patch.state??'REVIEWED',f.admin,patch.date??'2026-11-05']);return id;}
+ const certificate=(await f.db.query("select id from public.subcontractor_certificates where company_id=$1 and subcontract_id=$2 and status='POSTED'limit 1",[f.company,f.contracts[0]])).rows[0].id;
+ const body={kind:'CONTRACT_PAYMENT',date:'2026-11-05',amount_minor:'1000',contract_id:f.contracts[0],project_id:f.project,treasury_id:f.bank,certificate_id:certificate,evidence:'Signed synthetic payment evidence'};
+ const read=async(actor,source_id)=>(await f.as(actor,'select public.read_source_settlement($1,$2)r',[f.company,source_id]))[0].r;
+ const rpc=async(actor,name,a)=>name==='command_source_settlement'?call(actor,a):name==='read_source_settlement'?read(actor,a.source_id):name==='read_source_document_links'?(await f.as(actor,'select public.read_source_document_links($1,$2)r',[a.cid,a.source_ids]))[0].r:name==='command_hr'?(await f.as(actor,'select public.command_hr($1,$2,$3,$4)r',[a.cid,a.request_id,a.action,a.input]))[0].r:f.rpc(actor,name,a);
+ return{...f,call,source,body,certificate,readSettlement:read,rpc};
+}
+if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){
+ const f=await sourceSettlementFixture(),checks=[];const check=(v,m)=>{assert(v,m);checks.push(m);console.log('PASS',checks.length,m)};
+ const count=async t=>Number((await f.db.query('select count(*)n from public.'+t)).rows[0].n);
+ const cost=async()=>String((await f.db.query("select coalesce(sum(l.debit_minor::numeric-l.credit_minor::numeric),0)n from public.journal_lines l join public.accounts a on a.company_id=l.company_id and a.id=l.account_id where l.company_id=$1 and a.account_type='EXPENSE'",[f.company])).rows[0].n);
+ const cmd=(s,v,a,input={},rest={})=>({source_id:s,expected_version:v,request_id:randomUUID(),action:a,input,...rest});
+ const fail=async(fn,code,m)=>{await assert.rejects(fn,e=>e.code===code);check(true,m)};
+ async function ready(s,body=f.body){await f.call(f.admin,cmd(s,0,'SAVE',body));await f.call(f.admin,cmd(s,1,'REVIEW'));await f.call(f.admin,cmd(s,2,'APPROVE'));}
+ try{
+ const s=await f.source(),initial=await count('journal_entries'),draft=cmd(s,0,'SAVE',{kind:'CONTRACT_PAYMENT',amount_minor:'unfinished'});
+ check((await f.call(f.admin,draft)).state==='DRAFT'&&await count('journal_entries')===initial,'Incomplete source draft is editable and has no financial effect');check((await f.call(f.admin,draft)).version===1,'Same-key draft retry returns one immutable event');
+ await fail(()=>f.call(f.admin,{...draft,reason:'changed'}),'22023','Changed request replay rejected');
+ await fail(()=>f.call(f.admin,cmd(s,1,'APPROVE')),'23514','Approval cannot skip complete source review');
+ for(const actor of[f.viewer,f.foreign,f.system,f.procurement])await fail(()=>f.call(actor,cmd(s,1,'SAVE',f.body)),'42501','Denied role/tenant cannot mutate source settlement');
+ await fail(()=>f.call(f.admin,cmd(s,0,'SAVE',f.body)),'40001','Stale draft version rejected');
+ await f.call(f.admin,cmd(s,1,'SAVE',f.body));await f.call(f.admin,cmd(s,2,'REVIEW'));await fail(()=>f.call(f.admin,cmd(s,3,'POST')),'23514','Posting requires explicit approval');
+ await f.call(f.admin,cmd(s,3,'APPROVE'));const beforeCost=await cost(),post=cmd(s,4,'POST'),posted=await f.call(f.admin,post);
+ check(posted.state==='POSTED'&&!!posted.journal_id&&await cost()===beforeCost,'Contract settlement reuses payable command without new Project cost');
+ check((await f.call(f.admin,post)).document_id===posted.document_id&&await count('journal_entries')===initial+1,'Posting retry has one cash outflow and one canonical payment');
+ await fail(()=>f.call(f.admin,cmd(s,5,'SAVE',f.body)),'23514','Posted source permanently retains its original link');
+ await fail(()=>f.db.query("update public.historical_source_records set assigned_project_id=null,completion='{\"amount_minor\":\"2\"}'where id=$1",[s]),'23514','Posted source dimensions/amount cannot be rewritten');
+ await fail(()=>f.db.query('delete from public.source_settlement_events where source_id=$1',[s]),'23514','Source lineage immutable even for trusted update/delete');
+ const linked=await f.source();await f.call(f.admin,cmd(linked,0,'SAVE',{...f.body,existing_document_id:posted.document_id}));await fail(()=>f.call(f.admin,cmd(linked,1,'REVIEW')),'23505','One posted document cannot be assigned to two sources');
+ const n=await count('journal_entries'),existing=(await f.as(f.admin,"select *from public.post_subcontractor_payment($1,'2026-11-05',$2,$3,1000,'BANK','OLD-PAYMENT',null,$4,$5)",[f.company,f.contracts[0],f.bank,[{certificate_id:f.certificate,amount_minor:'1000'}],randomUUID()]))[0];
+ const ms=await f.source();await ready(ms,{...f.body,existing_document_id:existing.subcontractor_payment_id});await f.call(f.admin,cmd(ms,3,'POST'));check(await count('journal_entries')===n+1,'Link existing payment without a second journal or cash outflow');
+ const ca=await f.source('SUBCONTRACTOR_ADVANCE');await ready(ca,{...f.body,kind:'CONTRACT_ADVANCE',contract_id:f.contracts[1],project_id:f.p2,certificate_id:''});const caCost=await cost();check((await f.call(f.admin,cmd(ca,3,'POST'))).state==='POSTED'&&await cost()===caCost,'Contract advance is contract-scoped asset rather than work cost');
+ const mismatch=await f.source();await f.call(f.admin,cmd(mismatch,0,'SAVE',{...f.body,project_id:f.id(9999)}));await fail(()=>f.call(f.admin,cmd(mismatch,1,'REVIEW')),'23514','Contract/Project mismatch rejected before approval');
+ const stale=await f.source();await ready(stale);await f.db.query("update public.historical_source_records set completion='{\"notes\":\"new evidence\"}',updated_at=clock_timestamp()where id=$1",[stale]);await fail(()=>f.call(f.admin,cmd(stale,3,'POST')),'40001','Source changes invalidate approval');
+ const amount=await f.source();await f.call(f.admin,cmd(amount,0,'SAVE',{...f.body,amount_minor:'999'}));await fail(()=>f.call(f.admin,cmd(amount,1,'REVIEW')),'23514','Exact source amount required');
+ const duplicate=await f.source('SUBCONTRACTOR_PAYMENT',{classification:{potential_duplicate:true}});await f.call(f.admin,cmd(duplicate,0,'SAVE',f.body));await fail(()=>f.call(f.admin,cmd(duplicate,1,'REVIEW',{}, {confirmations:{owner:true,payment:true,distinct:true}})),'23514','Duplicate warning requires explicit distinct-event clearance');
+ const pending=await f.source('SUBCONTRACTOR_PAYMENT',{state:'PENDING'});await f.call(f.admin,cmd(pending,0,'SAVE',f.body));await fail(()=>f.call(f.admin,cmd(pending,1,'REVIEW')),'23514','Pending source can save but cannot approve/post');
+ const fenced=await f.source('EXPENSE');await f.call(f.admin,cmd(fenced,0,'SAVE',f.body));await fail(()=>f.as(f.admin,"select public.command_source_expense_draft($1,$2,$3,0,$4,'SAVE','{}','No duplicate cost','{}')",[f.company,fenced,randomUUID(),randomUUID()]),'23514','Cost draft cannot claim a settlement-bound source');
+ await f.call(f.admin,cmd(fenced,1,'CANCEL'));check((await f.as(f.admin,"select public.command_source_expense_draft($1,$2,$3,0,$4,'SAVE','{}','Cancelled claim preserved','{}')r",[f.company,fenced,randomUUID(),randomUUID()]))[0].r.state==='DRAFT','Cancelling unposted settlement releases claim with retained history');
+ const opposite=await f.source('EXPENSE');await f.as(f.admin,"select public.command_source_expense_draft($1,$2,$3,0,$4,'SAVE','{}','Existing cost claim','{}')",[f.company,opposite,randomUUID(),randomUUID()]);await fail(()=>f.call(f.admin,cmd(opposite,0,'SAVE',f.body)),'23514','Settlement cannot claim an existing cost-bound source');
+ const accounts=(await f.db.query('select id,system_key from public.accounts where company_id=$1',[f.company])).rows,setup={version:0,advance_account_id:'NEW',advance_code:'EMP-SOURCE',advance_name:'Synthetic employee advance',evidence:'Explicit synthetic receivable mapping'};
+ for(const k of['SALARY_PAYABLE','PROJECT_COST','COMPANY_EXPENSE'])setup[k]=accounts.find(x=>x.system_key===k).id;
+ await f.rpc(f.admin,'command_hr',{cid:f.company,request_id:randomUUID(),action:'SETUP',input:setup});
+ const es=await f.source('EMPLOYEE_ADVANCE',{date:'2026-10-01'}),eb={kind:'EMPLOYEE_ADVANCE',date:'2026-10-01',amount_minor:'1000',employee_id:f.person,treasury_id:f.bank,monthly_limit_minor:'500',evidence:'Signed employee advance and recovery agreement'};
+ await ready(es,eb);const ecost=await cost(),ep=await f.call(f.admin,cmd(es,3,'POST'));check(await cost()===ecost&&!!ep.journal_id,'Employee advance delegates to HR receivable without payroll cost');
+ const er=await f.readSettlement(f.admin,es);check(er.document.id===ep.document_id&&er.recoveries.remaining_minor==='1000','Source links canonical employee advance and recoverable balance');
+ await fail(()=>f.readSettlement(f.viewer,es),'42501','Viewer cannot request confidential employee source workspace');
+ const viewerLinks=(await f.as(f.viewer,'select public.read_source_document_links($1,$2)r',[f.company,[es]]))[0].r;check(viewerLinks[0].event.state==='POSTED'&&viewerLinks[0].event.receipt===null,'Viewer source status redacts employee financial receipt');
+ const readonly=await f.db.transaction(async tx=>{await tx.exec('set transaction read only');await tx.query("select set_config('request.jwt.claims',$1,true)",[JSON.stringify({sub:f.admin})]);await tx.exec('set local role authenticated');return(await tx.query('select public.read_source_settlement($1,$2)r',[f.company,es])).rows[0].r});check(readonly.event.state==='POSTED','Source/recovery lineage is available in read-only transactions');
+ const sql=async(q,a=[])=>(await f.as(f.admin,q,a))[0]?.r;
+ const hr=async(action,input)=>f.rpc(f.admin,'command_hr',{cid:f.company,request_id:randomUUID(),action,input:{evidence:'Synthetic payroll recovery authorization',...input}});
+ const month='2026-10-01';await hr('POLICY',{version:0,effective_month:month,method:'SCHEDULED_MINUTES',timezone:'Asia/Dubai',approved:true});
+ await hr('TERMS',{employee_id:f.person,effective_on:month,employed_from:month,basic_minor:'31000',allowances:[],weekdays:[1,2,3,4,5,6,7],start_minute:480,end_minute:1020,break_minutes:60,project_id:f.p2,status:'ACTIVE',version:0});
+ await sql("select public.save_payroll_profile($1,$2,0,'SOURCE-EMP','STAFF','Engineer','Synthetic Site',$3,1,'BANK','ACTIVE')r",[f.company,f.person,f.p2]);
+ const dayState=await sql('select public.read_hr_workspace($1,$2)r',[f.company,month]);
+ await sql('select public.bulk_hr_attendance($1,$2,$3)r',[f.company,randomUUID(),dayState.days.map(d=>({employee_id:f.person,day:d.day,version:0,status:'PRESENT',project_id:f.p2,start_minute:480,end_minute:1020,break_minutes:60,paid_leave_minutes:0,overtime_earned_minor:'0',evidence:'Synthetic source recovery integration'}))]);
+ const beforePlan=await count('journal_entries'),planKey=randomUUID(),plan={advance_id:ep.document_id,month,version:0,amount_minor:'500',evidence:'Explicit source-linked employee recovery agreement'};
+ await f.rpc(f.admin,'command_hr',{cid:f.company,request_id:planKey,action:'RECOVERY',input:plan});await f.rpc(f.admin,'command_hr',{cid:f.company,request_id:planKey,action:'RECOVERY',input:plan});
+ check(await count('journal_entries')===beforePlan&&(await f.readSettlement(f.admin,es)).recoveries.plans.length===1,'Source-linked recovery plan reuses HR idempotency with no cash/cost effect');
+ await fail(()=>hr('RECOVERY',{...plan,version:1,amount_minor:'501'}),'23514','Recovery above the approved monthly limit rejected');
+ const reviewed=await sql('select public.read_hr_workspace($1,$2)r',[f.company,month]);await hr('REVIEW',{month,version:reviewed.period.revision});
+ const period=await sql('select public.refresh_payroll_draft($1,$2,0)r',[f.company,month]);let pd=await sql('select public.read_payroll_draft($1,$2)r',[f.company,month]);
+ await sql('select public.prepare_payroll_accounting($1,$2,$3,$4,$5)r',[f.company,period,pd.period.version,{[pd.rows[0].id]:pd.rows[0].default_project_id},{}]);
+ pd=await sql('select public.read_payroll_draft($1,$2)r',[f.company,month]);await sql('select public.review_payroll_draft($1,$2,$3)r',[f.company,period,pd.period.version]);
+ const salaryCost=await cost(),pk=randomUUID(),pay=await sql('select public.post_payroll($1,$2,$3,$4)r',[f.company,period,pd.period.version,pk]);await sql('select public.post_payroll($1,$2,$3,$4)r',[f.company,period,pd.period.version,pk]);
+ const recovered=await f.readSettlement(f.admin,es);check(recovered.recoveries.remaining_minor==='500'&&recovered.recoveries.postings.length===1,'Existing Payroll posts one recovery, traced back to the imported advance source');
+ check(BigInt(await cost())-BigInt(salaryCost)===31000n,'Recovery does not reduce or duplicate the earned payroll expense');
+ check((await f.db.query('select count(*)n from public.journal_lines where journal_entry_id=$1 and treasury_account_id is not null',[recovered.recoveries.postings[0].journal_id])).rows[0].n.toString()==='0','Payroll recovery transfers payable to receivable without a cash outflow');
+ await sql("select public.reverse_payroll($1,$2,'2026-11-05','Synthetic source recovery correction',$3)r",[f.company,pay,randomUUID()]);
+ const reversedRecovery=await f.readSettlement(f.admin,es);check(reversedRecovery.recoveries.remaining_minor==='1000'&&reversedRecovery.recoveries.postings[0].reversed,'Canonical Payroll reversal restores receivable and preserves recovery lineage');
+ const oldLink=(await f.as(f.admin,'select public.read_source_document_links($1,$2)r',[f.company,[opposite]]))[0].r;check(oldLink[0].event.state==='DRAFT'&&!oldLink[0].kind,'Extended lineage preserves existing83 Expense draft response');
+ await fail(()=>f.as(f.admin,"update public.source_settlement_events set reason='bypass'where source_id=$1",[es]),'42501','Authenticated direct-write bypass denied by grants');
+ check((await f.as(f.viewer,'select id from public.source_settlement_events where company_id=$1',[f.company])).length===0,'Viewer cannot read detailed settlement/employee event rows through table access');
+ await fail(()=>f.readSettlement(f.foreign,es),'42501','Foreign Company source workspace read denied');
+ check((await f.db.query("select has_function_privilege('authenticated','private.source_settlement_document(uuid,text,uuid)','execute')x")).rows[0].x===false,'Private document matcher cannot be invoked from browser');
+ const nofund=await f.source('EMPLOYEE_ADVANCE',{amount:900000000,date:'2026-10-01'});await ready(nofund,{...eb,amount_minor:'900000000'});const fn=await count('journal_entries');await fail(()=>f.call(f.admin,cmd(nofund,3,'POST')),'23514','Employee source advance cannot invent missing Treasury funds');check(await count('journal_entries')===fn,'Failed post rolls back document and financial effects');
+ const blank=await f.source('SUBCONTRACTOR_PAYMENT',{state:'PENDING'});await f.db.query("update public.historical_source_records set completion='{\"date\":\"\"}'where id=$1",[blank]);await f.call(f.admin,cmd(blank,0,'SAVE',{kind:'CONTRACT_PAYMENT'}));check((await f.readSettlement(f.admin,blank)).event.state==='DRAFT','Blank incomplete source date remains editable and readable without posting');
+ await f.db.query("update public.historical_source_records set review_status='CANCELLED'where id=$1",[blank]);check((await f.call(f.admin,cmd(blank,1,'CANCEL'))).state==='CANCELLED','Archived unposted source can cancel its document claim without financial effects');
+ check((await f.db.query("select count(*)n from(select journal_entry_id from public.journal_lines group by journal_entry_id having sum(debit_minor::numeric-credit_minor::numeric)<>0)x")).rows[0].n.toString()==='0','All resulting journals balance');
+ writeFileSync('/tmp/narvo-source-settlements/database.json',JSON.stringify({status:'PASS',checks,hosted:false},null,2));console.log('ALL PASS',checks.length);
+ }catch(e){console.error('FAIL',e.message,e.code,e.where);process.exitCode=1}finally{await f.db.close()}
+}
