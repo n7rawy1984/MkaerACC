@@ -32,6 +32,7 @@ export function dependencyGraph(entry) {
 }
 // Existing command recovery envelopes only; these files are not local business stores.
 const sessionRecoveryFiles=new Set([
+ 'src/inventory/InventoryWorkspace.tsx',
  'src/platform/platformRecovery.ts',
  'src/master/CompanyAccountingSetup.tsx', // Actor/Company-scoped setup request retry only; no balances or ledger cache.
  'src/historical/SourceReclassification.tsx', // Frozen actor/Company/source correction retry only; no ledger fallback.

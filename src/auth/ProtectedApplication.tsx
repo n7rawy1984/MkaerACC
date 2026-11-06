@@ -72,6 +72,8 @@ function RoutedApplication() {
           <Route path="/accounts" element={<TenantReadyApplication view="accounts" />} />
           <Route path="/subcontracts" element={<TenantReadyApplication view="subcontracts" />} />
           <Route path="/financial-evidence" element={<TenantReadyApplication view="financialEvidence" />} />
+          <Route path="/inventory/:section" element={<TenantReadyApplication view="inventory" />} />
+          <Route path="/inventory" element={<Navigate to="/inventory/materials" replace />} />
           <Route path="/custody" element={<TenantReadyApplication view="custody" />} />
           <Route path="/treasury-accounts" element={<TenantReadyApplication view="treasuryAccounts" />} />
           <Route path="*" element={<TenantReadyApplication view="deferred" />} />

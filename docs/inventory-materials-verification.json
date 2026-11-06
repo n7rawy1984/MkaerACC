@@ -1,0 +1,248 @@
+{
+  "database": {
+    "status": "PASS",
+    "checks": [
+      "100 bags received at supported AED25; stock asset2500 equals quantity valuation",
+      "Receiving recognizes GRNI without Treasury/Bank/Custody payment",
+      "40 bags issued;60 remain with exact AED1500 carrying value",
+      "Project issue recognizes AED1000 cost without a second cash outflow",
+      "Stock quantity/value and canonical Inventory GL reconcile; receipt/issue history retained",
+      "Identical issue submission replays one immutable journal/movement",
+      "Changed same-key stock intent rejected",
+      "Negative available stock prevented before posting",
+      "Viewer cannot write draft stock documents",
+      "Cross-Company Inventory read denied",
+      "Master/configuration changes require Accounting Admin",
+      "Browser direct stock mutation denied",
+      "Posted stock ledger immutable even under trusted DML",
+      "Warehouse transfer moves ten bags/value once without new GL cost/payment",
+      "Material return restores five bags at original issued carrying cost",
+      "Return cannot exceed remaining original issue quantity",
+      "Physical count preserves observed53 separately from book55 and posts no journal",
+      "Stock adjustment requires existing Admin correction authority",
+      "Approved count adjustment records two-bag loss and exact variance journal",
+      "Consumed receipt reversal blocked by later stock valuation",
+      "Concurrent/stale reviewed valuation cannot post against changed stock",
+      "Historical invoice link creates history only, not stock, asset, payable, cash or cost",
+      "Unverified historical invoice cannot post stock valuation",
+      "Existing cost capitalization changes neither payment history nor original posted journal",
+      "Approved capitalization removes already recognized cost exactly once before stock consumption",
+      "Existing posted expense cannot capitalize twice",
+      "Existing Expense reversal/reclassification cannot bypass live inventory capitalization",
+      "GRNI receipt matches existing invoice without another stock asset or payment",
+      "Receipt invoice matching leaves stock asset equal to canonical GL",
+      "Receipt cannot finalize invoice match twice",
+      "Authorized physically counted and independently valued unrecognized opening stock supported",
+      "Existing stock cannot receive a duplicate opening",
+      "Used material unit/conversion cannot be silently rewritten",
+      "Approved alternative UOM converts exactly to fifty base bags",
+      "Ten partial returns preserve cumulative original carrying cost without rounding over-recognition",
+      "Dependency-ordered issue/receipt corrections unwind through exact reversals without trapping older documents",
+      "Existing Project cost report includes canonical stock consumption, invoice matching and original document references",
+      "Database protects used base-unit history against trusted direct mutation",
+      "All six tenant-owned stock tables force RLS and deny direct/anonymous writes",
+      "Inventory commands/private helpers have fixed search paths and minimal EXECUTE grants",
+      "en stock, valuation, history and purchase-reference exports align exactly",
+      "ar stock, valuation, history and purchase-reference exports align exactly",
+      "Every stock document and full canonical GL reconcile with balanced journals",
+      "Closed accounting period blocks new inventory financial recognition"
+    ],
+    "hosted": false
+  },
+  "integration": {
+    "status": "PASS",
+    "checks": [
+      "Existing Supplier settlement pays the received/matched invoice exactly once",
+      "Existing Supplier payment creates neither another inventory asset nor another Project cost",
+      "Approved stock gain uses supported existing average; no arbitrary valuation",
+      "General Company consumption uses existing Company expense mapping, separate from Project costs",
+      "Project-site warehouse consumption cannot silently omit its Project",
+      "Foreign Company material UUID cannot be used in receiving or valuation",
+      "Inactive material blocks new receipts while preserving versioned master audit",
+      "Integrated AP/stock/Company consumption preserves exact Inventory GL reconciliation",
+      "Stock capitalizes existing invoice net cost while preserving canonical Input VAT exactly",
+      "Tax-bearing Supplier invoice settles gross once through the existing payment engine, without duplicating stock or tax",
+      "UUID business identities normalize before hashing and immutable stock/source storage",
+      "Changing UUID letter case cannot capitalize one invoice twice",
+      "Normalized inventory dependency prevents source reversal/refund with alternate UUID casing",
+      "Return quantity bounds cannot be bypassed by uppercase/lowercase original IDs",
+      "Document callers cannot inject configured GL accounts or financial journal inputs",
+      "One captured purchase source cannot receive stock twice under another reference or UUID casing",
+      "Stock Procurement read does not disclose underlying financial-source or Expense pickers"
+    ],
+    "hosted": false
+  },
+  "concurrency": {
+    "status": "PASS",
+    "checks": [
+      "Concurrent duplicate issue finalization returns one journal and one stock consumption",
+      "Competing issues cannot overdraw available stock or consume a stale valuation",
+      "Concurrent source reversal cannot refund cash or rewrite a capitalized inventory cost",
+      "A physical count adjustment cannot silently override stock moved after its count/review",
+      "Concurrent accrued-receipt invoice retries create one canonical AP invoice/match without transient committed duplicate cost",
+      "Native concurrent stock value reconciles exactly to canonical inventory GL"
+    ],
+    "hosted": false
+  },
+  "browser": {
+    "status": "PASS",
+    "checks": [
+      "Real receipt UI saves, reviews and posts100 bags through canonical command",
+      "Uncertain dispatched posting cannot discard its frozen request",
+      "UI40-bag issue with lost response/reload posts once;60 bags remain",
+      "Balance UI distinguishes book quantity and exact value from unverified physical count",
+      "Actual Inventory valuation/movement XLSX downloads",
+      "PDF stock audit preserves book/physical distinction and original movement evidence",
+      "UI warehouse transfer moves stock/value without new cost or cash journal",
+      "UI physical count records48 separately without silently overwriting book50",
+      "UI approved count adjustment posts exact stock/GL variance",
+      "Material profile shows issues, count status and warehouse balance",
+      "en Inventory workspace fits mobile with RTL/LTR",
+      "ar Inventory workspace fits mobile with RTL/LTR",
+      "Viewer sees authorized stock data without posting controls",
+      "No runtime errors or external/hosted browser requests"
+    ],
+    "errors": [],
+    "external": [],
+    "hosted": false
+  },
+  "masters_browser": {
+    "status": "PASS",
+    "checks": [
+      "Actual master UI creates reusable category/base/alternative units and exact reorder quantity",
+      "Master edit preserves approved conversions and records a new audited version",
+      "Historical purchase picker links the captured source without reimporting, changing or recognizing it",
+      "Actual material status action uses the authorized audited command",
+      "Actual warehouse UI supports optional Project association without inventing GL accounts",
+      "Existing sidebar exposes all eight coherent Inventory sections",
+      "Master/purchase/warehouse browser operations have no runtime errors"
+    ],
+    "errors": [],
+    "hosted": false
+  },
+  "session_browser": {
+    "status": "PASS",
+    "checks": [
+      "Role/session context change during authorization read prevents stale financial dispatch",
+      "Suppressed stale request leaves material, stock, accounting and audit events unchanged"
+    ],
+    "hosted": false
+  },
+  "counts": {
+    "database_and_integration": 71,
+    "native_concurrency": 6,
+    "browser_total": 28
+  },
+  "preflight": {
+    "status": "PASS",
+    "at": "2026-11-06T13:26:07.438613+00:00",
+    "project": "eqnzueginpkskbnqvgoc",
+    "canonical_applied": 87,
+    "local_canonical": 88,
+    "only_pending": "20261106150000_inventory_materials_v1.sql",
+    "sha256": "683eb8051d6e33e2eca1b470898197f7fc910b1e2236326cd8f855db94f4f63a",
+    "remote_main": "f30ee525ec790c75d0fcc360a58c9b58d728731b",
+    "read_only": true,
+    "applied": false,
+    "business_commands_invoked": false,
+    "live83_87": "Product Owner reports LIVE; no fresh Vercel acceptance claimed"
+  },
+  "migration": {
+    "number": 88,
+    "file": "supabase/migrations/20261106150000_inventory_materials_v1.sql",
+    "sha256": "683eb8051d6e33e2eca1b470898197f7fc910b1e2236326cd8f855db94f4f63a",
+    "status": "PREPARED_NOT_APPLIED"
+  },
+  "valuation": {
+    "method": "MOVING_AVERAGE_LOCATION",
+    "money": "BIGINT minor units",
+    "quantities": "BIGINT base micro-units",
+    "alternative_units": "Exact positive integer ratios",
+    "source": "https://www.ifrs.org/issued-standards/list-of-standards/ias-2-inventories/",
+    "scope": "Cost subledger only; not full IAS2/NRV/tax/financial-statement certification"
+  },
+  "build": {
+    "status": "PASS",
+    "warning": "Existing bundle-size advisory"
+  },
+  "lint": {
+    "status": "PASS_WITH_WARNINGS",
+    "errors": 0,
+    "warnings": 3,
+    "scope": "Changed application files and Inventory test harnesses",
+    "limitations": "Three new component lifecycle-pattern warnings; no lint errors"
+  },
+  "exports": {
+    "xlsx": "Actual Chromium download ZIP/XML inspected for Inventory GL, original receipt/issue references and book/physical warning",
+    "pdf": "Actual report dialog verified"
+  },
+  "environment": {
+    "real_Maker_mutations": false,
+    "hosted_schema_changes": false,
+    "hosted_business_commands": false,
+    "pushed": false,
+    "deployed": false,
+    "restore_USB": "DEFERRED_NOT_REOPENED"
+  },
+  "lifecycle": {
+    "local_supported_business_security_database_testing_documentation": "VERIFIED",
+    "hosted88_frontend_publication_genuine_operator_acceptance": "DEFERRED",
+    "hosted_financial_execution": "NOT_APPLICABLE"
+  },
+  "scope_limits": [
+    "One material/location event per document",
+    "Exact whole current-period unsplit existing Expense capitalization/matching; existing canonical VAT preserved",
+    "Historical references do not establish remaining stock; previously recognized prior-period cost cutover blocked",
+    "Existing closed-period/Project policy preserved",
+    "Supplier returns/credit notes, partial/multi-material matching, landed costs, NRV, reservations, lots/serials and other valuation formulas remain advanced scope",
+    "Existing Supplier invoices/payments used; no advanced Procurement engine rebuilt",
+    "Company snapshot and Company-level stock lock; high-volume optimization remains future work"
+  ],
+  "release": {
+    "directory": "/tmp/narvo-inventory-v1-release-20261106",
+    "base": "f30ee525ec790c75d0fcc360a58c9b58d728731b",
+    "isolated": true,
+    "activation_and_publication_pending": true
+  },
+  "release_checks": {
+    "requirement_families_preserved": 35,
+    "diff_check": "PASS",
+    "selected_file_secret_pattern": "PASS",
+    "canonical_migrations1_87_unchanged": "PASS",
+    "production_import_boundary": "PASS",
+    "production_import_dependencies": 263,
+    "selected_root_conflicts": [],
+    "isolated_parent": "f30ee525ec790c75d0fcc360a58c9b58d728731b"
+  },
+  "next": "Remaining Maker operational acceptance (Employee/Attendance/Payroll, reports, permissions); then Green/Villa13/Al Mazraa onboarding; then full original commercial roadmap",
+  "invoice": {
+    "status": "PASS",
+    "checks": [
+      "Receipt invoice uses the existing canonical Supplier invoice document and journal",
+      "Atomic invoice/match adds no second cost, quantity, inventory asset or cash outflow at commit",
+      "Actual existing tax command recognizes correct net/VAT/gross AP once",
+      "Lost atomic invoice response retries its one invoice/match result",
+      "Unpaid atomic invoice reversal unwinds invoice/VAT/matching together with no stock or cash rewrite",
+      "Existing Supplier payment settles atomic invoice gross once without Project cost duplication",
+      "Paid-invoice dependency rejects and rolls back the entire inventory/invoice reversal",
+      "Atomic invoice creation/correction preserves stock-to-GL reconciliation",
+      "en invoice audit exports align journal and invoice/reversal evidence",
+      "ar invoice audit exports align journal and invoice/reversal evidence"
+    ],
+    "hosted": false
+  },
+  "invoice_browser": {
+    "status": "PASS",
+    "checks": [
+      "Actual invoice UI creates and matches the canonical Supplier invoice atomically",
+      "UI invoice after40bag consumption adds no second Project cost or stock",
+      "Invoice UI exposes canonical invoice/journal and existing Supplier settlement trace",
+      "Arabic invoice actions and audit references render",
+      "Atomic invoice browser flow has no runtime errors"
+    ],
+    "errors": [],
+    "hosted": false
+  },
+  "accounting_invoice": "New accrued-receipt invoice uses existing Supplier invoice/VAT/AP command plus GRNI match atomically; unpaid reversal unwinds both journals; existing paid-invoice dependency rolls back entire correction",
+  "normalization": "Business UUIDs canonicalized before hashing/storage; source/Expense/return identity and dependency replay cannot be bypassed with casing; one original source cannot create duplicate receipt"
+}
