@@ -1,0 +1,191 @@
+{
+  "database": {
+    "status": "PASS",
+    "checks": [
+      "Canonical registration → dated basic/allowance terms → explicit attendance → calculated/reviewed payroll is exact",
+      "All31 explicit attendance days retained; unknown days were never assumed worked",
+      "Source-linked employee advance delegates to existing HR receivable without salary expense",
+      "Ordinary and source-linked advances share the existing approved recovery calculation",
+      "Accountant prepares/reviews but cannot bypass Accounting Admin payroll posting",
+      "Posting retry reuses one canonical payroll and recovery set",
+      "Accrual charges34100 earned cost once;1000 recovery reduces receivables/payable, not cost or cash",
+      "Each recovery debit uses the authoritative entitlement Project, matching accrual and salary settlement",
+      "Accountant partial salary payment retries without a second cash outflow",
+      "Overpayment cannot consume recovered or already paid entitlement",
+      "Full payment settles exact net cash once without duplicating salary expenses",
+      "Fully paid recovered salary leaves no false Project or unallocated salary payable",
+      "Existing Project cost report recognizes full earned labor cost, excluding recovery and payments",
+      "Existing complete-role Treasury report reconciles to actual GL after payroll payment",
+      "Employee statement by Project settles salary payable exactly",
+      "Both advance subledgers retain exact500 remaining after payroll recovery",
+      "en payroll register separates earned cost, advance recovery and net cash",
+      "en attendance/advance/payslip/Project/Treasury/employee statement report columns align",
+      "ar payroll register separates earned cost, advance recovery and net cash",
+      "ar attendance/advance/payslip/Project/Treasury/employee statement report columns align",
+      "Viewer/foreign/Procurement/System roles cannot read confidential HR or payroll snapshots",
+      "Viewer reporting remains read-only, excludes confidential payroll and explicitly retains partial-role coverage",
+      "Accountant cannot change Admin-approved recovery agreements",
+      "Live salary payments block payroll reversal and recovery restoration",
+      "Dependency-ordered payment/payroll reversals restore both advances and exact cost/cash without rewriting history",
+      "Every lifecycle/recovery/reversal journal balances",
+      "Forward recovery helper stays private; no new browser financial command or permission"
+    ],
+    "hosted": false
+  },
+  "reports": {
+    "status": "PASS",
+    "checks": [
+      "Zero-earned employee retains a zero entitlement, no recovery, and does not block valid Company payroll",
+      "Payroll accrual/recovery leaves Contract certification, advances and settlement register unchanged",
+      "Payroll accrual/recovery does not recreate Custody funding, expenses or returns",
+      "en existing Contract/Custody financial reports retain aligned auditable columns",
+      "en legacy Payroll Lite keeps its original13column days/net register",
+      "ar existing Contract/Custody financial reports retain aligned auditable columns",
+      "ar legacy Payroll Lite keeps its original13column days/net register",
+      "Additive correction retains private invoker/fixed search-path/no service-role execution"
+    ],
+    "hosted": false
+  },
+  "concurrency": {
+    "status": "PASS",
+    "checks": [
+      "Concurrent same-key payroll accrual posts one run and one recovery",
+      "Concurrent identical salary payment produces one actual Treasury movement",
+      "Competing payments cannot overpay cash entitlement after advance recovery",
+      "One concurrent recovery retains the exact authoritative Project dimension",
+      "Concurrent partial/full settlement leaves no false Project or unallocated payroll liability"
+    ],
+    "hosted": false
+  },
+  "browser": {
+    "status": "PASS",
+    "checks": [
+      "Definitive stale attendance rejection unlocks correction without discarding an uncertain financial result",
+      "Unconfirmed dispatched HR request cannot be cleared into a second financial intent",
+      "Lost response/reload retries one frozen attendance version exactly once",
+      "Attendance hands off to the existing Employee management route",
+      "Operational payroll explains that approved recovery must not be entered twice",
+      "Actual approval UI posts one canonical payroll and recovery",
+      "en actual register Excel/PDF separates earned cost, recovery and net cash",
+      "ar actual register Excel/PDF separates earned cost, recovery and net cash",
+      "Advance exports distinguish actual recoveries/current balances from proposed plans and historical attendance month",
+      "en affected HR workspace fits mobile RTL/LTR",
+      "ar affected HR workspace fits mobile RTL/LTR",
+      "Accountant can report balances without Admin advance/terms mutation controls",
+      "Accountant Company journal Excel/PDF includes the canonical recovery accounting trace",
+      "Management Viewer keeps the salary-free Employee directory with no compensation or mutation UI",
+      "Viewer navigation makes no confidential HR/payroll requests",
+      "Affected actual UI has no runtime errors or external/hosted requests"
+    ],
+    "errors": [],
+    "external": [],
+    "hosted": false
+  },
+  "exports": {
+    "status": "PASS",
+    "checks": [
+      "en downloaded15column workbook has exact earned/recovery/cash values and safe literal cells",
+      "en actual Chromium PDF generated from bilingual register",
+      "ar downloaded15column workbook has exact earned/recovery/cash values and safe literal cells",
+      "ar actual Chromium PDF generated from bilingual register",
+      "advances.xlsx actual downloaded report contains intended accounting trace and no formulas",
+      "company-journals.xlsx actual downloaded report contains intended accounting trace and no formulas"
+    ],
+    "hosted": false
+  },
+  "counts": {
+    "database_accounting_reports": 35,
+    "native_concurrency": 5,
+    "actual_browser": 16,
+    "actual_export_artifacts": 6
+  },
+  "preflight": {
+    "status": "PASS",
+    "at": "2026-11-06T14:48:17.360774+00:00",
+    "project": "eqnzueginpkskbnqvgoc",
+    "canonical_applied": 88,
+    "local_canonical": 89,
+    "only_pending": "20261106160000_payroll_recovery_project_dimension.sql",
+    "sha256": "a003ec9946b6631eafa8d6f813c654636ff8eaf90579769a2a1efb5ab37bd80d",
+    "remote_main": "d321f3fe88d938f2129382dce0cac9e056f4b4f3",
+    "read_only": true,
+    "applied": false,
+    "business_commands_invoked": false,
+    "affected_history_counts": {
+      "recoveries": 0,
+      "project_dimension_mismatches": 0
+    },
+    "live83_88": "Product Owner reports LIVE; no fresh Vercel acceptance claimed"
+  },
+  "migration": {
+    "number": 89,
+    "file": "supabase/migrations/20261106160000_payroll_recovery_project_dimension.sql",
+    "sha256": "a003ec9946b6631eafa8d6f813c654636ff8eaf90579769a2a1efb5ab37bd80d",
+    "status": "PREPARED_NOT_APPLIED",
+    "scope": "One private helper; no data migration, new table, public command or permission grant"
+  },
+  "demonstrated_defect": {
+    "status": "CONFIRMED_DEFECT",
+    "migration": 88,
+    "case": "Fully settled employee leaves offsetting Project/null Salary payable of500 minor due to recovery missing entitlement Project",
+    "balances": [
+      {
+        "project_id": "ed030005-0000-4000-8000-000000000100",
+        "balance_minor": "-500"
+      },
+      {
+        "project_id": null,
+        "balance_minor": "500"
+      }
+    ]
+  },
+  "fix": "Recovery Salary payable debit uses canonical entitlement Project; advance credit retains its original Party/account",
+  "release": {
+    "directory": "/tmp/narvo-maker-operational-release-20261106",
+    "branch": "release/maker-operational-completion",
+    "base": "d321f3fe88d938f2129382dce0cac9e056f4b4f3",
+    "isolated": true,
+    "activation_and_publication_pending": true
+  },
+  "environment": {
+    "real_Maker_mutations": false,
+    "hosted_schema_changes": false,
+    "hosted_business_commands": false,
+    "pushed": false,
+    "deployed": false,
+    "restore_USB": "DEFERRED_NOT_REOPENED"
+  },
+  "lifecycle": {
+    "supported_local_business_security_database_testing_documentation": "VERIFIED",
+    "hosted89_frontend_publication_genuine_operator_acceptance": "DEFERRED",
+    "hosted_business_execution": "NOT_APPLICABLE"
+  },
+  "build": {
+    "status": "PASS",
+    "warning": "Existing bundle-size advisory"
+  },
+  "lint": {
+    "status": "PASS",
+    "errors": 0,
+    "warnings": 0,
+    "scope": "Changed application files and focused test harnesses"
+  },
+  "release_checks": {
+    "diff_check": "PASS",
+    "secret_pattern": "PASS",
+    "migrations1_88_unchanged": "PASS",
+    "requirement_families_preserved": 35,
+    "production_import_boundary": "PASS",
+    "production_dependencies": 263,
+    "selected_root_conflicts": [],
+    "unrelated_root_baseline_preserved_before_sync": true
+  },
+  "supplementary": "Advance report resolves inactive/non-attending employee names through authoritative Company masters; pure-function check PASS",
+  "limits": [
+    "Existing Viewer financial reports remain explicitly role-limited and exclude confidential payroll; no new aggregate salary disclosure",
+    "Approved operational scheduled-minute scope only; advanced legal HR/WPS, multi-shift/delegation and statutory policies remain open",
+    "Complete statements/fiscal close/WIP/profitability and final security/operations/DR remain original roadmap",
+    "Real Maker policy/employment/attendance/opening/source evidence and authenticated operator acceptance were not fabricated or entered"
+  ],
+  "next": "After release and genuine Maker operational acceptance: Green/Villa13/Al Mazraa onboarding through appropriate Super Admin entity model; then all remaining original commercial requirements"
+}

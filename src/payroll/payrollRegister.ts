@@ -22,20 +22,20 @@ export function makeRegister(raw:unknown,context:RegisterContext,source:Register
  }
  if(!draft.period||draft.period.month!==context.month||!Number.isInteger(draft.period.version)||draft.rows.some(r=>typeof r.included!=='boolean'))throw Error('Invalid month');
  const explicit=draft.rows.some(r=>r.included&&r.hr_basis?.mode==='EXPLICIT_MINUTES');
- const totals=Array<bigint>(13).fill(0n);
+ const totals=Array<bigint>(explicit?15:13).fill(0n);
  const duration=(n:bigint)=>`${n/60n}:${String(n%60n).padStart(2,'0')}`;
  const rows=draft.rows.filter(r=>r.included).map(r=>{
   const text=[r.work_station,r.payroll_id,r.payroll_type,r.employee_name,r.profession];
   if(text.some(v=>typeof v!=='string'))throw Error('Invalid register text');
   const worked=BigInt(explicit?r.hr_basis!.worked_minutes:r.calendar_days*2-r.absence_half_units),absence=BigInt(explicit?r.hr_basis!.unpaid_minutes:r.absence_half_units);
-  const deduction=(BigInt(r.deductions_minor)+BigInt(r.hr_basis?.recovery_minor??'0')).toString(),cash=(BigInt(r.net_salary_minor)-BigInt(r.hr_basis?.recovery_minor??'0')).toString();
-  const amounts:[[number,string],[number,string],[number,string],[number,string],[number,string]]=[[5,r.monthly_salary_minor],[8,r.gross_salary_minor],[9,r.additions_minor],[11,deduction],[12,cash]];
+  const recovery=r.hr_basis?.recovery_minor??'0',deduction=explicit?r.deductions_minor:(BigInt(r.deductions_minor)+BigInt(recovery)).toString(),cash=(BigInt(r.net_salary_minor)-BigInt(r.hr_basis?.recovery_minor??'0')).toString();
+  const amounts:[number,string][]=[[5,r.monthly_salary_minor],[8,r.gross_salary_minor],[9,r.additions_minor],[11,deduction],[explicit?14:12,cash]];if(explicit)amounts.push([12,r.net_salary_minor],[13,recovery]);
   for(const [i,v] of amounts)totals[i]+=BigInt(v);totals[7]+=worked;totals[10]+=absence;
-  return [...text,displayPayrollMoney(r.monthly_salary_minor),explicit?'—':displayDailySalary(r.monthly_salary_minor,r.calendar_days),explicit?duration(worked):days(worked),displayPayrollMoney(r.gross_salary_minor),displayPayrollMoney(r.additions_minor),explicit?duration(absence):days(absence),displayPayrollMoney(deduction),displayPayrollMoney(cash)];
+  return [...text,displayPayrollMoney(r.monthly_salary_minor),explicit?'—':displayDailySalary(r.monthly_salary_minor,r.calendar_days),explicit?duration(worked):days(worked),displayPayrollMoney(r.gross_salary_minor),displayPayrollMoney(r.additions_minor),explicit?duration(absence):days(absence),displayPayrollMoney(deduction),...(explicit?[displayPayrollMoney(r.net_salary_minor),displayPayrollMoney(recovery)]:[]),displayPayrollMoney(cash)];
  });
  const t=registerText[locale],status=`${source.kind==='DRAFT'?t.draft:t.posted}${reversed?` · ${t.reversed}`:''}`;
- const total=totals.map((n,i)=>[5,8,9,11,12].includes(i)?money(n):[7,10].includes(i)?explicit?duration(n):days(n):'');total[0]=t.total;
+ const total=totals.map((n,i)=>(explicit?[5,8,9,11,12,13,14]:[5,8,9,11,12]).includes(i)?money(n):[7,10].includes(i)?explicit?duration(n):days(n):'');total[0]=t.total;
  const safe=context.companyName.replace(/[^\p{L}\p{N}_-]+/gu,'-').slice(0,60)||'Company';
- const columns=[...t.columns];if(explicit){columns[5]=locale==='ar'?'أساس راتب الفترة':'Period salary basis';columns[6]='—';columns[7]=locale==='ar'?'عمل ساعة:دقيقة':'Worked h:mm';columns[10]=locale==='ar'?'غير مدفوع ساعة:دقيقة':'Unpaid h:mm';columns[11]=locale==='ar'?'تخفيضات واسترداد سلف':'Reductions and advance recovery';columns[12]=locale==='ar'?'صافي النقد المستحق':'Net cash entitlement';}
+ const columns=[...t.columns];if(explicit){columns[5]=locale==='ar'?'أساس راتب الفترة':'Period salary basis';columns[6]='—';columns[7]=locale==='ar'?'عمل ساعة:دقيقة':'Worked h:mm';columns[10]=locale==='ar'?'غير مدفوع ساعة:دقيقة':'Unpaid h:mm';columns[11]=locale==='ar'?'تخفيضات الاستحقاق':'Entitlement reductions';columns.splice(12,1,...(locale==='ar'?['تكلفة الراتب المستحق','استرداد السلفة','صافي النقد المستحق']:['Earned payroll cost','Advance recovery','Net cash entitlement']));}
  return {columns,note:explicit?(locale==='ar'?'الاستحقاق بحسب سياسة دقائق الجدول المعتمدة؛ استرداد السلف تسوية ذمة منفصلة لا يخفض تكلفة الراتب.':'Approved scheduled-minute policy; advance recovery settles a separate receivable and does not reduce earned payroll cost.'):t.note,company:context.companyName,month:context.month.slice(0,7),status,id:source.id,locale,rows,totals:total,filename:`${safe}-Payroll-${context.month.slice(0,7)}-${source.kind}${reversed?'-REVERSED':''}.xlsx`};
 }
