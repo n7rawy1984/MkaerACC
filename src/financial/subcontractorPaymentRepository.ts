@@ -3,7 +3,7 @@ import type { Database } from "../types/database.generated";
 
 export interface SubcontractorPaymentRead {
   id: string; company_id: string; payment_reference: string; payment_date: string; project_id: string; subcontractor_id: string; subcontract_id: string;
-  treasury_account_id: string; total_amount_minor: string; payment_method: Database["public"]["Enums"]["payment_method"];
+  treasury_account_id: string|null; custodian_id?:string|null;custody_account_id?:string|null; total_amount_minor: string; payment_method: Database["public"]["Enums"]["payment_method"];
   external_reference: string | null; notes: string | null; status: "DRAFT" | "POSTED" | "REVERSED";
   posted_journal_entry_id: string | null; reversal_journal_entry_id: string | null; created_at: string; created_by: string | null; posted_at: string | null; posted_by: string | null; reversed_at: string | null; reversed_by: string | null; reversal_reason: string | null;
 }
@@ -19,7 +19,7 @@ const exact = (value: unknown) => {
   if (typeof value !== "string" || !/^\d+$/.test(value) || BigInt(value) > 9223372036854775807n) throw new Error("Invalid exact amount");
   return value;
 };
-const paymentProjection = "id,company_id,payment_reference,payment_date,project_id,subcontractor_id,subcontract_id,treasury_account_id,total_amount_minor::text,payment_method,external_reference,notes,status,posted_journal_entry_id,reversal_journal_entry_id,created_at,created_by,posted_at,posted_by,reversed_at,reversed_by,reversal_reason";
+const paymentProjection = "id,company_id,payment_reference,payment_date,project_id,subcontractor_id,subcontract_id,treasury_account_id,custodian_id,custody_account_id,total_amount_minor::text,payment_method,external_reference,notes,status,posted_journal_entry_id,reversal_journal_entry_id,created_at,created_by,posted_at,posted_by,reversed_at,reversed_by,reversal_reason";
 const allocationProjection = "id,company_id,subcontractor_payment_id,subcontractor_certificate_id,allocated_amount_minor::text";
 const expenseProjection = "id,company_id,certificate_reference,certificate_date,project_id,subcontractor_id,subcontract_id,payable_amount_minor::text";
 
@@ -48,7 +48,7 @@ export async function readSubcontractorPayments(client: SupabaseClient<Database>
     .order("certificate_date", { ascending: true }).order("id", { ascending: true }).range(from, to));
   if ([...payments, ...allocations, ...subcontractor_certificates].some(row => row.company_id !== companyId)) throw new Error("Invalid Subcontractor Payment scope");
   const mappedPayments = payments.map(row => {
-    if (!uuid.test(row.id) || !uuid.test(row.project_id) || !uuid.test(row.subcontractor_id) || !uuid.test(row.subcontract_id) || !uuid.test(row.treasury_account_id) || !["DRAFT", "POSTED", "REVERSED"].includes(row.status)) throw new Error("Invalid Subcontractor Payment row");
+    if (!uuid.test(row.id) || !uuid.test(row.project_id) || !uuid.test(row.subcontractor_id) || !uuid.test(row.subcontract_id) || !((uuid.test(row.treasury_account_id)&&!row.custodian_id&&!row.custody_account_id)||(row.treasury_account_id===null&&uuid.test(row.custodian_id)&&uuid.test(row.custody_account_id))) || !["DRAFT", "POSTED", "REVERSED"].includes(row.status)) throw new Error("Invalid Subcontractor Payment row");
     return { ...row, total_amount_minor: exact(row.total_amount_minor) } as SubcontractorPaymentRead;
   });
   const status = new Map(mappedPayments.map(row => [row.id, row.status]));

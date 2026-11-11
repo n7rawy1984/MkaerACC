@@ -2145,7 +2145,9 @@ export type Database = {
           status: Database["public"]["Enums"]["expense_status"]
           subcontract_id: string
           subcontractor_id: string
-          treasury_account_id: string
+          treasury_account_id: string | null
+          custodian_id: string | null
+          custody_account_id: string | null
           updated_at: string
           updated_by: string
         }
@@ -2170,7 +2172,9 @@ export type Database = {
           status?: Database["public"]["Enums"]["expense_status"]
           subcontract_id: string
           subcontractor_id: string
-          treasury_account_id: string
+          treasury_account_id: string | null
+          custodian_id?: string | null
+          custody_account_id?: string | null
           updated_at?: string
           updated_by: string
         }
@@ -2195,7 +2199,9 @@ export type Database = {
           status?: Database["public"]["Enums"]["expense_status"]
           subcontract_id?: string
           subcontractor_id?: string
-          treasury_account_id?: string
+          treasury_account_id?: string | null
+          custodian_id?: string | null
+          custody_account_id?: string | null
           updated_at?: string
           updated_by?: string
         }
@@ -2549,7 +2555,9 @@ export type Database = {
           subcontract_id: string
           subcontractor_id: string
           total_amount_minor: number
-          treasury_account_id: string
+          treasury_account_id: string | null
+          custodian_id: string | null
+          custody_account_id: string | null
           updated_at: string
           updated_by: string
         }
@@ -2575,7 +2583,9 @@ export type Database = {
           subcontract_id: string
           subcontractor_id: string
           total_amount_minor: number
-          treasury_account_id: string
+          treasury_account_id: string | null
+          custodian_id?: string | null
+          custody_account_id?: string | null
           updated_at?: string
           updated_by: string
         }
@@ -2601,7 +2611,9 @@ export type Database = {
           subcontract_id?: string
           subcontractor_id?: string
           total_amount_minor?: number
-          treasury_account_id?: string
+          treasury_account_id?: string | null
+          custodian_id?: string | null
+          custody_account_id?: string | null
           updated_at?: string
           updated_by?: string
         }

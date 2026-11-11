@@ -3,7 +3,7 @@ import type { Database } from "../types/database.generated";
 
 export interface SubcontractorAdvanceRead {
   id: string; company_id: string; advance_reference: string; advance_date: string;
-  project_id: string; subcontractor_id: string; subcontract_id: string; treasury_account_id: string;
+  project_id: string; subcontractor_id: string; subcontract_id: string; treasury_account_id: string|null; custodian_id?:string|null;custody_account_id?:string|null;
   amount_minor: string; payment_method: Database["public"]["Enums"]["payment_method"];
   external_reference: string | null; notes: string | null; status: "DRAFT" | "POSTED" | "REVERSED";
   posted_journal_entry_id: string | null; reversal_journal_entry_id: string | null;
@@ -11,10 +11,10 @@ export interface SubcontractorAdvanceRead {
   reversed_at: string | null; reversed_by: string | null;
 }
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-const projection = "id,company_id,advance_reference,advance_date,project_id,subcontractor_id,subcontract_id,treasury_account_id,amount_minor::text,payment_method,external_reference,notes,status,posted_journal_entry_id,reversal_journal_entry_id,created_at,created_by,posted_at,posted_by,reversed_at,reversed_by";
+const projection = "id,company_id,advance_reference,advance_date,project_id,subcontractor_id,subcontract_id,treasury_account_id,custodian_id,custody_account_id,amount_minor::text,payment_method,external_reference,notes,status,posted_journal_entry_id,reversal_journal_entry_id,created_at,created_by,posted_at,posted_by,reversed_at,reversed_by";
 function map(row: any): SubcontractorAdvanceRead {
   if (!uuid.test(row.id) || !uuid.test(row.company_id) || !uuid.test(row.project_id) || !uuid.test(row.subcontractor_id)
-    || !uuid.test(row.subcontract_id) || !uuid.test(row.treasury_account_id) || typeof row.amount_minor !== "string"
+    || !uuid.test(row.subcontract_id) || !((uuid.test(row.treasury_account_id)&&!row.custodian_id&&!row.custody_account_id)||(row.treasury_account_id===null&&uuid.test(row.custodian_id)&&uuid.test(row.custody_account_id))) || typeof row.amount_minor !== "string"
     || !/^\d+$/.test(row.amount_minor) || BigInt(row.amount_minor) > 9000000000000000n
     || !["DRAFT", "POSTED", "REVERSED"].includes(row.status)) throw new Error("Invalid Subcontractor Advance row");
   return row as SubcontractorAdvanceRead;
