@@ -1,5 +1,5 @@
 {
-  "status": "FINAL_OWNER_EQUITY90_PREPARED_NOT_APPLIED",
+  "status": "FINALIZED90_APPLIED_12_REAL_OWNER_EQUITY_RECEIPTS_POSTED_RECONCILED",
   "production_baseline": "044fbc6a82f597f818c4e19fcd57dea9c1423bbc",
   "production_baseline_owner_confirmed_live": true,
   "superseded_treasury_only_release": "f86e77716319f034badbb5e4258d6b51edd89918",
@@ -7,7 +7,7 @@
     "number": 90,
     "file": "supabase/migrations/20261111120000_custody_funding_drafts.sql",
     "sha256": "04569a7efda790ace6f0a476d0712e7f5e391a709797827e17874eeaa18dfea7",
-    "applied": false,
+    "applied": true,
     "linked_dry_run_only90": true,
     "previous_hash_superseded": true
   },
@@ -18,28 +18,47 @@
     "repayable": false,
     "treasury_transit": false,
     "company_revenue": false,
-    "actual_receipt_posts": 0,
-    "actual_receipt_drafts": 0,
-    "actual_journals": []
+    "actual_receipt_posts": 12,
+    "actual_receipt_drafts": 12,
+    "actual_current_draft_state": "ALL12_POSTED",
+    "actual_journal_count": 12,
+    "actual_posted_minor": "39096020",
+    "exact_journal_ids": "Private ignored docs/barq-owner-posted-journals.csv.local",
+    "unposted_owner_receipts": 0
   },
   "actual_setup_and_preservation": {
     "status": "PASS",
-    "captured": "2026-11-11T11:57:08.995Z",
-    "sources_preserved": 370,
-    "prior_drafts_preserved": 14,
-    "source_links": 14,
-    "existing_financial_tables_unchanged": true,
-    "existing_master_rows_unchanged": true,
-    "new_owner_party": 1,
-    "owner_legal_name_verification": "PENDING",
-    "new_dedicated_equity_account": 1,
-    "new_equity_configuration": 1,
-    "real_journals": [],
-    "posted_minor": "0",
-    "treasury_movement_minor": "0",
-    "custody_movement_minor": "0",
-    "payroll_deferred": true,
-    "no_registration_or_ownership_percentage_invented": true
+    "captured": "2026-11-11T12:18:52.840Z",
+    "migration90": "APPLIED_APPROVED_FINAL_HASH",
+    "owner_receipts_saved_reviewed_approved_posted": 12,
+    "lifecycle_events": 48,
+    "posted_minor": "39096020",
+    "journal_count": 12,
+    "journal_line_count": 24,
+    "total_debit_minor": "39096020",
+    "total_credit_minor": "39096020",
+    "custody_receivable_minor": "39096020",
+    "owner_contributions_equity_credit_minor": "39096020",
+    "treasury_change_minor": "0",
+    "project_cost_change_minor": "0",
+    "payroll_change_minor": "0",
+    "existing_sources_preserved": 370,
+    "existing_source_review_notes_preserved": 330,
+    "existing_incomplete_drafts_preserved": 14,
+    "duplicate_receipt_documents": 0,
+    "unposted_owner_receipts": 0,
+    "new_nonpayroll_expenses_posted": 0,
+    "new_contractor_payments_posted": 0,
+    "new_payroll_postings": 0,
+    "physical_cash": "UNVERIFIED",
+    "owner_name_verification": "PENDING_LEGAL_DOCUMENT",
+    "monthly_posted_funding_minor": {
+      "2026-08": 18400000,
+      "2026-09": 12098120,
+      "2026-10": 8117900,
+      "2026-11": 480000
+    },
+    "exact_journal_ids_private_only": true
   },
   "new_tests": {
     "database": {
@@ -254,5 +273,24 @@
     "access": "FULL",
     "basis": "Existing canonical legacy eligibility; no entitlement/configuration bypass"
   },
-  "migration_activation_authorization": "REQUIRED_FOR_FINALIZED_HASH"
+  "migration_activation_authorization": "EXPLICIT_OWNER_FINALIZED_HASH_AUTHORIZED",
+  "activation_authorization": "GRANTED_AND_EXECUTED",
+  "actual_canonical_financial_commands": 48,
+  "frontend_release_status": "PREPARED_NOT_PUSHED_NOT_DEPLOYED",
+  "exact_operator_receipts_ignored_local": true,
+  "activation": {
+    "status": "PASS",
+    "authorized_project": "eqnzueginpkskbnqvgoc",
+    "migration": 90,
+    "approved_sha256": "04569a7efda790ace6f0a476d0712e7f5e391a709797827e17874eeaa18dfea7",
+    "applied": true,
+    "preflight": "2026-11-11T12:05:24.357Z",
+    "postflight": "2026-11-11T12:09:32.926Z",
+    "existing_maker_tables_preserved": 32,
+    "sources_preserved": 370,
+    "existing_drafts_preserved": 14,
+    "new_journals_before_posting": 0,
+    "authenticated_actor_and_membership_preserved": true,
+    "pending_migrations": []
+  }
 }
