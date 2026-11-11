@@ -1,0 +1,103 @@
+{
+  "status": "NINE_EXPENSES_POSTED_RECONCILED",
+  "captured_at": "2026-11-11T19:04:24.584Z",
+  "posted_count": 9,
+  "posted_amount_minor": "293050",
+  "operating_expenses": 9,
+  "project_costs": 0,
+  "materials_assets": 0,
+  "contractor_advances_settlements": 0,
+  "employee_advances": 0,
+  "remaining_outgoing_unposted": 321,
+  "remaining_expense_candidates": 143,
+  "remaining_family_counts": {
+    "expense_candidates": 143,
+    "materials_assets": 75,
+    "contractor_candidates": 4,
+    "employee_advance_candidates": 4,
+    "salary_related_deferred": 5,
+    "other_review": 90
+  },
+  "reused_existing_expense_drafts_posted": 5,
+  "new_distinct_source_linked_expenses": 4,
+  "remaining_original_expense_drafts": 5,
+  "employee_advance_drafts_preserved": 4,
+  "conditional_funding_default_annotations": 175,
+  "custody_balance_minor": "38802970",
+  "owner_equity_credit_minor": "39096020",
+  "treasury_effect_minor": "0",
+  "project_cost_effect_minor": "0",
+  "input_vat_claimed_minor": "0",
+  "physical_cash": "UNVERIFIED",
+  "existing_12_journals_unchanged": true,
+  "source_facts_preserved": true,
+  "all25_payroll_sources_and5_salary_related_rows_unchanged": true,
+  "all_other_captured_financial_master_tables_unchanged": true,
+  "active_membership_unchanged": true,
+  "historical_custody_never_negative": true,
+  "hosted_migrations_this_batch": 0,
+  "push": false,
+  "deploy": false,
+  "remaining_blockers": [
+    "Unresolved Company/beneficiary, Project and economic purpose; conflicting source facts",
+    "Missing or contradictory dates and possible duplicates, including identical transfer-fee rows",
+    "Materials ownership/quantities/consumption and asset recognition evidence",
+    "Electrical settlement-versus-advance decision; Stone Contract/certification; existing source settlement supports Treasury funding only",
+    "Missing employee identity, recovery terms and one explicit alternative payer; one undated Employee Advance",
+    "Payroll intentionally deferred"
+  ],
+  "contractor_source_totals": {
+    "electrical_minor": "1650000",
+    "stone_minor": "1000000"
+  },
+  "focused_checks": {
+    "unit": 21,
+    "browser": {
+      "status": "PASS",
+      "checks": [
+        "Confirmed Custody default replaces imported Treasury claim without posting",
+        "Confirmed Custody default is separately filterable",
+        "Payer confirmation clears unknown funding while contradictory occurrence evidence remains",
+        "en source list labels confirmed Custody default",
+        "en actual PDF export retains conditional Custody payer label",
+        "ar source list labels confirmed Custody default",
+        "ar actual PDF export retains conditional Custody payer label",
+        "Read-only synthetic browser checks make no source, financial or hosted writes"
+      ],
+      "errors": [],
+      "external": [],
+      "hosted": false
+    },
+    "artifacts": 4,
+    "total": 33,
+    "status": "PASS",
+    "isolated_production_build": "PASS",
+    "typecheck": "PASS",
+    "artifacts_evidence": {
+      "status": "PASS",
+      "checks": [
+        "en Excel confirmed Custody label",
+        "en valid PDF artifact",
+        "ar Excel confirmed Custody label",
+        "ar valid PDF artifact"
+      ]
+    },
+    "browser_count": 8,
+    "artifact_count": 4,
+    "focused_lint": "PASS_ZERO_ERRORS_TWO_PREEXISTING_HOOK_WARNINGS",
+    "production_boundary": "PASS",
+    "scoped_secret_scan": "PASS",
+    "diff_check": "PASS"
+  },
+  "release_branch": "release/owner-confirmed-expenses",
+  "release_parent": "94ceb21d9b198dfc2c3e4886d3d6ca490ec0cce1",
+  "migration_status": "1_TO90_APPLIED_NO_NEW_MIGRATION",
+  "readiness": {
+    "business_accounting": "VERIFIED_NINE_POSTINGS_AND_PRESERVATION; REMAINDER_DEFERRED_FOR_SPECIFIC_EVIDENCE",
+    "security_authorization": "VERIFIED_AUTHENTICATED_ACCOUNTING_ADMIN_CANONICAL_COMMANDS; NO_PERMISSION_CHANGE",
+    "database": "VERIFIED_EXISTING_COMMANDS_REUSED; SCHEMA_CHANGE_NOT_APPLICABLE",
+    "deployment": "DEFERRED_RELEASE_NOT_PUSHED_OR_DEPLOYED",
+    "testing": "VERIFIED_FOCUSED_UNIT_BROWSER_EXPORT_BUILD_AND_ACTUAL_RECONCILIATION",
+    "documentation": "UPDATED_CANONICALS_IN_PLACE"
+  }
+}

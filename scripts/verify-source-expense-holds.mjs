@@ -16,4 +16,11 @@ check(!p.sourceNeedsReview({...row,review_status:'CANCELLED'})&&!p.sourceNeedsRe
 check(m.sourceAccounting({...row,source_document_unavailable:true})==='UNAVAILABLE','Unavailable document lookup stays fail-closed');
 check(p.sourceSavedReviewReasons({...row,completion:{operational_review_notes:'Unrecognized specific evidence requirement'}},'en')[0]==='Unrecognized specific evidence requirement','Unstructured saved review reason remains visible without guessing');
 check(JSON.stringify(row)===original,'Review display and exports preserve all source facts and working data');
+const confirmed={...row,cash_treasury_id:null,completion:{funding_confirmation_mode:'CUSTODIAN',funding_confirmation_party_id:'90000000-0000-4000-8000-000000000003',funding_confirmation_reference:'SYN-OWNER-CONFIRMATION',funding_confirmation_scope:'VERIFIED_COMPANY_OUTGOINGS',funding_confirmation_status:'OWNER_CONFIRMED_DEFAULT'}};
+check(p.sourcePaymentState(confirmed)==='CUSTODY_DEFAULT'&&!p.sourceReviewIssues(confirmed).includes('PAYMENT_SOURCE_UNCONFIRMED'),'Confirmed Custody default removes unknown funding without claiming financial posting');
+check(m.sourceAccounting(confirmed)==='CLASSIFIED_UNPOSTED'&&p.sourceNeedsReview(confirmed),'Funding confirmation alone does not approve or post a source');
+check(p.sourcePaymentState({...confirmed,completion:{...confirmed.completion,funding_contradiction:'true'}})==='UNCONFIRMED','Transaction-specific contrary evidence suppresses the default');
+check(p.sourcePaymentState({...confirmed,source_document:{state:'POSTED'}})==='DOCUMENTED','Posted canonical payment takes precedence over conditional default');
+check(p.sourcePaymentState({...confirmed,record_type:'PAYROLL'})==='UNCONFIRMED','Custody default cannot change Payroll presentation');
+for(const locale of ['en','ar'])check(sourceReport([confirmed],'Synthetic',locale,'DATE','GENERAL','11/2026').sections.at(-1).rows[0].includes(p.custodyDefaultLabel(locale)),locale+' financial export labels Custody confirmation without inventing Treasury funding');
 console.log(JSON.stringify({status:'PASS',count:checks.length,hostedWrites:0}));

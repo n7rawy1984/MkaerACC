@@ -1,9 +1,17 @@
 import {sourceDirection,sourceLinked,sourceTransactionDate,sourceCurrentAmount,sourceValue,type SourceRecord} from './sourceModel';
+// A review annotation is a conditional funding default, never posting authority.
+export function sourceCustodyDefault(row:SourceRecord):boolean{
+ const v=row.completion;
+ if(row.record_type!=='GENERAL'||sourceDirection(row)!=='OUT')return false;
+ return v.funding_confirmation_status==='OWNER_CONFIRMED_DEFAULT'&&v.funding_confirmation_mode==='CUSTODIAN'&&typeof v.funding_confirmation_party_id==='string'&&/^[0-9a-f-]{36}$/i.test(v.funding_confirmation_party_id)&&typeof v.funding_confirmation_reference==='string'&&v.funding_confirmation_reference.trim().length>0&&v.funding_confirmation_scope==='VERIFIED_COMPANY_OUTGOINGS'&&v.funding_contradiction!=='true';
+}
+export const custodyDefaultLabel=(locale:'en'|'ar')=>locale==='ar'?'دافع العهدة مؤكد لمصروفات الشركة':'Custody payer confirmed for Company outgoings';
 // Payment-source confirmation is independent of an imported outflow claim.
-export function sourcePaymentState(row:SourceRecord):'PAID'|'RECEIVED'|'UNCONFIRMED'|'NO_CASH'|'DOCUMENTED'{
+export function sourcePaymentState(row:SourceRecord):'PAID'|'RECEIVED'|'UNCONFIRMED'|'NO_CASH'|'DOCUMENTED'|'CUSTODY_DEFAULT'{
  if(row.source_document?.state==='POSTED')return 'DOCUMENTED';
  const direction=sourceDirection(row);
  if(direction==='NONE')return 'NO_CASH';
+ if(sourceCustodyDefault(row))return 'CUSTODY_DEFAULT';
  if(!row.cash_treasury_id)return 'UNCONFIRMED';
  return direction==='OUT'?'PAID':'RECEIVED';
 }
@@ -23,7 +31,7 @@ export const sourceReviewIssues = (row:SourceRecord) => {
  if(sourceCurrentAmount(row)===null)issues.push('AMOUNT_UNCONFIRMED');
  if(!sourceValue(row,'nature',row.classification.nature)||sourceValue(row,'nature',row.classification.nature)==='NEEDS_REVIEW')issues.push('CLASSIFICATION_REQUIRED');
  if(row.classification.legal_company_verified===false)issues.push('COMPANY_UNCONFIRMED');
- if(sourceDirection(row)!=='NONE'&&!row.cash_treasury_id)issues.push('PAYMENT_SOURCE_UNCONFIRMED');
+ if(sourceDirection(row)!=='NONE'&&!row.cash_treasury_id&&!sourceCustodyDefault(row))issues.push('PAYMENT_SOURCE_UNCONFIRMED');
  if(row.classification.independent_payment_evidence_verified===false)issues.push('PAYMENT_EVIDENCE_UNCONFIRMED');
  if(row.classification.potential_duplicate===true)issues.push('POSSIBLE_DUPLICATE');
  if(row.review_status!=='REVIEWED')issues.push('SOURCE_REVIEW_REQUIRED');
