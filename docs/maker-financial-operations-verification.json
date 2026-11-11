@@ -203,5 +203,9 @@
     "company_membership_permission_mutation": false,
     "push": false,
     "deployment": false
-  }
+  },
+  "release_owner_confirmed_live": true,
+  "publication_status": "COMPLETE_OWNER_CONFIRMED_GITHUB_MAIN_VERIFIED",
+  "publication_note": "Previous push/deployment false flags describe agent actions at that checkpoint; owner subsequently published44. Do not republish.",
+  "current_milestone": "docs/BARQ_CUSTODY_EXECUTION.md"
 }

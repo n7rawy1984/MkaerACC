@@ -43,6 +43,7 @@ const sessionRecoveryFiles=new Set([
  'OperationalFinanceWorkspace',
  'OpeningReconciliationWorkspace', // Frozen actor/Company command recovery, never a balance store.
  'CustodyWorkspace', // Actor/Company-scoped frozen command recovery only; never a balance store.
+ 'CustodyFundingDrafts', // Frozen actor/Company request recovery; canonical DB remains authoritative.
  'SubcontractorAdvancePost','RetentionPaymentPost','SubcontractorAdvanceReverseAction',
  'SubcontractorCertificateApproveAction','TreasuryExpensePost','SubcontractorPaymentPost',
  'SubcontractorPaymentReverseAction','SubcontractorCertificateReverseAction','SupplierPaymentPost',

@@ -1,0 +1,258 @@
+{
+  "status": "FINAL_OWNER_EQUITY90_PREPARED_NOT_APPLIED",
+  "production_baseline": "044fbc6a82f597f818c4e19fcd57dea9c1423bbc",
+  "production_baseline_owner_confirmed_live": true,
+  "superseded_treasury_only_release": "f86e77716319f034badbb5e4258d6b51edd89918",
+  "migration": {
+    "number": 90,
+    "file": "supabase/migrations/20261111120000_custody_funding_drafts.sql",
+    "sha256": "04569a7efda790ace6f0a476d0712e7f5e391a709797827e17874eeaa18dfea7",
+    "applied": false,
+    "linked_dry_run_only90": true,
+    "previous_hash_superseded": true
+  },
+  "accounting": {
+    "debit": "CUSTODY_ADVANCE / confirmed Custodian",
+    "credit": "PARTNER_ADDITIONAL_CAPITAL / dedicated EQUITY control",
+    "registered_share_capital": false,
+    "repayable": false,
+    "treasury_transit": false,
+    "company_revenue": false,
+    "actual_receipt_posts": 0,
+    "actual_receipt_drafts": 0,
+    "actual_journals": []
+  },
+  "actual_setup_and_preservation": {
+    "status": "PASS",
+    "captured": "2026-11-11T11:57:08.995Z",
+    "sources_preserved": 370,
+    "prior_drafts_preserved": 14,
+    "source_links": 14,
+    "existing_financial_tables_unchanged": true,
+    "existing_master_rows_unchanged": true,
+    "new_owner_party": 1,
+    "owner_legal_name_verification": "PENDING",
+    "new_dedicated_equity_account": 1,
+    "new_equity_configuration": 1,
+    "real_journals": [],
+    "posted_minor": "0",
+    "treasury_movement_minor": "0",
+    "custody_movement_minor": "0",
+    "payroll_deferred": true,
+    "no_registration_or_ownership_percentage_invented": true
+  },
+  "new_tests": {
+    "database": {
+      "status": "PASS",
+      "count": 34,
+      "checks": [
+        "Twelve direct owner receipts save separately and identical SAVE retries create no duplicate draft",
+        "Two09/10 owner receipts retain separate dates/amounts and source references",
+        "Exact private owner schedule totals AED390960.20",
+        "Direct owner equity cannot invent Treasury transit",
+        "Foreign or nonexistent contributor cannot enter a Company draft",
+        "Caller cannot choose arbitrary GL accounts",
+        "Missing Owner Contributions equity mapping cannot default to registered capital, revenue or debt",
+        "Unknown owner remains editable and unposted rather than an invented identity",
+        "Case-variant original receipt references cannot create duplicate funding drafts",
+        "Viewer, foreign Company and platform-only authority cannot mutate owner funding",
+        "Viewer, foreign Company and platform-only authority cannot mutate owner funding",
+        "Viewer, foreign Company and platform-only authority cannot mutate owner funding",
+        "Owner equity posting requires explicit approval",
+        "Owner equity posting requires explicit approval",
+        "Owner equity posting requires explicit approval",
+        "Owner equity posting requires explicit approval",
+        "Owner equity posting requires explicit approval",
+        "Owner equity posting requires explicit approval",
+        "Owner equity posting requires explicit approval",
+        "Owner equity posting requires explicit approval",
+        "Owner equity posting requires explicit approval",
+        "Owner equity posting requires explicit approval",
+        "Owner equity posting requires explicit approval",
+        "Owner equity posting requires explicit approval",
+        "Twelve owner receipts post exactly twelve balanced Dr Custodian / Cr Owner Contributions equity journals with no Treasury entries",
+        "Existing canonical direct-funding documents retain contributor, Custodian, evidence, dates and non-share-capital classification",
+        "Owner funding changes no Treasury, Project expense, salary or imported historical source record",
+        "Posted owner receipt is immutable and cannot be silently reclassified",
+        "Owner receipt audit events cannot be deleted",
+        "Foreign Company cannot read owner receipt snapshots",
+        "Management Viewer reads financial receipt history without financial mutation",
+        "Treasury transfers cannot also claim an owner contribution",
+        "Separate Treasury-transfer route retains its historical funding safeguard",
+        "Direct owner contributions cannot bypass closed accounting periods"
+      ],
+      "hosted": false,
+      "journals_synthetic_only": 12
+    },
+    "browser": {
+      "status": "PASS",
+      "checks": [
+        "Existing owner contribution opens with its verified contributor route",
+        "Direct contribution UI contains no fictitious Treasury or payment method",
+        "Provisional name status and separation from registered capital are visible",
+        "Treasury transfer retains its separate supported input path",
+        "Canonical draft save preserves owner identity and excludes Treasury transit",
+        "en financial export retains owner, funding route and monthly source state",
+        "ar financial export retains owner, funding route and monthly source state",
+        "Management Viewer sees owner funding reports without edit or posting controls",
+        "Owner-route UI has no runtime errors or hosted requests"
+      ],
+      "errors": [],
+      "external": [],
+      "hosted": false
+    },
+    "artifacts": {
+      "status": "PASS",
+      "checks": [
+        "en Excel: contributor, direct equity route, numeric date and unposted monthly claims",
+        "en PDF: actual verified bilingual owner-route print preview",
+        "ar Excel: contributor, direct equity route, numeric date and unposted monthly claims",
+        "ar PDF: actual verified bilingual owner-route print preview"
+      ]
+    },
+    "total": 47
+  },
+  "prior40_tests_reused": true,
+  "production_build": "PASS_FINAL_ISOLATED_RELEASE",
+  "focused_lint": "PASS_ZERO_ERRORS_ZERO_WARNINGS",
+  "prior_checkpoint_evidence": {
+    "status": "LOCAL_WORKFLOW_VERIFIED_ACTIVATION_AND_FINANCIAL_EVIDENCE_REQUIRED",
+    "base_release": "044fbc6a82f597f818c4e19fcd57dea9c1423bbc",
+    "base_release_owner_confirmed_live": true,
+    "migration": {
+      "number": 90,
+      "file": "supabase/migrations/20261111120000_custody_funding_drafts.sql",
+      "sha256": "9eee6a48f30bae437e352c99ddb048a9a1b0eceda210a1bfce522fc2919017d4",
+      "applied": false,
+      "linked_dry_run_pending_only": [
+        "20261111120000_custody_funding_drafts.sql"
+      ],
+      "predecessors_aligned_and_byte_unchanged": 89
+    },
+    "actual_execution": {
+      "status": "PASS",
+      "captured": "2026-11-11T11:26:06.876Z",
+      "sources_preserved": 370,
+      "prior_expense_drafts_preserved": 10,
+      "prior_employee_advance_drafts_preserved": 4,
+      "canonical_source_links": 14,
+      "existing_tables_equal": 31,
+      "new_control_accounts": 1,
+      "existing_masters_unchanged": true,
+      "custody_holder_reused": true,
+      "financial_postings": 0,
+      "journal_ids": [],
+      "posted_debits_minor": "0",
+      "posted_credits_minor": "0",
+      "treasury_balance_minor": "0",
+      "custody_balance_minor": "0",
+      "project_cost_change_minor": "0",
+      "opening_documents": 0,
+      "closed_period_events": 0,
+      "period_policy_note": "No recorded closed-period events; no certification of complete fiscal setup. Canonical period/funding checks remain mandatory at review/posting.",
+      "custody_funding_drafts_saved": 0,
+      "migration90_applied": false,
+      "payroll_deferred": true,
+      "salary_effects_unchanged": true
+    },
+    "receipts": {
+      "count": 12,
+      "existing_matches": 0,
+      "private_packets_prepared": 12,
+      "canonical_funding_drafts_saved": 0,
+      "posted": 0,
+      "posted_minor": "0",
+      "journal_ids": []
+    },
+    "tests": {
+      "database": {
+        "status": "PASS",
+        "checks": [
+          "Twelve separately identified incomplete receipts save and replay without duplicate documents",
+          "Incomplete receipt capture creates no journal, cash movement, cost or payroll effect",
+          "Two receipts on the same09/10 date retain distinct identities and amounts",
+          "Private twelve-receipt packet totals exact AED390960.20 without publishing source identities",
+          "Duplicate receipt reference cannot create a second active draft",
+          "Unconfirmed route/funding blocks review while preserving the incomplete draft",
+          "Viewer, other Company and platform-only actors cannot mutate funding",
+          "Viewer, other Company and platform-only actors cannot mutate funding",
+          "Viewer, other Company and platform-only actors cannot mutate funding",
+          "Management Viewer can read the draft register",
+          "Direct table writes denied",
+          "Draft audit history cannot be deleted",
+          "Changed request retry intent rejected",
+          "Concurrent stale version cannot overwrite a saved receipt",
+          "Future funding cannot finance a historical transfer",
+          "Posting cannot skip approval",
+          "Accountant cannot bypass Accounting Admin approval",
+          "Approved funding posts and replays one canonical Custody advance",
+          "Canonical posting debits Custodian receivable and credits Treasury once with no Project cost or payroll",
+          "Posted document is immutable; specialized reversal remains canonical",
+          "Backdated funding cannot overdraw an already recorded later Treasury balance",
+          "Competing same-version requests commit one immutable version",
+          "Closed accounting period blocks historical funding"
+        ],
+        "count": 23,
+        "hosted": false
+      },
+      "browser": {
+        "status": "PASS",
+        "checks": [
+          "Actual draft component displays twelve separately identified receipts",
+          "Same-day receipts remain separate and dates numeric",
+          "Existing draft opens with exact editable AED amount",
+          "Draft save invokes only the canonical SAVE command without posting",
+          "Unsaved edits cannot review or post the older snapshot",
+          "Confirmed review rejection preserves an editable unposted draft",
+          "Unconfirmed save retains its exact actor and Company-scoped request",
+          "Permission loss during uncertain replay retains reconciliation evidence",
+          "Identical retry resolves the committed save without a second document",
+          "en monthly export separates unposted claims and missing dates",
+          "ar monthly export separates unposted claims and missing dates",
+          "Management Viewer has read-only draft and report access",
+          "No browser runtime errors or hosted requests"
+        ],
+        "errors": [],
+        "external": [],
+        "hosted": false
+      },
+      "artifacts": {
+        "status": "PASS",
+        "checks": [
+          "en Excel: separate unposted funding claims, monthly totals, numeric and missing dates",
+          "en PDF: artifact from verified actual bilingual print preview",
+          "ar Excel: separate unposted funding claims, monthly totals, numeric and missing dates",
+          "ar PDF: artifact from verified actual bilingual print preview"
+        ]
+      },
+      "total": 40,
+      "prior_completed_suites_reused": true
+    },
+    "focused_lint": "PASS_ZERO_ERRORS_ZERO_WARNINGS",
+    "production_build": "PASS_FINAL_ISOLATED_RELEASE",
+    "hosted_migrations_applied": 0,
+    "push": false,
+    "deploy": false,
+    "payroll_deferred": true,
+    "auth_permissions_bypassed": false,
+    "release_checkout": "/tmp/narvo-barq-custody-release-20261111",
+    "github_main_read_verified": "044fbc6a82f597f818c4e19fcd57dea9c1423bbc",
+    "production_build_limitations": [
+      "Existing large chunk size advisory"
+    ],
+    "release_status": "PREPARED_NOT_PUSHED_NOT_DEPLOYED",
+    "release_commit": "f86e77716319f034badbb5e4258d6b51edd89918",
+    "push_command": "git push origin f86e77716319f034badbb5e4258d6b51edd89918:main",
+    "activation_approval": "PENDING_EXPLICIT_OWNER_RESPONSE"
+  },
+  "push": false,
+  "deploy": false,
+  "owner_legal_name_verification": "PENDING",
+  "release_checkout": "/tmp/narvo-owner-custody-release-20261111",
+  "commercial_readiness_preflight": {
+    "ready": true,
+    "access": "FULL",
+    "basis": "Existing canonical legacy eligibility; no entitlement/configuration bypass"
+  },
+  "migration_activation_authorization": "REQUIRED_FOR_FINALIZED_HASH"
+}
