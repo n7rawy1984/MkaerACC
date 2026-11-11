@@ -1,3 +1,4 @@
+import{reportingMonthLabel,UNCONFIRMED_DATE}from'./sourceDatePresentation';
 import {ReportExport} from '../reports/ReportExport';
 import {sourceReport} from '../reports/sourceReports';
 import type {DashboardSummary} from '../dashboard/dashboardSummary';
@@ -7,10 +8,10 @@ import {DashboardChart} from '../dashboard/DashboardChart';
 import {Badge} from '../components/ui/Badge';
 import {minorDisplay,sourceCurrentAmount,sourceDirection,sourceAccounting,sourceReportingMonth,type ReportingBasis,sourceValue,sourceTotals,type SourceRecord} from './sourceModel';
 export function HistoricalOverview({rows,loading,error,refresh,company,postedSummary}:{rows:SourceRecord[];loading:boolean;error:boolean;refresh:()=>void;company:string;postedSummary?:DashboardSummary|null}) {
- const {locale}=useI18n(),ar=locale==='ar';const [basis,setBasis]=useState<ReportingBasis>('SOURCE');const totals=sourceTotals(rows);
+ const {locale}=useI18n(),ar=locale==='ar';const [basis,setBasis]=useState<ReportingBasis>('DATE');const totals=sourceTotals(rows);
  const generalMonths=[...new Set(rows.filter(r=>r.record_type==='GENERAL').map(r=>sourceReportingMonth(r,basis)))].sort();
- const months=generalMonths.slice(-2);const payrollMonth=[...new Set(rows.filter(r=>r.record_type==='PAYROLL').map(r=>sourceReportingMonth(r,basis)))].sort().at(-1);
- const monthName=(m:string)=>new Intl.DateTimeFormat(ar?'ar-AE':'en-GB',{month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(m+'-01T00:00:00Z'));
+ const months=generalMonths.filter(m=>m!==UNCONFIRMED_DATE).slice(-2);const payrollMonth=[...new Set(rows.filter(r=>r.record_type==='PAYROLL').map(r=>sourceReportingMonth(r,basis)))].sort().at(-1);
+ const monthName=(m:string)=>reportingMonthLabel(m,locale);
  const sum=(rs:SourceRecord[],field:'outflow_minor'|'payroll_net_minor')=>rs.reduce((n,r)=>n+BigInt(r[field]??'0'),0n).toString();
  const corrected=(rs:SourceRecord[])=>rs.filter(r=>r.review_status!=='CANCELLED').reduce((n,r)=>n+BigInt(sourceCurrentAmount(r)??'0'),0n).toString();
  const cards=months.map(m=>({label:`${monthName(m)} · ${ar?'الصرف النقدي':'Cash outflow'}`,original:sum(rows.filter(r=>r.record_type==='GENERAL'&&sourceReportingMonth(r,basis)===m),'outflow_minor'),current:corrected(rows.filter(r=>r.record_type==='GENERAL'&&sourceReportingMonth(r,basis)===m&&sourceDirection(r)==='OUT'))}));
@@ -21,8 +22,8 @@ export function HistoricalOverview({rows,loading,error,refresh,company,postedSum
  const statuses=new Map<string,number>();for(const r of rows){const s=r.review_status==='CANCELLED'?'ARCHIVED':sourceAccounting(r);statuses.set(s,(statuses.get(s)??0)+1);}
  return <section className="min-w-0 space-y-4" dir={ar?'rtl':'ltr'} aria-label={ar?"ملخص الحركات المستوردة":"Imported activity summary"}>
   <header className="flex flex-wrap items-start justify-between gap-3"><div><h2 className="text-2xl font-semibold text-slate-900">{ar?"ملخص الحركات المستوردة":"Imported activity summary"}</h2><p className="mt-1 text-sm leading-6 text-slate-500">{ar?"المعاملات التاريخية المستوردة، معروضة بشكل منفصل عن الأرصدة المحاسبية المرحلة.":"Historical imported transactions, shown separately from posted accounting balances."}</p></div><button className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm disabled:opacity-50" disabled={loading} onClick={refresh}>{ar?'تحديث':'Refresh historical activity'}</button></header>
-  <ReportExport disabled={loading||error} build={()=>sourceReport(rows,company,locale,basis,'OVERVIEW',generalMonths.join(', '),postedSummary)}/>
-  <label className="block max-w-md text-sm text-slate-600">{ar?'أساس الشهر (موحد للأصلي والمصحح)':'Month basis (same for original and corrected)'}<select aria-label={ar?'أساس شهر التقرير':'Reporting month basis'} className="mt-1 block w-full rounded-lg border border-slate-300 bg-white p-2" value={basis} onChange={e=>setBasis(e.target.value as ReportingBasis)}><option value="SOURCE">{ar?"شهر التقرير الأصلي":"Original reporting month"}</option><option value="DATE">{ar?'شهر تاريخ المعاملة / الراتب المصحح':'Transaction date / corrected salary month'}</option></select></label>
+  <ReportExport disabled={loading||error} build={()=>sourceReport(rows,company,locale,basis,'OVERVIEW',generalMonths.map(m=>monthName(m)).join(', '),postedSummary)}/>
+  <label className="block max-w-md text-sm text-slate-600">{ar?'أساس الشهر (موحد للأصلي والمصحح)':'Month basis (same for original and corrected)'}<select aria-label={ar?'أساس شهر التقرير':'Reporting month basis'} className="mt-1 block w-full rounded-lg border border-slate-300 bg-white p-2" value={basis} onChange={e=>setBasis(e.target.value as ReportingBasis)}><option value="SOURCE">{ar?"شهر ورقة المصدر (مرجع الاستيراد)":"Source worksheet month (provenance)"}</option><option value="DATE">{ar?'شهر تاريخ المعاملة / فترة الراتب':'Transaction date / salary-period month'}</option></select></label>
   <p className="text-xs text-slate-500">{ar?'تستخدم المقارنة نفس السجلات ونفس أساس الشهر؛ الأرشفة وتصحيح المبلغ وحدهما يغيران الإجمالي النشط.':'Comparisons use the same records and month basis. Archiving and amount corrections change active totals; source evidence is preserved.'}</p>
   {loading&&<p role="status" className="rounded-lg bg-blue-50 p-3 text-sm text-blue-800">{ar?'جار تحميل النشاط المالي':'Loading financial activity…'}</p>}
   {error&&<p role="alert" className="rounded-lg border border-red-200 bg-red-50 p-4 text-red-800">{ar?'تعذر تحميل النشاط التاريخي. أعد المحاولة.':'Historical activity could not be loaded. Try refreshing.'}</p>}

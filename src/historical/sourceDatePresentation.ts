@@ -1,19 +1,16 @@
-// Presentation only. Never infer day/month order, derive a date from source_month,
-// or change an imported/reviewed value. Non-ISO input requires source evidence.
-export function sourceDatePresentation(value: string | null | undefined, locale: "en" | "ar") {
-  const raw = value ?? "";
-  const unknown = !raw;
-  const valid = /^\d{4}-\d{2}-\d{2}$/.test(raw) && !raw.startsWith("0000-")
-    && Number.isFinite(Date.parse(raw + "T00:00:00Z"))
-    && new Date(raw + "T00:00:00Z").toISOString().slice(0, 10) === raw;
-  if (!valid) return {
-    status: unknown ? "UNKNOWN" as const : "UNRESOLVED" as const,
-    iso: null,
-    label: unknown ? locale === "ar" ? "غير معروف" : "Unknown"
-      : `${raw} — ${locale === "ar" ? "تاريخ ملتبس أو غير صالح؛ راجع المصدر" : "Ambiguous or invalid date; verify source"}`,
-  };
-  const named = new Intl.DateTimeFormat(locale === "ar" ? "ar-AE" : "en-GB", {
-    day: "2-digit", month: "long", year: "numeric", calendar: "gregory", timeZone: "UTC",
-  }).format(new Date(raw + "T00:00:00Z"));
-  return { status: "KNOWN" as const, iso: raw, label: `${raw} · ${named}` };
+// Calendar dates are validated and formatted lexically. Never parse ambiguous text,
+// infer a transaction date from a worksheet/month, or shift dates across timezones.
+export const UNCONFIRMED_DATE='UNCONFIRMED_DATE';
+export function validFinancialDate(value:unknown):value is string{
+ if(typeof value!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(value))return false;
+ const[y,m,d]=value.split('-').map(Number),days=[31,y%4===0&&(y%100!==0||y%400===0)?29:28,31,30,31,30,31,31,30,31,30,31];
+ return y>=1&&m>=1&&m<=12&&d>=1&&d<=days[m-1];
+}
+export const unconfirmedDateLabel=(locale:'en'|'ar')=>locale==='ar'?'بدون تاريخ مؤكد':'Without a confirmed date';
+export function formatFinancialDate(value:string|null|undefined,locale:'en'|'ar'='en'){
+ return validFinancialDate(value)?value.slice(8,10)+'/'+value.slice(5,7)+'/'+value.slice(0,4):unconfirmedDateLabel(locale);
+}
+export const reportingMonthLabel=(month:string,locale:'en'|'ar')=>/^\d{4}-(0[1-9]|1[0-2])$/.test(month)?month.slice(5,7)+'/'+month.slice(0,4):unconfirmedDateLabel(locale);
+export function sourceDatePresentation(value:string|null|undefined,locale:'en'|'ar'){
+ const known=validFinancialDate(value);return{status:known?'KNOWN'as const:!value?'UNKNOWN'as const:'UNRESOLVED'as const,iso:known?value:null,label:formatFinancialDate(value,locale)};
 }

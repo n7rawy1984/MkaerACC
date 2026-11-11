@@ -1,0 +1,109 @@
+{
+  "status": "LOCAL_VERIFIED_PUBLICATION_PENDING",
+  "date": "2026-11-11",
+  "base_commit": "a01def446424ef7a71951bb03efc9598850f15c8",
+  "unit": {
+    "status": "PASS",
+    "checks": [
+      "October worksheet with09November transaction defaults to November",
+      "September worksheet with01October transaction defaults to October",
+      "Month-end/start transactions retain exact calendar boundaries",
+      "Missing, ambiguous and deliberately cleared dates never fall back to a worksheet month",
+      "Audited working date overrides original date only for transaction-source reporting",
+      "Explicit worksheet provenance remains separately available and immutable",
+      "en numeric date appears once without named months",
+      "en unverified values remain in labelled review group",
+      "en monthly summaries include exact dated and separate unconfirmed totals",
+      "en financial export uses numeric transaction date and separate source provenance",
+      "en financial export columns remain aligned",
+      "ar numeric date appears once without named months",
+      "ar unverified values remain in labelled review group",
+      "ar monthly summaries include exact dated and separate unconfirmed totals",
+      "ar financial export uses numeric transaction date and separate source provenance",
+      "ar financial export columns remain aligned",
+      "Calendar validator rejects impossible/ambiguous/timestamp/serial inputs without guessing",
+      "All source IDs, original facts, raw evidence, dates and working metadata preserved by filtering/exports",
+      "Posted Project report displays posting date numerically without reclassifying GL period or mutating journals",
+      "Dashboard monthly metrics use actual transaction months by default",
+      "Dashboard undated records remain distinct from dated totals",
+      "Explicit null working date remains unconfirmed without resurrecting original date",
+      "Salary-period reporting retains its distinct existing basis"
+    ],
+    "hosted": false,
+    "timezone": "Pacific/Kiritimati"
+  },
+  "browser": {
+    "status": "PASS",
+    "checks": [
+      "Transaction table renders one numeric date without translated month names",
+      "Default November filter includes both November dates from an October worksheet",
+      "Monthly PDF uses the filtered transaction dates and separate worksheet provenance",
+      "October filter includes September-sheet October transaction and excludes November dates",
+      "Missing and ambiguous dates stay preserved in the separate unconfirmed group",
+      "Arabic UI uses identical numeric calendar dates and labelled unconfirmed review",
+      "Arabic PDF retains exact numeric date without timezone conversion",
+      "Monthly overview safely lists actual date months and unconfirmed group",
+      "Financial dashboard defaults to transaction months and numeric period labels",
+      "Financial dashboard keeps undated sources visible outside monthly totals",
+      "Filtering, summaries and exports issue no financial/data mutation command",
+      "Actual component flow has no runtime errors or external/hosted requests"
+    ],
+    "errors": [],
+    "external": [],
+    "hosted": false
+  },
+  "artifacts": {
+    "status": "PASS",
+    "checks": [
+      "en Excel artifact: exact numeric dates, correct monthly rows and separate worksheet provenance",
+      "en PDF artifact created from verified bilingual monthly print preview",
+      "ar Excel artifact: exact numeric dates, correct monthly rows and separate worksheet provenance",
+      "ar PDF artifact created from verified bilingual monthly print preview"
+    ],
+    "count": 4
+  },
+  "maker_read_only_impact": {
+    "captured": "2026-11-11T06:08:10.041991+00:00",
+    "read_only": true,
+    "maker_sources": 370,
+    "general": 345,
+    "payroll": 25,
+    "worksheet_date_month_mismatches": 2,
+    "unconfirmed_general_dates": 25,
+    "normalized_evidence_comparisons": 320,
+    "normalized_evidence_conflicts": 0,
+    "production_corrections_proposed": 0,
+    "business_writes": 0
+  },
+  "migration": {
+    "status": "PASS",
+    "project": "eqnzueginpkskbnqvgoc",
+    "canonical_migrations": 89,
+    "local_sql_matches_hosted": true,
+    "new_migrations": 0,
+    "hosted_writes": 0
+  },
+  "release_checks": {
+    "status": "PASS",
+    "canonical_migrations_unchanged": 89,
+    "new_schema_or_mutation_commands": 0,
+    "changed_file_secret_scan": "PASS",
+    "production_boundary_files": 263,
+    "diff_check": "PASS"
+  },
+  "production_build": "PASS",
+  "typecheck": "PASS",
+  "focused_lint": {
+    "errors": 0,
+    "warnings": "existing React lifecycle/dependency warnings"
+  },
+  "hosted_business_writes": 0,
+  "push": false,
+  "deployment": false,
+  "limitations": [
+    "25 dates require original-evidence review; no fabricated dates or data correction",
+    "Independent real-source date certification and live acceptance remain pending",
+    "GL posting/recognition rules and Payroll salary-period basis unchanged",
+    "Final commercial/operations/DR/USB obligations retained"
+  ]
+}

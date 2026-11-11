@@ -9,7 +9,7 @@ export function moneyMetric(value:string|null|undefined,phase:'READY'|'LOADING'|
 }
 export type MonthlyKind='inflow'|'outflow'|'payroll';
 // Source evidence, never GL truth. No row/coverage is not proof of a zero period.
-export function sourceMonthMetric(rows:SourceRecord[],month:string,kind:MonthlyKind,basis:ReportingBasis='SOURCE'):Metric{
+export function sourceMonthMetric(rows:SourceRecord[],month:string,kind:MonthlyKind,basis:ReportingBasis='DATE'):Metric{
  try{
  const matching=rows.filter(r=>r.review_status!=='CANCELLED'&&sourceReportingMonth(r,basis)===month&&(kind==='payroll'?r.record_type==='PAYROLL':r.record_type==='GENERAL'&&sourceDirection(r)===(kind==='inflow'?'IN':'OUT')));
  if(!matching.length)return {state:'UNAVAILABLE'};

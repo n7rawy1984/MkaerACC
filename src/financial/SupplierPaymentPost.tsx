@@ -1,3 +1,4 @@
+import{formatFinancialDate}from'../historical/sourceDatePresentation';
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { useT } from "../i18n/I18nContext";
 import { getSupabaseClient } from "../lib/supabase";
@@ -57,7 +58,7 @@ export function SupplierPaymentPost({ userId, companyId, role, outstanding, onPo
       <label className="sm:col-span-2">{t("supplierPaymentPost.notes")}<textarea name="notes" maxLength={2000} className={field} /></label>
     </fieldset><fieldset disabled={busy || !ready || !supplierId || !treasuryId} className="space-y-3"><legend className="font-medium">{t("supplierPaymentPost.allocations")}</legend>
       {supplierId && treasuryId && eligible.length === 0 && <p role="status">{t("supplierPaymentPost.noEligible")}</p>}
-      {eligible.map(row => <label key={row.id} className="grid gap-2 rounded-lg border border-slate-200 p-3 sm:grid-cols-[1fr_11rem]"><span className="min-w-0 break-words"><bdi>{row.expense_reference} · {row.expense_date}</bdi><span className="block text-sm text-slate-600"><bdi>{row.description} · {displayMinor(row.outstanding_amount_minor)} AED</bdi></span></span><input dir="ltr" aria-label={`${row.expense_reference} ${t("supplierPaymentPost.allocate")}`} inputMode="decimal" value={amounts[row.id] ?? ""} onChange={e => setAmounts(current => ({ ...current, [row.id]: e.target.value }))} className={field} /></label>)}
+      {eligible.map(row => <label key={row.id} className="grid gap-2 rounded-lg border border-slate-200 p-3 sm:grid-cols-[1fr_11rem]"><span className="min-w-0 break-words"><bdi>{row.expense_reference} · {formatFinancialDate(row.expense_date)}</bdi><span className="block text-sm text-slate-600"><bdi>{row.description} · {displayMinor(row.outstanding_amount_minor)} AED</bdi></span></span><input dir="ltr" aria-label={`${row.expense_reference} ${t("supplierPaymentPost.allocate")}`} inputMode="decimal" value={amounts[row.id] ?? ""} onChange={e => setAmounts(current => ({ ...current, [row.id]: e.target.value }))} className={field} /></label>)}
     </fieldset><label className="flex items-start gap-2"><input name="confirm" value="yes" type="checkbox" required /><span>{t("supplierPaymentPost.confirm")}</span></label><button type="submit" className={field}>{t("supplierPaymentPost.submit")}</button></form>}
   </section>;
 }

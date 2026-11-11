@@ -1,3 +1,4 @@
+import{formatFinancialDate}from'../historical/sourceDatePresentation';
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useT } from "../i18n/I18nContext";
 import { getSupabaseClient } from "../lib/supabase";
@@ -57,7 +58,7 @@ export function RetentionPaymentPost({ userId, companyId, role, outstanding, onP
       <label className="sm:col-span-2">{t("retentionPaymentPost.notes")}<textarea name="notes" maxLength={2000} className={field} /></label>
     </fieldset><fieldset disabled={busy || !ready || !subcontractId || !treasuryId} className="space-y-3"><legend className="font-medium">{t("retentionPaymentPost.allocations")}</legend>
       {subcontractId && treasuryId && eligible.length === 0 && <p role="status">{t("retentionPaymentPost.noEligible")}</p>}
-      {eligible.map(row => <label key={row.id} className="grid gap-2 rounded-lg border border-slate-200 p-3 sm:grid-cols-[1fr_11rem]"><span className="min-w-0 break-words"><bdi>{row.release_reference} · {row.release_date}</bdi><span className="block text-sm text-slate-600"><bdi>{displayMinor(row.outstanding_amount_minor)} AED</bdi></span></span><input dir="ltr" aria-label={`${row.release_reference} ${t("retentionPaymentPost.allocate")}`} inputMode="decimal" value={amounts[row.id] ?? ""} onChange={e => setAmounts(current => ({ ...current, [row.id]: e.target.value }))} className={field} /></label>)}
+      {eligible.map(row => <label key={row.id} className="grid gap-2 rounded-lg border border-slate-200 p-3 sm:grid-cols-[1fr_11rem]"><span className="min-w-0 break-words"><bdi>{row.release_reference} · {formatFinancialDate(row.release_date)}</bdi><span className="block text-sm text-slate-600"><bdi>{displayMinor(row.outstanding_amount_minor)} AED</bdi></span></span><input dir="ltr" aria-label={`${row.release_reference} ${t("retentionPaymentPost.allocate")}`} inputMode="decimal" value={amounts[row.id] ?? ""} onChange={e => setAmounts(current => ({ ...current, [row.id]: e.target.value }))} className={field} /></label>)}
     </fieldset><label className="flex items-start gap-2"><input name="confirm" value="yes" type="checkbox" required /><span>{t("retentionPaymentPost.confirm")}</span></label><button type="submit" className={field}>{t("retentionPaymentPost.submit")}</button></form>}
   </section>;
 }

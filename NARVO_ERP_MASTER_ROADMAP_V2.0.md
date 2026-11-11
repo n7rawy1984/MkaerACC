@@ -1,3 +1,19 @@
+## 2026-11-11 — Financial transaction dates and monthly reporting corrected locally; publication pending
+
+Current release base is GitHub main89 `a01def446424ef7a71951bb03efc9598850f15c8`. Existing local activation evidence records89 APPLIED/preservation PASS;83–88 frontend LIVE is owner-reported. This checkpoint makes no new Vercel89/live acceptance claim. Older prepared-migration statuses below are historical.
+
+Imported financial lists, overview and financial-dashboard monthly metrics now default to authoritative transaction-date months; missing/invalid/ambiguous dates stay in **بدون تاريخ مؤكد / Without a confirmed date**. Worksheet grouping is explicitly import-provenance analysis only. Original worksheet/file/source IDs remain separate, including exports. Numeric **DD/MM/YYYY** formatting covers affected source/detail, Expense, Treasury/Custody, Contract/payment and Project/GL report surfaces and bilingual Excel/PDF. Calendar formatting performs no timezone conversion. Canonical journal posting-date filters/accounting periods and Payroll salary-period rules remain unchanged.
+
+Read-only Maker capture:370 sources (345 General +25 Payroll),2 General worksheet/date-month mismatches (September worksheet → August transaction month),25 General sources without valid confirmed dates. All320 valid normalized ISO source evidence comparisons agree; no supported data correction proposed or executed. Exact affected IDs are retained in a local operator impact preview, outside the publishable release. Requested October→November and September→October transitions pass synthetic acceptance cases. No reimport, source mutation, journal rewrite, payment, Company move or hosted business command.
+
+Focused verification:23 date/report checks,12 actual-component browser checks and4 bilingual export-artifact checks PASS; Production build, typecheck, focused lint (zero errors; existing lifecycle warnings), production boundary and diff/secret checks PASS. Read-only exact-target canonical1–89 version/name/SQL alignment PASS; all89 migration files unchanged. **No migration required/prepared/applied.** No push or deployment.
+
+Business/date reporting, affected authorization boundary, database compatibility, focused verification and documentation: VERIFIED locally. Schema/accounting-command changes: NOT APPLICABLE. Publication/live operator acceptance, evidence review of25 undated sources and final operational acceptance: DEFERRED. Any later Production working-date correction requires a scoped impact preview, explicit approval and the existing authorized audited workflow; immutable source facts/posted dates remain protected.
+
+Next action: owner publishes this isolated frontend correction, then Maker operational accounting/date review and acceptance → Green, Villa13 and Al Mazraa via the appropriate Super Admin accounting-entity model → the complete remaining original commercial ERP roadmap. Preserve all35 requirement families, Procurement/Inventory, AR/AP, statements/fiscal closing, construction/WIP, advancedHR/WPS, subscriptions, security/operations and deferred final disaster recovery/USB work. No completed audit or unrelated suite reopened.
+
+[Scope, evidence and release procedure](docs/FINANCIAL_DATE_REPORTING_CORRECTION.md); [focused verification](docs/financial-date-reporting-verification.json).
+
 ## 2026-11-06 — Maker operational HR/payroll/reporting completion implemented locally;89 pending
 
 Product Owner reports83–88 APPLIED and frontend releases LIVE. Existing84 Employee master, effective employment/policy/attendance, canonical Payroll calculation/review/accrual/payment/reversal,85 source-linked employee advances/recovery and GL/Project reports are reused. No parallel Employee, Payroll, financial engine or role model. Registration/terms/attendance do not create salary cost; accrual creates it once, recovery settles an employee receivable, and salary payment creates no second expense.

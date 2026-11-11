@@ -1,3 +1,4 @@
+import{formatFinancialDate}from'../historical/sourceDatePresentation';
 import type {SupabaseClient} from '@supabase/supabase-js';
 export type CorrectionMovement={journal_id:string;phase:'REVERSAL'|'REPLACEMENT';actual_new_payment:false;correction_id:string|null;source_id:string|null;original_payment_date:string|null;original_payment_journal:string|null;restricted:boolean};
 const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -16,4 +17,4 @@ export async function readCorrectionMovements(client:SupabaseClient,company:stri
  }
  return result;
 }
-export function correctionMovementLabel(row:CorrectionMovement,ar:boolean){return (ar?'تصحيح محاسبي — دون دفعة أو رد نقدي جديد':'Accounting correction — no new payment or cash return')+(row.original_payment_date?' · '+(ar?'الدفع الأصلي: ':'Original payment: ')+row.original_payment_date:'');}
+export function correctionMovementLabel(row:CorrectionMovement,ar:boolean){return (ar?'تصحيح محاسبي — دون دفعة أو رد نقدي جديد':'Accounting correction — no new payment or cash return')+(row.original_payment_date?' · '+(ar?'الدفع الأصلي: ':'Original payment: ')+formatFinancialDate(row.original_payment_date,ar?'ar':'en'):'');}
