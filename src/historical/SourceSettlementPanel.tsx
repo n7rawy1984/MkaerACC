@@ -1,3 +1,4 @@
+import{formatFinancialDate}from'./sourceDatePresentation';
 import {useEffect,useRef,useState} from 'react';
 import {useI18n} from '../i18n/I18nContext';
 import {useProductionMasterData} from '../master/productionMasterDataContext';
@@ -62,7 +63,7 @@ function Panel({row,cid,user,admin,onPosted}:{row:SourceRecord;cid:string;user:s
     {select('treasury_id','Actual funding Treasury','خزينة التمويل الفعلية',m.phase==='READY'?m.treasuryAccounts.filter(p=>p.companyId===cid&&(!employee||!p.projectId)).map(p=>({id:p.id,label:p.code+' · '+p.name})):[])}
     {v.kind==='CONTRACT_PAYMENT'&&select('certificate_id','Certified liability to settle','المستحق المعتمد للسداد',(data?.certificates??[]).filter(c=>c.contract_id===v.contract_id).map(c=>({id:c.id,label:c.reference+' · '+minorDisplay(c.remaining_minor)+' AED'})))}
     {employee&&money('monthly_limit_minor','Approved monthly recovery limit AED','الحد الشهري المعتمد للاسترداد بالدرهم')}
-    {select('existing_document_id','Existing exact-date/amount document (optional)','مستند قائم بنفس التاريخ والمبلغ (اختياري)',(data?.candidates??[]).filter(d=>employee?d.employee_id===v.employee_id:d.contract_id===v.contract_id).map(d=>({id:d.id,label:d.reference+' · '+d.date+' · '+minorDisplay(d.amount_minor)+' AED'})))}
+    {select('existing_document_id','Existing exact-date/amount document (optional)','مستند قائم بنفس التاريخ والمبلغ (اختياري)',(data?.candidates??[]).filter(d=>employee?d.employee_id===v.employee_id:d.contract_id===v.contract_id).map(d=>({id:d.id,label:d.reference+' · '+formatFinancialDate(d.date,locale)+' · '+minorDisplay(d.amount_minor)+' AED'})))}
     {employee&&select('project_id','Source Project context (no advance cost)','سياق مشروع المصدر (لا تكلفة للسلفة)',m.phase==='READY'?m.projects.filter(p=>p.companyId===cid).map(p=>({id:p.id,label:p.code+' · '+p.name})):[])}
     {text('evidence','Supporting payment / agreement reference','مرجع دليل الدفع / الاتفاقية')}
    </fieldset>
