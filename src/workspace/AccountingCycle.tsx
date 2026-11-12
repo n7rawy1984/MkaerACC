@@ -1,2 +1,3 @@
 import {CycleFoundation} from './CycleFoundation';
-export function AccountingCycle(){return <CycleFoundation/>;}
+import {LegacyExecutiveDashboard} from '../dashboard/ExecutiveDashboard';
+export function AccountingCycle(){return <CycleFoundation details={<LegacyExecutiveDashboard/>}/>;}

@@ -1,3 +1,4 @@
+import {AccountingOverview} from '../dashboard/AccountingOverview';
 import {MonthlyFinancialActivity} from '../dashboard/MonthlyFinancialActivity';
 import {useEffect,useMemo,useState,type ReactNode} from 'react';
 import {Link} from 'react-router-dom';
@@ -38,6 +39,14 @@ export function ProcessDiagram({items,role,t}:{items:{module:string;label:string
  return <ol className="cycle-process">{items.map((item,i)=><li key={item.module+item.label}><WorkflowCard moduleId={item.module} label={item.label} icon={item.icon} role={role} t={t} tone={i%6}/>{i<items.length-1&&<ArrowRight className="cycle-connector" size={19} aria-hidden="true"/>}</li>)}</ol>;
 }
 export function CycleFoundation({details}:{details?:ReactNode}){const {state}=useAuth();if(state.phase!=='TENANT_READY')return null;return <CycleData key={`${state.profile.userId}:${state.activeTenant.companyId}:${state.activeTenant.role}`} userId={state.profile.userId} companyId={state.activeTenant.companyId} role={state.activeTenant.role} details={details}/>;}
+export function DashboardFoundation(){const {state}=useAuth();if(state.phase!=='TENANT_READY')return null;return <OverviewWorkspace key={`${state.profile.userId}:${state.activeTenant.companyId}:${state.activeTenant.role}`} userId={state.profile.userId} companyId={state.activeTenant.companyId} role={state.activeTenant.role}/>;}
+function OverviewWorkspace({userId,companyId,role}:{userId:string;companyId:string;role:string}){
+ const {locale}=useI18n(),master=useProductionMasterData(),[revision,setRevision]=useState(0);
+ useEffect(()=>{const update=(event:Event)=>{if((event as CustomEvent).detail?.companyId===companyId)setRevision(n=>n+1);};window.addEventListener('historical-source-changed',update);return()=>window.removeEventListener('historical-source-changed',update);},[companyId]);
+ if(master.phase!=='READY')return <p role={master.phase==='ERROR'?'alert':'status'}>{locale==='ar'?'بيانات الشركة غير متاحة بعد':'Company data is not yet available'}</p>;
+ if(master.company.id!==companyId||master.projects.some(p=>p.companyId!==companyId))return <p role="alert">{locale==='ar'?'تعذر التحقق من نطاق الشركة':'Company scope could not be verified'}</p>;
+ return <div className="integrated-cycle"><AccountingOverview user={userId} company={companyId} companyName={master.company.name} role={role} locale={locale} revision={revision} projects={master.projects}/><Link className="cycle-report-link" to="/accounting-cycle">{locale==='ar'?'أدلة العمل وتقارير تدقيق المصادر':'Workspace guides & source audit reports'} ↗</Link></div>;
+}
 function CycleData({userId,companyId,role,details}:{userId:string;companyId:string;role:string;details?:ReactNode}){
  const {locale,t:globalText}=useI18n(),w=useWorkspaceText(),master=useProductionMasterData();const ar=locale==='ar',t:Text=key=>cycleText[ar?'ar':'en'][key];
  const [revision,setRevision]=useState(0),[expanded,setExpanded]=useState(false);

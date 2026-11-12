@@ -1,4 +1,4 @@
-import {CycleFoundation} from '../workspace/CycleFoundation';
+import {DashboardFoundation} from '../workspace/CycleFoundation';
 import {WorkspaceQuickActions} from '../workspace/WorkspaceQuickActions';
 import {useWorkspaceText} from '../workspace/useWorkspaceText';
 import {ReportExport} from '../reports/ReportExport';
@@ -18,8 +18,8 @@ import { useDashboardRead } from "./useDashboardRead";
 import { dashboardAED, summarizeDashboard, type DashboardSummary } from "./dashboardSummary";
 import { DashboardChart } from "./DashboardChart";
 
-export default function ExecutiveDashboard() {return <CycleFoundation details={<LegacyExecutiveDashboard/>}/>;}
-function LegacyExecutiveDashboard() {
+export default function ExecutiveDashboard() {return <DashboardFoundation/>;}
+export function LegacyExecutiveDashboard() {
   const { state } = useAuth();
   if (state.phase !== "TENANT_READY") return null;
   return <DashboardContent key={`${state.profile.userId}:${state.activeTenant.companyId}:${state.activeTenant.role}`} userId={state.profile.userId} companyId={state.activeTenant.companyId} role={state.activeTenant.role} />;

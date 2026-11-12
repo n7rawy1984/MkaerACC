@@ -1,0 +1,145 @@
+{
+  "status": "VERIFIED_LOCAL_RELEASE_PREPARED_NOT_DEPLOYED",
+  "baseline": {
+    "release": "71be5181682119c70b78d10c632204b573c961be",
+    "production_state": "Product Owner confirms LIVE; no general deployment audit repeated",
+    "hosted_migrations_through": 91
+  },
+  "migration": {
+    "number": 92,
+    "file": "20261112120000_accounting_dashboard_reads.sql",
+    "sha256": "d1b8349960007e21d6952e94b720a7c9f0417113b4d7490cfb5a5d1754efb250",
+    "state": "PREPARED_NOT_APPLIED",
+    "target_after_separate_authorization": "eqnzueginpkskbnqvgoc",
+    "purpose": "Server-side monthly aggregates and bounded transaction pages; no financial writes, backfill, table grants or RLS changes",
+    "security": "All new functions SECURITY INVOKER, fixed empty search_path, authenticated-only EXECUTE; canonical role/membership checks, table RLS and existing document-link reader retained",
+    "linked_dry_run": "Only Migration92 pending; no migrations applied"
+  },
+  "tests": {
+    "database": {
+      "status": "PASS",
+      "count": 19,
+      "checks": [
+        "Migration92 preserves all seeded financial/source/membership rows",
+        "Payroll source reporting follows entitlement period, not payment or worksheet month",
+        "SQL monthly aggregates reconcile to verified custody model",
+        "Contractor advances remain assets without Project cost",
+        "Source dates override worksheet provenance; unknowns and states remain separate",
+        "Server pages are bounded, deterministic and total covers all rows",
+        "Unknown-date group is separate and preserved",
+        "Possible duplicates have a distinct filter",
+        "Search is literal and applied server-side",
+        "Journal event-type filter excludes unrelated events",
+        "Changing transaction pages cannot change financial totals",
+        "Explicit empty future month carries the closing balance across years",
+        "Project filter does not allocate unassigned owner funding",
+        "Foreign Company actor denied by both reporting RPCs",
+        "Unbounded page requests rejected",
+        "Management Viewer receives no confidential payroll metrics",
+        "Reporting runs in READ ONLY transactions and preserves all financial evidence",
+        "SQL recognizes canonical Petty Cash as cash, not bank",
+        "Reversal is classified by original event on its own posting date"
+      ]
+    },
+    "client": {
+      "status": "PASS",
+      "count": 15,
+      "checks": [
+        "Every SQL financial metric matches the verified canonical monthly model",
+        "Month navigation is calendar-based, crosses years and clamps supported limits",
+        "Client uses only the bounded read RPC",
+        "Client preserves total independent of ten-row page",
+        "Client rejects foreign Company payload",
+        "Financial totals must remain exact minor-unit strings",
+        "Changed authenticated actor rejects stale response",
+        "Unmounted or changed Company context rejects response",
+        "Unavailable hosted read migration fails closed without legacy full-history fallback",
+        "en legacy audit exports retain both date and worksheet provenance modes",
+        "ar legacy audit exports retain both date and worksheet provenance modes",
+        "CASH uses the authoritative Treasury type for cash/bank breakdown",
+        "PETTY_CASH uses the authoritative Treasury type for cash/bank breakdown",
+        "PROJECT_CASH_BOX uses the authoritative Treasury type for cash/bank breakdown",
+        "BANK uses the authoritative Treasury type for cash/bank breakdown"
+      ]
+    },
+    "browser": {
+      "status": "PASS",
+      "count": 26,
+      "checks": [
+        "Single selected month with eight prominent KPIs",
+        "Closing Custody balance reconciles",
+        "Overview loads only the bounded aggregate and no transaction rows",
+        "Worksheet-month selector removed from standard dashboard",
+        "Compact six-month comparison",
+        "Comparison supports twelve months without monthly card wall",
+        "Explicit empty December remains visible and carries balance",
+        "Next month crosses year boundary",
+        "Comparison month selects corresponding overview",
+        "Server page size does not reduce total count",
+        "Transaction pagination does not change summary totals",
+        "Debounced search resets page and queries server",
+        "Source to document and journal navigation remains available",
+        "Unknown dates remain separately reviewable with yellow warnings",
+        "Actual en export retains monthly ledger reconciliation",
+        "Actual en direction",
+        "Actual en mobile layout fits viewport",
+        "Actual en mobile month values stay readable within a scrolling table",
+        "Actual ar export retains monthly ledger reconciliation",
+        "Actual ar direction",
+        "Actual ar mobile layout fits viewport",
+        "Actual ar mobile month values stay readable within a scrolling table",
+        "Management Viewer sees restricted Custody and no Payroll link",
+        "Foreign Company response fails closed and removes stale data",
+        "Sign-out clears previously displayed balances immediately",
+        "No browser errors, hosted requests or financial mutations"
+      ]
+    },
+    "artifacts": {
+      "status": "PASS",
+      "count": 4,
+      "checks": [
+        "en XLSX contains exact monthly values, numeric dates and correct direction",
+        "en actual PDF contains November, numeric transaction date and ledger closing",
+        "ar XLSX contains exact monthly values, numeric dates and correct direction",
+        "ar actual PDF contains November, numeric transaction date and ledger closing"
+      ]
+    }
+  },
+  "focused_check_total": 64,
+  "build": "PASS TypeScript and Production Vite build including production dependency boundary; existing large-chunk advisory remains",
+  "lint": "PASS scoped application lint, zero errors/warnings",
+  "accounting": {
+    "basis": "SQL aggregates match every metric and balance of the existing canonical monthly model using synthetic baseline figures; no fresh hosted accounting audit",
+    "custody_closing_checkpoint_minor": "37135070",
+    "funding_checkpoint_minor": "39096020",
+    "contractor_advance_checkpoint_minor": "1650000",
+    "expense_checkpoint_minor": "310950",
+    "real_financial_mutations": 0,
+    "source_or_date_mutations": 0,
+    "payroll_mutations": 0
+  },
+  "behavior": {
+    "default": "One current calendar month; previous/next/year boundaries and explicit empty/future months",
+    "comparison": "6/12 months ending at selected month; clickable compact table",
+    "overview_reads": "One monthly read RPC; no journal/source transaction downloads before detail is opened",
+    "details": "Separate server-side row pages (10/25/50), literal search, month/unknown-date, status, event-type, active Company and Project scope, date sort, exact full-match count; canonical document/report workspace links",
+    "exports": "Existing Excel/PDF renderer; summary and comparison totals independent of pages; detail section explicitly current filtered page only",
+    "audit_compatibility": "Existing /accounting-cycle retains full monthly audit/provenance report and legacy details; /expenses retains original source evidence; existing URLs preserved",
+    "confidentiality": "Payroll links/metrics require payroll.manage; complete Custody figures withheld when coverage is incomplete; Treasury totals and Project cost withheld without HR visibility rather than presenting partial balances",
+    "cash_type_correction": "CASH, PETTY_CASH and PROJECT_CASH_BOX are cash; other authoritative Treasury types are bank in shared model and SQL"
+  },
+  "limitations": [
+    "Migration92 requires explicit hosted authorization and activation before publishing the compatible frontend",
+    "New RPCs not exercised on Production because Migration92 is not approved/applied",
+    "Module drilldowns reuse existing workspace/report routes; no new dedicated journal detail screen or financial statements claimed",
+    "Existing audit/full-report workflows remain intentionally comprehensive; only new dashboard summary/detail reads use this bounded path",
+    "Payroll processing and remaining source evidence completion remain separate; no posting attempted",
+    "Full restoration rehearsal and USB tasks remain deferred"
+  ],
+  "release": {
+    "branch": "release/accounting-dashboard-ux",
+    "parent": "71be5181682119c70b78d10c632204b573c961be",
+    "automatic_push": false,
+    "automatic_deploy": false
+  }
+}
