@@ -18,8 +18,11 @@ export function sourceMonthMetric(rows:SourceRecord[],month:string,kind:MonthlyK
  return moneyMetric(values.reduce((n,v)=>n+BigInt(v!),0n).toString());
  }catch{return {state:'ERROR'};}
 }
-export function cycleMonths(start:string):string[]{
- if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(start))return [];
- const [year,month]=start.split('-').map(Number);if(year<1900||year>9998)return [];
- return [0,1,2].map(i=>{const index=year*12+month-1+i;return `${Math.floor(index/12)}-${String(index%12+1).padStart(2,'0')}`;});
+// Explicit inclusive range; callers discover boundaries from authoritative data.
+export function cycleMonths(start:string,through:string):string[]{
+ const valid=(s:string)=>/^\d{4}-(0[1-9]|1[0-2])$/.test(s)&&Number(s.slice(0,4))>=1;
+ if(!valid(start)||!valid(through)||start>through)return [];
+ const[y,m]=start.split('-').map(Number),[ey,em]=through.split('-').map(Number),result:string[]=[];
+ for(let i=y*12+m-1;i<=ey*12+em-1;i++)result.push(`${String(Math.floor(i/12)).padStart(4,'0')}-${String(i%12+1).padStart(2,'0')}`);
+ return result;
 }

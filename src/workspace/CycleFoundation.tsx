@@ -1,8 +1,7 @@
-import{reportingMonthLabel,unconfirmedDateLabel}from'../historical/sourceDatePresentation';
-import{sourceTransactionDate}from'../historical/sourceModel';
+import {MonthlyFinancialActivity} from '../dashboard/MonthlyFinancialActivity';
 import {useEffect,useMemo,useState,type ReactNode} from 'react';
 import {Link} from 'react-router-dom';
-import {Building2,BookOpen,Landmark,HardHat,FolderKanban,Users,FileSignature,ContactRound,CalendarDays,ArrowDownToLine,UserRound,Receipt,Wallet,ShoppingCart,Coins,Settings2,CheckCircle2,Database,ChartColumn,ClipboardCheck,LockKeyhole,Files,ArrowRight,RefreshCw,TriangleAlert,type LucideIcon} from 'lucide-react';
+import {Building2,BookOpen,Landmark,HardHat,FolderKanban,Users,FileSignature,ContactRound,CalendarDays,Receipt,Wallet,Settings2,CheckCircle2,Database,ChartColumn,ClipboardCheck,LockKeyhole,Files,ArrowRight,RefreshCw,TriangleAlert,type LucideIcon} from 'lucide-react';
 import {useAuth} from '../auth/AuthContext';
 import {useI18n} from '../i18n/I18nContext';
 import {useProductionMasterData} from '../master/productionMasterDataContext';
@@ -10,12 +9,11 @@ import {getSupabaseClient} from '../lib/supabase';
 import {useDashboardRead} from '../dashboard/useDashboardRead';
 import {summarizeDashboard,dashboardAED} from '../dashboard/dashboardSummary';
 import {useHistoricalSources} from '../historical/useHistoricalSources';
-import type {ReportingBasis} from '../historical/sourceModel';
 import {WorkspaceQuickActions} from './WorkspaceQuickActions';
 import {useWorkspaceText} from './useWorkspaceText';
 import {isAccountingReader} from './workspaceNavigation';
 import {moduleForRole} from './moduleRegistry';
-import {moneyMetric,sourceMonthMetric,cycleMonths,type Metric} from './metricState';
+import {moneyMetric,type Metric} from './metricState';
 import {cycleText,type CycleKey} from './cycleText';
 import './cycleFoundation.css';
 type Text=(key:CycleKey)=>string;
@@ -42,25 +40,21 @@ export function ProcessDiagram({items,role,t}:{items:{module:string;label:string
 export function CycleFoundation({details}:{details?:ReactNode}){const {state}=useAuth();if(state.phase!=='TENANT_READY')return null;return <CycleData key={`${state.profile.userId}:${state.activeTenant.companyId}:${state.activeTenant.role}`} userId={state.profile.userId} companyId={state.activeTenant.companyId} role={state.activeTenant.role} details={details}/>;}
 function CycleData({userId,companyId,role,details}:{userId:string;companyId:string;role:string;details?:ReactNode}){
  const {locale,t:globalText}=useI18n(),w=useWorkspaceText(),master=useProductionMasterData();const ar=locale==='ar',t:Text=key=>cycleText[ar?'ar':'en'][key];
- const [revision,setRevision]=useState(0),[start,setStart]=useState('2026-08'),[basis,setBasis]=useState<ReportingBasis>('DATE'),[expanded,setExpanded]=useState(false);
+ const [revision,setRevision]=useState(0),[expanded,setExpanded]=useState(false);
  useEffect(()=>{const update=(event:Event)=>{if((event as CustomEvent).detail?.companyId===companyId)setRevision(n=>n+1);};window.addEventListener('historical-source-changed',update);return()=>window.removeEventListener('historical-source-changed',update);},[companyId]);
  const masterReady=master.phase==='READY'&&master.company.id===companyId&&[...master.projects,...master.parties,...master.expenseCategories].every(r=>r.companyId===companyId);
  const financial=useDashboardRead(getSupabaseClient(),userId,companyId,role,revision,masterReady);
  const summary=useMemo(()=>{if(!masterReady||master.phase!=='READY'||financial.phase!=='READY')return null;try{return summarizeDashboard(master,financial.data,globalText('executiveDashboard.companyOverhead'));}catch{return null;}},[masterReady,master,financial,globalText]);
  const allowed=isAccountingReader(role),source=useHistoricalSources(companyId,allowed,undefined,revision,['ACCOUNTING_ADMIN','ACCOUNTANT'].includes(role));
  const phase=!allowed?'DENIED':master.phase==='LOADING'?'LOADING':!masterReady?'ERROR':financial.phase==='READY'?(summary?'READY':'ERROR'):financial.phase;
- const months=cycleMonths(start),monthLabel=(month:string)=>reportingMonthLabel(month,locale);
- const sourceMetric=(month:string,kind:'inflow'|'outflow'|'payroll'):Metric=>!allowed?{state:'UNAVAILABLE'}:source.loading?{state:'LOADING'}:source.error?{state:'ERROR'}:sourceMonthMetric(source.rows,month,kind,basis);
  const postedMetrics=[['posted',summary?.postedExpenseNet],['supplier',summary?.supplierOutstanding],['subcontractor',summary?.subcontractorOutstanding],['retention',summary?.retentionHeld]] as const;
  const setup=[['/company-profile','company',Building2],['/accounts','coa',BookOpen],['/treasury-accounts','treasury',Landmark],['assets','assets',HardHat],['/projects','projectMaster',FolderKanban],['/parties','contractors',Users],['/subcontracts','contracts',FileSignature],['/employees','employees',ContactRound]] as const;
- const monthlyRows=[['inflow','sourceIn',ArrowDownToLine],['unsupported','advances',UserRound],['outflow','sourceOut',Receipt],['unsupported','contractorPayments',Wallet],['unsupported','materials',ShoppingCart],['payroll','payroll',Coins]] as const;
  const retry=()=>{setRevision(n=>n+1);source.refresh();};
  return <div className="integrated-cycle" data-reference="NARVO_DASHBOARD_REFERENCE.jpeg"><header className="cycle-title"><span className="cycle-wordmark"><Building2 size={26} aria-hidden="true"/>NARVO <small>ERP</small></span><div><h2>{t('title')}</h2><p>{t('intro')}</p></div><button type="button" onClick={retry} aria-label={t('retry')}><RefreshCw size={16} aria-hidden="true"/>{t('retry')}</button></header>
- <div className="cycle-period-banner"><CalendarDays size={21} aria-hidden="true"/><span>{t('range')}<strong>{months.map(monthLabel).join(' · ')||'—'}</strong></span></div>
  <WorkspaceQuickActions compact/>
  {(source.error||phase==='ERROR')&&<div className="cycle-read-error" role="alert"><TriangleAlert size={18} aria-hidden="true"/>{t('errorHelp')}</div>}
  <WorkflowStage number={1} title={t('setup')} note={t('setupNote')}><div className="cycle-setup">{setup.map(([id,label,Icon],i)=><WorkflowCard key={id} moduleId={id} label={t(label)} icon={Icon} tone={i%6} role={role} t={t}/>)}</div></WorkflowStage>
- <WorkflowStage number={2} title={t('monthly')} note={t('monthlyNote')}><div className="cycle-month-controls"><label>{t('period')}<input type="month" value={start} min="1900-01" max="9998-10" onChange={e=>{if(cycleMonths(e.target.value).length)setStart(e.target.value);}}/></label><label>{t('basis')}<select aria-label={t('basis')} value={basis} onChange={e=>setBasis(e.target.value as ReportingBasis)}><option value="SOURCE">{t('sourceBasis')}</option><option value="DATE">{t('dateBasis')}</option></select></label></div><div className="cycle-month-grid">{months.map((month,i)=><MonthlyActivityColumn key={month} title={monthLabel(month)} index={i} t={t} rows={monthlyRows.map(([kind,label,Icon])=>({label:t(label),icon:Icon,metric:kind==='unsupported'?{state:'UNAVAILABLE'}:sourceMetric(month,kind),explanation:kind==='unsupported'?t('splitReason'):allowed?t('sourceReason'):t('scopeDenied')}))}/>)}</div><p className="cycle-evidence-note">{t('sourceDisclaimer')} {unconfirmedDateLabel(locale)}: {source.rows.filter(r=>r.record_type==='GENERAL'&&sourceTransactionDate(r)===null).length}</p></WorkflowStage>
+ <WorkflowStage number={2} title={ar?'الحركة المالية الشهرية':'Monthly financial activity'} note={ar?'المصادر المستوردة والمحاسبة المرحلة منفصلتان':'Imported sources and posted accounting shown separately'}><MonthlyFinancialActivity user={userId} company={companyId} companyName={masterReady&&master.phase==='READY'?master.company.name:''} role={role} locale={locale} revision={revision} sources={source.rows} sourceLoading={source.loading} sourceError={source.error}/></WorkflowStage>
  <WorkflowStage number={3} title={t('posting')} note={t('postingNote')}><ProcessDiagram role={role} t={t} items={[{module:'/expenses',label:t('entry'),icon:Receipt},{module:'rules',label:t('rules'),icon:Settings2},{module:'/expenses',label:t('review'),icon:CheckCircle2},{module:'/accounting-reports',label:t('ledger'),icon:Database}]}/><p className="cycle-evidence-note">{ar?"صدّر القيود اليومية المرحلة للمراجعة. تُرحّل المعاملات من مستنداتها؛ استعراض الأستاذ العام وتعديل قواعد الترحيل غير متاحين هنا.":"Export posted journal entries for review. Post transactions from their documents; a separate general ledger browser and posting-rule editor are not available."}</p></WorkflowStage>
  <WorkflowStage number={4} title={t('reports')} note={t('reportsNote')}><div className="cycle-report-grid">{['trialBalance','income','balance'].map((id,i)=>{const m=moduleForRole(id,role);return <ReportPreview key={id} title={m.name[ar?1:0]} icon={[BookOpen,ChartColumn,Landmark][i]} t={t}/>;})}<article className="cycle-report-panel cycle-supported-reports"><h3><Files size={20} aria-hidden="true"/>{t('details')}</h3><dl>{postedMetrics.map(([key,value])=><FinancialMetricCard key={key} label={t(key)} metric={moneyMetric(value,phase)} t={t} explanation={allowed?t('empty'):t('scopeDenied')}/>)}</dl>{moduleForRole('/accounting-reports',role).canNavigate&&<Link className="cycle-report-link" to="/accounting-reports">{w('reports')}<ArrowRight size={14} aria-hidden="true"/></Link>}</article></div><p className="cycle-evidence-note">{t('metricScope')}</p></WorkflowStage>
  <WorkflowStage number={5} title={t('projects')} note={t('projectsNote')}><ProcessDiagram role={role} t={t} items={[{module:'/subcontracts',label:t('contract'),icon:FileSignature},{module:'execution',label:t('execution'),icon:HardHat},{module:'/subcontractor-certificates',label:t('certificates'),icon:ClipboardCheck},{module:'/subcontractor-payments',label:t('payments'),icon:Wallet},{module:'cost',label:t('cost'),icon:ChartColumn},{module:'projectReports',label:t('projectReports'),icon:BookOpen}]}/></WorkflowStage>

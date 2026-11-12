@@ -7,6 +7,7 @@ export type CustodyMovement = StatementRow & {funding:string;spending:string;ret
 export type CustodyReconciliation = {statement:StatementResult;opening:string;funding:string;spending:string;returned:string;other:string;certifiedOpening:string;difference:string;closing:string;rows:CustodyMovement[]};
 // Custody is a Company/person receivable. These are journal movements, never a
 // calculated cash box or an automatically recognized reimbursement liability.
+export function custodyMovementKind(type:string){return ['CUSTODY_ADVANCE','PARTNER_LOAN_FUNDING','PARTNER_CAPITAL_FUNDING','PARTNER_ADDITIONAL_CAPITAL_FUNDING','PARTNER_CURRENT_FUNDING'].includes(type)?'FUNDING':['EXPENSE','SUBCONTRACTOR_ADVANCE','SUBCONTRACTOR_PAYMENT','HR_EMPLOYEE_ADVANCE'].includes(type)?'SPENDING':type==='CUSTODY_CASH_RETURN'?'RETURN':type==='CERTIFIED_OPENING'?'OPENING':'OTHER';}
 export function reconcileCustody(statement:StatementResult):CustodyReconciliation {
  if(!statement.operational.applicable||statement.scope.account!=='ALL'||statement.scope.transaction!=='ALL')throw Error('scope');
  const groups=statement.groups.filter(g=>g.account.system_key==='CUSTODY_ADVANCE');
@@ -15,7 +16,7 @@ export function reconcileCustody(statement:StatementResult):CustodyReconciliatio
  const rows:CustodyMovement[]=[];
  for(const g of groups){opening+=BigInt(g.opening);closing+=BigInt(g.closing);
   for(const r of g.rows){const net=BigInt(r.debit)-BigInt(r.credit);let f=0n,s=0n,t=0n,o=0n;
-   if(['CUSTODY_ADVANCE','PARTNER_LOAN_FUNDING','PARTNER_CAPITAL_FUNDING','PARTNER_ADDITIONAL_CAPITAL_FUNDING','PARTNER_CURRENT_FUNDING'].includes(r.type))f=net;else if(['EXPENSE','SUBCONTRACTOR_ADVANCE','SUBCONTRACTOR_PAYMENT','HR_EMPLOYEE_ADVANCE'].includes(r.type))s=-net;else if(r.type==='CUSTODY_CASH_RETURN')t=-net;else if(r.type==='CERTIFIED_OPENING'){certifiedOpening+=net;}else o=net;
+   if(custodyMovementKind(r.type)==='FUNDING')f=net;else if(custodyMovementKind(r.type)==='SPENDING')s=-net;else if(custodyMovementKind(r.type)==='RETURN')t=-net;else if(custodyMovementKind(r.type)==='OPENING'){certifiedOpening+=net;}else o=net;
    funding+=f;spending+=s;returned+=t;other+=o;
    rows.push({...r,funding:String(f),spending:String(s),returned:String(t),other:String(o),certifiedOpening:r.type==='CERTIFIED_OPENING'?String(net):'0'});
   }
