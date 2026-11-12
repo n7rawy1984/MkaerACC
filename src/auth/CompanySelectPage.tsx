@@ -15,7 +15,7 @@ export function CompanySelectPage() {
       <p className="mt-2 text-sm text-slate-600">{t("auth.selectCompanyHint")}</p>
       <div className="mt-6 space-y-3">
         {state.memberships.map((membership) => (
-          <button key={membership.membershipId} type="button" onClick={() => chooseCompany(membership.companyId)} className="flex w-full items-center justify-between rounded-xl border border-slate-200 p-4 text-start hover:border-blue-400 hover:bg-blue-50">
+          <button key={membership.membershipId} type="button" onClick={() => chooseCompany(membership.companyId)} className="narvo-company-choice flex w-full items-center justify-between rounded-xl border border-slate-200 p-4 text-start hover:border-blue-400 hover:bg-blue-50">
             <span><span className="block font-medium"><bdi>{membership.companyName}</bdi></span><span className="mt-1 block text-xs text-slate-500"><bdi dir="ltr">{membership.companyCode}</bdi></span></span>
             <span className="text-xs text-slate-600"><bdi>{roleLabel(membership.role,locale)}</bdi></span>
           </button>

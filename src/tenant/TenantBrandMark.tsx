@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTenantSettings } from "./TenantSettingsContext";
-import { HardHat } from "lucide-react";
+import { Building2 } from "lucide-react";
 
 export function TenantBrandMark({ logoUrl, className = "h-10 w-10" }: { logoUrl: string | null; className?: string }) {
   const settings = useTenantSettings();
@@ -9,5 +9,5 @@ export function TenantBrandMark({ logoUrl, className = "h-10 w-10" }: { logoUrl:
   if (logoUrl && failedUrl !== logoUrl) {
     return <img src={logoUrl} alt={alt} referrerPolicy="no-referrer" className={`${className} shrink-0 rounded-lg object-contain`} onError={() => setFailedUrl(logoUrl)} />;
   }
-  return <span className={`flex ${className} items-center justify-center rounded-lg bg-[var(--tenant-primary)] text-white`}><HardHat size={19} /></span>;
+  return <span className={`flex ${className} items-center justify-center rounded-lg bg-[var(--tenant-primary)] text-white`}><Building2 size={19} aria-hidden="true"/></span>;
 }

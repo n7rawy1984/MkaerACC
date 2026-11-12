@@ -1,0 +1,11 @@
+// Test-only: materialize existing canonical synthetic fixtures for UI verification.
+// No hosted credentials/connection; subsequent browser transport is read-only/capture-only.
+import{makerOperationalFixture}from'./maker-operational-fixture.mjs';import{readFileSync,writeFileSync,mkdirSync}from'node:fs';
+const out='/tmp/narvo-premium-completion';mkdirSync(out,{recursive:true});const f=await makerOperationalFixture();
+try{
+ for(const file of['20261111120000_custody_funding_drafts.sql','20261111140000_custody_funded_source_settlements.sql','20261112120000_accounting_dashboard_reads.sql']){if(!readFileSync('supabase/migrations/'+file,'utf8'))throw Error(file);await f.db.exec(readFileSync('supabase/migrations/'+file,'utf8'));}
+ const names=(await f.db.query("select table_name from information_schema.tables where table_schema='public'")).rows.map(r=>r.table_name),tables={};for(const name of names){if(!/^[a-z_]+$/.test(name))throw Error('identifier');tables[name]=(await f.db.query('select * from public.'+name)).rows.filter(r=>!r.company_id||r.company_id===f.company);}
+ const read=async(name,args)=>{const keys=Object.keys(args);return(await f.as(f.admin,'select public.'+name+'('+keys.map((k,i)=>k+'=> $'+(i+1)).join(',')+')r',keys.map(k=>args[k])))[0].r;};
+ const rpc={};for(const[name,args]of[['read_hr_workspace',{cid:f.company,m:f.month}],['read_payroll_profiles',{target_company_id:f.company}],['read_payroll_draft',{target_company_id:f.company,target_month:f.month}],['read_payroll_postings',{target_company_id:f.company,target_month:f.month}],['read_inventory',{cid:f.company}],['get_company_accounting_setup',{company_id:f.company}]]){try{rpc[name]=await read(name,args);}catch(e){rpc[name]={fixtureReadError:e.message};}}
+ const value={company:f.company,user:f.admin,accountant:f.accountant,viewer:f.viewer??'ed030005-0000-4000-8000-000000000004',project:f.p2,bank:f.bank,custodian:f.custodian,supplier:f.supplier,contract:f.contract??f.subcontract,employee:f.employee,month:f.month,today:f.today,draft:f.draft,tables,rpc};writeFileSync(out+'/snapshot.json',JSON.stringify(value,(_k,v)=>typeof v==='bigint'?v.toString():v));console.log('Prepared local synthetic populated UI snapshot;',names.length,'table shapes; no hosted access.');
+}finally{await f.db.close();}

@@ -1,3 +1,4 @@
+import {containDialogTab} from '../components/ui/dialogFocus';
 import {createElement,useEffect,useId,useRef,useState,type ReactNode} from 'react';
 import {ChevronRight,SlidersHorizontal,Inbox,LoaderCircle,TriangleAlert,ChartNoAxesCombined} from 'lucide-react';
 import {Link,useLocation} from 'react-router-dom';
@@ -18,6 +19,6 @@ export function LoadingState({children}:{children:ReactNode}){return <div classN
 export function ErrorState({children,onRetry,retryLabel}:{children:ReactNode;onRetry?:()=>void;retryLabel?:string}){return <div className="suite-error" role="alert"><TriangleAlert size={19} aria-hidden="true"/><p>{children}</p>{onRetry&&<button type="button" onClick={onRetry}>{retryLabel}</button>}</div>;}
 export function FormField({label,children}:{label:string;children:ReactNode}){return <label className="suite-form-field"><span>{label}</span>{children}</label>;}
 export function DetailPanel({children,title}:{children:ReactNode;title?:string}){return <div className="suite-detail-panel">{title&&<h3>{title}</h3>}{children}</div>;}
-export function WorkspaceDrawer({title,closeLabel,onClose,children}:{title:string;closeLabel:string;onClose:()=>void;children:ReactNode}){const ref=useRef<HTMLDialogElement>(null),id=useId();useEffect(()=>{ref.current?.showModal();},[]);return <dialog ref={ref} className="workspace-navigation-dialog suite-drawer" aria-labelledby={id} onClose={onClose}><header><h2 id={id}>{title}</h2><button type="button" aria-label={closeLabel} onClick={()=>ref.current?.close()}>×</button></header><div onClick={e=>{if((e.target as HTMLElement).closest('a[href]'))ref.current?.close();}}>{children}</div></dialog>;}
+export function WorkspaceDrawer({title,closeLabel,onClose,children}:{title:string;closeLabel:string;onClose:()=>void;children:ReactNode}){const ref=useRef<HTMLDialogElement>(null),id=useId();useEffect(()=>{ref.current?.showModal();},[]);return <dialog ref={ref} className="workspace-navigation-dialog suite-drawer" onKeyDown={containDialogTab} aria-labelledby={id} onClose={onClose}><header><h2 id={id}>{title}</h2><button type="button" aria-label={closeLabel} onClick={()=>ref.current?.close()}>×</button></header><div onClick={e=>{if((e.target as HTMLElement).closest('a[href]'))ref.current?.close();}}>{children}</div></dialog>;}
 
 export function ExpandableText({text,label}:{text:string;label:string}){return text.length>180?<details className="suite-long-text"><summary aria-label={label}><bdi>{text.slice(0,180)}…</bdi><span>{label}</span></summary><p><bdi>{text}</bdi></p></details>:<bdi>{text}</bdi>;}

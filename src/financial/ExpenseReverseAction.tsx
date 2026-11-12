@@ -85,7 +85,7 @@ export function ExpenseReverseAction({ userId, companyId, role, expense, onRefre
 
   if (role !== "ACCOUNTING_ADMIN" || (expense.status !== "POSTED" && !attempt)) return null;
   const field = "block w-full rounded-lg border border-slate-300 bg-white px-3 py-2";
-  return <section className="mt-3 rounded-lg border border-red-200 p-3" aria-label={t("expenseReverse.title")}>
+  return <section className="narvo-financial-workflow narvo-reversal mt-3 rounded-lg border border-red-200 p-3" aria-label={t("expenseReverse.title")}>
     {message && <p role="alert" className="mb-2 break-words text-red-800">{t(`expenseReverse.${message}`)}</p>}
     {busy && <p role="status">{t("expenseReverse.pending")}</p>}
     {attempt ? <div className="space-y-2 break-words">

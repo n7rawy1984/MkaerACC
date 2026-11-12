@@ -42,7 +42,7 @@ export function RetentionPaymentPost({ userId, companyId, role, outstanding, onP
     } catch (error) { setMessage(error instanceof Error && error.message === "invalid" ? "invalid" : "storageError"); }
   };
   if (!canPostRetentionPayment(role)) return null; const field = "block w-full rounded-lg border border-slate-300 bg-white px-3 py-2";
-  return <section className="mt-5 min-w-0 rounded-xl border border-slate-200 p-4" aria-label={t("retentionPaymentPost.title")}>
+  return <section className="narvo-financial-workflow mt-5 min-w-0 rounded-xl border border-slate-200 p-4" aria-label={t("retentionPaymentPost.title")}>
     <h3 className="font-semibold">{t("retentionPaymentPost.title")}</h3><p className="mt-2 text-sm text-slate-600">{t("retentionPaymentPost.scope")}</p>
     {message && <p role="alert" className="mt-3 break-words text-red-800">{t(`retentionPaymentPost.${message}`)}</p>}{busy && <p role="status">{t("retentionPaymentPost.pending")}</p>}
     {attempt ? <div className="mt-3 space-y-3 break-words"><p>{t(attempt.receipt ? "retentionPaymentPost.confirmed" : "retentionPaymentPost.frozen")}</p><p><bdi>{displayMinor(attempt.input.totalMinor)} AED · {attempt.input.allocations.length}</bdi></p><p>{t("retentionPaymentPost.request")}: <bdi dir="ltr">{attempt.key}</bdi></p>{attempt.receipt && <p><bdi>{attempt.receipt.payment_reference} · {attempt.receipt.journal_entry_id}</bdi></p>}{posted && <p role="status">{t("retentionPaymentPost.readback")}: <bdi>{posted.payment_reference} · {displayMinor(posted.total_amount_minor)} AED · {t(`retentionPaymentRead.${posted.status}`)}</bdi></p>}

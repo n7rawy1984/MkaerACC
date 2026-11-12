@@ -1,3 +1,4 @@
+import {containDialogTab} from '../components/ui/dialogFocus';
 import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import type { SupabaseClient } from "@supabase/supabase-js";
@@ -22,7 +23,7 @@ const labelKey = (key: string): PlatformTextKey | null => Object.hasOwn(platform
 function PlatformDialog({ title, close, children, busy }: { title: string; close: () => void; children: ReactNode; busy: boolean }) {
   const ref = useRef<HTMLDialogElement>(null); const t = useText();
   useEffect(() => { const node = ref.current; const previous = document.activeElement as HTMLElement | null; node?.showModal(); return () => { node?.close(); previous?.focus(); }; }, []);
-  return <dialog ref={ref} className="platform-dialog" aria-labelledby="platform-dialog-title" onCancel={event => { event.preventDefault(); if (!busy) close(); }}>
+  return <dialog ref={ref} className="platform-dialog" onKeyDown={containDialogTab} aria-labelledby="platform-dialog-title" onCancel={event => { event.preventDefault(); if (!busy) close(); }}>
     <header><h2 id="platform-dialog-title">{title}</h2><button type="button" disabled={busy} onClick={close}>{t("cancel")}</button></header>{children}
   </dialog>;
 }

@@ -1,5 +1,5 @@
 {
-  "phase": "System-wide visual foundation and representative workflow transformation; full application acceptance remains PARTIAL",
+  "phase": "Production visual coverage COMPLETE locally; publication and post-deployment smoke DEFERRED",
   "visualAuthority": {
     "path": "/home/nagham/Downloads/a_ultra_modern_dark_blue_and_white_arabic_dashboar.png",
     "sha256": "a108ecc262d4bea348208d6f02847942dfc4e2c4c341a1e87dfaa79f42951c98",
@@ -11,320 +11,413 @@
       "path": "/",
       "state": "PREMIUM COMPLETE",
       "verified": "New shared shell, responsive layout and both languages; Dashboard additionally has financial interactions/empty/error/privacy/export checks.",
-      "remaining": []
+      "remaining": [],
+      "evidence": [
+        "baseline: docs/premium-system-ui-verification.json"
+      ]
     },
     {
       "path": "/parties",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
-      "remaining": [
-        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual Production route, laptop1366×768/mobile390×844; existing module forms/details plus relevant financial confirmations. Baseline four-viewport shell evidence retained.",
+      "remaining": [],
+      "evidence": [
+        "completion.populated",
+        "completion.details"
       ]
     },
     {
       "path": "/expense-categories",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
-      "remaining": [
-        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual Production route, laptop1366×768/mobile390×844; existing module forms/details plus relevant financial confirmations. Baseline four-viewport shell evidence retained.",
+      "remaining": [],
+      "evidence": [
+        "completion.populated",
+        "completion.details"
       ]
     },
     {
       "path": "/projects",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
-      "remaining": [
-        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual Production route, laptop1366×768/mobile390×844; existing module forms/details plus relevant financial confirmations. Baseline four-viewport shell evidence retained.",
+      "remaining": [],
+      "evidence": [
+        "completion.populated",
+        "completion.details"
       ]
     },
     {
       "path": "/financial-evidence",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
-      "remaining": [
-        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual Production route, laptop1366×768/mobile390×844; existing module forms/details plus relevant financial confirmations. Baseline four-viewport shell evidence retained.",
+      "remaining": [],
+      "evidence": [
+        "completion.populated",
+        "completion.details",
+        "completion.evidence-confirmation"
       ]
     },
     {
       "path": "/custody",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
-      "remaining": [
-        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual Production route, laptop1366×768/mobile390×844; existing module forms/details plus relevant financial confirmations. Baseline four-viewport shell evidence retained.",
+      "remaining": [],
+      "evidence": [
+        "completion.populated",
+        "completion.details",
+        "completion.details"
       ]
     },
     {
       "path": "/expenses",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
-      "remaining": [
-        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual Production route, laptop1366×768/mobile390×844; existing module forms/details plus relevant financial confirmations. Baseline four-viewport shell evidence retained.",
+      "remaining": [],
+      "evidence": [
+        "completion.populated",
+        "completion.details",
+        "completion.financial-surfaces",
+        "completion.output-correction"
       ]
     },
     {
       "path": "/supplier-payments",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
-      "remaining": [
-        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual Production route, laptop1366×768/mobile390×844; existing module forms/details plus relevant financial confirmations. Baseline four-viewport shell evidence retained.",
+      "remaining": [],
+      "evidence": [
+        "completion.populated",
+        "completion.details",
+        "completion.reversal-variants"
       ]
     },
     {
       "path": "/treasury-accounts",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
-      "remaining": [
-        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual Production route, laptop1366×768/mobile390×844; existing module forms/details plus relevant financial confirmations. Baseline four-viewport shell evidence retained.",
+      "remaining": [],
+      "evidence": [
+        "completion.populated",
+        "completion.details"
       ]
     },
     {
       "path": "/subcontracts",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
-      "remaining": [
-        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual Production route, laptop1366×768/mobile390×844; existing module forms/details plus relevant financial confirmations. Baseline four-viewport shell evidence retained.",
+      "remaining": [],
+      "evidence": [
+        "completion.populated",
+        "completion.details"
       ]
     },
     {
       "path": "/subcontractor-advances",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
-      "remaining": [
-        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual Production route, laptop1366×768/mobile390×844; existing module forms/details plus relevant financial confirmations. Baseline four-viewport shell evidence retained.",
+      "remaining": [],
+      "evidence": [
+        "completion.populated",
+        "completion.details",
+        "completion.reversal-variants"
       ]
     },
     {
       "path": "/subcontractor-certificates",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
-      "remaining": [
-        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual Production route, laptop1366×768/mobile390×844; existing module forms/details plus relevant financial confirmations. Baseline four-viewport shell evidence retained.",
+      "remaining": [],
+      "evidence": [
+        "completion.populated",
+        "completion.details",
+        "completion.reversal-variants"
       ]
     },
     {
       "path": "/subcontractor-payments",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
-      "remaining": [
-        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual Production route, laptop1366×768/mobile390×844; existing module forms/details plus relevant financial confirmations. Baseline four-viewport shell evidence retained.",
+      "remaining": [],
+      "evidence": [
+        "completion.populated",
+        "completion.details",
+        "completion.reversal-variants"
       ]
     },
     {
       "path": "/retention-releases",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
-      "remaining": [
-        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual Production route, laptop1366×768/mobile390×844; existing module forms/details plus relevant financial confirmations. Baseline four-viewport shell evidence retained.",
+      "remaining": [],
+      "evidence": [
+        "completion.populated",
+        "completion.details",
+        "completion.reversal-variants"
       ]
     },
     {
       "path": "/retention-payments",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
-      "remaining": [
-        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual Production route, laptop1366×768/mobile390×844; existing module forms/details plus relevant financial confirmations. Baseline four-viewport shell evidence retained.",
+      "remaining": [],
+      "evidence": [
+        "completion.populated",
+        "completion.details",
+        "completion.reversal-variants"
       ]
     },
     {
       "path": "/inventory/materials",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
-      "remaining": [
-        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual Production route, laptop1366×768/mobile390×844; existing module forms/details plus relevant financial confirmations. Baseline four-viewport shell evidence retained.",
+      "remaining": [],
+      "evidence": [
+        "completion.populated",
+        "completion.details"
       ]
     },
     {
       "path": "/inventory/warehouses",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
-      "remaining": [
-        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual Production route, laptop1366×768/mobile390×844; existing module forms/details plus relevant financial confirmations. Baseline four-viewport shell evidence retained.",
+      "remaining": [],
+      "evidence": [
+        "completion.populated",
+        "completion.details"
       ]
     },
     {
       "path": "/inventory/receipts",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
-      "remaining": [
-        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual Production route, laptop1366×768/mobile390×844; existing module forms/details plus relevant financial confirmations. Baseline four-viewport shell evidence retained.",
+      "remaining": [],
+      "evidence": [
+        "completion.populated",
+        "completion.details"
       ]
     },
     {
       "path": "/inventory/issues",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
-      "remaining": [
-        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual Production route, laptop1366×768/mobile390×844; existing module forms/details plus relevant financial confirmations. Baseline four-viewport shell evidence retained.",
+      "remaining": [],
+      "evidence": [
+        "completion.populated",
+        "completion.details"
       ]
     },
     {
       "path": "/inventory/transfers",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
-      "remaining": [
-        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual Production route, laptop1366×768/mobile390×844; existing module forms/details plus relevant financial confirmations. Baseline four-viewport shell evidence retained.",
+      "remaining": [],
+      "evidence": [
+        "completion.populated",
+        "completion.details"
       ]
     },
     {
       "path": "/inventory/counts",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
-      "remaining": [
-        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual Production route, laptop1366×768/mobile390×844; existing module forms/details plus relevant financial confirmations. Baseline four-viewport shell evidence retained.",
+      "remaining": [],
+      "evidence": [
+        "completion.populated",
+        "completion.details"
       ]
     },
     {
       "path": "/inventory/balances",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
-      "remaining": [
-        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual Production route, laptop1366×768/mobile390×844; existing module forms/details plus relevant financial confirmations. Baseline four-viewport shell evidence retained.",
+      "remaining": [],
+      "evidence": [
+        "completion.populated",
+        "completion.details"
       ]
     },
     {
       "path": "/inventory/history",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
-      "remaining": [
-        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual Production route, laptop1366×768/mobile390×844; existing module forms/details plus relevant financial confirmations. Baseline four-viewport shell evidence retained.",
+      "remaining": [],
+      "evidence": [
+        "completion.populated",
+        "completion.details"
       ]
     },
     {
       "path": "/employees",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
-      "remaining": [
-        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual Production route, laptop1366×768/mobile390×844; existing module forms/details plus relevant financial confirmations. Baseline four-viewport shell evidence retained.",
+      "remaining": [],
+      "evidence": [
+        "completion.populated",
+        "completion.details"
       ]
     },
     {
       "path": "/attendance",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
-      "remaining": [
-        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual Production route, laptop1366×768/mobile390×844; existing module forms/details plus relevant financial confirmations. Baseline four-viewport shell evidence retained.",
+      "remaining": [],
+      "evidence": [
+        "completion.populated",
+        "completion.details"
       ]
     },
     {
       "path": "/payroll",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
-      "remaining": [
-        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual Production route, laptop1366×768/mobile390×844; existing module forms/details plus relevant financial confirmations. Baseline four-viewport shell evidence retained.",
+      "remaining": [],
+      "evidence": [
+        "completion.populated",
+        "completion.details",
+        "completion.financial-surfaces",
+        "completion.output-correction"
       ]
     },
     {
       "path": "/accounting-cycle",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
-      "remaining": [
-        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual Production route, laptop1366×768/mobile390×844; existing module forms/details plus relevant financial confirmations. Baseline four-viewport shell evidence retained.",
+      "remaining": [],
+      "evidence": [
+        "completion.populated",
+        "completion.details"
       ]
     },
     {
       "path": "/accounts",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
-      "remaining": [
-        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual Production route, laptop1366×768/mobile390×844; existing module forms/details plus relevant financial confirmations. Baseline four-viewport shell evidence retained.",
+      "remaining": [],
+      "evidence": [
+        "completion.populated",
+        "completion.details"
       ]
     },
     {
       "path": "/accounting-reports",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
-      "remaining": [
-        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual Production route, laptop1366×768/mobile390×844; existing module forms/details plus relevant financial confirmations. Baseline four-viewport shell evidence retained.",
+      "remaining": [],
+      "evidence": [
+        "completion.populated",
+        "completion.details"
       ]
     },
     {
       "path": "/company-profile",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
-      "remaining": [
-        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual Production route, laptop1366×768/mobile390×844; existing module forms/details plus relevant financial confirmations. Baseline four-viewport shell evidence retained.",
+      "remaining": [],
+      "evidence": [
+        "completion.populated",
+        "completion.details"
       ]
     }
   ],
   "platformRoutes": [
     {
       "path": "/platform",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual administrative route and shared shell rendered in both languages at four viewports; settings dialog and login separately inspected.",
-      "remaining": [
-        "Populated directory variants and every administrative command dialog not individually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual administrative route and reachable directory/editor/detail command dialogs at laptop/mobile; dialog cancellation and keyboard containment. Synthetic Platform data only.",
+      "remaining": [],
+      "evidence": [
+        "completion.platform-completion",
+        "completion.platform-invitations"
       ]
     },
     {
       "path": "/platform/onboarding",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual administrative route and shared shell rendered in both languages at four viewports; settings dialog and login separately inspected.",
-      "remaining": [
-        "Populated directory variants and every administrative command dialog not individually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual administrative route and reachable directory/editor/detail command dialogs at laptop/mobile; dialog cancellation and keyboard containment. Synthetic Platform data only.",
+      "remaining": [],
+      "evidence": [
+        "completion.platform-completion",
+        "completion.platform-invitations"
       ]
     },
     {
       "path": "/platform/customers",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual administrative route and shared shell rendered in both languages at four viewports; settings dialog and login separately inspected.",
-      "remaining": [
-        "Populated directory variants and every administrative command dialog not individually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual administrative route and reachable directory/editor/detail command dialogs at laptop/mobile; dialog cancellation and keyboard containment. Synthetic Platform data only.",
+      "remaining": [],
+      "evidence": [
+        "completion.platform-completion",
+        "completion.platform-invitations"
       ]
     },
     {
       "path": "/platform/entities",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual administrative route and shared shell rendered in both languages at four viewports; settings dialog and login separately inspected.",
-      "remaining": [
-        "Populated directory variants and every administrative command dialog not individually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual administrative route and reachable directory/editor/detail command dialogs at laptop/mobile; dialog cancellation and keyboard containment. Synthetic Platform data only.",
+      "remaining": [],
+      "evidence": [
+        "completion.platform-completion",
+        "completion.platform-invitations"
       ]
     },
     {
       "path": "/platform/users",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual administrative route and shared shell rendered in both languages at four viewports; settings dialog and login separately inspected.",
-      "remaining": [
-        "Populated directory variants and every administrative command dialog not individually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual administrative route and reachable directory/editor/detail command dialogs at laptop/mobile; dialog cancellation and keyboard containment. Synthetic Platform data only.",
+      "remaining": [],
+      "evidence": [
+        "completion.platform-completion",
+        "completion.platform-invitations"
       ]
     },
     {
       "path": "/platform/memberships",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual administrative route and shared shell rendered in both languages at four viewports; settings dialog and login separately inspected.",
-      "remaining": [
-        "Populated directory variants and every administrative command dialog not individually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual administrative route and reachable directory/editor/detail command dialogs at laptop/mobile; dialog cancellation and keyboard containment. Synthetic Platform data only.",
+      "remaining": [],
+      "evidence": [
+        "completion.platform-completion",
+        "completion.platform-invitations"
       ]
     },
     {
       "path": "/platform/invitations",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual administrative route and shared shell rendered in both languages at four viewports; settings dialog and login separately inspected.",
-      "remaining": [
-        "Populated directory variants and every administrative command dialog not individually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual administrative route and reachable directory/editor/detail command dialogs at laptop/mobile; dialog cancellation and keyboard containment. Synthetic Platform data only.",
+      "remaining": [],
+      "evidence": [
+        "completion.platform-completion",
+        "completion.platform-invitations"
       ]
     },
     {
       "path": "/platform/subscriptions",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual administrative route and shared shell rendered in both languages at four viewports; settings dialog and login separately inspected.",
-      "remaining": [
-        "Populated directory variants and every administrative command dialog not individually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual administrative route and reachable directory/editor/detail command dialogs at laptop/mobile; dialog cancellation and keyboard containment. Synthetic Platform data only.",
+      "remaining": [],
+      "evidence": [
+        "completion.platform-completion",
+        "completion.platform-invitations"
       ]
     },
     {
       "path": "/platform/audit",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual administrative route and shared shell rendered in both languages at four viewports; settings dialog and login separately inspected.",
-      "remaining": [
-        "Populated directory variants and every administrative command dialog not individually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual administrative route and reachable directory/editor/detail command dialogs at laptop/mobile; dialog cancellation and keyboard containment. Synthetic Platform data only.",
+      "remaining": [],
+      "evidence": [
+        "completion.platform-completion",
+        "completion.platform-invitations"
       ]
     },
     {
       "path": "/platform/settings",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Actual administrative route and shared shell rendered in both languages at four viewports; settings dialog and login separately inspected.",
-      "remaining": [
-        "Populated directory variants and every administrative command dialog not individually accepted."
+      "state": "PREMIUM COMPLETE",
+      "verified": "EN/AR populated actual administrative route and reachable directory/editor/detail command dialogs at laptop/mobile; dialog cancellation and keyboard containment. Synthetic Platform data only.",
+      "remaining": [],
+      "evidence": [
+        "completion.platform-completion",
+        "completion.platform-invitations"
       ]
     }
   ],
@@ -332,83 +425,125 @@
     {
       "path": "/login",
       "state": "PREMIUM COMPLETE",
-      "verified": "Actual platform sign-in and shared authentication shell rendered in EN/AR at four viewports."
+      "verified": "Actual platform sign-in and shared authentication shell rendered in EN/AR at four viewports.",
+      "evidence": [
+        "baseline"
+      ]
     },
     {
       "path": "/select-company",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Uses redesigned AuthFrame; individual identity-transition screen not independently browser-captured."
+      "state": "PREMIUM COMPLETE",
+      "verified": "Individually browser verified in EN/AR at laptop/mobile: Company selection, no-membership/retry, identity error/retry, loading callback, recovery request and password/MFA callback. No real credentials/session mutation.",
+      "evidence": [
+        "completion.auth-transitions",
+        "completion.platform-completion"
+      ]
     },
     {
       "path": "/no-company",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Uses redesigned AuthFrame; individual identity-transition screen not independently browser-captured."
+      "state": "PREMIUM COMPLETE",
+      "verified": "Individually browser verified in EN/AR at laptop/mobile: Company selection, no-membership/retry, identity error/retry, loading callback, recovery request and password/MFA callback. No real credentials/session mutation.",
+      "evidence": [
+        "completion.auth-transitions",
+        "completion.platform-completion"
+      ]
     },
     {
       "path": "/auth-error",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Uses redesigned AuthFrame; individual identity-transition screen not independently browser-captured."
+      "state": "PREMIUM COMPLETE",
+      "verified": "Individually browser verified in EN/AR at laptop/mobile: Company selection, no-membership/retry, identity error/retry, loading callback, recovery request and password/MFA callback. No real credentials/session mutation.",
+      "evidence": [
+        "completion.auth-transitions",
+        "completion.platform-completion"
+      ]
     },
     {
       "path": "/auth/callback",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Uses redesigned AuthFrame; individual identity-transition screen not independently browser-captured."
+      "state": "PREMIUM COMPLETE",
+      "verified": "Individually browser verified in EN/AR at laptop/mobile: Company selection, no-membership/retry, identity error/retry, loading callback, recovery request and password/MFA callback. No real credentials/session mutation.",
+      "evidence": [
+        "completion.auth-transitions",
+        "completion.platform-completion"
+      ]
     },
     {
       "path": "/auth/recovery",
-      "state": "PREMIUM PARTIAL",
-      "verified": "Uses redesigned AuthFrame; individual identity-transition screen not independently browser-captured."
+      "state": "PREMIUM COMPLETE",
+      "verified": "Individually browser verified in EN/AR at laptop/mobile: Company selection, no-membership/retry, identity error/retry, loading callback, recovery request and password/MFA callback. No real credentials/session mutation.",
+      "evidence": [
+        "completion.auth-transitions",
+        "completion.platform-completion"
+      ]
     }
   ],
   "sharedComponents": [
     {
       "surface": "Product mark",
       "state": "PREMIUM COMPLETE",
-      "implementation": "src/components/ui/NarvoMark.tsx"
+      "implementation": "src/components/ui/NarvoMark.tsx",
+      "evidence": "Baseline evidence retained; populated completion, confirmation, output and presentation-preservation evidence added."
     },
     {
       "surface": "Company navigation/header",
       "state": "PREMIUM COMPLETE",
-      "implementation": "src/workspace/CompanyWorkspaceShell.tsx"
+      "implementation": "src/workspace/CompanyWorkspaceShell.tsx",
+      "evidence": "Baseline evidence retained; populated completion, confirmation, output and presentation-preservation evidence added."
     },
     {
       "surface": "Dashboard KPIs/chart/attention/recent/detail",
       "state": "PREMIUM COMPLETE",
-      "implementation": "src/dashboard/AccountingOverview.tsx"
+      "implementation": "src/dashboard/AccountingOverview.tsx",
+      "evidence": "Baseline evidence retained; populated completion, confirmation, output and presentation-preservation evidence added."
     },
     {
       "surface": "Inventory/Payroll module navigation",
       "state": "PREMIUM COMPLETE",
-      "implementation": "src/components/ui/ModuleNavigation.tsx"
+      "implementation": "src/components/ui/ModuleNavigation.tsx",
+      "evidence": "Baseline evidence retained; populated completion, confirmation, output and presentation-preservation evidence added."
     },
     {
       "surface": "Headers/sections/financial summaries/tables/filters/status/empty/loading/error/form fields/detail drawer",
-      "state": "PREMIUM PARTIAL",
-      "implementation": "src/workspace/workspaceUi.tsx"
+      "state": "PREMIUM COMPLETE",
+      "implementation": "src/workspace/workspaceUi.tsx",
+      "evidence": "Baseline evidence retained; populated completion, confirmation, output and presentation-preservation evidence added."
     },
     {
       "surface": "Formal financial PDF/Excel",
-      "state": "PREMIUM PARTIAL",
-      "implementation": "src/reports/ReportExport.tsx; src/reports/reportExport.ts; src/styles/reportBrand.ts"
+      "state": "PREMIUM COMPLETE",
+      "implementation": "src/reports/ReportExport.tsx; src/reports/reportExport.ts; src/styles/reportBrand.ts",
+      "evidence": "Baseline evidence retained; populated completion, confirmation, output and presentation-preservation evidence added."
     },
     {
       "surface": "Payroll register Excel/PDF",
-      "state": "PREMIUM PARTIAL",
-      "implementation": "src/payroll/payrollRegisterXlsx.ts; existing PayrollRegisterOutput"
+      "state": "PREMIUM COMPLETE",
+      "implementation": "src/payroll/payrollRegisterXlsx.ts; existing PayrollRegisterOutput",
+      "evidence": "Baseline evidence retained; populated completion, confirmation, output and presentation-preservation evidence added."
     },
     {
       "surface": "Administrative directory/forms/dialogs/onboarding",
-      "state": "PREMIUM PARTIAL",
-      "implementation": "src/platform/PlatformApplication.tsx; PlatformShell; premium.css"
+      "state": "PREMIUM COMPLETE",
+      "implementation": "src/platform/PlatformApplication.tsx; PlatformShell; premium.css",
+      "evidence": "Baseline evidence retained; populated completion, confirmation, output and presentation-preservation evidence added."
     },
     {
       "surface": "Legacy utility-based operational forms/audit/posting confirmations",
-      "state": "PREMIUM PARTIAL",
-      "implementation": "src/styles/premium.css; existing canonical renderers"
+      "state": "PREMIUM COMPLETE",
+      "implementation": "src/styles/premium.css; existing canonical renderers",
+      "evidence": "Baseline evidence retained; populated completion, confirmation, output and presentation-preservation evidence added."
+    },
+    {
+      "surface": "Shared Production Field and Company-choice/auth transition controls",
+      "state": "PREMIUM COMPLETE",
+      "implementation": "src/components/ui/Field.tsx; src/auth; premium.css"
+    },
+    {
+      "surface": "Keyboard containment in Company/Platform detail and financial/Payroll report dialogs",
+      "state": "PREMIUM COMPLETE",
+      "implementation": "src/components/ui/dialogFocus.ts"
     }
   ],
   "legacyDemoRoutes": {
-    "state": "NOT YET UPDATED",
+    "state": "NOT APPLICABLE TO PRODUCTION",
     "paths": [
       "/",
       "/company",
@@ -424,7 +559,17 @@
       "/people",
       "/journal"
     ],
-    "boundary": "Isolated local-demo is not the supabase-auth Production workspace; no demo fallback introduced. Full-product visual coverage must account for these separately."
+    "boundary": "All13 patterns belong to isolated local-demo DemoApplication; Production uses ProtectedApplication under supabase-auth. Demo-only AppShell/Sidebar/Modal/StatCard are outside this release scope. Production-shared Card already uses approved identity; shared Field completed here. No demo fallback or extra customer app introduced.",
+    "productionShared": [
+      "src/components/ui/Card.tsx",
+      "src/components/ui/Field.tsx"
+    ],
+    "demoOnly": [
+      "src/components/layout/AppShell.tsx",
+      "src/components/layout/Sidebar.tsx",
+      "src/components/ui/Modal.tsx",
+      "src/components/ui/StatCard.tsx"
+    ]
   },
   "redirects": {
     "state": "NOT APPLICABLE",
@@ -435,10 +580,22 @@
     ],
     "reason": "Existing redirects preserved; no new independent presentation."
   },
-  "remaining": [
-    "Workflow-specific populated subviews and every posting/reversal/correction confirmation require further visual acceptance.",
-    "Identity-transition/recovery screens inherit AuthFrame but lack individual browser captures.",
-    "Local-demo AppShell/Sidebar/Modal/Field/StatCard and its 13 route patterns retain legacy composition.",
-    "Existing operational screen bodies are token-styled; bespoke component migration is partial, not fully complete."
-  ]
+  "remaining": [],
+  "continuedFrom": "133bf0c6048d87f3cddb00832917da7b5fd4967c",
+  "coverageBasis": "Existing Production components rendered with immutable synthetic populated snapshots and capture-only commands. Baseline 554 focused checks reused, not repeated. Completion concerns UI presentation and interactions, not a new accounting/security audit or hosted financial execution.",
+  "publication": {
+    "state": "DEFERRED",
+    "required": "Explicit publication followed by read-only Production smoke; no automatic push/deploy. Local visual verification is not a claim of a deployed release."
+  },
+  "summary": {
+    "companyDestinations": 30,
+    "platformDestinations": 10,
+    "authenticationSurfaces": 6,
+    "productionCoverage": "46/46 locally complete",
+    "isolatedDemoPatterns": 13,
+    "newFocusedChecks": 895,
+    "prior554Repeated": false,
+    "realFinancialWrites": 0,
+    "newMigrations": 0
+  }
 }

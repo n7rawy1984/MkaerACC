@@ -42,7 +42,7 @@ export function SubcontractorPaymentPost({ userId, companyId, role, outstanding,
     } catch (error) { setMessage(error instanceof Error && error.message === "invalid" ? "invalid" : "storageError"); }
   };
   if (!canPostSubcontractorPayment(role)) return null; const field = "block w-full rounded-lg border border-slate-300 bg-white px-3 py-2";
-  return <section className="mt-5 min-w-0 rounded-xl border border-slate-200 p-4" aria-label={t("subcontractorPaymentPost.title")}>
+  return <section className="narvo-financial-workflow mt-5 min-w-0 rounded-xl border border-slate-200 p-4" aria-label={t("subcontractorPaymentPost.title")}>
     <h3 className="font-semibold">{t("subcontractorPaymentPost.title")}</h3><p className="mt-2 text-sm text-slate-600">{t("subcontractorPaymentPost.scope")}</p>
     {message && <p role="alert" className="mt-3 break-words text-red-800">{t(`subcontractorPaymentPost.${message}`)}</p>}{busy && <p role="status">{t("subcontractorPaymentPost.pending")}</p>}
     {attempt ? <div className="mt-3 space-y-3 break-words"><p>{t(attempt.receipt ? "subcontractorPaymentPost.confirmed" : "subcontractorPaymentPost.frozen")}</p><p><bdi>{displayMinor(attempt.input.totalMinor)} AED · {attempt.input.allocations.length}</bdi></p><p>{t("subcontractorPaymentPost.request")}: <bdi dir="ltr">{attempt.key}</bdi></p>{attempt.receipt && <p><bdi>{attempt.receipt.payment_reference} · {attempt.receipt.journal_entry_id}</bdi></p>}{posted && <p role="status">{t("subcontractorPaymentPost.readback")}: <bdi>{posted.payment_reference} · {displayMinor(posted.total_amount_minor)} AED · {t(`subcontractorPaymentRead.${posted.status}`)}</bdi></p>}

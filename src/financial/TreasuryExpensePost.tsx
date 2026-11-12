@@ -91,7 +91,7 @@ export function TreasuryExpensePost({ userId, companyId, role, onPosted, source 
   };
   if (!canPostExpense(role)) return null;
   const field = "block w-full rounded-lg border border-slate-300 bg-white px-3 py-2";
-  return <section className="mt-5 min-w-0 rounded-xl border border-slate-200 p-4" aria-label={t("expensePost.title")}>
+  return <section className="narvo-financial-workflow mt-5 min-w-0 rounded-xl border border-slate-200 p-4" aria-label={t("expensePost.title")}>
     <h3 className="font-semibold">{t("expensePost.title")}</h3>
     <p className="mt-2 text-sm text-slate-600">{t("expensePost.scope")}</p>{source?.grossMinor&&<p className="mt-2 text-sm font-medium">Source gross / إجمالي المصدر: <bdi dir="ltr">{displayMinor(source.grossMinor)} AED</bdi>. Net + VAT must match / يجب مطابقة الصافي والضريبة.</p>}
     {initial.foreign&&<p role="alert" className="mt-3 text-red-800">Resolve the existing pending Expense request in its original workflow before posting another source. / أكمل الطلب المعلق في مساره الأصلي قبل ترحيل مصدر آخر.</p>}
