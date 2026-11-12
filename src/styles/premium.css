@@ -1,42 +1,4 @@
-/* Five coordinated identities share one semantic component system. */
-:root, :root[data-theme="emerald"] {
- --erp-primary:#087E68;--erp-primary-hover:#066553;--erp-action-text:#076B59;
- --erp-background:#F6F8F7;--erp-sidebar:#F5FAF7;--erp-surface-subtle:#F5FAF7;
- --erp-text:#182B29;--erp-secondary:#425C55;--erp-muted:#536562;--erp-border:#DFE8E4;
- --erp-input-border:#80968C;--erp-secondary-bg:#EAF6F0;--erp-secondary-hover:#DBEEE3;
- --erp-focus:#066553;--erp-focus-inverse:#066553;--erp-nav-text:#294B40;--erp-nav-muted:#536562;
- --erp-nav-selected:var(--erp-primary);--erp-nav-selected-edge:#087E68;--erp-table-header:#EFF6F2;--erp-table-hover:#F0F8F4;
- --erp-chart-1:#087E68;--erp-chart-2:#5388BA;--erp-chart-3:#AA8544;--erp-chart-4:#8C72AF;
- --erp-radius-card:16px;--erp-radius-control:9px;--erp-shadow:0 3px 16px #182B2906;
-}
-:root[data-theme="sapphire"] {
- --erp-primary:#315DB4;--erp-primary-hover:#24488F;--erp-action-text:#24488F;--erp-background:#F5F7FB;--erp-sidebar:#F1F5FC;
- --erp-surface-subtle:#F3F6FC;--erp-text:#202C43;--erp-secondary:#435572;--erp-muted:#56657D;--erp-border:#DCE3EF;--erp-input-border:#8192AC;
- --erp-secondary-bg:#EAF0FC;--erp-secondary-hover:#DEE8F9;--erp-focus:#315DB4;--erp-focus-inverse:#315DB4;
- --erp-nav-text:#344C76;--erp-nav-muted:#56657D;--erp-nav-selected:var(--erp-primary);--erp-nav-selected-edge:#315DB4;--erp-table-header:#EEF2FA;--erp-table-hover:#F0F4FD;
- --erp-chart-1:#315DB4;--erp-chart-2:#208781;--erp-chart-3:#A5823E;--erp-chart-4:#8C72AF;
-}
-:root[data-theme="graphite"] {
- --erp-primary:#485461;--erp-primary-hover:#303D49;--erp-action-text:#36444F;--erp-background:#F5F6F7;--erp-sidebar:#F0F2F4;
- --erp-surface-subtle:#F4F5F6;--erp-text:#222B33;--erp-secondary:#46535F;--erp-muted:#59656F;--erp-border:#DDE2E6;--erp-input-border:#8B969F;
- --erp-secondary-bg:#EBEEF1;--erp-secondary-hover:#DDE3E8;--erp-focus:#485461;--erp-focus-inverse:#485461;
- --erp-nav-text:#394854;--erp-nav-muted:#59656F;--erp-nav-selected:var(--erp-primary);--erp-nav-selected-edge:#485461;--erp-table-header:#EEF1F3;--erp-table-hover:#F1F4F6;
- --erp-chart-1:#485461;--erp-chart-2:#5388BA;--erp-chart-3:#9E834C;--erp-chart-4:#6D8F83;
-}
-:root[data-theme="champagne"] {
- --erp-primary:#86652D;--erp-primary-hover:#6C4F20;--erp-action-text:#755622;--erp-background:#FAF8F3;--erp-sidebar:#F7F3E9;
- --erp-surface-subtle:#FCFAF5;--erp-text:#362E22;--erp-secondary:#62543E;--erp-muted:#71634E;--erp-border:#E8E0D1;--erp-input-border:#A1937A;
- --erp-secondary-bg:#F5EEDC;--erp-secondary-hover:#EDE2C8;--erp-focus:#86652D;--erp-focus-inverse:#86652D;
- --erp-nav-text:#645030;--erp-nav-muted:#71634E;--erp-nav-selected:var(--erp-primary);--erp-nav-selected-edge:#86652D;--erp-table-header:#F5F0E5;--erp-table-hover:#FCF7EB;
- --erp-chart-1:#86652D;--erp-chart-2:#4F8791;--erp-chart-3:#8E74A5;--erp-chart-4:#648775;
-}
-:root[data-theme="teal"] {
- --erp-primary:#087D89;--erp-primary-hover:#08636E;--erp-action-text:#08636E;--erp-background:#F3F8F9;--erp-sidebar:#EFF8F9;
- --erp-surface-subtle:#F3FAFA;--erp-text:#19343B;--erp-secondary:#3E5D65;--erp-muted:#536B72;--erp-border:#D8E7E9;--erp-input-border:#7D9A9F;
- --erp-secondary-bg:#E2F3F5;--erp-secondary-hover:#D2EBEE;--erp-focus:#087D89;--erp-focus-inverse:#087D89;
- --erp-nav-text:#29525B;--erp-nav-muted:#536B72;--erp-nav-selected:var(--erp-primary);--erp-nav-selected-edge:#087D89;--erp-table-header:#EAF5F6;--erp-table-hover:#EDF8F9;
- --erp-chart-1:#087D89;--erp-chart-2:#5979BA;--erp-chart-3:#A5823E;--erp-chart-4:#987BA6;
-}
+/* NARVO Premium: one identity; component refinements consume centralized tokens. */
 /* Status semantics retain stable meaning in every identity. */
 :root {--erp-info-text:var(--erp-action-text);--erp-info-bg:var(--erp-secondary-bg);--erp-info-border:var(--erp-input-border);--erp-neutral-bg:var(--erp-surface-subtle);--erp-neutral-text:var(--erp-muted);--erp-font:"Inter","Noto Sans Arabic","Segoe UI",Tahoma,Arial,sans-serif;}
 body {font-family:var(--erp-font);font-size:16px;line-height:1.65;background:var(--erp-background);color:var(--erp-text)}
@@ -118,3 +80,98 @@ body {font-family:var(--erp-font);font-size:16px;line-height:1.65;background:var
 .company-workspace .workspace-tenant>span {background:var(--erp-secondary-bg);color:var(--erp-action-text);flex-shrink:0}
 .platform-app .platform-row-actions button:not(.platform-primary):not(:disabled) {color:var(--erp-action-text)}
 .company-workspace .enterprise-record-list dl:empty {display:none}
+/* Approved premium identity: shared shells, records, inputs and overlays. */
+.narvo-mark{flex-shrink:0;color:var(--erp-brand-cyan)}
+.narvo-identity{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:8px;background:var(--erp-info-bg);color:var(--erp-info-text);font-size:12px;font-weight:700;letter-spacing:.05em;white-space:nowrap}
+.narvo-language{min-height:40px;padding:7px 12px;border:1px solid var(--erp-border);border-radius:10px;color:var(--erp-secondary);background:var(--erp-surface);font-size:14px;font-weight:600;cursor:pointer}
+:is(.company-workspace,.platform-app) :is(.workspace-sidebar,.platform-sidebar){background:var(--erp-brand-navy);border:0;box-shadow:0 0 24px #07172F0D}
+:is(.company-workspace,.platform-app) :is(.workspace-brand,.platform-brand){padding-block:24px;gap:12px;color:white;border-color:#FFFFFF16}
+:is(.company-workspace,.platform-app) :is(.workspace-brand-icon,.platform-brand-symbol){background:transparent;border:0;color:var(--erp-brand-cyan);width:36px;height:36px}
+:is(.company-workspace,.platform-app) :is(.workspace-brand,.platform-brand)>span:last-child{font-weight:800;font-size:25px;letter-spacing:.02em}
+:is(.company-workspace,.platform-app) :is(.workspace-brand,.platform-brand) small{font-size:12px!important;color:#7DD3FC;font-weight:600}
+:is(.company-workspace,.platform-app) :is(.workspace-brand,.platform-brand) em{font-size:12px;color:var(--erp-nav-muted);font-style:normal;letter-spacing:0;font-weight:400}
+.company-workspace .workspace-tenant,.platform-app .platform-owner-card{background:var(--erp-brand-navy-surface);border:1px solid #FFFFFF18;border-radius:12px}
+:is(.workspace-tenant,.platform-owner-card) :is(strong,span,bdi){color:var(--erp-nav-text)}
+.company-workspace .workspace-tenant small{color:var(--erp-nav-muted)}
+.company-workspace .workspace-nav-group summary{font-size:12px;font-weight:600;color:var(--erp-nav-muted);padding:10px 12px;gap:10px}
+.company-workspace .workspace-nav-group>div{padding-inline:4px}
+.company-workspace .workspace-nav-group a{display:flex;align-items:center;gap:10px;font-size:14px;min-height:42px;padding:9px 12px;margin-block:3px;border-radius:9px;border-inline-start:3px solid transparent}
+.company-workspace .workspace-nav-group a.active,.platform-app .platform-nav-group a.active{background:linear-gradient(110deg,#104174,#087F94);border-inline-start-color:var(--erp-brand-cyan);box-shadow:0 4px 12px #0002;color:white}
+.company-workspace .workspace-sidebar-footer{color:var(--erp-nav-muted);border-color:#FFFFFF16}
+:is(.workspace-topbar,.platform-topbar){box-shadow:0 1px 6px #10264A05}
+.narvo-page-icon{display:grid;place-items:center;flex-shrink:0;width:52px;height:52px;background:var(--erp-info-bg);color:var(--erp-primary);border:1px solid var(--erp-border);border-radius:15px}
+.company-workspace .workspace-page-header{justify-content:flex-start;gap:16px}
+.company-workspace .workspace-page-header>.suite-action-toolbar{margin-inline-start:auto}
+.company-workspace .workspace-page-header nav{font-size:12px;margin-block-end:4px}
+.company-workspace .workspace-page-header h1{font-size:26px}
+.company-workspace .suite-section-heading{padding:18px 22px;border-radius:var(--erp-radius-card) var(--erp-radius-card) 0 0}
+.company-workspace .suite-section-heading h2{font-size:19px}
+.company-workspace .suite-financial-card{border-block-start:0;border:1px solid var(--erp-border);background:linear-gradient(135deg,var(--erp-surface),var(--erp-info-bg));border-radius:var(--erp-radius-card);padding:20px}
+.company-workspace .suite-financial-card h3{display:flex;align-items:center;gap:9px;color:var(--erp-secondary);font-size:14px}
+.company-workspace .suite-financial-card h3 svg{color:var(--erp-primary)}
+.company-workspace .suite-financial-card>p{font-size:var(--erp-type-amount);font-weight:700;margin-block:12px 6px;letter-spacing:-.02em}
+:is(.company-workspace,.platform-app,.platform-dialog) :is(input,select,textarea){border-radius:var(--erp-radius-control);transition:border-color .12s,box-shadow .12s}
+:is(.company-workspace,.platform-app,.platform-dialog) :is(input,select,textarea):focus-visible{outline:2px solid var(--erp-focus);outline-offset:2px}
+:is(.company-workspace,.platform-app) :is(.suite-filter-bar,.platform-filters){border-radius:12px;background:var(--erp-surface-subtle);padding:16px;gap:var(--erp-form-gap)}
+:is(.company-workspace,.platform-app) :is(.suite-data-table,.historical-data-table,.platform-table){border-collapse:separate;border-spacing:0}
+:is(.company-workspace,.platform-app) :is(th,td){padding-block:var(--erp-table-cell-block);border-bottom:1px solid var(--erp-border)}
+:is(.company-workspace,.platform-app) th{font-weight:650;white-space:normal}
+:is(.company-workspace,.platform-app) tbody tr:hover{background:var(--erp-table-hover)}
+:is(.company-workspace,.platform-app) :is(.suite-table-region,.platform-table-region){border:1px solid var(--erp-border);border-radius:12px}
+:is(.company-workspace,.platform-app) :is(.suite-primary,.platform-primary){border-radius:10px;box-shadow:0 3px 7px #2563EB16}
+:is(.company-workspace,.platform-app) button:disabled{box-shadow:none;cursor:not-allowed}
+.erp-badge{font-size:13px;line-height:1.5;font-weight:600}
+.erp-badge::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+.platform-badge.erp-badge::before{display:none}
+.company-workspace :is(.suite-empty,.suite-loading){border-radius:12px;border:1px dashed var(--erp-border)}
+:is(.platform-dialog,.suite-drawer,.workspace-navigation-dialog){border:1px solid var(--erp-border);border-radius:var(--erp-radius-dialog);box-shadow:var(--erp-shadow-dialog);background:var(--erp-surface);color:var(--erp-text)}
+:is(.platform-dialog,.suite-drawer)::backdrop{background:#07172F66}
+.company-workspace .suite-drawer>header{background:var(--erp-surface-subtle);border-bottom:1px solid var(--erp-border);padding:18px 22px}
+.company-workspace .suite-drawer>header h2{font-size:20px}
+.company-workspace .suite-detail-panel{border-radius:12px;padding:20px;background:var(--erp-surface-subtle)}
+.company-workspace .suite-detail-panel dl{gap:16px}
+:is(.company-workspace,.platform-app) :is(.suite-action-toolbar,.platform-row-actions){row-gap:8px}
+:is(.company-workspace,.platform-app) :is(a,button,summary){transition:background-color .12s,border-color .12s,color .12s}
+:is(.company-workspace,.platform-app) :is(.suite-error,.platform-error){border-radius:12px}
+/* A navigation drawer is dark; financial detail drawers remain bright. */
+.company-workspace .suite-drawer:has(.workspace-brand){background:var(--erp-sidebar);color:var(--erp-nav-text)}
+.company-workspace .suite-drawer:has(.workspace-brand)>header{background:var(--erp-brand-navy-surface);color:white}
+.company-workspace .suite-drawer:has(.workspace-brand)>header h2{color:white}
+/* Authentication uses the same identity without changing its session workflow. */
+.narvo-auth{display:grid;grid-template-columns:minmax(0,1fr) minmax(480px,1fr);min-height:100dvh;background:var(--erp-background);font-family:var(--erp-font)}
+.narvo-auth-story{display:flex;flex-direction:column;justify-content:space-between;gap:60px;padding:60px;background:linear-gradient(140deg,#07172F 30%,#102D50 75%,#075E75);color:white;position:relative;overflow:hidden}
+.narvo-auth-story::after{content:'';position:absolute;width:540px;height:540px;border:1px solid #06B6D430;border-radius:50%;inset-inline-start:-180px;bottom:-350px;box-shadow:0 0 0 45px #06B6D407,0 0 0 90px #06B6D405;pointer-events:none}
+.narvo-auth-brand{display:flex;align-items:center;gap:14px}.narvo-auth-brand .narvo-mark{width:43px;height:43px}.narvo-auth-brand strong{font-size:32px;font-weight:800}.narvo-auth-brand small{font-size:14px;color:#7DD3FC}
+.narvo-auth-eyebrow{font-size:12px;letter-spacing:.12em;color:#67E8F9;font-weight:650}.narvo-auth-story h1{font-size:clamp(32px,3.6vw,58px);font-weight:750;line-height:1.3;margin-block:20px;max-width:600px}.narvo-auth-story>div>p{font-size:18px;line-height:1.9;color:#CBD8EC;max-width:460px;margin-bottom:30px}.narvo-auth-security{display:flex;gap:9px;align-items:center;font-size:13px;color:#B8C9DF;position:relative;z-index:1}
+.narvo-auth-content{padding:30px 48px;display:flex;flex-direction:column;gap:40px;justify-content:space-between;min-width:0}.narvo-auth-content>header{display:flex;justify-content:flex-end}.narvo-auth-mobile-brand{display:none}.narvo-auth-card{width:100%;max-width:440px;align-self:center;background:white;border:1px solid var(--erp-border);padding:36px;border-radius:20px;box-shadow:var(--erp-shadow)}
+.narvo-auth-card h1{font-size:28px;font-weight:750;color:var(--erp-text)}.narvo-auth-card p{font-size:15px;line-height:1.8;color:var(--erp-secondary)}.narvo-auth-card input,.narvo-auth-card select{min-height:46px;border:1px solid var(--erp-input-border);border-radius:10px;font-size:16px}.narvo-auth-card label{font-size:14px;line-height:1.8}.narvo-auth-card button[type=submit]{background:var(--erp-primary);border-radius:10px;min-height:46px;color:white}.narvo-auth-card [role=alert]{color:var(--erp-danger-text);background:var(--erp-danger-bg);padding:10px;border-radius:8px}.narvo-auth :focus-visible{outline:3px solid var(--erp-focus);outline-offset:3px}.narvo-auth-content>footer{text-align:center;color:var(--erp-muted);font-size:12px}
+/* Administrative summaries use restrained colour; totals retain their existing definitions. */
+.platform-app .platform-stats article{background:linear-gradient(140deg,var(--erp-surface),var(--erp-info-bg));border-radius:16px;box-shadow:var(--erp-shadow)}
+.platform-app .platform-stat-label>span{background:var(--erp-info-bg);color:var(--erp-primary);border-radius:12px}
+.platform-app .platform-panel{border-radius:16px}.platform-app .platform-section-title h2{font-size:19px}.platform-app .platform-stats strong{font-size:34px}
+@media(max-width:1000px){.narvo-auth{grid-template-columns:minmax(0,1fr)}.narvo-auth-story{display:none}.narvo-auth-content{min-height:100dvh;padding:24px;gap:30px}.narvo-auth-mobile-brand{display:flex;align-items:center;gap:10px;color:var(--erp-text)}.narvo-auth-content>header{justify-content:space-between}}
+@media(max-width:600px){.narvo-identity{display:none}.narvo-page-icon{width:43px;height:43px;border-radius:12px}.company-workspace .workspace-page-header{gap:10px;margin-bottom:18px}.company-workspace .workspace-page-header h1{font-size:23px}.company-workspace .suite-section-content{padding:16px}.company-workspace .suite-section-heading{padding:16px}.company-workspace .suite-filter-bar{padding:12px}.narvo-auth-content{padding:20px}.narvo-auth-card{padding:26px 22px}.company-workspace .suite-financial-card>p{font-size:26px}.company-workspace .workspace-topbar-actions{min-width:0}.company-workspace .suite-account-menu summary>span:not(.suite-avatar){display:none}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+@media print{.narvo-identity,.narvo-page-icon{display:none}body,.financial-report-output,.payroll-register-output{background:white!important;color:#111!important}.financial-report-print header,.payroll-register-print header{border-bottom:2px solid #16243B}.financial-report-print th,.payroll-register-print th{background:#F1F3F6!important;color:#111!important}.financial-report-print :is(th,td),.payroll-register-print :is(th,td){box-shadow:none!important}.erp-badge{background:white!important;color:#111!important;border-color:#777!important}}
+/* Operational modules that intentionally do not use ContentSection share its surface. */
+.company-workspace .workspace-route-body :is(.workspace-module,.workspace-module-content>section){background:var(--erp-surface);border:1px solid var(--erp-border);border-radius:var(--erp-radius-card);box-shadow:var(--erp-shadow);padding:22px}
+.company-workspace .workspace-route-body :is(.workspace-module,.workspace-module-content>section)>:is(h1,h2){font-size:21px;font-weight:700;margin-bottom:12px}
+.company-workspace .workspace-route-body :is(.workspace-module,.workspace-module-content>section) :is(article,fieldset){border-color:var(--erp-border);border-radius:12px}
+.company-workspace .workspace-route-body :is(.workspace-module,.workspace-module-content>section) fieldset{padding:16px;background:var(--erp-surface-subtle)}
+.company-workspace .workspace-route-body :is(.workspace-module,.workspace-module-content>section) details>summary{cursor:pointer;color:var(--erp-action-text);font-weight:600}
+.company-workspace .workspace-route-body :is(.workspace-module,.workspace-module-content>section) :is(input[type=checkbox],input[type=radio]){min-height:18px;min-width:18px}
+.company-workspace .workspace-route-body :is(.workspace-module,.workspace-module-content>section) :is(.overflow-x-auto,.overflow-auto){max-width:100%;border-radius:10px}
+.workspace-standalone>header{background:var(--erp-brand-navy);color:white;padding:20px;border-radius:16px}.workspace-standalone>header a{color:#A5EFFF}.workspace-standalone>section{box-shadow:var(--erp-shadow);border-color:var(--erp-border);border-radius:16px}
+@media(max-width:600px){.company-workspace .workspace-route-body :is(.workspace-module,.workspace-module-content>section){padding:16px}.company-workspace .workspace-route-body :is(.workspace-module,.workspace-module-content>section) fieldset{padding:12px}}
+
+.narvo-card{border-color:var(--erp-border);border-radius:var(--erp-radius-card);box-shadow:var(--erp-shadow);background:var(--erp-surface)}
+.company-workspace .suite-row-actions>.narvo-row-menu{margin:0;border:0;padding:0;background:transparent}.company-workspace .suite-row-actions>.narvo-row-menu>summary{padding:7px 10px;border:1px solid var(--erp-border);border-radius:8px;background:var(--erp-surface);color:var(--erp-action-text);list-style:none;min-height:36px;font-weight:600}.company-workspace .suite-row-actions>.narvo-row-menu>summary::after{content:' ⌄';font-size:14px}.company-workspace .suite-row-actions>.narvo-row-menu[open]>div{padding:10px 0;min-width:190px}.company-workspace .suite-data-table td{vertical-align:top}.company-workspace .suite-data-table:has(.narvo-row-menu){min-width:1000px;table-layout:auto}
+.narvo-auth-context{font-weight:650;color:var(--erp-info-text)!important;margin-bottom:12px;font-size:13px!important}.narvo-auth-links{margin-top:20px;border-top:1px solid var(--erp-border);padding-top:16px;font-size:14px;color:var(--erp-action-text)}
+:is(.company-workspace,.platform-app) :is(.workspace-sidebar,.platform-sidebar){background-image:radial-gradient(ellipse at 20% 120%,#06B6D420,transparent 65%)}
+.company-workspace .narvo-module-nav{display:flex;flex-wrap:wrap;gap:6px;margin-block:18px;padding:6px;border:1px solid var(--erp-border);border-radius:12px;background:var(--erp-surface-subtle)}
+.company-workspace .narvo-module-nav :is(a,button){display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 12px;min-height:42px;background:transparent;color:var(--erp-secondary);border:1px solid transparent;border-radius:8px;font-size:14px;font-weight:600}
+.company-workspace .narvo-module-nav :is(a[aria-current=page],button[aria-pressed=true]){color:var(--erp-action-text);background:var(--erp-surface);border-color:var(--erp-border);box-shadow:0 1px 3px #10264A09}
+@media(max-width:600px){.company-workspace .narvo-module-nav :is(a,button){flex:1 0 40%;justify-content:flex-start;font-size:13px}}
+/* Utility-based nested operational panels use the same borders as shared Cards. */
+.company-workspace :where(section,article,fieldset,form).border{border-color:var(--erp-border)}
+.company-workspace .narvo-context-toolbar{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 20px;padding:14px;border:1px solid var(--erp-border);border-radius:12px;background:var(--erp-surface-subtle)}.company-workspace .narvo-context-toolbar>label{display:block;flex:1;min-width:180px;max-width:320px}.company-workspace .narvo-context-toolbar>a{display:inline-flex;align-items:center;min-height:42px;font-size:14px}.company-workspace .narvo-context-toolbar>button{min-height:42px}

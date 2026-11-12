@@ -1,3 +1,4 @@
+import {NarvoMark} from '../components/ui/NarvoMark';
 import {ThemeSwitcher} from '../theme/ThemeSwitcher';
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
@@ -15,7 +16,7 @@ export function PlatformShell({ children, signOut }: { children: ReactNode; sign
   const [mobileOpen, setMobileOpen] = useState(false);
   useEffect(() => { if (mobileOpen) menu.current?.showModal(); }, [mobileOpen]);
   const tab = pathname.split("/")[2] || "overview"; const title = Object.hasOwn(platformText.en, tab) ? t(tab === "onboarding" ? "commercialOnboarding" : tab as PlatformTextKey) : t("overview");
-  const navigation = (mobile = false) => <><Link className="platform-brand" to="/platform" onClick={() => menu.current?.close()}><span className="platform-brand-symbol"><LayersMark/></span><span>NARVO <small>ERP</small><em>{t("ownerConsole")}</em></span></Link>
+  const navigation = (mobile = false) => <><Link className="platform-brand" to="/platform" onClick={() => menu.current?.close()}><span className="platform-brand-symbol"><NarvoMark/></span><span>NARVO <small>ERP</small><em>{t("ownerConsole")}</em></span></Link>
     <nav aria-label={t("title")}>{groups.map(group => <div className="platform-nav-group" key={group.label}><p>{t(group.label)}</p>{group.items.map(({ key, icon: Icon }) => <NavLink key={key} to={key === "overview" ? "/platform" : `/platform/${key}`} end={key === "overview"} onClick={() => { if (mobile) menu.current?.close(); }}><Icon size={19} aria-hidden="true"/>{t(key === "onboarding" ? "commercialOnboarding" : key)}</NavLink>)}</div>)}</nav>
     <div className="platform-sidebar-footer"><div className="platform-owner-card"><span><ShieldCheck size={18} aria-hidden="true"/></span><div><strong>{t("platformOwner")}</strong><small>{t("protectedAdministration")}</small></div></div><Link to="/" onClick={() => menu.current?.close()}>{t("accounting")}<ArrowUpRight size={16} aria-hidden="true"/></Link><button onClick={signOut}><LogOut size={16} aria-hidden="true"/>{t("signOut")}</button></div></>;
   return <div className="platform-app"><a className="platform-skip" href="#platform-main">{t("skipContent")}</a>
@@ -26,4 +27,3 @@ export function PlatformShell({ children, signOut }: { children: ReactNode; sign
     </div>
   </div>;
 }
-function LayersMark() { return <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m4 8 8-4 8 4-8 4-8-4Zm0 5 8 4 8-4M4 18l8 4 8-4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>; }

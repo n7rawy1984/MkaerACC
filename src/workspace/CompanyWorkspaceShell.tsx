@@ -2,7 +2,9 @@ import {ThemeSwitcher} from '../theme/ThemeSwitcher';
 import {workspaceBusinessAccess} from './workspaceBusinessAccess';
 import {useEffect,useRef,useState,type ReactNode} from 'react';
 import {Link,NavLink,useLocation} from 'react-router-dom';
-import {Building2,ChevronDown,LayoutDashboard,Users,FolderKanban,Wallet,HardHat,ContactRound,BookOpen,Settings2,Menu,LogOut,ArrowLeftRight,ShieldCheck,Plus,CalendarDays} from 'lucide-react';
+import {Building2,ChevronDown,Menu,LogOut,ArrowLeftRight,ShieldCheck,Plus,CalendarDays} from 'lucide-react';
+import {NarvoMark} from '../components/ui/NarvoMark';
+import {moduleIcon} from './moduleIcons';
 import {useProductionMasterData} from '../master/productionMasterDataContext';
 import {useAuth} from '../auth/AuthContext';
 import {useT,useI18n} from '../i18n/I18nContext';
@@ -20,7 +22,6 @@ import {useWorkspaceUiText} from './useWorkspaceUiText';
 import {PageHeader,WorkspaceDrawer} from './workspaceUi';
 import './workspace.css';
 import './workspaceSuite.css';
-const icons={dashboard:LayoutDashboard,masters:Users,projects:FolderKanban,financial:Wallet,contracts:HardHat,people:ContactRound,accounting:BookOpen,settings:Settings2};
 export function CompanyWorkspaceShell({children}:{children:ReactNode}){
  const {locale}=useI18n();
  const {state,showCompanySelector,signOut}=useAuth(),branding=useTenantSettings(),master=useProductionMasterData(),t=useWorkspaceText(),u=useWorkspaceUiText(),authText=useT(),{pathname}=useLocation(),subscription=useWorkspaceSubscription();
@@ -33,9 +34,9 @@ export function CompanyWorkspaceShell({children}:{children:ReactNode}){
  const verified=subscription?.companyId===tenant.companyId&&subscription.loaded&&!!subscription.row;
  const newExpense=pathname==='/expenses'&&canPostExpense(tenant.role);
  const actions=newExpense?(workspaceBusinessAccess(subscription,tenant.companyId)==='FULL'?<a className="suite-primary" href="#new-expense" onClick={()=>{const d=document.getElementById('new-expense');if(d instanceof HTMLDetailsElement)d.open=true;}}><Plus size={16} aria-hidden="true"/>{u('newExpense')}</a>:<span className="suite-disabled" aria-disabled="true" title={u(verified?'renew':'unverified')}>{u('newExpense')}</span>):null;
- const navigation=<><Link className="workspace-brand" to="/"><span className="workspace-brand-icon"><Building2 size={23} aria-hidden="true"/></span><span>NARVO <small>ERP</small><em>{t('workspace')}</em></span></Link>
+ const navigation=<><Link className="workspace-brand" to="/"><span className="workspace-brand-icon"><NarvoMark/></span><span>NARVO <small>ERP</small><em>{t('workspace')}</em></span></Link>
  <div className="workspace-tenant" title={identity}><TenantBrandMark logoUrl={branding.phase==='READY'?branding.settings.logoUrl:null}/><div><small>{t('currentCompany')}</small><strong><bdi>{name}</bdi></strong><span><bdi dir="ltr">{tenant.companyCode}</bdi></span></div></div>
- <nav aria-label={t('navigation')}>{groups.map(g=>{const Icon=icons[g.label as keyof typeof icons]??BookOpen;return <details className="workspace-nav-group" key={g.label} open={g.items.some(i=>i.path===pathname)||g.label==='dashboard'}><summary><Icon size={17} aria-hidden="true"/><span>{t(g.label)}</span><ChevronDown size={15} aria-hidden="true"/></summary><div>{g.items.map(item=><NavLink end key={item.path} to={item.path}>{t(item.label)}</NavLink>)}</div></details>;})}</nav>
+ <nav aria-label={t('navigation')}>{groups.map(g=>{const Icon=moduleIcon(g.label);return <details className="workspace-nav-group" key={g.label} open={g.items.some(i=>i.path===pathname)||g.label==='dashboard'}><summary><Icon size={17} aria-hidden="true"/><span>{t(g.label)}</span><ChevronDown size={15} aria-hidden="true"/></summary><div>{g.items.map(item=>{const ItemIcon=moduleIcon(item.path);return <NavLink end key={item.path} to={item.path}><ItemIcon size={17} aria-hidden="true"/><span>{t(item.label)}</span></NavLink>;})}</div></details>;})}</nav>
  <div className="workspace-sidebar-footer"><span><ShieldCheck size={15} aria-hidden="true"/>{t('companyScoped')}</span></div></>;
  return <div className="company-workspace workspace-suite"><a className="workspace-skip" href="#company-workspace-main">{t('skip')}</a><aside className="workspace-sidebar">{navigation}</aside>
  {open&&<WorkspaceDrawer title={t('navigation')} closeLabel={t('closeNavigation')} onClose={()=>{setOpen(false);trigger.current?.focus();}}>{navigation}</WorkspaceDrawer>}

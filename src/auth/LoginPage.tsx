@@ -3,7 +3,7 @@ import { useT } from "../i18n/I18nContext";
 import { AuthFrame } from "./AuthFrame";
 import { useAuth } from "./AuthContext";
 
-export function LoginPage() {
+export function LoginPage({context,footer}:{context?:string;footer?:import("react").ReactNode}={}) {
   const t = useT();
   const { signIn } = useAuth();
   const [email, setEmail] = useState("");
@@ -23,6 +23,7 @@ export function LoginPage() {
 
   return (
     <AuthFrame>
+      {context&&<p className="narvo-auth-context">{context}</p>}
       <h1 className="text-2xl font-semibold">{t("auth.loginTitle")}</h1>
       <p className="mt-2 text-sm text-slate-600">{t("auth.loginSubtitle")}</p>
       <form className="mt-6 space-y-4" onSubmit={submit}>
@@ -37,6 +38,7 @@ export function LoginPage() {
           {pending ? t("auth.signingIn") : t("auth.signIn")}
         </button>
       </form>
+      {footer&&<div className="narvo-auth-links">{footer}</div>}
     </AuthFrame>
   );
 }

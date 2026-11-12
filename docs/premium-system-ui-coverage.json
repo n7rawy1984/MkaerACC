@@ -1,0 +1,444 @@
+{
+  "phase": "System-wide visual foundation and representative workflow transformation; full application acceptance remains PARTIAL",
+  "visualAuthority": {
+    "path": "/home/nagham/Downloads/a_ultra_modern_dark_blue_and_white_arabic_dashboar.png",
+    "sha256": "a108ecc262d4bea348208d6f02847942dfc4e2c4c341a1e87dfaa79f42951c98",
+    "inspected": true,
+    "industryImagery": "Not embedded; neutral CSS welcome banner and vector N brand."
+  },
+  "companyRoutes": [
+    {
+      "path": "/",
+      "state": "PREMIUM COMPLETE",
+      "verified": "New shared shell, responsive layout and both languages; Dashboard additionally has financial interactions/empty/error/privacy/export checks.",
+      "remaining": []
+    },
+    {
+      "path": "/parties",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
+      "remaining": [
+        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      ]
+    },
+    {
+      "path": "/expense-categories",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
+      "remaining": [
+        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      ]
+    },
+    {
+      "path": "/projects",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
+      "remaining": [
+        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      ]
+    },
+    {
+      "path": "/financial-evidence",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
+      "remaining": [
+        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      ]
+    },
+    {
+      "path": "/custody",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
+      "remaining": [
+        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      ]
+    },
+    {
+      "path": "/expenses",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
+      "remaining": [
+        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      ]
+    },
+    {
+      "path": "/supplier-payments",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
+      "remaining": [
+        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      ]
+    },
+    {
+      "path": "/treasury-accounts",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
+      "remaining": [
+        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      ]
+    },
+    {
+      "path": "/subcontracts",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
+      "remaining": [
+        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      ]
+    },
+    {
+      "path": "/subcontractor-advances",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
+      "remaining": [
+        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      ]
+    },
+    {
+      "path": "/subcontractor-certificates",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
+      "remaining": [
+        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      ]
+    },
+    {
+      "path": "/subcontractor-payments",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
+      "remaining": [
+        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      ]
+    },
+    {
+      "path": "/retention-releases",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
+      "remaining": [
+        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      ]
+    },
+    {
+      "path": "/retention-payments",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
+      "remaining": [
+        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      ]
+    },
+    {
+      "path": "/inventory/materials",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
+      "remaining": [
+        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      ]
+    },
+    {
+      "path": "/inventory/warehouses",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
+      "remaining": [
+        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      ]
+    },
+    {
+      "path": "/inventory/receipts",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
+      "remaining": [
+        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      ]
+    },
+    {
+      "path": "/inventory/issues",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
+      "remaining": [
+        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      ]
+    },
+    {
+      "path": "/inventory/transfers",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
+      "remaining": [
+        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      ]
+    },
+    {
+      "path": "/inventory/counts",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
+      "remaining": [
+        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      ]
+    },
+    {
+      "path": "/inventory/balances",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
+      "remaining": [
+        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      ]
+    },
+    {
+      "path": "/inventory/history",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
+      "remaining": [
+        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      ]
+    },
+    {
+      "path": "/employees",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
+      "remaining": [
+        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      ]
+    },
+    {
+      "path": "/attendance",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
+      "remaining": [
+        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      ]
+    },
+    {
+      "path": "/payroll",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
+      "remaining": [
+        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      ]
+    },
+    {
+      "path": "/accounting-cycle",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
+      "remaining": [
+        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      ]
+    },
+    {
+      "path": "/accounts",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
+      "remaining": [
+        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      ]
+    },
+    {
+      "path": "/accounting-reports",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
+      "remaining": [
+        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      ]
+    },
+    {
+      "path": "/company-profile",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual route rendered in both languages at 1366x768,1920x1080,820x1180,390x844; shared identity applied.",
+      "remaining": [
+        "Populated workflow-specific subviews and all confirmation variants are not individually visually accepted."
+      ]
+    }
+  ],
+  "platformRoutes": [
+    {
+      "path": "/platform",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual administrative route and shared shell rendered in both languages at four viewports; settings dialog and login separately inspected.",
+      "remaining": [
+        "Populated directory variants and every administrative command dialog not individually accepted."
+      ]
+    },
+    {
+      "path": "/platform/onboarding",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual administrative route and shared shell rendered in both languages at four viewports; settings dialog and login separately inspected.",
+      "remaining": [
+        "Populated directory variants and every administrative command dialog not individually accepted."
+      ]
+    },
+    {
+      "path": "/platform/customers",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual administrative route and shared shell rendered in both languages at four viewports; settings dialog and login separately inspected.",
+      "remaining": [
+        "Populated directory variants and every administrative command dialog not individually accepted."
+      ]
+    },
+    {
+      "path": "/platform/entities",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual administrative route and shared shell rendered in both languages at four viewports; settings dialog and login separately inspected.",
+      "remaining": [
+        "Populated directory variants and every administrative command dialog not individually accepted."
+      ]
+    },
+    {
+      "path": "/platform/users",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual administrative route and shared shell rendered in both languages at four viewports; settings dialog and login separately inspected.",
+      "remaining": [
+        "Populated directory variants and every administrative command dialog not individually accepted."
+      ]
+    },
+    {
+      "path": "/platform/memberships",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual administrative route and shared shell rendered in both languages at four viewports; settings dialog and login separately inspected.",
+      "remaining": [
+        "Populated directory variants and every administrative command dialog not individually accepted."
+      ]
+    },
+    {
+      "path": "/platform/invitations",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual administrative route and shared shell rendered in both languages at four viewports; settings dialog and login separately inspected.",
+      "remaining": [
+        "Populated directory variants and every administrative command dialog not individually accepted."
+      ]
+    },
+    {
+      "path": "/platform/subscriptions",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual administrative route and shared shell rendered in both languages at four viewports; settings dialog and login separately inspected.",
+      "remaining": [
+        "Populated directory variants and every administrative command dialog not individually accepted."
+      ]
+    },
+    {
+      "path": "/platform/audit",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual administrative route and shared shell rendered in both languages at four viewports; settings dialog and login separately inspected.",
+      "remaining": [
+        "Populated directory variants and every administrative command dialog not individually accepted."
+      ]
+    },
+    {
+      "path": "/platform/settings",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Actual administrative route and shared shell rendered in both languages at four viewports; settings dialog and login separately inspected.",
+      "remaining": [
+        "Populated directory variants and every administrative command dialog not individually accepted."
+      ]
+    }
+  ],
+  "authenticationSurfaces": [
+    {
+      "path": "/login",
+      "state": "PREMIUM COMPLETE",
+      "verified": "Actual platform sign-in and shared authentication shell rendered in EN/AR at four viewports."
+    },
+    {
+      "path": "/select-company",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Uses redesigned AuthFrame; individual identity-transition screen not independently browser-captured."
+    },
+    {
+      "path": "/no-company",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Uses redesigned AuthFrame; individual identity-transition screen not independently browser-captured."
+    },
+    {
+      "path": "/auth-error",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Uses redesigned AuthFrame; individual identity-transition screen not independently browser-captured."
+    },
+    {
+      "path": "/auth/callback",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Uses redesigned AuthFrame; individual identity-transition screen not independently browser-captured."
+    },
+    {
+      "path": "/auth/recovery",
+      "state": "PREMIUM PARTIAL",
+      "verified": "Uses redesigned AuthFrame; individual identity-transition screen not independently browser-captured."
+    }
+  ],
+  "sharedComponents": [
+    {
+      "surface": "Product mark",
+      "state": "PREMIUM COMPLETE",
+      "implementation": "src/components/ui/NarvoMark.tsx"
+    },
+    {
+      "surface": "Company navigation/header",
+      "state": "PREMIUM COMPLETE",
+      "implementation": "src/workspace/CompanyWorkspaceShell.tsx"
+    },
+    {
+      "surface": "Dashboard KPIs/chart/attention/recent/detail",
+      "state": "PREMIUM COMPLETE",
+      "implementation": "src/dashboard/AccountingOverview.tsx"
+    },
+    {
+      "surface": "Inventory/Payroll module navigation",
+      "state": "PREMIUM COMPLETE",
+      "implementation": "src/components/ui/ModuleNavigation.tsx"
+    },
+    {
+      "surface": "Headers/sections/financial summaries/tables/filters/status/empty/loading/error/form fields/detail drawer",
+      "state": "PREMIUM PARTIAL",
+      "implementation": "src/workspace/workspaceUi.tsx"
+    },
+    {
+      "surface": "Formal financial PDF/Excel",
+      "state": "PREMIUM PARTIAL",
+      "implementation": "src/reports/ReportExport.tsx; src/reports/reportExport.ts; src/styles/reportBrand.ts"
+    },
+    {
+      "surface": "Payroll register Excel/PDF",
+      "state": "PREMIUM PARTIAL",
+      "implementation": "src/payroll/payrollRegisterXlsx.ts; existing PayrollRegisterOutput"
+    },
+    {
+      "surface": "Administrative directory/forms/dialogs/onboarding",
+      "state": "PREMIUM PARTIAL",
+      "implementation": "src/platform/PlatformApplication.tsx; PlatformShell; premium.css"
+    },
+    {
+      "surface": "Legacy utility-based operational forms/audit/posting confirmations",
+      "state": "PREMIUM PARTIAL",
+      "implementation": "src/styles/premium.css; existing canonical renderers"
+    }
+  ],
+  "legacyDemoRoutes": {
+    "state": "NOT YET UPDATED",
+    "paths": [
+      "/",
+      "/company",
+      "/projects",
+      "/projects/:id",
+      "/treasury",
+      "/expenses",
+      "/advances",
+      "/suppliers",
+      "/subcontractors",
+      "/subcontractors/:id",
+      "/subcontracts/:id",
+      "/people",
+      "/journal"
+    ],
+    "boundary": "Isolated local-demo is not the supabase-auth Production workspace; no demo fallback introduced. Full-product visual coverage must account for these separately."
+  },
+  "redirects": {
+    "state": "NOT APPLICABLE",
+    "paths": [
+      "/historical-imports -> /expenses",
+      "/inventory -> /inventory/materials",
+      "signed-in identity routes -> /"
+    ],
+    "reason": "Existing redirects preserved; no new independent presentation."
+  },
+  "remaining": [
+    "Workflow-specific populated subviews and every posting/reversal/correction confirmation require further visual acceptance.",
+    "Identity-transition/recovery screens inherit AuthFrame but lack individual browser captures.",
+    "Local-demo AppShell/Sidebar/Modal/Field/StatCard and its 13 route patterns retain legacy composition.",
+    "Existing operational screen bodies are token-styled; bespoke component migration is partial, not fully complete."
+  ]
+}

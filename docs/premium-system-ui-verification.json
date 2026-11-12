@@ -1,0 +1,103 @@
+{
+  "status": "LOCAL PHASE VERIFIED; FULL SYSTEM VISUAL ACCEPTANCE PARTIAL",
+  "baseCommit": "f1aee4ef27913aad5a8ac6bf529a510e737429cc",
+  "releaseBranch": "release/premium-system",
+  "productionActions": {
+    "push": false,
+    "deploy": false,
+    "hostedMigration": false,
+    "financialWrites": false,
+    "hostedReads": false
+  },
+  "checks": {
+    "routes": {
+      "status": "PASS",
+      "count": 348
+    },
+    "interactions": {
+      "status": "PASS",
+      "count": 17
+    },
+    "platform": {
+      "status": "PASS",
+      "count": 111
+    },
+    "dashboard": {
+      "status": "PASS",
+      "count": 55
+    },
+    "exports": {
+      "status": "PASS",
+      "count": 4
+    },
+    "snapshot": {
+      "status": "PASS",
+      "count": 9
+    }
+  },
+  "additionalEvidence": {
+    "readModelChecks": 15,
+    "financialPdfXlsxArtifactChecks": 4,
+    "typescript": "PASS through Production build",
+    "productionBuild": "PASS; existing >500kB bundle advisory",
+    "lint": "0 errors; 5 pre-existing hook warnings in unchanged effect bodies of PlatformApplication/InventoryWorkspace",
+    "whitespace": "PASS",
+    "newDependencies": false,
+    "secretScan": "No changed-file credential findings"
+  },
+  "migration": {
+    "newRequired": false,
+    "latestAppliedCheckpoint": 92,
+    "sha256": "d1b8349960007e21d6952e94b720a7c9f0417113b4d7490cfb5a5d1754efb250",
+    "hostedHistoryReaudited": false
+  },
+  "preservation": {
+    "canonicalCommands": "No changes to repositories, read models, accounting calculations, authorization, route guards, migrations, RLS or domain files. Existing handlers preserved; Expense actions only wrapped in a disclosure.",
+    "fixtures": "All synthetic source/master/financial rows unchanged after navigation/interactions; mutation transport denied.",
+    "makerCheckpoint": "AED371350.70 from previously verified private snapshot, not a fresh hosted reconciliation. No Production connection in this milestone.",
+    "root": "37 scoped paths synchronized; 275 unrelated dirty/untracked paths retain their exact prior content hashes. Root HEAD 652bc37ba372bf4fa8bbf454da0bba921f5758fa and release/platform-owner-console branch unchanged."
+  },
+  "design": {
+    "tokens": "src/styles/emeraldTokens.css is the single current palette; existing primitives and premium component layer consume it. Five legacy palette overrides removed.",
+    "typography": "Inter / Noto Sans Arabic / Segoe UI / Tahoma / Arial fallbacks; body15-16, headings23-29, financial values24-33; bdi isolation and tabular numerals. No external font dependency.",
+    "icons": "Existing lucide-react only, semantic route map, shared industry-neutral SVG N mark.",
+    "exports": "Restrained blue/neutral headers, dark ink, unchanged values/directions; print excludes gradients."
+  },
+  "screenshots": {
+    "root": "/tmp/narvo-premium-system",
+    "dashboard": "/tmp/narvo-operational-dashboard/maker-preview",
+    "viewports": [
+      [
+        1366,
+        768
+      ],
+      [
+        1920,
+        1080
+      ],
+      [
+        820,
+        1180
+      ],
+      [
+        390,
+        844
+      ]
+    ],
+    "languages": [
+      "en",
+      "ar"
+    ],
+    "committedCustomerImages": false
+  },
+  "coverage": "docs/premium-system-ui-coverage.json",
+  "lifecycle": {
+    "businessAccounting": "VERIFIED presentation preservation; no new accounting policy",
+    "securityAuthorization": "VERIFIED unchanged boundaries and focused viewer checks; full audit deferred",
+    "database": "NOT APPLICABLE new schema; M92 unchanged",
+    "deployment": "DEFERRED publication/Production visual smoke; local build ready",
+    "testing": "VERIFIED focused evidence; full populated workflow acceptance DEFERRED",
+    "documentation": "VERIFIED canonical checkpoint and explicit partial coverage"
+  },
+  "notClaimed": "Full application design completion, fresh Production reconciliation, all populated workflow states or local-demo modernization."
+}
