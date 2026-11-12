@@ -23,15 +23,16 @@ export function CompanySubscriptionProvider({companyId,children}:{companyId:stri
   const result=useSubscriptionRead(companyId);
   return <WorkspaceSubscriptionContext.Provider value={result}>{children}</WorkspaceSubscriptionContext.Provider>;
 }
-function StandaloneStatus({companyId}:{companyId:string}) { const result=useSubscriptionRead(companyId);return result.loaded ? <SubscriptionBanner row={result.row}/> : null; }
-export function CompanySubscriptionStatus({companyId}:{companyId:string}) {
+function StandaloneStatus({companyId,compact=false}:{companyId:string;compact?:boolean}) { const result=useSubscriptionRead(companyId);return result.loaded ? <SubscriptionBanner row={result.row} compact={compact}/> : null; }
+export function CompanySubscriptionStatus({companyId,compact=false}:{companyId:string;compact?:boolean}) {
   const shared=useContext(WorkspaceSubscriptionContext);
-  return shared?.companyId === companyId ? shared.loaded ? <SubscriptionBanner row={shared.row}/> : null : <StandaloneStatus companyId={companyId}/>;
+  return shared?.companyId === companyId ? shared.loaded ? <SubscriptionBanner row={shared.row} compact={compact}/> : null : <StandaloneStatus companyId={companyId} compact={compact}/>;
 }
-function SubscriptionBanner({row}:{row:Subscription|null}) {
+function SubscriptionBanner({row,compact=false}:{row:Subscription|null;compact?:boolean}) {
   const {locale}=useI18n();
   if (!row) return <p role="status">{locale === "ar" ? "تعذر التحقق من حالة الاشتراك. أعد تحميل الصفحة." : "Subscription status could not be verified. Reload to check."}</p>;
   const states = locale === "ar" ? { UNMANAGED: "دون اشتراك", TRIAL: "تجريبي", ACTIVE: "نشط", EXPIRED: "منتهٍ", CANCELLED: "ملغى", SCHEDULED: "لم يبدأ" } : { UNMANAGED: "No subscription", TRIAL: "Trial", ACTIVE: "Active", EXPIRED: "Expired", CANCELLED: "Cancelled", SCHEDULED: "Not started" };
+  if(compact&&row.access==='FULL')return <aside role="status" className="op-subscription-context"><span>{locale==='ar'?'وصول الشركة متاح':'Company access available'}</span><span> · {row.state==='UNMANAGED'?(locale==='ar'?'شركة داخلية':'Internal company'):states[row.state as keyof typeof states]}</span>{row.ends_on&&<span> · {locale==='ar'?'صالح حتى':'Valid through'} <bdi dir="ltr">{row.ends_on}</bdi></span>}</aside>;
   return <aside role="status" className="border-b border-slate-200 bg-slate-50 px-6 py-3 text-sm">
     <b>{locale === "ar" ? "الاشتراك: " : "Subscription: "}{row.state === "UNMANAGED" && row.access === "FULL" ? locale === "ar" ? "شركة داخلية" : "Internal company" : states[row.state as keyof typeof states]}</b>
     {row.ends_on && <> · {locale === "ar" ? "صالح حتى: " : "Valid through: "}<bdi dir="ltr">{row.ends_on}</bdi> · {locale === "ar" ? "موعد التجديد: " : "Renewal due: "}<bdi dir="ltr">{row.renewal_due_on}</bdi></>}

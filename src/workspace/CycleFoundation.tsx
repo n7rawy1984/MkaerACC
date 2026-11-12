@@ -44,8 +44,8 @@ function OverviewWorkspace({userId,companyId,role}:{userId:string;companyId:stri
  const {locale}=useI18n(),master=useProductionMasterData(),[revision,setRevision]=useState(0);
  useEffect(()=>{const update=(event:Event)=>{if((event as CustomEvent).detail?.companyId===companyId)setRevision(n=>n+1);};window.addEventListener('historical-source-changed',update);return()=>window.removeEventListener('historical-source-changed',update);},[companyId]);
  if(master.phase!=='READY')return <p role={master.phase==='ERROR'?'alert':'status'}>{locale==='ar'?'بيانات الشركة غير متاحة بعد':'Company data is not yet available'}</p>;
- if(master.company.id!==companyId||master.projects.some(p=>p.companyId!==companyId))return <p role="alert">{locale==='ar'?'تعذر التحقق من نطاق الشركة':'Company scope could not be verified'}</p>;
- return <div className="integrated-cycle"><AccountingOverview user={userId} company={companyId} companyName={master.company.name} role={role} locale={locale} revision={revision} projects={master.projects}/><Link className="cycle-report-link" to="/accounting-cycle">{locale==='ar'?'أدلة العمل وتقارير تدقيق المصادر':'Workspace guides & source audit reports'} ↗</Link></div>;
+ if(master.company.id!==companyId||[...master.projects,...master.accounts,...master.parties,...master.treasuryAccounts].some(p=>p.companyId!==companyId))return <p role="alert">{locale==='ar'?'تعذر التحقق من نطاق الشركة':'Company scope could not be verified'}</p>;
+ return <div className="integrated-cycle"><AccountingOverview user={userId} company={companyId} companyName={master.company.name} role={role} locale={locale} revision={revision} accounts={master.accounts} parties={master.parties} treasuries={master.treasuryAccounts}/></div>;
 }
 function CycleData({userId,companyId,role,details}:{userId:string;companyId:string;role:string;details?:ReactNode}){
  const {locale,t:globalText}=useI18n(),w=useWorkspaceText(),master=useProductionMasterData();const ar=locale==='ar',t:Text=key=>cycleText[ar?'ar':'en'][key];

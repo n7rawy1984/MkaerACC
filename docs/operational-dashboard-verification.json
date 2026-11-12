@@ -1,0 +1,197 @@
+{
+  "status": "IMPLEMENTED_LOCALLY_VISUALLY_REVIEWED_RELEASE_PREPARED_NOT_PUSHED_OR_DEPLOYED",
+  "references": [
+    {
+      "name": "Xero",
+      "url": "https://www.xero.com/ae/accounting-software/dashboard/",
+      "applied": "Modular account widgets, readable balances, restrained charts"
+    },
+    {
+      "name": "QuickBooks Online",
+      "url": "https://quickbooks.intuit.com/learn-support/en-us/help-article/product-setup/customize-home-page-quickbooks-online/L0ryPsyjD_US_en_US",
+      "applied": "Needs Attention and quick canonical transaction actions"
+    },
+    {
+      "name": "Zoho Books",
+      "url": "https://www.zoho.com/ae/books/help/home/",
+      "applied": "Structured financial summaries and accounting-report drilldowns"
+    }
+  ],
+  "implementation": {
+    "dashboard": "Four primary cards: Cash/Bank closing, Custody closing receivable, selected-period operating/Project GL costs, selected-month unposted review count",
+    "middle": "Six-month canonical funding/payments/expense chart and actionable Needs Attention panel. Overlapping flags never summed; undated count explicitly all-period. Owner funding never revenue.",
+    "recent": "At most five posted journals from the selected month; exact balanced journal value and recognized Treasury/Custody account. Read-only specific-record drawer links to filtered journal report and original canonical workspace. Unknown/incomplete enrichment withheld.",
+    "full_reports": "Existing /accounting-reports?view=transactions now hosts previous comprehensive monthly report, filters, server pagination, Company/Project scope and Excel/PDF. Existing /accounting-reports landing and /accounting-cycle audit/provenance preserved.",
+    "responsive": "Actual CompanyWorkspaceShell/branding/sidebar retained; duplicate Dashboard page header removed; FULL access notice compacted, all LIMITED/unknown warnings preserved. Numeric month picker, RTL/LTR, desktop table and mobile readable recent rows.",
+    "boundaries": "No financial engine, mutation command, schema, RLS, permission or authentication changes. No new ERP module."
+  },
+  "verification": {
+    "automated_focused_count": 64,
+    "focused": {
+      "status": "PASS",
+      "checks": [
+        "Chart and primary balances reuse canonical monthly calculations",
+        "Contractor Advances stay outside posted expense total",
+        "Custody payments and expenses remain distinct, overlapping views",
+        "Negative corrections remain visible below chart baseline",
+        "Restricted aggregate is withheld rather than partially presented",
+        "BigInt chart scaling converts only bounded display ratios",
+        "Recent rows show exact balanced journal value despite server cap2",
+        "Enrichment reads only the five displayed journals",
+        "Funding receipts and payments retain opposite account directions",
+        "Incomplete journal cannot masquerade as a verified financial amount",
+        "Foreign Company enrichment fails closed",
+        "Authenticated actor transition rejects recent reads",
+        "Changed Company/unmounted generation rejects recent reads",
+        "Read projections and chart leave all source/journal evidence unchanged",
+        "Reuse successful hosted Migration92 activation evidence; no new migration"
+      ],
+      "financialMutations": 0,
+      "root": "/tmp/narvo-reference-dashboard-release"
+    },
+    "browser": {
+      "status": "PASS",
+      "checks": [
+        "Exactly four operational primary cards",
+        "Homepage shows five recent posted entries without transaction pagination",
+        "Recent table displays exact balanced journal amount",
+        "Full pagination is absent from operational dashboard",
+        "Six-month financial movement chart uses canonical monthly values",
+        "August closing balance retains verified accounting calculation",
+        "Recent View opens a specific read-only journal/document detail",
+        "Attention total does not sum overlapping flags",
+        "en laptop has no horizontal page overflow",
+        "en laptop direction is deliberate",
+        "en laptop primary balances are visible immediately",
+        "en laptop uses actual bounded application sidebar",
+        "en desktop has no horizontal page overflow",
+        "en desktop direction is deliberate",
+        "en desktop primary balances are visible immediately",
+        "en desktop uses actual bounded application sidebar",
+        "en mobile has no horizontal page overflow",
+        "en mobile direction is deliberate",
+        "en mobile primary balances are visible immediately",
+        "en mobile chart month labels remain readable",
+        "ar laptop has no horizontal page overflow",
+        "ar laptop direction is deliberate",
+        "ar laptop primary balances are visible immediately",
+        "ar laptop uses actual bounded application sidebar",
+        "ar desktop has no horizontal page overflow",
+        "ar desktop direction is deliberate",
+        "ar desktop primary balances are visible immediately",
+        "ar desktop uses actual bounded application sidebar",
+        "ar mobile has no horizontal page overflow",
+        "ar mobile direction is deliberate",
+        "ar mobile primary balances are visible immediately",
+        "ar mobile chart month labels remain readable",
+        "November closing reconciles to AED371350.70",
+        "Empty December preserves closing balances with useful empty state",
+        "Month navigation crosses year boundary",
+        "Attention drilldown opens dedicated accounting report, not a homepage expander",
+        "Dedicated transaction pagination retains complete filtered total",
+        "Dedicated en PDF retains complete monthly balance",
+        "Dedicated ar PDF retains complete monthly balance",
+        "New transaction menu supports Escape and existing canonical routes",
+        "Empty chart and transaction states are captured in both languages",
+        "Management Viewer has no create action or misleading restricted totals",
+        "Foreign Company response does not retain stale financial values",
+        "Limited access retains full operational warning and blocks creation shortcut",
+        "Actual shell/browser has no runtime errors, hosted requests or financial mutations"
+      ],
+      "errors": [],
+      "external": []
+    },
+    "artifacts": {
+      "status": "PASS",
+      "checks": [
+        "en dedicated report XLSX has exact complete totals and correct direction",
+        "en dedicated report PDF retains full-period balance",
+        "ar dedicated report XLSX has exact complete totals and correct direction",
+        "ar dedicated report PDF retains full-period balance"
+      ]
+    },
+    "maker_snapshot_visual": {
+      "status": "PASS",
+      "checks": [
+        "en laptop verified Maker snapshot layout",
+        "en desktop verified Maker snapshot layout",
+        "en mobile verified Maker snapshot layout",
+        "ar laptop verified Maker snapshot layout",
+        "ar desktop verified Maker snapshot layout",
+        "ar mobile verified Maker snapshot layout",
+        "Read-only Maker snapshot preview has no runtime errors, hosted requests or mutations"
+      ],
+      "source": "Previously verified private read-only Maker snapshot; no hosted writes"
+    },
+    "live_authenticated_accountant": {
+      "status": "LIVE_OPERATIONAL_DASHBOARD_READ_PASS",
+      "captured": "2026-11-12T08:21:14.148Z",
+      "custody_minor": "37135070",
+      "november_recent_count": 1,
+      "november_journal_value_minor": "480000",
+      "august_recent_count": 5,
+      "summary_counts": {
+        "draft": 0,
+        "total": 7,
+        "posted": 0,
+        "review": 7,
+        "unknown": 25,
+        "classified": 0,
+        "duplicates": 7,
+        "unclassified": 7
+      },
+      "read_calls": [
+        "/auth/v1/user",
+        "/rest/v1/rpc/read_accounting_dashboard",
+        "/rest/v1/rpc/read_dashboard_transactions",
+        "/rest/v1/journal_lines",
+        "/rest/v1/journal_lines",
+        "/rest/v1/rpc/read_dashboard_transactions",
+        "/rest/v1/journal_lines",
+        "/rest/v1/journal_lines"
+      ],
+      "financial_mutations": 0
+    },
+    "build": "PASS TypeScript and Production Vite/dependency-boundary build; existing large chunk advisory remains",
+    "scoped_lint": "PASS no warnings/errors",
+    "visual_review": "Actual local screenshots critically reviewed in EN/AR: 1366x768,1920x1080,390x844; empty and populated fixtures; actual verified read-only Maker snapshot previews. Fixed register typography leaking into dashboard, split mobile currency, English native month text, unreadable chart axes and horizontally hidden mobile transaction amounts.",
+    "screenshots": {
+      "en_laptop": "/tmp/narvo-operational-dashboard/maker-preview/en-laptop-populated.png",
+      "en_desktop": "/tmp/narvo-operational-dashboard/maker-preview/en-desktop-populated.png",
+      "en_mobile": "/tmp/narvo-operational-dashboard/maker-preview/en-mobile-populated.png",
+      "ar_laptop": "/tmp/narvo-operational-dashboard/maker-preview/ar-laptop-populated.png",
+      "ar_desktop": "/tmp/narvo-operational-dashboard/maker-preview/ar-desktop-populated.png",
+      "ar_mobile": "/tmp/narvo-operational-dashboard/maker-preview/ar-mobile-populated.png"
+    },
+    "screenshots_are_not_committed": "Private customer-data previews stay outside source/release; no passwords or session tokens saved."
+  },
+  "accounting": {
+    "custody_minor": "37135070",
+    "november_recent_journal_minor": "480000",
+    "november_review_count": 7,
+    "unknown_date_count": 25,
+    "production_financial_mutations": 0,
+    "data_policy": "Canonical GL dates, source transaction dates, payroll periods and worksheet evidence remain distinct and unchanged.",
+    "recent_amount_semantics": "Balanced journal debit total, not an additional payment or a claimed physical cash balance; source references and canonical dimensions preserved."
+  },
+  "migration": {
+    "new_migration_required": false,
+    "dependency": "Existing APPLIED Migration92",
+    "sha256_92": "d1b8349960007e21d6952e94b720a7c9f0417113b4d7490cfb5a5d1754efb250",
+    "applied_during_this_ux_milestone": false
+  },
+  "release": {
+    "branch": "release/operational-dashboard",
+    "parent": "9541795f1b5260794d436f036e91f348d5868746",
+    "scope": "Includes prior Migration92-compatible frontend dependency even if9541795 has not separately been pushed. No deployment audit repeated.",
+    "automatic_push": false,
+    "automatic_deploy": false
+  },
+  "limitations": [
+    "Product Owner visual acceptance and publication remain pending; local verification is not a claim of deployed acceptance.",
+    "Recent amounts show journal value; unrecognized funding directs the user to original documents rather than guessing.",
+    "Large journal enrichment is bounded to20 reads and roughly200 lines; incomplete values are withheld and full canonical reports remain available.",
+    "Outstanding Maker evidence completion, historical payroll and operational acceptance remain separate.",
+    "Original commercial ERP roadmap and deferred restore/USB tasks preserved."
+  ]
+}

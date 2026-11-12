@@ -1,0 +1,117 @@
+{
+  "status": "APPLIED_PRESERVATION_POSTFLIGHT_PASS_FRONTEND_READY_NOT_DEPLOYED",
+  "captured": "2026-11-12T07:30:37.368019+00:00",
+  "target": "eqnzueginpkskbnqvgoc",
+  "migration": {
+    "number": 92,
+    "version": "20261112120000",
+    "file": "20261112120000_accounting_dashboard_reads.sql",
+    "sha256": "d1b8349960007e21d6952e94b720a7c9f0417113b4d7490cfb5a5d1754efb250",
+    "applied_only": [
+      "20261112120000_accounting_dashboard_reads.sql"
+    ],
+    "pending": [],
+    "workflow": "Supabase CLI linked db push after exact sole-pending dry-run, checksum/target checks and explicit Product Owner authorization",
+    "non_destructive_scope": "Four new reporting functions only: SECURITY INVOKER, stable/immutable, fixed search_path; authenticated-only execution. No business-data writes, backfill, table/RLS changes or accounting permission changes."
+  },
+  "preservation": {
+    "all_101_public_and_auth_table_fingerprints": "IDENTICAL",
+    "existing_table_RLS_policies_and_grants": "IDENTICAL",
+    "existing_public_private_function_bodies_and_permissions": "IDENTICAL",
+    "all_company_account_party_project_treasury_GL_balances": "IDENTICAL",
+    "maker_counts": {
+      "sources": 370,
+      "journals": 27,
+      "journal_lines": 54,
+      "source_drafts": 18,
+      "posted_expenses": 13,
+      "payroll_postings": 0,
+      "contractor_advances": 2,
+      "unbalanced_journals": 0,
+      "salary_source_records": 25,
+      "owner_funding_journals": 12
+    },
+    "source_draft_count_note": "Actual preflight and postflight contain18 preserved source-to-draft links. This includes the earlier14; no links/drafts created during activation. Count is not a claim that18 documents are currently unposted.",
+    "custody_balance_minor": "37135070",
+    "auth_users_identities": "UNCHANGED",
+    "company_memberships_role_permissions": "UNCHANGED",
+    "treasury_contractor_project_payroll_records": "UNCHANGED",
+    "financial_mutations": 0,
+    "new_journals": []
+  },
+  "reporting_hosted_smoke": {
+    "status": "MIGRATION92_AUTHENTICATED_HOSTED_READ_PASS",
+    "captured": "2026-11-12T07:28:59.563Z",
+    "checks": [
+      "Existing authenticated Maker accountant session",
+      "Hosted monthly closing matches Barq Custody checkpoint",
+      "Funding less actual Custody payments reconciles exactly",
+      "Expense and Contractor Advance figures retain GL classification",
+      "All27 posted journals reconcile to monthly counts",
+      "All370 historical sources remain accessible within Maker scope",
+      "Bounded page0 has complete matching total and Company scope",
+      "Bounded page1 has complete matching total and Company scope",
+      "Bounded page2 has complete matching total and Company scope",
+      "Bounded page3 has complete matching total and Company scope",
+      "Bounded page4 has complete matching total and Company scope",
+      "Bounded page5 has complete matching total and Company scope",
+      "Bounded page6 has complete matching total and Company scope",
+      "Bounded page7 has complete matching total and Company scope",
+      "Bounded page8 has complete matching total and Company scope",
+      "Bounded page9 has complete matching total and Company scope",
+      "Bounded page10 has complete matching total and Company scope",
+      "Bounded page11 has complete matching total and Company scope",
+      "Bounded page12 has complete matching total and Company scope",
+      "Bounded page13 has complete matching total and Company scope",
+      "Every matching August source returned exactly once across pages",
+      "Pagination leaves full-period financial totals unchanged",
+      "Unconfirmed dates remain a separate review group",
+      "Journal page and complete monthly journal total agree",
+      "Authenticated foreign Company scope denied: read_accounting_dashboard",
+      "Anonymous execution denied: read_accounting_dashboard",
+      "Authenticated foreign Company scope denied: read_dashboard_transactions",
+      "Anonymous execution denied: read_dashboard_transactions"
+    ],
+    "pagination": {
+      "month": "2026-08",
+      "total": 132,
+      "pages": 14,
+      "pageSize": 10,
+      "unique": 132
+    },
+    "source_count": 370,
+    "custody_minor": "37135070",
+    "summary_counts": {
+      "draft": 0,
+      "total": 7,
+      "posted": 0,
+      "review": 7,
+      "unknown": 25,
+      "classified": 0,
+      "duplicates": 7,
+      "unclassified": 7
+    },
+    "call_count": 20,
+    "financial_mutations": 0
+  },
+  "management_viewer": {
+    "permission_check": "Hosted role_permissions grants no payroll.manage to MANAGEMENT_VIEWER",
+    "functions": "All four hosted bodies match the locally verified finalized migration; invoker/search_path/volatility/anonymous/service-role/authenticated grants verified",
+    "privacy": "Unchanged canonical RLS and tested server-side redaction retained; complete Treasury/Project metrics withheld without HR visibility; confidential payroll metrics restricted",
+    "method_limit": "No separate live Management Viewer login was used; hosted catalog/policy/grant checks and completed local role tests reused."
+  },
+  "verification_not_repeated": [
+    "Completed64 implementation/browser/export tests",
+    "General deployment/security audits",
+    "Backup restore/USB tasks"
+  ],
+  "release": {
+    "compatible_frontend_commit": "9541795f1b5260794d436f036e91f348d5868746",
+    "branch": "release/accounting-dashboard-ux",
+    "readiness": "READY_FOR_OPERATOR_PUBLICATION",
+    "production_frontend": "Not changed by this activation",
+    "push_performed": false,
+    "deploy_performed": false,
+    "new_commit_created": false
+  }
+}

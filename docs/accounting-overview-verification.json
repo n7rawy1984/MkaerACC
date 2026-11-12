@@ -1,5 +1,5 @@
 {
-  "status": "VERIFIED_LOCAL_RELEASE_PREPARED_NOT_DEPLOYED",
+  "status": "MIGRATION92_APPLIED_PRESERVATION_VERIFIED_FRONTEND_READY_NOT_DEPLOYED",
   "baseline": {
     "release": "71be5181682119c70b78d10c632204b573c961be",
     "production_state": "Product Owner confirms LIVE; no general deployment audit repeated",
@@ -9,11 +9,13 @@
     "number": 92,
     "file": "20261112120000_accounting_dashboard_reads.sql",
     "sha256": "d1b8349960007e21d6952e94b720a7c9f0417113b4d7490cfb5a5d1754efb250",
-    "state": "PREPARED_NOT_APPLIED",
+    "state": "APPLIED",
     "target_after_separate_authorization": "eqnzueginpkskbnqvgoc",
     "purpose": "Server-side monthly aggregates and bounded transaction pages; no financial writes, backfill, table grants or RLS changes",
     "security": "All new functions SECURITY INVOKER, fixed empty search_path, authenticated-only EXECUTE; canonical role/membership checks, table RLS and existing document-link reader retained",
-    "linked_dry_run": "Only Migration92 pending; no migrations applied"
+    "linked_dry_run": "Only Migration92 pending; no migrations applied",
+    "activation_evidence": "accounting-overview-migration92-activation.json",
+    "pending_migrations": []
   },
   "tests": {
     "database": {
@@ -129,8 +131,7 @@
     "cash_type_correction": "CASH, PETTY_CASH and PROJECT_CASH_BOX are cash; other authoritative Treasury types are bank in shared model and SQL"
   },
   "limitations": [
-    "Migration92 requires explicit hosted authorization and activation before publishing the compatible frontend",
-    "New RPCs not exercised on Production because Migration92 is not approved/applied",
+    "Compatible frontend9541795 remains operator publication/deployment work; new reads passed focused hosted accountant smoke.",
     "Module drilldowns reuse existing workspace/report routes; no new dedicated journal detail screen or financial statements claimed",
     "Existing audit/full-report workflows remain intentionally comprehensive; only new dashboard summary/detail reads use this bounded path",
     "Payroll processing and remaining source evidence completion remain separate; no posting attempted",
@@ -140,6 +141,8 @@
     "branch": "release/accounting-dashboard-ux",
     "parent": "71be5181682119c70b78d10c632204b573c961be",
     "automatic_push": false,
-    "automatic_deploy": false
+    "automatic_deploy": false,
+    "commit": "9541795f1b5260794d436f036e91f348d5868746",
+    "state": "READY_FOR_PUBLICATION_NOT_PUSHED_OR_DEPLOYED_BY_AGENT"
   }
 }
