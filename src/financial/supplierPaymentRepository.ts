@@ -3,7 +3,7 @@ import type { Database } from "../types/database.generated";
 
 export interface SupplierPaymentRead {
   id: string; company_id: string; payment_reference: string; payment_date: string; supplier_id: string;
-  treasury_account_id: string; total_amount_minor: string; payment_method: Database["public"]["Enums"]["payment_method"];
+  treasury_account_id: string | null; custodian_id?:string|null; total_amount_minor: string; payment_method: Database["public"]["Enums"]["payment_method"];
   external_reference: string | null; notes: string | null; status: "DRAFT" | "POSTED" | "REVERSED";
   posted_journal_entry_id: string | null; reversal_journal_entry_id: string | null;
 }
@@ -39,6 +39,14 @@ export function canReadSupplierPayments(role: string) {
 
 export async function readSupplierPayments(client: SupabaseClient<Database>, companyId: string): Promise<SupplierPaymentSnapshot> {
   if (!uuid.test(companyId)) throw new Error("Invalid Supplier Payment scope");
+  // Migration94 exposes authoritative remaining balances after payments, credit notes and advance applications.
+  // Only a genuinely absent migration uses the original hosted reader; permission/integrity failures stay closed.
+  const modern=await client.rpc('read_supplier_accounts' as never,{cid:companyId} as never) as unknown as {data:import('./supplierAccounts').SupplierAPRead|null;error:{code?:string;message?:string}|null};
+  if(!modern.error){const data=modern.data;if(!data||data.company_id!==companyId||data.invoices.some(i=>i.company_id!==companyId)||data.adjustments.some(d=>d.company_id!==companyId))throw Error('Invalid Supplier AP scope');
+    const payments=data.payments.map(p=>{if(!uuid.test(p.id)||!uuid.test(p.supplier_id)||!(p.treasury_account_id&&uuid.test(p.treasury_account_id)||p.custodian_id&&uuid.test(p.custodian_id)))throw Error('Invalid Supplier funding');return {...p,company_id:companyId,total_amount_minor:exact(p.total_amount_minor)} as SupplierPaymentRead;});
+    return {payments,allocations:data.allocations.map(a=>({...a,company_id:companyId,allocated_amount_minor:exact(a.allocated_amount_minor)} as SupplierPaymentAllocationRead)),outstanding:data.invoices.filter(i=>i.funding_mode==='SUPPLIER_CREDIT'&&(BigInt(i.outstanding_minor)>0n||BigInt(i.credit_balance_minor??'0')>0n)).map(i=>({id:i.id,company_id:companyId,supplier_id:i.supplier_id,expense_reference:i.expense_reference,expense_date:i.expense_date,project_id:i.project_id,description:i.description,gross_amount_minor:exact(i.gross_minor),allocated_amount_minor:exact(i.settled_minor),outstanding_amount_minor:(BigInt(i.outstanding_minor)-BigInt(i.credit_balance_minor??'0')).toString()}))};
+  }
+  if(!['PGRST202','42883'].includes(modern.error.code??''))throw Error('Supplier AP read unavailable');
   const payments = await allRows<any>((from, to) => client.from("supplier_payments").select(paymentProjection)
     .eq("company_id", companyId).order("payment_date", { ascending: false }).order("id", { ascending: true }).range(from, to));
   const allocations = await allRows<any>((from, to) => client.from("supplier_payment_allocations").select(allocationProjection)

@@ -1,3 +1,4 @@
+import {SupplierAccountsWorkspace} from '../financial/SupplierAccountsWorkspace';
 import{InventoryWorkspace}from'../inventory/InventoryWorkspace';
 import {OpeningReconciliationWorkspace} from '../financial/OpeningReconciliationWorkspace';
 import {FinancialEvidenceWorkspace} from '../financial/FinancialEvidenceWorkspace';
@@ -7,7 +8,7 @@ import {CustodyReconciliation} from '../reports/CustodyReconciliation';
 import {ContentSection,LoadingState,ErrorState} from '../workspace/workspaceUi';
 import ExecutiveDashboard from "../dashboard/ExecutiveDashboard";
 import { ExpenseReadPanel } from "../financial/ExpenseReadPanel";
-import { SupplierPaymentPanel } from "../financial/SupplierPaymentPanel";
+
 import { SubcontractorAdvancePanel } from "../financial/SubcontractorAdvancePanel";
 import { SubcontractorPaymentPanel } from "../financial/SubcontractorPaymentPanel";
 import { RetentionReleasePanel } from "../financial/RetentionReleasePanel";
@@ -30,7 +31,7 @@ export default function TenantReadyApplication({ view }: { view: "inventory" | "
   const masterData = useProductionMasterData();
   if (state.phase !== "TENANT_READY") return null;
   return <div className="workspace-module-content">
-        {view === "inventory" ? <InventoryWorkspace /> : view === "financialEvidence" ? <FinancialEvidenceWorkspace /> : view === "custody" ? <CustodyWorkspace /> : view === "dashboard" ? <ExecutiveDashboard /> : view === "expenses" ? <ExpenseReadPanel /> : view === "supplierPayments" ? <SupplierPaymentPanel /> : view === "subcontractorAdvances" ? <SubcontractorAdvancePanel /> : view === "subcontractorCertificates" ? <SubcontractorCertificatePanel /> : view === "subcontractorPayments" ? <SubcontractorPaymentPanel /> : view === "retentionReleases" ? <RetentionReleasePanel /> : view === "retentionPayments" ? <RetentionPaymentPanel /> : view === "deferred" ? (
+        {view === "inventory" ? <InventoryWorkspace /> : view === "financialEvidence" ? <FinancialEvidenceWorkspace /> : view === "custody" ? <CustodyWorkspace /> : view === "dashboard" ? <ExecutiveDashboard /> : view === "expenses" ? <ExpenseReadPanel /> : view === "supplierPayments" ? <SupplierAccountsWorkspace /> : view === "subcontractorAdvances" ? <SubcontractorAdvancePanel /> : view === "subcontractorCertificates" ? <SubcontractorCertificatePanel /> : view === "subcontractorPayments" ? <SubcontractorPaymentPanel /> : view === "retentionReleases" ? <RetentionReleasePanel /> : view === "retentionPayments" ? <RetentionPaymentPanel /> : view === "deferred" ? (
           <ContentSection className="workspace-master-module">
             <h2>{t("auth.tenantReadyTitle")}</h2>
             <p className="mt-3 leading-7 text-slate-600">{t("auth.cutoverPending")}</p>

@@ -1,0 +1,366 @@
+{
+  "milestone": "ACW-01 Supplier accounts and credit purchase cycle",
+  "date": "2026-11-13",
+  "base_release": "5d7fcf90cdabb53890c2dcad8b084f736f72d1ed",
+  "release_status": "PREPARED_LOCAL_NOT_PUSHED_NOT_DEPLOYED",
+  "migration": {
+    "number": 94,
+    "file": "supabase/migrations/20261113140000_supplier_accounts_payable_cycle.sql",
+    "sha256": "cab19b0a6f3996e6ff9a47964fdb0621632c1ce532c77e006c229dfd86ad01c8",
+    "state": "PREPARED_NOT_APPLIED",
+    "hosted_project": "eqnzueginpkskbnqvgoc",
+    "last_hosted": 93,
+    "linked_dry_run_pending_only": [
+      "20261113140000_supplier_accounts_payable_cycle.sql"
+    ],
+    "hosted_activation_authorized": false,
+    "scope": "Additive schema and canonical command/report extensions. No seed, backfill, Company configuration or financial execution."
+  },
+  "real_Maker": {
+    "writes": 0,
+    "financial_postings": 0,
+    "source_edits": 0,
+    "configuration_changes": 0,
+    "previous_supplier_execution_repeated": false,
+    "last_previously_verified_Barq_AED": "370300.70",
+    "balance_freshly_queried": false,
+    "pending_supplier_identity_reviews_preserved": 193
+  },
+  "release_baseline": {
+    "github_main": "3fb13e4040222c19a9667622f437c1c0c599a96e",
+    "supplier_linking_base_unpushed_at_check": true,
+    "production_commit_verified": false,
+    "reason": "Read-only Vercel deployment metadata API returned HTTP403"
+  },
+  "tests": {
+    "accounting-tests": {
+      "status": "PASS",
+      "count": 42,
+      "checks": [
+        "Invoice preview balanced and exact",
+        "Credit service invoice recognized once with payable",
+        "Invoice retry idempotent",
+        "Changed invoice retry rejected",
+        "Normalized duplicate Supplier invoice rejected",
+        "VAT claim without tax invoice evidence rejected",
+        "Project service invoice preserves net and recoverable VAT",
+        "Partial payment debits AP and credits Custody once",
+        "Payment recognizes no duplicate Expense",
+        "Overpayment rejected",
+        "One payment allocates to multiple invoices and Projects",
+        "Duplicate invoice allocation rejected",
+        "Credit note reduces correct original cost and payable",
+        "Advance allocated to Supplier invoice",
+        "Advance application moves no cash and creates no cost",
+        "Advance over-allocation rejected",
+        "Advance reversal blocked until dependent allocations reversed",
+        "Full final settlement clears outstanding",
+        "Already settled invoice cannot be paid twice",
+        "Invoice reversal blocked by live AP dependencies",
+        "Credit reversal restores payable without changing original journal",
+        "Allocation reversal restores advance availability and invoice liability",
+        "Advance reversal restores original cash once after allocation reversal",
+        "Tax credit follows original 5% net/VAT treatment",
+        "Conflicting credit-note VAT rejected",
+        "Inventory invoice creates canonical Supplier payable with VAT",
+        "GRNI match creates no duplicate Inventory or Project cost",
+        "Inventory credit blocked from ordinary Expense adjustment",
+        "Inventory-linked invoice enforces canonical reversal dependencies",
+        "Cash Inventory invoice matches receipt and settles exactly once atomically",
+        "Cash service purchase produces no artificial outstanding liability",
+        "Management Viewer cannot post invoice",
+        "Foreign Company actor cannot post invoice",
+        "Foreign Company reader denied",
+        "Procurement cannot post financial advance",
+        "Caller-selected GL account rejected",
+        "New AP tables isolate other Company",
+        "Authenticated direct AP deletion denied",
+        "Management Viewer can read non-Payroll Supplier statement components",
+        "Supplier invoice outstanding reconciles to canonical AP GL",
+        "Every pre-existing journal unchanged",
+        "All scenario journals balance"
+      ]
+    },
+    "integration-tests": {
+      "status": "PASS",
+      "count": 20,
+      "checks": [
+        "Authoritative Custody payment preview balanced",
+        "Payment preview rejects excessive allocation",
+        "Normalized advance replay returns one original journal",
+        "Duplicate actual advance reference rejected",
+        "Existing AP summary reader includes credit notes and applied advances",
+        "Existing payment reader accepts authoritative Custody funding",
+        "Canonical Supplier GL statement resolves new credit/advance source documents",
+        "Supplier advances classified separately from AP in GL statement",
+        "Custody statement traces Supplier advances without Party mismatch",
+        "No invented due-date or overdue claim when payment terms absent",
+        "Aging boundary uses exact days and amounts",
+        "en Supplier report includes invoices, payments, credits, advances and allocations",
+        "ar Supplier report includes invoices, payments, credits, advances and allocations",
+        "Project cost ledger includes source-linked Supplier credit exactly once",
+        "Existing monthly financial dashboard remains available with Supplier funding",
+        "Existing Supplier payment reversal supports Custody journals",
+        "Viewer cannot obtain financial command plan",
+        "Ordinary Accountant cannot reconfigure control accounts",
+        "Closed period blocks Supplier invoice recognition",
+        "Closed period blocks Supplier cash advance"
+      ]
+    },
+    "credit-tests": {
+      "status": "PASS",
+      "count": 15,
+      "checks": [
+        "Paid-invoice credit becomes separate available Supplier balance",
+        "Paid-invoice credit reduces actual cost without fictitious refund",
+        "Existing Supplier credit allocated to another invoice",
+        "Credit allocation retries create no duplicate financial effect",
+        "Cannot over-allocate Supplier credit",
+        "Credit-note reversal requires dependent applications reversed",
+        "Existing AP summary preserves signed Supplier credit balances",
+        "Allocation reversal restores both original document positions",
+        "Credit reversal preserves original paid invoice and cash history",
+        "Credit against cash purchase creates Supplier credit without new liability or cash movement",
+        "Cumulative credit cannot exceed original recognized cost",
+        "Actual manual/mixed tax credit is not forced to an invented average rate",
+        "Ambiguous non-ISO financial date rejected",
+        "Unsupported asset purchase cannot be forced into Expense",
+        "Open invoices less unapplied credits reconcile to canonical Supplier AP GL"
+      ]
+    },
+    "concurrency": {
+      "status": "PASS",
+      "count": 11,
+      "checks": [
+        "Concurrent duplicate invoice numbers commit exactly one invoice",
+        "Competing partial payments cannot overpay the same invoice",
+        "Concurrent credit note and payment cannot over-settle payable",
+        "Concurrent normalized retry returns one canonical journal",
+        "Rolled-back payment leaves remaining balance available to waiting payer",
+        "Credit note commits before invoice reversal; dependency blocks reversal without deadlock",
+        "Invoice reversal commits first; concurrent credit cannot act on reversed payable",
+        "Concurrent advance applications cannot spend the same advance twice",
+        "Concurrent Supplier credit applications cannot spend the same paid-invoice credit twice",
+        "Native concurrent open invoices reconcile to canonical AP GL",
+        "Every native race leaves balanced immutable journals"
+      ]
+    },
+    "activation-tests": {
+      "status": "PASS",
+      "count": 30,
+      "checks": [
+        "Migration preserves existing journal_entries exactly",
+        "Migration preserves existing journal_lines exactly",
+        "Migration preserves existing expenses exactly",
+        "Migration preserves existing supplier_payments exactly",
+        "Migration preserves existing supplier_payment_allocations exactly",
+        "Migration preserves existing historical_source_records exactly",
+        "Migration preserves existing expense_draft_events exactly",
+        "Migration preserves existing parties exactly",
+        "Migration preserves existing accounts exactly",
+        "Migration preserves existing treasury_accounts exactly",
+        "Migration preserves existing projects exactly",
+        "Migration preserves existing subcontracts exactly",
+        "Migration preserves existing subcontractor_advances exactly",
+        "Migration preserves existing subcontractor_payments exactly",
+        "Migration preserves existing payroll_postings exactly",
+        "Migration preserves existing company_memberships exactly",
+        "Migration preserves existing profiles exactly",
+        "Migration creates no financial command or journal",
+        "Legacy Treasury payment request replays after activation with original hash and receipt",
+        "New supplier_ap_documents remains empty after migration",
+        "Forced RLS enabled for supplier_ap_documents",
+        "No direct financial write grant on supplier_ap_documents",
+        "New supplier_invoice_terms remains empty after migration",
+        "Forced RLS enabled for supplier_invoice_terms",
+        "No direct financial write grant on supplier_invoice_terms",
+        "New supplier_advance_configuration remains empty after migration",
+        "Forced RLS enabled for supplier_advance_configuration",
+        "No direct financial write grant on supplier_advance_configuration",
+        "New RPCs use fixed empty search paths and authenticated-only execution",
+        "Private accounting planner is not browser-callable"
+      ]
+    },
+    "browser-tests": {
+      "status": "PASS",
+      "count": 21,
+      "checks": [
+        "en posting unavailable until current accounting preview",
+        "en authoritative journal preview shows exact amount",
+        "en one approval creates one canonical Supplier invoice",
+        "en new credit invoice outstanding exact",
+        "en invoice Pay action hands off to one compact drawer",
+        "en partial Custody payment updates invoice with no duplicate cost",
+        "en complete Supplier GL statement reachable",
+        "en Supplier Excel export available",
+        "en mobile workspace contains horizontal table scrolling",
+        "ar posting unavailable until current accounting preview",
+        "ar authoritative journal preview shows exact amount",
+        "ar one approval creates one canonical Supplier invoice",
+        "ar new credit invoice outstanding exact",
+        "ar invoice Pay action hands off to one compact drawer",
+        "ar partial Custody payment updates invoice with no duplicate cost",
+        "ar complete Supplier GL statement reachable",
+        "ar Supplier Excel export available",
+        "ar mobile workspace contains horizontal table scrolling",
+        "Management Viewer has no invoice creation action",
+        "Management Viewer has no financial mutation action",
+        "No AP browser runtime errors"
+      ]
+    },
+    "credit-browser-tests": {
+      "status": "PASS",
+      "count": 11,
+      "checks": [
+        "en paid invoice credit creates available Supplier balance without refund fiction",
+        "en credit note creates no cash payment",
+        "en existing credit allocated once to another invoice",
+        "ar paid invoice credit creates available Supplier balance without refund fiction",
+        "ar credit note creates no cash payment",
+        "ar existing credit allocated once to another invoice",
+        "Lost response and resumed retry produce exactly one invoice and journal",
+        "Retry preserves exact original request key",
+        "Management Viewer has no invoice creation action",
+        "Management Viewer has no financial mutation action",
+        "No AP browser runtime errors"
+      ]
+    },
+    "export-browser-tests": {
+      "status": "PASS",
+      "count": 9,
+      "checks": [
+        "en actual Supplier Excel export downloaded",
+        "en printable Supplier statement preserves exact invoice and amount",
+        "en PDF includes complete invoice section",
+        "ar actual Supplier Excel export downloaded",
+        "ar printable Supplier statement preserves exact invoice and amount",
+        "ar PDF includes complete invoice section",
+        "Management Viewer has no invoice creation action",
+        "Management Viewer has no financial mutation action",
+        "No AP browser runtime errors"
+      ]
+    },
+    "reversal-browser-tests": {
+      "status": "PASS",
+      "count": 11,
+      "checks": [
+        "en payment reversal cannot approve before preview",
+        "en reversal preview identifies original payment",
+        "en canonical reversal restores only original payment obligation",
+        "en credit cancellation uses controlled reversal without modifying invoice",
+        "ar payment reversal cannot approve before preview",
+        "ar reversal preview identifies original payment",
+        "ar canonical reversal restores only original payment obligation",
+        "ar credit cancellation uses controlled reversal without modifying invoice",
+        "Management Viewer has no invoice creation action",
+        "Management Viewer has no financial mutation action",
+        "No AP browser runtime errors"
+      ]
+    },
+    "final-control-tests": {
+      "status": "PASS",
+      "count": 8,
+      "checks": [
+        "Existing payable remains settleable after Supplier inactive and Project closed",
+        "Reversal preview swaps exact original journal sides",
+        "Reversal preview creates no financial event",
+        "Management Viewer cannot preview reversal command",
+        "Foreign Company cannot preview original payment",
+        "Arbitrary journal preview selector rejected",
+        "Insufficient recorded Custody funding prevents Supplier settlement",
+        "Failed funding leaves invoice unpaid and creates no payment journal"
+      ]
+    },
+    "export-artifacts": {
+      "status": "PASS",
+      "count": 5,
+      "checks": [
+        "en XLSX preserves exact reference and amount",
+        "en actual PDF contains reference (wrapped in invoice column) and exact amount",
+        "ar XLSX preserves exact reference and amount",
+        "Arabic XLSX retains translated Unicode headers",
+        "ar actual PDF contains reference (wrapped in invoice column) and exact amount"
+      ]
+    }
+  },
+  "total_focused_checks": 183,
+  "artifacts": {
+    "browser_languages": [
+      "en",
+      "ar"
+    ],
+    "viewport_mobile": 390,
+    "rendered_screenshots_inspected": [
+      "statement-en",
+      "statement-ar",
+      "mobile-en",
+      "mobile-ar",
+      "credit-ar",
+      "reversal-en",
+      "reversal-ar"
+    ],
+    "actual_exports_inspected": [
+      "supplier-en.xlsx",
+      "supplier-ar.xlsx",
+      "supplier-en.pdf",
+      "supplier-ar.pdf"
+    ],
+    "native_concurrency": "Independent embedded PostgreSQL connections with observed lock waits",
+    "hosted_business_test_requests": 0
+  },
+  "remaining_limits": [
+    "Physical Supplier returns and capitalized Inventory price credits require specialized stock/correction workflow.",
+    "Actual Supplier cash refunds require a separate canonical receipt workflow; reversals only cancel/correct original events.",
+    "Fixed-asset invoice recognition outside delivered service/stock treatments.",
+    "Existing Inventory receipt/master/period matching restrictions preserved.",
+    "Unknown response retry survives drawer close/resume within mounted session; page reload needs existing document lookup/reconciliation.",
+    "Hosted Migration94 activation and compatible frontend publication require operator action; no automatic push/deployment."
+  ],
+  "lifecycle": {
+    "business_accounting": "VERIFIED_LOCAL_WITH_EXPLICIT_SPECIALIST_DEFERRALS",
+    "security_authorization": "VERIFIED_ISOLATED_CANONICAL_FIXTURES",
+    "database": "VERIFIED_LOCAL_HOSTED_ACTIVATION_DEFERRED",
+    "deployment": "DEFERRED_NOT_PUSHED_OR_DEPLOYED",
+    "documentation": "VERIFIED_AT_RELEASE_PACKAGING",
+    "real_Maker_AP_execution": "NOT_APPLICABLE_NOT_AUTHORIZED"
+  },
+  "quality": {
+    "typescript": "PASS: npm run build runs tsc -b before Vite",
+    "production_build": "PASS: Vite production bundle built against final source",
+    "build_advisories": [
+      "Existing >500kB bundle-size advisory"
+    ],
+    "scoped_lint": {
+      "errors": 0,
+      "warnings": 2,
+      "new_warning": "SupplierAccountsWorkspace async-load setState effect (loading state synchronized with scoped RPC)",
+      "existing_warning": "DataWorkspace shared effect"
+    },
+    "git_diff_check": "PASS",
+    "focused_secret_scan": "PASS: intended changed/new text files only"
+  },
+  "implementation_sha256": {
+    "scripts/acw01-browser-server.mjs": "aa55db1f2dd08bbc14b10b1cab5fc4c79734072b905a8ea0f904c2097b2974d7",
+    "scripts/acw01-fixture.mjs": "ed230952022a595d5b792fc37d81131791cf4e255f712c61eaa80a721a709392",
+    "scripts/fixtures/acw01.tsx": "87ec7a27cc759193767354178525dc63131d6a88347828ac6c6ef2a76c1b2148",
+    "scripts/verify-acw01-accounting.mjs": "50c7f5256b7c0bc47434ed3ed0f707afb1d9db7acfc3d5e9932672fdb952ec24",
+    "scripts/verify-acw01-activation.mjs": "a9bf915771a812d0c6c1dd79bbad3ff1247781bbae03cc1b4b33302398564a6a",
+    "scripts/verify-acw01-browser.mjs": "8daf2e601cfff79f5fc5af667ed842930d418211e2d915a65a6c4ba90770a546",
+    "scripts/verify-acw01-credits.mjs": "e2bc2fa8891f2650cdece15d06187987e553a819e47f95200c4c590d3fab8924",
+    "scripts/verify-acw01-final-controls.mjs": "a6c5fc7807e09c5b2d8eae67d6e50e10720fae5d76d976b0c1680229b1616237",
+    "scripts/verify-acw01-integration.mjs": "b3ad66fa741d1ba39e03873fff5f7f87c4526a00ecdc620024bea8903dd2ea9b",
+    "scripts/verify-acw01-races.mjs": "de983f39748461e4626a891d5fe62dd9099064fd3e0d0115ffbbc0f714c49858",
+    "src/app/TenantReadyApplication.tsx": "7eec5bfe53e5768f718d6f28338a3adab6e32ea79dc1e8c4539696d9e233fbf9",
+    "src/components/ui/statusTone.ts": "d8828c849c5ebbb7495d0446b8afeab32047ca35b0c83b942eaaef4b4346839b",
+    "src/financial/SupplierAccountsWorkspace.tsx": "bd2e19c0922ddc6b801a31ccc5f3d6d2b58f803e963a9062557d4115e4bb985b",
+    "src/financial/SupplierPaymentPanel.tsx": "e48859860eb224f16242ba9102b2261f37e055501811fd19575e7fd142260cf7",
+    "src/financial/supplierAccounts.ts": "65f10a0701de34f0cc460640bf796af4fdf8ed1269ef21cce552c65df2a8f962",
+    "src/financial/supplierPaymentRepository.ts": "15add335ac85e9b2900c708580be8a92e979d70b9cfa914c6b54a0a030a35734",
+    "src/reports/PartyStatement.tsx": "50ab124df0ad6354450d0f863c355c03788fa28c607b655d489d9e79e40abc37",
+    "src/reports/partyStatement.ts": "aa2cc0761e16bd2db4afe8b53ab369531976b1b31c33f142952089ede4acb7fe",
+    "src/reports/projectCostLedger.ts": "403628181846ac0bef143f68b93677717cc6e37d0ae46ab1480682e743658864",
+    "src/workspace/data/DataWorkspace.tsx": "6561ca3db74ce4c72b65ba71a30fcaf8c6503e95bde222dd6827da30499e1133",
+    "src/workspace/workspaceText.ts": "143bc627501f2b875a97a87b34102e1f61d51dcac0e50495ee1b6f72502385bb",
+    "supabase/migrations/20261113140000_supplier_accounts_payable_cycle.sql": "cab19b0a6f3996e6ff9a47964fdb0621632c1ce532c77e006c229dfd86ad01c8"
+  }
+}
