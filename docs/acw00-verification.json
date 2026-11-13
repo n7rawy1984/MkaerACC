@@ -1,0 +1,208 @@
+{
+  "date": "2026-11-13",
+  "status": "IMPLEMENTED_VERIFIED_LOCAL; TWO_APPROVED_SOURCE_SET_SETTINGS_SAVED; RELEASE_NOT_PUBLISHED; ACTUAL_POSTING_AWAITS_SPECIFIC_FACTS",
+  "baseCommit": "c4776f89a6eef892d26bea450a64a97defeed2cd",
+  "releaseBranch": "release/acw00-one-click",
+  "rootCause": [
+    "The existing source-set match hid the payer checkbox but the action disabled condition still required its false local checkbox value.",
+    "Company SOURCE_SET policies had not been configured.",
+    "Separate source review, Save, Review, Post, original-cost/ownership checkboxes and a final window.confirm repeated the same deliberate accounting approval."
+  ],
+  "implementation": [
+    "One explicit Approve & Post / اعتماد وترحيل action runs existing source-review and source-bound draft Save/Review/Post commands in sequence.",
+    "Canonical backend remains authoritative; no new posting RPC or financial primitives.",
+    "Exact pending request remains frozen after uncertain response; replay recovers the canonical receipt.",
+    "Read-only current-source check plus optimistic source review preserves original facts; session guard before each transition.",
+    "Essential issue shown first; economic classification, category, Project where required, verified date/amount, actual funding and VAT/evidence remain mandatory.",
+    "Company/Project master IDs reused; source reference and duplicate evidence preserved.",
+    "Technical source fields, payment override, supplementary references and cancellation remain available through disclosures.",
+    "Posted receipt updates the source drawer lifecycle and removes approval action; old financial correction permissions and mandatory reasons remain.",
+    "Contract/Employee advances retain specialized source-settlement flows and approval-role boundaries; materials navigate Inventory and never enter Expense posting."
+  ],
+  "tests": {
+    "focusedChecks": 58,
+    "accounting": {
+      "status": "PASS",
+      "checks": [
+        "Scoped batch fact resolves canonical Custody without another payer checkbox",
+        "Complete classified source has no redundant administrative issue",
+        "Unclassified cost requests its economic type first",
+        "Project cost requires its Project",
+        "Single approval completes canonical Save → Review → Post with a real isolated journal",
+        "All financial work uses existing source-bound canonical commands",
+        "Exact minor-unit debit/credit balance",
+        "Exactly AED10 credits the actual Custody holder",
+        "Exactly AED10 recognized once as Company expense",
+        "Posting preserves original source date, description and imported evidence",
+        "Independent historical records remain unchanged",
+        "Completed approval cannot post again",
+        "Lost response retains the exact posting envelope",
+        "Exact retry recovers canonical receipt and continues safely",
+        "Uncertain-response retry creates one Expense only",
+        "Contractor Advances cannot enter Expense recognition",
+        "Unsupported input VAT remains blocked",
+        "Closed or unavailable periods remain blocked",
+        "Management Viewer cannot post",
+        "Another Company accountant cannot post Maker-scoped fixture sources",
+        "Unknown or foreign Custody holder remains blocked",
+        "SUBCONTRACTOR_ADVANCE uses its existing specialized workflow",
+        "EMPLOYEE_ADVANCE uses its existing specialized workflow",
+        "MATERIAL_PURCHASE uses its existing specialized workflow",
+        "Session change stops orchestration before financial dispatch",
+        "Final action records source review with unchanged completion facts",
+        "Concurrent source edit cannot be overwritten by combined approval",
+        "All pre-existing synthetic posted journals remain byte-equivalent",
+        "A second draft cannot create a second financial effect for a posted source",
+        "Stale concurrent draft version cannot overwrite the winner"
+      ],
+      "hosted": false,
+      "realMakerWrites": 0
+    },
+    "browser": {
+      "status": "PASS",
+      "checks": [
+        "en covered complete source exposes one enabled Approve & Post action",
+        "en covered payer never requires another funding checkbox",
+        "en no separate review button before approval",
+        "en normal draft shows essential fields with technical details collapsed",
+        "en mobile primary action remains readable",
+        "en mobile page has no horizontal overflow",
+        "en primary posting action has distinct filled color",
+        "en one deliberate click dispatches existing canonical lifecycle exactly once",
+        "en batch payer evidence reaches canonical source review",
+        "en final action explicitly attests distinct original cost",
+        "en no repeated browser confirmation dialog",
+        "en posted receipt replaces the posting action",
+        "ar covered complete source exposes one enabled Approve & Post action",
+        "ar covered payer never requires another funding checkbox",
+        "ar no separate review button before approval",
+        "ar normal draft shows essential fields with technical details collapsed",
+        "ar mobile primary action remains readable",
+        "ar mobile page has no horizontal overflow",
+        "ar primary posting action has distinct filled color",
+        "ar one deliberate click dispatches existing canonical lifecycle exactly once",
+        "ar batch payer evidence reaches canonical source review",
+        "ar final action explicitly attests distinct original cost",
+        "ar no repeated browser confirmation dialog",
+        "ar posted receipt replaces the posting action",
+        "Unclassified record cannot be approved as an Expense",
+        "Unclassified record opens the existing economic-routing selector",
+        "Management Viewer has no posting action",
+        "No changed-flow browser runtime errors"
+      ],
+      "errors": [],
+      "transport": "Isolated capture-only synthetic RPC; no hosted requests",
+      "realFinancialWrites": 0
+    },
+    "typescript": "PASS",
+    "productionBuild": "PASS with existing >500KB chunk advisory; browser-safe supabase-auth configuration",
+    "scopedLint": {
+      "errors": 0,
+      "warnings": 6
+    },
+    "whitespace": "PASS",
+    "privateCredentialScan": "PASS",
+    "previous185ChecksRepeated": false
+  },
+  "migration": {
+    "newMigration": "NONE",
+    "latestApplied": 93,
+    "evidence": "docs/accounting-without-complexity-migration93-activation.json",
+    "existingCanonicalMigrationChanges": []
+  },
+  "hostedOperations": {
+    "target": "eqnzueginpkskbnqvgoc",
+    "workflow": "Existing application login; authenticated Company accountant; canonical configure_payment_preferences; no administrative permission bypass",
+    "settings": {
+      "status": "TWO_SOURCE_SET_SETTINGS_SAVED_PRESERVATION_PASS",
+      "captured": "2026-11-13T09:38:45.913Z",
+      "actor": "6f67b7bf-e531-49b7-9839-a0167c9c582b",
+      "configured": [
+        {
+          "id": "c5ade18b-e0d2-414c-b975-7f2ccd78f8f0",
+          "existing": false,
+          "scope": {
+            "file": "03_General_Expenses_Aug_Sep_2026_No_Farm_Only.xlsx",
+            "hash": "32b4fa49b114ee74fa41a591860738e530a5ab00fae357d3596ec615ecaa374d",
+            "from": "2026-08",
+            "through": "2026-09",
+            "count": 208
+          }
+        },
+        {
+          "id": "a32bbe61-7ca0-4778-964d-147bb086cd54",
+          "existing": false,
+          "scope": {
+            "file": "NARVO_Maker_All_Outgoings_Review_V2.xlsx",
+            "hash": "0ea2715932d668692a7f66411493a8b437f280c4809ffcdc85bb97c69a11d91b",
+            "from": "2026-09",
+            "through": "2026-11",
+            "count": 122
+          }
+        }
+      ],
+      "new_journals": 0,
+      "source_edits": 0
+    },
+    "secondHashNote": "Owner selected the exact approved preview. Their follow-up transcription shortened the second SHA; the verified original64-character fingerprint from that preview was used.",
+    "preservation": {
+      "all15ScopedBusinessTableSnapshots": "IDENTICAL",
+      "sources": 370,
+      "sourceDraftLinks": 18,
+      "draftEvents": 56,
+      "postedExpenses": 13,
+      "postedContractorAdvances": 2,
+      "ownerFundingJournals": 12,
+      "journals": 27,
+      "journalLines": 54,
+      "payrollPostings": 0,
+      "barqOpeningMinor": "37135070",
+      "barqClosingMinor": "37135070",
+      "newSourceEdits": 0,
+      "newFinancialPostings": 0,
+      "newJournalIds": []
+    },
+    "execution": {
+      "outgoingSourceCount": 330,
+      "alreadyPosted": 15,
+      "excluded": 34,
+      "pending": 281,
+      "remainingPrimaryReasons": {
+        "Advance/receivable/partner/Custody treatment outside Expense execution": 25,
+        "Payroll/salary-related payment or transfer fee deferred": 9,
+        "Project/Company cost allocation, labor recognition, receipt or tax-support evidence": 85,
+        "Materials/stock/asset recognition and valuation evidence": 69,
+        "Missing/conflicting authoritative transaction date": 14,
+        "Specific legal entity/beneficiary site remains unresolved": 15,
+        "Economic nature/beneficiary or supported canonical treatment unresolved": 89,
+        "Specific beneficiary/business-purpose and gross-cost/no-input-VAT facts awaiting reply after automatic approval rejection": 3,
+        "Contract and advance-versus-certified-settlement evidence": 3,
+        "Duplicate/distinct-payment evidence": 3
+      },
+      "blockedCandidateRefs": [
+        "G-2026-09-56",
+        "G-2026-08-156",
+        "G-2026-09-99"
+      ],
+      "blockedCandidateTotalMinor": "105000",
+      "blocker": "Automatic approval review rejected irreversible real journals while beneficiary/business-purpose and VAT/invoice uncertainty remains in the saved records; exact factual confirmation requested. No rejected posting action executed."
+    }
+  },
+  "publication": {
+    "pushed": false,
+    "deployed": false,
+    "configurationSaved": true,
+    "productionFrontendSmoke": "DEFERRED until operator publication"
+  },
+  "limitations": [
+    "No automatic economic classification for unknown records.",
+    "One-action orchestration covers original unsplit Expenses; split allocations and specialized advance/settlement/correction separation of duties retain existing workflows.",
+    "Insufficient Project, Contract, receipt, Company or tax evidence remains pending; no speculative posting."
+  ],
+  "screenshots": [
+    "docs/screenshots/acw00/ready-en.png",
+    "docs/screenshots/acw00/ready-ar.png",
+    "docs/screenshots/acw00/ready-mobile-en.png",
+    "docs/screenshots/acw00/ready-mobile-ar.png"
+  ]
+}

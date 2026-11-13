@@ -843,5 +843,27 @@
       "testing": "VERIFIED for listed changed-state/synthetic scope",
       "documentation": "VERIFIED; existing canonical roadmap/requirements/handoff updated in place"
     }
+  },
+  "acw00": {
+    "status": "COMPLETE_LOCAL_IMPLEMENTATION; NOT_PUBLISHED",
+    "scope": [
+      "Expense source opening/draft approval",
+      "Source editor disclosures",
+      "Source economic-routing guidance",
+      "Company payment-settings anchor",
+      "Scoped primary-action styling"
+    ],
+    "evidence": "docs/acw00-verification.json",
+    "focusedChecks": 58,
+    "languages": [
+      "Arabic RTL",
+      "English LTR"
+    ],
+    "viewports": [
+      "1366x768",
+      "390x844"
+    ],
+    "financialCommands": "Existing canonical only; no migrations or authorization changes",
+    "specializedFlows": "Existing split allocations and protected advance/settlement/correction approval boundaries retained"
   }
 }

@@ -1,0 +1,148 @@
+{
+  "status": "APPLIED_PRESERVATION_POSTFLIGHT_PASS_FRONTEND_READY_NOT_DEPLOYED",
+  "captured": "2026-11-13T08:59:08.544896+00:00",
+  "target": "eqnzueginpkskbnqvgoc",
+  "migration": {
+    "number": 93,
+    "version": "20261113120000",
+    "file": "20261113120000_payment_workflow_preferences.sql",
+    "sha256": "1c2d1c412749704e4b0f913bb30013d05061baa1754bd71f40d2ce6adc213752",
+    "workflow": "Supabase CLI linked db push; sole-pending dry-run; exact checksum/target; explicit Migration93-only authorization",
+    "pending_migrations": [],
+    "scope": "Additive empty payment-preference metadata table and four constrained functions; no backfill or Company configuration"
+  },
+  "preservation": {
+    "existing_public_and_auth_table_fingerprints": {
+      "count": 101,
+      "result": "IDENTICAL"
+    },
+    "existing_RLS_policies_grants_and_functions": "IDENTICAL",
+    "all_company_GL_dimension_balances": "IDENTICAL",
+    "maker_counts": {
+      "sources": 370,
+      "journals": 27,
+      "journal_lines": 54,
+      "source_drafts": 18,
+      "posted_expenses": 13,
+      "payroll_postings": 0,
+      "contractor_advances": 2,
+      "unbalanced_journals": 0,
+      "salary_source_records": 25,
+      "owner_funding_journals": 12
+    },
+    "barq_custody_minor": "37135070",
+    "Auth_identities_Company_memberships_permissions": "UNCHANGED",
+    "Treasury_Contractor_Project_Inventory_Payroll_records": "UNCHANGED",
+    "new_financial_transactions": 0,
+    "new_source_notes": 0,
+    "new_payment_preferences": 0
+  },
+  "new_object_security": {
+    "policies": [
+      {
+        "cmd": "SELECT",
+        "qual": "(has_company_role(company_id, 'ACCOUNTING_ADMIN'::company_role) OR has_company_role(company_id, 'ACCOUNTANT'::company_role))",
+        "roles": [
+          "authenticated"
+        ],
+        "tablename": "payment_workflow_preferences",
+        "permissive": "PERMISSIVE",
+        "policyname": "payment_preferences_read",
+        "schemaname": "public",
+        "with_check": null
+      }
+    ],
+    "functions": [
+      {
+        "acl": [
+          "postgres=X/postgres",
+          "authenticated=X/postgres"
+        ],
+        "name": "append_source_note",
+        "config": [
+          "search_path=\"\""
+        ],
+        "anon_execute": false,
+        "security_definer": true,
+        "service_role_execute": false,
+        "authenticated_execute": true
+      },
+      {
+        "acl": [
+          "postgres=X/postgres",
+          "authenticated=X/postgres"
+        ],
+        "name": "configure_payment_preferences",
+        "config": [
+          "search_path=\"\""
+        ],
+        "anon_execute": false,
+        "security_definer": true,
+        "service_role_execute": false,
+        "authenticated_execute": true
+      },
+      {
+        "acl": [
+          "postgres=X/postgres",
+          "authenticated=X/postgres"
+        ],
+        "name": "read_payment_preferences",
+        "config": [
+          "search_path=\"\""
+        ],
+        "anon_execute": false,
+        "security_definer": true,
+        "service_role_execute": false,
+        "authenticated_execute": true
+      },
+      {
+        "acl": [
+          "postgres=X/postgres",
+          "authenticated=X/postgres"
+        ],
+        "name": "read_source_payment_policies",
+        "config": [
+          "search_path=\"\""
+        ],
+        "anon_execute": false,
+        "security_definer": true,
+        "service_role_execute": false,
+        "authenticated_execute": true
+      }
+    ],
+    "table_security": {
+      "acl": [
+        "postgres=arwdDxtm/postgres",
+        "authenticated=r/postgres"
+      ],
+      "rls": true,
+      "forced": true
+    },
+    "preference_rows": 0,
+    "direct_write_privileges": {
+      "anon": [
+        false,
+        false,
+        false
+      ],
+      "service_role": [
+        false,
+        false,
+        false
+      ],
+      "authenticated": [
+        false,
+        false,
+        false
+      ]
+    }
+  },
+  "verification": "Only activation-time read-only fingerprints, counts, balances, catalog/grants/RLS and migration alignment; completed185 checks reused",
+  "release": {
+    "commit": "c4776f89a6eef892d26bea450a64a97defeed2cd",
+    "status": "READY_FOR_OPERATOR_PUBLICATION; NOT_PUSHED_OR_DEPLOYED_BY_THIS_STEP",
+    "Company_configuration": "NOT_PERFORMED",
+    "runtime_smoke": "DEFERRED until operator frontend publication"
+  },
+  "documentation": "Operational working-tree record; prepared release commit unchanged"
+}

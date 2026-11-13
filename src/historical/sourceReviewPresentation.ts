@@ -26,9 +26,9 @@ export const sourceReviewIssues = (row:SourceRecord) => {
  const issues:string[]=[];
  if(row.source_document_unavailable)issues.push('LINK_UNAVAILABLE');
  if(sourceLinked(row))return issues;
+ if(!sourceValue(row,'nature',row.classification.nature)||sourceValue(row,'nature',row.classification.nature)==='NEEDS_REVIEW')issues.push('CLASSIFICATION_REQUIRED');
  if(!sourceTransactionDate(row))issues.push('DATE_UNCONFIRMED');
  if(sourceCurrentAmount(row)===null)issues.push('AMOUNT_UNCONFIRMED');
- if(!sourceValue(row,'nature',row.classification.nature)||sourceValue(row,'nature',row.classification.nature)==='NEEDS_REVIEW')issues.push('CLASSIFICATION_REQUIRED');
  if(row.classification.legal_company_verified===false)issues.push('COMPANY_UNCONFIRMED');
  if(row.payment_policy?.contradicted||row.completion.funding_contradiction==='true')issues.push('PAYMENT_CONTRADICTION');
  else if(sourceDirection(row)!=='NONE'&&!row.cash_treasury_id&&!confirmedSourcePayment(row))issues.push('PAYMENT_SOURCE_UNCONFIRMED');
@@ -42,7 +42,13 @@ export const reviewIssueLabels={
  LINK_UNAVAILABLE:['Document links unavailable','تعذر التحقق من روابط المستندات'],
  DATE_UNCONFIRMED:['Without a confirmed date','بدون تاريخ مؤكد'],
  AMOUNT_UNCONFIRMED:['Amount requires evidence','المبلغ يحتاج إثباتاً'],
- CLASSIFICATION_REQUIRED:['Classification needs review','التصنيف يحتاج مراجعة'],
+ CLASSIFICATION_REQUIRED:['Choose the economic type: Expense, advance, Contractor payment or materials.','حدد نوع العملية: مصروف، سلفة، دفعة مقاول، أو شراء مواد.'],
+ PROJECT_REQUIRED:['Select the Project for this cost, or choose Company operating expense.','حدد المشروع المرتبط بهذه التكلفة، أو اختر مصروف الشركة.'],
+ DESCRIPTION_REQUIRED:['Complete the transaction description.','استكمل وصف المعاملة.'],
+ CATEGORY_REQUIRED:['Select the established cost category.','حدد فئة التكلفة المعتمدة.'],
+ VAT_REQUIRED:['Select the VAT treatment and provide invoice evidence when claiming VAT.','حدد المعالجة الضريبية وأرفق دليل الفاتورة عند المطالبة بالضريبة.'],
+ EVIDENCE_REQUIRED:['Add the existing supporting evidence reference.','أضف مرجع الإثبات المتوفر.'],
+ SOURCE_MATCH_REQUIRED:['Match the saved source date and description; original evidence stays preserved.','طابق تاريخ المصدر المحفوظ ووصفه؛ تبقى الأدلة الأصلية محفوظة.'],
  COMPANY_UNCONFIRMED:['Accounting Company unconfirmed','الشركة المحاسبية غير مؤكدة'],
  PAYMENT_SOURCE_UNCONFIRMED:['Payment source unconfirmed','مصدر الدفع غير مؤكد'],
  PAYMENT_EVIDENCE_UNCONFIRMED:['Payment evidence unconfirmed','إثبات الدفع غير مؤكد'],

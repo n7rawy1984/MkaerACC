@@ -199,3 +199,7 @@ body {font-family:var(--erp-font);font-size:16px;line-height:1.65;background:var
 @media(max-width:600px){:is(.company-workspace,.workspace-standalone) .narvo-financial-workflow{padding:16px}:is(.company-workspace,.workspace-standalone) :is(.narvo-confirmation,[data-financial-confirmation]){padding:16px}.company-workspace .narvo-financial-workflow form{padding:12px}.narvo-auth-card .narvo-company-choice{padding:14px;gap:12px}}
 /* Keep the Company identity readable when switch/account controls share a phone header. */
 @media(max-width:600px){.company-workspace .workspace-topbar{flex-wrap:wrap}.company-workspace .suite-company-control{flex:1 1 100%;max-width:100%;min-width:0}.company-workspace .suite-company-control>div{flex:1;min-width:0}.company-workspace .suite-company-control strong{display:block;overflow-wrap:normal;line-height:1.6}.company-workspace .workspace-topbar-actions{width:100%;justify-content:flex-end}}
+
+/* ACW-00: one visually distinct final action in the existing Expense workflow. */
+.company-workspace #expense-drafts .acw-approve:not(:disabled){min-height:44px;background:var(--erp-primary);color:var(--erp-inverse);border:1px solid var(--erp-primary);font-weight:700}
+.company-workspace #expense-drafts .acw-approve:focus-visible{outline:3px solid var(--erp-focus);outline-offset:3px}

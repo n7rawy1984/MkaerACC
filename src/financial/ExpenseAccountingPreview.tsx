@@ -4,7 +4,7 @@ import type {ExpenseDraft} from './expenseDrafts';
 /** Display-only mapping of the reviewed snapshot; canonical commands remain authoritative. */
 export function ExpenseAccountingPreview({draft,dirty}:{draft:ExpenseDraft;dirty:boolean}){
  const m=useProductionMasterData(),{locale}=useI18n(),ar=locale==='ar';if(!draft.preview||m.phase!=='READY')return null;
- if(dirty)return <p role="note">{ar?'احفظ التغييرات وأعد المراجعة لتحديث المعالجة المقترحة.':'Save and review changes to update the proposed treatment.'}</p>;
+ if(dirty)return <p role="note">{ar?'ستُفحص البيانات المحدثة عند اعتماد وترحيل؛ المعاينة السابقة لا تمثل التعديلات.':'Approve & Post will validate the updated details; the previous preview does not represent these edits.'}</p>;
  const v=draft.snapshot,p=draft.preview,debit=m.accounts.find(a=>a.systemKey===(v.project_id?'PROJECT_COST':'COMPANY_EXPENSE')&&a.status==='ACTIVE'),tax=m.accounts.find(a=>a.systemKey==='INPUT_VAT'&&a.status==='ACTIVE');
  const credit=v.funding_mode==='CUSTODIAN'?m.accounts.find(a=>a.systemKey==='CUSTODY_ADVANCE'&&a.status==='ACTIVE'):v.funding_mode==='TREASURY'?m.accounts.find(a=>a.id===m.treasuryAccounts.find(t=>t.id===v.treasury_id)?.glAccountId):undefined;
  const party=m.parties.find(a=>a.id===v.paid_by_id)?.name,treasury=m.treasuryAccounts.find(a=>a.id===v.treasury_id)?.name;
