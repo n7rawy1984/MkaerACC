@@ -1,3 +1,4 @@
+import{DataWorkspace,TextCell,RecordStatus}from'../workspace/data/DataWorkspace';
 import {PartyBusinessControl,BusinessPartyExports} from './PartyBusinessControl';
 import {RecordIdentity} from '../components/ui/RecordIdentity';
 import {StatusBadge} from '../workspace/workspaceUi';
@@ -9,12 +10,12 @@ import { CustodianPartyNameControl } from "./CustodianPartyNameControl";
 import { OwnerPartyNameControl } from "./OwnerPartyNameControl";
 import { useLayoutEffect, useRef, useState } from "react";
 import { useAuth } from "../auth/AuthContext";
-import { useT } from "../i18n/I18nContext";
+import { useT,useI18n } from "../i18n/I18nContext";
 import { useProductionMasterData } from "./productionMasterDataContext";
 import { SupplierPartyForm } from "./SupplierPartyForm";
 
 export function PartiesList() {
-  const t = useT();
+  const t = useT();const{locale}=useI18n();
   const { state } = useAuth();
   const master = useProductionMasterData();
   const [editing, setEditing] = useState<"new" | null>(null);
@@ -75,9 +76,12 @@ export function PartiesList() {
     <BusinessPartyExports/>
     <p className="mt-3 text-sm text-slate-500">{t("productionMaster.partyVisibility")}</p>
     {master.parties.length === 0 ? <p role="status" className="mt-4 text-sm text-slate-500">{t("productionMaster.partiesEmpty")}</p> : (
-      <ul className="enterprise-record-list mt-5" aria-label={t("productionMaster.parties")}>
-        {master.parties.map((party) => (
-          <li key={party.id} className="py-4 first:pt-0 last:pb-0">
+      <DataWorkspace label={t('productionMaster.parties')} rows={master.parties} titleOf={p=>p.name} search={p=>[p.name,p.code,p.type,p.phone].join(' ')} statusOf={p=>p.status} columns={[
+ {key:'party',label:t('productionMaster.parties'),value:p=>p.name,render:p=><TextCell value={p.name} secondary={p.code}/>},
+ {key:'type',label:locale==='ar'?'النوع':'Type',value:p=>p.type,render:p=><span>{t(`productionMaster.type.${p.type}`)}</span>},
+ {key:'phone',label:t('productionMaster.phone'),render:p=><bdi dir="ltr">{p.phone??'—'}</bdi>},
+ {key:'status',label:t('common.status'),render:p=><RecordStatus value={p.status}/>}
+ ]} renderDetails={party=><>
             <RecordIdentity code={party.code} name={party.name} kind={party.personRoles?.length === 2 ? t("personCreation.EMPLOYEE_CUSTODIAN") : t(`productionMaster.type.${party.type}`)} status={<StatusBadge status={party.status}>{t(`partyStatus.${party.status}`)}</StatusBadge>}/>
             <dl className="mt-2 space-y-1 break-words text-sm text-slate-500">
               {([
@@ -93,9 +97,7 @@ export function PartiesList() {
             {party.type === "OWNER" && <OwnerPartyNameControl party={party} selected={ownerActionId === party.id} onSelect={() => { returnFocus.current = null; setEditing(null); setOtherActionId(null); setEmployeeActionId(null); setCustodianActionId(null); setSubcontractorActionId(null); setOwnerActionId(party.id); }} />}
             {['SUPPLIER','SUBCONTRACTOR'].includes(party.type)&&<PartyBusinessControl key={state.profile.userId+':'+party.companyId+':'+party.id} party={party}/>}
 
-          </li>
-        ))}
-      </ul>
+          </>}/>
     )}
   </>;
 }

@@ -1,3 +1,4 @@
+import{DataWorkspace,TextCell}from'../workspace/data/DataWorkspace';
 import {ProjectClosure} from './ProjectClosure';
 import {ProjectLifecycle} from './ProjectLifecycle';
 import {ProjectActivation} from './ProjectActivation';
@@ -48,9 +49,13 @@ export function ProjectsList() {
     <button type="button" disabled={phase === "PENDING"} onClick={refresh} className="mt-4 rounded-lg border px-3 py-2 text-sm">{t("projectMetadata.refresh")}</button></div>
     {!master.projects.some(p => p.id === actionId) && message}
     {master.projects.length === 0 && <p className="mt-4 text-sm">{t("productionProjects.empty")}</p>}
-    <ul className="enterprise-record-list mt-5" aria-label={t("productionProjects.title")}>
-      {master.projects.map(project => <li key={project.id} className="min-w-0 break-words py-4">
-        <RecordIdentity code={project.code} name={project.name} status={<StatusBadge status={project.status}>{t(`projectStatus.${project.status}`)}</StatusBadge>}/>
+    <DataWorkspace label={t('productionProjects.title')} rows={master.projects} titleOf={p=>p.name} search={p=>[p.code,p.name,p.clientName,p.location,p.contractNumber].join(' ')} statusOf={p=>t(`projectStatus.${p.status}`)} onClose={close} columns={[
+ {key:'project',label:t('productionProjects.title'),value:p=>p.name,render:p=><TextCell value={p.name} secondary={p.code}/>},
+ {key:'client',label:t('projectMetadata.client_name'),value:p=>p.clientName??'',render:p=><TextCell value={p.clientName??'—'}/>},
+ {key:'location',label:t('projectMetadata.location'),render:p=><TextCell value={p.location??'—'}/>},
+ {key:'contract',label:t('projectMetadata.contract_number'),render:p=><TextCell value={p.contractNumber??'—'}/>},
+ {key:'status',label:t('common.status'),render:p=><StatusBadge status={p.status}>{t(`projectStatus.${p.status}`)}</StatusBadge>}
+ ]} renderDetails={project=><>        <RecordIdentity code={project.code} name={project.name} status={<StatusBadge status={project.status}>{t(`projectStatus.${project.status}`)}</StatusBadge>}/>
         <dl className="mt-2 space-y-2 text-sm">
           {(["client_name", "location", "contract_number", "notes"] as const).map(field => <div key={field} className={field === "notes" ? "record-detail-wide" : undefined}><dt className="text-slate-500">{t(`projectMetadata.${field}`)}</dt><dd className="whitespace-pre-wrap">{(field === "client_name" ? project.clientName : field === "contract_number" ? project.contractNumber : project[field]) ?? t("projectMetadata.empty")}</dd></div>)}
         </dl>
@@ -60,7 +65,6 @@ export function ProjectsList() {
         <ProjectLifecycle project={project} disabled={blocked || !!editing} onRefresh={master.refreshProjects}/>
         <ProjectClosure project={project} disabled={blocked || !!editing} onRefresh={master.refreshProjects}/>
         {actionId === project.id && message}
-      </li>)}
-    </ul>
+</>}/>
   </div>;
 }

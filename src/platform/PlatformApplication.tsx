@@ -1,3 +1,5 @@
+import{RecordActions}from'../workspace/data/DataWorkspace';
+import{TableViewport}from'../workspace/data/TableViewport';
 import {containDialogTab} from '../components/ui/dialogFocus';
 import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -204,9 +206,9 @@ function Console({ client, userId, revalidate }: { client: SupabaseClient<Databa
       <div className="platform-directory-meta"><p>{t("loadedPageOnly")}</p>{data && <span>{t("visibleRecords")}: {visibleRows.length} · {t("loadedRecords")}: {data.items.length}</span>}</div>
       {selectedEntity && selectedEntity !== "new" && <Link className="platform-back-link" to="/platform/entities">{t("entities")}</Link>}
       {!data && !error && <LoadingState/>}
-      {data && <div className="platform-table-wrap" role="region" aria-label={`${t(titleKey)} — ${t("directoryLabel")}`} tabIndex={0}><table><caption className="platform-sr-only">{t(titleKey)} · {t("page")} {page + 1}</caption><thead><tr>{columns[resource].map(key => <th key={key} scope="col">{labelKey(key) ? t(key as PlatformTextKey) : key.replaceAll("_", " ")}</th>)}<th scope="col">{t("actions")}</th></tr></thead><tbody>
-        {visibleRows.map((row, i) => <tr key={value(row, "id") || i}>{columns[resource].map(key => <td key={key} data-label={labelKey(key) ? t(key as PlatformTextKey) : key.replaceAll("_", " ")}>{resource === "customers" && key === "portfolio" ? <CustomerPortfolio api={api} customerId={value(row,"id")} generation={generation}/> : <DirectoryCell row={row} field={key} showCode={resource === "subscriptions"}/>}</td>)}<td data-label={t("actions")}><div className="platform-row-actions">
-          <button disabled={busy} onClick={() => setEditor({ kind: "details", row })}>{t("details")}</button>
+      {data && <TableViewport className="platform-table-wrap" role="region" aria-label={`${t(titleKey)} — ${t("directoryLabel")}`} tabIndex={0}><table className="dw-table"><caption className="platform-sr-only">{t(titleKey)} · {t("page")} {page + 1}</caption><thead><tr>{columns[resource].map(key => <th key={key} scope="col">{labelKey(key) ? t(key as PlatformTextKey) : key.replaceAll("_", " ")}</th>)}<th scope="col">{t("actions")}</th></tr></thead><tbody>
+        {visibleRows.map((row, i) => <tr key={value(row, "id") || i}>{columns[resource].map(key => <td key={key} data-label={labelKey(key) ? t(key as PlatformTextKey) : key.replaceAll("_", " ")}>{resource === "customers" && key === "portfolio" ? <CustomerPortfolio api={api} customerId={value(row,"id")} generation={generation}/> : <DirectoryCell row={row} field={key} showCode={resource === "subscriptions"}/>}</td>)}<td data-label={t("actions")}><RecordActions primary={<button disabled={busy} onClick={() => setEditor({ kind: "details", row })}>{t("details")}</button>}>
+
           {tab === "entities" && <><Link to={`/platform/onboarding?company=${value(row,"id")}`}>{t("commercialOnboarding")}</Link><Link to={`/platform/entities/${value(row, "id")}`}>{t("openEntity")}</Link><button disabled={!!pending} onClick={() => setEditor({ kind: "update_entity", row })}>{t("edit")}</button><button disabled={!!pending} onClick={() => setEditor({ kind: "set_lifecycle", row })}>{t("lifecycle")}</button>{row.lifecycle === "ACTIVE" && row.accounting_setup === "INCOMPLETE" && <button disabled={!!pending} onClick={() => setEditor({ kind: "provision_accounting", row })}>{t("provisionAccounting")}</button>}</>}
           {tab === "subscriptions" && <button aria-label={t("manageSubscription")} disabled={!!pending} onClick={() => setEditor({ kind: "set_subscription", row })}>{t("manageShort")}</button>}
           {tab === "customers" && <Link to={`/platform/onboarding?customer=${value(row,"id")}`}>{t("portfolio")}</Link>}
@@ -215,8 +217,8 @@ function Console({ client, userId, revalidate }: { client: SupabaseClient<Databa
           {tab === "memberships" && <button disabled={!!pending} onClick={() => setEditor({ kind: "set_membership", row })}>{t("access")}</button>}
           {tab === "settings" && <button disabled={!!pending} onClick={() => setEditor({ kind: "update_settings", row })}>{t("edit")}</button>}
           {tab === "invitations" && row.state === "PENDING" && <><label>{t("invitationReviewLink")}<input readOnly value={`${window.location.origin}/auth/callback?invitation_id=${value(row, "id")}`} onFocus={event => event.currentTarget.select()}/></label><button disabled={!!pending || busy} onClick={() => { setStepPhase("confirm"); setSensitiveAction({ kind: "delivery", invitationId: value(row, "id") }); }}>{t("deliver")}</button><button disabled={!!pending} onClick={() => setEditor({ kind: "resend", row })}>{t("resend")}</button><button disabled={!!pending} onClick={() => setEditor({ kind: "revoke", row })}>{t("revoke")}</button></>}
-        </div></td></tr>)}
-      </tbody></table>{!visibleRows.length && <EmptyState reset={resetFilters}/>}</div>}
+        </RecordActions></td></tr>)}
+      </tbody></table>{!visibleRows.length && <EmptyState reset={resetFilters}/>}</TableViewport>}
       {data && <p className="platform-scroll-help">{t("tableScrollHelp")}</p>}
       <div className="platform-pager"><button disabled={!page || busy} onClick={() => setPage(n => n - 1)}>{t("previous")}</button><span>{t("page")} {page + 1}</span><button disabled={!data?.has_more || busy} onClick={() => setPage(n => n + 1)}>{t("next")}</button></div>
       {["entities", "invitations", "subscriptions"].includes(tab) && <PageHelp>{tab === "entities" ? <p>{t("freeze")}</p> : tab === "subscriptions" ? <p>{t("manualSubscriptionHelp")}</p> : <><p>{t("deliveryHelp")}</p><p>{t("invitationLinkHelp")}</p></>}</PageHelp>}

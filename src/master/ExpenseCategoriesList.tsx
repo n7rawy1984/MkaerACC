@@ -1,3 +1,4 @@
+import{DataWorkspace,TextCell,RecordStatus}from'../workspace/data/DataWorkspace';
 import { useState } from "react";
 import { useAuth } from "../auth/AuthContext";
 import { useT } from "../i18n/I18nContext";
@@ -37,15 +38,15 @@ export function ExpenseCategoriesList() {
       }}>{t("categoryMutation.confirm")}</button><button type="button" className={button} onClick={() => setStatusTarget(null)}>{t("categoryMutation.close")}</button></div>
     </div>}
     {master.expenseCategories.length === 0 ? <p role="status" className="mt-4 text-sm text-slate-500">{t("productionMaster.categoriesEmpty")}</p> :
-      <ul className="mt-5 divide-y divide-slate-200" aria-label={t("productionMaster.expenseCategories")}>
-        {master.expenseCategories.map((category) => <li key={category.id} className="flex flex-wrap items-start justify-between gap-3 py-4">
+      <DataWorkspace label={t('productionMaster.expenseCategories')} rows={master.expenseCategories} titleOf={c=>c.name} search={c=>[c.code,c.name,c.description].join(' ')} statusOf={c=>t(`partyStatus.${c.status}`)} detailDismissKey={editing==='new'?'NEW':editing?.id??statusTarget?.id} columns={[
+ {key:'code',label:t('categoryMutation.code'),value:c=>c.code,render:c=><bdi dir="ltr">{c.code}</bdi>},{key:'name',label:t('categoryMutation.name'),value:c=>c.name,render:c=><TextCell value={c.name}/>},{key:'description',label:t('categoryMutation.description'),render:c=><TextCell value={c.description??'—'}/>},{key:'status',label:t('common.status'),render:c=><RecordStatus value={c.status}/>}
+ ]} renderDetails={category=><>
           <div className="min-w-0 break-words"><p className="font-medium"><bdi>{category.code} · {category.name}</bdi></p>{category.description !== null && <p className="text-sm text-slate-500">{category.description}</p>}</div>
           <span className="text-sm">{t(`partyStatus.${category.status}`)}</span>
           {canManage && <div className="flex flex-wrap gap-2">
             <button type="button" className={button} disabled={blocked} onClick={() => { setStatusTarget(null); setEditing(category); }}>{t("categoryMutation.edit")}</button>
             <button type="button" className={button} disabled={blocked} onClick={() => { setEditing(null); setStatusTarget(category); }}>{t(category.status === "ACTIVE" ? "categoryMutation.deactivate" : "categoryMutation.reactivate")}</button>
           </div>}
-        </li>)}
-      </ul>}
+        </>}/>}
   </>;
 }

@@ -16,12 +16,13 @@ export function DirectoryCell({ row, field, showCode = false }: { row: PlatformR
   if (raw === null || raw === undefined || raw === "") return <span className="platform-muted">—</span>;
   const text = String(raw); const label = Object.hasOwn(platformText.en, text) ? t(text as PlatformTextKey) : text;
   if (statusFields.has(field)) return <StatusBadge status={text}>{label}</StatusBadge>;
-  if (typeof raw === "object") return <details className="platform-event-detail"><summary>{t("eventDetails")}</summary><pre>{JSON.stringify(raw, null, 2)}</pre></details>;
+  if (typeof raw === "object") return <span className="platform-muted">{t("eventDetails")}</span>;
   if (["created_at", "expires_at", "starts_on", "ends_on", "renewal_due_on"].includes(field) && Number.isFinite(Date.parse(text))) {
     return <time dateTime={text}>{new Intl.DateTimeFormat(locale === "ar" ? "ar-AE" : "en-GB", { dateStyle: "medium", timeZone: field.endsWith("_on") ? "UTC" : "Asia/Dubai" }).format(new Date(text))}</time>;
   }
   if (field === "name" || field === "company_name") return <span className="platform-record-name"><bdi>{label}</bdi>{showCode && field === "name" && row.code && <small><bdi>{String(row.code)}</bdi></small>}</span>;
-  return <bdi className={field.endsWith("_id") ? "platform-reference" : undefined}>{label}</bdi>;
+  if(field.endsWith('_id'))return<details className="platform-event-detail"><summary>{locale==='ar'?'مرجع تقني':'Technical reference'}</summary><bdi dir="ltr">{label}</bdi></details>;
+  return <bdi>{label}</bdi>;
 }
 export function LoadingState() {
   const t = usePlatformText(); return <section className="platform-loading" role="status" aria-busy="true"><span className="platform-loading-label">{t("loading")}</span><div className="platform-skeletons" aria-hidden="true">{[0, 1, 2].map(i => <div key={i}/>)}</div></section>;

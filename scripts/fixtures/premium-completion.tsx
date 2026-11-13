@@ -39,6 +39,8 @@ window.fixtureClient={auth:{getClaims:async()=>({data:{claims:{sub:f.user}},erro
  if(name==='attendance_day')return{data:{locked:false,rows:[{employee_id:snapshot.employee.id,employee_name:snapshot.employee.name,entry:null}]},error:null};
  if(name==='attendance_month')return{data:{period:{revision:1,reviewed_revision:1,locked_at:null},assignments:[],exceptions:[]},error:null};
  if(name==='get_project_correction_eligibility')return{data:{review_id:a.target_review_id,eligible:true,blocker:null,expense_reference:'SYN-EXPENSE',expense_id:expense.id,original_project_id:null,corrected_project_id:snapshot.project,amount_minor:'1250',effective_date:snapshot.today,reason:'Synthetic approved allocation'},error:null};
+ if(name==='read_accounting_dashboard'&&snapshot.rpc.read_accounting_dashboard)return{data:structuredClone(snapshot.rpc.read_accounting_dashboard),error:null};
+ if(name==='read_dashboard_transactions'&&snapshot.rpc.read_dashboard_transactions){const d=structuredClone(snapshot.rpc.read_dashboard_transactions);let rows=d.rows.filter((r:any)=>(!a.search||(r.reference+' '+r.description).toLowerCase().includes(a.search.toLowerCase()))&&(a.status_filter==='ALL'||r.status===a.status_filter)&&(!a.type_filter||r.event_type===a.type_filter));rows.sort((x:any,y:any)=>(String(x.date).localeCompare(String(y.date))||x.id.localeCompare(y.id))*(a.sort_order==='ASC'?1:-1));return{data:{...d,total:rows.length,page:a.page,pageSize:a.page_size,rows:rows.slice(a.page*a.page_size,(a.page+1)*a.page_size)},error:null};}
  if(name==='has_permission')return{data:f.role!=='MANAGEMENT_VIEWER',error:null};
  if(name==='custody_reporting_complete')return{data:true,error:null};
  if(name==='has_company_role')return{data:a.required_role===f.role,error:null};

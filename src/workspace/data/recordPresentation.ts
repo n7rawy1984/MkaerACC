@@ -1,0 +1,6 @@
+export type RecordColumn<T>={key:string;label:string;value?:(row:T)=>string|number|bigint;numeric?:boolean};
+export function selectRecordPage<T extends{id:string}>(rows:readonly T[],{query,status,project,search,statusOf,projectOf,dateOf,from='',through='',sort,direction,page,size}:{query:string;status:string;project:string;search:(row:T)=>string;statusOf?:(row:T)=>string;projectOf?:(row:T)=>string;dateOf?:(row:T)=>string|null|undefined;from?:string;through?:string;sort?:(row:T)=>string|number|bigint;direction:1|-1;page:number;size:number}){
+ const term=query.trim().toLocaleLowerCase();const filtered=rows.filter(row=>(!term||search(row).toLocaleLowerCase().includes(term))&&(!status||statusOf?.(row)===status)&&(!project||projectOf?.(row)===project)&&(!from||!!dateOf?.(row)&&dateOf(row)!>=from)&&(!through||!!dateOf?.(row)&&dateOf(row)!<=through));
+ const ordered=sort?[...filtered].sort((a,b)=>{const x=sort(a),y=sort(b);return(x===y?0:x<y?-direction:direction)||a.id.localeCompare(b.id);}):filtered;
+ const last=Math.max(0,Math.ceil(ordered.length/size)-1),current=Math.min(Math.max(0,page),last);return{rows:ordered.slice(current*size,(current+1)*size),count:ordered.length,page:current,pages:last+1};
+}

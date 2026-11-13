@@ -597,5 +597,155 @@
     "prior554Repeated": false,
     "realFinancialWrites": 0,
     "newMigrations": 0
+  },
+  "dataWorkspaceMilestone": {
+    "date": "2026-11-13",
+    "status": "COMPLETE within existing Production data-workspace scope locally; publication and Production smoke DEFERRED",
+    "releaseBranch": "release/data-workspaces",
+    "baseCommit": "03be3c92bc17f3f41562482249779652a935d728",
+    "priorPremiumIncludedByAncestry": "133bf0c6048d87f3cddb00832917da7b5fd4967c",
+    "implementation": {
+      "sharedComponents": "DataWorkspace, TableViewport, MoneyCell, DateCell, TextCell, RecordStatus, RecordActions, RecordDetailDrawer; full-loaded collection search/filter/stable sort/page helpers.",
+      "masters": "Subcontracts, Projects, Parties, GL accounts, Treasury accounts and Expense categories use summary tables with existing forms/actions in selected detail drawers.",
+      "subcontracts": "Human Contract number, Contractor/Project/scope, authoritative Contract value/certified/advance outstanding/settlement values, status and details. Missing read-model metrics remain —; uncapped contracts identified. Existing certificates, payments, retention and metadata actions retained.",
+      "expenses": "Separate sources/drafts/posted/entry views; structured source rows with preserved source references, yellow review warnings, one primary action plus accessible secondary disclosure. Posted register has counterparty/Project/funding fields and selected correction/reversal drawer. Removed page-only financial summary cards; explicit page scope and complete report export remain.",
+      "financialDocuments": "Supplier payments, Contractor advances/certificates/payments and retention releases/payments use paged compact summaries and selected original financial details; confirmation controls and command inputs unchanged.",
+      "inventory": "Materials/warehouses/documents/balances/movements use shared tables and appropriate selected drawers. Existing posting confirmation, valuation and GL logic unchanged.",
+      "people": "Employee summary and single detail drawer; existing protected employment/Payroll screens retained. Attendance grid and existing Payroll register retain specialized structure with shared table viewport.",
+      "reportsAndFunding": "Custody history, funding evidence/financial operations, certified openings/reconciliation, Party/Project/Treasury/Custody reports and Migration92 transaction report retain authoritative readers and existing specialized forms; shared table boundaries/columns applied.",
+      "platform": "Eight existing administrative directories retain server search/pagination; compact Details plus secondary actions; technical IDs and full metadata remain in audit/detail views.",
+      "scrolling": "Table-local horizontal scroll, page/modal vertical scrolling; fixed demonstrated posted Expense implicit-grid overflow. No global overflow hiding. Native focus-contained drawers yield to existing Inventory confirmation.",
+      "paging": "Full-loaded client collections get deterministic pagination/filtered counts, exact BigInt sort and date/status/Project filters where applicable. Existing posted Expense, Platform and Migration92 server pagination and full exports are preserved; no invented global totals."
+    },
+    "companyRoutes": {
+      "status": "COMPLETE for scoped presentation checks",
+      "count": 29,
+      "routes": [
+        "/accounting-cycle",
+        "/accounting-reports",
+        "/accounts",
+        "/attendance",
+        "/company-profile",
+        "/custody",
+        "/employees",
+        "/expense-categories",
+        "/expenses",
+        "/financial-evidence",
+        "/inventory/balances",
+        "/inventory/counts",
+        "/inventory/history",
+        "/inventory/issues",
+        "/inventory/materials",
+        "/inventory/receipts",
+        "/inventory/transfers",
+        "/inventory/warehouses",
+        "/parties",
+        "/payroll?view=register&month=2026-10",
+        "/projects",
+        "/retention-payments",
+        "/retention-releases",
+        "/subcontractor-advances",
+        "/subcontractor-certificates",
+        "/subcontractor-payments",
+        "/subcontracts",
+        "/supplier-payments",
+        "/treasury-accounts"
+      ],
+      "locales": [
+        "en",
+        "ar"
+      ],
+      "viewports": [
+        [
+          1366,
+          768
+        ],
+        [
+          1920,
+          1080
+        ],
+        [
+          390,
+          844
+        ]
+      ],
+      "evidence": "docs/data-workspace-verification.json"
+    },
+    "platformDataDirectories": {
+      "status": "COMPLETE for scoped table/detail checks",
+      "count": 8,
+      "routes": [
+        "customers",
+        "entities",
+        "users",
+        "memberships",
+        "invitations",
+        "subscriptions",
+        "audit",
+        "settings"
+      ],
+      "locales": [
+        "en",
+        "ar"
+      ],
+      "viewports": [
+        [
+          1366,
+          768
+        ],
+        [
+          1920,
+          1080
+        ],
+        [
+          390,
+          844
+        ]
+      ]
+    },
+    "inheritedSurfaces": {
+      "status": "NOT APPLICABLE to new data-table conversion",
+      "surfaces": "Dashboard, non-directory Platform overview/onboarding, authentication/transition screens retain completed Premium baseline; no repeated 554/895 baseline suites."
+    },
+    "demoRoutes": {
+      "status": "NOT APPLICABLE",
+      "reason": "13 isolated local-demo patterns remain outside Production scope; shared Production presentation components reused without demo expansion."
+    },
+    "partial": [],
+    "limitations": [
+      "Local synthetic populated snapshots and capture-only commands verify presentation/navigation, not a new hosted accounting or security audit. Production publication and read-only smoke remain DEFERRED.",
+      "Wide registers deliberately require horizontal scrolling on narrower screens; full values/actions remain available. Long descriptions truncate in lists; complete text remains in details.",
+      "Client search/paging applies only to existing complete loaded collections. Existing server-paged registers retain their current supported controls; no new universal backend search or report module was introduced.",
+      "Missing authoritative Contract metrics are shown as unavailable rather than inferred. No new financial statements, accounting rules or operational modules are claimed."
+    ],
+    "verification": {
+      "focusedChecks": 795,
+      "priorSuccessfulSuitesRepeated": false,
+      "finalTypeScript": "PASS",
+      "productionBuild": "PASS",
+      "scopedLint": {
+        "errors": 0,
+        "warnings": 15,
+        "note": "Existing effect/ref/compiler/fixture advisories plus intentional shared drawer dismissal effect; no lint errors."
+      },
+      "financialWrites": 0,
+      "hostedConnections": 0,
+      "newMigrations": 0,
+      "migration92Sha256": "d1b8349960007e21d6952e94b720a7c9f0417113b4d7490cfb5a5d1754efb250"
+    },
+    "screenshots": [
+      "docs/screenshots/data-workspaces/subcontracts-en.png",
+      "docs/screenshots/data-workspaces/subcontracts-ar.png",
+      "docs/screenshots/data-workspaces/expense-sources-ar.png",
+      "docs/screenshots/data-workspaces/posted-expenses-ar.png"
+    ],
+    "lifecycle": {
+      "businessAccountingPreservation": "VERIFIED: presentation boundary, unchanged engine and captured zero mutations",
+      "securityAuthorization": "VERIFIED for unchanged boundaries and focused Management Viewer behavior; broad hosted audit not repeated",
+      "database": "NOT APPLICABLE: no schema/RLS/command/migration change",
+      "deployment": "DEFERRED: explicit publication and Production smoke required",
+      "testing": "VERIFIED within listed local synthetic scope",
+      "documentation": "VERIFIED: canonical register, requirements, roadmap and handoff updated"
+    }
   }
 }

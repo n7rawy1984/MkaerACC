@@ -1363,5 +1363,13 @@
     "priorPremiumReleaseIncludedByAncestry": true,
     "newCommitScope": "Remaining Production UI coverage, focused verification and canonical documentation only",
     "publication": "NOT PUSHED / NOT DEPLOYED"
+  },
+  "dataWorkspaceMilestone": {
+    "status": "PASS locally; publication DEFERRED",
+    "baseCommit": "03be3c92bc17f3f41562482249779652a935d728",
+    "checks": 795,
+    "evidence": "docs/data-workspace-verification.json",
+    "coverage": "docs/premium-system-ui-coverage.json#dataWorkspaceMilestone",
+    "priorSuccessfulSuitesRepeated": false
   }
 }
