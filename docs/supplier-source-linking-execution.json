@@ -1,0 +1,2615 @@
+{
+  "status": "PASS",
+  "scope": "Authenticated Maker Party creation and nonfinancial source metadata only",
+  "review_population": 330,
+  "original_distinct_spellings": 128,
+  "case_whitespace_distinct": 122,
+  "new_parties": 69,
+  "reused_parties": 2,
+  "source_working_links": 131,
+  "drafts_enriched": 1,
+  "posted_source_audit_references": 7,
+  "posted_financial_supplier_fields_changed": 0,
+  "pending_outgoing": 193,
+  "pending_reasons": {
+    "Missing original counterparty": 120,
+    "Identity, role, alias or evidence uncertainty": 73
+  },
+  "party_total": 74,
+  "custody_balance_minor": "37030070",
+  "financial_postings_created": 0,
+  "migration_required": false,
+  "checks": [
+    "expenses preserved exactly",
+    "journal_entries preserved exactly",
+    "journal_lines preserved exactly",
+    "subcontractor_advances preserved exactly",
+    "payroll_postings preserved exactly",
+    "historical_expense_drafts preserved exactly",
+    "69 new Party records; five existing identities preserved",
+    "Existing Party preserved Bareq",
+    "Existing Party preserved عهد الأصدقاء للمقاولات الفنية",
+    "Existing Party preserved برومبت للعوازل ذ.م.م",
+    "Existing Party preserved شركة الساجور لتجارة الحجر والرخام ذ.م.م",
+    "Existing Party preserved Abdul Hamid Al Zourani",
+    "No invented tax/legal/contact details",
+    "All 370 sources preserved; only approved working Party metadata changed; Payroll rows identical",
+    "Exactly one nonfinancial SAVE event; no POST/REVIEW execution",
+    "Draft financial inputs, dates, descriptions and funding unchanged",
+    "Audit notes did not mutate historical_source_records",
+    "Audit notes did not mutate expenses",
+    "Audit notes did not mutate journal_entries",
+    "Audit notes did not mutate journal_lines",
+    "Audit notes did not mutate subcontractor_advances",
+    "Audit notes did not mutate payroll_postings",
+    "Barq Custody AED370,300.70 unchanged",
+    "All 30 posted journals remain balanced",
+    "Exact saved 330 outgoing population reused"
+  ],
+  "parties": [
+    {
+      "name": "Media General Trading",
+      "party_id": "dee234d5-12e9-4703-ab94-38431ca39c8b",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "RELIANCE TRADING",
+      "party_id": "063ad914-d0e2-4d25-a509-f0a3fc816c39",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "IDRISS FACTORIES MACHINARY",
+      "party_id": "a260dfbb-e164-42e7-bac1-f064577af6ff",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "AL HADI GENERAL TRANSPORT",
+      "party_id": "ca0520fe-bbf8-4920-a5a2-a6f9e455a446",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "HAJAR ELECTRIC GROUP",
+      "party_id": "a201fa89-2cf8-42dd-ab6e-1a534438e566",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "ADNOC",
+      "party_id": "a89bccb9-3eaf-4e1e-b04b-27ece89ff47c",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "MASQSOOD BUILDING MATERIAL",
+      "party_id": "f2996ef9-5db1-4aed-b1be-0db90ea39c16",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "AL SAJOUR",
+      "party_id": "bbd427db-eec9-497d-ac4e-a508368abd1c",
+      "type": "SUBCONTRACTOR",
+      "created": false
+    },
+    {
+      "name": "BUNIR TRANSPORT",
+      "party_id": "d571cc72-fc22-42dd-8d3c-79645643553b",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "LULU HYPER MARKET",
+      "party_id": "943cdcc9-1ba7-4a0c-b5fc-3e16e9428a81",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "Alkaram Transports",
+      "party_id": "5a0f58ac-54bb-4344-98f0-ddd8bfca61bf",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "YONG LI TRADING",
+      "party_id": "e34eddba-466f-4509-a40e-61a66a145405",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "SAHAR AL SHARQ",
+      "party_id": "8d8537ae-4791-447d-88d0-93b5a96b3b81",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "AL TAMIMI BUILDING",
+      "party_id": "74c291b2-6e1b-420c-b942-8fa4b8af8a9f",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "AHD AL ASDIQA TECH",
+      "party_id": "82379cc2-4db3-41e9-a7e6-47c49a9aa989",
+      "type": "SUBCONTRACTOR",
+      "created": false
+    },
+    {
+      "name": "AYA GENERAL TRADING",
+      "party_id": "0d1d40b8-8de1-4106-a16d-fa602d475694",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "JISR AL SAJAA",
+      "party_id": "7278f463-07bc-4bdc-9ab4-4921a65a2751",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "ANCHOR BUILDING MATERIALS",
+      "party_id": "68a3f684-6be9-4a4f-a0d3-125bff0c7e39",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "Colors Lake",
+      "party_id": "8a7813f2-5fb5-4ebc-a7fe-6b05c2e5edb0",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "AL MARSA RESTAURANT",
+      "party_id": "a9528a4c-37d7-497c-93fa-f993b31239f0",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "SAEED BUILDING MATERIALS",
+      "party_id": "7f2dcd00-b874-4deb-954e-496f9a8aca5e",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "AL BURJ AL ANEEQ",
+      "party_id": "19b4c758-ad06-4620-a353-f6d2b705742c",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "paradise super market",
+      "party_id": "dbc1fe11-e00d-44d4-8916-4e0961801929",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "AL KUTBI SUPER MARKET",
+      "party_id": "eb3b9a2e-af88-4954-b38d-d70c0b5d45d0",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "MODERN WASHING CARS",
+      "party_id": "9808ea9a-e4d7-45f3-836e-79301baaf3db",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "Prime building",
+      "party_id": "2bf63669-2faa-40f1-84ce-dd98cc36bc91",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "COMPUTER PLAZA",
+      "party_id": "caf06eb3-1be9-4f1d-8c7f-e0d6cc56a943",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "SIRAJUDEEN FOODSTUFF",
+      "party_id": "b341e096-77be-43b5-9dcc-1d64f58b61d8",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "ZAM ZAM BUILDING",
+      "party_id": "29655673-94b2-4967-ac91-7a79fdedff4d",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "AL KHAYAL AUTO PARTS",
+      "party_id": "34b11d22-9fca-4f09-9de0-fb974d9add0f",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "AL EMTNAN GROCERY",
+      "party_id": "db733605-d6ce-4b22-994d-3b99aca0a8e0",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "GIANT TYRES AND OIL",
+      "party_id": "0f75e3b5-c887-421c-86a5-8abd98560dee",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "ROAD PEACE",
+      "party_id": "d799d606-69bf-4a01-9080-68ebb093b65e",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "TAREEQ AL HAYAT BIOLDING",
+      "party_id": "8c6ca1a3-5df6-4d2e-92c8-72bf32541222",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "SHOUKAT BUILDING",
+      "party_id": "c1b5b7d1-54be-42ee-a84a-9b9a2ce01beb",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "ITTFAQ CARGO TRANSPORT",
+      "party_id": "a1b09fc3-d338-4d29-a880-bf3a486ffaf5",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "QASIM TRANSPORT",
+      "party_id": "248e3627-2c81-4d5b-a01b-4547728c18b3",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "EMARAT",
+      "party_id": "172a201f-c515-4c81-8c2c-0302e3f46da9",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "DUBAI INSURANCE",
+      "party_id": "17a7e4a5-355e-446b-9a9a-6bcfd8ee01a3",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "AHD ASDEQAA FOR ECLETRECTY",
+      "party_id": "82379cc2-4db3-41e9-a7e6-47c49a9aa989",
+      "type": "SUBCONTRACTOR",
+      "created": false
+    },
+    {
+      "name": "AL METHALI FOR SCAFFOLD",
+      "party_id": "74a21292-07c9-4f03-b623-1185a2336cea",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "SMART STAMPS",
+      "party_id": "26688738-05e2-445e-804f-4aa290b4265b",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "AL MOWARRID",
+      "party_id": "01c7b17c-efd9-4f40-858e-00d12094c004",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "CHOICE",
+      "party_id": "9c7e3653-b337-4235-8b9e-045f36f6318d",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "AL MOHTARAM GARAGE",
+      "party_id": "279ccb3b-2754-4dcf-9b1a-d530f6957191",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "NATIONAL BLOCK FACTORY",
+      "party_id": "6bddf9b1-66da-478b-8dd5-05479f47104e",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "OSMAN BUILDING",
+      "party_id": "38798b65-030d-42c2-816d-32bd9dc60f9f",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "CITY FANOOS TRADING",
+      "party_id": "f79ab272-3794-4920-ae6c-6cb34cdfaa4c",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "Salma Elect",
+      "party_id": "8eb10c70-2f3b-458a-af90-7a8dc7baa4fe",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "SALEH AUTO ACCESSOIES",
+      "party_id": "7cf5bad6-b825-4131-935f-25d79456ad5e",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "AKBAR BUILDING MATERIALS",
+      "party_id": "c7998e7f-9bbe-450f-a488-8f40571ca0cf",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "DUNIA BUILDING MATERIALS",
+      "party_id": "519f5cb4-32d3-4e81-9bfe-3461a7131e3c",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "NOOR BUILDING TOOLS & MATERIALS",
+      "party_id": "e6e141fc-154b-4af0-92a1-8697faa1b3b8",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "J-A-T BROTHERS TRADING",
+      "party_id": "bb9a9740-750c-4e91-816c-875a6a8bd013",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "BIN SALEH AUTO ACCESSORES",
+      "party_id": "0fddeb9c-f375-469d-bed6-5a0eed4bc7e7",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "THUMBAY UNVERSITY",
+      "party_id": "0c2b7347-d48c-4f85-95e3-42dcc06ccadb",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "OMEGA",
+      "party_id": "854b3f5e-7897-4fb3-b7f3-b32d478002bc",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "Al Attifaq",
+      "party_id": "2de590dc-2ce7-4779-8f2d-e0ce38459fa0",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "NESTO HYPER MARKET",
+      "party_id": "b3ffdfbe-e4f9-4948-84f4-818362c2e359",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "NOOR AL JAZEERAH HARDWARE",
+      "party_id": "32a22557-ecfe-44ef-98ac-e29a4f8c49ba",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "M AMEEN TRANSPORT",
+      "party_id": "8989eff1-615c-4b34-9a7c-2d71807e05fe",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "SHANG YI F.Z.E",
+      "party_id": "b539a512-d82f-4ae4-9c30-7d691f4011e2",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "DARMIX",
+      "party_id": "02b92371-228d-47d8-8609-6158b971130d",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "ARABIAN STATIOINARY",
+      "party_id": "bc54975e-589c-470d-9417-56497d545a46",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "Najah Furniture LLC",
+      "party_id": "73f4ae7d-c502-4243-835c-8e0cd5e46832",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "DUBLIN AUTO SPARE PARTS TRADING",
+      "party_id": "a36ebc49-a65e-47d1-af8d-11908c604b8f",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "SUPER FIX MACHINE REPAIR",
+      "party_id": "dc93f4ed-dace-4fa1-8524-a6b0e8b45804",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "AJWA AUTO SPARE PARTS TRADING",
+      "party_id": "b8047793-d88b-4a8f-81f0-5e850bbed1d4",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "LULUAT GIFTS",
+      "party_id": "b7f7b3bb-5779-40fc-b64a-e1343560c47e",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "XPRO COMPUTER TRADING",
+      "party_id": "ab184491-92f7-4ffb-8376-c8e5974b1074",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "DUAA BUILDING AND CONST MACHINERIES",
+      "party_id": "c97bc82d-b3a3-4baa-90fa-a36881dec7e8",
+      "type": "SUPPLIER",
+      "created": true
+    },
+    {
+      "name": "AL RAAZ BUILDING",
+      "party_id": "6064f644-d56e-4791-a32b-9f8f2ba40a19",
+      "type": "SUPPLIER",
+      "created": true
+    }
+  ],
+  "source_links": [
+    {
+      "source_id": "068b1d97-96ce-4fe4-b72b-6102c6706b60",
+      "reference": "G-2026-08-33",
+      "original_name": "Media General Trading",
+      "party_id": "dee234d5-12e9-4703-ab94-38431ca39c8b",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "0ec7a0e4-d625-453d-b2de-a2063d809c68",
+      "reference": "10- OCT 26|R75|MAIN",
+      "original_name": "IDRISS FACTORIES MACHINARY",
+      "party_id": "a260dfbb-e164-42e7-bac1-f064577af6ff",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "0f7b3ca0-4bd2-41cf-9cc3-806d48893c4d",
+      "reference": "10- OCT 26|R51|MAIN",
+      "original_name": "AL HADI GENERAL TRANSPORT",
+      "party_id": "ca0520fe-bbf8-4920-a5a2-a6f9e455a446",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "105c7d4d-872e-4f1f-928f-715937b634e5",
+      "reference": "G-2026-09-27",
+      "original_name": "HAJAR ELECTRIC GROUP",
+      "party_id": "a201fa89-2cf8-42dd-ab6e-1a534438e566",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "130b5bbc-b31c-4729-ad77-6931842f9a90",
+      "reference": "G-2026-09-108",
+      "original_name": "ADNOC",
+      "party_id": "a89bccb9-3eaf-4e1e-b04b-27ece89ff47c",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "133bd0b3-bbd4-4d9c-b621-07f96b2cf9b5",
+      "reference": "10- OCT 26|R44|MAIN",
+      "original_name": "MASQSOOD BUILDING MATERIAL",
+      "party_id": "f2996ef9-5db1-4aed-b1be-0db90ea39c16",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "13892c58-7d99-4e16-a4cf-c8b01dbefccb",
+      "reference": "G-2026-09-86",
+      "original_name": "ADNOC",
+      "party_id": "a89bccb9-3eaf-4e1e-b04b-27ece89ff47c",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "17416c7f-9d8f-4fd0-8d1e-9c45151be32b",
+      "reference": "10- OCT 26|R30|MAIN",
+      "original_name": "AL SAJOUR",
+      "party_id": "bbd427db-eec9-497d-ac4e-a508368abd1c",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "1aa1be6f-41a9-4c9c-9e4c-2c107656298c",
+      "reference": "G-2026-09-40",
+      "original_name": "BUNIR TRANSPORT",
+      "party_id": "d571cc72-fc22-42dd-8d3c-79645643553b",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "1aae4293-edb2-482c-a7d0-557d75642e4c",
+      "reference": "G-2026-09-89",
+      "original_name": "ADNOC",
+      "party_id": "a89bccb9-3eaf-4e1e-b04b-27ece89ff47c",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "1cec6a25-12a2-4f8c-a55d-0affb7931030",
+      "reference": "G-2026-09-101",
+      "original_name": "ADNOC",
+      "party_id": "a89bccb9-3eaf-4e1e-b04b-27ece89ff47c",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "1d321638-c58a-493b-a72f-092b1284c9d5",
+      "reference": "10- OCT 26|R112|MAIN",
+      "original_name": "ADNOC",
+      "party_id": "a89bccb9-3eaf-4e1e-b04b-27ece89ff47c",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "1d8be9bc-e24b-4cba-bdc2-03d000ea8b94",
+      "reference": "09- SEP 26|R123|MAIN",
+      "original_name": "ADNOC",
+      "party_id": "a89bccb9-3eaf-4e1e-b04b-27ece89ff47c",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "1fc06357-2765-476b-9f43-c1e6fed93c44",
+      "reference": "G-2026-08-153",
+      "original_name": "LULU HYPER MARKET",
+      "party_id": "943cdcc9-1ba7-4a0c-b5fc-3e16e9428a81",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "21ec45d7-768c-4294-b24b-9dbc41f31333",
+      "reference": "G-2026-08-39",
+      "original_name": "Alkaram Transports",
+      "party_id": "5a0f58ac-54bb-4344-98f0-ddd8bfca61bf",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "24d265c9-3183-45be-9038-e322bf5d570f",
+      "reference": "G-2026-08-147",
+      "original_name": "MEDIA GENERAL TRADING",
+      "party_id": "dee234d5-12e9-4703-ab94-38431ca39c8b",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "26e42c43-1cc2-4ba7-a851-abcc50bb664f",
+      "reference": "10- OCT 26|R94|MAIN",
+      "original_name": "YONG LI TRADING",
+      "party_id": "e34eddba-466f-4509-a40e-61a66a145405",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "288ba879-26f9-47fc-8239-70bb84d3d1e8",
+      "reference": "09- SEP 26|R135|MAIN",
+      "original_name": "SAHAR AL SHARQ",
+      "party_id": "8d8537ae-4791-447d-88d0-93b5a96b3b81",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "2e4ef5b5-cc10-4368-8153-ec9585d20eff",
+      "reference": "09- SEP 26|R122|MAIN",
+      "original_name": "AL TAMIMI BUILDING",
+      "party_id": "74c291b2-6e1b-420c-b942-8fa4b8af8a9f",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "31867988-0bce-45db-8213-42038a470e1c",
+      "reference": "10- OCT 26|R115|MAIN",
+      "original_name": "AYA GENERAL TRADING",
+      "party_id": "0d1d40b8-8de1-4106-a16d-fa602d475694",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "3189fd0c-b4fa-4c63-885a-0b9fd379c545",
+      "reference": "10- OCT 26|R42|MAIN",
+      "original_name": "JISR AL SAJAA",
+      "party_id": "7278f463-07bc-4bdc-9ab4-4921a65a2751",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "38314390-79a2-46f6-8977-cbd49cbd4238",
+      "reference": "G-2026-08-124",
+      "original_name": "ANCHOR BUILDING MATERIALS",
+      "party_id": "68a3f684-6be9-4a4f-a0d3-125bff0c7e39",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "3866922a-a2ba-4688-8fa5-927bc88407b2",
+      "reference": "G-2026-08-55",
+      "original_name": "Colors Lake",
+      "party_id": "8a7813f2-5fb5-4ebc-a7fe-6b05c2e5edb0",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "3a3af99a-184a-41be-8028-f051bd6ce990",
+      "reference": "G-2026-09-57",
+      "original_name": "AL MARSA RESTAURANT",
+      "party_id": "a9528a4c-37d7-497c-93fa-f993b31239f0",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "3b432587-45ea-45c5-b2dc-379aa1bd045b",
+      "reference": "G-2026-08-22",
+      "original_name": "SAEED BUILDING MATERIALS",
+      "party_id": "7f2dcd00-b874-4deb-954e-496f9a8aca5e",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "3b7f0357-489d-4e19-bb0f-afab8e32df42",
+      "reference": "10- OCT 26|R92|MAIN",
+      "original_name": "AL BURJ AL ANEEQ",
+      "party_id": "19b4c758-ad06-4620-a353-f6d2b705742c",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "3be650a9-4c4a-487a-9f0e-6de361d5f0a9",
+      "reference": "G-2026-08-118",
+      "original_name": "paradise super market",
+      "party_id": "dbc1fe11-e00d-44d4-8916-4e0961801929",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "3ddfe4a5-bb90-44ac-ad02-84556978b965",
+      "reference": "G-2026-08-43",
+      "original_name": "AL KUTBI SUPER MARKET",
+      "party_id": "eb3b9a2e-af88-4954-b38d-d70c0b5d45d0",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "3fe56121-ce54-41d6-bdaf-1435fd7bc462",
+      "reference": "09- SEP 26|R130|MAIN",
+      "original_name": "MODERN WASHING CARS",
+      "party_id": "9808ea9a-e4d7-45f3-836e-79301baaf3db",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "427afb9b-80f3-4889-ab15-4ebb54d6a768",
+      "reference": "G-2026-08-54",
+      "original_name": "Prime building",
+      "party_id": "2bf63669-2faa-40f1-84ce-dd98cc36bc91",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "436c5c30-f8c0-4d63-88a8-0eb5b6cacb75",
+      "reference": "G-2026-09-26",
+      "original_name": "COMPUTER PLAZA",
+      "party_id": "caf06eb3-1be9-4f1d-8c7f-e0d6cc56a943",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "461d014f-e22d-444b-9957-644e8cf5a33a",
+      "reference": "10- OCT 26|R43|MAIN",
+      "original_name": "ZAM ZAM BUILDING",
+      "party_id": "29655673-94b2-4967-ac91-7a79fdedff4d",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "46c27d33-b27d-4be1-a1ba-dd2226bec234",
+      "reference": "10- OCT 26|R114|MAIN",
+      "original_name": "ADNOC",
+      "party_id": "a89bccb9-3eaf-4e1e-b04b-27ece89ff47c",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "47fdadc0-46fe-4447-8181-dcd047e61126",
+      "reference": "10- OCT 26|R80|MAIN",
+      "original_name": "AL KHAYAL AUTO PARTS",
+      "party_id": "34b11d22-9fca-4f09-9de0-fb974d9add0f",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "49642af7-ccb3-4ff7-86b1-3f7ca9c1a70a",
+      "reference": "G-2026-08-116",
+      "original_name": "paradise super market",
+      "party_id": "dbc1fe11-e00d-44d4-8916-4e0961801929",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "4c0e46fd-648a-42da-825f-75cc24f72335",
+      "reference": "10- OCT 26|R116|MAIN",
+      "original_name": "IDRISS FACTORIES MACHINARY",
+      "party_id": "a260dfbb-e164-42e7-bac1-f064577af6ff",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "4ce74f4a-88b2-47f1-bd88-0993d1859357",
+      "reference": "G-2026-08-45",
+      "original_name": "AL EMTNAN GROCERY",
+      "party_id": "db733605-d6ce-4b22-994d-3b99aca0a8e0",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "4d789743-5ba9-4bed-945e-d912081d9c97",
+      "reference": "09- SEP 26|R132|MAIN",
+      "original_name": "GIANT TYRES AND OIL",
+      "party_id": "0f75e3b5-c887-421c-86a5-8abd98560dee",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "5014c632-276b-4ec2-9c35-e19e8adaf3ec",
+      "reference": "G-2026-09-34",
+      "original_name": "ROAD PEACE",
+      "party_id": "d799d606-69bf-4a01-9080-68ebb093b65e",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "53f243dc-2894-4fbf-9fa4-23510041230b",
+      "reference": "G-2026-09-76",
+      "original_name": "TAREEQ AL HAYAT BIOLDING",
+      "party_id": "8c6ca1a3-5df6-4d2e-92c8-72bf32541222",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "54435ef9-3651-48fa-b759-5bf85c8f77d2",
+      "reference": "G-2026-09-88",
+      "original_name": "ADNOC",
+      "party_id": "a89bccb9-3eaf-4e1e-b04b-27ece89ff47c",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "5a53360c-03a3-4d34-96e7-72cc5da9464f",
+      "reference": "G-2026-08-149",
+      "original_name": "Prime building",
+      "party_id": "2bf63669-2faa-40f1-84ce-dd98cc36bc91",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "5a873817-be1d-42cd-a585-5143c2d62d60",
+      "reference": "10- OCT 26|R40|MAIN",
+      "original_name": "IDRISS FACTORIES MACHINARY",
+      "party_id": "a260dfbb-e164-42e7-bac1-f064577af6ff",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "5e5d9feb-451e-4dab-a209-111f5e1337ef",
+      "reference": "G-2026-08-28",
+      "original_name": "SHOUKAT BUILDING",
+      "party_id": "c1b5b7d1-54be-42ee-a84a-9b9a2ce01beb",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "5eadb714-ffaf-40de-8f98-8a3c4155f59a",
+      "reference": "G-2026-08-141",
+      "original_name": "ITTFAQ CARGO TRANSPORT",
+      "party_id": "a1b09fc3-d338-4d29-a880-bf3a486ffaf5",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "61422522-9070-4a92-aa67-976226261952",
+      "reference": "09- SEP 26|R125|MAIN",
+      "original_name": "QASIM TRANSPORT",
+      "party_id": "248e3627-2c81-4d5b-a01b-4547728c18b3",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "62bb228c-4f8b-4893-b50c-6d135db6da41",
+      "reference": "G-2026-08-154",
+      "original_name": "EMARAT",
+      "party_id": "172a201f-c515-4c81-8c2c-0302e3f46da9",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "6390a69b-992c-423a-8235-af10d4829466",
+      "reference": "G-2026-08-93",
+      "original_name": "ANCHOR BUILDING MATERIALS",
+      "party_id": "68a3f684-6be9-4a4f-a0d3-125bff0c7e39",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "63b9d009-c343-4cc7-849d-6402f5d28047",
+      "reference": "09- SEP 26|R131|MAIN",
+      "original_name": "MODERN WASHING CARS",
+      "party_id": "9808ea9a-e4d7-45f3-836e-79301baaf3db",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "649e7ca4-4ba6-4d7d-971c-c7ec935dc81b",
+      "reference": "G-2026-09-110",
+      "original_name": "GIANT TYRES AND OIL",
+      "party_id": "0f75e3b5-c887-421c-86a5-8abd98560dee",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "67b0a196-c157-47ac-91f1-674b733af3ce",
+      "reference": "09- SEP 26|R127|MAIN",
+      "original_name": "TAREEQ AL HAYAT BIOLDING",
+      "party_id": "8c6ca1a3-5df6-4d2e-92c8-72bf32541222",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "68def20a-1617-4d3a-adfe-977d8a31be59",
+      "reference": "09- SEP 26|R124|MAIN",
+      "original_name": "QASIM TRANSPORT",
+      "party_id": "248e3627-2c81-4d5b-a01b-4547728c18b3",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "694eec0a-8797-47cc-9566-21383e17529c",
+      "reference": "G-2026-09-42",
+      "original_name": "GIANT TYRES AND OIL",
+      "party_id": "0f75e3b5-c887-421c-86a5-8abd98560dee",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "6957a6d1-9d08-416f-aeb7-b11aeb6be4b3",
+      "reference": "G-2026-09-90",
+      "original_name": "ADNOC",
+      "party_id": "a89bccb9-3eaf-4e1e-b04b-27ece89ff47c",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "6d77d67f-5590-4909-a623-c072e97e07bc",
+      "reference": "G-2026-08-123",
+      "original_name": "QASIM TRANSPORT",
+      "party_id": "248e3627-2c81-4d5b-a01b-4547728c18b3",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "6ff0613d-3066-44df-b66b-3016f01f4f1a",
+      "reference": "10- OCT 26|R106|MAIN",
+      "original_name": "DUBAI INSURANCE",
+      "party_id": "17a7e4a5-355e-446b-9a9a-6bcfd8ee01a3",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "7779ae17-3f40-4ef2-a0c7-84e9ad466b85",
+      "reference": "G-2026-09-45",
+      "original_name": "AL METHALI FOR SCAFFOLD",
+      "party_id": "74a21292-07c9-4f03-b623-1185a2336cea",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "7ce763b4-8b43-462c-9817-6b9688a11a75",
+      "reference": "G-2026-08-20",
+      "original_name": "SMART STAMPS",
+      "party_id": "26688738-05e2-445e-804f-4aa290b4265b",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "7cf6d0f1-1d93-4431-aeab-8c66967863a5",
+      "reference": "10- OCT 26|R113|MAIN",
+      "original_name": "ADNOC",
+      "party_id": "a89bccb9-3eaf-4e1e-b04b-27ece89ff47c",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "7e750d6e-2953-412c-a3ba-5d96bb367d06",
+      "reference": "G-2026-08-120",
+      "original_name": "paradise super market",
+      "party_id": "dbc1fe11-e00d-44d4-8916-4e0961801929",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "8358641d-3ff9-4062-9dd9-91bf1ce81b2c",
+      "reference": "G-2026-09-77",
+      "original_name": "TAREEQ AL HAYAT BIOLDING",
+      "party_id": "8c6ca1a3-5df6-4d2e-92c8-72bf32541222",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "8471f5c0-8558-47b2-9adf-363bce2151b0",
+      "reference": "G-2026-09-28",
+      "original_name": "ADNOC",
+      "party_id": "a89bccb9-3eaf-4e1e-b04b-27ece89ff47c",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "855c4be4-e715-4710-9088-f654d227542a",
+      "reference": "G-2026-09-66",
+      "original_name": "AL MOWARRID",
+      "party_id": "01c7b17c-efd9-4f40-858e-00d12094c004",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "85e32d7f-7199-4d92-a862-81470d3d94c1",
+      "reference": "G-2026-08-90",
+      "original_name": "CHOICE",
+      "party_id": "9c7e3653-b337-4235-8b9e-045f36f6318d",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "8774a573-b4c7-437a-a477-84b7183cf729",
+      "reference": "G-2026-08-38",
+      "original_name": "QASIM TRANSPORT",
+      "party_id": "248e3627-2c81-4d5b-a01b-4547728c18b3",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "88e83530-f04c-4276-8f3a-8ca9a2f643c3",
+      "reference": "10- OCT 26|R110|MAIN",
+      "original_name": "AL MOHTARAM GARAGE",
+      "party_id": "279ccb3b-2754-4dcf-9b1a-d530f6957191",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "8930836c-ed8a-475a-b8a3-8d964a1162d4",
+      "reference": "G-2026-08-32",
+      "original_name": "Media General Trading",
+      "party_id": "dee234d5-12e9-4703-ab94-38431ca39c8b",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "89e70801-eb18-4d44-a068-beacfdaf127b",
+      "reference": "11 - NOV|R28|MAIN",
+      "original_name": "MEDIA GENERAL TRADING",
+      "party_id": "dee234d5-12e9-4703-ab94-38431ca39c8b",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "8b4d3a42-24e6-48d6-8779-70eaf0444904",
+      "reference": "G-2026-08-151",
+      "original_name": "NATIONAL BLOCK FACTORY",
+      "party_id": "6bddf9b1-66da-478b-8dd5-05479f47104e",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "8ec3a8d2-802f-4898-9fa3-e2edd2b4f5a7",
+      "reference": "10- OCT 26|R97|MAIN",
+      "original_name": "SAHAR AL SHARQ",
+      "party_id": "8d8537ae-4791-447d-88d0-93b5a96b3b81",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "8ee68564-a967-4716-96dd-f1277a68051f",
+      "reference": "10- OCT 26|R52|MAIN",
+      "original_name": "OSMAN BUILDING",
+      "party_id": "38798b65-030d-42c2-816d-32bd9dc60f9f",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "8f409ef3-d9e4-421e-bae6-dacbe4a4884d",
+      "reference": "G-2026-08-125",
+      "original_name": "Ittfaq cargo transport",
+      "party_id": "a1b09fc3-d338-4d29-a880-bf3a486ffaf5",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "9290458b-ca91-4b41-9768-1bbf2107eaef",
+      "reference": "G-2026-09-78",
+      "original_name": "AL KHAYAL AUTO PARTS",
+      "party_id": "34b11d22-9fca-4f09-9de0-fb974d9add0f",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "9611a2a9-8d87-439d-96ff-f1fcbb34be58",
+      "reference": "G-2026-08-140",
+      "original_name": "ITTFAQ CARGO TRANSPORT",
+      "party_id": "a1b09fc3-d338-4d29-a880-bf3a486ffaf5",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "965c5764-85c9-48d3-94f1-64a272a01115",
+      "reference": "G-2026-09-61",
+      "original_name": "CITY FANOOS TRADING",
+      "party_id": "f79ab272-3794-4920-ae6c-6cb34cdfaa4c",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "973a2dde-990b-4303-9fbe-4ae2ae571320",
+      "reference": "G-2026-08-136",
+      "original_name": "Dubai Insurance",
+      "party_id": "17a7e4a5-355e-446b-9a9a-6bcfd8ee01a3",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "978b6721-3b60-47e2-917b-f8e900dce39f",
+      "reference": "G-2026-08-53",
+      "original_name": "Salma Elect",
+      "party_id": "8eb10c70-2f3b-458a-af90-7a8dc7baa4fe",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "9856d8da-3b7d-43e8-90d9-9451a03173a1",
+      "reference": "G-2026-08-61",
+      "original_name": "QASIM TRANSPORT",
+      "party_id": "248e3627-2c81-4d5b-a01b-4547728c18b3",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "9a742779-3a22-44b1-a0dc-e3182a74d078",
+      "reference": "11 - NOV|R27|MAIN",
+      "original_name": "SALEH AUTO ACCESSOIES",
+      "party_id": "7cf5bad6-b825-4131-935f-25d79456ad5e",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "9ad45dfc-bb52-4539-b70c-13be79d49069",
+      "reference": "10- OCT 26|R120|MAIN",
+      "original_name": "AKBAR BUILDING MATERIALS",
+      "party_id": "c7998e7f-9bbe-450f-a488-8f40571ca0cf",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "9b31749d-7cc3-4819-9096-9822fdd81eca",
+      "reference": "G-2026-08-146",
+      "original_name": "DUNIA BUILDING MATERIALS",
+      "party_id": "519f5cb4-32d3-4e81-9bfe-3461a7131e3c",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "9f114828-3db6-4b3e-a190-f9cf6dbba12a",
+      "reference": "G-2026-09-46",
+      "original_name": "AL METHALI FOR SCAFFOLD",
+      "party_id": "74a21292-07c9-4f03-b623-1185a2336cea",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "a24bc61c-7675-42b3-9e87-dda2aa965152",
+      "reference": "10- OCT 26|R67|MAIN",
+      "original_name": "NOOR BUILDING TOOLS & MATERIALS",
+      "party_id": "e6e141fc-154b-4af0-92a1-8697faa1b3b8",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "a35c4e4a-ebe6-4878-baf6-7d5119375f8d",
+      "reference": "10- OCT 26|R50|MAIN",
+      "original_name": "NATIONAL BLOCK FACTORY",
+      "party_id": "6bddf9b1-66da-478b-8dd5-05479f47104e",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "a35ee9e3-b1b0-4996-a847-2f99220ec106",
+      "reference": "G-2026-08-27",
+      "original_name": "SAEED BUILDING MATERIALS",
+      "party_id": "7f2dcd00-b874-4deb-954e-496f9a8aca5e",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "a774823b-420a-4202-827f-4621bd5e2da4",
+      "reference": "G-2026-09-60",
+      "original_name": "J-A-T BROTHERS TRADING",
+      "party_id": "bb9a9740-750c-4e91-816c-875a6a8bd013",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "a7c91f72-83de-48e0-8962-74e9a80ff019",
+      "reference": "10- OCT 26|R109|MAIN",
+      "original_name": "BIN SALEH AUTO ACCESSORES",
+      "party_id": "0fddeb9c-f375-469d-bed6-5a0eed4bc7e7",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "a90ed42a-6f9b-4644-aa77-25250e873b75",
+      "reference": "G-2026-08-70",
+      "original_name": "National Block Factory",
+      "party_id": "6bddf9b1-66da-478b-8dd5-05479f47104e",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "afb8b97a-a357-48fa-8c81-1f7b26f851fc",
+      "reference": "G-2026-08-82",
+      "original_name": "THUMBAY UNVERSITY",
+      "party_id": "0c2b7347-d48c-4f85-95e3-42dcc06ccadb",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "b02f7b33-b121-4277-9eba-d47ec6ef5e0b",
+      "reference": "G-2026-08-50",
+      "original_name": "OMEGA",
+      "party_id": "854b3f5e-7897-4fb3-b7f3-b32d478002bc",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "b0ca380d-e33e-4efd-9cf4-d625799b9a7e",
+      "reference": "10- OCT 26|R46|MAIN",
+      "original_name": "AL KHAYAL AUTO PARTS",
+      "party_id": "34b11d22-9fca-4f09-9de0-fb974d9add0f",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "b0fa5738-c354-4024-af0f-965afb6cb6e3",
+      "reference": "G-2026-09-58",
+      "original_name": "ADNOC",
+      "party_id": "a89bccb9-3eaf-4e1e-b04b-27ece89ff47c",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "b1ad7da4-4e4c-40de-8543-35ffb8478708",
+      "reference": "G-2026-08-26",
+      "original_name": "National Block Factory",
+      "party_id": "6bddf9b1-66da-478b-8dd5-05479f47104e",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "b34690c0-65be-408b-a2ee-69e851618af7",
+      "reference": "G-2026-08-29",
+      "original_name": "QASIM TRANSPORT",
+      "party_id": "248e3627-2c81-4d5b-a01b-4547728c18b3",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "b3f9032d-7b3b-4bd0-9cfb-6e241f9e05b6",
+      "reference": "10- OCT 26|R117|MAIN",
+      "original_name": "IDRISS FACTORIES MACHINARY",
+      "party_id": "a260dfbb-e164-42e7-bac1-f064577af6ff",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "b6256e34-4614-4e3c-9d00-fa60b7f294ba",
+      "reference": "G-2026-08-117",
+      "original_name": "Al Attifaq",
+      "party_id": "2de590dc-2ce7-4779-8f2d-e0ce38459fa0",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "b68b326a-9eea-4518-a119-2e39749c9db5",
+      "reference": "G-2026-08-65",
+      "original_name": "MEDIA GENERAL TRADING",
+      "party_id": "dee234d5-12e9-4703-ab94-38431ca39c8b",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "b9ce9fa8-fe9e-4f64-b5b0-a03a6f12a116",
+      "reference": "G-2026-08-46",
+      "original_name": "NESTO HYPER MARKET",
+      "party_id": "b3ffdfbe-e4f9-4948-84f4-818362c2e359",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "bc0c06f0-0c57-47fe-8a8c-52f54c4d0b0e",
+      "reference": "10- OCT 26|R71|MAIN",
+      "original_name": "QASIM TRANSPORT",
+      "party_id": "248e3627-2c81-4d5b-a01b-4547728c18b3",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "be089db7-6329-4712-8330-12a25b87c0c5",
+      "reference": "G-2026-09-73",
+      "original_name": "NATIONAL BLOCK FACTORY",
+      "party_id": "6bddf9b1-66da-478b-8dd5-05479f47104e",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "bf52bb56-86b9-4c66-9eaf-2d118c74a15f",
+      "reference": "10- OCT 26|R60|MAIN",
+      "original_name": "ADNOC",
+      "party_id": "a89bccb9-3eaf-4e1e-b04b-27ece89ff47c",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "bf58a7e2-11f1-47e1-979a-b66adac0ca2d",
+      "reference": "G-2026-08-137",
+      "original_name": "ITTFAQ CARGO TRANSPORT",
+      "party_id": "a1b09fc3-d338-4d29-a880-bf3a486ffaf5",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "c06694e9-5ee7-4121-a5a2-6ba2a8553859",
+      "reference": "09- SEP 26|R128|MAIN",
+      "original_name": "TAREEQ AL HAYAT BIOLDING",
+      "party_id": "8c6ca1a3-5df6-4d2e-92c8-72bf32541222",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "c20f7574-5448-4360-ace8-93db8a5b5e12",
+      "reference": "09- SEP 26|R133|MAIN",
+      "original_name": "NOOR AL JAZEERAH HARDWARE",
+      "party_id": "32a22557-ecfe-44ef-98ac-e29a4f8c49ba",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "c4739bca-4dbe-4d5e-9422-5c9e938b2284",
+      "reference": "G-2026-08-60",
+      "original_name": "QASIM TRANSPORT",
+      "party_id": "248e3627-2c81-4d5b-a01b-4547728c18b3",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "c9f47c44-0f28-4855-afb8-4fe3a2a58aff",
+      "reference": "10- OCT 26|R61|MAIN",
+      "original_name": "ADNOC",
+      "party_id": "a89bccb9-3eaf-4e1e-b04b-27ece89ff47c",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "ca9910d5-5e61-4748-be1e-6ff5851daa64",
+      "reference": "G-2026-08-72",
+      "original_name": "M AMEEN TRANSPORT",
+      "party_id": "8989eff1-615c-4b34-9a7c-2d71807e05fe",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "cbc91db4-b179-4362-82a4-4e11b2f3940f",
+      "reference": "G-2026-08-47",
+      "original_name": "SHANG YI F.Z.E",
+      "party_id": "b539a512-d82f-4ae4-9c30-7d691f4011e2",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "ce073eb4-2ed6-4088-8596-6cdc23c0a0eb",
+      "reference": "G-2026-08-138",
+      "original_name": "ITTFAQ CARGO TRANSPORT",
+      "party_id": "a1b09fc3-d338-4d29-a880-bf3a486ffaf5",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "ce6ab270-e447-4c17-ace1-a7d5301ebc19",
+      "reference": "G-2026-08-81",
+      "original_name": "THUMBAY UNVERSITY",
+      "party_id": "0c2b7347-d48c-4f85-95e3-42dcc06ccadb",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "d2820e7a-6cb2-4ebc-8bb2-e48bd1a96aba",
+      "reference": "G-2026-08-113",
+      "original_name": "DARMIX",
+      "party_id": "02b92371-228d-47d8-8609-6158b971130d",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "d559d70c-c671-437b-8572-6e11d76bbe30",
+      "reference": "10- OCT 26|R82|MAIN",
+      "original_name": "AL SAJOUR",
+      "party_id": "bbd427db-eec9-497d-ac4e-a508368abd1c",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "d68bf2e9-21da-4b07-a171-32ae5fa12b44",
+      "reference": "10- OCT 26|R39|MAIN",
+      "original_name": "IDRISS FACTORIES MACHINARY",
+      "party_id": "a260dfbb-e164-42e7-bac1-f064577af6ff",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "d772a8bf-51f1-4b66-9825-c5e0ca633aad",
+      "reference": "G-2026-08-73",
+      "original_name": "MEDIA GENERAL TRADING",
+      "party_id": "dee234d5-12e9-4703-ab94-38431ca39c8b",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "db1bf6e3-4efa-43e9-8e09-e69323bfc0c7",
+      "reference": "G-2026-09-43",
+      "original_name": "BUNIR TRANSPORT",
+      "party_id": "d571cc72-fc22-42dd-8d3c-79645643553b",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "dcb6035c-3797-4384-b92c-563c57620e11",
+      "reference": "G-2026-09-109",
+      "original_name": "TAREEQ AL HAYAT BIOLDING",
+      "party_id": "8c6ca1a3-5df6-4d2e-92c8-72bf32541222",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "dcc8636b-182e-489d-af6f-4b291fbe3782",
+      "reference": "G-2026-08-131",
+      "original_name": "Media General Trading",
+      "party_id": "dee234d5-12e9-4703-ab94-38431ca39c8b",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "dcd50d9c-504e-45b0-a422-621755cd5f94",
+      "reference": "G-2026-08-71",
+      "original_name": "M AMEEN TRANSPORT",
+      "party_id": "8989eff1-615c-4b34-9a7c-2d71807e05fe",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "dcee6b40-2075-41ca-ade9-faa888229b96",
+      "reference": "G-2026-08-48",
+      "original_name": "Najah Furniture LLC",
+      "party_id": "73f4ae7d-c502-4243-835c-8e0cd5e46832",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "df029983-11e9-43d5-803d-2b56f3ec86ab",
+      "reference": "10- OCT 26|R111|MAIN",
+      "original_name": "DUBLIN AUTO SPARE PARTS TRADING",
+      "party_id": "a36ebc49-a65e-47d1-af8d-11908c604b8f",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "df32bd50-3489-4694-958f-d7287fe6b57f",
+      "reference": "10- OCT 26|R66|MAIN",
+      "original_name": "SUPER FIX MACHINE REPAIR",
+      "party_id": "dc93f4ed-dace-4fa1-8524-a6b0e8b45804",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "e5c7cdcc-a307-4346-af32-89e181625056",
+      "reference": "G-2026-08-107",
+      "original_name": "AJWA AUTO SPARE PARTS TRADING",
+      "party_id": "b8047793-d88b-4a8f-81f0-5e850bbed1d4",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "e6c56b7c-8983-44e3-80a4-654730898c13",
+      "reference": "G-2026-08-66",
+      "original_name": "Colors Lake",
+      "party_id": "8a7813f2-5fb5-4ebc-a7fe-6b05c2e5edb0",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "e79838e2-83be-4ca8-966c-32843482afbb",
+      "reference": "10- OCT 26|R98|MAIN",
+      "original_name": "ADNOC",
+      "party_id": "a89bccb9-3eaf-4e1e-b04b-27ece89ff47c",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "ee9feb23-6b67-400f-9be6-9e079944d130",
+      "reference": "G-2026-09-87",
+      "original_name": "LULUAT GIFTS",
+      "party_id": "b7f7b3bb-5779-40fc-b64a-e1343560c47e",
+      "draft_enriched": true
+    },
+    {
+      "source_id": "efb566b4-3880-4cb8-a104-f0269270918c",
+      "reference": "G-2026-08-119",
+      "original_name": "paradise super market",
+      "party_id": "dbc1fe11-e00d-44d4-8916-4e0961801929",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "f301acd7-bf33-486b-9858-55de76941ae4",
+      "reference": "G-2026-09-36",
+      "original_name": "DUAA BUILDING AND CONST MACHINERIES",
+      "party_id": "c97bc82d-b3a3-4baa-90fa-a36881dec7e8",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "f44ff3a1-83d5-4fda-ace8-f5e7d109c439",
+      "reference": "G-2026-08-139",
+      "original_name": "ITTFAQ CARGO TRANSPORT",
+      "party_id": "a1b09fc3-d338-4d29-a880-bf3a486ffaf5",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "f6de6527-920f-4357-876b-cc90ef007e86",
+      "reference": "G-2026-09-115",
+      "original_name": "AL RAAZ BUILDING",
+      "party_id": "6064f644-d56e-4791-a32b-9f8f2ba40a19",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "f8204037-56a2-4b5c-9601-67c43f8cd2ec",
+      "reference": "G-2026-08-95",
+      "original_name": "ITTFAQ CARGO TRANSPORT",
+      "party_id": "a1b09fc3-d338-4d29-a880-bf3a486ffaf5",
+      "draft_enriched": false
+    },
+    {
+      "source_id": "facb8235-95ad-48a0-b1ab-2350a2bdf302",
+      "reference": "G-2026-08-44",
+      "original_name": "AL EMTNAN GROCERY",
+      "party_id": "db733605-d6ce-4b22-994d-3b99aca0a8e0",
+      "draft_enriched": false
+    }
+  ],
+  "posted_source_notes": [
+    {
+      "source_id": "07cceae0-a47e-4f6f-bd25-644e1078ec0f",
+      "reference": "G-2026-08-88",
+      "name": "RELIANCE TRADING",
+      "party_id": "063ad914-d0e2-4d25-a509-f0a3fc816c39",
+      "reason": "Posted financial document immutable; structured nonfinancial Party association requires an approved additive command",
+      "request_id": "14bbf663-c683-5dcc-9ef0-b3d964519a1e",
+      "audit_id": "207bb51b-fec6-4e60-9b3b-e35c4f6c7719"
+    },
+    {
+      "source_id": "314f6e8d-1c03-46b6-a4d4-444fa2d82467",
+      "reference": "G-2026-09-70",
+      "name": "AHD AL ASDIQA TECH",
+      "party_id": "82379cc2-4db3-41e9-a7e6-47c49a9aa989",
+      "reason": "Posted financial document immutable; structured nonfinancial Party association requires an approved additive command",
+      "request_id": "d90bbc78-ea0d-5d58-b94f-6493b57e45e7",
+      "audit_id": "49f5eeb8-066e-4d80-9413-04942a2f1e4e"
+    },
+    {
+      "source_id": "44834f5a-54c4-4ab1-b98e-af6f764ac7e8",
+      "reference": "G-2026-08-87",
+      "name": "SIRAJUDEEN FOODSTUFF",
+      "party_id": "b341e096-77be-43b5-9dcc-1d64f58b61d8",
+      "reason": "Posted financial document immutable; structured nonfinancial Party association requires an approved additive command",
+      "request_id": "228b309b-a771-5b47-b827-71b3965dfed9",
+      "audit_id": "259e3c55-bdb3-40cb-87ae-00cef0476a88"
+    },
+    {
+      "source_id": "730b0a0b-82ba-4cc2-851a-9f12bbc15b08",
+      "reference": "G-2026-08-130",
+      "name": "AHD ASDEQAA FOR ECLETRECTY",
+      "party_id": "82379cc2-4db3-41e9-a7e6-47c49a9aa989",
+      "reason": "Posted financial document immutable; structured nonfinancial Party association requires an approved additive command",
+      "request_id": "6430f4bd-9363-5587-b55f-0839340e3d23",
+      "audit_id": "f4930481-b308-4e18-8216-6dbe7634df27"
+    },
+    {
+      "source_id": "b160733d-b85e-43ae-91b2-ec07c346fdf2",
+      "reference": "G-2026-08-86",
+      "name": "SIRAJUDEEN FOODSTUFF",
+      "party_id": "b341e096-77be-43b5-9dcc-1d64f58b61d8",
+      "reason": "Posted financial document immutable; structured nonfinancial Party association requires an approved additive command",
+      "request_id": "ebb4d4a2-ad8b-5964-9fe0-3098e116de6d",
+      "audit_id": "65be7b16-2690-4da2-a8af-357cad8ddb92"
+    },
+    {
+      "source_id": "d634b72b-972a-486c-a61f-b042d439d637",
+      "reference": "10- OCT 26|R84|MAIN",
+      "name": "ARABIAN STATIOINARY",
+      "party_id": "bc54975e-589c-470d-9417-56497d545a46",
+      "reason": "Posted financial document immutable; structured nonfinancial Party association requires an approved additive command",
+      "request_id": "abdb9925-2b49-51ee-9c13-1d974abfccfe",
+      "audit_id": "7805cffb-e79a-4e01-83ec-7c7f9f23ddfe"
+    },
+    {
+      "source_id": "eef7b835-2bf7-4c04-8d26-e2baec1225a0",
+      "reference": "10- OCT 26|R85|MAIN",
+      "name": "XPRO COMPUTER TRADING",
+      "party_id": "ab184491-92f7-4ffb-8376-c8e5974b1074",
+      "reason": "Posted financial document immutable; structured nonfinancial Party association requires an approved additive command",
+      "request_id": "f040c47e-631e-5d17-abf9-c4c00f60afa9",
+      "audit_id": "121556fe-506a-435c-8649-813a865a8c43"
+    }
+  ],
+  "pending": [
+    {
+      "id": "01c4cc37-a48b-4535-955e-53a1d73d2cc7",
+      "reference": "G-2026-08-155",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "0251be04-41c7-4072-a5f2-53cafb20a983",
+      "reference": "G-2026-08-102",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "02aa09a9-0f32-4633-9bb1-e4959cba8725",
+      "reference": "10- OCT 26|R72|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "03ac69be-9dff-4e41-914b-285b0fd90b0f",
+      "reference": "G-2026-08-96",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "03e70d0f-88de-446a-8c23-8e5f502d8eb2",
+      "reference": "09- SEP 26|R137|MAIN",
+      "name": "MEDIA GENERAL",
+      "reason": "Possible alias of Media General Trading; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "04483c95-cb55-4097-9fd3-cedc513eb971",
+      "reference": "10- OCT 26|R21|PRIVATE_ABDELRAHIM",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "04c3019b-24d1-432d-9cfe-1974ef5ea274",
+      "reference": "G-2026-08-91",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "0521a1e8-a979-48f8-95cf-25e25983d3fc",
+      "reference": "G-2026-09-54",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "05cb4fb4-4be3-4130-bb50-abd1915405fd",
+      "reference": "10- OCT 26|R63|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "068a615f-b16c-48df-9e39-55ea7b36e588",
+      "reference": "G-2026-08-79",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "09ad9d80-261c-49ad-bfaf-42f10b24e76a",
+      "reference": "10- OCT 26|R81|MAIN",
+      "name": "MEDIA GENERAL",
+      "reason": "Possible alias of Media General Trading; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "0c66fb30-0891-44b6-9204-2101b30ad593",
+      "reference": "G-2026-09-39",
+      "name": "ADOC",
+      "reason": "Possible alias of ADNOC; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "0ee39a27-f59f-4dd0-9f72-fff845f026dd",
+      "reference": "10- OCT 26|R31|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "0eef39dd-cd82-4ce8-99c3-42ecfea0b5d0",
+      "reference": "10- OCT 26|R93|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "0f0eed50-6929-47bb-99e5-b076594499b6",
+      "reference": "G-2026-08-57",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "0f211ba4-c9e5-411f-9c59-811c5f394224",
+      "reference": "G-2026-09-94",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "10c31393-e231-4f38-bf05-117d0be3802e",
+      "reference": "09- SEP 26|R141|MAIN",
+      "name": "AL MAWAJ TYRE SERVICE",
+      "reason": "Possible alias of AL AMWAJ TYRE SERVICE; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "1258a436-3256-498c-a735-0bef848d5a3b",
+      "reference": "G-2026-08-143",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "128cdad2-93bb-4705-8cfa-fd2e6845c88b",
+      "reference": "G-2026-09-56",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "14d2a99a-6f5d-47d1-974a-ac92d3c19ea8",
+      "reference": "G-2026-08-62",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "1585f8dd-eb9a-4f07-8e0d-907643673712",
+      "reference": "G-2026-08-121",
+      "name": "Muhamed Jahangir",
+      "reason": "Identity, role or possible existing-party alias requires original identifier/evidence; no person inferred to be a Supplier."
+    },
+    {
+      "id": "1672c2fc-0795-43fa-a661-47c2fb90aeb2",
+      "reference": "G-2026-08-92",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "1858dcb6-a7bd-4fb7-9dca-69539ba2c21f",
+      "reference": "G-2026-08-110",
+      "name": "Warsha abdullah masoud",
+      "reason": "Possible alias of WARSHA ABDULLAH MASOUD; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "1a01d455-c7e3-43e9-8783-271b668609d9",
+      "reference": "G-2026-09-67",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "1c79781d-5487-4662-a515-3d118ad751a9",
+      "reference": "09- SEP 26|R136|MAIN",
+      "name": "MEDIA GENERAL",
+      "reason": "Possible alias of Media General Trading; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "1c872732-475e-47e6-8fa4-beebedd0f284",
+      "reference": "G-2026-09-92",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "20864d4a-08e1-4a98-8ddd-b4c3685ba19f",
+      "reference": "09- SEP 26|R139|MAIN",
+      "name": "SUPER MARKET",
+      "reason": "Generic service/payment/beneficiary label; actual named legal counterparty is not established."
+    },
+    {
+      "id": "2336360d-3b7e-47fa-a6bf-7452b134153c",
+      "reference": "10- OCT 26|R87|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "24562f2f-c580-412f-b3a4-8ae12e342d4c",
+      "reference": "09- SEP 26|R138|MAIN",
+      "name": "SAHR AL SHARQ",
+      "reason": "Possible alias of SAHAR AL SHARQ; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "246b8ace-19d3-4884-b671-13b107bc9e7e",
+      "reference": "G-2026-09-80",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "281b37b1-06db-4f6c-b554-e877fc94515d",
+      "reference": "G-2026-09-38",
+      "name": "ADOC",
+      "reason": "Possible alias of ADNOC; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "2a40091f-2a28-4e56-911e-dd3bc794dfa4",
+      "reference": "G-2026-08-52",
+      "name": "Media General trading LLC",
+      "reason": "Possible alias of Media General Trading; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "2bc3d361-e6c4-4f1d-a064-bf807e243b57",
+      "reference": "G-2026-08-31",
+      "name": "ALHAYAT BUILDING",
+      "reason": "Possible alias of AL HAYAT BUILDING / TAREEQ AL HAYAT; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "314dfa01-2d43-46db-b8a5-79b73fea2ee0",
+      "reference": "10- OCT 26|R56|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "31aaf33b-d893-47b4-b346-093b46b54f26",
+      "reference": "G-2026-08-63",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "326ea42d-0cd4-4ab5-9b8d-cf10e53efae6",
+      "reference": "G-2026-08-105",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "33062bb2-e20c-48e8-863f-09e71caf1db0",
+      "reference": "G-2026-09-69",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "356f226f-d5c9-4b14-8758-e3de95faa494",
+      "reference": "G-2026-08-128",
+      "name": "PICKUP",
+      "reason": "Generic service/payment/beneficiary label; actual named legal counterparty is not established."
+    },
+    {
+      "id": "35ba8556-0d1f-43b2-88ea-858ded900de0",
+      "reference": "10- OCT 26|R48|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "374fc0ff-cb79-455b-99cb-0c2d1c5afd86",
+      "reference": "G-2026-08-51",
+      "name": "Media General trading LLC",
+      "reason": "Possible alias of Media General Trading; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "38cf588b-d2f7-4cf5-ab0c-fa42e03b9f3f",
+      "reference": "G-2026-08-127",
+      "name": "akbar building",
+      "reason": "Possible alias of AKBAR BUILDING MATERIALS; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "39fbd21d-5169-4ae4-b6ff-be73e690b3d3",
+      "reference": "09- SEP 26|R4|PRIVATE_MAJED",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "3a0fe962-a4ef-4e7f-bdfe-3596861db22b",
+      "reference": "G-2026-08-64",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "3a7f7be0-fdd0-4d2c-ac5b-22b1f0ea51ac",
+      "reference": "10- OCT 26|R119|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "3bf1fcb4-5459-4a04-a363-a0f1f8e30881",
+      "reference": "09- SEP 26|R3|PRIVATE_MAJED",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "3e329386-1687-4ac2-990d-2b82fd737ae5",
+      "reference": "10- OCT 26|R33|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "403679bf-8c20-400e-a73f-02f97b1952f1",
+      "reference": "G-2026-08-69",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "4076092b-5fe2-48b9-a3ae-e2104c38d600",
+      "reference": "G-2026-08-74",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "412b5421-2962-4222-b190-76efaddee5fe",
+      "reference": "G-2026-08-129",
+      "name": "AIRFLY TICKET FOR MAGDY",
+      "reason": "Generic service/payment/beneficiary label; actual named legal counterparty is not established."
+    },
+    {
+      "id": "41896c81-f97c-4022-ad14-4aa5e6cdf8ec",
+      "reference": "G-2026-09-71",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "41e62649-c530-45bd-89c8-6c7ded8d04a3",
+      "reference": "G-2026-08-101",
+      "name": "Kois IT System Trading",
+      "reason": "Supplier field conflicts with worker electricity description; original supplier/receipt identity requires reconciliation."
+    },
+    {
+      "id": "42bb0c55-b8bd-44fd-b3d9-9bb46a5ee5c5",
+      "reference": "G-2026-08-84",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "42fc37a9-608a-4981-8202-85d3c7062f30",
+      "reference": "09- SEP 26|R19|PRIVATE_ABDELRAHIM",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "487aad1c-e526-4bd1-a32b-fd4acc202c71",
+      "reference": "09- SEP 26|R119|MAIN",
+      "name": "تاكسي للعمال لان عصام كان بالشارقة",
+      "reason": "Generic service/payment/beneficiary label; actual named legal counterparty is not established."
+    },
+    {
+      "id": "4b457112-2efd-4460-b9a6-92ec063e9308",
+      "reference": "G-2026-09-83",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "4bc2f12d-1534-4956-90c4-a6b30bed1f7c",
+      "reference": "G-2026-08-76",
+      "name": "Abdallah Masoud",
+      "reason": "Identity, role or possible existing-party alias requires original identifier/evidence; no person inferred to be a Supplier."
+    },
+    {
+      "id": "4bc9d7fb-7d79-41c0-bc92-dc94272cc515",
+      "reference": "G-2026-09-100",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "4c2fec9a-3ae0-4015-babd-8237a0a844b5",
+      "reference": "10- OCT 26|R64|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "4cc8be29-5455-4dda-ad31-210c6a7977a6",
+      "reference": "10- OCT 26|R49|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "4eeae849-50ad-4f4c-a6db-95f6143b0d8d",
+      "reference": "G-2026-08-108",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "4fd4ce4d-b5f1-4daa-9388-caaad5200539",
+      "reference": "G-2026-09-93",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "50c8fb61-d7df-4808-a9de-f357398815c6",
+      "reference": "G-2026-09-37",
+      "name": "ADOC",
+      "reason": "Possible alias of ADNOC; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "520590c0-45e0-4215-b5e8-7e4d636036e0",
+      "reference": "G-2026-08-145",
+      "name": "ALHAYAT BUILDING",
+      "reason": "Possible alias of AL HAYAT BUILDING / TAREEQ AL HAYAT; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "5301a659-c3b1-4453-b309-b279ef83053b",
+      "reference": "10- OCT 26|R95|MAIN",
+      "name": "CENTRAL LAB L.L.C",
+      "reason": "Source explicitly references GREEN; Maker ownership/counterparty relationship requires verification."
+    },
+    {
+      "id": "53165c24-036f-4fc9-8cec-ec4de58ec706",
+      "reference": "G-2026-09-62",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "56fcc00a-458a-43f1-8483-c077462745d5",
+      "reference": "G-2026-08-85",
+      "name": "Al hayat Building Hazarouds",
+      "reason": "Possible alias of AL HAYAT BUILDING; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "57231776-5ba6-4bd1-867d-3ed3506b0b9f",
+      "reference": "G-2026-08-21",
+      "name": "AKBAR building",
+      "reason": "Possible alias of AKBAR BUILDING MATERIALS; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "58509d0c-2212-4daf-bb20-41455cfc004f",
+      "reference": "G-2026-08-132",
+      "name": "Bunir Transport LLC",
+      "reason": "Possible alias of BUNIR TRANSPORT; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "5876d565-bd0b-4159-be7e-46e80710f5c4",
+      "reference": "10- OCT 26|R108|MAIN",
+      "name": "AL FARADAN EXCHANG",
+      "reason": "Payroll transfer-fee source; Payroll-related records left untouched; exact Party identity also unverified."
+    },
+    {
+      "id": "5bf3dc8e-7959-4f99-8f67-eb8eb0114c5a",
+      "reference": "10- OCT 26|R88|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "5d762428-44a8-4423-9d2f-573989a6d528",
+      "reference": "09- SEP 26|R129|MAIN",
+      "name": "ABDULLAH MASOUD",
+      "reason": "Identity, role or possible existing-party alias requires original identifier/evidence; no person inferred to be a Supplier."
+    },
+    {
+      "id": "5e6955ca-989a-4176-a378-b623856b48ca",
+      "reference": "G-2026-08-80",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "5ebcc533-c779-4f7a-9117-847102965679",
+      "reference": "G-2026-08-49",
+      "name": "JOBUILD CUSTOMER",
+      "reason": "Original field suggests Customer; role cannot be assumed Supplier."
+    },
+    {
+      "id": "5f1c251f-f40d-4515-a952-1ce68b98fd10",
+      "reference": "10- OCT 26|R47|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "5f87db94-bc83-4c78-b4a2-61ad61d4d87c",
+      "reference": "G-2026-09-65",
+      "name": "IDRISS FACTORIES",
+      "reason": "Possible alias of IDRISS FACTORIES MACHINARY; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "5fd55f90-5c29-4ae6-9575-fbfe5a0d4465",
+      "reference": "10- OCT 26|R76|MAIN",
+      "name": "MEDIA GENERAL",
+      "reason": "Possible alias of Media General Trading; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "62fdfbab-6669-4b0a-b5c5-b4f701362447",
+      "reference": "G-2026-08-152",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "63b1daaf-245d-429f-b531-e9bed6203bba",
+      "reference": "09- SEP 26|R120|MAIN",
+      "name": "عدد 2عمال صنايعي طابوق",
+      "reason": "Generic service/payment/beneficiary label; actual named legal counterparty is not established."
+    },
+    {
+      "id": "64d60293-016f-4104-9764-c819aa36198b",
+      "reference": "G-2026-08-94",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "64e45d71-4c98-4780-830d-f81a86ca86ef",
+      "reference": "10- OCT 26|R45|MAIN",
+      "name": "AL HAYAT BUILDING",
+      "reason": "Possible alias of ALHAYAT BUILDING / TAREEQ AL HAYAT; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "6579345c-cc3b-4e62-9dc3-1dba448eefc1",
+      "reference": "G-2026-08-114",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "6581e7b5-5b93-4675-8955-25218b1b1c09",
+      "reference": "09- SEP 26|R134|MAIN",
+      "name": "IDRISS FACTORIES",
+      "reason": "Possible alias of IDRISS FACTORIES MACHINARY; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "65b3d753-7d86-4778-95a8-48282c743ecb",
+      "reference": "G-2026-09-96",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "66ccdee5-ff5d-48ca-9938-f65e2754738f",
+      "reference": "G-2026-08-83",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "685b61a8-c29d-4aed-ac2a-b479972b08bd",
+      "reference": "09- SEP 26|R12|PRIVATE_MAJED",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "69114be6-a4f6-4c9e-9258-063448ac55b4",
+      "reference": "10- OCT 26|R35|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "69cb3984-a984-471c-a0b0-3e3183a09767",
+      "reference": "G-2026-08-148",
+      "name": "Warsha abdullah masoud",
+      "reason": "Possible alias of WARSHA ABDULLAH MASOUD; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "6ba34ce6-823e-45ca-af83-7b2aec3a6455",
+      "reference": "G-2026-08-97",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "6f47b394-861f-4d20-99ff-08f8b0173ffa",
+      "reference": "09- SEP 26|R9|PRIVATE_MAJED",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "703204db-ed9d-4556-89ab-b39c34e38d66",
+      "reference": "G-2026-08-30",
+      "name": "NOOR BUILDING",
+      "reason": "Possible alias of NOOR BUILDING TOOLS & MATERIALS; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "718c15f9-d944-44be-b767-2696d3afcd24",
+      "reference": "G-2026-08-103",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "71e332d7-e397-4988-ad36-3befe1fed247",
+      "reference": "09- SEP 26|R144|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "720b08d1-a684-4865-93a1-73c86f78993f",
+      "reference": "G-2026-08-89",
+      "name": "AL AMWAJ TYRE SERVICE",
+      "reason": "Possible alias of AL MAWAJ TYRE SERVICE; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "7242a060-747b-4a85-b333-6d1b64867221",
+      "reference": "G-2026-08-36",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "7287d70d-5729-4c67-9e5d-968823cff0f6",
+      "reference": "G-2026-09-79",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "75b4a020-b280-47e1-83cb-228ba999e70f",
+      "reference": "G-2026-08-37",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "7891740a-11fe-49cf-b0da-c5ac2917327a",
+      "reference": "G-2026-08-134",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "7adb6f55-1fac-43cf-93c5-6ef448b6b841",
+      "reference": "G-2026-08-78",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "7b442eb8-af34-49df-b4da-88f3b85f8fe7",
+      "reference": "G-2026-08-156",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "7c2518ec-f4f0-46a2-a0d0-4038773332ac",
+      "reference": "10- OCT 26|R62|MAIN",
+      "name": "SIRAJUDEEN SUPERMARKET",
+      "reason": "Possible alias of SIRAJUDEEN FOODSTUFF / siraj super market; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "7c7fc2b0-4496-4f4a-86f5-f18de2bb8011",
+      "reference": "G-2026-09-107",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "7cf1e05a-5f10-4962-b476-ed458238bd41",
+      "reference": "10- OCT 26|R65|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "7d7f3d7a-19ee-4151-b79b-795d32a40049",
+      "reference": "G-2026-09-63",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "7e726e17-7ae1-484f-8b21-2b6151c60574",
+      "reference": "09- SEP 26|R10|PRIVATE_MAJED",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "7f0c0b5d-509b-45ca-a41e-90bfe0f213ab",
+      "reference": "10- OCT 26|R58|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "7f7aa54a-d604-417b-a844-4ecab66428ef",
+      "reference": "10- OCT 26|R55|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "7fa801d3-847d-4389-bf85-63e398e1cb09",
+      "reference": "G-2026-09-48",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "80993200-b6e5-45ef-bab3-69e6dc5281ef",
+      "reference": "G-2026-09-33",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "8251a47c-b807-4d6d-8477-c99b0e2b2d2d",
+      "reference": "10- OCT 26|R103|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "83b03c9f-3cdc-4a5e-81a8-75981c13f6de",
+      "reference": "G-2026-08-35",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "83c06d5f-c323-4acc-b344-6be507483fe7",
+      "reference": "G-2026-09-99",
+      "name": "DU CREDIT",
+      "reason": "Generic service/payment/beneficiary label; actual named legal counterparty is not established."
+    },
+    {
+      "id": "86d56521-5bbc-4302-8704-14aa6c31cfc1",
+      "reference": "G-2026-09-98",
+      "name": "NOOR AL JAZEERA",
+      "reason": "Possible alias of NOOR AL JAZEERAH HARDWARE; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "878a4351-cff3-4822-b64b-df82b92e8a81",
+      "reference": "10- OCT 26|R122|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "87ddd9d4-6a63-404f-bbf8-1b932a0ece64",
+      "reference": "10- OCT 26|R105|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "8ab71d21-fb18-4735-9394-6aec0cc71863",
+      "reference": "09- SEP 26|R7|PRIVATE_MAJED",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "8c1b5f29-10c6-4509-beb8-f2d3fa89fc53",
+      "reference": "G-2026-09-85",
+      "name": "siraj super market",
+      "reason": "Possible alias of SIRAJUDEEN FOODSTUFF / SIRAJUDEEN SUPERMARKET; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "8e99b119-8ca8-4f80-bcf5-f9db79936e9a",
+      "reference": "G-2026-09-102",
+      "name": "CARGO TRANSPORT",
+      "reason": "Generic service/payment/beneficiary label; actual named legal counterparty is not established."
+    },
+    {
+      "id": "8ebeb277-1418-4249-893f-c5fcb4f39696",
+      "reference": "G-2026-09-74",
+      "name": "WARSHA ABDALLA MASOUD",
+      "reason": "Possible alias of WARSHA ABDULLAH MASOUD; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "927ddf55-de11-4944-9c6e-62557f28d3c0",
+      "reference": "G-2026-09-81",
+      "name": "اجور عمال الزورا",
+      "reason": "Generic service/payment/beneficiary label; actual named legal counterparty is not established."
+    },
+    {
+      "id": "928503a7-1424-49b6-8536-9a2d86374f79",
+      "reference": "09- SEP 26|R5|PRIVATE_MAJED",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "929bda2e-3939-40e8-b2f9-5a61d5b1a1a9",
+      "reference": "10- OCT 26|R70|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "9483ba06-4a33-4e70-aae9-7f01fd8b1882",
+      "reference": "10- OCT 26|R121|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "95a4d691-2a68-4cd7-89ca-f92608a891ed",
+      "reference": "10- OCT 26|R53|MAIN",
+      "name": "AKBAR BUILDING MATERILAS",
+      "reason": "Possible alias of AKBAR BUILDING MATERIALS; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "9ca97ca4-e1be-4a7f-a3ec-3cfd6ab104a0",
+      "reference": "G-2026-09-112",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "9d94e417-252a-418a-8f22-9755f51ea00d",
+      "reference": "G-2026-08-111",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "a3dd83c6-8548-456d-8268-c7a686fa2dc8",
+      "reference": "G-2026-08-40",
+      "name": "Bunir Transport LLC",
+      "reason": "Possible alias of BUNIR TRANSPORT; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "a3fa0c0b-beb4-4e10-bfde-e87d45eee9cb",
+      "reference": "G-2026-08-109",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "a4140d24-718d-4b1c-a86f-1a83dbef7a75",
+      "reference": "10- OCT 26|R74|MAIN",
+      "name": "NOOR AL JAZEERAH",
+      "reason": "Possible alias of NOOR AL JAZEERAH HARDWARE; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "a6814880-6e77-4c0b-8b19-3af2fdb77dfb",
+      "reference": "G-2026-08-75",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "a728964f-01c7-434c-80c5-ef8a91cbd62d",
+      "reference": "G-2026-09-51",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "a7b89b73-5f02-4b4a-bbcb-61c064b5b581",
+      "reference": "10- OCT 26|R73|MAIN",
+      "name": "GIANT TYRESAND OIL",
+      "reason": "Possible alias of GIANT TYRES AND OIL; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "ac2da97b-3a4e-4936-80a8-905b354fa0db",
+      "reference": "10- OCT 26|R77|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "ac74b76c-05c0-4403-a7f7-339886f71e96",
+      "reference": "G-2026-09-82",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "ad899909-e91d-4863-9e88-80d1bfddaac0",
+      "reference": "09- SEP 26|R11|PRIVATE_MAJED",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "ae837846-a665-4743-b7b7-603716295d15",
+      "reference": "G-2026-09-64",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "af637bac-b669-4305-93ba-2401aa84a6df",
+      "reference": "G-2026-09-95",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "af9aca1a-bca3-44ef-95b0-03857f6978c4",
+      "reference": "G-2026-08-106",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "b0f66f4b-7223-42e7-be50-0338a7b01a1b",
+      "reference": "G-2026-08-122",
+      "name": "Iftikhar Ahmed",
+      "reason": "Identity, role or possible existing-party alias requires original identifier/evidence; no person inferred to be a Supplier."
+    },
+    {
+      "id": "b11da7d5-d4e8-4691-bc79-270514dc3f12",
+      "reference": "10- OCT 26|R36|MAIN",
+      "name": "وزارة الموارد البشرية MOHREE",
+      "reason": "Government/Other counterparty; no supported canonical OTHER business creation command. Not relabeled as Supplier."
+    },
+    {
+      "id": "b198de40-70e4-4b09-bf67-3afc3d4f81ec",
+      "reference": "G-2026-08-112",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "b4616149-433b-4a1d-99aa-a4a59a2e6be8",
+      "reference": "G-2026-08-99",
+      "name": "DIESEL DISTRIBUTION",
+      "reason": "Generic service/payment/beneficiary label; actual named legal counterparty is not established."
+    },
+    {
+      "id": "b5a02b2b-6817-4267-94de-f948d786c259",
+      "reference": "10- OCT 26|R38|MAIN",
+      "name": "AL NUAMIYA GOVERMENT",
+      "reason": "Government/Other counterparty; no supported canonical OTHER business creation command. Not relabeled as Supplier."
+    },
+    {
+      "id": "bafa7051-bfb4-42f4-802c-f4e014931208",
+      "reference": "10- OCT 26|R20|PRIVATE_ABDELRAHIM",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "bb651969-68b2-422f-a818-8c6feeebc40b",
+      "reference": "G-2026-09-84",
+      "name": "siraj super market",
+      "reason": "Possible alias of SIRAJUDEEN FOODSTUFF / SIRAJUDEEN SUPERMARKET; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "bc0a6549-3bb8-4aa0-abf4-2748c9483474",
+      "reference": "G-2026-08-115",
+      "name": "من حساب الشركاء",
+      "reason": "Generic service/payment/beneficiary label; actual named legal counterparty is not established."
+    },
+    {
+      "id": "bcabbceb-f2a9-4955-b375-bf70e695920a",
+      "reference": "G-2026-09-104",
+      "name": "CARGO TRANSPORT",
+      "reason": "Generic service/payment/beneficiary label; actual named legal counterparty is not established."
+    },
+    {
+      "id": "bdf94e61-a5fd-48bb-a08b-5d01e2eafd3f",
+      "reference": "G-2026-08-150",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "c0602c0d-b157-488b-a5fc-94e0c90ecb8c",
+      "reference": "09- SEP 26|R20|PRIVATE_ABDELRAHIM",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "c2cf98c4-d929-4b0e-b134-cf33ba24109c",
+      "reference": "G-2026-09-91",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "c353917a-6ba0-4b9a-bfe1-58cb1ded84d4",
+      "reference": "G-2026-08-142",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "c6122d7c-b5da-4cd4-a5c5-f59991dd876a",
+      "reference": "09- SEP 26|R126|MAIN",
+      "name": "ANCHOR BUILDING",
+      "reason": "Possible alias of ANCHOR BUILDING MATERIALS; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "c826fa5d-4832-4554-9182-91c25ea1cbbb",
+      "reference": "10- OCT 26|R32|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "c95b6cf8-16cb-4fcd-94db-cca5f769ffe0",
+      "reference": "10- OCT 26|R107|MAIN",
+      "name": "AL FARADAN EXCHANG",
+      "reason": "Payroll transfer-fee source; Payroll-related records left untouched; exact Party identity also unverified."
+    },
+    {
+      "id": "cd2e8754-e32a-47f3-a8a4-359d1a512de8",
+      "reference": "10- OCT 26|R37|MAIN",
+      "name": "AL NUAMIYA GOVERMENT",
+      "reason": "Government/Other counterparty; no supported canonical OTHER business creation command. Not relabeled as Supplier."
+    },
+    {
+      "id": "cd731ca6-5eb7-473d-8db6-74e392e18896",
+      "reference": "G-2026-08-59",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "cd91b99e-bfed-4fab-bc9c-d5fa3a29fc73",
+      "reference": "G-2026-09-47",
+      "name": "Zahrat Al Foad Marbels",
+      "reason": "Identity, role or possible existing-party alias requires original identifier/evidence; no person inferred to be a Supplier."
+    },
+    {
+      "id": "cdfd3b36-d9e5-407f-825a-584fbcf79706",
+      "reference": "G-2026-08-144",
+      "name": "SHABAZ AHMED",
+      "reason": "Identity, role or possible existing-party alias requires original identifier/evidence; no person inferred to be a Supplier."
+    },
+    {
+      "id": "d1eacb5e-dd2a-474f-afe3-127c3d710c5f",
+      "reference": "10- OCT 26|R91|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "d3ade0b6-f563-40de-978d-136674759f77",
+      "reference": "10- OCT 26|R34|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "d4912096-01a6-405c-a099-ceb8c7ed0d16",
+      "reference": "G-2026-08-42",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "d773331d-b656-4b33-8d76-44a98a255f30",
+      "reference": "G-2026-09-97",
+      "name": "ANCHOR BUILDING",
+      "reason": "Possible alias of ANCHOR BUILDING MATERIALS; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "d7af2e19-c146-4fcd-8431-06c9d5c4c7de",
+      "reference": "09- SEP 26|R21|PRIVATE_ABDELRAHIM",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "db4e36b1-b508-4869-804c-bb5e217b6551",
+      "reference": "G-2026-08-133",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "dc372ae2-1edf-461e-9e37-c0eaa9aee303",
+      "reference": "G-2026-09-44",
+      "name": "MEDIA GENERAL",
+      "reason": "Possible alias of Media General Trading; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "dc817e6e-408a-4877-bd78-6db18e62bdc1",
+      "reference": "10- OCT 26|R89|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "dca3c30e-9899-43e4-8a19-2eec14a903fa",
+      "reference": "G-2026-09-41",
+      "name": "AL HAYAT BUILDING",
+      "reason": "Possible alias of ALHAYAT BUILDING / TAREEQ AL HAYAT; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "de68ae79-509e-4bff-9743-706c6f517c91",
+      "reference": "10- OCT 26|R68|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "de8636fa-6613-4d66-bfe5-8856e72182b8",
+      "reference": "G-2026-08-77",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "df40147d-5f85-485a-b742-9c2c8a69d2e8",
+      "reference": "G-2026-08-56",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "e02398c7-09f7-4dea-b3c5-10113a797486",
+      "reference": "10- OCT 26|R19|PRIVATE_ABDELRAHIM",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "e04aa313-e91f-4629-9379-eb1582e14302",
+      "reference": "09- SEP 26|R140|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "e1245d64-e8e3-4991-9175-0399bc53528d",
+      "reference": "G-2026-09-50",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "e1676559-1646-4574-8bbc-c1e6057caa59",
+      "reference": "G-2026-08-104",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "e26e3013-ff69-43be-804c-14bb008e1666",
+      "reference": "G-2026-09-49",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "e4c6b72a-60b9-4697-a4d3-999111f17833",
+      "reference": "G-2026-08-135",
+      "name": "مسحوبات الشركاء",
+      "reason": "Generic service/payment/beneficiary label; actual named legal counterparty is not established."
+    },
+    {
+      "id": "e5c3caef-a93a-42df-b9b7-56db0e88dd9e",
+      "reference": "G-2026-09-103",
+      "name": "CARGO TRANSPORT",
+      "reason": "Generic service/payment/beneficiary label; actual named legal counterparty is not established."
+    },
+    {
+      "id": "e6364e2e-bc74-48c2-b1ec-a0c0907e92f4",
+      "reference": "10- OCT 26|R79|MAIN",
+      "name": "TAREEQ AL HAYAT",
+      "reason": "Possible alias of TAREEQ AL HAYAT BIOLDING; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "ea5e37a8-e6d7-41fb-8191-ea01b27dddc6",
+      "reference": "10- OCT 26|R59|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "eb8a3798-830f-4f83-ac63-5a3f6fd78f4f",
+      "reference": "G-2026-09-111",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "ebce0173-c12c-4207-a3a4-59845752fe9d",
+      "reference": "G-2026-08-41",
+      "name": "Media General trading LLC",
+      "reason": "Possible alias of Media General Trading; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "ec3e0a5d-57ac-49c7-88be-d80b59649f1c",
+      "reference": "G-2026-09-52",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "ed3bd1cc-dd30-41e8-a515-be56f517aafa",
+      "reference": "10- OCT 26|R83|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "edd47c5d-e926-4e64-a2f6-84d90bdcd48e",
+      "reference": "G-2026-08-126",
+      "name": "akbar building",
+      "reason": "Possible alias of AKBAR BUILDING MATERIALS; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "eed77c8d-8d53-4ca9-85c6-503ddb34a716",
+      "reference": "G-2026-09-75",
+      "name": "MEDIA GENERAL",
+      "reason": "Possible alias of Media General Trading; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "f397eb89-93a8-4342-9d1e-04aab56d82bd",
+      "reference": "10- OCT 26|R69|MAIN",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "f3f3b64e-d31e-4114-aa40-64393030e58e",
+      "reference": "10- OCT 26|R90|MAIN",
+      "name": "WARSHA ABDULLAH MASOUD",
+      "reason": "Identity, role or possible existing-party alias requires original identifier/evidence; no person inferred to be a Supplier."
+    },
+    {
+      "id": "f5100e14-07e0-40c1-bb16-54ef2cc9af8c",
+      "reference": "09- SEP 26|R6|PRIVATE_MAJED",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "f54c86cf-c755-4637-8c12-387289b023f3",
+      "reference": "G-2026-08-58",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "f9a9eaa4-dfe5-4da1-a520-a67539600d70",
+      "reference": "10- OCT 26|R96|MAIN",
+      "name": "EMIRATE",
+      "reason": "Identity, role or possible existing-party alias requires original identifier/evidence; no person inferred to be a Supplier."
+    },
+    {
+      "id": "fae040e2-95b8-4663-906f-5f1b45f226c6",
+      "reference": "G-2026-08-98",
+      "name": "GOLDEN GATE HAZAROUDS WASTE & COLLECTION",
+      "reason": "Supplier field and FICHER FIS product description require original invoice identity verification."
+    },
+    {
+      "id": "fc376999-85d9-4221-b60d-754154896a80",
+      "reference": "G-2026-09-53",
+      "reason": "No supplier/counterparty in original field"
+    },
+    {
+      "id": "fd2d3138-1e16-40b3-b3e7-fb42f1852545",
+      "reference": "G-2026-09-59",
+      "name": "NOOR BUILDING",
+      "reason": "Possible alias of NOOR BUILDING TOOLS & MATERIALS; shared verified identifier is missing; no merge or duplicate Party created."
+    },
+    {
+      "id": "ff550088-6727-4dd8-91dc-f829c82898fe",
+      "reference": "G-2026-08-34",
+      "name": "ADVERTISING",
+      "reason": "Generic service/payment/beneficiary label; actual named legal counterparty is not established."
+    }
+  ],
+  "source_evidence": {
+    "available_workbook_sha256": "0ea2715932d668692a7f66411493a8b437f280c4809ffcdc85bb97c69a11d91b",
+    "original_supplier_rows_reconciled": 74,
+    "earlier_workbook": "Original extracted raw_source supplier fields and recorded workbook SHA reused; standalone original workbook not found during this run."
+  },
+  "limitations": [
+    "Possible aliases are deliberately not merged without reliable identifiers.",
+    "Posted supplier dimensions and subledger allocation remain immutable; audit references and clearly labeled read-only provenance are not AP reassignment.",
+    "No new OTHER/Employee identities inferred from generic or personal names.",
+    "Frontend changes await publication; live canonical name check passed for G-2026-09-87."
+  ],
+  "outgoing_sources_linked": 130,
+  "other_nonfinancial_sources_linked": 1,
+  "outgoing_classification_reconciliation": {
+    "linked": 130,
+    "posted_audit_references": 7,
+    "pending": 193,
+    "total": 330
+  },
+  "ap_review": {
+    "supplier_credit_expenses": 0,
+    "supplier_liabilities_created": 0,
+    "note": "Paid historical Custody costs are not backfilled as unpaid invoices or supplier liabilities. Existing posted supplier dimensions retained."
+  },
+  "preserved_financial_hashes": {
+    "journal_entries": "a17fcc406d59334cf9dad6f28b332af5440680d739523a6aacf874a08f0869e2",
+    "journal_lines": "8ab2e4b3f95513b416adf36501b4b36cdd316bf57fb79c0746c39d2ef9b4ec6b",
+    "expenses": "d503004adfa370d02f1e307a65217201d42c0aefc774f6df39e0ae488217566a",
+    "subcontractor_advances": "235afce30abb14424b40da5899c388854de1152beaf8f41f186be0c48631eec9",
+    "payroll_postings": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "verification": {
+    "focused_logic": {
+      "status": "PASS",
+      "checks": [
+        "Working canonical Supplier name displayed",
+        "Explicit source relationship distinguished",
+        "Original Excel name visible without invented Party link",
+        "Raw name is not a financially linked supplier",
+        "Other Company Party cannot resolve source",
+        "Missing supplier preserved as unknown",
+        "Arabic working spelling preserved",
+        "Existing Contractor identity reused independently of Supplier role",
+        "Active same-Company source supplier defaults into new draft",
+        "Inactive supplier not defaulted",
+        "Contractor not silently cast to Supplier",
+        "Payroll not routed to Supplier",
+        "Presentation never mutates imported evidence",
+        "Posted projection explicitly distinguished from financial supplier",
+        "Projection scoped by Company, General type and session lifetime",
+        "Posted counterparty projection strictly read-only"
+      ]
+    },
+    "bilingual_source_browser": {
+      "status": "PASS",
+      "checks": [
+        "en canonical Party name rendered in source Counterparty column",
+        "en Counterparty width prevents stacked letters",
+        "en Project width remains readable",
+        "en mobile table scroll contained within workspace",
+        "en new source-linked draft defaults verified Supplier",
+        "en inspecting supplier UI dispatches no mutations",
+        "ar canonical Party name rendered in source Counterparty column",
+        "ar Counterparty width prevents stacked letters",
+        "ar Project width remains readable",
+        "ar mobile table scroll contained within workspace",
+        "ar new source-linked draft defaults verified Supplier",
+        "ar inspecting supplier UI dispatches no mutations",
+        "No changed-flow browser runtime errors"
+      ],
+      "errors": [],
+      "hostedRequests": 0
+    },
+    "bilingual_posted_browser": {
+      "status": "PASS",
+      "checks": [
+        "en posted source counterparty rendered by read-only projection",
+        "en provenance label distinguishes immutable posted supplier",
+        "ar posted source counterparty rendered by read-only projection",
+        "ar provenance label distinguishes immutable posted supplier",
+        "Posted counterparty provenance dispatches no mutations",
+        "No changed-flow browser runtime errors"
+      ],
+      "errors": [],
+      "hostedRequests": 0
+    },
+    "typescript": "PASS: npm run build after final audit-note fix",
+    "production_build": "PASS: final npm run build, 8.23s Vite stage; existing bundle-size advisory",
+    "scoped_lint": "0 errors; 6 existing hook advisories",
+    "live_expenses_counterparty": "PASS: actual authenticated G-2026-09-87 row displays LULUAT GIFTS; screenshot inspected",
+    "migration": "No schema changes; Migration93 remains unchanged/applied",
+    "publication": "NOT PUSHED OR DEPLOYED",
+    "bilingual_audit_notes": {
+      "status": "PASS",
+      "checks": [
+        "en posted-source Party note visible as escaped text",
+        "en original supporting reference visible",
+        "ar posted-source Party note visible as escaped text",
+        "ar original supporting reference visible",
+        "Audit-note viewing creates no mutations",
+        "No changed-flow browser runtime errors"
+      ],
+      "errors": [],
+      "hostedRequests": 0
+    },
+    "focused_checks_total": 41,
+    "preservation_checks_total": 25
+  }
+}

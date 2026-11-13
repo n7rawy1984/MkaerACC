@@ -7,3 +7,12 @@
 .company-workspace .dw-expense-source-table .suite-description{min-width:0!important}.company-workspace :is(.dw-expense-source-table,.expense-posted-table) :is(.suite-badge,.suite-status){white-space:normal;font-size:12px!important;padding:3px 7px;line-height:1.5}.company-workspace .dw-expense-source-table .dw-actions{flex-wrap:nowrap;align-items:center}.dw-expense-type{font-size:12px}.company-workspace .dw-expense-source-table .dw-actions button{padding:6px;min-height:34px;font-size:12px}
 .narvo-payment-settings{margin-block:24px;border:1px solid var(--erp-border);border-radius:14px;padding:20px}.narvo-payment-settings h2{font-size:20px}.narvo-payment-settings form,.narvo-payment-settings fieldset{display:grid;gap:14px;margin-block:14px;min-width:0}.narvo-payment-settings label{display:grid;gap:6px}.narvo-payment-settings :is(input,textarea,select){min-height:42px;padding:8px;border:1px solid var(--erp-input-border);border-radius:8px;max-width:100%}.narvo-payment-settings code{overflow-wrap:anywhere}.narvo-payment-settings button{padding:9px 14px;border:1px solid var(--erp-border);border-radius:8px;color:var(--erp-action-text)}
 .company-workspace .dw-expense-source-table th:last-child{width:135px}.company-workspace .dw-expense-source-table .dw-actions{gap:4px}.company-workspace .dw-expense-source-table .dw-actions button{min-width:0!important;font-size:12px!important;padding:5px!important}.company-workspace .dw-expense-source-table .dw-actions .narvo-menu-trigger{width:28px;flex:0 0 28px;padding:3px!important}
+/* Explicit widths leave no zero-width residual columns for Party/Project names. */
+.company-workspace :is(.dw-expense-source-table,.expense-posted-table){min-width:1260px!important}
+.company-workspace :is(.dw-expense-source-table,.expense-posted-table) th:nth-child(2){width:270px}
+.company-workspace :is(.dw-expense-source-table,.expense-posted-table) th:nth-child(3){width:140px}
+.company-workspace :is(.dw-expense-source-table,.expense-posted-table) :is(th,td):nth-child(4),
+.company-workspace :is(.dw-expense-source-table,.expense-posted-table) :is(th,td):nth-child(5){width:180px;word-break:normal;overflow-wrap:break-word}
+.company-workspace :is(.dw-expense-source-table,.expense-posted-table) td:nth-child(4) .dw-text>small{overflow-wrap:break-word;word-break:normal}
+/* General-import registers with the optional reference column retain natural column sizing. */
+.company-workspace .dw-expense-source-table[data-reference-column=visible]{table-layout:auto!important}

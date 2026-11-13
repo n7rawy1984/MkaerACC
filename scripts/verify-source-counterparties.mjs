@@ -1,0 +1,22 @@
+import assert from 'node:assert/strict';import{createRequire}from'node:module';import{readFileSync,writeFileSync}from'node:fs';
+const load=createRequire(import.meta.url)('./financial-test-load.cjs'),{sourceCounterparty,sourceSupplierId}=load('src/historical/sourceCounterparty.ts');
+const source={company_id:'A',record_type:'GENERAL',completion:{supplier_id:'s'},raw_source:{'Supplier (exact)':'Original Supplier'}},supplier={id:'s',companyId:'A',name:'Canonical Supplier',type:'SUPPLIER',status:'ACTIVE'},checks=[];
+function check(v,name){assert(v,name);checks.push(name);console.log('PASS',name);}
+check(sourceCounterparty(source,[supplier]).name==='Canonical Supplier','Working canonical Supplier name displayed');
+check(sourceCounterparty(source,[supplier]).linked,'Explicit source relationship distinguished');
+check(sourceCounterparty({...source,completion:{}},[supplier]).name==='Original Supplier','Original Excel name visible without invented Party link');
+check(!sourceCounterparty({...source,completion:{}},[supplier]).linked,'Raw name is not a financially linked supplier');
+check(sourceCounterparty(source,[{...supplier,companyId:'B'}]).name==='Original Supplier','Other Company Party cannot resolve source');
+check(sourceCounterparty({...source,completion:{},raw_source:{}},[]).name==='—','Missing supplier preserved as unknown');
+check(sourceCounterparty({...source,completion:{party:'اسم المورد'}},[]).name==='اسم المورد','Arabic working spelling preserved');
+check(sourceCounterparty({...source,completion:{subcontractor_id:'c'}},[{...supplier,id:'c',type:'SUBCONTRACTOR'}]).linked,'Existing Contractor identity reused independently of Supplier role');
+check(sourceSupplierId(source,[supplier])==='s','Active same-Company source supplier defaults into new draft');
+check(sourceSupplierId(source,[{...supplier,status:'INACTIVE'}])==='','Inactive supplier not defaulted');
+check(sourceSupplierId(source,[{...supplier,type:'SUBCONTRACTOR'}])==='','Contractor not silently cast to Supplier');
+check(sourceSupplierId({...source,record_type:'PAYROLL'},[supplier])==='','Payroll not routed to Supplier');
+const before=JSON.stringify(source);sourceCounterparty(source,[supplier]);sourceSupplierId(source,[supplier]);check(JSON.stringify(source)===before,'Presentation never mutates imported evidence');
+const panel=readFileSync('src/financial/ExpenseReadPanel.tsx','utf8'),hook=readFileSync('src/historical/useExpenseSourceCounterparties.ts','utf8');
+check(panel.includes('Excel counterparty — posted document unchanged'),'Posted projection explicitly distinguished from financial supplier');
+check(hook.includes(".eq('company_id',company).eq('record_type','GENERAL')")&&hook.includes('if(!live)return'),'Projection scoped by Company, General type and session lifetime');
+check(!/\.rpc\(|\.insert\(|\.update\(|\.delete\(/.test(hook),'Posted counterparty projection strictly read-only');
+writeFileSync('/tmp/narvo-party-linking/focused-tests.json',JSON.stringify({status:'PASS',checks},null,2));
