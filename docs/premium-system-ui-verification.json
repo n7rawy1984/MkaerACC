@@ -1371,5 +1371,12 @@
     "evidence": "docs/data-workspace-verification.json",
     "coverage": "docs/premium-system-ui-coverage.json#dataWorkspaceMilestone",
     "priorSuccessfulSuitesRepeated": false
+  },
+  "accountingWithoutComplexity": {
+    "status": "IMPLEMENTED and VERIFIED locally; Migration93 and isolated release PREPARED; not deployed; actually posted zero",
+    "baseCommit": "77a9097de53fc14b1e7c032f6b45ff97c3b260f2",
+    "focusedChecks": 185,
+    "evidence": "docs/accounting-without-complexity-verification.json",
+    "coverage": "docs/premium-system-ui-coverage.json#accountingWithoutComplexity"
   }
 }

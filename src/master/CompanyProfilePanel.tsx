@@ -1,3 +1,4 @@
+import {PaymentWorkflowSettings} from './PaymentWorkflowSettings';
 import {DetailPanel} from '../workspace/workspaceUi';
 import { useLayoutEffect, useRef, useState } from "react";
 import { useAuth } from "../auth/AuthContext";
@@ -25,7 +26,7 @@ export function CompanyProfilePanel() {
   const { phase, error } = master.companyProfileMutation;
   const blocked = phase === "PENDING" || phase === "ERROR" || phase === "REFRESH_ERROR";
   const close = () => { restoreFocus.current = true; setEditing(null); };
-  return <DetailPanel>
+  return <><DetailPanel>
     <p className="font-medium"><bdi dir="ltr">{master.company.code}</bdi> · <bdi>{master.company.name}</bdi></p>
     <dl className="mt-3 space-y-3">
       {(["legal_name", "trn", "address", "notes"] as const).map((field) => <div key={field}>
@@ -44,5 +45,5 @@ export function CompanyProfilePanel() {
     {canEdit && editing && <CompanyProfileForm company={editing} disabled={blocked} onCancel={close} onSave={async (input) => {
       if (await master.saveCompanyProfile({ company: editing, input })) close();
     }} />}
-  </DetailPanel>;
+  </DetailPanel><PaymentWorkflowSettings/></>;
 }

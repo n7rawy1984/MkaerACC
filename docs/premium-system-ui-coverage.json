@@ -747,5 +747,101 @@
       "testing": "VERIFIED within listed local synthetic scope",
       "documentation": "VERIFIED: canonical register, requirements, roadmap and handoff updated"
     }
+  },
+  "accountingWithoutComplexity": {
+    "date": "2026-11-13",
+    "status": "IMPLEMENTED and VERIFIED locally; Migration93 and isolated release PREPARED; not deployed; actually posted zero",
+    "baseCommit": "77a9097de53fc14b1e7c032f6b45ff97c3b260f2",
+    "baselineAuthority": "Product Owner confirms Premium/Data Workspace release published and Migration92 applied; no repeated general release audit.",
+    "releaseBranch": "release/accounting-without-complexity",
+    "coverage": {
+      "dashboard": "COMPLETE for affected layout/overlay scope; actual EN/AR laptop1366×768, desktop1920×1080 and mobile390×844 screenshots. Baseline menu error-state and populated October canonical synthetic fixtures both exercised.",
+      "expenses": "COMPLETE for affected source/posted eight-column presentation, funding details, editable existing drafts, readable preview, compact status, query/filter/page controls and canonical correction/reversal navigation.",
+      "paymentDefaults": "COMPLETE locally: opt-in Company future Expense/draft suggestions and exact existing file/hash/original-source-month confirmations; overrides remain possible, contradictory facts stay unresolved. Production configuration not saved.",
+      "companySettings": "COMPLETE locally: scoped preview, Company accounting permission, immutable versioned config, same-request retry and clear inactive-capability state.",
+      "sourceEnrichment": "COMPLETE locally: append-only notes/optional supporting references on general financial sources, including posted linked sources; audit insertion only, no source/document/journal edits.",
+      "relatedSharedUI": "Existing DataWorkspace RecordActions uses the shared top-layer menu, including modal subtree/keyboard/edge placement. Subcontracts retains its canonical summary table. Treasury/Custody entry receives appropriate future Expense suggestions; specialized financial modules retain their workflows.",
+      "payroll": "VERIFIED unchanged scope: specialized source table keeps ten columns; no Expense-density rules applied, no confidential Viewer reads. No Payroll calculation/payment/attendance changes.",
+      "notApplicable": "Isolated local-demo pages and unrelated module redesign; no new accounting engine, account mappings, financial reports or authentication system."
+    },
+    "rootCauses": {
+      "width": "Stacked max-width constraints: main1700px, integrated-cycle1550px, operations-dashboard1580px. The real baseline dashboard measured1550px at1920px. Dashboard/data/report variants now use available workspace width; Company forms keep1180px, focused reading variant1000px and record drawers900px.",
+      "menu": "A locally absolute menu inside the isolated hero had no viewport-edge placement and remained in a card stacking context. Replaced with shared native top-layer popover, RTL/LTR anchoring, clamp/flip, keyboard focus, Escape isolation, outside dismissal and native-dialog subtree portal. Baseline desktop probe did not find actual occlusion; no claim of a reproduced Production deployment failure.",
+      "expenses": "Funding column, repeated payment badges, expanded warning panels, tall source totals, primary correction action and three monetary columns competed for row space. New essential grid uses date, two-line description, type, counterparty, Project, gross, lifecycle and compact actions; full text/funding/net/VAT/blockers stay in details."
+    },
+    "controls": {
+      "essentialRetained": [
+        "Active authenticated Company authority",
+        "Actual verified date/open accounting period",
+        "Valid amount and canonical mapped balancing accounts",
+        "Company/Project/Contract/Employee consistency",
+        "No duplicate source/document/financial effect",
+        "Actual funds and historical Custody availability",
+        "VAT/invoice evidence for recoverable tax",
+        "Original Expense versus advance/settlement distinction",
+        "Immutable posted journals; canonical audited financial corrections"
+      ],
+      "optional": "Additional Expense review/POST narrative may use a deterministic action audit reason when omitted; cancellation reason remains explicit. Supplementary notes/references are optional. Required original cost evidence and applicable VAT documentation remain required by existing commands.",
+      "redundancyRemoved": "Matching audited source-set payer fact replaces only repeated payment confirmation. Future suggested defaults never certify actual payment. Overrides or contradictions restore independent verification; combined saved warnings retain unresolved Company/VAT facts without repeating resolved payment facts.",
+      "sourceFacts": "Working date, amount, source evidence, Company assignment, financial histories and original source statuses are never modified by policy reads/default projections."
+    },
+    "ownerDecision": {
+      "confirmed": "Maker historical actual Company expenditures in the imported August–November2026 set were paid by Barq Custody unless specific evidence contradicts that fact. This confirmation is recorded here without asking the owner to reconfirm it.",
+      "activation": "After Migration93 approval/activation, use the existing Maker accountant setup to save one audited SOURCE_SET entry per exact existing original file/hash and approved original source-month scope, selecting the verified existing Barq Custodian. No hardcoded Company/Party IDs or invented imports. Not configured in Production during this task.",
+      "exclusions": "Other Companies, unrelated/future transactions, receipts/mixed inflows, explicit conflicting payer evidence, disputed payments and Payroll processing. A future DEFAULT is a suggestion, separate from source-set factual confirmation."
+    },
+    "verification": {
+      "focusedChecks": 185,
+      "results": "docs/accounting-without-complexity-verification.json",
+      "typescript": "PASS",
+      "productionBuild": "PASS",
+      "scopedLint": {
+        "errors": 0,
+        "warnings": 12
+      },
+      "prior554_895_795SuitesRepeated": false,
+      "screenshots": [
+        "docs/screenshots/accounting-without-complexity/dashboard-en.png",
+        "docs/screenshots/accounting-without-complexity/dashboard-ar.png",
+        "docs/screenshots/accounting-without-complexity/expenses-en.png",
+        "docs/screenshots/accounting-without-complexity/expenses-ar.png",
+        "docs/screenshots/accounting-without-complexity/dashboard-mobile-ar.png",
+        "docs/screenshots/accounting-without-complexity/expenses-mobile-en.png"
+      ]
+    },
+    "migration": {
+      "number": 93,
+      "file": "supabase/migrations/20261113120000_payment_workflow_preferences.sql",
+      "sha256": "1c2d1c412749704e4b0f913bb30013d05061baa1754bd71f40d2ce6adc213752",
+      "status": "PREPARED — NOT APPLIED",
+      "target": "eqnzueginpkskbnqvgoc",
+      "linkedDryRun": "PASS: only20261113120000_payment_workflow_preferences.sql pending; no seeds/roles applied",
+      "scope": "One append-only Company preferences table; configure/read scoped metadata functions; append-source-note function inserting existing audit history. No applied migration/function rewrites or financial-data backfill."
+    },
+    "production": {
+      "deployed": false,
+      "hostedMigrationApplied": false,
+      "realFinancialPostings": 0,
+      "realSourceOrDraftEdits": 0,
+      "realCompanyPreferenceWrites": 0,
+      "realBalancesQueried": false,
+      "push": false
+    },
+    "limitations": [
+      "Full defaults/enrichment require separately authorized Migration93 activation, followed by publication and one scoped accountant configuration per imported file fingerprint.",
+      "Future suggestions apply to Expense entry and Expense drafts; other specialized standalone financial modules retain their existing funding selection. Historical Contractor/Employee source workflows reuse confirmed source-set facts.",
+      "Enrichment adds audit notes/references to linked general financial sources; it does not add file-upload capability or expand editable posted document fields.",
+      "Laptop essential Expense columns fit the workspace. Mobile tables deliberately scroll horizontally; all values/actions remain reachable. Existing server-paged posted lists link to the full Migration92 journal report for complete search/filtering; no page-slice totals/search are presented as global.",
+      "Current Maker balances were not freshly queried. Tests and screenshots use isolated synthetic canonical fixtures; no real accounting execution is implied.",
+      "Production smoke after activation/publication remains deferred; existing bundle-size advisory and scoped lint advisories remain non-blocking."
+    ],
+    "lifecycle": {
+      "businessAccounting": "VERIFIED locally; no new financial recognition rules",
+      "securityAuthorization": "VERIFIED with focused permission/RLS/scope and unchanged engine checks",
+      "database": "VERIFIED locally; additive Migration93 PREPARED, hosted activation DEFERRED",
+      "deployment": "PREPARED; explicit activation/publication and Production smoke DEFERRED",
+      "testing": "VERIFIED for listed changed-state/synthetic scope",
+      "documentation": "VERIFIED; existing canonical roadmap/requirements/handoff updated in place"
+    }
   }
 }

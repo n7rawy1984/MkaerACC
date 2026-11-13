@@ -1,3 +1,4 @@
+import {usePaymentPreferences} from './paymentPreferences';
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useT,useI18n } from "../i18n/I18nContext";
 import { getSupabaseClient } from "../lib/supabase";
@@ -7,6 +8,7 @@ import { attemptStorageKey, loadAttempt, saveAttempt, sendAttempt, type ExpenseA
 import { displayMinor, readExpenseById, type ExpenseRead } from "./expenseRepository";
 
 export function TreasuryExpensePost({ userId, companyId, role, onPosted, source }: { userId: string; companyId: string; role: string; onPosted: (receipt?:ExpenseReceipt) => void; source?:{allocationEventId?:string|null;id:string;date:string;description:string;treasuryId:string;categoryId:string;grossMinor?:string;projectId?:string|null;assignmentScope?:'PROJECT'|'COMPANY'|null} }) {
+  const preferences=usePaymentPreferences();const suggested=preferences.rows.find(p=>p.kind==="DEFAULT"&&p.mode==="TREASURY")?.treasury_id??"";
   const t = useT();const{locale}=useI18n();
   const master = useProductionMasterData();
   // Parent keys this component by actor/Company/role; restore only that scope.
@@ -20,6 +22,7 @@ export function TreasuryExpensePost({ userId, companyId, role, onPosted, source 
   const [message, setMessage] = useState<"invalid" | "unresolved" | "rejected" | "readError" | "storageError" | "denied" | null>(initial.ready || initial.foreign ? null : "storageError");
   const [sourceError,setSourceError]=useState<string|null>(null);
   const [posted, setPosted] = useState<ExpenseRead | null>(null);
+  const treasuryTouched=useRef(false);const [treasuryChoice,setTreasuryChoice]=useState(source?.treasuryId??"");useEffect(()=>{if(!source&&!treasuryTouched.current&&suggested)setTreasuryChoice(suggested);},[suggested,source]);
   const [project, setProject] = useState(source?.projectId??"");
   const [vat, setVat] = useState<TreasuryExpenseInput["vatMode"]|"">(source?"":"ZERO");
   const [invoice, setInvoice] = useState(false);
@@ -114,7 +117,7 @@ export function TreasuryExpensePost({ userId, companyId, role, onPosted, source 
         <label>{t("expensePost.date")}<input dir="ltr" name="date" defaultValue={source?.date} readOnly={!!source} type="date" required className={field} /></label>
         <label>{t("expensePost.project")}<select disabled={!!source?.assignmentScope||!!source?.allocationEventId} value={project} onChange={e => setProject(e.target.value)} className={field}><option value="">{source?.allocationEventId?(locale==='ar'?'تخصيص مشترك':'Shared allocation'):t("expensePost.companyCost")}</option>{master.projects.filter(r => r.companyId === companyId && r.status !== "CLOSED").map(r => <option key={r.id} value={r.id}>{r.code} · {r.name}</option>)}</select></label>
         <label>{t("expensePost.category")}<select name="category" required className={field} defaultValue={source?.categoryId??""}><option value="">{t("expensePost.select")}</option>{master.expenseCategories.filter(r => r.companyId === companyId && r.status === "ACTIVE").map(r => <option key={r.id} value={r.id}>{r.code} · {r.name}</option>)}</select></label>
-        <label>{t("expensePost.treasury")}<select name="treasury" key={project} required className={field} defaultValue={source?.treasuryId??""}><option value="">{t("expensePost.select")}</option>{master.treasuryAccounts.filter(r => (!source||r.id===source.treasuryId) && r.companyId === companyId && r.status === "ACTIVE" && (r.projectId === null || r.projectId === project)).map(r => <option key={r.id} value={r.id}>{r.code} · {r.name}</option>)}</select></label>
+        <label>{t("expensePost.treasury")}<select name="treasury" required className={field} value={treasuryChoice} onChange={e=>{treasuryTouched.current=true;setTreasuryChoice(e.target.value);}}><option value="">{t("expensePost.select")}</option>{master.treasuryAccounts.filter(r => (!source||r.id===source.treasuryId) && r.companyId === companyId && r.status === "ACTIVE" && (r.projectId === null || r.projectId === project)).map(r => <option key={r.id} value={r.id}>{r.code} · {r.name}</option>)}</select></label>
         <label>{t("expensePost.supplier")}<select disabled={!!source?.allocationEventId} name="supplier" className={field} defaultValue=""><option value="">{t("expenseRead.absent")}</option>{master.parties.filter(r => r.companyId === companyId && r.type === "SUPPLIER" && r.status === "ACTIVE").map(r => <option key={r.id} value={r.id}>{r.name}</option>)}</select></label>
         <label>{t("expensePost.net")}<input dir="ltr" name="net" defaultValue={source?.grossMinor?displayMinor(source.grossMinor):undefined} required inputMode="decimal" placeholder="0.00" className={field} /></label>
         <label>{t("expensePost.vat")}<select required value={vat} onChange={e => { const mode = e.target.value as TreasuryExpenseInput["vatMode"]; setVat(mode); if (mode !== "ZERO") setInvoice(true); }} className={field}>{source&&<option value="">Confirm VAT treatment / أكد معالجة الضريبة</option>}{(["ZERO", "AUTO_5", "MANUAL"] as const).map(v => <option disabled={!!source?.allocationEventId&&v!=="ZERO"} key={v} value={v}>{t(`expenseRead.${v}`)}</option>)}</select></label>

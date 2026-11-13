@@ -1,5 +1,6 @@
 import{validFinancialDate,UNCONFIRMED_DATE}from'./sourceDatePresentation';
 export type SourceRecord = {
+ payment_policy?:import('../financial/paymentPolicy').SourcePaymentPolicy;
  source_document?:{correction?:{id:string;state:string;target:string;reversed:boolean;receipt:{id:string;kind:string;journal:string}|null};kind?:string;draft_id:string;state:string;receipt:{id:string;reference:string;journal:string}|null;reversed:boolean};source_document_unavailable?:boolean;
  id: string; company_id?: string; source_reference: string; source_file: string; source_month: string;
  record_type: string; source_date: string | null; description: string;

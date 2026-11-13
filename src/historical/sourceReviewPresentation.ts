@@ -1,9 +1,8 @@
-import {sourceDirection,sourceLinked,sourceTransactionDate,sourceCurrentAmount,sourceValue,type SourceRecord} from './sourceModel';
+import {confirmedSourcePayment} from '../financial/paymentPolicy';
+import {sourceAccounting,sourceDirection,sourceLinked,sourceTransactionDate,sourceCurrentAmount,sourceValue,type SourceRecord} from './sourceModel';
 // A review annotation is a conditional funding default, never posting authority.
 export function sourceCustodyDefault(row:SourceRecord):boolean{
- const v=row.completion;
- if(row.record_type!=='GENERAL'||sourceDirection(row)!=='OUT')return false;
- return v.funding_confirmation_status==='OWNER_CONFIRMED_DEFAULT'&&v.funding_confirmation_mode==='CUSTODIAN'&&typeof v.funding_confirmation_party_id==='string'&&/^[0-9a-f-]{36}$/i.test(v.funding_confirmation_party_id)&&typeof v.funding_confirmation_reference==='string'&&v.funding_confirmation_reference.trim().length>0&&v.funding_confirmation_scope==='VERIFIED_COMPANY_OUTGOINGS'&&v.funding_contradiction!=='true';
+ return confirmedSourcePayment(row)?.mode==='CUSTODIAN';
 }
 export const custodyDefaultLabel=(locale:'en'|'ar')=>locale==='ar'?'دافع العهدة مؤكد لمصروفات الشركة':'Custody payer confirmed for Company outgoings';
 // Payment-source confirmation is independent of an imported outflow claim.
@@ -31,13 +30,15 @@ export const sourceReviewIssues = (row:SourceRecord) => {
  if(sourceCurrentAmount(row)===null)issues.push('AMOUNT_UNCONFIRMED');
  if(!sourceValue(row,'nature',row.classification.nature)||sourceValue(row,'nature',row.classification.nature)==='NEEDS_REVIEW')issues.push('CLASSIFICATION_REQUIRED');
  if(row.classification.legal_company_verified===false)issues.push('COMPANY_UNCONFIRMED');
- if(sourceDirection(row)!=='NONE'&&!row.cash_treasury_id&&!sourceCustodyDefault(row))issues.push('PAYMENT_SOURCE_UNCONFIRMED');
- if(row.classification.independent_payment_evidence_verified===false)issues.push('PAYMENT_EVIDENCE_UNCONFIRMED');
+ if(row.payment_policy?.contradicted||row.completion.funding_contradiction==='true')issues.push('PAYMENT_CONTRADICTION');
+ else if(sourceDirection(row)!=='NONE'&&!row.cash_treasury_id&&!confirmedSourcePayment(row))issues.push('PAYMENT_SOURCE_UNCONFIRMED');
+ if(row.classification.independent_payment_evidence_verified===false&&!confirmedSourcePayment(row))issues.push('PAYMENT_EVIDENCE_UNCONFIRMED');
  if(row.classification.potential_duplicate===true)issues.push('POSSIBLE_DUPLICATE');
  if(row.review_status!=='REVIEWED')issues.push('SOURCE_REVIEW_REQUIRED');
  return issues;
 };
 export const reviewIssueLabels={
+ PAYMENT_CONTRADICTION:['Review the conflicting payment evidence','راجع دليل الدفع المتعارض'],
  LINK_UNAVAILABLE:['Document links unavailable','تعذر التحقق من روابط المستندات'],
  DATE_UNCONFIRMED:['Without a confirmed date','بدون تاريخ مؤكد'],
  AMOUNT_UNCONFIRMED:['Amount requires evidence','المبلغ يحتاج إثباتاً'],
@@ -48,7 +49,7 @@ export const reviewIssueLabels={
  POSSIBLE_DUPLICATE:['Possible duplicate','قد تكون مكررة'],
  SOURCE_REVIEW_REQUIRED:['Source review required','مراجعة المصدر مطلوبة'],
 }as const;
-export function sourceReviewIssueLabel(issue:string,locale:'en'|'ar'){return(reviewIssueLabels[issue as keyof typeof reviewIssueLabels]??[issue,issue])[locale==='ar'?1:0];}
+export function sourceReviewIssueLabel(issue:string,locale:'en'|'ar'){return(reviewIssueLabels[issue as keyof typeof reviewIssueLabels]??['Review the source evidence','راجع أدلة المصدر'])[locale==='ar'?1:0];}
 export const sourceAccountingLabels={
  UNCLASSIFIED:['Unclassified — not posted','غير مصنف — غير مرحّل'],
  CLASSIFIED_UNPOSTED:['Classified — not posted','مصنف — غير مرحّل'],
@@ -60,7 +61,7 @@ export const sourceAccountingLabels={
  POSTED:['Posted','مرحل'],REVERSED:['Reversed','معكوس'],RECLASSIFIED:['Corrected classification','تصنيف مصحح'],
  LINKED:['Linked to posted Payroll','مرتبط برواتب مرحلة'],UNAVAILABLE:['Document link unavailable','تعذر التحقق من ارتباط المستند'],
 }as const;
-export function sourceAccountingLabel(state:string,locale:'en'|'ar'){return(sourceAccountingLabels[state as keyof typeof sourceAccountingLabels]??[state,state])[locale==='ar'?1:0];}
+export function sourceAccountingLabel(state:string,locale:'en'|'ar'){return(sourceAccountingLabels[state as keyof typeof sourceAccountingLabels]??['Needs review','يحتاج مراجعة'])[locale==='ar'?1:0];}
 
 // These are saved review findings, not a live posting-authority decision. Keep
 // their provenance visible; only canonical commands can validate readiness.
@@ -96,7 +97,7 @@ export function sourceSavedReviewReasons(row:SourceRecord,locale:'en'|'ar'):stri
  const marker='Evidence requirements:';const start=note.indexOf(marker);
  if(start<0)return [note];
  const codes=note.slice(start+marker.length).trim().replace(/\.$/,'').split(/,\s*/).filter(Boolean);
- return [...new Set(codes)].map(code=>savedReviewLabels[code]?.[locale==='ar'?1:0]??code);
+ return [...new Set(codes)].filter(code=>!(confirmedSourcePayment(row)&&['ACTUAL_FUNDING_SOURCE_UNCONFIRMED','RECORDED_TREASURY_GL_BALANCE_ZERO_NO_VERIFIED_FUNDING_OR_OPENING'].includes(code))).map(code=>{if(confirmedSourcePayment(row)&&code==='INDEPENDENT_PAYMENT_AND_LEGAL_OWNERSHIP_NOT_CERTIFIED')return locale==='ar'?'تحقق من تبعية العملية للشركة المحاسبية':'Verify the accounting Company ownership';if(confirmedSourcePayment(row)&&code==='CONTRACT_NOTES_ARE_NOT_INDEPENDENT_PAYMENT_OR_TAX_EVIDENCE')return locale==='ar'?'تحقق من المعالجة الضريبية وأدلتها المطبقة':'Verify the applicable VAT treatment and evidence';return savedReviewLabels[code]?.[locale==='ar'?1:0]??(/^[A-Z][A-Z0-9_]+$/.test(code)?(locale==='ar'?'راجع متطلب المراجعة المحفوظ في أدلة المصدر':'Review the saved requirement in source evidence'):code);});
 }
 export const sourceNeedsReview=(row:SourceRecord)=>row.record_type==='GENERAL'&&row.review_status!=='CANCELLED'&&!sourceLinked(row)&&(sourceReviewIssues(row).length>0||sourceSavedReviewReasons(row,'en').length>0);
 export const sourceUnpostedWarning=(locale:'en'|'ar')=>locale==='ar'?'غير مرحّل — يحتاج مراجعة':'Not posted — needs review';
@@ -104,4 +105,15 @@ export function sourceReviewRequirements(row:SourceRecord,locale:'en'|'ar'){
  const live=sourceReviewIssues(row).map(code=>sourceReviewIssueLabel(code,locale));
  const saved=sourceSavedReviewReasons(row,locale);
  return [...live,...(saved.length?[(locale==='ar'?'متطلبات المراجعة المحفوظة: ':'Saved review requirements: ')+saved.join(' · ')]:[])].join(' · ');
+}
+
+// Compact labels describe saved canonical lifecycle; they do not assert posting eligibility.
+export function compactSourceStatus(row:SourceRecord,locale:'en'|'ar'){
+ const state=sourceAccounting(row),ar=locale==='ar';
+ return ({POSTED:ar?'مرحّل':'Posted',REVERSED:ar?'معكوس':'Reversed',RECLASSIFIED:ar?'تم التصحيح':'Corrected',DOCUMENT_DRAFT:ar?'مسودة':'Draft',DOCUMENT_REVIEWED:ar?'مسودة مراجعة':'Reviewed draft',DOCUMENT_APPROVED:ar?'جاهز للترحيل':'Ready to post',LINKED:ar?'مرتبط بمستند مرحّل':'Linked to posted document'} as Record<string,string>)[state]??(ar?'يحتاج مراجعة':'Needs review');
+}
+
+export function sourceNatureLabel(value:string,locale:'en'|'ar'){
+ const labels:Record<string,[string,string]>={EXPENSE:['Expense','مصروف'],NEEDS_REVIEW:['Classification required','يحتاج تصنيفاً'],SUBCONTRACTOR_ADVANCE:['Contractor advance','سلفة مقاول'],SUBCONTRACTOR_PAYMENT:['Contractor settlement','سداد مقاول'],CONTRACTOR_PAYMENT:['Contractor payment','دفعة مقاول'],EMPLOYEE_ADVANCE:['Employee advance','سلفة موظف'],SUPPLIER_PAYMENT:['Supplier settlement','سداد مورد'],PAYROLL_OR_SALARY_PAYMENT:['Salary payment','دفعة راتب'],MATERIAL_PURCHASE:['Materials','مواد'],MATERIALS:['Materials','مواد'],ASSET_PURCHASE:['Asset purchase','شراء أصل'],CUSTODY_TRANSFER:['Custody transfer','تحويل عهدة']};
+ return labels[value]?.[locale==='ar'?1:0]??(/^[A-Z][A-Z0-9_]+$/.test(value)?(locale==='ar'?'نوع يحتاج مراجعة':'Type needs review'):value);
 }

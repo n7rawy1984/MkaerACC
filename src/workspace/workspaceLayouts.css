@@ -1,0 +1,9 @@
+/* Layout intent is scoped to the Company workspace, not a global max-width reset. */
+.company-workspace #company-workspace-main{width:100%;min-width:0;box-sizing:border-box}
+.company-workspace .workspace-route-body{width:100%;min-width:0}
+.company-workspace .workspace-layout-dashboard .operations-dashboard{width:100%;max-width:none;margin-inline:0}
+.company-workspace .workspace-layout-data .workspace-route-body,.company-workspace .workspace-layout-report .workspace-route-body{max-width:none}
+.company-workspace .workspace-layout-form .workspace-route-body{max-width:1180px;margin-inline:auto}
+.company-workspace .workspace-layout-reading .workspace-route-body{max-width:1000px;margin-inline:auto}
+.company-workspace .workspace-content>main.workspace-layout-dashboard,.company-workspace .workspace-content>main.workspace-layout-data,.company-workspace .workspace-content>main.workspace-layout-report{max-width:none}
+.company-workspace .workspace-layout-dashboard .integrated-cycle:has(.operations-dashboard){width:100%;max-width:none;margin-inline:0}
