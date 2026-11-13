@@ -1,0 +1,218 @@
+{
+  "captured": "2026-11-13T11:52:31.721Z",
+  "status": "THREE_AUTHORIZED_EXPENSES_ACTUALLY_POSTED_AND_RECONCILED",
+  "target": "eqnzueginpkskbnqvgoc",
+  "authorization": {
+    "businessFacts": "All three Company-benefit/beneficiary and actual paid gross/no-input-VAT facts specifically confirmed.",
+    "payerConflictResolution": "Product Owner explicitly selected Authorize this resolution and posting, then reconfirmed in the continuation brief.",
+    "scope": "Exactly three existing source UUIDs; source-specific actual Barq payer resolution, original Main Cash links retained. No broader conflicting-source overrides."
+  },
+  "sourceReferenceCorrection": {
+    "approvedActualResidencySource": "G-2026-09-56",
+    "sourceId": "128cdad2-93bb-4705-8cfa-fd2e6845c88b",
+    "briefTranscription": "G-2026-09-66",
+    "distinction": "G-2026-09-66 is a separate AED367.50 stone-material record, not the approved AED240 residency cost. Its source remains unchanged and unposted."
+  },
+  "actualResult": {
+    "status": "CONFIRMED_CANONICAL_EXPENSE_BATCH_RECONCILED",
+    "captured": "2026-11-13T11:52:31.721Z",
+    "actor": "6f67b7bf-e531-49b7-9839-a0167c9c582b",
+    "results": [
+      {
+        "source_id": "128cdad2-93bb-4705-8cfa-fd2e6845c88b",
+        "source_reference": "G-2026-09-56",
+        "date": "2026-09-14",
+        "amount_minor": "24000",
+        "expense_id": "f061b87a-fbd7-43f6-96d5-6af7bcd8e147",
+        "expense_reference": "MAKER-EXP-2026-000014",
+        "journal_id": "63866ca8-ab7f-4d9a-b3a1-bbde96648a87",
+        "newly_posted": true,
+        "debit_account": "f9eae2c2-4ae6-4a51-acbd-5bf7cd6c7337",
+        "credit_account": "ffe01ce0-43bb-41a0-ae2a-cb356b62ab39",
+        "credit_party": "7967263c-6b5b-4161-a6b6-63e290e3c33b",
+        "project_cost_effect_minor": "0",
+        "recoverable_vat_minor": "0",
+        "custody_opening_minor": "37135070",
+        "custody_closing_minor": "37111070"
+      },
+      {
+        "source_id": "7b442eb8-af34-49df-b4da-88f3b85f8fe7",
+        "source_reference": "G-2026-08-156",
+        "date": "2026-08-31",
+        "amount_minor": "80000",
+        "expense_id": "4a6fa58c-0698-4098-872f-09ff1d4a066f",
+        "expense_reference": "MAKER-EXP-2026-000015",
+        "journal_id": "2c9a56f5-2421-4061-bfe7-8b325079e1e7",
+        "newly_posted": true,
+        "debit_account": "f9eae2c2-4ae6-4a51-acbd-5bf7cd6c7337",
+        "credit_account": "ffe01ce0-43bb-41a0-ae2a-cb356b62ab39",
+        "credit_party": "7967263c-6b5b-4161-a6b6-63e290e3c33b",
+        "project_cost_effect_minor": "0",
+        "recoverable_vat_minor": "0",
+        "custody_opening_minor": "37111070",
+        "custody_closing_minor": "37031070"
+      },
+      {
+        "source_id": "83c06d5f-c323-4acc-b344-6be507483fe7",
+        "source_reference": "G-2026-09-99",
+        "date": "2026-09-26",
+        "amount_minor": "1000",
+        "expense_id": "f24f3650-af6f-4add-8171-10fe7171291a",
+        "expense_reference": "MAKER-EXP-2026-000016",
+        "journal_id": "3020d620-69ca-4d22-abac-e1acf0714b04",
+        "newly_posted": true,
+        "debit_account": "f9eae2c2-4ae6-4a51-acbd-5bf7cd6c7337",
+        "credit_account": "ffe01ce0-43bb-41a0-ae2a-cb356b62ab39",
+        "credit_party": "7967263c-6b5b-4161-a6b6-63e290e3c33b",
+        "project_cost_effect_minor": "0",
+        "recoverable_vat_minor": "0",
+        "custody_opening_minor": "37031070",
+        "custody_closing_minor": "37030070"
+      }
+    ],
+    "holds": [],
+    "custody_balance_minor": "37030070"
+  },
+  "reconciliation": {
+    "status": "PASS",
+    "checks": [
+      "companies unchanged",
+      "accounts unchanged",
+      "expense_categories unchanged",
+      "parties unchanged",
+      "projects unchanged",
+      "subcontracts unchanged",
+      "subcontractor_advances unchanged",
+      "subcontractor_payments unchanged",
+      "payroll_postings unchanged",
+      "All pre-existing journal_entries immutable/preserved",
+      "All pre-existing journal_lines immutable/preserved",
+      "All pre-existing expenses immutable/preserved",
+      "All pre-existing historical_expense_drafts immutable/preserved",
+      "All pre-existing expense_draft_events immutable/preserved",
+      "All370 source records retained",
+      "367 unrelated sources unchanged; three original dates/amounts/provenance/MainCash links preserved",
+      "Two source-set preferences reused, unchanged",
+      "Exactly three expected new journals",
+      "Exactly three expected new Expenses",
+      "All30 journals balance exactly",
+      "Six new lines; no Treasury movement or Project cost",
+      "Expected document/draft/journal counts reconcile",
+      "AED1050 posted; Custody AED371350.70 →370300.70",
+      "Each source has exactly one posted canonical link"
+    ],
+    "actualNewExpenses": 3,
+    "actualNewJournals": [
+      "2c9a56f5-2421-4061-bfe7-8b325079e1e7",
+      "3020d620-69ca-4d22-abac-e1acf0714b04",
+      "63866ca8-ab7f-4d9a-b3a1-bbde96648a87"
+    ],
+    "actualPostedMinor": "105000",
+    "custodyOpeningMinor": "37135070",
+    "custodyClosingMinor": "37030070",
+    "preservedSourceCount": 370,
+    "unrelatedSourcesUnchanged": 367,
+    "remainingSavedDrafts": [
+      {
+        "draft_id": "fcfc3a24-57d8-4f83-8784-adcf007e8584",
+        "description": "رسوم الفردان شهري 7و8",
+        "state": "DRAFT"
+      },
+      {
+        "draft_id": "def2c5c9-e93c-4469-b104-276079fe32ab",
+        "description": "عطر للمكتب م/محمود غير واصل",
+        "state": "DRAFT"
+      },
+      {
+        "draft_id": "66295e40-79b9-4ef7-9775-74ccea5d2408",
+        "description": "رسوم تحويل الرواتب لشهر 9 في الفردان",
+        "state": "DRAFT"
+      },
+      {
+        "draft_id": "28d4d876-5a66-4608-ae6e-87c727ad0625",
+        "description": "رسوم تحويل الرواتب لشهر 9 في الفردان",
+        "state": "DRAFT"
+      },
+      {
+        "draft_id": "48c3bce6-4d6e-4bad-97c5-86047dd14744",
+        "description": "رسوم الفردان لباقي رواتب",
+        "state": "DRAFT"
+      }
+    ]
+  },
+  "accounting": {
+    "treatment": "Dr COMPANY_EXPENSE / Cr CUSTODY_ADVANCE for the existing Barq party; full gross cost, zero recoverable input VAT",
+    "newExpenses": 3,
+    "newExpenseDrafts": 3,
+    "newDraftEvents": 9,
+    "postedTotalMinor": "105000",
+    "custodyOpeningMinor": "37135070",
+    "custodyClosingMinor": "37030070",
+    "ownerFundingMinor": "39096020",
+    "allPostedExpensesMinor": "415950",
+    "contractorAdvancesMinor": "1650000",
+    "equation": "39096020 -415950 -1650000 =37030070",
+    "newProjectCostMinor": "0",
+    "newTreasuryMovementMinor": "0",
+    "newRecoverableVATMinor": "0"
+  },
+  "preservation": {
+    "historicalSources": 370,
+    "unrelatedSourceRowsIdentical": 367,
+    "originalTargetSourceDatesAmountsRawEvidenceCompaniesClassificationsAndMainCashLinks": "UNCHANGED",
+    "threeTargetWorkingRecords": "Audited owner decision, source-review state and canonical posted link added through existing authenticated commands",
+    "allPreExistingJournalsLinesExpensesDraftEventsAndBindings": "UNCHANGED",
+    "ownerFundingJournals": 12,
+    "priorPostedExpenses": 13,
+    "priorPostedContractorAdvances": 2,
+    "Payroll": "UNCHANGED;0payroll postings; all25Payroll source rows preserved",
+    "CompanyAccountsCategoriesPartiesProjectsContracts": "UNCHANGED",
+    "sourceSetPreferences": "Both existing preferences unchanged; not recreated"
+  },
+  "currentCounts": {
+    "postedExpenses": 16,
+    "journals": 30,
+    "journalLines": 60,
+    "sourceDraftLinks": 21,
+    "draftEvents": 65,
+    "sources": 370
+  },
+  "remainingOutgoingSources": {
+    "states": {
+      "EXCLUDED": 34,
+      "PENDING": 278,
+      "ALREADY_POSTED": 15,
+      "ACTUALLY_POSTED": 3
+    },
+    "primaryReasons": {
+      "Advance/receivable/partner/Custody treatment outside Expense execution": 25,
+      "Payroll/salary-related payment or transfer fee deferred": 9,
+      "Project/Company cost allocation, labor recognition, receipt or tax-support evidence": 85,
+      "Materials/stock/asset recognition and valuation evidence": 69,
+      "Missing/conflicting authoritative transaction date": 14,
+      "Specific legal entity/beneficiary site remains unresolved": 15,
+      "Economic nature/beneficiary or supported canonical treatment unresolved": 89,
+      "Contract and advance-versus-certified-settlement evidence": 3,
+      "Duplicate/distinct-payment evidence": 3
+    },
+    "newlyEligibleFromRemainingSavedDrafts": 0,
+    "draftExplanation": "Five prior unposted drafts remain: four salary-transfer/AlFardan fees excluded from this task, one office fragrance with missing receipt/receipt-of-goods evidence. Other saved review packets retain unresolved economic purpose, Project/Contract, material valuation, legal entity, dates, tax/receipt support or duplicates. No classifications or amounts invented."
+  },
+  "verification": {
+    "focusedPostflightChecks": 24,
+    "previous58ImplementationChecks": "REUSED; not rerun",
+    "broadHistoricalReviewRepeated": false,
+    "duplicateProtection": "Fresh persisted-state preflight, existing-draft/source-link lookup, frozen request IDs, canonical unique source binding, exact three journals and one posted link per source."
+  },
+  "executionAdapterCorrection": "Local browser operator adapter now accepts the source-review RPC valid empty response. It stopped before posting on that response; persisted resolution was checked and the same request identities resumed. No Production application code changed.",
+  "knownPresentationLimitation": "The unchanged Migration93 policy projection still describes the legacy raw Main Cash link as contradicted. Explicit approved resolution is preserved in the source audit/completion; the canonical posted Expense and GL authoritatively identify Barq. No policy reader weakened or original Treasury link erased.",
+  "release": {
+    "commit": "427e3dbfdc548955cf7410139177bdbb8ab5cb24",
+    "unchanged": true,
+    "pushed": false,
+    "deployed": false,
+    "newApplicationReleaseRequiredForThesePostings": false
+  },
+  "migration": "No new migration or hosted schema/configuration change beyond previously approved two SOURCE_SET records. Migration93 remains applied.",
+  "documentation": "Operational working-tree records; prepared isolated UI release unchanged."
+}

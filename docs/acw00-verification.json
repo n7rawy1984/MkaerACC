@@ -1,6 +1,6 @@
 {
   "date": "2026-11-13",
-  "status": "IMPLEMENTED_VERIFIED_LOCAL; TWO_APPROVED_SOURCE_SET_SETTINGS_SAVED; RELEASE_NOT_PUBLISHED; ACTUAL_POSTING_AWAITS_SPECIFIC_FACTS",
+  "status": "READY_FOR_OPERATOR_PUBLICATION; IMPLEMENTATION_VERIFIED; TWO_SOURCE_SET_SETTINGS_SAVED; THREE_SPECIFIC_EXPENSES_POSTED_AND_RECONCILED; FRONTEND_NOT_DEPLOYED",
   "baseCommit": "c4776f89a6eef892d26bea450a64a97defeed2cd",
   "releaseBranch": "release/acw00-one-click",
   "rootCause": [
@@ -146,6 +146,124 @@
     },
     "secondHashNote": "Owner selected the exact approved preview. Their follow-up transcription shortened the second SHA; the verified original64-character fingerprint from that preview was used.",
     "preservation": {
+      "evidence": "docs/acw00-confirmed-posting-execution.json",
+      "sources": 370,
+      "sourceDraftLinks": 21,
+      "draftEvents": 65,
+      "postedExpenses": 16,
+      "postedContractorAdvances": 2,
+      "ownerFundingJournals": 12,
+      "journals": 30,
+      "journalLines": 60,
+      "payrollPostings": 0,
+      "barqOpeningMinor": "37135070",
+      "barqClosingMinor": "37030070",
+      "preExistingPostedFinancialHistory": "UNCHANGED",
+      "unrelatedSourcesUnchanged": 367,
+      "newFinancialPostings": 3,
+      "newJournalIds": [
+        "63866ca8-ab7f-4d9a-b3a1-bbde96648a87",
+        "2c9a56f5-2421-4061-bfe7-8b325079e1e7",
+        "3020d620-69ca-4d22-abac-e1acf0714b04"
+      ]
+    },
+    "execution": {
+      "status": "THREE_AUTHORIZED_EXPENSES_ACTUALLY_POSTED_AND_RECONCILED",
+      "outgoingSourceCount": 330,
+      "newlyPosted": 3,
+      "newlyPostedMinor": "105000",
+      "previouslyPosted": 15,
+      "excluded": 34,
+      "pending": 278,
+      "results": [
+        {
+          "source_id": "128cdad2-93bb-4705-8cfa-fd2e6845c88b",
+          "source_reference": "G-2026-09-56",
+          "date": "2026-09-14",
+          "amount_minor": "24000",
+          "expense_id": "f061b87a-fbd7-43f6-96d5-6af7bcd8e147",
+          "expense_reference": "MAKER-EXP-2026-000014",
+          "journal_id": "63866ca8-ab7f-4d9a-b3a1-bbde96648a87",
+          "newly_posted": true,
+          "debit_account": "f9eae2c2-4ae6-4a51-acbd-5bf7cd6c7337",
+          "credit_account": "ffe01ce0-43bb-41a0-ae2a-cb356b62ab39",
+          "credit_party": "7967263c-6b5b-4161-a6b6-63e290e3c33b",
+          "project_cost_effect_minor": "0",
+          "recoverable_vat_minor": "0",
+          "custody_opening_minor": "37135070",
+          "custody_closing_minor": "37111070"
+        },
+        {
+          "source_id": "7b442eb8-af34-49df-b4da-88f3b85f8fe7",
+          "source_reference": "G-2026-08-156",
+          "date": "2026-08-31",
+          "amount_minor": "80000",
+          "expense_id": "4a6fa58c-0698-4098-872f-09ff1d4a066f",
+          "expense_reference": "MAKER-EXP-2026-000015",
+          "journal_id": "2c9a56f5-2421-4061-bfe7-8b325079e1e7",
+          "newly_posted": true,
+          "debit_account": "f9eae2c2-4ae6-4a51-acbd-5bf7cd6c7337",
+          "credit_account": "ffe01ce0-43bb-41a0-ae2a-cb356b62ab39",
+          "credit_party": "7967263c-6b5b-4161-a6b6-63e290e3c33b",
+          "project_cost_effect_minor": "0",
+          "recoverable_vat_minor": "0",
+          "custody_opening_minor": "37111070",
+          "custody_closing_minor": "37031070"
+        },
+        {
+          "source_id": "83c06d5f-c323-4acc-b344-6be507483fe7",
+          "source_reference": "G-2026-09-99",
+          "date": "2026-09-26",
+          "amount_minor": "1000",
+          "expense_id": "f24f3650-af6f-4add-8171-10fe7171291a",
+          "expense_reference": "MAKER-EXP-2026-000016",
+          "journal_id": "3020d620-69ca-4d22-abac-e1acf0714b04",
+          "newly_posted": true,
+          "debit_account": "f9eae2c2-4ae6-4a51-acbd-5bf7cd6c7337",
+          "credit_account": "ffe01ce0-43bb-41a0-ae2a-cb356b62ab39",
+          "credit_party": "7967263c-6b5b-4161-a6b6-63e290e3c33b",
+          "project_cost_effect_minor": "0",
+          "recoverable_vat_minor": "0",
+          "custody_opening_minor": "37031070",
+          "custody_closing_minor": "37030070"
+        }
+      ],
+      "remainingPrimaryReasons": {
+        "Advance/receivable/partner/Custody treatment outside Expense execution": 25,
+        "Payroll/salary-related payment or transfer fee deferred": 9,
+        "Project/Company cost allocation, labor recognition, receipt or tax-support evidence": 85,
+        "Materials/stock/asset recognition and valuation evidence": 69,
+        "Missing/conflicting authoritative transaction date": 14,
+        "Specific legal entity/beneficiary site remains unresolved": 15,
+        "Economic nature/beneficiary or supported canonical treatment unresolved": 89,
+        "Contract and advance-versus-certified-settlement evidence": 3,
+        "Duplicate/distinct-payment evidence": 3
+      },
+      "evidence": "docs/acw00-confirmed-posting-execution.json",
+      "blocker": "None for the three authorized postings; remaining sources retain documented individual accounting requirements."
+    }
+  },
+  "publication": {
+    "pushed": false,
+    "deployed": false,
+    "configurationSaved": true,
+    "productionFrontendSmoke": "DEFERRED until operator publication"
+  },
+  "limitations": [
+    "No automatic economic classification for unknown records.",
+    "One-action orchestration covers original unsplit Expenses; split allocations and specialized advance/settlement/correction separation of duties retain existing workflows.",
+    "Insufficient Project, Contract, receipt, Company or tax evidence remains pending; no speculative posting.",
+    "Conflicting legacy source Treasury links are retained as provenance. The three specifically authorized Barq resolutions are audited; other genuinely contradictory source records require their existing controlled completion path."
+  ],
+  "screenshots": [
+    "docs/screenshots/acw00/ready-en.png",
+    "docs/screenshots/acw00/ready-ar.png",
+    "docs/screenshots/acw00/ready-mobile-en.png",
+    "docs/screenshots/acw00/ready-mobile-ar.png"
+  ],
+  "historicalImplementationCheckpoint": {
+    "captured": "2026-11-13T09:38:45.913Z",
+    "preservation": {
       "all15ScopedBusinessTableSnapshots": "IDENTICAL",
       "sources": 370,
       "sourceDraftLinks": 18,
@@ -186,23 +304,23 @@
       ],
       "blockedCandidateTotalMinor": "105000",
       "blocker": "Automatic approval review rejected irreversible real journals while beneficiary/business-purpose and VAT/invoice uncertainty remains in the saved records; exact factual confirmation requested. No rejected posting action executed."
-    }
+    },
+    "note": "Historical before the separately authorized three Expense postings; superseded by final operational evidence."
   },
-  "publication": {
-    "pushed": false,
-    "deployed": false,
-    "configurationSaved": true,
-    "productionFrontendSmoke": "DEFERRED until operator publication"
-  },
-  "limitations": [
-    "No automatic economic classification for unknown records.",
-    "One-action orchestration covers original unsplit Expenses; split allocations and specialized advance/settlement/correction separation of duties retain existing workflows.",
-    "Insufficient Project, Contract, receipt, Company or tax evidence remains pending; no speculative posting."
-  ],
-  "screenshots": [
-    "docs/screenshots/acw00/ready-en.png",
-    "docs/screenshots/acw00/ready-ar.png",
-    "docs/screenshots/acw00/ready-mobile-en.png",
-    "docs/screenshots/acw00/ready-mobile-ar.png"
-  ]
+  "releaseFinalization": {
+    "date": "2026-11-13",
+    "scope": "Packaging and documentation only; application source, dependencies and canonical migrations unchanged from tested427e3db release",
+    "implementationCommit": "427e3dbfdc548955cf7410139177bdbb8ab5cb24",
+    "reusedEvidence": {
+      "focusedImplementationChecks": 58,
+      "typescript": "PASS",
+      "productionBuild": "PASS",
+      "focusedLivePostflightChecks": 24
+    },
+    "hostedAccessDuringPackaging": false,
+    "hostedFinancialWritesDuringPackaging": 0,
+    "migrationsAppliedDuringPackaging": 0,
+    "publication": "NOT_PUSHED_NOT_DEPLOYED; operator action required",
+    "sourceSetPreferences": "Already saved hosted Company metadata, not code seeds; no automatic preference recreation on deployment"
+  }
 }

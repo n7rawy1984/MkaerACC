@@ -845,7 +845,7 @@
     }
   },
   "acw00": {
-    "status": "COMPLETE_LOCAL_IMPLEMENTATION; NOT_PUBLISHED",
+    "status": "VERIFIED_READY_FOR_OPERATOR_PUBLICATION; NOT_DEPLOYED",
     "scope": [
       "Expense source opening/draft approval",
       "Source editor disclosures",
@@ -864,6 +864,8 @@
       "390x844"
     ],
     "financialCommands": "Existing canonical only; no migrations or authorization changes",
-    "specializedFlows": "Existing split allocations and protected advance/settlement/correction approval boundaries retained"
+    "specializedFlows": "Existing split allocations and protected advance/settlement/correction approval boundaries retained",
+    "latestOperationalEvidence": "docs/acw00-confirmed-posting-execution.json",
+    "releasePackaging": "Current implementation and passing checks reused; documentation finalized after three authorized hosted postings."
   }
 }
