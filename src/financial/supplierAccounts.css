@@ -1,0 +1,21 @@
+/* Existing premium tokens; scoped to the Supplier workspace, including its native dialogs. */
+.company-workspace .supplier-account-workspace :is(label,.dw-toolbar label>span){font-size:16px;line-height:1.75;font-weight:600;color:var(--erp-text)}
+.company-workspace .supplier-account-workspace :is(input,select,textarea){font-size:16px;line-height:1.65;font-weight:400;min-height:42px;color:var(--erp-text)}
+.company-workspace .supplier-account-workspace .dw-table th{font-size:16px;line-height:1.7;font-weight:650;color:var(--erp-text)}
+.company-workspace .supplier-account-workspace .dw-table th button{font-size:inherit;color:inherit}
+.supplier-account-filters{display:flex;flex-wrap:wrap;align-items:end;gap:14px}
+.supplier-account-filters>label{display:grid;gap:6px;min-width:0}
+.supplier-account-filters>.supplier-account-picker{flex:1 1 260px;max-width:440px}
+.supplier-account-picker select{width:100%;min-width:0;text-overflow:ellipsis}
+.supplier-account-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px;min-height:42px}
+.supplier-statement-view{display:grid;gap:14px;min-width:0}
+.supplier-statement-view h3{font-size:20px;font-weight:700;line-height:1.6}
+.supplier-statement-view h4{font-size:17px;font-weight:650;line-height:1.7;margin-block:12px 8px}
+.supplier-statement-view>p{font-size:15px;line-height:1.8;color:var(--erp-secondary)}
+.supplier-statement-view .dw-table td{overflow-wrap:anywhere;min-width:120px;max-width:320px}
+.supplier-statement-view .dw-table td:last-child{white-space:normal;width:auto}
+@media(max-width:600px){.supplier-account-filters>.supplier-account-picker{max-width:none;flex-basis:100%}.supplier-account-filters{gap:12px}}
+
+.company-workspace .supplier-account-workspace .dw-table :is(th,th button,th span){font-size:16px!important;line-height:1.7;color:var(--erp-text)}
+.supplier-account-workspace .dw-table .erp-badge{white-space:nowrap;overflow-wrap:normal;word-break:normal}
+.supplier-account-workspace .dw-table td:last-child{min-width:140px}

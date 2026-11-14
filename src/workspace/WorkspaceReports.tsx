@@ -13,6 +13,7 @@ import {postedExpenseReport} from '../reports/postedExpenseReport';
 import {isAccountingReader} from './workspaceNavigation';
 import {useWorkspaceText} from './useWorkspaceText';
 export function WorkspaceReports(){const {state}=useAuth(),{locale}=useI18n(),t=useWorkspaceText(),master=useProductionMasterData(),[query]=useSearchParams();if(state.phase!=='TENANT_READY')return null;if(!isAccountingReader(state.activeTenant.role))return <p role="alert">{t('dashboardUnavailable')}</p>;const {companyId,companyName}=state.activeTenant;
+ if(query.get('party')&&!query.get('view'))return <section>{master.phase==='READY'&&master.company.id===companyId&&master.parties.some(p=>p.id===query.get('party')&&p.companyId===companyId&&p.type==='SUPPLIER')&&<Link className="cycle-report-link" to={'/supplier-statements?party='+encodeURIComponent(query.get('party')!)}>{locale==='ar'?'كشف حساب المورد':'Supplier statement'}</Link>}<PartyStatement initialParty={query.get('party')!} autoLoad/></section>;
  if(query.get('view')==='transactions'){
   if(master.phase!=='READY'||master.company.id!==companyId)return <p role="status">{locale==='ar'?'جار تحميل التقارير…':'Loading reports…'}</p>;
   const m=query.get('month')??'',month=validMonth(m)&&m>='0002-01'&&m<='9998-12'?m:undefined;
