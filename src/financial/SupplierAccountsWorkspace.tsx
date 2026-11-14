@@ -14,12 +14,15 @@ import {type InventoryRead} from '../inventory/inventory';
 import type {SupabaseClient} from '@supabase/supabase-js';
 type Mode='INVOICE'|'PAYMENT'|'ADVANCE'|'CREDIT_NOTE'|'ADVANCE_ALLOCATION'|'CREDIT_ALLOCATION'|'REVERSE'|'REVERSE_PAYMENT'|'SETUP';
 type Intent={name:string;args:Record<string,unknown>};
-export function SupplierAccountsWorkspace(){const{state}=useAuth();if(state.phase!=='TENANT_READY')return null;return <SupplierAccounts key={state.profile.userId+state.activeTenant.companyId+state.activeTenant.role} cid={state.activeTenant.companyId} user={state.profile.userId} role={state.activeTenant.role} company={state.activeTenant.companyName}/>;}
-export function SupplierAccounts({cid,user,role,company}:{cid:string;user:string;role:string;company:string}){
+type SupplierSection='invoices'|'payments'|'aging';
+export function SupplierAccountsWorkspace({section='invoices'}:{section?:SupplierSection}={}){const{state}=useAuth();if(state.phase!=='TENANT_READY')return null;return <SupplierAccounts key={state.profile.userId+state.activeTenant.companyId+state.activeTenant.role} cid={state.activeTenant.companyId} user={state.profile.userId} role={state.activeTenant.role} company={state.activeTenant.companyName} section={section}/>;}
+export function SupplierAccounts({cid,user,role,company,section='invoices'}:{cid:string;user:string;role:string;company:string;section?:SupplierSection}){
  const{locale}=useI18n(),ar=locale==='ar',t=(en:string,arabic:string)=>ar?arabic:en,m=useProductionMasterData(),prefs=usePaymentPreferences();
  const client=getSupabaseClient() as unknown as SupabaseClient;
- const[data,setData]=useState<SupplierAPRead|null>(null),[asOf,setAsOf]=useState(''),[supplier,setSupplier]=useState(''),[tab,setTab]=useState('invoices'),[message,setMessage]=useState(''),[unavailable,setUnavailable]=useState(false),[busy,setBusy]=useState(false),[revision,setRevision]=useState(0);
+ const[data,setData]=useState<SupplierAPRead|null>(null),[asOf,setAsOf]=useState(''),[supplier,setSupplier]=useState(''),[tab,setTab]=useState<string>(section),[message,setMessage]=useState(''),[unavailable,setUnavailable]=useState(false),[busy,setBusy]=useState(false),[revision,setRevision]=useState(0);
  const[mode,setMode]=useState<Mode|null>(null),[input,setInput]=useState<APInput>({}),[preview,setPreview]=useState<APPreview|null>(null),[intent,setIntent]=useState<Intent|null>(null),[allocations,setAllocations]=useState<Record<string,string>>({}),[stock,setStock]=useState<InventoryRead|null>(null),[createSupplier,setCreateSupplier]=useState(false);
+ // Route changes select an existing report tab without resetting an in-flight accounting intent.
+ useEffect(()=>{setTab(section);},[section]);
  const intentMode=useRef<Mode|null>(null);const formRef=useRef<HTMLFormElement>(null);const generation=useRef(0),alive=useRef(true),lock=useRef(false),canWrite=['ACCOUNTING_ADMIN','ACCOUNTANT'].includes(role),admin=role==='ACCOUNTING_ADMIN',canRead=canWrite||role==='MANAGEMENT_VIEWER';
  const parties=m.phase==='READY'?m.parties.filter(p=>p.companyId===cid&&p.type==='SUPPLIER'):[],projects=m.phase==='READY'?m.projects.filter(p=>p.companyId===cid):[],categories=m.phase==='READY'?m.expenseCategories.filter(p=>p.companyId===cid&&p.status==='ACTIVE'):[];
  const partyName=(id:string)=>parties.find(p=>p.id===id)?.name??id,accountName=(id:string)=>m.phase==='READY'?m.accounts.find(a=>a.companyId===cid&&a.id===id)?.name??id:id;

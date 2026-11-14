@@ -1,0 +1,101 @@
+{
+  "milestone": "ACW-01 / Migration94 hosted activation",
+  "status": "APPLIED_POSTFLIGHT_PASS",
+  "project": "eqnzueginpkskbnqvgoc",
+  "release": "269b4f9a628ee3ded238da6cf50e4622ac2d3592",
+  "migration": {
+    "file": "20261113140000_supplier_accounts_payable_cycle.sql",
+    "sha256": "cab19b0a6f3996e6ff9a47964fdb0621632c1ce532c77e006c229dfd86ad01c8",
+    "previous_version": "20261113120000",
+    "applied_version": "20261113140000",
+    "canonical_versions_applied": 94,
+    "pending": [],
+    "cli_result": {
+      "upToDate": false,
+      "dryRun": false,
+      "migrations": [
+        "20261113140000_supplier_accounts_payable_cycle.sql"
+      ],
+      "seeds": [],
+      "roles": [],
+      "message": "Finished supabase db push."
+    }
+  },
+  "captured_preflight_utc": "2026-11-13T19:01:12.285378+00:00",
+  "captured_postflight_utc": "2026-11-13T19:02:23.582373+00:00",
+  "preservation": {
+    "matched_existing_table_fingerprints": 102,
+    "all_existing_public_rows_unchanged": true,
+    "Auth_users_identities_unchanged": true,
+    "memberships_permissions_unchanged": true,
+    "source_records_links_and_Party_relationships_unchanged": true,
+    "drafts_and_posted_financial_records_unchanged": true,
+    "all_Company_GL_balances_unchanged": true,
+    "Barq_Custody_AED": "370300.70",
+    "Maker_counts_before_and_after": {
+      "sources": 370,
+      "journals": 30,
+      "draft_events": 66,
+      "journal_lines": 60,
+      "draft_bindings": 21,
+      "posted_expenses": 16,
+      "payroll_postings": 0,
+      "supplier_parties": 69,
+      "supplier_payments": 0,
+      "contractor_advances": 2,
+      "unbalanced_journals": 0,
+      "owner_funding_journals": 12
+    },
+    "new_supplier_payment_nullable_metadata_all_null": true,
+    "new_AP_tables_empty": true,
+    "new_configuration_empty": true
+  },
+  "security": {
+    "existing_table_RLS_grants_policies_unchanged": true,
+    "unrelated_functions_unchanged": true,
+    "expected_function_replacements_preserve_permission_metadata": true,
+    "new_tables_forced_RLS": true,
+    "no_authenticated_direct_write_grants": true,
+    "new_RPCs_authenticated_only_fixed_search_path": true,
+    "private_planner_not_browser_callable": true,
+    "validated_funding_shape_constraint": true,
+    "read_only_probes": [
+      "New Supplier account reader executes under existing Company accountant database-role scope; no Supplier documents/payments/configuration created",
+      "Existing accountant can still read all370 Maker sources; no foreign Company authority",
+      "Supplier reader rejects foreign Company under authenticated database role",
+      "Anonymous database-role Supplier account access denied",
+      "PostgREST exposes installed RPC and denies unauthenticated access (not missing-schema endpoint)"
+    ]
+  },
+  "compatibility": {
+    "release_database_dependencies_satisfied": true,
+    "PostgREST_new_RPC_visible": true,
+    "frontend_deployed_in_this_step": false,
+    "Production_frontend_release_validation": "DEFERRED until operator publishes compatible application",
+    "prepared_release_unchanged": true,
+    "previous_183_focused_checks_reused": true,
+    "broad_tests_repeated": false
+  },
+  "activation_business_mutations": {
+    "new_invoices": 0,
+    "new_liabilities": 0,
+    "new_payments": 0,
+    "new_journals": 0,
+    "source_or_Party_edits": 0,
+    "Company_configuration": 0,
+    "financial_commands_invoked": 0
+  },
+  "actions": {
+    "migration_applied": 94,
+    "code_pushed": false,
+    "code_deployed": false,
+    "other_migrations_applied": false
+  },
+  "lifecycle": {
+    "database_activation_and_preservation": "VERIFIED",
+    "authorization_tenant_RLS_read_postflight": "VERIFIED",
+    "canonical_documentation": "VERIFIED",
+    "compatible_frontend_publication_and_Production_smoke": "DEFERRED",
+    "real_Maker_AP_execution": "NOT_APPLICABLE; separate authorization required"
+  }
+}

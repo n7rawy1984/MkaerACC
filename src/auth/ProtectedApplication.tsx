@@ -62,7 +62,10 @@ function RoutedApplication() {
           <Route path="/parties" element={<TenantReadyApplication view="parties" />} />
           <Route path="/historical-imports" element={<Navigate to="/expenses" replace />} />
           <Route path="/expenses" element={<TenantReadyApplication view="expenses" />} />
-          <Route path="/supplier-payments" element={<TenantReadyApplication view="supplierPayments" />} />
+          <Route path="/supplier-invoices" element={<TenantReadyApplication view="supplierPayments" supplierSection="invoices" />} />
+          <Route path="/accounts-payable" element={<TenantReadyApplication view="supplierPayments" supplierSection="aging" />} />
+          <Route path="/supplier-statements" element={<TenantReadyApplication view="supplierPayments" supplierSection="aging" />} />
+          <Route path="/supplier-payments" element={<TenantReadyApplication view="supplierPayments" supplierSection="payments" />} />
           <Route path="/subcontractor-advances" element={<TenantReadyApplication view="subcontractorAdvances" />} />
           <Route path="/subcontractor-certificates" element={<TenantReadyApplication view="subcontractorCertificates" />} />
           <Route path="/subcontractor-payments" element={<TenantReadyApplication view="subcontractorPayments" />} />

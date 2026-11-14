@@ -1,0 +1,103 @@
+{
+  "status": "PASS",
+  "checks": [
+    "en sidebar links /supplier-invoices",
+    "en /supplier-invoices renders existing workflow instead of generic fallback",
+    "en sidebar links /accounts-payable",
+    "en /accounts-payable renders existing workflow instead of generic fallback",
+    "en sidebar links /supplier-statements",
+    "en /supplier-statements renders existing workflow instead of generic fallback",
+    "en sidebar links /supplier-payments",
+    "en /supplier-payments renders existing workflow instead of generic fallback",
+    "en invoice entry opens existing canonical form",
+    "ar sidebar links /supplier-invoices",
+    "ar /supplier-invoices renders existing workflow instead of generic fallback",
+    "ar sidebar links /accounts-payable",
+    "ar /accounts-payable renders existing workflow instead of generic fallback",
+    "ar sidebar links /supplier-statements",
+    "ar /supplier-statements renders existing workflow instead of generic fallback",
+    "ar sidebar links /supplier-payments",
+    "ar /supplier-payments renders existing workflow instead of generic fallback",
+    "ar invoice entry opens existing canonical form",
+    "Accounting Admin retains all four Supplier routes",
+    "Accounting Admin retains canonical invoice entry",
+    "Management Viewer retains Supplier read navigation",
+    "Management Viewer has no invoice creation action",
+    "Non-accounting role gets no Supplier financial navigation",
+    "Non-accounting direct route invokes no Supplier accounting read",
+    "Navigation invokes only existing read RPCs; zero financial commands",
+    "No route or workspace browser runtime errors"
+  ],
+  "errors": [],
+  "hostedRequests": 0,
+  "financialCommands": 0,
+  "scope": "Actual ProtectedApplication routes, CompanyWorkspaceShell/sidebar, TenantReadyApplication and SupplierAccountsWorkspace; synthetic read transport only",
+  "milestone": "ACW-01 Production navigation correction",
+  "date": "2026-11-14",
+  "base_release": "269b4f9a628ee3ded238da6cf50e4622ac2d3592",
+  "release_status": "PREPARED_LOCAL_NOT_PUSHED_NOT_DEPLOYED",
+  "diagnosis": {
+    "confirmed": "/supplier-invoices was absent from actual route registration and reached the generic deferred placeholder; navigation exposed only a combined purchase/payment entry.",
+    "not_established": "No failure of an authenticated Supplier read or accountant permission was observed. User confirms legacy page displayed no warning. Do not attribute it to RLS or a failed reader.",
+    "production_bundle": "Public Production JS contains ACW-01 workspace and canonical /supplier-payments wiring. Source-only legacy screen without wrapper/warning was not reproduced in an attached authenticated browser.",
+    "hosted_compatibility": "Read-only CLI history confirms all94 aligned; installed read_supplier_accounts body exactly matches94; authenticated EXECUTE present and anonymous execution denied. No user-role impersonation performed in this investigation."
+  },
+  "routes": {
+    "/supplier-invoices": "Existing Supplier workspace, Invoices tab",
+    "/accounts-payable": "Existing Supplier workspace, Aging & statement tab",
+    "/supplier-statements": "Existing Supplier workspace, Aging & statement tab; select Supplier for exports/full GL link",
+    "/supplier-payments": "Existing Supplier workspace, Payments tab"
+  },
+  "authorization": {
+    "navigation_read": [
+      "ACCOUNTING_ADMIN",
+      "ACCOUNTANT",
+      "MANAGEMENT_VIEWER"
+    ],
+    "invoice_entry": [
+      "ACCOUNTING_ADMIN",
+      "ACCOUNTANT"
+    ],
+    "database_RLS_RPC_and_Auth_changes": false,
+    "real_user_JWT_impersonation": false
+  },
+  "preservation": {
+    "status": "PASS",
+    "canonical_form_command_block_sha256": "50c0b9397300f5e06b476571995ec3ca9dd4159ad59a1955ad1beac609543322",
+    "Auth_repositories_and_migrations_unchanged": true
+  },
+  "quality": {
+    "focused_browser_checks": 26,
+    "typescript": "PASS via npm run build",
+    "production_build": "PASS",
+    "scoped_lint_errors": 0,
+    "scoped_lint_advisories": 2,
+    "lint_advisory_scope": "Existing async-load state effect and new route-section synchronization effect; no permission/calculation changes",
+    "existing_bundle_size_advisory": true,
+    "git_diff_check": "PASS",
+    "screenshots_inspected": [
+      "navigation-en.png",
+      "navigation-ar.png"
+    ],
+    "focused_secret_scan": "PASS"
+  },
+  "migration": {
+    "latest_applied": 94,
+    "new_migration_required": false,
+    "migration_applied_by_this_fix": false,
+    "history_evidence": "CLI read-only migration list and function-catalog inspection from preceding focused investigation; activation evidence separately preserved."
+  },
+  "limitations": [
+    "Actual authenticated Production browser session was not attached. User-reported legacy-only screen cause remains unverified.",
+    "New navigation must be published by operator, then checked in a refreshed Production tab.",
+    "AP and Supplier statements reuse existing aging/statement component and Supplier selection; no new report/accounting module."
+  ],
+  "lifecycle": {
+    "presentation_routes_role_visibility": "VERIFIED_LOCAL_BROWSER",
+    "accounting_and_authorization_preservation": "VERIFIED_UNCHANGED_COMMANDS_REPOSITORIES_AUTH_AND_MIGRATIONS",
+    "database_changes": "NOT_APPLICABLE",
+    "hosted_business_mutations": "NOT_APPLICABLE_ZERO",
+    "release_documentation": "VERIFIED_AT_PACKAGING",
+    "publication_and_Production_UI_acceptance": "DEFERRED"
+  }
+}
