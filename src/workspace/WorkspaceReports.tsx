@@ -9,6 +9,8 @@ import {useAuth} from '../auth/AuthContext';
 import {useI18n} from '../i18n/I18nContext';
 import {ReportExport} from '../reports/ReportExport';
 import {postedJournalReport} from '../reports/postedJournalReport';
+import {AccountingPeriodsWorkspace} from '../reports/AccountingPeriodsWorkspace';
+import {FinancialStatementsWorkspace} from '../reports/FinancialStatementsWorkspace';
 import {postedExpenseReport} from '../reports/postedExpenseReport';
 import {isAccountingReader} from './workspaceNavigation';
 import {useWorkspaceText} from './useWorkspaceText';
@@ -20,5 +22,5 @@ export function WorkspaceReports(){const {state}=useAuth(),{locale}=useI18n(),t=
   const status=query.get('status')??'ALL',safeStatus=['ALL','POSTED','DRAFT','CLASSIFIED_UNPOSTED','UNCLASSIFIED','NEEDS_REVIEW','POSSIBLE_DUPLICATE'].includes(status)?status:'ALL';
   return <section><Link className="cycle-report-link" to="/accounting-reports">{locale==='ar'?'كل التقارير':'All reports'}</Link><AccountingPeriodReport key={companyId+state.activeTenant.role+query.toString()} user={state.profile.userId} company={companyId} companyName={companyName} role={state.activeTenant.role} locale={locale} revision={0} projects={master.projects} initialMonth={month} initialFilters={{domain:query.get('domain')==='SOURCES'?'SOURCES':'JOURNALS',status:safeStatus,search:(query.get('search')??'').slice(0,100),unknown:query.get('unknown')==='true'}}/></section>;
  }
- return <section><Link className="cycle-report-link" to="/accounting-reports?view=transactions">{locale==='ar'?'كل المعاملات والتقارير الشهرية':'All transactions & monthly reports'}</Link><p className="suite-scope-note">{t('reportsIntro')}</p><div className="workspace-report-grid"><article><h2>{t('postedExport')}</h2><p>{t('exportScope')}</p><ReportExport build={()=>postedJournalReport(companyId,companyName,locale)}/></article><article><h2>{t('expenseExport')}</h2><p>{t('exportScope')}</p><ReportExport build={()=>postedExpenseReport(companyId,companyName,locale)}/></article></div><CustodyReconciliation/><PartyStatement/><ProjectCostLedger/><p className="workspace-guidance">{t('statementGap')}</p></section>;
+ return <section><Link className="cycle-report-link" to="/accounting-reports?view=transactions">{locale==='ar'?'كل المعاملات والتقارير الشهرية':'All transactions & monthly reports'}</Link><p className="suite-scope-note">{t('reportsIntro')}</p><div className="workspace-report-grid"><article><h2>{t('postedExport')}</h2><p>{t('exportScope')}</p><ReportExport build={()=>postedJournalReport(companyId,companyName,locale)}/></article><article><h2>{t('expenseExport')}</h2><p>{t('exportScope')}</p><ReportExport build={()=>postedExpenseReport(companyId,companyName,locale)}/></article></div><AccountingPeriodsWorkspace/><FinancialStatementsWorkspace/><CustodyReconciliation/><PartyStatement/><ProjectCostLedger/><p className="workspace-guidance">{t('statementGap')}</p></section>;
 }

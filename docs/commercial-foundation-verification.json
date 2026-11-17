@@ -1,0 +1,3296 @@
+{
+  "date": "2026-11-18",
+  "status": "LOCAL_FOUNDATION_VERIFIED_PROGRAM_PARTIAL",
+  "readiness": "NOT COMMERCIALLY READY",
+  "publicationBaseline": {
+    "sha": "dc430087c9d2c585ab17cb031a0100c2b95a1c91",
+    "githubMain": "VERIFIED by git ls-remote",
+    "production": "VERIFIED GitHub Production deployment status success, created 2026-11-17T19:19:02Z",
+    "deploymentUrl": "https://maker-bzw9tv5t0-n7rawy1984-8059s-projects.vercel.app",
+    "runtimeAcceptance": "Not repeated; deployment metadata does not imply new end-user acceptance",
+    "migration": "Local canonical history ends at 94; prior hosted 94 activation evidence reused, not freshly queried"
+  },
+  "checks": 142,
+  "checksMeaning": "Focused assertions, not this many independent economic scenarios. Actual supported-cycle economic scenarios:24; journals:26; reversals:1. Earlier ACW-02 and ACW-01 suites reused, not repeated.",
+  "results": {
+    "foundation-results": {
+      "status": "PARTIAL_PROGRAM",
+      "milestone": "Financial statement foundation and canonical multi-module simulation",
+      "environment": "Disposable in-process PGlite PostgreSQL, no network/hosted credentials",
+      "company": {
+        "id": "35866f1d-2888-40f2-9690-015802ec13a8",
+        "name": "NARVO DEMO — Trading & Contracting LLC",
+        "bootstrap": "Synthetic fixture bootstrap; not a Company-onboarding acceptance test"
+      },
+      "period": {
+        "from": "2026-10-01",
+        "through": "2026-11-17"
+      },
+      "checks": [
+        "OPEN canonical journal matches independently declared debits/credits",
+        "Opening Trial Balance and Balance Sheet reconcile to independent capital",
+        "FUND canonical journal matches independently declared debits/credits",
+        "CASH canonical journal matches independently declared debits/credits",
+        "BILL1 canonical journal matches independently declared debits/credits",
+        "BILL2 canonical journal matches independently declared debits/credits",
+        "Duplicate invoice rejects atomically without financial effects",
+        "Unsupported input VAT claim rejects atomically without financial effects",
+        "PARTIAL canonical journal matches independently declared debits/credits",
+        "MULTI canonical journal matches independently declared debits/credits",
+        "FINAL canonical journal matches independently declared debits/credits",
+        "Supplier overpayment rejects atomically without financial effects",
+        "ADV canonical journal matches independently declared debits/credits",
+        "BILL3 canonical journal matches independently declared debits/credits",
+        "APPLY canonical journal matches independently declared debits/credits",
+        "CREDIT canonical journal matches independently declared debits/credits",
+        "STOCK canonical journal matches independently declared debits/credits",
+        "STOCKBILL canonical journal matches independently declared debits/credits",
+        "ISSUE canonical journal matches independently declared debits/credits",
+        "CONTRACTADV canonical journal matches independently declared debits/credits",
+        "CERT canonical journal matches independently declared debits/credits",
+        "CONTRACTPAY canonical journal matches independently declared debits/credits",
+        "PROJECT canonical journal matches independently declared debits/credits",
+        "RETURN canonical journal matches independently declared debits/credits",
+        "EMPADV canonical journal matches independently declared debits/credits",
+        "PAYROLL canonical journal matches independently declared debits/credits",
+        "SALARY canonical journal matches independently declared debits/credits",
+        "REVERSE canonical journal matches independently declared debits/credits",
+        "Already reversed event rejects atomically without financial effects",
+        "Management Viewer posting rejects atomically without financial effects",
+        "Cross-company posting rejects atomically without financial effects",
+        "Immutable journal direct write rejects atomically without financial effects",
+        "Entire ending ledger reconciles to predeclared independent scenario oracle",
+        "Independent P&L loss AED7250 and Balance Sheet equation reconcile",
+        "Supplier outstanding AED1300 equals AP GL control",
+        "Remaining 80 units value AED800 equals independent valuation",
+        "Custody AED8700 excludes reversed expense and includes one return",
+        "Contract advance AED400, payable AED1000 and retention AED200 remain distinct",
+        "Employee advance AED100 and salary liability AED400 reconcile without reducing earned payroll cost",
+        "en report includes all account rows, zero accounts and totals",
+        "ar report includes all account rows, zero accounts and totals",
+        "Restricted Payroll visibility cannot return a falsely complete Company statement",
+        "Foreign Company report is denied before financial reads",
+        "Wrong actor session cannot read statements",
+        "Period income zero does not erase prior balances or cumulative unclosed loss",
+        "Incomplete or unbalanced ledger fails closed rather than inventing balances",
+        "Impossible calendar date rejected without timezone conversion",
+        "All report reads, failed actions and exports preserve posted financial history",
+        "24 unique economic scenarios produced 26 canonical journals; stock invoice and Payroll recovery each have an atomic journal pair"
+      ],
+      "scenarios": [
+        {
+          "id": "OPEN",
+          "description": "Certified bank/capital opening",
+          "date": "2026-10-01",
+          "expected": [
+            {
+              "account": "BANK",
+              "debit": "10000000",
+              "credit": "0"
+            },
+            {
+              "account": "EQUITY",
+              "debit": "0",
+              "credit": "10000000"
+            }
+          ],
+          "receipt": {
+            "id": "6717b264-0344-4b02-bfcc-ac9d28bd0c37",
+            "journal": "3f7edc03-0208-4319-9fdd-2bcc6a1e15aa",
+            "replayed": false
+          },
+          "actual": [
+            {
+              "id": "3f7edc03-0208-4319-9fdd-2bcc6a1e15aa",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000001",
+              "posting_date": "2026-10-01",
+              "account_id": "27c4f388-7040-4a06-9899-d3584e5579b4",
+              "party_id": null,
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "0",
+              "credit_minor": "10000000"
+            },
+            {
+              "id": "3f7edc03-0208-4319-9fdd-2bcc6a1e15aa",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000001",
+              "posting_date": "2026-10-01",
+              "account_id": "62735a71-2493-4a9c-8f1b-09d95dcd7081",
+              "party_id": null,
+              "project_id": null,
+              "treasury_account_id": "0cfc9480-e748-457a-a78f-48f2f8b4928a",
+              "subcontract_id": null,
+              "debit_minor": "10000000",
+              "credit_minor": "0"
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "id": "FUND",
+          "description": "Bank to Custody advance",
+          "date": "2026-11-17",
+          "expected": [
+            {
+              "account": "CUSTODY_ADVANCE",
+              "debit": "1000000",
+              "credit": "0"
+            },
+            {
+              "account": "BANK",
+              "debit": "0",
+              "credit": "1000000"
+            }
+          ],
+          "receipt": [
+            {
+              "custody_advance_id": "b9dd1a7e-2abb-48a8-b7fd-66f8f2914734",
+              "advance_reference": "NARVO-DEMO-COMMERCIAL-CADV-2026-000001",
+              "journal_entry_id": "5465937c-2d1c-4484-835f-97ea6420e8f5",
+              "replayed": false
+            }
+          ],
+          "actual": [
+            {
+              "id": "5465937c-2d1c-4484-835f-97ea6420e8f5",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000002",
+              "posting_date": "2026-11-17",
+              "account_id": "bb99908d-15ec-48e2-9159-807c857a4a97",
+              "party_id": "04893a34-7adc-4e1e-9ef4-409868ff4a84",
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "1000000",
+              "credit_minor": "0"
+            },
+            {
+              "id": "5465937c-2d1c-4484-835f-97ea6420e8f5",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000002",
+              "posting_date": "2026-11-17",
+              "account_id": "62735a71-2493-4a9c-8f1b-09d95dcd7081",
+              "party_id": null,
+              "project_id": null,
+              "treasury_account_id": "0cfc9480-e748-457a-a78f-48f2f8b4928a",
+              "subcontract_id": null,
+              "debit_minor": "0",
+              "credit_minor": "1000000"
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "id": "CASH",
+          "description": "Immediate supplies purchase, fictional 5% recoverable VAT",
+          "date": "2026-11-17",
+          "expected": [
+            {
+              "account": "COMPANY_EXPENSE",
+              "debit": "10000",
+              "credit": "0"
+            },
+            {
+              "account": "INPUT_VAT",
+              "debit": "500",
+              "credit": "0"
+            },
+            {
+              "account": "CUSTODY_ADVANCE",
+              "debit": "0",
+              "credit": "10500"
+            }
+          ],
+          "receipt": [
+            {
+              "expense_id": "fb5fc02a-0bc1-4a5a-b1bd-3031880ccccd",
+              "expense_reference": "NARVO-DEMO-COMMERCIAL-EXP-2026-000001",
+              "journal_entry_id": "d7d39386-b7bc-40b5-81b1-a1f335063eb8",
+              "replayed": false
+            }
+          ],
+          "actual": [
+            {
+              "id": "d7d39386-b7bc-40b5-81b1-a1f335063eb8",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000003",
+              "posting_date": "2026-11-17",
+              "account_id": "3912b218-564f-45bf-acb2-e6fe7163628c",
+              "party_id": null,
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "10000",
+              "credit_minor": "0"
+            },
+            {
+              "id": "d7d39386-b7bc-40b5-81b1-a1f335063eb8",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000003",
+              "posting_date": "2026-11-17",
+              "account_id": "040fcf58-13ea-48b9-b537-b864da4ab51e",
+              "party_id": null,
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "500",
+              "credit_minor": "0"
+            },
+            {
+              "id": "d7d39386-b7bc-40b5-81b1-a1f335063eb8",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000003",
+              "posting_date": "2026-11-17",
+              "account_id": "bb99908d-15ec-48e2-9159-807c857a4a97",
+              "party_id": "04893a34-7adc-4e1e-9ef4-409868ff4a84",
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "0",
+              "credit_minor": "10500"
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "id": "BILL1",
+          "description": "Credit service purchase with supported fictional VAT",
+          "date": "2026-11-17",
+          "expected": [
+            {
+              "account": "COMPANY_EXPENSE",
+              "debit": "100000",
+              "credit": "0"
+            },
+            {
+              "account": "INPUT_VAT",
+              "debit": "5000",
+              "credit": "0"
+            },
+            {
+              "account": "SUPPLIER_PAYABLE",
+              "debit": "0",
+              "credit": "105000"
+            }
+          ],
+          "receipt": {
+            "id": "faccad1a-7eab-45ef-ba5f-d654845983d3",
+            "journal": "4682af9e-d06b-4d79-9299-0b5c25914d77",
+            "replayed": false,
+            "reference": "NARVO-DEMO-COMMERCIAL-EXP-2026-000002",
+            "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+            "inventory_document": null
+          },
+          "actual": [
+            {
+              "id": "4682af9e-d06b-4d79-9299-0b5c25914d77",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000004",
+              "posting_date": "2026-11-17",
+              "account_id": "3912b218-564f-45bf-acb2-e6fe7163628c",
+              "party_id": null,
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "100000",
+              "credit_minor": "0"
+            },
+            {
+              "id": "4682af9e-d06b-4d79-9299-0b5c25914d77",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000004",
+              "posting_date": "2026-11-17",
+              "account_id": "040fcf58-13ea-48b9-b537-b864da4ab51e",
+              "party_id": null,
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "5000",
+              "credit_minor": "0"
+            },
+            {
+              "id": "4682af9e-d06b-4d79-9299-0b5c25914d77",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000004",
+              "posting_date": "2026-11-17",
+              "account_id": "fa8753bc-821f-4830-b2cc-dbb44165dd2d",
+              "party_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "0",
+              "credit_minor": "105000"
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "id": "BILL2",
+          "description": "Credit service purchase without recoverable VAT",
+          "date": "2026-11-17",
+          "expected": [
+            {
+              "account": "COMPANY_EXPENSE",
+              "debit": "50000",
+              "credit": "0"
+            },
+            {
+              "account": "SUPPLIER_PAYABLE",
+              "debit": "0",
+              "credit": "50000"
+            }
+          ],
+          "receipt": {
+            "id": "e274eee1-3eaa-41ac-8569-40f568c5a521",
+            "journal": "82bf1d1f-af81-4e9c-b415-ab2dd26758b2",
+            "replayed": false,
+            "reference": "NARVO-DEMO-COMMERCIAL-EXP-2026-000003",
+            "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+            "inventory_document": null
+          },
+          "actual": [
+            {
+              "id": "82bf1d1f-af81-4e9c-b415-ab2dd26758b2",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000005",
+              "posting_date": "2026-11-17",
+              "account_id": "3912b218-564f-45bf-acb2-e6fe7163628c",
+              "party_id": null,
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "50000",
+              "credit_minor": "0"
+            },
+            {
+              "id": "82bf1d1f-af81-4e9c-b415-ab2dd26758b2",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000005",
+              "posting_date": "2026-11-17",
+              "account_id": "fa8753bc-821f-4830-b2cc-dbb44165dd2d",
+              "party_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "0",
+              "credit_minor": "50000"
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "id": "PARTIAL",
+          "description": "Partial Supplier payment",
+          "date": "2026-11-17",
+          "expected": [
+            {
+              "account": "SUPPLIER_PAYABLE",
+              "debit": "40000",
+              "credit": "0"
+            },
+            {
+              "account": "BANK",
+              "debit": "0",
+              "credit": "40000"
+            }
+          ],
+          "receipt": [
+            {
+              "supplier_payment_id": "365a0531-072e-4398-94fc-f8e376ef043a",
+              "payment_reference": "NARVO-DEMO-COMMERCIAL-SPAY-2026-000001",
+              "journal_entry_id": "29c30720-b4fd-4f73-a2e2-a744d57ed74e",
+              "replayed": false
+            }
+          ],
+          "actual": [
+            {
+              "id": "29c30720-b4fd-4f73-a2e2-a744d57ed74e",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000006",
+              "posting_date": "2026-11-17",
+              "account_id": "fa8753bc-821f-4830-b2cc-dbb44165dd2d",
+              "party_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "40000",
+              "credit_minor": "0"
+            },
+            {
+              "id": "29c30720-b4fd-4f73-a2e2-a744d57ed74e",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000006",
+              "posting_date": "2026-11-17",
+              "account_id": "62735a71-2493-4a9c-8f1b-09d95dcd7081",
+              "party_id": null,
+              "project_id": null,
+              "treasury_account_id": "0cfc9480-e748-457a-a78f-48f2f8b4928a",
+              "subcontract_id": null,
+              "debit_minor": "0",
+              "credit_minor": "40000"
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "id": "MULTI",
+          "description": "One payment across two invoices",
+          "date": "2026-11-17",
+          "expected": [
+            {
+              "account": "SUPPLIER_PAYABLE",
+              "debit": "80000",
+              "credit": "0"
+            },
+            {
+              "account": "BANK",
+              "debit": "0",
+              "credit": "80000"
+            }
+          ],
+          "receipt": [
+            {
+              "supplier_payment_id": "b8bb8b99-2bf0-4980-8edb-3f98aba3dbb5",
+              "payment_reference": "NARVO-DEMO-COMMERCIAL-SPAY-2026-000002",
+              "journal_entry_id": "fa9984e0-179b-490c-b06f-9a9b9d225d6c",
+              "replayed": false
+            }
+          ],
+          "actual": [
+            {
+              "id": "fa9984e0-179b-490c-b06f-9a9b9d225d6c",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000007",
+              "posting_date": "2026-11-17",
+              "account_id": "fa8753bc-821f-4830-b2cc-dbb44165dd2d",
+              "party_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "80000",
+              "credit_minor": "0"
+            },
+            {
+              "id": "fa9984e0-179b-490c-b06f-9a9b9d225d6c",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000007",
+              "posting_date": "2026-11-17",
+              "account_id": "62735a71-2493-4a9c-8f1b-09d95dcd7081",
+              "party_id": null,
+              "project_id": null,
+              "treasury_account_id": "0cfc9480-e748-457a-a78f-48f2f8b4928a",
+              "subcontract_id": null,
+              "debit_minor": "0",
+              "credit_minor": "80000"
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "id": "FINAL",
+          "description": "Final Supplier settlement",
+          "date": "2026-11-17",
+          "expected": [
+            {
+              "account": "SUPPLIER_PAYABLE",
+              "debit": "35000",
+              "credit": "0"
+            },
+            {
+              "account": "BANK",
+              "debit": "0",
+              "credit": "35000"
+            }
+          ],
+          "receipt": [
+            {
+              "supplier_payment_id": "9a0ecf49-9ffa-4722-ac00-f9091ee5f4bb",
+              "payment_reference": "NARVO-DEMO-COMMERCIAL-SPAY-2026-000003",
+              "journal_entry_id": "e272462d-1b2c-4033-9d55-56184f7579af",
+              "replayed": false
+            }
+          ],
+          "actual": [
+            {
+              "id": "e272462d-1b2c-4033-9d55-56184f7579af",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000008",
+              "posting_date": "2026-11-17",
+              "account_id": "fa8753bc-821f-4830-b2cc-dbb44165dd2d",
+              "party_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "35000",
+              "credit_minor": "0"
+            },
+            {
+              "id": "e272462d-1b2c-4033-9d55-56184f7579af",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000008",
+              "posting_date": "2026-11-17",
+              "account_id": "62735a71-2493-4a9c-8f1b-09d95dcd7081",
+              "party_id": null,
+              "project_id": null,
+              "treasury_account_id": "0cfc9480-e748-457a-a78f-48f2f8b4928a",
+              "subcontract_id": null,
+              "debit_minor": "0",
+              "credit_minor": "35000"
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "id": "ADV",
+          "description": "Supplier advance from Custody",
+          "date": "2026-11-17",
+          "expected": [
+            {
+              "account": "SUPPLIER_ADVANCE",
+              "debit": "20000",
+              "credit": "0"
+            },
+            {
+              "account": "CUSTODY_ADVANCE",
+              "debit": "0",
+              "credit": "20000"
+            }
+          ],
+          "receipt": {
+            "id": "5807720e-13ab-4829-bed3-81effc5ce35f",
+            "journal": "aa6bd2ea-9814-48e8-bdce-9dee4355f4f2",
+            "replayed": false,
+            "reference": "NARVO-DEMO-COMMERCIAL-SAP-2026-000001",
+            "company_id": "35866f1d-2888-40f2-9690-015802ec13a8"
+          },
+          "actual": [
+            {
+              "id": "aa6bd2ea-9814-48e8-bdce-9dee4355f4f2",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000009",
+              "posting_date": "2026-11-17",
+              "account_id": "c4346feb-9798-4112-8d31-072f3135a59b",
+              "party_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "20000",
+              "credit_minor": "0"
+            },
+            {
+              "id": "aa6bd2ea-9814-48e8-bdce-9dee4355f4f2",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000009",
+              "posting_date": "2026-11-17",
+              "account_id": "bb99908d-15ec-48e2-9159-807c857a4a97",
+              "party_id": "04893a34-7adc-4e1e-9ef4-409868ff4a84",
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "0",
+              "credit_minor": "20000"
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "id": "BILL3",
+          "description": "Third credit service invoice",
+          "date": "2026-11-17",
+          "expected": [
+            {
+              "account": "COMPANY_EXPENSE",
+              "debit": "50000",
+              "credit": "0"
+            },
+            {
+              "account": "SUPPLIER_PAYABLE",
+              "debit": "0",
+              "credit": "50000"
+            }
+          ],
+          "receipt": {
+            "id": "b398cd51-f016-4989-8e44-2b9a2b21cea1",
+            "journal": "0503f70d-2a16-4a76-bc62-d8c23d9967e9",
+            "replayed": false,
+            "reference": "NARVO-DEMO-COMMERCIAL-EXP-2026-000004",
+            "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+            "inventory_document": null
+          },
+          "actual": [
+            {
+              "id": "0503f70d-2a16-4a76-bc62-d8c23d9967e9",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000010",
+              "posting_date": "2026-11-17",
+              "account_id": "3912b218-564f-45bf-acb2-e6fe7163628c",
+              "party_id": null,
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "50000",
+              "credit_minor": "0"
+            },
+            {
+              "id": "0503f70d-2a16-4a76-bc62-d8c23d9967e9",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000010",
+              "posting_date": "2026-11-17",
+              "account_id": "fa8753bc-821f-4830-b2cc-dbb44165dd2d",
+              "party_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "0",
+              "credit_minor": "50000"
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "id": "APPLY",
+          "description": "Apply Supplier advance without another payment",
+          "date": "2026-11-17",
+          "expected": [
+            {
+              "account": "SUPPLIER_PAYABLE",
+              "debit": "20000",
+              "credit": "0"
+            },
+            {
+              "account": "SUPPLIER_ADVANCE",
+              "debit": "0",
+              "credit": "20000"
+            }
+          ],
+          "receipt": {
+            "id": "f3c5654c-f6d0-42a3-b8d8-0dd1f46646af",
+            "journal": "24a2655e-9cf0-421a-b746-456bdbffb107",
+            "replayed": false,
+            "reference": "NARVO-DEMO-COMMERCIAL-SAP-2026-000002",
+            "company_id": "35866f1d-2888-40f2-9690-015802ec13a8"
+          },
+          "actual": [
+            {
+              "id": "24a2655e-9cf0-421a-b746-456bdbffb107",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000011",
+              "posting_date": "2026-11-17",
+              "account_id": "fa8753bc-821f-4830-b2cc-dbb44165dd2d",
+              "party_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "20000",
+              "credit_minor": "0"
+            },
+            {
+              "id": "24a2655e-9cf0-421a-b746-456bdbffb107",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000011",
+              "posting_date": "2026-11-17",
+              "account_id": "c4346feb-9798-4112-8d31-072f3135a59b",
+              "party_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "0",
+              "credit_minor": "20000"
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "id": "CREDIT",
+          "description": "Service credit note",
+          "date": "2026-11-17",
+          "expected": [
+            {
+              "account": "SUPPLIER_PAYABLE",
+              "debit": "5000",
+              "credit": "0"
+            },
+            {
+              "account": "COMPANY_EXPENSE",
+              "debit": "0",
+              "credit": "5000"
+            }
+          ],
+          "receipt": {
+            "id": "0d01e846-58ad-4f76-a8b9-8bef36ddbf48",
+            "journal": "72c1a1a6-3c13-473d-8820-23ede111142d",
+            "replayed": false,
+            "reference": "NARVO-DEMO-COMMERCIAL-SAP-2026-000003",
+            "company_id": "35866f1d-2888-40f2-9690-015802ec13a8"
+          },
+          "actual": [
+            {
+              "id": "72c1a1a6-3c13-473d-8820-23ede111142d",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000012",
+              "posting_date": "2026-11-17",
+              "account_id": "fa8753bc-821f-4830-b2cc-dbb44165dd2d",
+              "party_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "5000",
+              "credit_minor": "0"
+            },
+            {
+              "id": "72c1a1a6-3c13-473d-8820-23ede111142d",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000012",
+              "posting_date": "2026-11-17",
+              "account_id": "3912b218-564f-45bf-acb2-e6fe7163628c",
+              "party_id": null,
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "0",
+              "credit_minor": "5000"
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "id": "STOCK",
+          "description": "Physical receipt against GRNI",
+          "date": "2026-11-17",
+          "expected": [
+            {
+              "account": "INVENTORY",
+              "debit": "100000",
+              "credit": "0"
+            },
+            {
+              "account": "GRNI",
+              "debit": "0",
+              "credit": "100000"
+            }
+          ],
+          "receipt": {
+            "id": "23d0d7cb-8ed7-415a-9911-9a16507e7433",
+            "state": "POSTED",
+            "action": "POST",
+            "version": 3,
+            "replayed": false,
+            "snapshot": {
+              "date": "2026-11-17",
+              "kind": "RECEIPT",
+              "unit": "UNIT",
+              "computed": {
+                "qty": "100000000",
+                "cost": null,
+                "value": "100000",
+                "balance": {
+                  "qty": "0",
+                  "value": "0",
+                  "revision": 0,
+                  "last_date": null
+                },
+                "project": null,
+                "cost_project": null,
+                "location_version": 1,
+                "material_version": 1,
+                "destination_balance": null,
+                "destination_version": null
+              },
+              "evidence": "Fictional 100 units received at AED10 each",
+              "qty_micros": "100000000",
+              "location_id": "d17dcb13-5de8-41c2-a520-c8ed3285455f",
+              "material_id": "9f008339-a007-4fb1-a541-454ba05721e5",
+              "recognition": "GRNI",
+              "supplier_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+              "value_minor": "100000",
+              "source_reference": "DEMO-RECEIPT",
+              "not_previously_recognized": true
+            },
+            "reference": "NARVO-DEMO-COMMERCIAL-INV-2026-000001",
+            "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+            "created_at": "2026-11-17T19:55:25.808+00:00",
+            "created_by": "ed030005-0000-4000-8000-000000000001",
+            "journal_id": "da59418a-28c9-4749-9646-16077ec5a8ab",
+            "request_id": "c29772c8-e270-4b7f-a992-fc635ce16d9b",
+            "document_id": "77f11312-ed69-4984-8478-51a649b5e14c",
+            "request_hash": "89d46ca353acb21b468730d50ebd44280d39d293716f7599c9195c66d7f0016d"
+          },
+          "actual": [
+            {
+              "id": "da59418a-28c9-4749-9646-16077ec5a8ab",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000013",
+              "posting_date": "2026-11-17",
+              "account_id": "98c5c01a-2ac5-44e5-98c4-6983a56225fb",
+              "party_id": null,
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "100000",
+              "credit_minor": "0"
+            },
+            {
+              "id": "da59418a-28c9-4749-9646-16077ec5a8ab",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000013",
+              "posting_date": "2026-11-17",
+              "account_id": "f07aa589-addc-434a-af27-3a880474c8e3",
+              "party_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "0",
+              "credit_minor": "100000"
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "id": "STOCKBILL",
+          "description": "Credit invoice matched to receipt with fictional VAT",
+          "date": "2026-11-17",
+          "expected": [
+            {
+              "account": "COMPANY_EXPENSE",
+              "debit": "100000",
+              "credit": "0"
+            },
+            {
+              "account": "INPUT_VAT",
+              "debit": "5000",
+              "credit": "0"
+            },
+            {
+              "account": "SUPPLIER_PAYABLE",
+              "debit": "0",
+              "credit": "105000"
+            },
+            {
+              "account": "GRNI",
+              "debit": "100000",
+              "credit": "0"
+            },
+            {
+              "account": "COMPANY_EXPENSE",
+              "debit": "0",
+              "credit": "100000"
+            }
+          ],
+          "receipt": {
+            "id": "052b8973-31b2-41bd-b856-a126cbc8d307",
+            "journal": "80b1bb18-3335-4ab3-8741-27c3e3e18df7",
+            "replayed": false,
+            "reference": "NARVO-DEMO-COMMERCIAL-EXP-2026-000005",
+            "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+            "inventory_document": "8ea17bb2-b873-4a5c-b764-8c12d09bf016"
+          },
+          "actual": [
+            {
+              "id": "60145bd9-1ba6-4946-9ebc-692e0cfcec06",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000015",
+              "posting_date": "2026-11-17",
+              "account_id": "f07aa589-addc-434a-af27-3a880474c8e3",
+              "party_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "100000",
+              "credit_minor": "0"
+            },
+            {
+              "id": "60145bd9-1ba6-4946-9ebc-692e0cfcec06",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000015",
+              "posting_date": "2026-11-17",
+              "account_id": "3912b218-564f-45bf-acb2-e6fe7163628c",
+              "party_id": null,
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "0",
+              "credit_minor": "100000"
+            },
+            {
+              "id": "80b1bb18-3335-4ab3-8741-27c3e3e18df7",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000014",
+              "posting_date": "2026-11-17",
+              "account_id": "3912b218-564f-45bf-acb2-e6fe7163628c",
+              "party_id": null,
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "100000",
+              "credit_minor": "0"
+            },
+            {
+              "id": "80b1bb18-3335-4ab3-8741-27c3e3e18df7",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000014",
+              "posting_date": "2026-11-17",
+              "account_id": "040fcf58-13ea-48b9-b537-b864da4ab51e",
+              "party_id": null,
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "5000",
+              "credit_minor": "0"
+            },
+            {
+              "id": "80b1bb18-3335-4ab3-8741-27c3e3e18df7",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000014",
+              "posting_date": "2026-11-17",
+              "account_id": "fa8753bc-821f-4830-b2cc-dbb44165dd2d",
+              "party_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "0",
+              "credit_minor": "105000"
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "id": "ISSUE",
+          "description": "Project consumes 20 of 100 units at historical cost",
+          "date": "2026-11-17",
+          "expected": [
+            {
+              "account": "PROJECT_COST",
+              "debit": "20000",
+              "credit": "0"
+            },
+            {
+              "account": "INVENTORY",
+              "debit": "0",
+              "credit": "20000"
+            }
+          ],
+          "receipt": {
+            "id": "070524cd-f087-49dc-ad62-7fe4a9adcffb",
+            "state": "POSTED",
+            "action": "POST",
+            "version": 3,
+            "replayed": false,
+            "snapshot": {
+              "date": "2026-11-17",
+              "kind": "ISSUE",
+              "unit": "UNIT",
+              "computed": {
+                "qty": "20000000",
+                "cost": "a737d4ab-6b5c-4d4a-affd-c7d898b9f8ad",
+                "value": "20000",
+                "balance": {
+                  "qty": "100000000",
+                  "value": "100000",
+                  "revision": 1,
+                  "last_date": "2026-11-17"
+                },
+                "project": "91dd3ce1-9097-445c-8128-f58bc2586f11",
+                "cost_project": null,
+                "location_version": 1,
+                "material_version": 1,
+                "destination_balance": null,
+                "destination_version": null
+              },
+              "evidence": "Fictional 100 units received at AED10 each",
+              "project_id": "91dd3ce1-9097-445c-8128-f58bc2586f11",
+              "qty_micros": "20000000",
+              "location_id": "d17dcb13-5de8-41c2-a520-c8ed3285455f",
+              "material_id": "9f008339-a007-4fb1-a541-454ba05721e5",
+              "recognition": "GRNI",
+              "supplier_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+              "value_minor": "100000",
+              "recipient_id": "04893a34-7adc-4e1e-9ef4-409868ff4a84",
+              "source_reference": "DEMO-PROJECT-ISSUE",
+              "not_previously_recognized": true
+            },
+            "reference": "NARVO-DEMO-COMMERCIAL-INV-2026-000003",
+            "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+            "created_at": "2026-11-17T19:55:31.182+00:00",
+            "created_by": "ed030005-0000-4000-8000-000000000001",
+            "journal_id": "2565b8ce-f09e-4e4b-a746-03b593885d4d",
+            "request_id": "9d6e1a41-b28b-4fdd-aa49-5d0fccb8c5a4",
+            "document_id": "4ef536ba-9634-4e47-9fab-99be024b3a16",
+            "request_hash": "bf5b9ba603736c4790adac1407e3448e3c1ac8e8ec86aafc98e58b558880d1a8"
+          },
+          "actual": [
+            {
+              "id": "2565b8ce-f09e-4e4b-a746-03b593885d4d",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000016",
+              "posting_date": "2026-11-17",
+              "account_id": "a737d4ab-6b5c-4d4a-affd-c7d898b9f8ad",
+              "party_id": null,
+              "project_id": "91dd3ce1-9097-445c-8128-f58bc2586f11",
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "20000",
+              "credit_minor": "0"
+            },
+            {
+              "id": "2565b8ce-f09e-4e4b-a746-03b593885d4d",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000016",
+              "posting_date": "2026-11-17",
+              "account_id": "98c5c01a-2ac5-44e5-98c4-6983a56225fb",
+              "party_id": null,
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "0",
+              "credit_minor": "20000"
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "id": "CONTRACTADV",
+          "description": "Contract advance, no cost recognition",
+          "date": "2026-11-17",
+          "expected": [
+            {
+              "account": "SUBCONTRACTOR_ADVANCE",
+              "debit": "50000",
+              "credit": "0"
+            },
+            {
+              "account": "BANK",
+              "debit": "0",
+              "credit": "50000"
+            }
+          ],
+          "receipt": [
+            {
+              "subcontractor_advance_id": "07e7be14-1719-4b9e-b929-8036fe42bd55",
+              "advance_reference": "NARVO-DEMO-COMMERCIAL-SADV-2026-000001",
+              "journal_entry_id": "e7a1c70c-2587-44e7-9121-658d733e2c15",
+              "replayed": false
+            }
+          ],
+          "actual": [
+            {
+              "id": "e7a1c70c-2587-44e7-9121-658d733e2c15",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000017",
+              "posting_date": "2026-11-17",
+              "account_id": "9a05772b-df0f-40e3-b1cd-f3958fcbf912",
+              "party_id": "0cdc138b-4e3c-47ec-a72e-f88a584b50b5",
+              "project_id": "91dd3ce1-9097-445c-8128-f58bc2586f11",
+              "treasury_account_id": null,
+              "subcontract_id": "d12474bc-7962-448d-a449-f8ece3166c69",
+              "debit_minor": "50000",
+              "credit_minor": "0"
+            },
+            {
+              "id": "e7a1c70c-2587-44e7-9121-658d733e2c15",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000017",
+              "posting_date": "2026-11-17",
+              "account_id": "62735a71-2493-4a9c-8f1b-09d95dcd7081",
+              "party_id": null,
+              "project_id": "91dd3ce1-9097-445c-8128-f58bc2586f11",
+              "treasury_account_id": "0cfc9480-e748-457a-a78f-48f2f8b4928a",
+              "subcontract_id": "d12474bc-7962-448d-a449-f8ece3166c69",
+              "debit_minor": "0",
+              "credit_minor": "50000"
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "id": "CERT",
+          "description": "Certified cost with 10% retention and advance recovery",
+          "date": "2026-11-17",
+          "expected": [
+            {
+              "account": "PROJECT_COST_SUBCONTRACTORS",
+              "debit": "200000",
+              "credit": "0"
+            },
+            {
+              "account": "SUBCONTRACTOR_ADVANCE",
+              "debit": "0",
+              "credit": "10000"
+            },
+            {
+              "account": "SUBCONTRACTOR_RETENTION_PAYABLE",
+              "debit": "0",
+              "credit": "20000"
+            },
+            {
+              "account": "SUBCONTRACTOR_PAYABLE",
+              "debit": "0",
+              "credit": "170000"
+            }
+          ],
+          "receipt": [
+            {
+              "subcontractor_certificate_id": "d119bffb-9849-41ea-9f41-b26730b179a4",
+              "certificate_reference": "NARVO-DEMO-COMMERCIAL-SCERT-2026-000001",
+              "journal_entry_id": "de5310b5-451a-4232-b47b-53e1b2467d55",
+              "replayed": false
+            }
+          ],
+          "actual": [
+            {
+              "id": "de5310b5-451a-4232-b47b-53e1b2467d55",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000018",
+              "posting_date": "2026-11-17",
+              "account_id": "92cfe183-7760-4a28-babb-c125845abb87",
+              "party_id": "0cdc138b-4e3c-47ec-a72e-f88a584b50b5",
+              "project_id": "91dd3ce1-9097-445c-8128-f58bc2586f11",
+              "treasury_account_id": null,
+              "subcontract_id": "d12474bc-7962-448d-a449-f8ece3166c69",
+              "debit_minor": "200000",
+              "credit_minor": "0"
+            },
+            {
+              "id": "de5310b5-451a-4232-b47b-53e1b2467d55",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000018",
+              "posting_date": "2026-11-17",
+              "account_id": "686db60c-fee8-42ce-b900-401c3fdd50b6",
+              "party_id": "0cdc138b-4e3c-47ec-a72e-f88a584b50b5",
+              "project_id": "91dd3ce1-9097-445c-8128-f58bc2586f11",
+              "treasury_account_id": null,
+              "subcontract_id": "d12474bc-7962-448d-a449-f8ece3166c69",
+              "debit_minor": "0",
+              "credit_minor": "20000"
+            },
+            {
+              "id": "de5310b5-451a-4232-b47b-53e1b2467d55",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000018",
+              "posting_date": "2026-11-17",
+              "account_id": "9a05772b-df0f-40e3-b1cd-f3958fcbf912",
+              "party_id": "0cdc138b-4e3c-47ec-a72e-f88a584b50b5",
+              "project_id": "91dd3ce1-9097-445c-8128-f58bc2586f11",
+              "treasury_account_id": null,
+              "subcontract_id": "d12474bc-7962-448d-a449-f8ece3166c69",
+              "debit_minor": "0",
+              "credit_minor": "10000"
+            },
+            {
+              "id": "de5310b5-451a-4232-b47b-53e1b2467d55",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000018",
+              "posting_date": "2026-11-17",
+              "account_id": "435f5697-8e6e-4b7c-8104-98fd8ee4b343",
+              "party_id": "0cdc138b-4e3c-47ec-a72e-f88a584b50b5",
+              "project_id": "91dd3ce1-9097-445c-8128-f58bc2586f11",
+              "treasury_account_id": null,
+              "subcontract_id": "d12474bc-7962-448d-a449-f8ece3166c69",
+              "debit_minor": "0",
+              "credit_minor": "170000"
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "id": "CONTRACTPAY",
+          "description": "Partial certified Contractor settlement",
+          "date": "2026-11-17",
+          "expected": [
+            {
+              "account": "SUBCONTRACTOR_PAYABLE",
+              "debit": "70000",
+              "credit": "0"
+            },
+            {
+              "account": "BANK",
+              "debit": "0",
+              "credit": "70000"
+            }
+          ],
+          "receipt": [
+            {
+              "subcontractor_payment_id": "71e067d6-adb1-4ff5-8fc7-ed3096e69a4e",
+              "payment_reference": "NARVO-DEMO-COMMERCIAL-SCPAY-2026-000001",
+              "journal_entry_id": "c60ea8f3-4dc3-4211-8fd2-e522a680a1fa",
+              "replayed": false
+            }
+          ],
+          "actual": [
+            {
+              "id": "c60ea8f3-4dc3-4211-8fd2-e522a680a1fa",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000019",
+              "posting_date": "2026-11-17",
+              "account_id": "435f5697-8e6e-4b7c-8104-98fd8ee4b343",
+              "party_id": "0cdc138b-4e3c-47ec-a72e-f88a584b50b5",
+              "project_id": "91dd3ce1-9097-445c-8128-f58bc2586f11",
+              "treasury_account_id": null,
+              "subcontract_id": "d12474bc-7962-448d-a449-f8ece3166c69",
+              "debit_minor": "70000",
+              "credit_minor": "0"
+            },
+            {
+              "id": "c60ea8f3-4dc3-4211-8fd2-e522a680a1fa",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000019",
+              "posting_date": "2026-11-17",
+              "account_id": "62735a71-2493-4a9c-8f1b-09d95dcd7081",
+              "party_id": null,
+              "project_id": "91dd3ce1-9097-445c-8128-f58bc2586f11",
+              "treasury_account_id": "0cfc9480-e748-457a-a78f-48f2f8b4928a",
+              "subcontract_id": "d12474bc-7962-448d-a449-f8ece3166c69",
+              "debit_minor": "0",
+              "credit_minor": "70000"
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "id": "PROJECT",
+          "description": "Direct Custody-funded Project expense",
+          "date": "2026-11-17",
+          "expected": [
+            {
+              "account": "PROJECT_COST",
+              "debit": "10000",
+              "credit": "0"
+            },
+            {
+              "account": "CUSTODY_ADVANCE",
+              "debit": "0",
+              "credit": "10000"
+            }
+          ],
+          "receipt": [
+            {
+              "expense_id": "da2f78c6-e612-4069-9caa-178eb84e77a2",
+              "expense_reference": "NARVO-DEMO-COMMERCIAL-EXP-2026-000006",
+              "journal_entry_id": "6ee13c87-c274-4392-8049-f6c6ce4a29d2",
+              "replayed": false
+            }
+          ],
+          "actual": [
+            {
+              "id": "6ee13c87-c274-4392-8049-f6c6ce4a29d2",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000020",
+              "posting_date": "2026-11-17",
+              "account_id": "a737d4ab-6b5c-4d4a-affd-c7d898b9f8ad",
+              "party_id": null,
+              "project_id": "91dd3ce1-9097-445c-8128-f58bc2586f11",
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "10000",
+              "credit_minor": "0"
+            },
+            {
+              "id": "6ee13c87-c274-4392-8049-f6c6ce4a29d2",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000020",
+              "posting_date": "2026-11-17",
+              "account_id": "bb99908d-15ec-48e2-9159-807c857a4a97",
+              "party_id": "04893a34-7adc-4e1e-9ef4-409868ff4a84",
+              "project_id": "91dd3ce1-9097-445c-8128-f58bc2586f11",
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "0",
+              "credit_minor": "10000"
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "id": "RETURN",
+          "description": "Custody cash return without changing costs",
+          "date": "2026-11-17",
+          "expected": [
+            {
+              "account": "BANK",
+              "debit": "100000",
+              "credit": "0"
+            },
+            {
+              "account": "CUSTODY_ADVANCE",
+              "debit": "0",
+              "credit": "100000"
+            }
+          ],
+          "receipt": [
+            {
+              "custody_cash_return_id": "0f5ddf35-d61e-4b91-b5eb-91ff1be25691",
+              "return_reference": "NARVO-DEMO-COMMERCIAL-CRET-2026-000001",
+              "journal_entry_id": "3e073d2e-812f-4050-99a0-148553cbccac",
+              "replayed": false
+            }
+          ],
+          "actual": [
+            {
+              "id": "3e073d2e-812f-4050-99a0-148553cbccac",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000021",
+              "posting_date": "2026-11-17",
+              "account_id": "62735a71-2493-4a9c-8f1b-09d95dcd7081",
+              "party_id": null,
+              "project_id": null,
+              "treasury_account_id": "0cfc9480-e748-457a-a78f-48f2f8b4928a",
+              "subcontract_id": null,
+              "debit_minor": "100000",
+              "credit_minor": "0"
+            },
+            {
+              "id": "3e073d2e-812f-4050-99a0-148553cbccac",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000021",
+              "posting_date": "2026-11-17",
+              "account_id": "bb99908d-15ec-48e2-9159-807c857a4a97",
+              "party_id": "04893a34-7adc-4e1e-9ef4-409868ff4a84",
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "0",
+              "credit_minor": "100000"
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "id": "EMPADV",
+          "description": "Employee advance, recoverable asset",
+          "date": "2026-10-02",
+          "expected": [
+            {
+              "account": "EMPLOYEE_ADVANCE",
+              "debit": "20000",
+              "credit": "0"
+            },
+            {
+              "account": "BANK",
+              "debit": "0",
+              "credit": "20000"
+            }
+          ],
+          "receipt": {
+            "id": "9b4b8349-70c1-4165-adaa-b5642428143b",
+            "action": "ADVANCE"
+          },
+          "actual": [
+            {
+              "id": "12e4e9d2-1f3b-4d51-bb84-ff3fc757e1a0",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000022",
+              "posting_date": "2026-10-02",
+              "account_id": "ae90c31b-95e4-4ac2-8421-0ea6d4603da2",
+              "party_id": "585aee79-4f68-4d79-998a-5d0961168102",
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "20000",
+              "credit_minor": "0"
+            },
+            {
+              "id": "12e4e9d2-1f3b-4d51-bb84-ff3fc757e1a0",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000022",
+              "posting_date": "2026-10-02",
+              "account_id": "62735a71-2493-4a9c-8f1b-09d95dcd7081",
+              "party_id": null,
+              "project_id": null,
+              "treasury_account_id": "0cfc9480-e748-457a-a78f-48f2f8b4928a",
+              "subcontract_id": null,
+              "debit_minor": "0",
+              "credit_minor": "20000"
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "id": "PAYROLL",
+          "description": "Approved payroll with advance recovery",
+          "date": "2026-10-31",
+          "expected": [
+            {
+              "account": "PROJECT_COST",
+              "debit": "300000",
+              "credit": "0"
+            },
+            {
+              "account": "SALARY_PAYABLE",
+              "debit": "0",
+              "credit": "300000"
+            },
+            {
+              "account": "SALARY_PAYABLE",
+              "debit": "10000",
+              "credit": "0"
+            },
+            {
+              "account": "EMPLOYEE_ADVANCE",
+              "debit": "0",
+              "credit": "10000"
+            }
+          ],
+          "receipt": "82a000f8-a301-4ccd-a7fe-2464c98b67c5",
+          "actual": [
+            {
+              "id": "404cddaf-6b8c-4314-b258-9b96315d92ac",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000023",
+              "posting_date": "2026-10-31",
+              "account_id": "a737d4ab-6b5c-4d4a-affd-c7d898b9f8ad",
+              "party_id": "585aee79-4f68-4d79-998a-5d0961168102",
+              "project_id": "91dd3ce1-9097-445c-8128-f58bc2586f11",
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "300000",
+              "credit_minor": "0"
+            },
+            {
+              "id": "404cddaf-6b8c-4314-b258-9b96315d92ac",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000023",
+              "posting_date": "2026-10-31",
+              "account_id": "ed91ddbf-c5d8-4d8d-8ec2-8ea9e3b28342",
+              "party_id": "585aee79-4f68-4d79-998a-5d0961168102",
+              "project_id": "91dd3ce1-9097-445c-8128-f58bc2586f11",
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "0",
+              "credit_minor": "300000"
+            },
+            {
+              "id": "db9a86a2-0bfb-473f-a83f-331123f2929d",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000024",
+              "posting_date": "2026-10-31",
+              "account_id": "ed91ddbf-c5d8-4d8d-8ec2-8ea9e3b28342",
+              "party_id": "585aee79-4f68-4d79-998a-5d0961168102",
+              "project_id": "91dd3ce1-9097-445c-8128-f58bc2586f11",
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "10000",
+              "credit_minor": "0"
+            },
+            {
+              "id": "db9a86a2-0bfb-473f-a83f-331123f2929d",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000024",
+              "posting_date": "2026-10-31",
+              "account_id": "ae90c31b-95e4-4ac2-8421-0ea6d4603da2",
+              "party_id": "585aee79-4f68-4d79-998a-5d0961168102",
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "0",
+              "credit_minor": "10000"
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "id": "SALARY",
+          "description": "Partial salary settlement",
+          "date": "2026-11-17",
+          "expected": [
+            {
+              "account": "SALARY_PAYABLE",
+              "debit": "250000",
+              "credit": "0"
+            },
+            {
+              "account": "BANK",
+              "debit": "0",
+              "credit": "250000"
+            }
+          ],
+          "receipt": [
+            {
+              "pay_salary": "940f1a3b-2b55-4354-8f22-4064c8c030c4"
+            }
+          ],
+          "actual": [
+            {
+              "id": "9580b665-8e4f-4495-963d-eedda07477ab",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000025",
+              "posting_date": "2026-11-17",
+              "account_id": "ed91ddbf-c5d8-4d8d-8ec2-8ea9e3b28342",
+              "party_id": "585aee79-4f68-4d79-998a-5d0961168102",
+              "project_id": "91dd3ce1-9097-445c-8128-f58bc2586f11",
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "250000",
+              "credit_minor": "0"
+            },
+            {
+              "id": "9580b665-8e4f-4495-963d-eedda07477ab",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000025",
+              "posting_date": "2026-11-17",
+              "account_id": "62735a71-2493-4a9c-8f1b-09d95dcd7081",
+              "party_id": "585aee79-4f68-4d79-998a-5d0961168102",
+              "project_id": "91dd3ce1-9097-445c-8128-f58bc2586f11",
+              "treasury_account_id": "0cfc9480-e748-457a-a78f-48f2f8b4928a",
+              "subcontract_id": null,
+              "debit_minor": "0",
+              "credit_minor": "250000"
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "id": "REVERSE",
+          "description": "Controlled supplies reversal including original VAT",
+          "date": "2026-11-17",
+          "expected": [
+            {
+              "account": "CUSTODY_ADVANCE",
+              "debit": "10500",
+              "credit": "0"
+            },
+            {
+              "account": "COMPANY_EXPENSE",
+              "debit": "0",
+              "credit": "10000"
+            },
+            {
+              "account": "INPUT_VAT",
+              "debit": "0",
+              "credit": "500"
+            }
+          ],
+          "receipt": [
+            {
+              "expense_id": "fb5fc02a-0bc1-4a5a-b1bd-3031880ccccd",
+              "expense_reference": "NARVO-DEMO-COMMERCIAL-EXP-2026-000001",
+              "reversal_journal_entry_id": "a1e80f19-8544-42b4-ac9b-dc78c1c33136",
+              "replayed": false
+            }
+          ],
+          "actual": [
+            {
+              "id": "a1e80f19-8544-42b4-ac9b-dc78c1c33136",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000026",
+              "posting_date": "2026-11-17",
+              "account_id": "3912b218-564f-45bf-acb2-e6fe7163628c",
+              "party_id": null,
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "0",
+              "credit_minor": "10000"
+            },
+            {
+              "id": "a1e80f19-8544-42b4-ac9b-dc78c1c33136",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000026",
+              "posting_date": "2026-11-17",
+              "account_id": "040fcf58-13ea-48b9-b537-b864da4ab51e",
+              "party_id": null,
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "0",
+              "credit_minor": "500"
+            },
+            {
+              "id": "a1e80f19-8544-42b4-ac9b-dc78c1c33136",
+              "journal_reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000026",
+              "posting_date": "2026-11-17",
+              "account_id": "bb99908d-15ec-48e2-9159-807c857a4a97",
+              "party_id": "04893a34-7adc-4e1e-9ef4-409868ff4a84",
+              "project_id": null,
+              "treasury_account_id": null,
+              "subcontract_id": null,
+              "debit_minor": "10500",
+              "credit_minor": "0"
+            }
+          ],
+          "status": "PASS"
+        }
+      ],
+      "statements": {
+        "scope": {
+          "companyId": "35866f1d-2888-40f2-9690-015802ec13a8",
+          "from": "2026-10-01",
+          "through": "2026-11-17"
+        },
+        "captured": "2026-11-17T19:56:29.149Z",
+        "rows": [
+          {
+            "account": {
+              "id": "62735a71-2493-4a9c-8f1b-09d95dcd7081",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "110000",
+              "name": "Demo Bank GL",
+              "account_type": "ASSET"
+            },
+            "opening": "0",
+            "debit": "10100000",
+            "credit": "1545000",
+            "closing": "8555000"
+          },
+          {
+            "account": {
+              "id": "040fcf58-13ea-48b9-b537-b864da4ab51e",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "120000",
+              "name": "Fictional INPUT_VAT",
+              "account_type": "ASSET"
+            },
+            "opening": "0",
+            "debit": "10500",
+            "credit": "500",
+            "closing": "10000"
+          },
+          {
+            "account": {
+              "id": "bb99908d-15ec-48e2-9159-807c857a4a97",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "130000",
+              "name": "Fictional CUSTODY_ADVANCE",
+              "account_type": "ASSET"
+            },
+            "opening": "0",
+            "debit": "1010500",
+            "credit": "140500",
+            "closing": "870000"
+          },
+          {
+            "account": {
+              "id": "9a05772b-df0f-40e3-b1cd-f3958fcbf912",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "131000",
+              "name": "Fictional SUBCONTRACTOR_ADVANCE",
+              "account_type": "ASSET"
+            },
+            "opening": "0",
+            "debit": "50000",
+            "credit": "10000",
+            "closing": "40000"
+          },
+          {
+            "account": {
+              "id": "c4346feb-9798-4112-8d31-072f3135a59b",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "132000",
+              "name": "Demo SUPPLIER_ADVANCE",
+              "account_type": "ASSET"
+            },
+            "opening": "0",
+            "debit": "20000",
+            "credit": "20000",
+            "closing": "0"
+          },
+          {
+            "account": {
+              "id": "ae90c31b-95e4-4ac2-8421-0ea6d4603da2",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "133000",
+              "name": "Demo EMPLOYEE_ADVANCE",
+              "account_type": "ASSET"
+            },
+            "opening": "0",
+            "debit": "20000",
+            "credit": "10000",
+            "closing": "10000"
+          },
+          {
+            "account": {
+              "id": "fa8753bc-821f-4830-b2cc-dbb44165dd2d",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "210000",
+              "name": "Fictional SUPPLIER_PAYABLE",
+              "account_type": "LIABILITY"
+            },
+            "opening": "0",
+            "debit": "180000",
+            "credit": "310000",
+            "closing": "-130000"
+          },
+          {
+            "account": {
+              "id": "435f5697-8e6e-4b7c-8104-98fd8ee4b343",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "220000",
+              "name": "Fictional SUBCONTRACTOR_PAYABLE",
+              "account_type": "LIABILITY"
+            },
+            "opening": "0",
+            "debit": "70000",
+            "credit": "170000",
+            "closing": "-100000"
+          },
+          {
+            "account": {
+              "id": "686db60c-fee8-42ce-b900-401c3fdd50b6",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "221000",
+              "name": "Fictional SUBCONTRACTOR_RETENTION_PAYABLE",
+              "account_type": "LIABILITY"
+            },
+            "opening": "0",
+            "debit": "0",
+            "credit": "20000",
+            "closing": "-20000"
+          },
+          {
+            "account": {
+              "id": "ed91ddbf-c5d8-4d8d-8ec2-8ea9e3b28342",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "230000",
+              "name": "Fictional SALARY_PAYABLE",
+              "account_type": "LIABILITY"
+            },
+            "opening": "0",
+            "debit": "260000",
+            "credit": "300000",
+            "closing": "-40000"
+          },
+          {
+            "account": {
+              "id": "27c4f388-7040-4a06-9899-d3584e5579b4",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "310000",
+              "name": "Demo EQUITY",
+              "account_type": "EQUITY"
+            },
+            "opening": "0",
+            "debit": "0",
+            "credit": "10000000",
+            "closing": "-10000000"
+          },
+          {
+            "account": {
+              "id": "3912b218-564f-45bf-acb2-e6fe7163628c",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "510000",
+              "name": "Fictional COMPANY_EXPENSE",
+              "account_type": "EXPENSE"
+            },
+            "opening": "0",
+            "debit": "310000",
+            "credit": "115000",
+            "closing": "195000"
+          },
+          {
+            "account": {
+              "id": "a737d4ab-6b5c-4d4a-affd-c7d898b9f8ad",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "520000",
+              "name": "Fictional PROJECT_COST",
+              "account_type": "EXPENSE"
+            },
+            "opening": "0",
+            "debit": "330000",
+            "credit": "0",
+            "closing": "330000"
+          },
+          {
+            "account": {
+              "id": "92cfe183-7760-4a28-babb-c125845abb87",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "521000",
+              "name": "Fictional PROJECT_COST_SUBCONTRACTORS",
+              "account_type": "EXPENSE"
+            },
+            "opening": "0",
+            "debit": "200000",
+            "credit": "0",
+            "closing": "200000"
+          },
+          {
+            "account": {
+              "id": "f07aa589-addc-434a-af27-3a880474c8e3",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "DEMO-grni",
+              "name": "Demo grni",
+              "account_type": "LIABILITY"
+            },
+            "opening": "0",
+            "debit": "100000",
+            "credit": "100000",
+            "closing": "0"
+          },
+          {
+            "account": {
+              "id": "98c5c01a-2ac5-44e5-98c4-6983a56225fb",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "DEMO-inventory",
+              "name": "Demo inventory",
+              "account_type": "ASSET"
+            },
+            "opening": "0",
+            "debit": "100000",
+            "credit": "20000",
+            "closing": "80000"
+          },
+          {
+            "account": {
+              "id": "4d4251a1-3224-4088-af91-01b281f6019c",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "DEMO-opening",
+              "name": "Demo opening",
+              "account_type": "EQUITY"
+            },
+            "opening": "0",
+            "debit": "0",
+            "credit": "0",
+            "closing": "0"
+          },
+          {
+            "account": {
+              "id": "62e9421c-c3f6-4bb7-b554-ef4129708aa3",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "DEMO-variance",
+              "name": "Demo variance",
+              "account_type": "EXPENSE"
+            },
+            "opening": "0",
+            "debit": "0",
+            "credit": "0",
+            "closing": "0"
+          }
+        ],
+        "journalCount": 26,
+        "debit": "12761000",
+        "credit": "12761000",
+        "assets": "9565000",
+        "liabilities": "290000",
+        "equity": "10000000",
+        "unclosedResult": "-725000",
+        "revenue": "0",
+        "expenses": "725000",
+        "profit": "-725000"
+      },
+      "openingTrialBalance": {
+        "scope": {
+          "companyId": "35866f1d-2888-40f2-9690-015802ec13a8",
+          "from": "2026-10-01",
+          "through": "2026-10-01"
+        },
+        "captured": "2026-11-17T19:55:09.758Z",
+        "rows": [
+          {
+            "account": {
+              "id": "62735a71-2493-4a9c-8f1b-09d95dcd7081",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "110000",
+              "name": "Demo Bank GL",
+              "account_type": "ASSET"
+            },
+            "opening": "0",
+            "debit": "10000000",
+            "credit": "0",
+            "closing": "10000000"
+          },
+          {
+            "account": {
+              "id": "040fcf58-13ea-48b9-b537-b864da4ab51e",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "120000",
+              "name": "Fictional INPUT_VAT",
+              "account_type": "ASSET"
+            },
+            "opening": "0",
+            "debit": "0",
+            "credit": "0",
+            "closing": "0"
+          },
+          {
+            "account": {
+              "id": "bb99908d-15ec-48e2-9159-807c857a4a97",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "130000",
+              "name": "Fictional CUSTODY_ADVANCE",
+              "account_type": "ASSET"
+            },
+            "opening": "0",
+            "debit": "0",
+            "credit": "0",
+            "closing": "0"
+          },
+          {
+            "account": {
+              "id": "9a05772b-df0f-40e3-b1cd-f3958fcbf912",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "131000",
+              "name": "Fictional SUBCONTRACTOR_ADVANCE",
+              "account_type": "ASSET"
+            },
+            "opening": "0",
+            "debit": "0",
+            "credit": "0",
+            "closing": "0"
+          },
+          {
+            "account": {
+              "id": "c4346feb-9798-4112-8d31-072f3135a59b",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "132000",
+              "name": "Demo SUPPLIER_ADVANCE",
+              "account_type": "ASSET"
+            },
+            "opening": "0",
+            "debit": "0",
+            "credit": "0",
+            "closing": "0"
+          },
+          {
+            "account": {
+              "id": "ae90c31b-95e4-4ac2-8421-0ea6d4603da2",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "133000",
+              "name": "Demo EMPLOYEE_ADVANCE",
+              "account_type": "ASSET"
+            },
+            "opening": "0",
+            "debit": "0",
+            "credit": "0",
+            "closing": "0"
+          },
+          {
+            "account": {
+              "id": "fa8753bc-821f-4830-b2cc-dbb44165dd2d",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "210000",
+              "name": "Fictional SUPPLIER_PAYABLE",
+              "account_type": "LIABILITY"
+            },
+            "opening": "0",
+            "debit": "0",
+            "credit": "0",
+            "closing": "0"
+          },
+          {
+            "account": {
+              "id": "435f5697-8e6e-4b7c-8104-98fd8ee4b343",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "220000",
+              "name": "Fictional SUBCONTRACTOR_PAYABLE",
+              "account_type": "LIABILITY"
+            },
+            "opening": "0",
+            "debit": "0",
+            "credit": "0",
+            "closing": "0"
+          },
+          {
+            "account": {
+              "id": "686db60c-fee8-42ce-b900-401c3fdd50b6",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "221000",
+              "name": "Fictional SUBCONTRACTOR_RETENTION_PAYABLE",
+              "account_type": "LIABILITY"
+            },
+            "opening": "0",
+            "debit": "0",
+            "credit": "0",
+            "closing": "0"
+          },
+          {
+            "account": {
+              "id": "ed91ddbf-c5d8-4d8d-8ec2-8ea9e3b28342",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "230000",
+              "name": "Fictional SALARY_PAYABLE",
+              "account_type": "LIABILITY"
+            },
+            "opening": "0",
+            "debit": "0",
+            "credit": "0",
+            "closing": "0"
+          },
+          {
+            "account": {
+              "id": "27c4f388-7040-4a06-9899-d3584e5579b4",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "310000",
+              "name": "Demo EQUITY",
+              "account_type": "EQUITY"
+            },
+            "opening": "0",
+            "debit": "0",
+            "credit": "10000000",
+            "closing": "-10000000"
+          },
+          {
+            "account": {
+              "id": "3912b218-564f-45bf-acb2-e6fe7163628c",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "510000",
+              "name": "Fictional COMPANY_EXPENSE",
+              "account_type": "EXPENSE"
+            },
+            "opening": "0",
+            "debit": "0",
+            "credit": "0",
+            "closing": "0"
+          },
+          {
+            "account": {
+              "id": "a737d4ab-6b5c-4d4a-affd-c7d898b9f8ad",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "520000",
+              "name": "Fictional PROJECT_COST",
+              "account_type": "EXPENSE"
+            },
+            "opening": "0",
+            "debit": "0",
+            "credit": "0",
+            "closing": "0"
+          },
+          {
+            "account": {
+              "id": "92cfe183-7760-4a28-babb-c125845abb87",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "521000",
+              "name": "Fictional PROJECT_COST_SUBCONTRACTORS",
+              "account_type": "EXPENSE"
+            },
+            "opening": "0",
+            "debit": "0",
+            "credit": "0",
+            "closing": "0"
+          },
+          {
+            "account": {
+              "id": "f07aa589-addc-434a-af27-3a880474c8e3",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "DEMO-grni",
+              "name": "Demo grni",
+              "account_type": "LIABILITY"
+            },
+            "opening": "0",
+            "debit": "0",
+            "credit": "0",
+            "closing": "0"
+          },
+          {
+            "account": {
+              "id": "98c5c01a-2ac5-44e5-98c4-6983a56225fb",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "DEMO-inventory",
+              "name": "Demo inventory",
+              "account_type": "ASSET"
+            },
+            "opening": "0",
+            "debit": "0",
+            "credit": "0",
+            "closing": "0"
+          },
+          {
+            "account": {
+              "id": "4d4251a1-3224-4088-af91-01b281f6019c",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "DEMO-opening",
+              "name": "Demo opening",
+              "account_type": "EQUITY"
+            },
+            "opening": "0",
+            "debit": "0",
+            "credit": "0",
+            "closing": "0"
+          },
+          {
+            "account": {
+              "id": "62e9421c-c3f6-4bb7-b554-ef4129708aa3",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "code": "DEMO-variance",
+              "name": "Demo variance",
+              "account_type": "EXPENSE"
+            },
+            "opening": "0",
+            "debit": "0",
+            "credit": "0",
+            "closing": "0"
+          }
+        ],
+        "journalCount": 1,
+        "debit": "10000000",
+        "credit": "10000000",
+        "assets": "10000000",
+        "liabilities": "0",
+        "equity": "10000000",
+        "unclosedResult": "0",
+        "revenue": "0",
+        "expenses": "0",
+        "profit": "0"
+      },
+      "subledgers": {
+        "supplierAP": {
+          "gl": [
+            {
+              "party_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+              "payable_minor": "130000"
+            }
+          ],
+          "as_of": "2026-11-17",
+          "today": "2026-11-17",
+          "invoices": [
+            {
+              "id": "052b8973-31b2-41bd-b856-a126cbc8d307",
+              "status": "POSTED",
+              "due_date": "2026-11-17",
+              "net_minor": "100000",
+              "vat_minor": "5000",
+              "aging_days": 0,
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "project_id": null,
+              "description": "Fictional evidenced service",
+              "gross_minor": "105000",
+              "supplier_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+              "expense_date": "2026-11-17",
+              "funding_mode": "SUPPLIER_CREDIT",
+              "overdue_days": 0,
+              "settled_minor": "0",
+              "invoice_number": "DEMO-STOCK-BILL",
+              "due_date_recorded": true,
+              "expense_reference": "NARVO-DEMO-COMMERCIAL-EXP-2026-000005",
+              "outstanding_minor": "105000",
+              "credit_balance_minor": "0",
+              "posted_journal_entry_id": "80b1bb18-3335-4ab3-8741-27c3e3e18df7",
+              "reversal_journal_entry_id": null
+            },
+            {
+              "id": "b398cd51-f016-4989-8e44-2b9a2b21cea1",
+              "status": "POSTED",
+              "due_date": "2026-11-17",
+              "net_minor": "50000",
+              "vat_minor": "0",
+              "aging_days": 0,
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "project_id": null,
+              "description": "Fictional evidenced service",
+              "gross_minor": "50000",
+              "supplier_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+              "expense_date": "2026-11-17",
+              "funding_mode": "SUPPLIER_CREDIT",
+              "overdue_days": 0,
+              "settled_minor": "25000",
+              "invoice_number": "DEMO-SERVICE-3",
+              "due_date_recorded": true,
+              "expense_reference": "NARVO-DEMO-COMMERCIAL-EXP-2026-000004",
+              "outstanding_minor": "25000",
+              "credit_balance_minor": "0",
+              "posted_journal_entry_id": "0503f70d-2a16-4a76-bc62-d8c23d9967e9",
+              "reversal_journal_entry_id": null
+            },
+            {
+              "id": "e274eee1-3eaa-41ac-8569-40f568c5a521",
+              "status": "POSTED",
+              "due_date": "2026-11-17",
+              "net_minor": "50000",
+              "vat_minor": "0",
+              "aging_days": 0,
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "project_id": null,
+              "description": "Fictional evidenced service",
+              "gross_minor": "50000",
+              "supplier_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+              "expense_date": "2026-11-17",
+              "funding_mode": "SUPPLIER_CREDIT",
+              "overdue_days": 0,
+              "settled_minor": "50000",
+              "invoice_number": "DEMO-SERVICE-2",
+              "due_date_recorded": true,
+              "expense_reference": "NARVO-DEMO-COMMERCIAL-EXP-2026-000003",
+              "outstanding_minor": "0",
+              "credit_balance_minor": "0",
+              "posted_journal_entry_id": "82bf1d1f-af81-4e9c-b415-ab2dd26758b2",
+              "reversal_journal_entry_id": null
+            },
+            {
+              "id": "faccad1a-7eab-45ef-ba5f-d654845983d3",
+              "status": "POSTED",
+              "due_date": "2026-11-17",
+              "net_minor": "100000",
+              "vat_minor": "5000",
+              "aging_days": 0,
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "project_id": null,
+              "description": "Fictional evidenced service",
+              "gross_minor": "105000",
+              "supplier_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+              "expense_date": "2026-11-17",
+              "funding_mode": "SUPPLIER_CREDIT",
+              "overdue_days": 0,
+              "settled_minor": "105000",
+              "invoice_number": "DEMO-SERVICE-1",
+              "due_date_recorded": true,
+              "expense_reference": "NARVO-DEMO-COMMERCIAL-EXP-2026-000002",
+              "outstanding_minor": "0",
+              "credit_balance_minor": "0",
+              "posted_journal_entry_id": "4682af9e-d06b-4d79-9299-0b5c25914d77",
+              "reversal_journal_entry_id": null
+            }
+          ],
+          "payments": [
+            {
+              "id": "365a0531-072e-4398-94fc-f8e376ef043a",
+              "notes": null,
+              "status": "POSTED",
+              "posted_at": "2026-11-17T19:55:14.061+00:00",
+              "posted_by": "ed030005-0000-4000-8000-000000000001",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "created_at": "2026-11-17T19:55:14.061+00:00",
+              "created_by": "ed030005-0000-4000-8000-000000000001",
+              "updated_at": "2026-11-17T19:55:14.061+00:00",
+              "updated_by": "ed030005-0000-4000-8000-000000000001",
+              "reversed_at": null,
+              "reversed_by": null,
+              "supplier_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+              "custodian_id": null,
+              "payment_date": "2026-11-17",
+              "payment_method": "BANK",
+              "payment_reference": "NARVO-DEMO-COMMERCIAL-SPAY-2026-000001",
+              "custody_account_id": null,
+              "external_reference": null,
+              "total_amount_minor": "40000",
+              "treasury_account_id": "0cfc9480-e748-457a-a78f-48f2f8b4928a",
+              "posted_journal_entry_id": "29c30720-b4fd-4f73-a2e2-a744d57ed74e",
+              "reversal_journal_entry_id": null
+            },
+            {
+              "id": "9a0ecf49-9ffa-4722-ac00-f9091ee5f4bb",
+              "notes": null,
+              "status": "POSTED",
+              "posted_at": "2026-11-17T19:55:15.994+00:00",
+              "posted_by": "ed030005-0000-4000-8000-000000000001",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "created_at": "2026-11-17T19:55:15.994+00:00",
+              "created_by": "ed030005-0000-4000-8000-000000000001",
+              "updated_at": "2026-11-17T19:55:15.994+00:00",
+              "updated_by": "ed030005-0000-4000-8000-000000000001",
+              "reversed_at": null,
+              "reversed_by": null,
+              "supplier_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+              "custodian_id": null,
+              "payment_date": "2026-11-17",
+              "payment_method": "BANK",
+              "payment_reference": "NARVO-DEMO-COMMERCIAL-SPAY-2026-000003",
+              "custody_account_id": null,
+              "external_reference": null,
+              "total_amount_minor": "35000",
+              "treasury_account_id": "0cfc9480-e748-457a-a78f-48f2f8b4928a",
+              "posted_journal_entry_id": "e272462d-1b2c-4033-9d55-56184f7579af",
+              "reversal_journal_entry_id": null
+            },
+            {
+              "id": "b8bb8b99-2bf0-4980-8edb-3f98aba3dbb5",
+              "notes": null,
+              "status": "POSTED",
+              "posted_at": "2026-11-17T19:55:15.043+00:00",
+              "posted_by": "ed030005-0000-4000-8000-000000000001",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "created_at": "2026-11-17T19:55:15.043+00:00",
+              "created_by": "ed030005-0000-4000-8000-000000000001",
+              "updated_at": "2026-11-17T19:55:15.043+00:00",
+              "updated_by": "ed030005-0000-4000-8000-000000000001",
+              "reversed_at": null,
+              "reversed_by": null,
+              "supplier_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+              "custodian_id": null,
+              "payment_date": "2026-11-17",
+              "payment_method": "BANK",
+              "payment_reference": "NARVO-DEMO-COMMERCIAL-SPAY-2026-000002",
+              "custody_account_id": null,
+              "external_reference": null,
+              "total_amount_minor": "80000",
+              "treasury_account_id": "0cfc9480-e748-457a-a78f-48f2f8b4928a",
+              "posted_journal_entry_id": "fa9984e0-179b-490c-b06f-9a9b9d225d6c",
+              "reversal_journal_entry_id": null
+            }
+          ],
+          "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+          "adjustments": [
+            {
+              "id": "0d01e846-58ad-4f76-a8b9-8bef36ddbf48",
+              "kind": "CREDIT_NOTE",
+              "status": "POSTED",
+              "evidence": "Fictional approved source evidence",
+              "effective": true,
+              "net_minor": "5000",
+              "reference": "NARVO-DEMO-COMMERCIAL-SAP-2026-000003",
+              "vat_minor": "0",
+              "advance_id": null,
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "created_at": "2026-11-17T19:55:24.081+00:00",
+              "created_by": "ed030005-0000-4000-8000-000000000001",
+              "expense_id": "b398cd51-f016-4989-8e44-2b9a2b21cea1",
+              "project_id": null,
+              "supplier_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+              "amount_minor": "5000",
+              "custodian_id": null,
+              "posting_date": "2026-11-17",
+              "credit_note_id": null,
+              "external_reference": "DEMO-2d7e575d-b618-4b64-a294-84df8b2b2cc6",
+              "treasury_account_id": null,
+              "posted_journal_entry_id": "72c1a1a6-3c13-473d-8820-23ede111142d",
+              "reversal_journal_entry_id": null
+            },
+            {
+              "id": "5807720e-13ab-4829-bed3-81effc5ce35f",
+              "kind": "ADVANCE",
+              "status": "POSTED",
+              "evidence": "Fictional approved source evidence",
+              "effective": true,
+              "net_minor": "20000",
+              "reference": "NARVO-DEMO-COMMERCIAL-SAP-2026-000001",
+              "vat_minor": "0",
+              "advance_id": null,
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "created_at": "2026-11-17T19:55:18.366+00:00",
+              "created_by": "ed030005-0000-4000-8000-000000000001",
+              "expense_id": null,
+              "project_id": null,
+              "supplier_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+              "amount_minor": "20000",
+              "custodian_id": "04893a34-7adc-4e1e-9ef4-409868ff4a84",
+              "posting_date": "2026-11-17",
+              "credit_note_id": null,
+              "external_reference": "DEMO-4939a23b-cf01-47eb-91c8-a48a112013d8",
+              "treasury_account_id": null,
+              "posted_journal_entry_id": "aa6bd2ea-9814-48e8-bdce-9dee4355f4f2",
+              "reversal_journal_entry_id": null
+            },
+            {
+              "id": "f3c5654c-f6d0-42a3-b8d8-0dd1f46646af",
+              "kind": "ADVANCE_ALLOCATION",
+              "status": "POSTED",
+              "evidence": "Fictional approved source evidence",
+              "effective": true,
+              "net_minor": "20000",
+              "reference": "NARVO-DEMO-COMMERCIAL-SAP-2026-000002",
+              "vat_minor": "0",
+              "advance_id": "5807720e-13ab-4829-bed3-81effc5ce35f",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "created_at": "2026-11-17T19:55:22.731+00:00",
+              "created_by": "ed030005-0000-4000-8000-000000000001",
+              "expense_id": "b398cd51-f016-4989-8e44-2b9a2b21cea1",
+              "project_id": null,
+              "supplier_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+              "amount_minor": "20000",
+              "custodian_id": null,
+              "posting_date": "2026-11-17",
+              "credit_note_id": null,
+              "external_reference": "DEMO-88f67355-49cc-4147-bfbc-ec9ea05acddb",
+              "treasury_account_id": null,
+              "posted_journal_entry_id": "24a2655e-9cf0-421a-b746-456bdbffb107",
+              "reversal_journal_entry_id": null
+            }
+          ],
+          "allocations": [
+            {
+              "id": "20ac5754-ccd3-46fc-9320-e2282200f7d8",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "created_at": "2026-11-17T19:55:15.994+00:00",
+              "created_by": "ed030005-0000-4000-8000-000000000001",
+              "expense_id": "faccad1a-7eab-45ef-ba5f-d654845983d3",
+              "supplier_payment_id": "9a0ecf49-9ffa-4722-ac00-f9091ee5f4bb",
+              "allocated_amount_minor": "5000"
+            },
+            {
+              "id": "63ec8f7c-ebd9-4426-b74f-8afa8f09c59d",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "created_at": "2026-11-17T19:55:15.994+00:00",
+              "created_by": "ed030005-0000-4000-8000-000000000001",
+              "expense_id": "e274eee1-3eaa-41ac-8569-40f568c5a521",
+              "supplier_payment_id": "9a0ecf49-9ffa-4722-ac00-f9091ee5f4bb",
+              "allocated_amount_minor": "30000"
+            },
+            {
+              "id": "8ad8d35a-4dce-459d-a365-f95b77c49ebf",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "created_at": "2026-11-17T19:55:14.061+00:00",
+              "created_by": "ed030005-0000-4000-8000-000000000001",
+              "expense_id": "faccad1a-7eab-45ef-ba5f-d654845983d3",
+              "supplier_payment_id": "365a0531-072e-4398-94fc-f8e376ef043a",
+              "allocated_amount_minor": "40000"
+            },
+            {
+              "id": "9564cde1-cb7f-4ad7-8989-9f93154e171e",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "created_at": "2026-11-17T19:55:15.043+00:00",
+              "created_by": "ed030005-0000-4000-8000-000000000001",
+              "expense_id": "faccad1a-7eab-45ef-ba5f-d654845983d3",
+              "supplier_payment_id": "b8bb8b99-2bf0-4980-8edb-3f98aba3dbb5",
+              "allocated_amount_minor": "60000"
+            },
+            {
+              "id": "bfb88031-1b38-4508-b3ba-54684642aa3e",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "created_at": "2026-11-17T19:55:15.043+00:00",
+              "created_by": "ed030005-0000-4000-8000-000000000001",
+              "expense_id": "e274eee1-3eaa-41ac-8569-40f568c5a521",
+              "supplier_payment_id": "b8bb8b99-2bf0-4980-8edb-3f98aba3dbb5",
+              "allocated_amount_minor": "20000"
+            }
+          ],
+          "advance_account_id": "c4346feb-9798-4112-8d31-072f3135a59b"
+        },
+        "inventory": {
+          "links": [
+            {
+              "id": "7b3f5724-8599-4280-8124-d3afe04d08bf",
+              "evidence": "Fictional evidenced service",
+              "reference": "SUPPLIER-INVOICE:96696c58-de4d-45ab-bc2f-53238c7482af:demo-stock-bill",
+              "source_id": null,
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "created_at": "2026-11-17T19:55:28.694+00:00",
+              "created_by": "ed030005-0000-4000-8000-000000000001",
+              "expense_id": "052b8973-31b2-41bd-b856-a126cbc8d307",
+              "material_id": "9f008339-a007-4fb1-a541-454ba05721e5"
+            }
+          ],
+          "today": "2026-11-17",
+          "events": [
+            {
+              "id": "bb76ece1-15da-49f1-b5d9-7fedff139d65",
+              "state": "RECORDED",
+              "action": "SETUP",
+              "version": 1,
+              "snapshot": {
+                "method": "MOVING_AVERAGE_LOCATION",
+                "evidence": "Fictional perpetual weighted-average stock configuration",
+                "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+                "created_at": "2026-11-17T19:55:08.948+00:00",
+                "created_by": "ed030005-0000-4000-8000-000000000001",
+                "grni_account_id": "f07aa589-addc-434a-af27-3a880474c8e3",
+                "opening_account_id": "4d4251a1-3224-4088-af91-01b281f6019c",
+                "variance_account_id": "62e9421c-c3f6-4bb7-b554-ef4129708aa3",
+                "inventory_account_id": "98c5c01a-2ac5-44e5-98c4-6983a56225fb"
+              },
+              "reference": null,
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "created_at": "2026-11-17T19:55:08.958+00:00",
+              "created_by": "ed030005-0000-4000-8000-000000000001",
+              "journal_id": null,
+              "request_id": "0908b2bf-9a1b-4dd5-b7ee-df371873fd69",
+              "document_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "request_hash": "679280334eb69baed1912ad7295f389549a6f83a5f7f8af81af0f6145797c3ce"
+            },
+            {
+              "id": "270253da-07fc-4e46-a7b4-b75f603d1676",
+              "state": "RECORDED",
+              "action": "MATERIAL",
+              "version": 1,
+              "snapshot": {
+                "id": "9f008339-a007-4fb1-a541-454ba05721e5",
+                "code": "DEMO-MAT",
+                "name": "Demo material",
+                "active": true,
+                "version": 1,
+                "category": "Construction",
+                "evidence": "Fictional item",
+                "base_unit": "UNIT",
+                "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+                "conversions": {},
+                "reorder_micros": 0
+              },
+              "reference": null,
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "created_at": "2026-11-17T19:55:09.006+00:00",
+              "created_by": "ed030005-0000-4000-8000-000000000001",
+              "journal_id": null,
+              "request_id": "1a437094-2e04-463f-8477-55888ab3f0e2",
+              "document_id": "9f008339-a007-4fb1-a541-454ba05721e5",
+              "request_hash": "446575c0b27df3cc3f6dec62496f08399d967d793c1ec607499447765435f3ad"
+            },
+            {
+              "id": "1233f3ed-0bcf-43ab-a541-d6a18cae4a6d",
+              "state": "RECORDED",
+              "action": "LOCATION",
+              "version": 1,
+              "snapshot": {
+                "id": "d17dcb13-5de8-41c2-a520-c8ed3285455f",
+                "code": "DEMO-WH",
+                "name": "Demo warehouse",
+                "active": true,
+                "version": 1,
+                "evidence": "Fictional location",
+                "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+                "project_id": null
+              },
+              "reference": null,
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "created_at": "2026-11-17T19:55:09.035+00:00",
+              "created_by": "ed030005-0000-4000-8000-000000000001",
+              "journal_id": null,
+              "request_id": "a30e16f7-dea8-4ea8-af2f-ede18fb6b2d3",
+              "document_id": "d17dcb13-5de8-41c2-a520-c8ed3285455f",
+              "request_hash": "2fb6c4d9b3ce7cfad1e7c625ebcb9d186351e2b8dfc63db3179f006ccaffb059"
+            },
+            {
+              "id": "a97b9f8d-ae48-498f-817f-e083891f560c",
+              "state": "DRAFT",
+              "action": "SAVE",
+              "version": 1,
+              "snapshot": {
+                "date": "2026-11-17",
+                "kind": "RECEIPT",
+                "unit": "UNIT",
+                "evidence": "Fictional 100 units received at AED10 each",
+                "qty_micros": "100000000",
+                "location_id": "d17dcb13-5de8-41c2-a520-c8ed3285455f",
+                "material_id": "9f008339-a007-4fb1-a541-454ba05721e5",
+                "recognition": "GRNI",
+                "supplier_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+                "value_minor": "100000",
+                "source_reference": "DEMO-RECEIPT",
+                "not_previously_recognized": true
+              },
+              "reference": null,
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "created_at": "2026-11-17T19:55:25.677+00:00",
+              "created_by": "ed030005-0000-4000-8000-000000000001",
+              "journal_id": null,
+              "request_id": "bcee74f4-a70f-4ea5-a881-5efc2de43a07",
+              "document_id": "77f11312-ed69-4984-8478-51a649b5e14c",
+              "request_hash": "0272bc9dbfa5a93977136745f62c8db39222d567f154eeac5e9b41634767ac77"
+            },
+            {
+              "id": "6c670e38-7183-44f3-baa4-08f56ca2a69a",
+              "state": "REVIEWED",
+              "action": "REVIEW",
+              "version": 2,
+              "snapshot": {
+                "date": "2026-11-17",
+                "kind": "RECEIPT",
+                "unit": "UNIT",
+                "computed": {
+                  "qty": "100000000",
+                  "cost": null,
+                  "value": "100000",
+                  "balance": {
+                    "qty": "0",
+                    "value": "0",
+                    "revision": 0,
+                    "last_date": null
+                  },
+                  "project": null,
+                  "cost_project": null,
+                  "location_version": 1,
+                  "material_version": 1,
+                  "destination_balance": null,
+                  "destination_version": null
+                },
+                "evidence": "Fictional 100 units received at AED10 each",
+                "qty_micros": "100000000",
+                "location_id": "d17dcb13-5de8-41c2-a520-c8ed3285455f",
+                "material_id": "9f008339-a007-4fb1-a541-454ba05721e5",
+                "recognition": "GRNI",
+                "supplier_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+                "value_minor": "100000",
+                "source_reference": "DEMO-RECEIPT",
+                "not_previously_recognized": true
+              },
+              "reference": null,
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "created_at": "2026-11-17T19:55:25.729+00:00",
+              "created_by": "ed030005-0000-4000-8000-000000000001",
+              "journal_id": null,
+              "request_id": "b31a24d4-d35c-4f98-9bff-fb5588b4f28a",
+              "document_id": "77f11312-ed69-4984-8478-51a649b5e14c",
+              "request_hash": "26445314883536aa4ee3c85230b93f705d77a9592ffb66af8a762101270c079b"
+            },
+            {
+              "id": "23d0d7cb-8ed7-415a-9911-9a16507e7433",
+              "state": "POSTED",
+              "action": "POST",
+              "version": 3,
+              "snapshot": {
+                "date": "2026-11-17",
+                "kind": "RECEIPT",
+                "unit": "UNIT",
+                "computed": {
+                  "qty": "100000000",
+                  "cost": null,
+                  "value": "100000",
+                  "balance": {
+                    "qty": "0",
+                    "value": "0",
+                    "revision": 0,
+                    "last_date": null
+                  },
+                  "project": null,
+                  "cost_project": null,
+                  "location_version": 1,
+                  "material_version": 1,
+                  "destination_balance": null,
+                  "destination_version": null
+                },
+                "evidence": "Fictional 100 units received at AED10 each",
+                "qty_micros": "100000000",
+                "location_id": "d17dcb13-5de8-41c2-a520-c8ed3285455f",
+                "material_id": "9f008339-a007-4fb1-a541-454ba05721e5",
+                "recognition": "GRNI",
+                "supplier_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+                "value_minor": "100000",
+                "source_reference": "DEMO-RECEIPT",
+                "not_previously_recognized": true
+              },
+              "reference": "NARVO-DEMO-COMMERCIAL-INV-2026-000001",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "created_at": "2026-11-17T19:55:25.808+00:00",
+              "created_by": "ed030005-0000-4000-8000-000000000001",
+              "journal_id": "da59418a-28c9-4749-9646-16077ec5a8ab",
+              "request_id": "c29772c8-e270-4b7f-a992-fc635ce16d9b",
+              "document_id": "77f11312-ed69-4984-8478-51a649b5e14c",
+              "request_hash": "89d46ca353acb21b468730d50ebd44280d39d293716f7599c9195c66d7f0016d"
+            },
+            {
+              "id": "30fd202f-2660-46ef-9670-04b66d900d93",
+              "state": "DRAFT",
+              "action": "SAVE",
+              "version": 1,
+              "snapshot": {
+                "date": "2026-11-17",
+                "kind": "MATCH",
+                "unit": "UNIT",
+                "evidence": "Fictional evidenced service",
+                "origin_id": "77f11312-ed69-4984-8478-51a649b5e14c",
+                "expense_id": "052b8973-31b2-41bd-b856-a126cbc8d307",
+                "project_id": null,
+                "qty_micros": "0",
+                "location_id": "d17dcb13-5de8-41c2-a520-c8ed3285455f",
+                "material_id": "9f008339-a007-4fb1-a541-454ba05721e5",
+                "supplier_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+                "value_minor": "100000",
+                "source_reference": "SUPPLIER-INVOICE:96696c58-de4d-45ab-bc2f-53238c7482af:demo-stock-bill"
+              },
+              "reference": null,
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "created_at": "2026-11-17T19:55:28.601+00:00",
+              "created_by": "ed030005-0000-4000-8000-000000000001",
+              "journal_id": null,
+              "request_id": "3c0bfee1-84d6-4063-8754-d5f33e68193a",
+              "document_id": "8ea17bb2-b873-4a5c-b764-8c12d09bf016",
+              "request_hash": "c29779c92892a46645e4dee99485680925a1fdba348ec2d83eb33de3c95f42b8"
+            },
+            {
+              "id": "014aac2c-1d6e-4b57-8364-5bf668a234a2",
+              "state": "REVIEWED",
+              "action": "REVIEW",
+              "version": 2,
+              "snapshot": {
+                "date": "2026-11-17",
+                "kind": "MATCH",
+                "unit": "UNIT",
+                "computed": {
+                  "qty": "100000000",
+                  "cost": "3912b218-564f-45bf-acb2-e6fe7163628c",
+                  "value": "100000",
+                  "balance": {
+                    "qty": "100000000",
+                    "value": "100000",
+                    "revision": 1,
+                    "last_date": "2026-11-17"
+                  },
+                  "project": null,
+                  "cost_project": null,
+                  "location_version": 1,
+                  "material_version": 1,
+                  "destination_balance": null,
+                  "destination_version": null
+                },
+                "evidence": "Fictional evidenced service",
+                "origin_id": "77f11312-ed69-4984-8478-51a649b5e14c",
+                "expense_id": "052b8973-31b2-41bd-b856-a126cbc8d307",
+                "project_id": null,
+                "qty_micros": "0",
+                "location_id": "d17dcb13-5de8-41c2-a520-c8ed3285455f",
+                "material_id": "9f008339-a007-4fb1-a541-454ba05721e5",
+                "supplier_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+                "value_minor": "100000",
+                "source_reference": "SUPPLIER-INVOICE:96696c58-de4d-45ab-bc2f-53238c7482af:demo-stock-bill"
+              },
+              "reference": null,
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "created_at": "2026-11-17T19:55:28.645+00:00",
+              "created_by": "ed030005-0000-4000-8000-000000000001",
+              "journal_id": null,
+              "request_id": "ce906579-2e67-4334-b601-abc775973a1d",
+              "document_id": "8ea17bb2-b873-4a5c-b764-8c12d09bf016",
+              "request_hash": "c4ff8f9ea2a36db7ac5a2fb5bcba50b276c2a88e3e799e5566314fa917e0899a"
+            },
+            {
+              "id": "4467638e-cf15-4e56-a227-c8cba58ca499",
+              "state": "POSTED",
+              "action": "POST",
+              "version": 3,
+              "snapshot": {
+                "date": "2026-11-17",
+                "kind": "MATCH",
+                "unit": "UNIT",
+                "computed": {
+                  "qty": "100000000",
+                  "cost": "3912b218-564f-45bf-acb2-e6fe7163628c",
+                  "value": "100000",
+                  "balance": {
+                    "qty": "100000000",
+                    "value": "100000",
+                    "revision": 1,
+                    "last_date": "2026-11-17"
+                  },
+                  "project": null,
+                  "cost_project": null,
+                  "location_version": 1,
+                  "material_version": 1,
+                  "destination_balance": null,
+                  "destination_version": null
+                },
+                "evidence": "Fictional evidenced service",
+                "origin_id": "77f11312-ed69-4984-8478-51a649b5e14c",
+                "expense_id": "052b8973-31b2-41bd-b856-a126cbc8d307",
+                "project_id": null,
+                "qty_micros": "0",
+                "location_id": "d17dcb13-5de8-41c2-a520-c8ed3285455f",
+                "material_id": "9f008339-a007-4fb1-a541-454ba05721e5",
+                "supplier_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+                "value_minor": "100000",
+                "source_reference": "SUPPLIER-INVOICE:96696c58-de4d-45ab-bc2f-53238c7482af:demo-stock-bill"
+              },
+              "reference": "NARVO-DEMO-COMMERCIAL-INV-2026-000002",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "created_at": "2026-11-17T19:55:28.691+00:00",
+              "created_by": "ed030005-0000-4000-8000-000000000001",
+              "journal_id": "60145bd9-1ba6-4946-9ebc-692e0cfcec06",
+              "request_id": "5434f862-f52e-460a-ba97-c287cea3e48e",
+              "document_id": "8ea17bb2-b873-4a5c-b764-8c12d09bf016",
+              "request_hash": "b8caf4f924edeb62b3896a9b64659f6f93df44f46ad80d5bc25de6ede2ee2b72"
+            },
+            {
+              "id": "9444c7f7-582a-4626-a578-1f6aa2d474e5",
+              "state": "DRAFT",
+              "action": "SAVE",
+              "version": 1,
+              "snapshot": {
+                "date": "2026-11-17",
+                "kind": "ISSUE",
+                "unit": "UNIT",
+                "evidence": "Fictional 100 units received at AED10 each",
+                "project_id": "91dd3ce1-9097-445c-8128-f58bc2586f11",
+                "qty_micros": "20000000",
+                "location_id": "d17dcb13-5de8-41c2-a520-c8ed3285455f",
+                "material_id": "9f008339-a007-4fb1-a541-454ba05721e5",
+                "recognition": "GRNI",
+                "supplier_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+                "value_minor": "100000",
+                "recipient_id": "04893a34-7adc-4e1e-9ef4-409868ff4a84",
+                "source_reference": "DEMO-PROJECT-ISSUE",
+                "not_previously_recognized": true
+              },
+              "reference": null,
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "created_at": "2026-11-17T19:55:31.037+00:00",
+              "created_by": "ed030005-0000-4000-8000-000000000001",
+              "journal_id": null,
+              "request_id": "d6c84e2e-2499-45e0-8185-90351f93542a",
+              "document_id": "4ef536ba-9634-4e47-9fab-99be024b3a16",
+              "request_hash": "dd34734cfdd35709ef049140840d44c2ef681fb422699e62b1aca16d2296039e"
+            },
+            {
+              "id": "d9b3900b-313b-493f-a319-7ce41ec3c6b5",
+              "state": "REVIEWED",
+              "action": "REVIEW",
+              "version": 2,
+              "snapshot": {
+                "date": "2026-11-17",
+                "kind": "ISSUE",
+                "unit": "UNIT",
+                "computed": {
+                  "qty": "20000000",
+                  "cost": "a737d4ab-6b5c-4d4a-affd-c7d898b9f8ad",
+                  "value": "20000",
+                  "balance": {
+                    "qty": "100000000",
+                    "value": "100000",
+                    "revision": 1,
+                    "last_date": "2026-11-17"
+                  },
+                  "project": "91dd3ce1-9097-445c-8128-f58bc2586f11",
+                  "cost_project": null,
+                  "location_version": 1,
+                  "material_version": 1,
+                  "destination_balance": null,
+                  "destination_version": null
+                },
+                "evidence": "Fictional 100 units received at AED10 each",
+                "project_id": "91dd3ce1-9097-445c-8128-f58bc2586f11",
+                "qty_micros": "20000000",
+                "location_id": "d17dcb13-5de8-41c2-a520-c8ed3285455f",
+                "material_id": "9f008339-a007-4fb1-a541-454ba05721e5",
+                "recognition": "GRNI",
+                "supplier_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+                "value_minor": "100000",
+                "recipient_id": "04893a34-7adc-4e1e-9ef4-409868ff4a84",
+                "source_reference": "DEMO-PROJECT-ISSUE",
+                "not_previously_recognized": true
+              },
+              "reference": null,
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "created_at": "2026-11-17T19:55:31.096+00:00",
+              "created_by": "ed030005-0000-4000-8000-000000000001",
+              "journal_id": null,
+              "request_id": "5d6df45d-973f-4d62-8521-8dc5fcaca29a",
+              "document_id": "4ef536ba-9634-4e47-9fab-99be024b3a16",
+              "request_hash": "70a4d2a766884b129dc8eb5d698e66a317bc725d60b356ca84c131ab7525317d"
+            },
+            {
+              "id": "070524cd-f087-49dc-ad62-7fe4a9adcffb",
+              "state": "POSTED",
+              "action": "POST",
+              "version": 3,
+              "snapshot": {
+                "date": "2026-11-17",
+                "kind": "ISSUE",
+                "unit": "UNIT",
+                "computed": {
+                  "qty": "20000000",
+                  "cost": "a737d4ab-6b5c-4d4a-affd-c7d898b9f8ad",
+                  "value": "20000",
+                  "balance": {
+                    "qty": "100000000",
+                    "value": "100000",
+                    "revision": 1,
+                    "last_date": "2026-11-17"
+                  },
+                  "project": "91dd3ce1-9097-445c-8128-f58bc2586f11",
+                  "cost_project": null,
+                  "location_version": 1,
+                  "material_version": 1,
+                  "destination_balance": null,
+                  "destination_version": null
+                },
+                "evidence": "Fictional 100 units received at AED10 each",
+                "project_id": "91dd3ce1-9097-445c-8128-f58bc2586f11",
+                "qty_micros": "20000000",
+                "location_id": "d17dcb13-5de8-41c2-a520-c8ed3285455f",
+                "material_id": "9f008339-a007-4fb1-a541-454ba05721e5",
+                "recognition": "GRNI",
+                "supplier_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+                "value_minor": "100000",
+                "recipient_id": "04893a34-7adc-4e1e-9ef4-409868ff4a84",
+                "source_reference": "DEMO-PROJECT-ISSUE",
+                "not_previously_recognized": true
+              },
+              "reference": "NARVO-DEMO-COMMERCIAL-INV-2026-000003",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "created_at": "2026-11-17T19:55:31.182+00:00",
+              "created_by": "ed030005-0000-4000-8000-000000000001",
+              "journal_id": "2565b8ce-f09e-4e4b-a746-03b593885d4d",
+              "request_id": "9d6e1a41-b28b-4fdd-aa49-5d0fccb8c5a4",
+              "document_id": "4ef536ba-9634-4e47-9fab-99be024b3a16",
+              "request_hash": "bf5b9ba603736c4790adac1407e3448e3c1ac8e8ec86aafc98e58b558880d1a8"
+            }
+          ],
+          "balances": [
+            {
+              "revision": 2,
+              "location_id": "d17dcb13-5de8-41c2-a520-c8ed3285455f",
+              "material_id": "9f008339-a007-4fb1-a541-454ba05721e5",
+              "value_minor": "80000",
+              "quantity_micros": "80000000"
+            }
+          ],
+          "documents": [
+            {
+              "id": "23d0d7cb-8ed7-415a-9911-9a16507e7433",
+              "state": "POSTED",
+              "action": "POST",
+              "version": 3,
+              "snapshot": {
+                "date": "2026-11-17",
+                "kind": "RECEIPT",
+                "unit": "UNIT",
+                "computed": {
+                  "qty": "100000000",
+                  "cost": null,
+                  "value": "100000",
+                  "balance": {
+                    "qty": "0",
+                    "value": "0",
+                    "revision": 0,
+                    "last_date": null
+                  },
+                  "project": null,
+                  "cost_project": null,
+                  "location_version": 1,
+                  "material_version": 1,
+                  "destination_balance": null,
+                  "destination_version": null
+                },
+                "evidence": "Fictional 100 units received at AED10 each",
+                "qty_micros": "100000000",
+                "location_id": "d17dcb13-5de8-41c2-a520-c8ed3285455f",
+                "material_id": "9f008339-a007-4fb1-a541-454ba05721e5",
+                "recognition": "GRNI",
+                "supplier_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+                "value_minor": "100000",
+                "source_reference": "DEMO-RECEIPT",
+                "not_previously_recognized": true
+              },
+              "reference": "NARVO-DEMO-COMMERCIAL-INV-2026-000001",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "created_at": "2026-11-17T19:55:25.808+00:00",
+              "created_by": "ed030005-0000-4000-8000-000000000001",
+              "journal_id": "da59418a-28c9-4749-9646-16077ec5a8ab",
+              "request_id": "c29772c8-e270-4b7f-a992-fc635ce16d9b",
+              "document_id": "77f11312-ed69-4984-8478-51a649b5e14c",
+              "request_hash": "89d46ca353acb21b468730d50ebd44280d39d293716f7599c9195c66d7f0016d"
+            },
+            {
+              "id": "4467638e-cf15-4e56-a227-c8cba58ca499",
+              "state": "POSTED",
+              "action": "POST",
+              "version": 3,
+              "snapshot": {
+                "date": "2026-11-17",
+                "kind": "MATCH",
+                "unit": "UNIT",
+                "computed": {
+                  "qty": "100000000",
+                  "cost": "3912b218-564f-45bf-acb2-e6fe7163628c",
+                  "value": "100000",
+                  "balance": {
+                    "qty": "100000000",
+                    "value": "100000",
+                    "revision": 1,
+                    "last_date": "2026-11-17"
+                  },
+                  "project": null,
+                  "cost_project": null,
+                  "location_version": 1,
+                  "material_version": 1,
+                  "destination_balance": null,
+                  "destination_version": null
+                },
+                "evidence": "Fictional evidenced service",
+                "origin_id": "77f11312-ed69-4984-8478-51a649b5e14c",
+                "expense_id": "052b8973-31b2-41bd-b856-a126cbc8d307",
+                "project_id": null,
+                "qty_micros": "0",
+                "location_id": "d17dcb13-5de8-41c2-a520-c8ed3285455f",
+                "material_id": "9f008339-a007-4fb1-a541-454ba05721e5",
+                "supplier_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+                "value_minor": "100000",
+                "source_reference": "SUPPLIER-INVOICE:96696c58-de4d-45ab-bc2f-53238c7482af:demo-stock-bill"
+              },
+              "reference": "NARVO-DEMO-COMMERCIAL-INV-2026-000002",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "created_at": "2026-11-17T19:55:28.691+00:00",
+              "created_by": "ed030005-0000-4000-8000-000000000001",
+              "journal_id": "60145bd9-1ba6-4946-9ebc-692e0cfcec06",
+              "request_id": "5434f862-f52e-460a-ba97-c287cea3e48e",
+              "document_id": "8ea17bb2-b873-4a5c-b764-8c12d09bf016",
+              "request_hash": "b8caf4f924edeb62b3896a9b64659f6f93df44f46ad80d5bc25de6ede2ee2b72"
+            },
+            {
+              "id": "070524cd-f087-49dc-ad62-7fe4a9adcffb",
+              "state": "POSTED",
+              "action": "POST",
+              "version": 3,
+              "snapshot": {
+                "date": "2026-11-17",
+                "kind": "ISSUE",
+                "unit": "UNIT",
+                "computed": {
+                  "qty": "20000000",
+                  "cost": "a737d4ab-6b5c-4d4a-affd-c7d898b9f8ad",
+                  "value": "20000",
+                  "balance": {
+                    "qty": "100000000",
+                    "value": "100000",
+                    "revision": 1,
+                    "last_date": "2026-11-17"
+                  },
+                  "project": "91dd3ce1-9097-445c-8128-f58bc2586f11",
+                  "cost_project": null,
+                  "location_version": 1,
+                  "material_version": 1,
+                  "destination_balance": null,
+                  "destination_version": null
+                },
+                "evidence": "Fictional 100 units received at AED10 each",
+                "project_id": "91dd3ce1-9097-445c-8128-f58bc2586f11",
+                "qty_micros": "20000000",
+                "location_id": "d17dcb13-5de8-41c2-a520-c8ed3285455f",
+                "material_id": "9f008339-a007-4fb1-a541-454ba05721e5",
+                "recognition": "GRNI",
+                "supplier_id": "96696c58-de4d-45ab-bc2f-53238c7482af",
+                "value_minor": "100000",
+                "recipient_id": "04893a34-7adc-4e1e-9ef4-409868ff4a84",
+                "source_reference": "DEMO-PROJECT-ISSUE",
+                "not_previously_recognized": true
+              },
+              "reference": "NARVO-DEMO-COMMERCIAL-INV-2026-000003",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "created_at": "2026-11-17T19:55:31.182+00:00",
+              "created_by": "ed030005-0000-4000-8000-000000000001",
+              "journal_id": "2565b8ce-f09e-4e4b-a746-03b593885d4d",
+              "request_id": "9d6e1a41-b28b-4fdd-aa49-5d0fccb8c5a4",
+              "document_id": "4ef536ba-9634-4e47-9fab-99be024b3a16",
+              "request_hash": "bf5b9ba603736c4790adac1407e3448e3c1ac8e8ec86aafc98e58b558880d1a8"
+            }
+          ],
+          "locations": [
+            {
+              "id": "d17dcb13-5de8-41c2-a520-c8ed3285455f",
+              "code": "DEMO-WH",
+              "name": "Demo warehouse",
+              "active": true,
+              "version": 1,
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "project_id": null
+            }
+          ],
+          "materials": [
+            {
+              "id": "9f008339-a007-4fb1-a541-454ba05721e5",
+              "code": "DEMO-MAT",
+              "name": "Demo material",
+              "active": true,
+              "version": 1,
+              "category": "Construction",
+              "base_unit": "UNIT",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "conversions": {},
+              "reorder_micros": "0"
+            }
+          ],
+          "movements": [
+            {
+              "id": "9dad7f21-1d14-4223-b9cf-9a230c404ea9",
+              "event_id": "23d0d7cb-8ed7-415a-9911-9a16507e7433",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "created_at": "2026-11-17T19:55:25.808+00:00",
+              "location_id": "d17dcb13-5de8-41c2-a520-c8ed3285455f",
+              "material_id": "9f008339-a007-4fb1-a541-454ba05721e5",
+              "value_minor": "100000",
+              "movement_date": "2026-11-17",
+              "quantity_micros": "100000000"
+            },
+            {
+              "id": "ad9de416-144f-4b1a-b04f-7f5535c13003",
+              "event_id": "070524cd-f087-49dc-ad62-7fe4a9adcffb",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+              "created_at": "2026-11-17T19:55:31.182+00:00",
+              "location_id": "d17dcb13-5de8-41c2-a520-c8ed3285455f",
+              "material_id": "9f008339-a007-4fb1-a541-454ba05721e5",
+              "value_minor": "-20000",
+              "movement_date": "2026-11-17",
+              "quantity_micros": "-20000000"
+            }
+          ],
+          "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+          "period_open": true,
+          "configuration": {
+            "method": "MOVING_AVERAGE_LOCATION",
+            "evidence": "Fictional perpetual weighted-average stock configuration",
+            "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+            "created_at": "2026-11-17T19:55:08.948+00:00",
+            "created_by": "ed030005-0000-4000-8000-000000000001",
+            "grni_account_id": "f07aa589-addc-434a-af27-3a880474c8e3",
+            "opening_account_id": "4d4251a1-3224-4088-af91-01b281f6019c",
+            "variance_account_id": "62e9421c-c3f6-4bb7-b554-ef4129708aa3",
+            "inventory_account_id": "98c5c01a-2ac5-44e5-98c4-6983a56225fb"
+          },
+          "gl_value_minor": "80000",
+          "purchase_sources": [],
+          "valuation_method": "MOVING_AVERAGE_LOCATION",
+          "purchase_expenses": [
+            {
+              "id": "052b8973-31b2-41bd-b856-a126cbc8d307",
+              "date": "2026-11-17",
+              "status": "POSTED",
+              "net_minor": "100000",
+              "reference": "NARVO-DEMO-COMMERCIAL-EXP-2026-000005",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8"
+            },
+            {
+              "id": "b398cd51-f016-4989-8e44-2b9a2b21cea1",
+              "date": "2026-11-17",
+              "status": "POSTED",
+              "net_minor": "50000",
+              "reference": "NARVO-DEMO-COMMERCIAL-EXP-2026-000004",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8"
+            },
+            {
+              "id": "da2f78c6-e612-4069-9caa-178eb84e77a2",
+              "date": "2026-11-17",
+              "status": "POSTED",
+              "net_minor": "10000",
+              "reference": "NARVO-DEMO-COMMERCIAL-EXP-2026-000006",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8"
+            },
+            {
+              "id": "e274eee1-3eaa-41ac-8569-40f568c5a521",
+              "date": "2026-11-17",
+              "status": "POSTED",
+              "net_minor": "50000",
+              "reference": "NARVO-DEMO-COMMERCIAL-EXP-2026-000003",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8"
+            },
+            {
+              "id": "faccad1a-7eab-45ef-ba5f-d654845983d3",
+              "date": "2026-11-17",
+              "status": "POSTED",
+              "net_minor": "100000",
+              "reference": "NARVO-DEMO-COMMERCIAL-EXP-2026-000002",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8"
+            },
+            {
+              "id": "fb5fc02a-0bc1-4a5a-b1bd-3031880ccccd",
+              "date": "2026-11-17",
+              "status": "REVERSED",
+              "net_minor": "10000",
+              "reference": "NARVO-DEMO-COMMERCIAL-EXP-2026-000001",
+              "company_id": "35866f1d-2888-40f2-9690-015802ec13a8"
+            }
+          ],
+          "stock_value_minor": "80000"
+        },
+        "custody_minor": "870000"
+      },
+      "journalCount": 26,
+      "reversals": 1,
+      "hostedRequests": 0,
+      "blocked": [
+        "AR sales/customer cycle: no canonical implementation found",
+        "Fixed assets/depreciation lifecycle: no canonical implementation found",
+        "Accrual/prepayment operational commands: no canonical implementation found",
+        "Cash Flow Statement: classification/cash-equivalent policy and reporting implementation missing",
+        "Remaining leave/absence/partial-hours and native concurrency/UI scenarios: not executed by this bounded test",
+        "Universal fiscal period close/reopen separately executed in disposable fixtures; annual profit-transfer/closing entries and single complete end-to-end full ERP cycle still outstanding"
+      ],
+      "readiness": "NOT COMMERCIALLY READY",
+      "journalBackedBusinessSources": 25,
+      "documentCountScope": "Distinct canonical journal-backed business sources, excluding JOURNAL_REVERSAL and masters/drafts/audit events"
+    },
+    "model-results": {
+      "status": "PASS",
+      "checks": [
+        "October opening, November boundaries and December cutoff remain distinct",
+        "Balance Sheet includes prior opening with current result exactly once",
+        "Arabic/English numeric dates identical without UTC shifts",
+        "Balances greater than Number safe integer preserve every minor unit",
+        "Missing account cannot be omitted to manufacture balanced totals",
+        "Cross-company master data rejected",
+        "Duplicate ledger lines rejected",
+        "Reversed date range rejected",
+        "Keyset pagination reads more than 500 journals and 1000 lines without truncation",
+        "Missing complete-ledger permission stops before data loading",
+        "Permission revoked during capture discards statement result",
+        "Cancelled Company/session generation prevents stale results"
+      ],
+      "hostedRequests": 0
+    },
+    "browser-results": {
+      "status": "PASS",
+      "checks": [
+        "en actual statement workspace renders Trial Balance, Income Statement and Balance Sheet",
+        "en independently verified net loss AED7250 is visible",
+        "en independently verified assets AED95650 are visible",
+        "en laptop has no page-level horizontal overflow",
+        "en actual Excel workbook downloaded",
+        "en printable PDF dialog includes exact Balance Sheet assets",
+        "en changed dates immediately invalidate previous totals",
+        "en empty future income period preserves cumulative Balance Sheet",
+        "en Management Viewer sees explicit incomplete scope and no false balances",
+        "en no financial RPC attempted",
+        "ar actual statement workspace renders Trial Balance, Income Statement and Balance Sheet",
+        "ar independently verified net loss AED7250 is visible",
+        "ar independently verified assets AED95650 are visible",
+        "ar laptop has no page-level horizontal overflow",
+        "ar actual Excel workbook downloaded",
+        "ar printable PDF dialog includes exact Balance Sheet assets",
+        "ar changed dates immediately invalidate previous totals",
+        "ar empty future income period preserves cumulative Balance Sheet",
+        "ar Management Viewer sees explicit incomplete scope and no false balances",
+        "ar no financial RPC attempted",
+        "No browser errors or hosted/external requests"
+      ],
+      "errors": [],
+      "external": [],
+      "transport": "Rendered production component; read-only snapshot from actual disposable canonical SQL results"
+    },
+    "export-results": {
+      "status": "PASS",
+      "checks": [
+        "en actual Excel: three sheets, assets 95650, loss -7250 and both TB sides 102900 exact",
+        "en rendered PDF includes exact assets and loss",
+        "ar actual Excel: three sheets, assets 95650, loss -7250 and both TB sides 102900 exact",
+        "ar rendered PDF includes exact assets and loss"
+      ]
+    },
+    "fiscal-results": {
+      "status": "PASS",
+      "checks": [
+        "Migration 95 activation preserves every pre-existing journal/line/source/Auth/membership row",
+        "Activation configures no Company policy and creates no financial activity",
+        "Existing Company posting remains compatible before explicit fiscal configuration",
+        "Year helper creates contiguous exact calendar-month dates",
+        "Nonstandard fiscal starts and leap-day boundaries remain exact",
+        "Same-key fiscal setup retry returns original year",
+        "Changed setup replay denied without financial effects",
+        "Overlapping fiscal year denied without financial effects",
+        "Gap in year coverage denied without financial effects",
+        "Non-admin/foreign Company fiscal mutation denied without financial effects",
+        "Non-admin/foreign Company fiscal mutation denied without financial effects",
+        "Non-admin/foreign Company fiscal mutation denied without financial effects",
+        "Configured year exposes twelve same-Company open periods",
+        "Management Viewer reads period metadata without mutation authority",
+        "Foreign Company period read denied without financial effects",
+        "Missing reconciliation approval denied without financial effects",
+        "Missing reconciliation evidence denied without financial effects",
+        "Invalid period version denied without financial effects",
+        "Closed period records exact balanced snapshot and version",
+        "Closing changes only period metadata/audit; all financial history unchanged",
+        "Closed request retry preserves the same event and version",
+        "Stale period command denied without financial effects",
+        "Canonical Supplier invoice into closed period denied without financial effects",
+        "Authenticated direct journal bypass denied without financial effects",
+        "Date outside configured fiscal periods denied without financial effects",
+        "Accounting Admin reopens with audited reason",
+        "Canonical posting resumes only after authorized reopening",
+        "Authenticated direct period mutation denied without financial effects",
+        "Authenticated audit deletion denied without financial effects",
+        "Audit events remain immutable even through privileged fixture connection",
+        "Private fiscal lock is not browser-executable",
+        "All new tenant tables force RLS",
+        "Exactly CREATE_YEAR/CLOSE/REOPEN audited to authenticated Accounting Admin"
+      ],
+      "hostedRequests": 0,
+      "migration": {
+        "file": "20261117120000_fiscal_period_controls.sql",
+        "sha256": "ceb192e8700b576066cb03c7c29c6ccdbc5f8fdc18de299d45cbba844359605c",
+        "status": "PREPARED_NOT_APPLIED",
+        "hostedDryRun": "Read-only linked dry-run confirms only Migration95 pending; no seeds/roles/application",
+        "target": "eqnzueginpkskbnqvgoc"
+      },
+      "policy": "Accounting Admin audited close/reopen; all journal posting dates require open configured period",
+      "limits": [
+        "Opt-in; existing unconfigured Companies retain prior controls",
+        "Period lock does not post annual profit transfer/closing entries",
+        "Reconciliation attestation is recorded; specialist subledger completeness is not inferred",
+        "Fiscal year maximum372 inclusive days; UI generates explicit calendar-month slices; up to53 contiguous configured periods"
+      ]
+    },
+    "fiscal-races": {
+      "status": "PASS",
+      "checks": [
+        "Posting-before-close: observed lock wait, one committed invoice included in closed snapshot",
+        "Close-before-posting: concurrent posting fails retryably without waiting or financial effects",
+        "Concurrent same-key close retries return exactly one audit result/version",
+        "Rolled-back close permits exact-key posting retry; no phantom close or rejected request persists",
+        "Shared posting guard permits independent posting without exclusive Company serialization",
+        "Queued close cannot create a shared/exclusive/domain-lock cycle: later posting fails fast and close completes",
+        "All independent-connection race journals remain balanced"
+      ],
+      "engine": "Disposable native PostgreSQL; independent sessions and observer-confirmed waits",
+      "hostedRequests": 0
+    },
+    "fiscal-browser": {
+      "status": "PASS",
+      "checks": [
+        "en preview performs no configuration write",
+        "en explicit confirmation required",
+        "en actual canonical SQL creates exactly twelve periods",
+        "Lost response recovers same idempotency key without duplicate close",
+        "en close readback displays canonical closed state",
+        "en audited reopening restores open state",
+        "en readable laptop layout without page overflow",
+        "ar preview performs no configuration write",
+        "ar explicit confirmation required",
+        "ar actual canonical SQL creates exactly twelve periods",
+        "ar close readback displays canonical closed state",
+        "ar audited reopening restores open state",
+        "ar readable laptop layout without page overflow",
+        "Accountant sees period state without Admin controls",
+        "Browser configuration/close/reopen create no journals or financial documents",
+        "No fiscal period browser runtime errors"
+      ],
+      "errors": [],
+      "transport": "Loopback browser into disposable canonical SQL; hosted requests blocked"
+    }
+  },
+  "migration": {
+    "file": "20261117120000_fiscal_period_controls.sql",
+    "sha256": "ceb192e8700b576066cb03c7c29c6ccdbc5f8fdc18de299d45cbba844359605c",
+    "status": "PREPARED_NOT_APPLIED",
+    "hostedDryRun": "Finalized checksum/target verified; linked read-only dry-run lists ONLY 20261117120000_fiscal_period_controls.sql; no seeds or roles; migration NOT APPLIED",
+    "target": "eqnzueginpkskbnqvgoc"
+  },
+  "build": {
+    "typescript": "PASS",
+    "production": "PASS",
+    "browserConfig": "Synthetic public build configuration, not deployment values",
+    "lint": "0 errors; two nonblocking ref-cleanup hook advisories",
+    "bundle": "Existing >500KB chunk advisory"
+  },
+  "visualInspection": "Actual EN/AR statement and period screenshots inspected; laptop 1366x768; Excel and printable PDF artifacts verified",
+  "preservation": "No hosted database or real Company writes executed. GitHub publication metadata was read only. Maker AED364365.77 remains the prior verified checkpoint, not a new balance query. Applied Migration94 evidence reused. Migration95 isolated activation preserved pre-existing journal/line/source/Auth/membership rows.",
+  "lifecycle": {
+    "businessAccounting": "VERIFIED for supported statement and period-control subsets; full commercial program DEFERRED",
+    "securityAuthorization": "VERIFIED focused active actor/Company/role/RLS/private helper, stale version and native close/post races; separate comprehensive Production audit not run",
+    "database": "VERIFIED disposable additive95; hosted activation DEFERRED",
+    "deployment": "VERIFIED local production build and existing baseline metadata; new publication DEFERRED",
+    "testing": "VERIFIED listed executed checks only; missing scenarios BLOCKED/NOT EXECUTED",
+    "documentation": "VERIFIED canonical records, completion matrix and executed learning workbook"
+  },
+  "releaseOrder": [
+    "Obtain explicit authorization for exactly Migration95 after target/history/dry-run/checksum review",
+    "Activate95 under approved workflow with preservation postflight; no Company policy or financial data automatically created",
+    "Publish compatible frontend only under separate operator authorization",
+    "Configure a real Company fiscal year only under explicit scoped Company setup authorization; none is authorized here",
+    "Continue local AR/assets/accrual/cash-flow and remaining commercial requirements without claiming complete readiness"
+  ],
+  "locking": "Nonblocking shared admission for journal insertion; exclusive transition lock. New posting fails atomically with retryable40001 while close/reopen is pending; domain-lock queue cycles are avoided."
+}

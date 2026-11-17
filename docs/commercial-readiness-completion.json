@@ -1,0 +1,205 @@
+{
+  "program": "Approved ROADMAP V3 Commercial Readiness Program",
+  "date": "2026-11-18",
+  "overall": "PARTIAL — NOT COMMERCIALLY READY",
+  "scope": "Bounded implementation evidence; not a new roadmap or a general architecture audit",
+  "authority": "Local implementation and disposable test execution only; no real Company mutations, hosted migrations, push or deployment",
+  "publishedBaseline": {
+    "sha": "dc430087c9d2c585ab17cb031a0100c2b95a1c91",
+    "githubMain": "VERIFIED by git ls-remote",
+    "production": "VERIFIED GitHub Production deployment status success, created 2026-11-17T19:19:02Z",
+    "deploymentUrl": "https://maker-bzw9tv5t0-n7rawy1984-8059s-projects.vercel.app",
+    "runtimeAcceptance": "Not repeated; deployment metadata does not imply new end-user acceptance",
+    "migration": "Local canonical history ends at 94; prior hosted 94 activation evidence reused, not freshly queried"
+  },
+  "modules": [
+    {
+      "module": "Chart of Accounts and control setup",
+      "status": "COMPLETE",
+      "scope": "Existing active typed Company accounts, Party requirements and canonical supported control/Treasury setup; disposable new Company exercises these commands",
+      "evidence": [
+        "src/master/CompanyAccountingSetup.tsx",
+        "supabase/migrations/20261105130000_existing_company_accounting_setup.sql",
+        "scripts/commercial-readiness-fixture.mjs"
+      ]
+    },
+    {
+      "module": "Canonical double-entry GL",
+      "status": "COMPLETE",
+      "scope": "Existing immutable balanced specialized commands, scoped reads and idempotency for supported business events; not proof that every future business event exists",
+      "evidence": [
+        "supabase/migrations/20260831120000_p5a_accounting_kernel.sql",
+        "src/reports/postedLedgerRead.ts",
+        "scripts/verify-commercial-foundation.mjs"
+      ]
+    },
+    {
+      "module": "Opening balances",
+      "status": "PARTIAL",
+      "scope": "Certified target-position/delta opening workflow reused in simulation; complete AR/AP/Inventory/Contract opening subledger migration is not established",
+      "evidence": [
+        "src/financial/OpeningReconciliationWorkspace.tsx",
+        "supabase/migrations/20261105090000_certified_opening_cash_reconciliation.sql"
+      ]
+    },
+    {
+      "module": "Corrections, reversals and adjustments",
+      "status": "PARTIAL",
+      "scope": "Supported Expense/source/Contract/Payroll reversals and source reclassification retained; generic accrual/prepayment adjustments and complete prior-period policy remain outstanding",
+      "evidence": [
+        "src/historical/SourceReclassification.tsx",
+        "supabase/migrations/20261106130000_source_transaction_reclassification.sql"
+      ]
+    },
+    {
+      "module": "Fiscal periods, close and reopening",
+      "status": "PARTIAL",
+      "scope": "Owner policy confirmed: Accounting Admin audited close/reopen, Accountants post only to open periods. Migration95 and bilingual operational UI verified locally with universal journal gate, opt-in fiscal dates, version/idempotency, preservation and native races. No annual profit-transfer/closing-entry workflow yet. Hosted activation remains unapproved.",
+      "evidence": [
+        "supabase/migrations/20261117120000_fiscal_period_controls.sql",
+        "src/reports/AccountingPeriodsWorkspace.tsx",
+        "docs/commercial-foundation-verification.json"
+      ]
+    },
+    {
+      "module": "Supplier AP",
+      "status": "PARTIAL",
+      "scope": "ACW-01 core service invoices, partial/multiple/final settlement, advances, allocation, credits, statements/aging and GL reconciliation implemented. Inventory return/price credits/refunds retain documented specialist limits",
+      "evidence": [
+        "docs/ACW_01_SUPPLIER_ACCOUNTS_PAYABLE.md",
+        "src/financial/SupplierAccountsWorkspace.tsx",
+        "supabase/migrations/20261113140000_supplier_accounts_payable_cycle.sql"
+      ]
+    },
+    {
+      "module": "Customer AR",
+      "status": "MISSING",
+      "scope": "No accounting Customer master, sales invoice/receipt/credit/advance subledger or AR aging UI/commands established. Platform commercial Customer is not an accounting debtor. FIN-05 construction revenue policy remains a dependency",
+      "evidence": [
+        "src/workspace/moduleRegistry.ts",
+        "NARVO_ERP_ACCOUNTING_REQUIREMENTS_REGISTER.md#fin-05--client-contracts-ar-and-revenue-recognition"
+      ]
+    },
+    {
+      "module": "Treasury and Bank",
+      "status": "PARTIAL",
+      "scope": "Real GL-mapped Treasury, supported receipts/payments/funding, movements and reconciliation outputs exist. External bank statement import/matching and complete bank reconciliation operational workflow not established",
+      "evidence": [
+        "src/financial/OperationalFinanceWorkspace.tsx",
+        "src/reports/TreasuryMovements.tsx"
+      ]
+    },
+    {
+      "module": "Financial Custody",
+      "status": "COMPLETE",
+      "scope": "Supported canonical funding, payment, settlement, return and reconciliation lifecycle only; not verified physical cash or an invented reimbursement entitlement",
+      "evidence": [
+        "src/financial/CustodyWorkspace.tsx",
+        "src/reports/CustodyReconciliation.tsx",
+        "supabase/migrations/20261111140000_custody_funded_source_settlements.sql"
+      ]
+    },
+    {
+      "module": "Inventory and Materials",
+      "status": "PARTIAL",
+      "scope": "V1 item/UOM/location, receipt, moving-average valuation, GRNI invoice match, Project issue, transfers, returns/counts/adjustments and reports exist. Sales/COGS integration and documented purchasing/return specialist limitations remain",
+      "evidence": [
+        "docs/INVENTORY_MATERIALS_V1.md",
+        "src/inventory/InventoryWorkspace.tsx",
+        "supabase/migrations/20261106150000_inventory_materials_v1.sql"
+      ]
+    },
+    {
+      "module": "Projects and Subcontractors",
+      "status": "PARTIAL",
+      "scope": "Project analytic costs, contract-scoped advances, certificates, recovery, retention, payment and reporting supported. Complete construction revenue, contract assets/liabilities and WIP await approved recognition policy",
+      "evidence": [
+        "src/financial/OperationalContracts.tsx",
+        "src/reports/ProjectCostLedger.tsx",
+        "NARVO_ERP_ACCOUNTING_REQUIREMENTS_REGISTER.md#fin-05--client-contracts-ar-and-revenue-recognition"
+      ]
+    },
+    {
+      "module": "Employee, Attendance and Payroll",
+      "status": "PARTIAL",
+      "scope": "Existing master/terms/attendance/calculation/review/accrual/payment/advance recovery/reporting retained. Advanced HR/WPS and complete absence/leave/partial-hours simulation coverage remain separately tracked",
+      "evidence": [
+        "docs/HR_OPERATIONAL_FOUNDATION.md",
+        "src/payroll/PayrollApplication.tsx",
+        "supabase/migrations/20261106160000_payroll_recovery_project_dimension.sql"
+      ]
+    },
+    {
+      "module": "Fixed assets",
+      "status": "MISSING",
+      "scope": "FIN-06 asset register/capitalization/depreciation/disposal operational lifecycle not established. Configurable asset classes, lives, residual/method and transition policy required",
+      "evidence": [
+        "NARVO_ERP_ACCOUNTING_REQUIREMENTS_REGISTER.md#fin-06--fixed-assets-depreciation-and-related-schedules"
+      ]
+    },
+    {
+      "module": "Accruals and prepayments",
+      "status": "MISSING",
+      "scope": "No operational schedules, allocation/accrual/release commands or UI established; generic private journal primitive is not an accountant-facing workflow",
+      "evidence": [
+        "src/financial",
+        "NARVO_ERP_ACCOUNTING_REQUIREMENTS_REGISTER.md"
+      ]
+    },
+    {
+      "module": "Tax accounting",
+      "status": "PARTIAL",
+      "scope": "Supported input VAT/nonrecoverable gross-cost treatment and Supplier credit controls retained. Output VAT requires AR; dedicated tax return/adjustment reconciliation and jurisdictional configuration remain outstanding",
+      "evidence": [
+        "src/financial/SupplierAccountsWorkspace.tsx",
+        "src/financial/ExpenseDraftWorkspace.tsx",
+        "supabase/migrations/20261113140000_supplier_accounts_payable_cycle.sql"
+      ]
+    },
+    {
+      "module": "Trial Balance, Income Statement, Balance Sheet",
+      "status": "COMPLETE",
+      "scope": "New locally verified supported subset: full authorized posted ledger, exact amounts, period income, cumulative balances/unclosed results, EN/AR Excel/printable PDF. Prior movements do not certify complete opening books. Payroll-restricted readers receive unavailable scope, never falsely complete totals. Local release unpublished",
+      "evidence": [
+        "src/reports/financialStatements.ts",
+        "src/reports/FinancialStatementsWorkspace.tsx",
+        "docs/commercial-foundation-verification.json"
+      ]
+    },
+    {
+      "module": "Cash Flow Statement",
+      "status": "BLOCKED BY DEPENDENCY",
+      "scope": "No full statement implementation. Cash-equivalent scope and operating/investing/financing classifications require explicit configurable policy, including Custody treatment; Treasury movement report is not a Cash Flow Statement",
+      "evidence": [
+        "src/reports/TreasuryMovements.tsx",
+        "NARVO_ERP_ACCOUNTING_REQUIREMENTS_REGISTER.md"
+      ]
+    },
+    {
+      "module": "Complete fictional accounting cycle",
+      "status": "PARTIAL",
+      "scope": "Executed canonical supported-cycle scenarios with independent answer key and reconciled statements; missing AR/assets/accruals/cash flow/formal close and remaining specialized/negative UI scenarios are BLOCKED or NOT EXECUTED, not PASS",
+      "evidence": [
+        "docs/commercial-foundation-verification.json",
+        "docs/COMMERCIAL_ACCOUNTING_SIMULATION.md"
+      ]
+    },
+    {
+      "module": "Commercial onboarding, subscriptions, document security and operations",
+      "status": "PARTIAL",
+      "scope": "Existing platform/entity/subscription and authorization work retained. Remaining original commercial requirements, private documents, independent Production audit, monitoring and final DR/restore gates remain tracked; no commercial go-live claim",
+      "evidence": [
+        "NARVO_ERP_MASTER_ROADMAP_V2.0.md",
+        "NARVO_ERP_ACCOUNTING_REQUIREMENTS_REGISTER.md",
+        "PROJECT_ROADMAP.md"
+      ]
+    }
+  ],
+  "deferredPreserved": [
+    "Real Maker Payroll and remaining evidence-dependent transactions",
+    "Green, Villa 13 and Al Mazraa onboarding",
+    "Full original Procurement/Inventory/AR/AP/construction/HR/WPS/subscriptions/security/operations requirements",
+    "Final restoration rehearsal and deferred USB work"
+  ],
+  "nextDependency": "Continue existing FIN-05 AR/customer cycle and remaining approved foundational accounting gaps; retained-earnings closing entries, Cash Flow and complete period-end simulation remain outstanding. Hosted95 activation needs separate exact authorization; local independent development does not require that activation."
+}
