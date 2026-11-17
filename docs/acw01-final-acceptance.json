@@ -1,0 +1,589 @@
+{
+  "date": "2026-11-17",
+  "baselineRelease": "0eec66e96ee3345b4ad1d4757a7b55be6836ae03",
+  "status": "FINAL_FOCUSED_ACCEPTANCE_PASS_WITH_EXPLICIT_OPERATIONAL_PREREQUISITE",
+  "changes": [
+    "Inventory receipt select: correct placeholder, explicit bilingual accessible name, required actual receipt; VAT treatment accessible name",
+    "Client Inventory approval warning/guard mirrors existing Accounting Admin database rule; no role/grant change",
+    "Supplier AP scope clarified in screen and shared Excel/PDF model; source associations are not invoices or complete purchase history",
+    "Missing Supplier Payable mapping: actionable setup warning; reconciliation/export shows Not configured and Unavailable; no fabricated numeric difference; inactive mapped controls retain historical reporting"
+  ],
+  "tests": {
+    "canonicalAccounting": {
+      "status": "PASS",
+      "count": 42,
+      "checks": [
+        "Invoice preview balanced and exact",
+        "Credit service invoice recognized once with payable",
+        "Invoice retry idempotent",
+        "Changed invoice retry rejected",
+        "Normalized duplicate Supplier invoice rejected",
+        "VAT claim without tax invoice evidence rejected",
+        "Project service invoice preserves net and recoverable VAT",
+        "Partial payment debits AP and credits Custody once",
+        "Payment recognizes no duplicate Expense",
+        "Overpayment rejected",
+        "One payment allocates to multiple invoices and Projects",
+        "Duplicate invoice allocation rejected",
+        "Credit note reduces correct original cost and payable",
+        "Advance allocated to Supplier invoice",
+        "Advance application moves no cash and creates no cost",
+        "Advance over-allocation rejected",
+        "Advance reversal blocked until dependent allocations reversed",
+        "Full final settlement clears outstanding",
+        "Already settled invoice cannot be paid twice",
+        "Invoice reversal blocked by live AP dependencies",
+        "Credit reversal restores payable without changing original journal",
+        "Allocation reversal restores advance availability and invoice liability",
+        "Advance reversal restores original cash once after allocation reversal",
+        "Tax credit follows original 5% net/VAT treatment",
+        "Conflicting credit-note VAT rejected",
+        "Inventory invoice creates canonical Supplier payable with VAT",
+        "GRNI match creates no duplicate Inventory or Project cost",
+        "Inventory credit blocked from ordinary Expense adjustment",
+        "Inventory-linked invoice enforces canonical reversal dependencies",
+        "Cash Inventory invoice matches receipt and settles exactly once atomically",
+        "Cash service purchase produces no artificial outstanding liability",
+        "Management Viewer cannot post invoice",
+        "Foreign Company actor cannot post invoice",
+        "Foreign Company reader denied",
+        "Procurement cannot post financial advance",
+        "Caller-selected GL account rejected",
+        "New AP tables isolate other Company",
+        "Authenticated direct AP deletion denied",
+        "Management Viewer can read non-Payroll Supplier statement components",
+        "Supplier invoice outstanding reconciles to canonical AP GL",
+        "Every pre-existing journal unchanged",
+        "All scenario journals balance"
+      ]
+    },
+    "canonicalIntegration": {
+      "status": "PASS",
+      "count": 20,
+      "checks": [
+        "Authoritative Custody payment preview balanced",
+        "Payment preview rejects excessive allocation",
+        "Normalized advance replay returns one original journal",
+        "Duplicate actual advance reference rejected",
+        "Existing AP summary reader includes credit notes and applied advances",
+        "Existing payment reader accepts authoritative Custody funding",
+        "Canonical Supplier GL statement resolves new credit/advance source documents",
+        "Supplier advances classified separately from AP in GL statement",
+        "Custody statement traces Supplier advances without Party mismatch",
+        "No invented due-date or overdue claim when payment terms absent",
+        "Aging boundary uses exact days and amounts",
+        "en Supplier report includes invoices, payments, credits, advances and allocations",
+        "ar Supplier report includes invoices, payments, credits, advances and allocations",
+        "Project cost ledger includes source-linked Supplier credit exactly once",
+        "Existing monthly financial dashboard remains available with Supplier funding",
+        "Existing Supplier payment reversal supports Custody journals",
+        "Viewer cannot obtain financial command plan",
+        "Ordinary Accountant cannot reconfigure control accounts",
+        "Closed period blocks Supplier invoice recognition",
+        "Closed period blocks Supplier cash advance"
+      ]
+    },
+    "canonicalCreditNotes": {
+      "status": "PASS",
+      "count": 15,
+      "checks": [
+        "Paid-invoice credit becomes separate available Supplier balance",
+        "Paid-invoice credit reduces actual cost without fictitious refund",
+        "Existing Supplier credit allocated to another invoice",
+        "Credit allocation retries create no duplicate financial effect",
+        "Cannot over-allocate Supplier credit",
+        "Credit-note reversal requires dependent applications reversed",
+        "Existing AP summary preserves signed Supplier credit balances",
+        "Allocation reversal restores both original document positions",
+        "Credit reversal preserves original paid invoice and cash history",
+        "Credit against cash purchase creates Supplier credit without new liability or cash movement",
+        "Cumulative credit cannot exceed original recognized cost",
+        "Actual manual/mixed tax credit is not forced to an invented average rate",
+        "Ambiguous non-ISO financial date rejected",
+        "Unsupported asset purchase cannot be forced into Expense",
+        "Open invoices less unapplied credits reconcile to canonical Supplier AP GL"
+      ]
+    },
+    "nativeConcurrency": {
+      "status": "PASS",
+      "count": 11,
+      "checks": [
+        "Concurrent duplicate invoice numbers commit exactly one invoice",
+        "Competing partial payments cannot overpay the same invoice",
+        "Concurrent credit note and payment cannot over-settle payable",
+        "Concurrent normalized retry returns one canonical journal",
+        "Rolled-back payment leaves remaining balance available to waiting payer",
+        "Credit note commits before invoice reversal; dependency blocks reversal without deadlock",
+        "Invoice reversal commits first; concurrent credit cannot act on reversed payable",
+        "Concurrent advance applications cannot spend the same advance twice",
+        "Concurrent Supplier credit applications cannot spend the same paid-invoice credit twice",
+        "Native concurrent open invoices reconcile to canonical AP GL",
+        "Every native race leaves balanced immutable journals"
+      ]
+    },
+    "actualBrowserCanonicalSQL": {
+      "status": "PASS",
+      "count": 57,
+      "checks": [
+        "en actual sidebar opens canonical Supplier invoice workspace",
+        "en native Supplier dropdown opens with mouse",
+        "en dropdown remains open",
+        "en keyboard selection persists",
+        "New invoice ACCEPT-5000-en defaults to unpaid credit, not historical Custody",
+        "en posting requires authoritative preview",
+        "en actual browser posts exactly one AED5000 invoice",
+        "en invoice Dr Project Cost / Cr Supplier AP exact",
+        "en unpaid invoice creates no Custody movement",
+        "en actual partial payment leaves AED3000 payable",
+        "en payment Dr AP / Cr actual Custody exact",
+        "en payment creates no duplicate Project cost",
+        "en actual final payment clears invoice",
+        "en both payments credit Custody exactly AED5000",
+        "New invoice ACCEPT-STOCK-en defaults to unpaid credit, not historical Custody",
+        "en Accountant can preview stock match but gets clear existing Admin approval boundary",
+        "en database independently rejects Accountant stock matching atomically",
+        "New invoice ACCEPT-STOCK-en defaults to unpaid credit, not historical Custody",
+        "en Inventory treatment requires and retains real receipt match",
+        "en actual Inventory invoice clears GRNI into AP without repeated stock or Project cost",
+        "en canonical duplicate receipt matching rejected",
+        "New invoice ACCEPT-PAID-en defaults to unpaid credit, not historical Custody",
+        "en immediate-paid service credits selected Custody once with no unpaid liability",
+        "en Supplier statement shows actual posted invoice and payment results",
+        "en AP scope distinguishes imported activity from canonical invoices",
+        "en printable PDF statement contains actual canonical invoice",
+        "en GL detail preserves Supplier through actual canonical reader",
+        "ar actual sidebar opens canonical Supplier invoice workspace",
+        "ar native Supplier dropdown opens with mouse",
+        "ar dropdown remains open",
+        "ar keyboard selection persists",
+        "New invoice ACCEPT-5000-ar defaults to unpaid credit, not historical Custody",
+        "ar posting requires authoritative preview",
+        "ar actual browser posts exactly one AED5000 invoice",
+        "ar invoice Dr Project Cost / Cr Supplier AP exact",
+        "ar unpaid invoice creates no Custody movement",
+        "ar actual partial payment leaves AED3000 payable",
+        "ar payment Dr AP / Cr actual Custody exact",
+        "ar payment creates no duplicate Project cost",
+        "ar actual final payment clears invoice",
+        "ar both payments credit Custody exactly AED5000",
+        "New invoice ACCEPT-STOCK-ar defaults to unpaid credit, not historical Custody",
+        "ar Accountant can preview stock match but gets clear existing Admin approval boundary",
+        "ar database independently rejects Accountant stock matching atomically",
+        "New invoice ACCEPT-STOCK-ar defaults to unpaid credit, not historical Custody",
+        "ar Inventory treatment requires and retains real receipt match",
+        "ar actual Inventory invoice clears GRNI into AP without repeated stock or Project cost",
+        "ar canonical duplicate receipt matching rejected",
+        "New invoice ACCEPT-PAID-ar defaults to unpaid credit, not historical Custody",
+        "ar immediate-paid service credits selected Custody once with no unpaid liability",
+        "ar Supplier statement shows actual posted invoice and payment results",
+        "ar AP scope distinguishes imported activity from canonical invoices",
+        "ar printable PDF statement contains actual canonical invoice",
+        "ar GL detail preserves Supplier through actual canonical reader",
+        "Final canonical Supplier subledger reconciles to AP GL",
+        "Every actual isolated journal balances",
+        "Actual route/browser runtime errors absent"
+      ]
+    },
+    "changeSpecificBrowser": {
+      "status": "PASS",
+      "count": 20,
+      "checks": [
+        "en missing control mapping has actionable Company setup warning",
+        "en no false zero GL reconciliation when mapping is absent",
+        "en no invented numeric reconciliation difference while mapping is unavailable",
+        "en printable export preserves unconfigured reconciliation state",
+        "en Inventory receipt has stable accessible label and mandatory selection",
+        "en Inventory blank choice no longer mislabels Service treatment",
+        "en Accountant sees stock matching authority before posting",
+        "en switching to service removes Inventory receipt requirement",
+        "en tax treatment has stable Arabic/English accessible label",
+        "ar missing control mapping has actionable Company setup warning",
+        "ar no false zero GL reconciliation when mapping is absent",
+        "ar no invented numeric reconciliation difference while mapping is unavailable",
+        "ar printable export preserves unconfigured reconciliation state",
+        "ar Inventory receipt has stable accessible label and mandatory selection",
+        "ar Inventory blank choice no longer mislabels Service treatment",
+        "ar Accountant sees stock matching authority before posting",
+        "ar switching to service removes Inventory receipt requirement",
+        "ar tax treatment has stable Arabic/English accessible label",
+        "Control/read-only browser regressions create no journal",
+        "Control browser runtime errors absent"
+      ]
+    },
+    "reportSemantics": {
+      "status": "PASS",
+      "count": 12,
+      "checks": [
+        "A historical Supplier association changes no canonical invoice, GL balance or journal",
+        "As-of Supplier statement excludes later invoices",
+        "GL opening derives from actual earlier posted invoices, separately from period activity",
+        "All aging boundary buckets reconcile exactly",
+        "en unconfigured AP mapping renders unavailable GL reconciliation instead of false zero",
+        "ar unconfigured AP mapping renders unavailable GL reconciliation instead of false zero",
+        "Missing Supplier Payable mapping fails atomically with explicit setup requirement",
+        "Inventory invoice matching preserves exact warehouse quantities and valuation",
+        "Receipt invoice has exactly one canonical purchase link",
+        "en export model retains canonical invoice references",
+        "ar export model retains canonical invoice references",
+        "Posting and reporting leave original historical Supplier-linked source unchanged"
+      ]
+    },
+    "exportFiles": {
+      "status": "PASS",
+      "count": 5,
+      "checks": [
+        "en actual XLSX retains invoice reference and exact AED5000",
+        "en actual PDF retains invoice reference and exact AED5000",
+        "ar actual XLSX retains invoice reference and exact AED5000",
+        "Arabic XLSX retains Unicode headers",
+        "ar actual PDF retains invoice reference and exact AED5000"
+      ]
+    }
+  },
+  "actualBrowserPosting": {
+    "isolatedOnly": true,
+    "company": "Synthetic Supplier Company",
+    "invoices": 6,
+    "settlementPayments": 4,
+    "scenarios": [
+      "AED5000 service/project credit invoice; AED2000 partial payment leaves AED3000; AED3000 final payment leaves zero",
+      "Canonical actual receipt match; unchanged inventory valuation and warehouse quantities, no duplicated Project cost",
+      "AED25 immediate paid service uses selected Custody exactly once",
+      "Historical SOURCE_SET Custody preference does not become a new purchase default"
+    ],
+    "journalExamples": [
+      {
+        "id": "c8e556a0-bbed-44e2-b8d8-9a74d275104c",
+        "lines": [
+          {
+            "systemKey": "PROJECT_COST",
+            "debit": "500000",
+            "credit": "0",
+            "party": null,
+            "project": "ed030005-0000-4000-8000-000000000100",
+            "treasury": null
+          },
+          {
+            "systemKey": "SUPPLIER_PAYABLE",
+            "debit": "0",
+            "credit": "500000",
+            "party": "ed030005-0000-4000-8000-000000000020",
+            "project": "ed030005-0000-4000-8000-000000000100",
+            "treasury": null
+          }
+        ]
+      },
+      {
+        "id": "e30be8f9-d50c-4ff7-b39d-a9691ffe3bd8",
+        "lines": [
+          {
+            "systemKey": "SUPPLIER_PAYABLE",
+            "debit": "200000",
+            "credit": "0",
+            "party": "ed030005-0000-4000-8000-000000000020",
+            "project": "ed030005-0000-4000-8000-000000000100",
+            "treasury": null
+          },
+          {
+            "systemKey": "CUSTODY_ADVANCE",
+            "debit": "0",
+            "credit": "200000",
+            "party": "ed030005-0000-4000-8000-000000000101",
+            "project": null,
+            "treasury": null
+          }
+        ]
+      },
+      {
+        "id": "1d60d782-8d59-48bb-a0c8-2a556b007e27",
+        "lines": [
+          {
+            "systemKey": "SUPPLIER_PAYABLE",
+            "debit": "300000",
+            "credit": "0",
+            "party": "ed030005-0000-4000-8000-000000000020",
+            "project": "ed030005-0000-4000-8000-000000000100",
+            "treasury": null
+          },
+          {
+            "systemKey": "CUSTODY_ADVANCE",
+            "debit": "0",
+            "credit": "300000",
+            "party": "ed030005-0000-4000-8000-000000000101",
+            "project": null,
+            "treasury": null
+          }
+        ]
+      },
+      {
+        "id": "b2859d83-708e-450a-a794-6da62ec46c3c",
+        "lines": [
+          {
+            "systemKey": "PROJECT_COST",
+            "debit": "250000",
+            "credit": "0",
+            "party": null,
+            "project": "ed030005-0000-4000-8000-000000000100",
+            "treasury": null
+          },
+          {
+            "systemKey": "SUPPLIER_PAYABLE",
+            "debit": "0",
+            "credit": "250000",
+            "party": "ed030005-0000-4000-8000-000000000020",
+            "project": "ed030005-0000-4000-8000-000000000100",
+            "treasury": null
+          }
+        ]
+      },
+      {
+        "id": "ab70e9ca-62be-4e06-b3e2-69086790e05f",
+        "lines": [
+          {
+            "systemKey": "PROJECT_COST",
+            "debit": "2500",
+            "credit": "0",
+            "party": null,
+            "project": "ed030005-0000-4000-8000-000000000100",
+            "treasury": null
+          },
+          {
+            "systemKey": "CUSTODY_ADVANCE",
+            "debit": "0",
+            "credit": "2500",
+            "party": "ed030005-0000-4000-8000-000000000101",
+            "project": "ed030005-0000-4000-8000-000000000100",
+            "treasury": null
+          }
+        ]
+      },
+      {
+        "id": "03e76f1b-79d8-463a-8adb-df93f2bd024c",
+        "lines": [
+          {
+            "systemKey": "PROJECT_COST",
+            "debit": "500000",
+            "credit": "0",
+            "party": null,
+            "project": "ed030005-0000-4000-8000-000000000100",
+            "treasury": null
+          },
+          {
+            "systemKey": "SUPPLIER_PAYABLE",
+            "debit": "0",
+            "credit": "500000",
+            "party": "ed030005-0000-4000-8000-000000000020",
+            "project": "ed030005-0000-4000-8000-000000000100",
+            "treasury": null
+          }
+        ]
+      },
+      {
+        "id": "93b7b12d-f330-4a93-9f07-48e6126f45f8",
+        "lines": [
+          {
+            "systemKey": "SUPPLIER_PAYABLE",
+            "debit": "200000",
+            "credit": "0",
+            "party": "ed030005-0000-4000-8000-000000000020",
+            "project": "ed030005-0000-4000-8000-000000000100",
+            "treasury": null
+          },
+          {
+            "systemKey": "CUSTODY_ADVANCE",
+            "debit": "0",
+            "credit": "200000",
+            "party": "ed030005-0000-4000-8000-000000000101",
+            "project": null,
+            "treasury": null
+          }
+        ]
+      },
+      {
+        "id": "eb89d5f3-90be-43b2-a458-a56ca827ab65",
+        "lines": [
+          {
+            "systemKey": "SUPPLIER_PAYABLE",
+            "debit": "300000",
+            "credit": "0",
+            "party": "ed030005-0000-4000-8000-000000000020",
+            "project": "ed030005-0000-4000-8000-000000000100",
+            "treasury": null
+          },
+          {
+            "systemKey": "CUSTODY_ADVANCE",
+            "debit": "0",
+            "credit": "300000",
+            "party": "ed030005-0000-4000-8000-000000000101",
+            "project": null,
+            "treasury": null
+          }
+        ]
+      },
+      {
+        "id": "50ae4ca5-a9b5-4112-8152-9f233861fddf",
+        "lines": [
+          {
+            "systemKey": "PROJECT_COST",
+            "debit": "250000",
+            "credit": "0",
+            "party": null,
+            "project": "ed030005-0000-4000-8000-000000000100",
+            "treasury": null
+          },
+          {
+            "systemKey": "SUPPLIER_PAYABLE",
+            "debit": "0",
+            "credit": "250000",
+            "party": "ed030005-0000-4000-8000-000000000020",
+            "project": "ed030005-0000-4000-8000-000000000100",
+            "treasury": null
+          }
+        ]
+      },
+      {
+        "id": "ab643a4a-3ef5-43ef-972b-8bd46c2a6a35",
+        "lines": [
+          {
+            "systemKey": "PROJECT_COST",
+            "debit": "2500",
+            "credit": "0",
+            "party": null,
+            "project": "ed030005-0000-4000-8000-000000000100",
+            "treasury": null
+          },
+          {
+            "systemKey": "CUSTODY_ADVANCE",
+            "debit": "0",
+            "credit": "2500",
+            "party": "ed030005-0000-4000-8000-000000000101",
+            "project": "ed030005-0000-4000-8000-000000000100",
+            "treasury": null
+          }
+        ]
+      }
+    ],
+    "accountingTransport": "Actual application routes/forms through loopback HTTP into canonical PGlite PostgreSQL commands and readers. Synthetic Auth/master adapters only; journal results are not mocked. Native races use independent local PostgreSQL connections. No real Maker financial writes."
+  },
+  "productionReadOnly": {
+    "before": "2026-11-17T14:24:01.619Z",
+    "after": "2026-11-17T14:28:43.381Z",
+    "sameTableFingerprints": {
+      "journal_entries": {
+        "count": 30,
+        "sha256": "9cb1982000a17e3663db2ba10ed29a8827b3be87a1ee0023f4fed40b8c61dc2d"
+      },
+      "journal_lines": {
+        "count": 60,
+        "sha256": "e076565b8c72265a9a258e92e8749d157ac2a6ee05474f7f4d271c633ebcb8bd"
+      },
+      "parties": {
+        "count": 74,
+        "sha256": "6629ccbc314d485045a5022d9c955af71575af297a7926bda2bb50bc617abf27"
+      },
+      "historical_source_records": {
+        "count": 370,
+        "sha256": "6f6f87d75449e002954b70d0f0f415c867d92c6bc408e158785d26dc7f2368b5"
+      },
+      "historical_expense_drafts": {
+        "count": 21,
+        "sha256": "9a06a168263bbe91b2cf4bc60896d7512e0bdaa2b5d1017b61eb3b3bc29e5b00"
+      },
+      "expense_draft_events": {
+        "count": 66,
+        "sha256": "7670ed6d00696154a5311f2ea44313a1ad13066ee138bdac9df7dbea8933ee2d"
+      },
+      "expenses": {
+        "count": 16,
+        "sha256": "1d74c59a15c146d7f61518a0c054efc33dde5fbb12fb56333d8b9e66325f8104"
+      },
+      "supplier_payments": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "supplier_payment_allocations": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "supplier_ap_documents": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "treasury_accounts": {
+        "count": 1,
+        "sha256": "0a752355f8e6177528fa0ed928a8ff8772b30ae580080eecb7a67bd9bace6c73"
+      },
+      "accounts": {
+        "count": 5,
+        "sha256": "1f95141224ca10136d627bbd10cf3c5ffa9a6263e984e88ba9f4735a9aec145d"
+      },
+      "payroll_postings": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "payroll_entitlements": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "payroll_draft_rows": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    "tablesPreserved": 15,
+    "dimensionBalancesUnchanged": true,
+    "apReadUnchanged": true,
+    "journals": 30,
+    "journalLines": 60,
+    "sources": 370,
+    "supplierParties": 69,
+    "allParties": 74,
+    "expenses": 16,
+    "draftBindings": 21,
+    "draftEvents": 66,
+    "payrollPostings": 0,
+    "barqCustodyMinor": "37030070",
+    "debitAndCreditTotalsMinor": {
+      "debit": "41161970",
+      "credit": "41161970"
+    },
+    "financialWrites": 0,
+    "supplierAPInvoices": 0,
+    "payableControlConfigured": false,
+    "selectorProbe": {
+      "opened": true,
+      "stayedOpen": true,
+      "selectionSucceeded": true
+    },
+    "access": "Existing authenticated Company accountant session; RLS-enforced GETs and existing read_supplier_accounts; no administrative impersonation",
+    "scopeLimit": "Company/RLS-visible fingerprints, not privileged global/atomic database capture. No fresh broad security audit."
+  },
+  "migration": {
+    "required": false,
+    "existingAppliedDependency": 94,
+    "schemaOrPermissionChanges": false
+  },
+  "sourcePreservation": {
+    "status": "PASS",
+    "commandPayloadsAndRequestLifecycleUnchanged": true,
+    "onlyCommandGuardChange": "Client blocks non-Admin Inventory invoice submission consistently with existing Migration88 database approval rule",
+    "schemaAuthRLSAndCanonicalReadersUnchanged": true,
+    "balanceAndAgingMathUnchanged": true,
+    "migration94SHA256": "cab19b0a6f3996e6ff9a47964fdb0621632c1ce532c77e006c229dfd86ad01c8"
+  },
+  "quality": {
+    "typeScript": "PASS",
+    "productionBuild": "PASS; existing large-chunk advisory",
+    "scopedLint": "0 errors / 2 existing state-effect warnings",
+    "diffCheck": "PASS"
+  },
+  "screenshotsAndExports": "Local synthetic evidence /tmp/narvo-acw01-acceptance-evidence; private Production screenshot excluded from release",
+  "remainingLimitations": [
+    "Maker credit AP execution requires deliberate Supplier Payable control account configuration by authorized Accounting Admin; no account was invented or created",
+    "Inventory invoice matching retains existing Accounting Admin approval, configured Inventory/GRNI and actual receipt prerequisites",
+    "Physical stock returns/Inventory price credits, actual Supplier cash refunds and fixed-asset purchases retain existing specialist workflow limitations; no shortcut accounting added",
+    "Real Maker invoice/payment posting is not part of acceptance; post-publication UI acceptance of this patch remains operator work"
+  ],
+  "nextPhase": "Stop expanding ACW-01; continue existing approved Roadmap V3 in a separate milestone. All original commercial ERP and deferred recovery requirements remain preserved.",
+  "deployment": "One isolated compatible frontend patch; not pushed or deployed; no migration"
+}
