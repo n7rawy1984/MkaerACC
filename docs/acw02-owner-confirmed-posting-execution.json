@@ -1,0 +1,516 @@
+{
+  "captured": "2026-11-17T17:56:39.059Z",
+  "status": "PASS",
+  "results": [
+    {
+      "source_id": "ee9feb23-6b67-400f-9be6-9e079944d130",
+      "source_reference": "G-2026-09-87",
+      "date": "2026-09-23",
+      "amount_minor": "2790",
+      "expense_id": "c293f38a-9035-4d7b-a4f9-c1a44905f7eb",
+      "expense_reference": "MAKER-EXP-2026-000017",
+      "journal_id": "ce07bed9-93fa-4d51-8468-c8e089c20d5a",
+      "category": "OFFICE_ADMIN"
+    },
+    {
+      "source_id": "1d321638-c58a-493b-a72f-092b1284c9d5",
+      "source_reference": "10- OCT 26|R112|MAIN",
+      "date": "2026-11-02",
+      "amount_minor": "5000",
+      "expense_id": "4adc8dd0-d6ba-47fa-bcea-5718abd0a606",
+      "expense_reference": "MAKER-EXP-2026-000018",
+      "journal_id": "20fc215a-92e8-41f4-9ded-bb607de49723",
+      "category": "VEHICLE_RUNNING"
+    },
+    {
+      "source_id": "1d8be9bc-e24b-4cba-bdc2-03d000ea8b94",
+      "source_reference": "09- SEP 26|R123|MAIN",
+      "date": "2026-09-30",
+      "amount_minor": "10000",
+      "expense_id": "600c3a95-b08c-4b73-8878-60a125977693",
+      "expense_reference": "MAKER-EXP-2026-000019",
+      "journal_id": "4a39b1ab-a5e0-4fa0-9105-2a6ec2188573",
+      "category": "VEHICLE_RUNNING"
+    },
+    {
+      "source_id": "46c27d33-b27d-4be1-a1ba-dd2226bec234",
+      "source_reference": "10- OCT 26|R114|MAIN",
+      "date": "2026-10-31",
+      "amount_minor": "3500",
+      "expense_id": "828bc11a-ab4d-4dae-a8d6-ffe53204bb3f",
+      "expense_reference": "MAKER-EXP-2026-000020",
+      "journal_id": "ff8f7f68-749d-42bf-baef-66e4ee8a8da7",
+      "category": "VEHICLE_RUNNING"
+    },
+    {
+      "source_id": "7cf6d0f1-1d93-4431-aeab-8c66967863a5",
+      "source_reference": "10- OCT 26|R113|MAIN",
+      "date": "2026-10-26",
+      "amount_minor": "10000",
+      "expense_id": "6745aa98-c711-43c0-9980-8c62b189a030",
+      "expense_reference": "MAKER-EXP-2026-000021",
+      "journal_id": "7b6c4a75-51be-4704-9e8d-c9090791162a",
+      "category": "VEHICLE_RUNNING"
+    },
+    {
+      "source_id": "bf52bb56-86b9-4c66-9eaf-2d118c74a15f",
+      "source_reference": "10- OCT 26|R60|MAIN",
+      "date": "2026-10-11",
+      "amount_minor": "5000",
+      "expense_id": "29049998-8465-4770-b871-09d2b8aa1f9c",
+      "expense_reference": "MAKER-EXP-2026-000022",
+      "journal_id": "7e42a0c4-e2fa-4356-a264-a9f2809551bc",
+      "category": "VEHICLE_RUNNING"
+    },
+    {
+      "source_id": "c9f47c44-0f28-4855-afb8-4fe3a2a58aff",
+      "source_reference": "10- OCT 26|R61|MAIN",
+      "date": "2026-10-13",
+      "amount_minor": "5000",
+      "expense_id": "7d115153-0858-4c84-893c-3c65cce95e0d",
+      "expense_reference": "MAKER-EXP-2026-000023",
+      "journal_id": "6e670024-fa04-43a4-87e5-ea311b55b306",
+      "category": "VEHICLE_RUNNING"
+    },
+    {
+      "source_id": "e79838e2-83be-4ca8-966c-32843482afbb",
+      "source_reference": "10- OCT 26|R98|MAIN",
+      "date": "2026-10-30",
+      "amount_minor": "10000",
+      "expense_id": "1de27c14-0093-4e95-8511-e65347197bb8",
+      "expense_reference": "MAKER-EXP-2026-000024",
+      "journal_id": "c21b53d2-7275-4f74-a3b0-69fd53a62b62",
+      "category": "VEHICLE_RUNNING"
+    },
+    {
+      "source_id": "f9a9eaa4-dfe5-4da1-a520-a67539600d70",
+      "source_reference": "10- OCT 26|R96|MAIN",
+      "date": "2026-10-29",
+      "amount_minor": "22500",
+      "expense_id": "88cacd86-c846-4af4-979a-5b02e4c29b2a",
+      "expense_reference": "MAKER-EXP-2026-000025",
+      "journal_id": "b49bc2ad-28b8-4cdb-972c-71f0230b9283",
+      "category": "VEHICLE_RUNNING"
+    },
+    {
+      "source_id": "10c31393-e231-4f38-bf05-117d0be3802e",
+      "source_reference": "09- SEP 26|R141|MAIN",
+      "date": "2026-10-09",
+      "amount_minor": "8000",
+      "expense_id": "5df3011b-a0a7-4438-b6c1-5d8856c396d9",
+      "expense_reference": "MAKER-EXP-2026-000026",
+      "journal_id": "51f1d5cf-f753-413f-a5de-3ae11139909e",
+      "category": "VEHICLE_RUNNING"
+    },
+    {
+      "source_id": "88e83530-f04c-4276-8f3a-8ca9a2f643c3",
+      "source_reference": "10- OCT 26|R110|MAIN",
+      "date": "2026-10-24",
+      "amount_minor": "9000",
+      "expense_id": "ce3f3f40-d459-423e-83cd-e746baed67bf",
+      "expense_reference": "MAKER-EXP-2026-000027",
+      "journal_id": "afdf310a-55cd-4cee-8c6a-13de3faa4960",
+      "category": "REPAIRS"
+    },
+    {
+      "source_id": "f3f3b64e-d31e-4114-aa40-64393030e58e",
+      "source_reference": "10- OCT 26|R90|MAIN",
+      "date": "2026-10-26",
+      "amount_minor": "201000",
+      "expense_id": "bb3b8c9a-0e97-4f30-bb0f-e372a25d4a74",
+      "expense_reference": "MAKER-EXP-2026-000028",
+      "journal_id": "abec5177-d0a7-4804-8456-9fe2a7298b22",
+      "category": "REPAIRS"
+    },
+    {
+      "source_id": "e04aa313-e91f-4629-9379-eb1582e14302",
+      "source_reference": "09- SEP 26|R140|MAIN",
+      "date": "2026-10-07",
+      "amount_minor": "103000",
+      "expense_id": "d5670aa8-4bb4-4437-a00a-d5b62929f6d1",
+      "expense_reference": "MAKER-EXP-2026-000029",
+      "journal_id": "4c68f19a-6dff-4885-97dd-929f5f3a7093",
+      "category": "HOUSING_UTILITIES"
+    },
+    {
+      "source_id": "a7c91f72-83de-48e0-8962-74e9a80ff019",
+      "source_reference": "10- OCT 26|R109|MAIN",
+      "date": "2026-11-02",
+      "amount_minor": "42000",
+      "expense_id": "4e8f8510-3da0-411f-a64f-15c2175702ce",
+      "expense_reference": "MAKER-EXP-2026-000030",
+      "journal_id": "4b6df16c-8802-4098-8ae3-5e99bd27eeeb",
+      "category": "OFFICE_ADMIN"
+    },
+    {
+      "source_id": "69114be6-a4f6-4c9e-9258-063448ac55b4",
+      "source_reference": "10- OCT 26|R35|MAIN",
+      "date": "2026-10-16",
+      "amount_minor": "7700",
+      "expense_id": "eb15093d-4e1e-4e3f-b488-8842f31b181f",
+      "expense_reference": "MAKER-EXP-2026-000031",
+      "journal_id": "532054b8-99d0-45f4-abb3-04c0523c7cd2",
+      "category": "FEES_ADVISORY"
+    },
+    {
+      "source_id": "314dfa01-2d43-46db-b8a5-79b73fea2ee0",
+      "source_reference": "10- OCT 26|R56|MAIN",
+      "date": "2026-10-19",
+      "amount_minor": "90000",
+      "expense_id": "7216c21d-2b22-4bbb-868f-30241abc571f",
+      "expense_reference": "MAKER-EXP-2026-000032",
+      "journal_id": "2cf52c42-1434-4067-a24c-0942f739f5b2",
+      "category": "EMPLOYEE_AFFAIRS"
+    },
+    {
+      "source_id": "0c66fb30-0891-44b6-9204-2101b30ad593",
+      "source_reference": "G-2026-09-39",
+      "date": "2026-09-10",
+      "amount_minor": "5000",
+      "expense_id": "bea017ae-44dc-482c-80c9-13c666e3ac4f",
+      "expense_reference": "MAKER-EXP-2026-000033",
+      "journal_id": "ff131356-bd0a-4a7f-aca5-821c225d0a34",
+      "category": "VEHICLE_RUNNING"
+    },
+    {
+      "source_id": "130b5bbc-b31c-4729-ad77-6931842f9a90",
+      "source_reference": "G-2026-09-108",
+      "date": "2026-09-17",
+      "amount_minor": "5000",
+      "expense_id": "892255cc-87e5-48a6-a549-8bd77c6d235f",
+      "expense_reference": "MAKER-EXP-2026-000034",
+      "journal_id": "6318126b-fd6b-4e3f-9dc4-1e67d6454ce3",
+      "category": "VEHICLE_RUNNING"
+    },
+    {
+      "source_id": "281b37b1-06db-4f6c-b554-e877fc94515d",
+      "source_reference": "G-2026-09-38",
+      "date": "2026-09-12",
+      "amount_minor": "5000",
+      "expense_id": "30bf4dc1-5649-423d-8cf5-9955474785a9",
+      "expense_reference": "MAKER-EXP-2026-000035",
+      "journal_id": "bb3ab08b-d927-46bd-a13f-1d100ebf6847",
+      "category": "VEHICLE_RUNNING"
+    },
+    {
+      "source_id": "50c8fb61-d7df-4808-a9de-f357398815c6",
+      "source_reference": "G-2026-09-37",
+      "date": "2026-09-11",
+      "amount_minor": "5000",
+      "expense_id": "af753eb7-87ab-4f0b-98c4-be69a7bff3a9",
+      "expense_reference": "MAKER-EXP-2026-000036",
+      "journal_id": "b42f1136-2170-4d18-8ee0-9b23ad10611e",
+      "category": "VEHICLE_RUNNING"
+    },
+    {
+      "source_id": "62bb228c-4f8b-4893-b50c-6d135db6da41",
+      "source_reference": "G-2026-08-154",
+      "date": "2026-08-31",
+      "amount_minor": "13503",
+      "expense_id": "9a91144b-e597-4f39-b2b7-7937d89f9843",
+      "expense_reference": "MAKER-EXP-2026-000037",
+      "journal_id": "5041f86b-f178-497c-b12e-c254e76d0b00",
+      "category": "VEHICLE_RUNNING"
+    },
+    {
+      "source_id": "8471f5c0-8558-47b2-9adf-363bce2151b0",
+      "source_reference": "G-2026-09-28",
+      "date": "2026-09-07",
+      "amount_minor": "3000",
+      "expense_id": "bd3741f6-3b3a-4459-bf9e-b9d73c48e096",
+      "expense_reference": "MAKER-EXP-2026-000038",
+      "journal_id": "1408b46b-7541-43e9-a295-84472f81e15b",
+      "category": "VEHICLE_RUNNING"
+    },
+    {
+      "source_id": "b0fa5738-c354-4024-af0f-965afb6cb6e3",
+      "source_reference": "G-2026-09-58",
+      "date": "2026-09-07",
+      "amount_minor": "5000",
+      "expense_id": "8ea36a22-f1a1-4a7f-9014-2ab98e73cc0f",
+      "expense_reference": "MAKER-EXP-2026-000039",
+      "journal_id": "daaf9435-c6a6-4493-b857-42912cabdd9e",
+      "category": "VEHICLE_RUNNING"
+    },
+    {
+      "source_id": "694eec0a-8797-47cc-9566-21383e17529c",
+      "source_reference": "G-2026-09-42",
+      "date": "2026-09-01",
+      "amount_minor": "9500",
+      "expense_id": "702fe207-01e8-4be4-9b4c-19e7f5d3adc3",
+      "expense_reference": "MAKER-EXP-2026-000040",
+      "journal_id": "c828cfb0-c9ee-401f-9af9-ccbf5f17b536",
+      "category": "VEHICLE_RUNNING"
+    },
+    {
+      "source_id": "720b08d1-a684-4865-93a1-73c86f78993f",
+      "source_reference": "G-2026-08-89",
+      "date": "2026-08-09",
+      "amount_minor": "8000",
+      "expense_id": "e5bb0ca2-e333-496e-94ea-f21e66be5f95",
+      "expense_reference": "MAKER-EXP-2026-000041",
+      "journal_id": "5fffe8a2-8680-4f1d-a327-f051476fc329",
+      "category": "VEHICLE_RUNNING"
+    }
+  ],
+  "heldUpdates": [
+    {
+      "source_id": "13892c58-7d99-4e16-a4cf-c8b01dbefccb",
+      "reason": "غير مرحّل — يحتاج مراجعة: احتمال تكرار G-2026-09-86 وG-2026-09-101؛ كلاهما بتاريخ 23/09/2026 ومبلغ 50 درهماً ولنفس المورد. يلزم دليل دفعين مستقلين قبل ترحيل أي منهما. الدافع بارق والاستلام مؤكدان من المالك؛ لم تُنشأ مصروفات أو قيود لهذين السجلين. Possible duplicate: same date, amount and Supplier; separate-payment evidence required. Payer and receipt are already confirmed.",
+      "audit_note_id": "609b2949-246b-41b4-a32a-cdf5d846c1f5"
+    },
+    {
+      "source_id": "1cec6a25-12a2-4f8c-a55d-0affb7931030",
+      "reason": "غير مرحّل — يحتاج مراجعة: احتمال تكرار G-2026-09-86 وG-2026-09-101؛ كلاهما بتاريخ 23/09/2026 ومبلغ 50 درهماً ولنفس المورد. يلزم دليل دفعين مستقلين قبل ترحيل أي منهما. الدافع بارق والاستلام مؤكدان من المالك؛ لم تُنشأ مصروفات أو قيود لهذين السجلين. Possible duplicate: same date, amount and Supplier; separate-payment evidence required. Payer and receipt are already confirmed.",
+      "audit_note_id": "eb7c14e5-d36e-4d64-939b-696eed62e3b2"
+    }
+  ],
+  "newlyPosted": 25,
+  "newlyPostedMinor": "593493",
+  "openingCustodyMinor": "37030070",
+  "closingCustodyMinor": "36436577",
+  "journalTotals": {
+    "debit": "41755463",
+    "credit": "41755463"
+  },
+  "tableCounts": {
+    "accounts": 6,
+    "expense_categories": 18,
+    "parties": 74,
+    "projects": 2,
+    "subcontracts": 2,
+    "subcontractor_advances": 2,
+    "subcontractor_payments": 0,
+    "historical_source_records": 370,
+    "historical_expense_drafts": 45,
+    "expense_draft_events": 141,
+    "expenses": 41,
+    "journal_entries": 55,
+    "journal_lines": 110,
+    "treasury_accounts": 1,
+    "supplier_payments": 0,
+    "supplier_payment_allocations": 0,
+    "supplier_ap_documents": 0,
+    "supplier_invoice_terms": 0,
+    "payroll_postings": 0,
+    "payroll_entitlements": 0,
+    "payroll_draft_rows": 0,
+    "hr_advance_postings": 0,
+    "payment_workflow_preferences": 2,
+    "company_accounting_setup_events": 3,
+    "project_correction_period_events": 0
+  },
+  "batches": [
+    {
+      "status": "PASS",
+      "newExpenses": 1,
+      "newAmountMinor": "2790",
+      "openingCustodyMinor": "37030070",
+      "closingCustodyMinor": "37027280",
+      "journalCount": 31,
+      "sourceCount": 370,
+      "immutableExistingHistoryPreserved": true,
+      "unrelatedTablesPreserved": true,
+      "noProjectOrTreasuryEffect": true
+    },
+    {
+      "status": "PASS",
+      "newExpenses": 5,
+      "newAmountMinor": "33500",
+      "openingCustodyMinor": "37027280",
+      "closingCustodyMinor": "36993780",
+      "journalCount": 36,
+      "sourceCount": 370,
+      "immutableExistingHistoryPreserved": true,
+      "unrelatedTablesPreserved": true,
+      "noProjectOrTreasuryEffect": true
+    },
+    {
+      "status": "PASS",
+      "newExpenses": 5,
+      "newAmountMinor": "54500",
+      "openingCustodyMinor": "36993780",
+      "closingCustodyMinor": "36939280",
+      "journalCount": 41,
+      "sourceCount": 370,
+      "immutableExistingHistoryPreserved": true,
+      "unrelatedTablesPreserved": true,
+      "noProjectOrTreasuryEffect": true
+    },
+    {
+      "status": "PASS",
+      "newExpenses": 5,
+      "newAmountMinor": "443700",
+      "openingCustodyMinor": "36939280",
+      "closingCustodyMinor": "36495580",
+      "journalCount": 46,
+      "sourceCount": 370,
+      "immutableExistingHistoryPreserved": true,
+      "unrelatedTablesPreserved": true,
+      "noProjectOrTreasuryEffect": true
+    },
+    {
+      "status": "PASS",
+      "newExpenses": 1,
+      "newAmountMinor": "5000",
+      "openingCustodyMinor": "36495580",
+      "closingCustodyMinor": "36490580",
+      "journalCount": 47,
+      "sourceCount": 370,
+      "immutableExistingHistoryPreserved": true,
+      "unrelatedTablesPreserved": true,
+      "noProjectOrTreasuryEffect": true
+    },
+    {
+      "status": "PASS",
+      "newExpenses": 5,
+      "newAmountMinor": "31503",
+      "openingCustodyMinor": "36490580",
+      "closingCustodyMinor": "36459077",
+      "journalCount": 52,
+      "sourceCount": 370,
+      "immutableExistingHistoryPreserved": true,
+      "unrelatedTablesPreserved": true,
+      "noProjectOrTreasuryEffect": true
+    },
+    {
+      "status": "PASS",
+      "newExpenses": 3,
+      "newAmountMinor": "22500",
+      "openingCustodyMinor": "36459077",
+      "closingCustodyMinor": "36436577",
+      "journalCount": 55,
+      "sourceCount": 370,
+      "immutableExistingHistoryPreserved": true,
+      "unrelatedTablesPreserved": true,
+      "noProjectOrTreasuryEffect": true
+    }
+  ],
+  "financialCommandPayloadsUnchanged": true,
+  "newInvoiceLiabilitiesOrPayments": 0,
+  "newPayrollOrAdvancePostings": 0,
+  "applicationCodeChangedInExecution": true,
+  "supplierReadModelPaidExpenseRows": 15,
+  "supplierOutstandingMinor": "0",
+  "authorization": "Product Owner final standing confirmation on2026-11-17 within the two existing approved SOURCE_SET scopes. Genuine covered Maker costs paid by Barq, goods/services received/performed. Uncertain economics, duplicate events and distinct accounting types remain excluded.",
+  "accounting": "DR canonical COMPANY_EXPENSE / CR canonical CUSTODY_ADVANCE with Barq Party. Full supported paid gross cost; no recoverable input VAT claimed; original tax values retained, not asserted zero.",
+  "verification": {
+    "preservationAssertions": 937,
+    "countMeaning": "Row/field fingerprints, all55journal balances and25source-document link checks; not937 independent accounting test scenarios.",
+    "batchReconciliations": 7,
+    "allExistingPostedFinancialRows": "BYTE_EQUIVALENT_TO_PREFLIGHT",
+    "originalFactsAll370Sources": "PRESERVED; only25posted working records and2precise duplicate-review metadata records updated through audited canonical commands",
+    "productionBrowser": "Actual office Expense detail displayed MAKER-EXP-2026-000017; original غير واصل wording remains visible under source evidence.",
+    "newMigration": "NONE",
+    "additionalApplicationTests": "14 change-specific EN/AR browser checks PASS plus final TypeScript/Production build PASS. Previous75focused checks reused, not repeated.",
+    "finalDuplicateMetadataPreservation": {
+      "status": "PASS",
+      "updates": [
+        {
+          "source_id": "13892c58-7d99-4e16-a4cf-c8b01dbefccb",
+          "source_reference": "G-2026-09-86",
+          "issue": "POSSIBLE_DUPLICATE",
+          "originalFactsPreserved": true,
+          "posted": false
+        },
+        {
+          "source_id": "1cec6a25-12a2-4f8c-a55d-0affb7931030",
+          "source_reference": "G-2026-09-101",
+          "issue": "POSSIBLE_DUPLICATE",
+          "originalFactsPreserved": true,
+          "posted": false
+        }
+      ],
+      "financialCommands": 0,
+      "journals": 55,
+      "lines": 110,
+      "closingCustodyMinor": "36436577"
+    }
+  },
+  "remainingCount": 287,
+  "remainingByClassification": {
+    "Expense candidates — allocation/recognition/date/duplicate review required": 118,
+    "Unclassified / specialist economic review (excluding salary-transfer fees)": 139,
+    "Payroll / salary-transfer fees — excluded": 9,
+    "Owner / partner movements — excluded": 16,
+    "Classified Employee advances — excluded": 3,
+    "Refundable deposits — separate supported treatment required": 2
+  },
+  "remainingSavedNatureCounts": {
+    "OWNER_PARTNER_DRAWING_OR_ADVANCE": 14,
+    "PAYROLL_OR_SALARY_PAYMENT": 5,
+    "NEEDS_REVIEW": 141,
+    "EXPENSE": 120,
+    "EMPLOYEE_ADVANCE": 3,
+    "PARTNER_TRANSFER_OR_ADVANCE": 2,
+    "REFUNDABLE_DEPOSIT": 2
+  },
+  "remainingSavedReviewFamilyCounts": {
+    "PARTNER_CLASSIFICATION_REVIEW": 16,
+    "PAYROLL_LIABILITY_SETTLEMENT_REVIEW": 5,
+    "CUSTODY_OR_PERSONAL_RECEIVABLE_REVIEW": 3,
+    "EXPENSE_ALLOCATION_REVIEW": 109,
+    "INVENTORY_DIRECT_COST_OR_ASSET_REVIEW": 69,
+    "DUPLICATE_EVIDENCE_REVIEW": 3,
+    "LEGAL_ENTITY_REVIEW": 15,
+    "PERSONAL_FUNDING_REIMBURSEMENT_REVIEW": 2,
+    "UNRESOLVED_ECONOMIC_NATURE": 43,
+    "CONTRACTOR_PAYMENT_VS_ADVANCE_REVIEW": 2,
+    "EMPLOYEE_ADVANCE_REVIEW": 4,
+    "TREASURY_CUSTODY_OR_PARTNER_REVIEW": 3,
+    "CAPITAL_ASSET_VS_CONSUMABLE_REVIEW": 6,
+    "BANK_FEE_EXPENSE_REVIEW": 2,
+    "REFUNDABLE_DEPOSIT_UNSUPPORTED": 2,
+    "CREDITOR_IDENTITY_AND_LIABILITY_REVIEW": 2,
+    "CONTRACT_OR_SUPPLIER_EVIDENCE_REVIEW": 1
+  },
+  "remainingEvidencePolicy": "Existing completed review carried forward; no new330-row review. Routine paid/received/payer facts are owner-confirmed. Genuine remaining issues are economics, Project/Contract allocation/recognition, materials/valuation, legal entity exceptions, dates, refundable/advance treatment, payroll exclusion or distinct-payment evidence.",
+  "sourceRegister": "docs/acw02-actual-posted-expenses.csv",
+  "remainingRegister": "docs/acw02-remaining-source-classifications.csv",
+  "ownerFundingAndElectrical": "12owner-funded receipts AED390960.20 and2Electrical Advances AED16500 unchanged; all pre-existing30journals preserved.",
+  "overallReconciliation": {
+    "ownerFundingMinor": "39096020",
+    "postedExpenseCount": 41,
+    "postedExpenseGrossMinor": "1009443",
+    "electricalAdvanceMinor": "1650000",
+    "custodyClosingMinor": "36436577",
+    "newTreasuryOrProjectCostEffectMinor": "0"
+  },
+  "release": {
+    "implementationCommit": "8b627c7cccec2fc6c0f3b67c4b9c0aa9c3bf36e4",
+    "applicationCodeUnchangedDuringPosting": true,
+    "pushed": false,
+    "deployed": false,
+    "newWarningFixRequiresPublication": true
+  },
+  "remainingGroupingNote": "Two salary-transfer fee records still have saved NEEDS_REVIEW nature and two have saved EXPENSE nature. All four are disclosed with the five salary-payment sources in the9excluded Payroll group. Saved source classifications themselves were not changed. Four existing Employee Advance drafts remain unchanged; one source is still in specialist review rather than classified EMPLOYEE_ADVANCE.",
+  "financialPostingPhaseUsedUnchangedCanonicalCode": true,
+  "subsequentFocusedUiFix": {
+    "rootCause": "SourceEditor suppressed SourceReviewStatus whenever original-cost draft was shown. Precise newly audited duplicate reasons therefore disappeared from the normal draft view.",
+    "fix": "Show only the explicit current POSSIBLE_DUPLICATE operator issue beside the draft; prioritize its precise saved explanation and reuse the existing distinct-payment clearance field. Empty original candidate arrays remain nonissues. No financial command, RLS or canonical SQL change.",
+    "hostedMetadata": "Only the two previously held source records gained an audited text operator_review_issue=POSSIBLE_DUPLICATE flag. Original raw facts, classification, dates, amounts and unposted state preserved.",
+    "focusedBrowser": {
+      "status": "PASS",
+      "checks": [
+        "en audited duplicate issue retained despite empty original candidates",
+        "en source issues include the saved current duplicate review",
+        "en precise yellow review reason remains visible alongside original-cost draft",
+        "en existing distinct-payment evidence field shown",
+        "en no preview/approval before duplicate evidence",
+        "en existing review can continue when accountant supplies evidence",
+        "en changing review inputs creates no financial transaction",
+        "ar audited duplicate issue retained despite empty original candidates",
+        "ar source issues include the saved current duplicate review",
+        "ar precise yellow review reason remains visible alongside original-cost draft",
+        "ar existing distinct-payment evidence field shown",
+        "ar no preview/approval before duplicate evidence",
+        "ar existing review can continue when accountant supplies evidence",
+        "ar changing review inputs creates no financial transaction"
+      ],
+      "syntheticOnly": true,
+      "financialWrites": 0
+    },
+    "finalTypeScriptAndProductionBuild": "PASS; existing large-bundle advisory only",
+    "productionVisibility": "PENDING operator publication. Existing deployed client hides this detailed warning alongside a cost draft; raw/audited reason is saved. Do not claim the new local warning is live."
+  }
+}

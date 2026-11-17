@@ -33,7 +33,7 @@ export const sourceReviewIssues = (row:SourceRecord) => {
  if(row.payment_policy?.contradicted||row.completion.funding_contradiction==='true')issues.push('PAYMENT_CONTRADICTION');
  else if(sourceDirection(row)!=='NONE'&&!row.cash_treasury_id&&!confirmedSourcePayment(row))issues.push('PAYMENT_SOURCE_UNCONFIRMED');
  if(row.classification.independent_payment_evidence_verified===false&&!confirmedSourcePayment(row))issues.push('PAYMENT_EVIDENCE_UNCONFIRMED');
- if(row.classification.potential_duplicate===true)issues.push('POSSIBLE_DUPLICATE');
+ if(row.classification.potential_duplicate===true||row.completion.operator_review_issue==='POSSIBLE_DUPLICATE')issues.push('POSSIBLE_DUPLICATE');
  if(row.review_status!=='REVIEWED')issues.push('SOURCE_REVIEW_REQUIRED');
  return issues;
 };

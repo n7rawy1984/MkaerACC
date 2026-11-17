@@ -29,5 +29,5 @@ export function sourceExpenseVatChange(input:DraftInput,vatMode:string,source?:S
 
 export function sourceHasDuplicateEvidence(source:SourceRecord):boolean {
  const candidates=source.raw_source.existing_match_candidates_unverified;
- return source.classification.potential_duplicate===true||!!source.classification.duplicate_group||Array.isArray(candidates)&&candidates.length>0;
+ return source.completion.operator_review_issue==='POSSIBLE_DUPLICATE'||source.classification.potential_duplicate===true||!!source.classification.duplicate_group||Array.isArray(candidates)&&candidates.length>0;
 }
