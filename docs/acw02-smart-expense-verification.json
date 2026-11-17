@@ -1,0 +1,270 @@
+{
+  "date": "2026-11-17",
+  "phase": "ACW-02",
+  "status": "LOCAL_IMPLEMENTATION_VERIFIED_RELEASE_READY_HOSTED_FINANCIAL_POSTINGS_ZERO_EVIDENCE_PENDING",
+  "baseRelease": "07a96fef912ef0be6f6a86ae9fa939cb46106d40",
+  "implementation": {
+    "canonicalPreviewBoundary": "Existing Save / Review commands produce a preview without dispatching POST. Explicit Approve & Post reuses reviewed snapshot; edits require renewed preview. Frozen requests retain exact retry identities.",
+    "sourceFactReuse": "Verified date, original source identity, linked Supplier, confirmed scope, category and available confirmed invoice/net/VAT metadata reused. Explicit no-recovery selection reuses exact gross amount; unknown tax and classifications stay blank.",
+    "duplicateDefect": "Empty candidate arrays previously rendered unnecessary distinct-payment evidence field. Only nonempty candidates or explicit duplicate flags now require it. 117 captured live sources have empty arrays; this is a UI count, not 117 duplicate transactions.",
+    "optionalSupplier": "Direct Expense Supplier remains optional; unpaid Supplier credit still requires a Supplier and uses the existing AP mapping.",
+    "guidance": "Source changes request refresh before generic source/date guidance. Supplier invoice routing uses /supplier-invoices. Existing premium EN/AR forms and canonical commands reused."
+  },
+  "hostedOperations": {
+    "authenticatedRole": [
+      "ACCOUNTING_ADMIN"
+    ],
+    "financialWrites": 0,
+    "newExpenses": 0,
+    "newlyPostedMinor": "0",
+    "newSourceIds": [],
+    "newJournalIds": [],
+    "newDrafts": 0,
+    "sourceEdits": 0,
+    "companyConfigurationChanges": 0,
+    "reason": "No remaining saved draft is fully eligible: four salary-transfer fees are excluded and the remaining office fragrance draft explicitly says not received, has unresolved gross-cost/tax evidence and a saved payer contradiction. A specific factual clarification is pending; no presumed receipt/tax treatment or blanket payer override. Other saved records retain their existing evidence requirements.",
+    "alreadyPostedOutgoing": 18,
+    "alreadyPostedExpenses": 16,
+    "alreadyPostedElectricalAdvances": 2,
+    "remainingOutgoing": 312,
+    "remainingExpenseDrafts": 5,
+    "remainingPrimaryReasons": {
+      "Advance/receivable/partner/Custody treatment outside Expense execution": 25,
+      "Payroll/salary-related payment or transfer fee deferred": 9,
+      "Project/Company cost allocation, labor recognition, receipt or tax-support evidence": 85,
+      "Materials/stock/asset recognition and valuation evidence": 69,
+      "Missing/conflicting authoritative transaction date": 14,
+      "Specific legal entity/beneficiary site remains unresolved": 15,
+      "Economic nature/beneficiary or supported canonical treatment unresolved": 89,
+      "Contract and advance-versus-certified-settlement evidence": 3,
+      "Duplicate/distinct-payment evidence": 3
+    },
+    "remainingReasonBasis": "Carried forward completed source review; current source-to-document state confirms 18 posted and 312 unposted. Not a new 330-source review. Supplier identity enrichment alone does not certify recognition/tax/Project facts.",
+    "barqOpeningMinor": "37030070",
+    "barqClosingMinor": "37030070",
+    "preservation": {
+      "captured": "2026-11-17T16:47:20.923Z",
+      "preservedTables": [
+        "journal_entries",
+        "journal_lines",
+        "parties",
+        "historical_source_records",
+        "historical_expense_drafts",
+        "expense_draft_events",
+        "expenses",
+        "supplier_payments",
+        "supplier_payment_allocations",
+        "supplier_ap_documents",
+        "treasury_accounts",
+        "accounts",
+        "payroll_postings",
+        "payroll_entitlements",
+        "payroll_draft_rows"
+      ],
+      "changedTables": [],
+      "tables": {
+        "journal_entries": {
+          "count": 30,
+          "sha256": "9cb1982000a17e3663db2ba10ed29a8827b3be87a1ee0023f4fed40b8c61dc2d"
+        },
+        "journal_lines": {
+          "count": 60,
+          "sha256": "e076565b8c72265a9a258e92e8749d157ac2a6ee05474f7f4d271c633ebcb8bd"
+        },
+        "parties": {
+          "count": 74,
+          "sha256": "6629ccbc314d485045a5022d9c955af71575af297a7926bda2bb50bc617abf27"
+        },
+        "historical_source_records": {
+          "count": 370,
+          "sha256": "6f6f87d75449e002954b70d0f0f415c867d92c6bc408e158785d26dc7f2368b5"
+        },
+        "historical_expense_drafts": {
+          "count": 21,
+          "sha256": "9a06a168263bbe91b2cf4bc60896d7512e0bdaa2b5d1017b61eb3b3bc29e5b00"
+        },
+        "expense_draft_events": {
+          "count": 66,
+          "sha256": "7670ed6d00696154a5311f2ea44313a1ad13066ee138bdac9df7dbea8933ee2d"
+        },
+        "expenses": {
+          "count": 16,
+          "sha256": "1d74c59a15c146d7f61518a0c054efc33dde5fbb12fb56333d8b9e66325f8104"
+        },
+        "supplier_payments": {
+          "count": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "supplier_payment_allocations": {
+          "count": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "supplier_ap_documents": {
+          "count": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "treasury_accounts": {
+          "count": 1,
+          "sha256": "0a752355f8e6177528fa0ed928a8ff8772b30ae580080eecb7a67bd9bace6c73"
+        },
+        "accounts": {
+          "count": 6,
+          "sha256": "4d47e07d00338e9c67cbbb37aa06b5fecee030f7dc31e8d83aa688b9ad51d392"
+        },
+        "payroll_postings": {
+          "count": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "payroll_entitlements": {
+          "count": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "payroll_draft_rows": {
+          "count": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        }
+      },
+      "barqCustodyMinor": "37030070",
+      "journalTotals": {
+        "debit": "41161970",
+        "credit": "41161970"
+      },
+      "supplierCount": 69,
+      "newFinancialPostings": 0,
+      "newJournalIds": [],
+      "noHostedWritesInACW02": true,
+      "baseline": "Fresh authenticated ACW02 preflight matched last verified authorized setup checkpoint; unchanged fingerprints after task"
+    },
+    "supplierPayableSetup": "Previously approved task created 210000 / SUPPLIER_PAYABLE, account 3c3318db-36da-4da1-a7af-92b7c028fcc2; active LIABILITY with required Party. AP and GL initial balances zero. No configuration mutation in ACW02.",
+    "payrollAndAdvances": "Excluded from this execution; existing records and posted effects preserved."
+  },
+  "verification": {
+    "canonicalAccounting": {
+      "status": "PASS",
+      "checks": [
+        "Blank source VAT does not become a fabricated zero-tax decision or net amount",
+        "Confirmed gross-cost treatment reuses exact minor-unit amount and saved classification",
+        "Original identity, date and description reused without invented facts",
+        "Missing dates and unconfirmed cost scope stay blank",
+        "Confirmed invoice/net/tax fields reused rather than requested again",
+        "Supplier credit routes to current canonical Supplier Invoices page",
+        "Stale source produces actionable refresh guidance en",
+        "Stale source produces actionable refresh guidance ar",
+        "Direct Custody Expense needs no optional Supplier",
+        "Unpaid invoice still requires a Supplier",
+        "Canonical preview returns exact amounts and no posting receipt",
+        "Preview never dispatches POST or creates a journal",
+        "Repeated unchanged preview performs no duplicate draft commands",
+        "Approval posts reviewed preview exactly once without redundant save/review",
+        "Posted exact original cost balances and reduces correct Custody once",
+        "Repeated approval cannot duplicate the posted source",
+        "Preview cannot accidentally execute an unresolved POST retry",
+        "Session guard runs before preview dispatch"
+      ],
+      "hosted": false,
+      "syntheticOnly": true
+    },
+    "finalInputChecks": {
+      "status": "PASS",
+      "checks": [
+        "Explicit no-recovery selection reuses exact gross amount",
+        "Tax recovery selection clears derived gross, never assumes net",
+        "Verified manually entered net preserved",
+        "Empty candidate list is not a duplicate",
+        "Nonempty candidate list retains duplicate review",
+        "Explicit duplicate flag retains duplicate review",
+        "Confirmed gross reused when saved net is empty"
+      ]
+    },
+    "browser": {
+      "status": "PASS",
+      "checks": [
+        "en complete source offers canonical preview before posting",
+        "en empty duplicate-candidate list does not demand unnecessary evidence",
+        "en covered payer never requires another funding checkbox",
+        "en no separate review button before approval",
+        "en normal draft shows essential fields with technical details collapsed",
+        "en preview saves and reviews without dispatching POST",
+        "en reviewed debit/credit preview visible before approval",
+        "en editing invalidates posting action until reviewed again",
+        "en mobile primary action remains readable",
+        "en mobile page has no horizontal overflow",
+        "en primary posting action has distinct filled color",
+        "en explicit preview then approval dispatch canonical SAVE,REVIEW,POST exactly once",
+        "en batch payer evidence reaches canonical source review",
+        "en final action explicitly attests distinct original cost",
+        "en no repeated browser confirmation dialog",
+        "en posted receipt replaces the posting action",
+        "ar complete source offers canonical preview before posting",
+        "ar empty duplicate-candidate list does not demand unnecessary evidence",
+        "ar covered payer never requires another funding checkbox",
+        "ar no separate review button before approval",
+        "ar normal draft shows essential fields with technical details collapsed",
+        "ar preview saves and reviews without dispatching POST",
+        "ar reviewed debit/credit preview visible before approval",
+        "ar editing invalidates posting action until reviewed again",
+        "ar mobile primary action remains readable",
+        "ar mobile page has no horizontal overflow",
+        "ar primary posting action has distinct filled color",
+        "ar explicit preview then approval dispatch canonical SAVE,REVIEW,POST exactly once",
+        "ar batch payer evidence reaches canonical source review",
+        "ar final action explicitly attests distinct original cost",
+        "ar no repeated browser confirmation dialog",
+        "ar posted receipt replaces the posting action",
+        "Fresh source with unresolved VAT does not assume a net amount",
+        "Fresh source draft reuses the exact confirmed gross-cost amount",
+        "Confirmed source VAT mode reused",
+        "Missing optional Supplier does not block a complete direct Expense preview",
+        "Unclassified record cannot be approved as an Expense",
+        "Unclassified record opens the existing economic-routing selector",
+        "Management Viewer has no posting action",
+        "No ACW-02 browser runtime errors"
+      ],
+      "errors": [],
+      "transport": "Isolated capture-only synthetic RPC; no hosted requests",
+      "realFinancialWrites": 0
+    },
+    "finalPreviewVisual": {
+      "status": "PASS",
+      "checks": [
+        "en reviewed date shown numerically",
+        "en reviewed journal amounts readable",
+        "en reviewed unchanged draft keeps one approval action",
+        "en changed preview explicitly requests fresh validation",
+        "en visual preview verification dispatches no financial commands",
+        "ar reviewed date shown numerically",
+        "ar reviewed journal amounts readable",
+        "ar reviewed unchanged draft keeps one approval action",
+        "ar changed preview explicitly requests fresh validation",
+        "ar visual preview verification dispatches no financial commands"
+      ],
+      "syntheticOnly": true
+    },
+    "typescriptAndProductionBuild": "PASS against final code; browser-safe synthetic build configuration, existing >500KB bundle advisory only",
+    "reused": "Prior ACW00 safeguards and ACW01 acceptance evidence reused; no broad audits/tests rerun.",
+    "scopedLint": "0 errors; 3 existing ExpenseDraftWorkspace effect/dependency advisories.",
+    "migrationOrRlsChanges": false,
+    "screenshots": [
+      "docs/screenshots/acw02/canonical-preview-en.png",
+      "docs/screenshots/acw02/canonical-preview-ar.png"
+    ],
+    "assertionCount": 75
+  },
+  "migration": {
+    "newMigration": "NONE",
+    "existingAppliedDependency": 94,
+    "hostedMigrationActions": 0
+  },
+  "release": {
+    "pushed": false,
+    "deployed": false,
+    "operatorAction": "Publish isolated compatible frontend release after final verification; no hosted migration needed."
+  },
+  "limitations": [
+    "No additional financial posting claimed. Office receipt/gross-cost/specific saved payer contradiction clarification remains pending.",
+    "Unknown economics, dates, VAT/receipt support, legal entity, Project/Contract, inventory/asset evidence and duplicates remain unposted; no fabricated administrative facts.",
+    "Maker PROJECT_COST mapping is absent; no account or Company configuration was silently created.",
+    "Personal reimbursement and specialist split/correction workflows continue using their existing canonical modules.",
+    "Full restoration rehearsal and USB work remain deferred; commercial roadmap unchanged."
+  ]
+}

@@ -14,6 +14,7 @@ export function expenseCompletionIssue(v:DraftInput,source?:SourceRecord):string
  if(!String(v.description??'').trim())return 'DESCRIPTION_REQUIRED';
  if(!v.category_id)return 'CATEGORY_REQUIRED';
  if(!['TREASURY','CUSTODIAN','PERSONAL','SUPPLIER_CREDIT'].includes(String(v.funding_mode))||v.funding_mode==='TREASURY'&&!v.treasury_id||['CUSTODIAN','PERSONAL'].includes(String(v.funding_mode))&&!v.paid_by_id)return 'PAYMENT_SOURCE_UNCONFIRMED';
+ if(v.funding_mode==='SUPPLIER_CREDIT'&&!v.supplier_id)return 'SUPPLIER_REQUIRED';
  if(!/^\d+(\.\d{1,2})?$/.test(String(v.net_aed))||!/[1-9]/.test(String(v.net_aed)))return 'AMOUNT_UNCONFIRMED';
  if(!['ZERO','AUTO_5','MANUAL'].includes(String(v.vat_mode))||v.vat_mode!=='ZERO'&&(!v.has_invoice||!v.invoice_number))return 'VAT_REQUIRED';
  if(!String(v.supporting_reference??'').trim())return 'EVIDENCE_REQUIRED';
@@ -33,9 +34,13 @@ export async function reviewExpenseSource(client:SupabaseClient,cid:string,sourc
  if(r.error)throw Error(r.error.message);
 }
 /** A lost response retains the exact pending request. Retry continues, never starts a second draft. */
-export async function runExpenseApproval(client:SupabaseClient,run:ExpenseApproval,guard:()=>Promise<void>,accept:(r:ExpenseDraft)=>void){
+export async function runExpenseApproval(client:SupabaseClient,run:ExpenseApproval,guard:()=>Promise<void>,accept:(r:ExpenseDraft)=>void,mode:'POST'|'PREVIEW'='POST'){
  while(run.latest?.state!=='POSTED'){
   await guard();
+  if(mode==='PREVIEW'){
+   if(run.next?.action==='POST')throw Error('Posting outcome unresolved; retry the existing posting request');
+   if(!run.needsSave&&!run.needsReview&&run.latest?.state==='REVIEWED')return run.latest;
+  }
   if(!run.next){
    if(run.latest?.state==='CANCELLED')throw Error('Final draft cannot be changed');
    const action=run.needsSave?'SAVE':run.needsReview||run.latest?.state==='DRAFT'?'REVIEW':'POST';

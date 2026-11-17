@@ -45,6 +45,7 @@ export const reviewIssueLabels={
  CLASSIFICATION_REQUIRED:['Choose the economic type: Expense, advance, Contractor payment or materials.','حدد نوع العملية: مصروف، سلفة، دفعة مقاول، أو شراء مواد.'],
  PROJECT_REQUIRED:['Select the Project for this cost, or choose Company operating expense.','حدد المشروع المرتبط بهذه التكلفة، أو اختر مصروف الشركة.'],
  DESCRIPTION_REQUIRED:['Complete the transaction description.','استكمل وصف المعاملة.'],
+ SUPPLIER_REQUIRED:['Select the Supplier for this unpaid invoice; use Supplier Invoices for Accounts Payable.','حدد المورد للفاتورة غير المسددة؛ استخدم فواتير الموردين للذمم الدائنة.'],
  CATEGORY_REQUIRED:['Select the established cost category.','حدد فئة التكلفة المعتمدة.'],
  VAT_REQUIRED:['Select the VAT treatment and provide invoice evidence when claiming VAT.','حدد المعالجة الضريبية وأرفق دليل الفاتورة عند المطالبة بالضريبة.'],
  EVIDENCE_REQUIRED:['Add the existing supporting evidence reference.','أضف مرجع الإثبات المتوفر.'],
