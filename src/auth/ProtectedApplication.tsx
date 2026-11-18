@@ -1,3 +1,4 @@
+import{BankReconciliationWorkspace}from'../banking/BankReconciliationWorkspace';
 import{CommercialWorkspace}from'../commercial/CommercialWorkspace';
 import {EmployeeManagement} from '../hr/EmployeeManagement';
 import { CompanyWorkspaceShell } from "../workspace/CompanyWorkspaceShell";
@@ -82,6 +83,7 @@ function RoutedApplication() {
           <Route path="/inventory/:section" element={<TenantReadyApplication view="inventory" />} />
           <Route path="/inventory" element={<Navigate to="/inventory/materials" replace />} />
           <Route path="/custody" element={<TenantReadyApplication view="custody" />} />
+          <Route path="/bank-reconciliation" element={<BankReconciliationWorkspace />} />
           <Route path="/treasury-accounts" element={<TenantReadyApplication view="treasuryAccounts" />} />
           <Route path="*" element={<TenantReadyApplication view="deferred" />} />
         </Routes></CompanyWorkspaceShell>

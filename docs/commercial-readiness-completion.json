@@ -5,12 +5,12 @@
   "scope": "Bounded implementation evidence; not a new roadmap or a general architecture audit",
   "authority": "Local implementation and disposable test execution only; no real Company mutations, hosted migrations, push or deployment",
   "publishedBaseline": {
-    "sha": "dc430087c9d2c585ab17cb031a0100c2b95a1c91",
+    "sha": "a5793111454b6493abe49c485f4cc479fada191a",
     "githubMain": "VERIFIED by git ls-remote",
-    "production": "VERIFIED GitHub Production deployment status success, created 2026-11-17T19:19:02Z",
-    "deploymentUrl": "https://maker-bzw9tv5t0-n7rawy1984-8059s-projects.vercel.app",
+    "production": "VERIFIED Production deployment success at a5793111454b6493abe49c485f4cc479fada191a, status2026-11-18T10:50:48Z",
+    "deploymentUrl": "https://maker-kjy27xlqe-n7rawy1984-8059s-projects.vercel.app",
     "runtimeAcceptance": "Not repeated; deployment metadata does not imply new end-user acceptance",
-    "migration": "Fresh read-only alignment: latest hosted94;95–100 prepared/not applied"
+    "migration": "95–100 applied; linked dry-run only101 pending"
   },
   "modules": [
     {
@@ -82,10 +82,9 @@
     {
       "module": "Treasury and Bank",
       "status": "PARTIAL",
-      "scope": "Real GL-mapped Treasury, supported receipts/payments/funding, movements and reconciliation outputs exist. External bank statement import/matching and complete bank reconciliation operational workflow not established",
+      "scope": "Existing real Treasury/GL plus CR03 statement CSV/XLSX mapping/import, audited partial matching, fees/interest/reversal, outstanding items, final locks and bilingual report exports VERIFIED LOCALLY.101 awaits authorization/publication; bank feeds/FX remain outside scope.",
       "evidence": [
-        "src/financial/OperationalFinanceWorkspace.tsx",
-        "src/reports/TreasuryMovements.tsx"
+        "docs/cr03-bank-reconciliation-verification.json"
       ]
     },
     {
@@ -201,6 +200,10 @@
     "Full original Procurement/Inventory/AR/AP/construction/HR/WPS/subscriptions/security/operations requirements",
     "Final restoration rehearsal and deferred USB work"
   ],
-  "nextDependency": "Explicit separate hosted authorization for exact95–100 checksums/order/preservation, then compatible application publication and scoped Company policy/setup; continue specialist gaps without claiming full roadmap complete.",
-  "continuationEvidence": "docs/commercial-completion-verification.json"
+  "nextDependency": "Scoped101 hosted activation authorization/preservation then compatible publication; continue supplier physical returns, approved construction/WIP policy, remaining essential scenarios and final fictional acceptance.",
+  "continuationEvidence": "docs/commercial-completion-verification.json",
+  "hostedActivation": {
+    "status": "95–100 APPLIED; preservation PASS",
+    "evidence": "docs/commercial95-100-hosted-activation.json"
+  }
 }
