@@ -200,10 +200,11 @@
     "Full original Procurement/Inventory/AR/AP/construction/HR/WPS/subscriptions/security/operations requirements",
     "Final restoration rehearsal and deferred USB work"
   ],
-  "nextDependency": "Scoped101 hosted activation authorization/preservation then compatible publication; continue supplier physical returns, approved construction/WIP policy, remaining essential scenarios and final fictional acceptance.",
+  "nextDependency": "Explicitly authorize hosted102 activation/preservation, then publish compatible CR04 release; CR05 Construction/WIP remains next and is not started.",
   "continuationEvidence": "docs/commercial-completion-verification.json",
   "hostedActivation": {
-    "status": "95–100 APPLIED; preservation PASS",
-    "evidence": "docs/commercial95-100-hosted-activation.json"
-  }
+    "status": "95–101 APPLIED;102 PREPARED / NOT APPLIED",
+    "evidence": "docs/cr03-migration101-hosted-activation.json"
+  },
+  "cr04Evidence": "docs/cr04-supplier-returns-verification.json"
 }

@@ -1,0 +1,21 @@
+{
+  "checks": [
+    "Draft request replay reuses exact event",
+    "Changed draft replay intent rejected",
+    "Physical post retry returns original event without duplicate stock",
+    "Same dispatch reference under a new draft cannot reduce stock twice",
+    "Stock moved to another warehouse cannot be returned from original location",
+    "Actual reverse transfer restores original warehouse availability",
+    "Later stock movement blocks historical reversal without partial financial effects",
+    "Private and legacy helpers unavailable directly to browser/anonymous actors",
+    "Previously paid capitalized Expense receipt appears with authoritative Supplier invoice",
+    "Return against existing paid capitalization creates Supplier credit1000 without new cash outflow",
+    "Capitalized historical-cost route uses original net and existing moving-average carrying value once",
+    "Procurement inventory read cannot expose Supplier credit or cash refund events",
+    "Procurement cannot read actual refund records through table RLS",
+    "Procurement cannot invoke the financial Supplier returns reader",
+    "Supplier credit journal source points to canonical AP credit document",
+    "Refund journal source points to canonical receipt document"
+  ],
+  "hostedWrites": 0
+}

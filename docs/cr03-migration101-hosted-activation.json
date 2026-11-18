@@ -1,0 +1,307 @@
+{
+  "milestone": "CR-03 Migration 101 hosted activation",
+  "status": "APPLIED / PRESERVATION VERIFIED",
+  "target": {
+    "id": "eqnzueginpkskbnqvgoc",
+    "name": "MakerACC-Development",
+    "status": "ACTIVE_HEALTHY",
+    "region": "ap-northeast-1"
+  },
+  "migration": {
+    "number": 101,
+    "version": "20261119120000",
+    "file": "20261119120000_bank_statement_reconciliation.sql",
+    "sha256": "bc330aa8ae5bbeb717c211c96cc51351fa19c24932668cd9957a9749fb0da9aa"
+  },
+  "preflight": {
+    "status": "PASS",
+    "target": "eqnzueginpkskbnqvgoc",
+    "latestHosted": "20261118160000",
+    "onlyPending": [
+      "20261119120000"
+    ],
+    "snapshottedTables": 132,
+    "release": "1ff0ad4fce8e101d432652c9e50361fe98a5cd50",
+    "completedAt": "2026-11-18T12:04:46.006848+00:00"
+  },
+  "postflight": {
+    "status": "PASS",
+    "latestHosted": "20261119120000",
+    "pending": [],
+    "preservedTables": 132,
+    "newTables": 7,
+    "newTablesEmpty": true,
+    "existingPoliciesAndRLSUnchanged": true,
+    "newFunctionsProtected": true,
+    "realFinancialWrites": 0,
+    "releaseCompatible": "1ff0ad4fce8e101d432652c9e50361fe98a5cd50",
+    "completedAt": "2026-11-18T12:05:39.394413+00:00"
+  },
+  "guards": {
+    "bankGuardEnabled": true,
+    "companyIdentityUnique": true,
+    "missingIdentityDenied": true
+  },
+  "makerBefore": {
+    "sources": 370,
+    "journals": 55,
+    "barqMinor": "36436577",
+    "company_id": "c1ca8b02-0096-4bca-af4c-68331f510103",
+    "debitMinor": "41755463",
+    "creditMinor": "41755463",
+    "draftEvents": 45,
+    "postedExpenses": 41
+  },
+  "makerAfter": {
+    "sources": 370,
+    "journals": 55,
+    "barqMinor": "36436577",
+    "company_id": "c1ca8b02-0096-4bca-af4c-68331f510103",
+    "debitMinor": "41755463",
+    "creditMinor": "41755463",
+    "draftEvents": 45,
+    "postedExpenses": 41
+  },
+  "preservation": {
+    "existingTables": 132,
+    "allRowCountsAndHashesUnchanged": true,
+    "scope": "All pre-existing public/private tables and auth.users, including every Company, financial source, journal, supplier, Payroll, membership and permissions record",
+    "newTables": {
+      "tables": [
+        {
+          "acl": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}",
+          "rls": true,
+          "table": "bank_adjustment_controls",
+          "forced": true,
+          "schema": "public"
+        },
+        {
+          "acl": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}",
+          "rls": true,
+          "table": "bank_adjustments",
+          "forced": true,
+          "schema": "public"
+        },
+        {
+          "acl": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}",
+          "rls": true,
+          "table": "bank_matches",
+          "forced": true,
+          "schema": "public"
+        },
+        {
+          "acl": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}",
+          "rls": true,
+          "table": "bank_reconciliation_events",
+          "forced": true,
+          "schema": "public"
+        },
+        {
+          "acl": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}",
+          "rls": true,
+          "table": "bank_statement_lines",
+          "forced": true,
+          "schema": "public"
+        },
+        {
+          "acl": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}",
+          "rls": true,
+          "table": "bank_statements",
+          "forced": true,
+          "schema": "public"
+        },
+        {
+          "acl": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}",
+          "rls": true,
+          "table": "bank_unmatches",
+          "forced": true,
+          "schema": "public"
+        }
+      ],
+      "rowCounts": {
+        "public.bank_matches": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "public.bank_unmatches": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "public.bank_statements": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "public.bank_adjustments": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "public.bank_statement_lines": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "public.bank_adjustment_controls": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "public.bank_reconciliation_events": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "permissions": {
+        "noAnonSelect": true,
+        "noBrowserDML": true
+      }
+    }
+  },
+  "rpcPermissions": [
+    {
+      "anon": false,
+      "name": "bank_actor",
+      "actor": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "signature": "private.bank_actor(uuid)",
+      "securityDefiner": false
+    },
+    {
+      "anon": false,
+      "name": "bank_adjustment_plan",
+      "actor": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "signature": "private.bank_adjustment_plan(uuid,uuid,uuid,text,text,boolean)",
+      "securityDefiner": false
+    },
+    {
+      "anon": false,
+      "name": "bank_allocated_asof",
+      "actor": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "signature": "private.bank_allocated_asof(uuid,uuid,date)",
+      "securityDefiner": false
+    },
+    {
+      "anon": false,
+      "name": "bank_final",
+      "actor": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "signature": "private.bank_final(uuid,uuid)",
+      "securityDefiner": false
+    },
+    {
+      "anon": false,
+      "name": "bank_guard_final",
+      "actor": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "signature": "private.bank_guard_final()",
+      "securityDefiner": true
+    },
+    {
+      "anon": false,
+      "name": "bank_lock",
+      "actor": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "signature": "private.bank_lock(uuid,uuid)",
+      "securityDefiner": false
+    },
+    {
+      "anon": false,
+      "name": "bank_remaining",
+      "actor": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "signature": "private.bank_remaining(uuid,uuid,boolean)",
+      "securityDefiner": false
+    },
+    {
+      "anon": false,
+      "name": "bank_void_pair",
+      "actor": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "signature": "private.bank_void_pair(uuid,uuid,date)",
+      "securityDefiner": false
+    },
+    {
+      "anon": false,
+      "name": "can_reconcile_bank",
+      "actor": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "public",
+      "signature": "can_reconcile_bank(uuid)",
+      "securityDefiner": false
+    },
+    {
+      "anon": false,
+      "name": "command_bank_reconciliation",
+      "actor": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "public",
+      "signature": "command_bank_reconciliation(uuid,uuid,text,jsonb)",
+      "securityDefiner": true
+    },
+    {
+      "anon": false,
+      "name": "preview_bank_adjustment",
+      "actor": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "public",
+      "signature": "preview_bank_adjustment(uuid,uuid,uuid,text,text,boolean)",
+      "securityDefiner": true
+    },
+    {
+      "anon": false,
+      "name": "read_bank_reconciliation",
+      "actor": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "public",
+      "signature": "read_bank_reconciliation(uuid,uuid)",
+      "securityDefiner": true
+    }
+  ],
+  "cliResult": {
+    "exitCode": 0,
+    "applied": [
+      "20261119120000_bank_statement_reconciliation.sql"
+    ],
+    "seeds": [],
+    "roles": []
+  },
+  "compatibleRelease": "1ff0ad4fce8e101d432652c9e50361fe98a5cd50",
+  "applicationPublished": false,
+  "gitPush": false,
+  "deployment": false,
+  "financialTransactionsCreated": 0,
+  "verificationReused": "75 local CR-03 focused assertions; no broad tests or fictional simulation repeated",
+  "remaining": "Compatible frontend publication and Production runtime acceptance; no hosted financial write smoke tests performed",
+  "recordedAt": "2026-11-18T12:06:26.311339+00:00"
+}

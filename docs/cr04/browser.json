@@ -1,0 +1,16 @@
+{
+  "checks": [
+    "Browser preview creates neither stock nor GL records",
+    "English UI executes Save → Review → Post physical return",
+    "English credit UI updates AP to4000",
+    "Arabic UI posts distinct return and recovers identical draft after lost response",
+    "Arabic actual refund UI posts one typed Treasury receipt",
+    "Arabic refund reversal UI uses audited canonical reversal",
+    "RTL workspace stays within desktop viewport",
+    "Arabic return history remains rendered on mobile",
+    "Mobile tables scroll within the workspace without page overflow",
+    "Mobile return IDs and financial columns remain readable without character wrapping",
+    "No browser runtime errors"
+  ],
+  "hostedWrites": 0
+}

@@ -19,3 +19,7 @@
 .company-workspace .supplier-account-workspace .dw-table :is(th,th button,th span){font-size:16px!important;line-height:1.7;color:var(--erp-text)}
 .supplier-account-workspace .dw-table .erp-badge{white-space:nowrap;overflow-wrap:normal;word-break:normal}
 .supplier-account-workspace .dw-table td:last-child{min-width:140px}
+
+/* Return IDs and bilingual financial columns scroll as a table, never character-wrap. */
+.supplier-returns .supplier-return-table{min-width:760px;table-layout:auto}
+.supplier-returns .supplier-return-table :is(th,td){white-space:nowrap;word-break:normal;overflow-wrap:normal;padding:10px 12px}

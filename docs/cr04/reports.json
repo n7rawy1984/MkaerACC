@@ -1,0 +1,11 @@
+{
+  "checks": [
+    "Report model Supplier subledger/control reconciliation zero",
+    "Report does not offer allocated/refunded credit again",
+    "Bilingual en statement contains original refund and reversal with numeric calendar dates",
+    "en report excludes unrelated Supplier refund",
+    "Bilingual ar statement contains original refund and reversal with numeric calendar dates",
+    "ar report excludes unrelated Supplier refund"
+  ],
+  "hostedWrites": 0
+}

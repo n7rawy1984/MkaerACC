@@ -1,0 +1,12 @@
+{
+  "checks": [
+    "Migration102 preserves populated existing journals, sources, parties, drafts and memberships",
+    "Independent simultaneous60-unit returns serialize; second over-return rolls back without duplicate stock or journal",
+    "Independent concurrent Supplier credits recognize AP exactly once",
+    "Native expected40units / inventory2000 / AP2000 independently reconcile",
+    "Both new tenant tables force RLS and deny direct browser mutations",
+    "Native Management Viewer command denied"
+  ],
+  "hostedWrites": 0,
+  "engine": "Disposable native PostgreSQL, independent sessions and observed lock waits"
+}

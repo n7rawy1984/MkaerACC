@@ -1,0 +1,3763 @@
+{
+  "checks": [
+    "Unpaid partial return: AP4000",
+    "Unpaid partial return:80 units/value4000",
+    "Supplier subledger equals AP GL 413000",
+    "Inventory movements equal GL 400000",
+    "Duplicate credit rejected",
+    "Generic inventory reversal cannot bypass Supplier credit dependencies",
+    "Credit must reverse before physical return",
+    "Full cumulative return clears AP and all stock",
+    "Supplier subledger equals AP GL 13000",
+    "Inventory movements equal GL 0",
+    "Fully paid invoice return creates Supplier credit1000 without revenue",
+    "Refund Dr actual Bank1000 Cr AP1000",
+    "Refund exact retry idempotent",
+    "Refund duplicate/reference or overrefund blocked",
+    "Refund consumes Supplier credit to zero",
+    "Supplier subledger equals AP GL 13000",
+    "Inventory movements equal GL 400000",
+    "Refund must reverse before Supplier credit",
+    "Refund reversal restores Supplier credit",
+    "Supplier credit allocated to another invoice; no cash/cost duplication",
+    "Supplier subledger equals AP GL 63000",
+    "Inventory movements equal GL 400000",
+    "Partial payment4500 then return1000 leaves Supplier credit500",
+    "Existing payment workflow rejects over-settling returned invoice",
+    "VAT-bearing return cannot silently skip documented VAT credit",
+    "Tax credit reverses1000 inventory cost and50 recoverable VAT; AP4200",
+    "Over-return original receipt rejected",
+    "Physical Project issue uses existing cost command",
+    "Insufficient pooled stock after Project issue rejected",
+    "Existing issue-return recovers warehouse stock and Project cost",
+    "Physical return reversal restores quantity/value once",
+    "Duplicate physical reversal rejected",
+    "Management Viewer cannot mutate purchase returns",
+    "Foreign Company read denied",
+    "Closed accounting period rejects Supplier return",
+    "Moving-average return carries1117.65; original invoice credit1400",
+    "Price/carrying variance282.35 uses existing variance control without restating stock",
+    "Actual refund journal equals independent Bank debit/AP credit expectation",
+    "Credit then physical reversal restores original AP7000 and stock19000",
+    "Supplier subledger equals AP GL 1133000",
+    "Inventory movements equal GL 1900000",
+    "Pre-existing fixture posted journals preserved byte-for-byte",
+    "All actual journals balanced"
+  ],
+  "scenarios": [
+    {
+      "name": "Unpaid partial20of100",
+      "expected": {
+        "qty": "80000000",
+        "value": "400000",
+        "payable": "400000"
+      },
+      "actual": {
+        "qty": "80000000",
+        "value": "400000",
+        "revision": 2,
+        "last_date": "2026-11-18"
+      },
+      "journalPhysical": "83da5c2d-340b-4d0f-9370-71ca456f6c83",
+      "journalCredit": "c74c4796-571f-4111-8245-f8c1e3adf419"
+    }
+  ],
+  "company": "ed030005-0000-4000-8000-000000000010",
+  "finalStock": {
+    "qty": "340000000",
+    "value": "1900000",
+    "revision": 16,
+    "last_date": "2026-11-18"
+  },
+  "ap": {
+    "gl": [
+      {
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "payable_minor": "1133000"
+      }
+    ],
+    "as_of": "2026-11-18",
+    "today": "2026-11-18",
+    "refunds": [
+      {
+        "id": "42fd4e6f-9c5f-4459-9c3c-59c97b4f5b71",
+        "date": "2026-11-18",
+        "evidence": "Fictional actual bank receipt evidenced by statement",
+        "reference": "CR04-ACTUAL-REFUND",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.137+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "journal_id": "c395ebc7-f227-4b2b-b05c-6c42b383edc5",
+        "original_id": null,
+        "supplier_id": "ed030005-0000-4000-8000-000000000020",
+        "treasury_id": "ed030005-0000-4000-8000-000000000120",
+        "amount_minor": "100000",
+        "credit_note_id": "9330f6ff-e956-468e-9433-e8395750d9c3"
+      },
+      {
+        "id": "c2d3398d-5c65-475b-af11-5ecb4cfe126e",
+        "date": "2026-11-18",
+        "evidence": "Fictional audited refund cancellation",
+        "reference": "ed030005-0000-4000-8000-000000000010-SRET-2026-000008",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.235+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "journal_id": "c23fe5b5-fe8a-43b3-8987-a84d983a0f41",
+        "original_id": "42fd4e6f-9c5f-4459-9c3c-59c97b4f5b71",
+        "supplier_id": "ed030005-0000-4000-8000-000000000020",
+        "treasury_id": "ed030005-0000-4000-8000-000000000120",
+        "amount_minor": "100000",
+        "credit_note_id": "9330f6ff-e956-468e-9433-e8395750d9c3"
+      }
+    ],
+    "invoices": [
+      {
+        "id": "76daee90-8861-4f82-b168-8a7e826d96e0",
+        "status": "POSTED",
+        "due_date": "2026-09-10",
+        "net_minor": "10000",
+        "vat_minor": "0",
+        "aging_days": 69,
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "project_id": "ed030005-0000-4000-8000-000000000030",
+        "description": "Synthetic cost",
+        "gross_minor": "10000",
+        "supplier_id": "ed030005-0000-4000-8000-000000000020",
+        "expense_date": "2026-09-10",
+        "funding_mode": "SUPPLIER_CREDIT",
+        "overdue_days": 0,
+        "settled_minor": "0",
+        "invoice_number": null,
+        "due_date_recorded": false,
+        "expense_reference": "ed030005-0000-4000-8000-000000000010-EXP-2026-000001",
+        "outstanding_minor": "10000",
+        "credit_balance_minor": "0",
+        "posted_journal_entry_id": "95321455-3708-441f-89e9-29be4c937bdd",
+        "reversal_journal_entry_id": null
+      },
+      {
+        "id": "a3c8862f-e106-464d-af51-72e0f39306c6",
+        "status": "POSTED",
+        "due_date": "2026-10-10",
+        "net_minor": "3000",
+        "vat_minor": "0",
+        "aging_days": 39,
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "project_id": "ed030005-0000-4000-8000-000000000100",
+        "description": "Synthetic cost",
+        "gross_minor": "3000",
+        "supplier_id": "ed030005-0000-4000-8000-000000000020",
+        "expense_date": "2026-10-10",
+        "funding_mode": "SUPPLIER_CREDIT",
+        "overdue_days": 0,
+        "settled_minor": "0",
+        "invoice_number": null,
+        "due_date_recorded": false,
+        "expense_reference": "ed030005-0000-4000-8000-000000000010-EXP-2026-000002",
+        "outstanding_minor": "3000",
+        "credit_balance_minor": "0",
+        "posted_journal_entry_id": "20fa2bc2-5dc2-4771-b64a-121187683145",
+        "reversal_journal_entry_id": null
+      },
+      {
+        "id": "23a1f7fa-2e88-4e8e-81dd-c1a0cb00c0ae",
+        "status": "POSTED",
+        "due_date": "2026-11-18",
+        "net_minor": "700000",
+        "vat_minor": "0",
+        "aging_days": 0,
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "project_id": null,
+        "description": "Verified synthetic supplier invoice",
+        "gross_minor": "700000",
+        "supplier_id": "ed030005-0000-4000-8000-000000000020",
+        "expense_date": "2026-11-18",
+        "funding_mode": "SUPPLIER_CREDIT",
+        "overdue_days": 0,
+        "settled_minor": "0",
+        "invoice_number": "SYN-72f03057-c5c3-4390-9e6e-e202324fb242",
+        "due_date_recorded": true,
+        "expense_reference": "ed030005-0000-4000-8000-000000000010-EXP-2026-000009",
+        "outstanding_minor": "700000",
+        "credit_balance_minor": "0",
+        "posted_journal_entry_id": "844ad0a3-a876-40d2-a88d-4a1671f086df",
+        "reversal_journal_entry_id": null
+      },
+      {
+        "id": "859dcce5-45fb-41bb-aba3-b6c170934b7d",
+        "status": "POSTED",
+        "due_date": "2026-11-18",
+        "net_minor": "150000",
+        "vat_minor": "0",
+        "aging_days": 0,
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "project_id": null,
+        "description": "Verified synthetic supplier invoice",
+        "gross_minor": "150000",
+        "supplier_id": "ed030005-0000-4000-8000-000000000020",
+        "expense_date": "2026-11-18",
+        "funding_mode": "SUPPLIER_CREDIT",
+        "overdue_days": 0,
+        "settled_minor": "100000",
+        "invoice_number": "SYN-3688ac23-54d6-4524-814f-feade59e63b9",
+        "due_date_recorded": true,
+        "expense_reference": "ed030005-0000-4000-8000-000000000010-EXP-2026-000006",
+        "outstanding_minor": "50000",
+        "credit_balance_minor": "0",
+        "posted_journal_entry_id": "bdccdf26-403c-4758-8f99-240b9609b43e",
+        "reversal_journal_entry_id": null
+      },
+      {
+        "id": "88df2cdd-dadf-483f-bd15-074e5b79256e",
+        "status": "POSTED",
+        "due_date": "2026-11-18",
+        "net_minor": "500000",
+        "vat_minor": "0",
+        "aging_days": 0,
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "project_id": null,
+        "description": "Verified synthetic supplier invoice",
+        "gross_minor": "500000",
+        "supplier_id": "ed030005-0000-4000-8000-000000000020",
+        "expense_date": "2026-11-18",
+        "funding_mode": "SUPPLIER_CREDIT",
+        "overdue_days": 0,
+        "settled_minor": "550000",
+        "invoice_number": "SYN-d7e1e9fd-3eba-4ac6-937b-c1d926f549f1",
+        "due_date_recorded": true,
+        "expense_reference": "ed030005-0000-4000-8000-000000000010-EXP-2026-000007",
+        "outstanding_minor": "0",
+        "credit_balance_minor": "50000",
+        "posted_journal_entry_id": "0b2561d4-3a0b-4208-af24-28a6b4130ad4",
+        "reversal_journal_entry_id": null
+      },
+      {
+        "id": "ddd5d713-1532-4819-b186-492d8b4806c5",
+        "status": "POSTED",
+        "due_date": "2026-11-18",
+        "net_minor": "500000",
+        "vat_minor": "0",
+        "aging_days": 0,
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "project_id": null,
+        "description": "Verified synthetic supplier invoice",
+        "gross_minor": "500000",
+        "supplier_id": "ed030005-0000-4000-8000-000000000020",
+        "expense_date": "2026-11-18",
+        "funding_mode": "SUPPLIER_CREDIT",
+        "overdue_days": 0,
+        "settled_minor": "500000",
+        "invoice_number": "SYN-90ed0ed8-9dfc-4521-86b0-abb332af4912",
+        "due_date_recorded": true,
+        "expense_reference": "ed030005-0000-4000-8000-000000000010-EXP-2026-000005",
+        "outstanding_minor": "0",
+        "credit_balance_minor": "0",
+        "posted_journal_entry_id": "1041775a-f44d-4823-a076-d9cd846f0f87",
+        "reversal_journal_entry_id": null
+      },
+      {
+        "id": "e8e53fdf-d4f8-477f-b549-34cda4abe93e",
+        "status": "POSTED",
+        "due_date": "2026-11-18",
+        "net_minor": "500000",
+        "vat_minor": "0",
+        "aging_days": 0,
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "project_id": null,
+        "description": "Verified synthetic supplier invoice",
+        "gross_minor": "500000",
+        "supplier_id": "ed030005-0000-4000-8000-000000000020",
+        "expense_date": "2026-11-18",
+        "funding_mode": "SUPPLIER_CREDIT",
+        "overdue_days": 0,
+        "settled_minor": "500000",
+        "invoice_number": "SYN-2606f84c-f513-402f-b3a0-2797cf51c425",
+        "due_date_recorded": true,
+        "expense_reference": "ed030005-0000-4000-8000-000000000010-EXP-2026-000004",
+        "outstanding_minor": "0",
+        "credit_balance_minor": "0",
+        "posted_journal_entry_id": "0bd32d57-af55-4f19-a3eb-2d5fd490df71",
+        "reversal_journal_entry_id": null
+      },
+      {
+        "id": "ec7d9bf4-fe1c-48e2-bd61-380d4452e102",
+        "status": "POSTED",
+        "due_date": "2026-11-18",
+        "net_minor": "500000",
+        "vat_minor": "25000",
+        "aging_days": 0,
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "project_id": null,
+        "description": "Verified synthetic supplier invoice",
+        "gross_minor": "525000",
+        "supplier_id": "ed030005-0000-4000-8000-000000000020",
+        "expense_date": "2026-11-18",
+        "funding_mode": "SUPPLIER_CREDIT",
+        "overdue_days": 0,
+        "settled_minor": "105000",
+        "invoice_number": "SYN-03d25b48-ac21-4931-8ca4-90a6372525e5",
+        "due_date_recorded": true,
+        "expense_reference": "ed030005-0000-4000-8000-000000000010-EXP-2026-000008",
+        "outstanding_minor": "420000",
+        "credit_balance_minor": "0",
+        "posted_journal_entry_id": "98951352-36c7-4e32-843d-84095fa878c0",
+        "reversal_journal_entry_id": null
+      }
+    ],
+    "payments": [
+      {
+        "id": "f059d0f0-65cd-4fd3-9718-caaf0abf3797",
+        "notes": null,
+        "status": "REVERSED",
+        "posted_at": "2026-11-18T12:42:30.995+00:00",
+        "posted_by": "ed030005-0000-4000-8000-000000000001",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:30.995+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "updated_at": "2026-11-18T12:42:31.046+00:00",
+        "updated_by": "ed030005-0000-4000-8000-000000000001",
+        "reversed_at": "2026-11-18T12:42:31.046+00:00",
+        "reversed_by": "ed030005-0000-4000-8000-000000000001",
+        "supplier_id": "ed030005-0000-4000-8000-000000000020",
+        "custodian_id": null,
+        "payment_date": "2026-10-15",
+        "payment_method": "TRANSFER",
+        "payment_reference": "ed030005-0000-4000-8000-000000000010-SPAY-2026-000001",
+        "custody_account_id": null,
+        "external_reference": null,
+        "total_amount_minor": "4000",
+        "treasury_account_id": "ed030005-0000-4000-8000-000000000031",
+        "posted_journal_entry_id": "109167bc-2a95-4a28-8071-c9d9da40ee70",
+        "reversal_journal_entry_id": "33ff253e-173b-4f79-bdb6-3eaa64bcf3c8"
+      },
+      {
+        "id": "64c02fef-8947-4be0-aa66-31aa21822eb7",
+        "notes": null,
+        "status": "POSTED",
+        "posted_at": "2026-11-18T12:42:34.41+00:00",
+        "posted_by": "ed030005-0000-4000-8000-000000000001",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.41+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "updated_at": "2026-11-18T12:42:34.41+00:00",
+        "updated_by": "ed030005-0000-4000-8000-000000000001",
+        "reversed_at": null,
+        "reversed_by": null,
+        "supplier_id": "ed030005-0000-4000-8000-000000000020",
+        "custodian_id": "ed030005-0000-4000-8000-000000000101",
+        "payment_date": "2026-11-18",
+        "payment_method": "OTHER",
+        "payment_reference": "ed030005-0000-4000-8000-000000000010-SPAY-2026-000003",
+        "custody_account_id": "ed030005-0000-4000-8000-000000000102",
+        "external_reference": null,
+        "total_amount_minor": "450000",
+        "treasury_account_id": null,
+        "posted_journal_entry_id": "a78d1ccf-16c8-4dba-9351-d29c7f49e5c4",
+        "reversal_journal_entry_id": null
+      },
+      {
+        "id": "f9d59962-e449-4062-a280-b57e52fe7b92",
+        "notes": null,
+        "status": "POSTED",
+        "posted_at": "2026-11-18T12:42:34.018+00:00",
+        "posted_by": "ed030005-0000-4000-8000-000000000001",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.018+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "updated_at": "2026-11-18T12:42:34.018+00:00",
+        "updated_by": "ed030005-0000-4000-8000-000000000001",
+        "reversed_at": null,
+        "reversed_by": null,
+        "supplier_id": "ed030005-0000-4000-8000-000000000020",
+        "custodian_id": "ed030005-0000-4000-8000-000000000101",
+        "payment_date": "2026-11-18",
+        "payment_method": "OTHER",
+        "payment_reference": "ed030005-0000-4000-8000-000000000010-SPAY-2026-000002",
+        "custody_account_id": "ed030005-0000-4000-8000-000000000102",
+        "external_reference": null,
+        "total_amount_minor": "500000",
+        "treasury_account_id": null,
+        "posted_journal_entry_id": "ad4c6216-e858-48fd-9378-d534c1aedcbc",
+        "reversal_journal_entry_id": null
+      }
+    ],
+    "company_id": "ed030005-0000-4000-8000-000000000010",
+    "adjustments": [
+      {
+        "id": "9330f6ff-e956-468e-9433-e8395750d9c3",
+        "kind": "CREDIT_NOTE",
+        "status": "POSTED",
+        "evidence": "Fictional documented Supplier credit note",
+        "effective": true,
+        "net_minor": "100000",
+        "reference": "ed030005-0000-4000-8000-000000000010-SRET-2026-000006",
+        "vat_minor": "0",
+        "advance_id": null,
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.08+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "expense_id": "ddd5d713-1532-4819-b186-492d8b4806c5",
+        "project_id": null,
+        "supplier_id": "ed030005-0000-4000-8000-000000000020",
+        "amount_minor": "100000",
+        "custodian_id": null,
+        "posting_date": "2026-11-18",
+        "credit_note_id": null,
+        "external_reference": "CR04-CN-e33fe4ae-1664-4278-9541-fdb746d7c6c6",
+        "treasury_account_id": null,
+        "posted_journal_entry_id": "95c1bcbb-9897-4cd0-bd27-e783e4f7051e",
+        "reversal_journal_entry_id": null
+      },
+      {
+        "id": "9aa6da5a-9913-4f6c-bf2d-162bb80fa669",
+        "kind": "CREDIT_ALLOCATION",
+        "status": "POSTED",
+        "evidence": "Apply real remaining credit to another invoice",
+        "effective": true,
+        "net_minor": "100000",
+        "reference": "ed030005-0000-4000-8000-000000000010-SAP-2026-000001",
+        "vat_minor": "0",
+        "advance_id": null,
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.279+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "expense_id": "859dcce5-45fb-41bb-aba3-b6c170934b7d",
+        "project_id": null,
+        "supplier_id": "ed030005-0000-4000-8000-000000000020",
+        "amount_minor": "100000",
+        "custodian_id": null,
+        "posting_date": "2026-11-18",
+        "credit_note_id": "9330f6ff-e956-468e-9433-e8395750d9c3",
+        "external_reference": null,
+        "treasury_account_id": null,
+        "posted_journal_entry_id": "021e031e-bdd6-4255-9714-806ed3cc244d",
+        "reversal_journal_entry_id": null
+      },
+      {
+        "id": "b15d3eea-2082-493c-b852-8df6b1291439",
+        "kind": "CREDIT_NOTE",
+        "status": "POSTED",
+        "evidence": "Fictional documented Supplier credit note",
+        "effective": true,
+        "net_minor": "100000",
+        "reference": "ed030005-0000-4000-8000-000000000010-SRET-2026-000010",
+        "vat_minor": "0",
+        "advance_id": null,
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.46+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "expense_id": "88df2cdd-dadf-483f-bd15-074e5b79256e",
+        "project_id": null,
+        "supplier_id": "ed030005-0000-4000-8000-000000000020",
+        "amount_minor": "100000",
+        "custodian_id": null,
+        "posting_date": "2026-11-18",
+        "credit_note_id": null,
+        "external_reference": "CR04-CN-0c593f46-d5f2-4d76-a4ba-2312dfd69cdb",
+        "treasury_account_id": null,
+        "posted_journal_entry_id": "4a38c056-940a-4264-bd43-2863f246b286",
+        "reversal_journal_entry_id": null
+      },
+      {
+        "id": "c1bd40b6-3acc-4830-8797-daa16d9b927a",
+        "kind": "CREDIT_NOTE",
+        "status": "POSTED",
+        "evidence": "Fictional documented Supplier credit note",
+        "effective": true,
+        "net_minor": "100000",
+        "reference": "ed030005-0000-4000-8000-000000000010-SRET-2026-000002",
+        "vat_minor": "0",
+        "advance_id": null,
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.687+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "expense_id": "e8e53fdf-d4f8-477f-b549-34cda4abe93e",
+        "project_id": null,
+        "supplier_id": "ed030005-0000-4000-8000-000000000020",
+        "amount_minor": "100000",
+        "custodian_id": null,
+        "posting_date": "2026-11-18",
+        "credit_note_id": null,
+        "external_reference": "CR04-CN-861ae9fb-c618-4824-a76f-49865a8129a8",
+        "treasury_account_id": null,
+        "posted_journal_entry_id": "c74c4796-571f-4111-8245-f8c1e3adf419",
+        "reversal_journal_entry_id": null
+      },
+      {
+        "id": "c43df674-1151-4a15-9539-ff8cd928ba15",
+        "kind": "CREDIT_NOTE",
+        "status": "REVERSED",
+        "evidence": "Fictional documented Supplier credit note",
+        "effective": false,
+        "net_minor": "140000",
+        "reference": "ed030005-0000-4000-8000-000000000010-SRET-2026-000016",
+        "vat_minor": "0",
+        "advance_id": null,
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.94+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "expense_id": "23a1f7fa-2e88-4e8e-81dd-c1a0cb00c0ae",
+        "project_id": null,
+        "supplier_id": "ed030005-0000-4000-8000-000000000020",
+        "amount_minor": "140000",
+        "custodian_id": null,
+        "posting_date": "2026-11-18",
+        "credit_note_id": null,
+        "external_reference": "CR04-CN-2cb1a695-9908-480b-9abd-a7dda9f954b7",
+        "treasury_account_id": null,
+        "posted_journal_entry_id": "d8f0f5f2-603d-405d-984d-d7d1eacda6f3",
+        "reversal_journal_entry_id": "bc91f988-2a73-48db-b17b-bf90f827060d"
+      },
+      {
+        "id": "d3238d65-9e69-4788-8b23-6b35f84c53dd",
+        "kind": "CREDIT_NOTE",
+        "status": "POSTED",
+        "evidence": "Fictional documented Supplier credit note",
+        "effective": true,
+        "net_minor": "400000",
+        "reference": "ed030005-0000-4000-8000-000000000010-SRET-2026-000004",
+        "vat_minor": "0",
+        "advance_id": null,
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.874+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "expense_id": "e8e53fdf-d4f8-477f-b549-34cda4abe93e",
+        "project_id": null,
+        "supplier_id": "ed030005-0000-4000-8000-000000000020",
+        "amount_minor": "400000",
+        "custodian_id": null,
+        "posting_date": "2026-11-18",
+        "credit_note_id": null,
+        "external_reference": "CR04-CN-d4b0744f-59de-4c3b-a136-217b6627757e",
+        "treasury_account_id": null,
+        "posted_journal_entry_id": "1093b521-b278-48fc-b23e-c1a8dd6b4ca9",
+        "reversal_journal_entry_id": null
+      },
+      {
+        "id": "dd7726da-7f50-46d5-b90b-0b96fa6c7add",
+        "kind": "CREDIT_NOTE",
+        "status": "POSTED",
+        "evidence": "Fictional documented Supplier credit note",
+        "effective": true,
+        "net_minor": "100000",
+        "reference": "ed030005-0000-4000-8000-000000000010-SRET-2026-000012",
+        "vat_minor": "5000",
+        "advance_id": null,
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.615+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "expense_id": "ec7d9bf4-fe1c-48e2-bd61-380d4452e102",
+        "project_id": null,
+        "supplier_id": "ed030005-0000-4000-8000-000000000020",
+        "amount_minor": "105000",
+        "custodian_id": null,
+        "posting_date": "2026-11-18",
+        "credit_note_id": null,
+        "external_reference": "CR04-CN-847db71b-b281-419b-96b6-e07d5c1314b4",
+        "treasury_account_id": null,
+        "posted_journal_entry_id": "89f601c5-24cc-48a7-868c-690c33c03640",
+        "reversal_journal_entry_id": null
+      }
+    ],
+    "allocations": [
+      {
+        "id": "324cb38d-1ea2-4ebf-8f6b-b343711a55a6",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.41+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "expense_id": "88df2cdd-dadf-483f-bd15-074e5b79256e",
+        "supplier_payment_id": "64c02fef-8947-4be0-aa66-31aa21822eb7",
+        "allocated_amount_minor": "450000"
+      },
+      {
+        "id": "481c9206-199f-4ecc-9fcf-480c9c46fed4",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:30.995+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "expense_id": "a3c8862f-e106-464d-af51-72e0f39306c6",
+        "supplier_payment_id": "f059d0f0-65cd-4fd3-9718-caaf0abf3797",
+        "allocated_amount_minor": "1500"
+      },
+      {
+        "id": "60d2fafb-f31e-4887-848a-d5c525caa6c5",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.018+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "expense_id": "ddd5d713-1532-4819-b186-492d8b4806c5",
+        "supplier_payment_id": "f9d59962-e449-4062-a280-b57e52fe7b92",
+        "allocated_amount_minor": "500000"
+      },
+      {
+        "id": "b2e7c61b-e729-416e-bc94-e099b863126e",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:30.995+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "expense_id": "76daee90-8861-4f82-b168-8a7e826d96e0",
+        "supplier_payment_id": "f059d0f0-65cd-4fd3-9718-caaf0abf3797",
+        "allocated_amount_minor": "2500"
+      }
+    ],
+    "advance_account_id": "fcaf7409-8292-4c0d-aac8-49ef50340383"
+  },
+  "refund": {
+    "id": "c395ebc7-f227-4b2b-b05c-6c42b383edc5",
+    "state": "RECORDED",
+    "version": 1,
+    "replayed": false,
+    "snapshot": {
+      "date": "2026-11-18",
+      "kind": "SUPPLIER_RETURN_REFUND",
+      "lines": [
+        {
+          "account_id": "ed030005-0000-4000-8000-000000000121",
+          "project_id": null,
+          "debit_minor": "100000",
+          "credit_minor": "0",
+          "treasury_account_id": "ed030005-0000-4000-8000-000000000120"
+        },
+        {
+          "party_id": "ed030005-0000-4000-8000-000000000020",
+          "account_id": "ed030005-0000-4000-8000-000000000043",
+          "project_id": null,
+          "debit_minor": "0",
+          "credit_minor": "100000"
+        }
+      ],
+      "evidence": "Fictional actual bank receipt evidenced by statement",
+      "reference": "CR04-ACTUAL-REFUND",
+      "gross_minor": "100000",
+      "supplier_id": "ed030005-0000-4000-8000-000000000020",
+      "treasury_id": "ed030005-0000-4000-8000-000000000120",
+      "amount_minor": "100000",
+      "credit_note_id": "9330f6ff-e956-468e-9433-e8395750d9c3"
+    },
+    "reference": "ed030005-0000-4000-8000-000000000010-SRET-2026-000007",
+    "company_id": "ed030005-0000-4000-8000-000000000010",
+    "journal_id": "c395ebc7-f227-4b2b-b05c-6c42b383edc5",
+    "document_id": "42fd4e6f-9c5f-4459-9c3c-59c97b4f5b71"
+  },
+  "reverseRefund": {
+    "id": "c23fe5b5-fe8a-43b3-8987-a84d983a0f41",
+    "state": "RECORDED",
+    "version": 1,
+    "replayed": false,
+    "snapshot": {
+      "id": "42fd4e6f-9c5f-4459-9c3c-59c97b4f5b71",
+      "date": "2026-11-18",
+      "kind": "SUPPLIER_RETURN_REVERSE_REFUND",
+      "evidence": "Fictional audited refund cancellation"
+    },
+    "reference": "ed030005-0000-4000-8000-000000000010-SRET-2026-000008",
+    "company_id": "ed030005-0000-4000-8000-000000000010",
+    "journal_id": "c23fe5b5-fe8a-43b3-8987-a84d983a0f41",
+    "document_id": "c2d3398d-5c65-475b-af11-5ecb4cfe126e"
+  },
+  "journals": [
+    {
+      "r": {
+        "id": "021e031e-bdd6-4255-9714-806ed3cc244d",
+        "posted_at": "2026-11-18T12:42:34.279+00:00",
+        "source_id": "9aa6da5a-9913-4f6c-bf2d-162bb80fa669",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.279+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "ed030005-0000-4000-8000-000000000010-SAP-2026-000001 Apply real remaining credit to another invoice",
+        "source_type": "SUPPLIER_CREDIT_ALLOCATION",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000034",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "023405c3-3e31-4544-960c-0ea6ae032970",
+        "posted_at": "2026-11-18T12:42:33.969+00:00",
+        "source_id": "a778dfaa-8bc3-4adb-9553-a1625fb16aba",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.969+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "ed030005-0000-4000-8000-000000000010-INV-2026-000004 SUPPLIER-INVOICE:ed030005-0000-4000-8000-000000000020:syn-90ed0ed8-9dfc-4521-86b0-abb332af4912",
+        "source_type": "INVENTORY_MATCH",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000027",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "06cbbb16-aa4c-4b83-8004-838f8999fd9f",
+        "posted_at": "2026-11-18T12:42:31.245+00:00",
+        "source_id": "065d3663-39fa-492d-9d5c-2f09b0117a99",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.245+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Retention Payment ed030005-0000-4000-8000-000000000010-SRPAY-2026-000001",
+        "source_type": "SUBCONTRACTOR_RETENTION_PAYMENT",
+        "posting_date": "2026-10-23",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000010",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "0b2561d4-3a0b-4208-af24-28a6b4130ad4",
+        "posted_at": "2026-11-18T12:42:34.359+00:00",
+        "source_id": "88df2cdd-dadf-483f-bd15-074e5b79256e",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.359+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Verified synthetic supplier invoice",
+        "source_type": "EXPENSE",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000036",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "0b933500-3cf5-4e65-8073-cf274e122574",
+        "posted_at": "2026-11-18T12:42:34.875+00:00",
+        "source_id": "4e5c9321-970b-4e75-9856-809e583920dc",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.875+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "ed030005-0000-4000-8000-000000000010-INV-2026-000012 SUPPLIER-INVOICE:ed030005-0000-4000-8000-000000000020:syn-72f03057-c5c3-4390-9e6e-e202324fb242",
+        "source_type": "INVENTORY_MATCH",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000052",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "0bd32d57-af55-4f19-a3eb-2d5fd490df71",
+        "posted_at": "2026-11-18T12:42:33.541+00:00",
+        "source_id": "e8e53fdf-d4f8-477f-b549-34cda4abe93e",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.541+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Verified synthetic supplier invoice",
+        "source_type": "EXPENSE",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000019",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "1041775a-f44d-4823-a076-d9cd846f0f87",
+        "posted_at": "2026-11-18T12:42:33.969+00:00",
+        "source_id": "ddd5d713-1532-4819-b186-492d8b4806c5",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.969+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Verified synthetic supplier invoice",
+        "source_type": "EXPENSE",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000026",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "109167bc-2a95-4a28-8071-c9d9da40ee70",
+        "posted_at": "2026-11-18T12:42:30.995+00:00",
+        "source_id": "f059d0f0-65cd-4fd3-9718-caaf0abf3797",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:30.995+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Supplier Payment ed030005-0000-4000-8000-000000000010-SPAY-2026-000001",
+        "source_type": "SUPPLIER_PAYMENT",
+        "posting_date": "2026-10-15",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000003",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "1093b521-b278-48fc-b23e-c1a8dd6b4ca9",
+        "posted_at": "2026-11-18T12:42:33.874+00:00",
+        "source_id": "d3238d65-9e69-4788-8b23-6b35f84c53dd",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.874+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "ed030005-0000-4000-8000-000000000010-SRET-2026-000004 Fictional documented Supplier credit note",
+        "source_type": "SUPPLIER_CREDIT_NOTE",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "POST",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000024",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "1bca0076-5cd0-4e81-84ed-9a9c2cdabe59",
+        "posted_at": "2026-11-18T12:42:34.068+00:00",
+        "source_id": "b1c30a22-1d4c-400f-b9fc-811aee194ce2",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.068+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Physical Supplier return",
+        "source_type": "SUPPLIER_PHYSICAL_RETURN",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "POST",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000029",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "20fa2bc2-5dc2-4771-b64a-121187683145",
+        "posted_at": "2026-11-18T12:42:30.974+00:00",
+        "source_id": "a3c8862f-e106-464d-af51-72e0f39306c6",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:30.974+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Synthetic cost",
+        "source_type": "EXPENSE",
+        "posting_date": "2026-10-10",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000002",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "22cd9542-acfb-4036-8418-61601ef71755",
+        "posted_at": "2026-11-18T12:42:33.955+00:00",
+        "source_id": "d12cc668-0ad1-4383-96d8-b5fdfe73d1d4",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.955+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "ed030005-0000-4000-8000-000000000010-INV-2026-000003 SYN-91e5ad88-8062-43e5-8b59-a465db6850cf",
+        "source_type": "INVENTORY_RECEIPT",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000025",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "2c46466a-5d29-4541-933f-42fcfb3e0b1e",
+        "posted_at": "2026-11-18T12:42:31.095+00:00",
+        "source_id": "594f9954-04ba-43c2-a3a8-1928210067a8",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.095+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Subcontractor Advance ed030005-0000-4000-8000-000000000010-SADV-2026-000001",
+        "source_type": "SUBCONTRACTOR_ADVANCE",
+        "posting_date": "2026-09-01",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000005",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "33ff253e-173b-4f79-bdb6-3eaa64bcf3c8",
+        "posted_at": "2026-11-18T12:42:31.046+00:00",
+        "source_id": "109167bc-2a95-4a28-8071-c9d9da40ee70",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.046+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Reversal of ed030005-0000-4000-8000-000000000010-SPAY-2026-000001: Synthetic later reversal",
+        "source_type": "JOURNAL_REVERSAL",
+        "posting_date": "2026-11-02",
+        "posting_purpose": "REVERSAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000004",
+        "reversal_of_journal_entry_id": "109167bc-2a95-4a28-8071-c9d9da40ee70"
+      }
+    },
+    {
+      "r": {
+        "id": "3bd423bf-539e-4286-a2e7-3cf529698287",
+        "posted_at": "2026-11-18T12:42:31.296+00:00",
+        "source_id": "a8a62899-e42d-4b41-aa3e-d4a1b83fb428",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.296+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Synthetic cost",
+        "source_type": "EXPENSE",
+        "posting_date": "2026-10-05",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000012",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "40479bce-7e30-47fd-8203-84f50d17e15e",
+        "posted_at": "2026-11-18T12:42:32.489+00:00",
+        "source_id": "0016e125-645f-4b54-9a9b-091b2c083f59",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:32.489+00:00",
+        "created_by": null,
+        "description": "Synthetic correction funding",
+        "source_type": "TEST",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "POST",
+        "journal_reference": "RECLASS-FUNDS",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "4a38c056-940a-4264-bd43-2863f246b286",
+        "posted_at": "2026-11-18T12:42:34.46+00:00",
+        "source_id": "b15d3eea-2082-493c-b852-8df6b1291439",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.46+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "ed030005-0000-4000-8000-000000000010-SRET-2026-000010 Fictional documented Supplier credit note",
+        "source_type": "SUPPLIER_CREDIT_NOTE",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "POST",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000040",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "513991f8-007d-47b8-8811-fe8bef738e38",
+        "posted_at": "2026-11-18T12:42:31.336+00:00",
+        "source_id": "1750f240-7640-434a-a55f-986fca5f5046",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.336+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Custody Cash Return ed030005-0000-4000-8000-000000000010-CRET-2026-000001",
+        "source_type": "CUSTODY_CASH_RETURN",
+        "posting_date": "2026-10-15",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000013",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "5265970c-3e1c-40b9-98b9-2635284865a1",
+        "posted_at": "2026-11-18T12:42:34.751+00:00",
+        "source_id": "8619b849-333e-483a-ab0b-4e9d7cd26c52",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.751+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Fictional return dispatch cancelled; goods physically recovered",
+        "source_type": "JOURNAL_REVERSAL",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "REVERSAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000049",
+        "reversal_of_journal_entry_id": "8619b849-333e-483a-ab0b-4e9d7cd26c52"
+      }
+    },
+    {
+      "r": {
+        "id": "6275ea79-8045-4af4-bd22-c446bd4b12e6",
+        "posted_at": "2026-11-18T12:42:33.512+00:00",
+        "source_id": "b390f947-bea0-45d6-913a-04d9ec0417d2",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.512+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "ed030005-0000-4000-8000-000000000010-INV-2026-000001 SYN-a6b3ba5a-8833-4ede-9f5e-beb8f7abdba9",
+        "source_type": "INVENTORY_RECEIPT",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000018",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "6ce28f64-d502-4ae8-95ae-a0dd24a53bbe",
+        "posted_at": "2026-11-18T12:42:31.138+00:00",
+        "source_id": "fb64163e-5289-485e-9c49-1dea11708e33",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.138+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Subcontractor Certificate ed030005-0000-4000-8000-000000000010-SCERT-2026-000001",
+        "source_type": "SUBCONTRACTOR_CERTIFICATE",
+        "posting_date": "2026-09-20",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000006",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "7bfa8b28-aa97-43a2-b8c5-314b42becb10",
+        "posted_at": "2026-11-18T12:42:34.359+00:00",
+        "source_id": "84c5989d-33d1-40ea-b24a-b74d37a1d583",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.359+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "ed030005-0000-4000-8000-000000000010-INV-2026-000006 SUPPLIER-INVOICE:ed030005-0000-4000-8000-000000000020:syn-d7e1e9fd-3eba-4ac6-937b-c1d926f549f1",
+        "source_type": "INVENTORY_MATCH",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000037",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "7d9d12a4-2cb5-4250-b03a-7e3f56d19398",
+        "posted_at": "2026-11-18T12:42:34.532+00:00",
+        "source_id": "3fac4221-56b2-4410-bf80-590629b3c7f4",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.532+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "ed030005-0000-4000-8000-000000000010-INV-2026-000008 SUPPLIER-INVOICE:ed030005-0000-4000-8000-000000000020:syn-03d25b48-ac21-4931-8ca4-90a6372525e5",
+        "source_type": "INVENTORY_MATCH",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000043",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "83da5c2d-340b-4d0f-9370-71ca456f6c83",
+        "posted_at": "2026-11-18T12:42:33.667+00:00",
+        "source_id": "9916de1c-5854-409d-b853-9e8deb96ce65",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.667+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Physical Supplier return",
+        "source_type": "SUPPLIER_PHYSICAL_RETURN",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "POST",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000021",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "844ad0a3-a876-40d2-a88d-4a1671f086df",
+        "posted_at": "2026-11-18T12:42:34.875+00:00",
+        "source_id": "23a1f7fa-2e88-4e8e-81dd-c1a0cb00c0ae",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.875+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Verified synthetic supplier invoice",
+        "source_type": "EXPENSE",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000051",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "84d252e0-2a32-44d2-8ec1-f0f0c1d75cb2",
+        "posted_at": "2026-11-18T12:42:31.189+00:00",
+        "source_id": "6abad6dd-188e-44b5-999c-c6eb04fc9664",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.189+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Subcontractor Payment ed030005-0000-4000-8000-000000000010-SCPAY-2026-000001",
+        "source_type": "SUBCONTRACTOR_PAYMENT",
+        "posting_date": "2026-10-21",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000008",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "858c4f09-6fd1-4ea3-bd38-3b587a2654bf",
+        "posted_at": "2026-11-18T12:42:34.711+00:00",
+        "source_id": "ae8df53a-c265-4ae2-bd06-9669c6a6e7d2",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.711+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "ed030005-0000-4000-8000-000000000010-INV-2026-000010 SYN-34ad2e7f-80bb-4270-84f6-6d3a5edd43c8",
+        "source_type": "INVENTORY_RETURN",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000047",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "8619b849-333e-483a-ab0b-4e9d7cd26c52",
+        "posted_at": "2026-11-18T12:42:34.739+00:00",
+        "source_id": "62c24bee-7813-4a00-a038-daf6aefa241b",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.739+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Physical Supplier return",
+        "source_type": "SUPPLIER_PHYSICAL_RETURN",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "POST",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000048",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "866fa49e-a773-4f6e-9a3a-ef2cc2464326",
+        "posted_at": "2026-11-18T12:42:33.859+00:00",
+        "source_id": "2204d292-afc3-4dda-a68a-7275bdec8749",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.859+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Physical Supplier return",
+        "source_type": "SUPPLIER_PHYSICAL_RETURN",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "POST",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000023",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "89f601c5-24cc-48a7-868c-690c33c03640",
+        "posted_at": "2026-11-18T12:42:34.615+00:00",
+        "source_id": "dd7726da-7f50-46d5-b90b-0b96fa6c7add",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.615+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "ed030005-0000-4000-8000-000000000010-SRET-2026-000012 Fictional documented Supplier credit note",
+        "source_type": "SUPPLIER_CREDIT_NOTE",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "POST",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000045",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "8d135b9f-6756-4ad6-b714-218a53235331",
+        "posted_at": "2026-11-18T12:42:34.52+00:00",
+        "source_id": "daab8388-e966-420e-ae3a-b221c4245f68",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.52+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "ed030005-0000-4000-8000-000000000010-INV-2026-000007 SYN-27b1685c-312a-4d6c-9845-dee67abe5b73",
+        "source_type": "INVENTORY_RECEIPT",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000041",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "8dba39e6-0017-41f5-a1c7-9ea1e774e999",
+        "posted_at": "2026-11-18T12:42:33.023+00:00",
+        "source_id": "a84e7938-2c2d-4488-a25b-6a00dec6d6f0",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.023+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Custody Advance ed030005-0000-4000-8000-000000000010-CADV-2026-000002",
+        "source_type": "CUSTODY_ADVANCE",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000017",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "93a41cda-e10b-4828-8c74-599a4db19a9f",
+        "posted_at": "2026-11-18T12:42:32.531+00:00",
+        "source_id": "23cb0f75-78b1-42ee-9dd2-36655865864c",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:32.531+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Subcontractor Certificate ed030005-0000-4000-8000-000000000010-SCERT-2026-000003",
+        "source_type": "SUBCONTRACTOR_CERTIFICATE",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000016",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "95321455-3708-441f-89e9-29be4c937bdd",
+        "posted_at": "2026-11-18T12:42:30.893+00:00",
+        "source_id": "76daee90-8861-4f82-b168-8a7e826d96e0",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:30.893+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Synthetic cost",
+        "source_type": "EXPENSE",
+        "posting_date": "2026-09-10",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000001",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "95c1bcbb-9897-4cd0-bd27-e783e4f7051e",
+        "posted_at": "2026-11-18T12:42:34.08+00:00",
+        "source_id": "9330f6ff-e956-468e-9433-e8395750d9c3",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.08+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "ed030005-0000-4000-8000-000000000010-SRET-2026-000006 Fictional documented Supplier credit note",
+        "source_type": "SUPPLIER_CREDIT_NOTE",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "POST",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000030",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "98951352-36c7-4e32-843d-84095fa878c0",
+        "posted_at": "2026-11-18T12:42:34.532+00:00",
+        "source_id": "ec7d9bf4-fe1c-48e2-bd61-380d4452e102",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.532+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Verified synthetic supplier invoice",
+        "source_type": "EXPENSE",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000042",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "a078a18b-2d19-4663-8cbf-0fb864286a12",
+        "posted_at": "2026-11-18T12:42:34.928+00:00",
+        "source_id": "2029dbe3-b02c-438b-b943-fa2a5763b525",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.928+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Physical Supplier return",
+        "source_type": "SUPPLIER_PHYSICAL_RETURN",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "POST",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000053",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "a78d1ccf-16c8-4dba-9351-d29c7f49e5c4",
+        "posted_at": "2026-11-18T12:42:34.41+00:00",
+        "source_id": "64c02fef-8947-4be0-aa66-31aa21822eb7",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.41+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Supplier Payment ed030005-0000-4000-8000-000000000010-SPAY-2026-000003",
+        "source_type": "SUPPLIER_PAYMENT",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000038",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "a9957c5c-ffb9-4be2-8a97-0d02ced25c98",
+        "posted_at": "2026-11-18T12:42:34.675+00:00",
+        "source_id": "f2bc5b8c-1e6f-4f2a-885d-1b81d7769fa4",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.675+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "ed030005-0000-4000-8000-000000000010-INV-2026-000009 SYN-3d49c3ab-9099-4465-baaf-80d4ff2b7be6",
+        "source_type": "INVENTORY_ISSUE",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000046",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "ab3cf5b0-293c-4517-97e2-4c11bd1fa206",
+        "posted_at": "2026-11-18T12:42:34.448+00:00",
+        "source_id": "01e566ac-3b61-4666-84e7-f29de2c5b897",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.448+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Physical Supplier return",
+        "source_type": "SUPPLIER_PHYSICAL_RETURN",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "POST",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000039",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "ad4c6216-e858-48fd-9378-d534c1aedcbc",
+        "posted_at": "2026-11-18T12:42:34.018+00:00",
+        "source_id": "f9d59962-e449-4062-a280-b57e52fe7b92",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.018+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Supplier Payment ed030005-0000-4000-8000-000000000010-SPAY-2026-000002",
+        "source_type": "SUPPLIER_PAYMENT",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000028",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "bc91f988-2a73-48db-b17b-bf90f827060d",
+        "posted_at": "2026-11-18T12:42:34.979+00:00",
+        "source_id": "d8f0f5f2-603d-405d-984d-d7d1eacda6f3",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.979+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Audited Supplier credit cancellation before stock return reversal",
+        "source_type": "JOURNAL_REVERSAL",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "REVERSAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000055",
+        "reversal_of_journal_entry_id": "d8f0f5f2-603d-405d-984d-d7d1eacda6f3"
+      }
+    },
+    {
+      "r": {
+        "id": "bdccdf26-403c-4758-8f99-240b9609b43e",
+        "posted_at": "2026-11-18T12:42:34.251+00:00",
+        "source_id": "859dcce5-45fb-41bb-aba3-b6c170934b7d",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.251+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Verified synthetic supplier invoice",
+        "source_type": "EXPENSE",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000033",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "be062d87-42a7-4cca-9425-22c17513c8cb",
+        "posted_at": "2026-11-18T12:42:34.994+00:00",
+        "source_id": "a078a18b-2d19-4663-8cbf-0fb864286a12",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.994+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Actual goods returned to warehouse after cancelled dispatch",
+        "source_type": "JOURNAL_REVERSAL",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "REVERSAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000056",
+        "reversal_of_journal_entry_id": "a078a18b-2d19-4663-8cbf-0fb864286a12"
+      }
+    },
+    {
+      "r": {
+        "id": "c23fe5b5-fe8a-43b3-8987-a84d983a0f41",
+        "posted_at": "2026-11-18T12:42:34.221+00:00",
+        "source_id": "c395ebc7-f227-4b2b-b05c-6c42b383edc5",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.221+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Fictional audited refund cancellation",
+        "source_type": "JOURNAL_REVERSAL",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "REVERSAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000032",
+        "reversal_of_journal_entry_id": "c395ebc7-f227-4b2b-b05c-6c42b383edc5"
+      }
+    },
+    {
+      "r": {
+        "id": "c395ebc7-f227-4b2b-b05c-6c42b383edc5",
+        "posted_at": "2026-11-18T12:42:34.123+00:00",
+        "source_id": "42fd4e6f-9c5f-4459-9c3c-59c97b4f5b71",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.123+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "ed030005-0000-4000-8000-000000000010-SRET-2026-000007 Fictional actual bank receipt evidenced by statement",
+        "source_type": "SUPPLIER_REFUND",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "POST",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000031",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "c74c4796-571f-4111-8245-f8c1e3adf419",
+        "posted_at": "2026-11-18T12:42:33.687+00:00",
+        "source_id": "c1bd40b6-3acc-4830-8797-daa16d9b927a",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.687+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "ed030005-0000-4000-8000-000000000010-SRET-2026-000002 Fictional documented Supplier credit note",
+        "source_type": "SUPPLIER_CREDIT_NOTE",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "POST",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000022",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "cad8a8ba-62af-40ed-85b5-72d39cc64886",
+        "posted_at": "2026-11-18T12:42:33.541+00:00",
+        "source_id": "9a90bf4b-e818-43f7-a574-588252d26fbc",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.541+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "ed030005-0000-4000-8000-000000000010-INV-2026-000002 SUPPLIER-INVOICE:ed030005-0000-4000-8000-000000000020:syn-2606f84c-f513-402f-b3a0-2797cf51c425",
+        "source_type": "INVENTORY_MATCH",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000020",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "d8b5a7ed-5250-4928-866d-cdf8ef7ea94d",
+        "posted_at": "2026-11-18T12:42:34.592+00:00",
+        "source_id": "b42efe3b-5c8c-4d0a-82b5-680904504960",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.592+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Physical Supplier return",
+        "source_type": "SUPPLIER_PHYSICAL_RETURN",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "POST",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000044",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "d8f0f5f2-603d-405d-984d-d7d1eacda6f3",
+        "posted_at": "2026-11-18T12:42:34.94+00:00",
+        "source_id": "c43df674-1151-4a15-9539-ff8cd928ba15",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.94+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "ed030005-0000-4000-8000-000000000010-SRET-2026-000016 Fictional documented Supplier credit note",
+        "source_type": "SUPPLIER_CREDIT_NOTE",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "POST",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000054",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "da1b6b90-ac0f-40ef-b5f3-575659011a16",
+        "posted_at": "2026-11-18T12:42:31.218+00:00",
+        "source_id": "6b30f13c-5c9a-4770-9a90-defdcd904a55",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.218+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Retention Release ed030005-0000-4000-8000-000000000010-SCREL-2026-000001",
+        "source_type": "SUBCONTRACTOR_RETENTION_RELEASE",
+        "posting_date": "2026-10-22",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000009",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "db50fc24-34ab-4a8a-855b-83b44a8b51f0",
+        "posted_at": "2026-11-18T12:42:31.175+00:00",
+        "source_id": "689cec1f-62df-4154-9d93-d958dd629a12",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.175+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Subcontractor Certificate ed030005-0000-4000-8000-000000000010-SCERT-2026-000002",
+        "source_type": "SUBCONTRACTOR_CERTIFICATE",
+        "posting_date": "2026-10-20",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000007",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "e43ad090-b34b-4b13-934c-1bd8252a3f3a",
+        "posted_at": "2026-11-18T12:42:34.346+00:00",
+        "source_id": "1483e9b5-53c1-4b51-aa7e-80423b7ade35",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.346+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "ed030005-0000-4000-8000-000000000010-INV-2026-000005 SYN-6df2bf56-f240-447b-b7f2-96a0fefc0f45",
+        "source_type": "INVENTORY_RECEIPT",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000035",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "e4cc40d7-abab-4ff8-ba7d-e13e9991b024",
+        "posted_at": "2026-11-18T12:42:34.864+00:00",
+        "source_id": "5570139a-e1de-4d49-b66a-c994c5d41e7a",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.864+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "ed030005-0000-4000-8000-000000000010-INV-2026-000011 SYN-ffde268c-f25f-4cd9-b774-e8ca4b66ee74",
+        "source_type": "INVENTORY_RECEIPT",
+        "posting_date": "2026-11-18",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000050",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "e837df1f-eda8-4f7a-ba87-a57cfd0198e7",
+        "posted_at": "2026-11-18T12:42:31.273+00:00",
+        "source_id": "e068c067-3f15-43ab-ab42-0560b9a8aeb8",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.273+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Custody Advance ed030005-0000-4000-8000-000000000010-CADV-2026-000001",
+        "source_type": "CUSTODY_ADVANCE",
+        "posting_date": "2026-09-10",
+        "posting_purpose": "ORIGINAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000011",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "ecaec40e-2836-45c9-aed8-201ee12bcf03",
+        "posted_at": "2026-11-18T12:42:31.41+00:00",
+        "source_id": "f05590bb-e6f4-47dc-afca-144564169821",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.41+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Synthetic later salary reversal",
+        "source_type": "JOURNAL_REVERSAL",
+        "posting_date": "2026-11-03",
+        "posting_purpose": "REVERSAL",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000015",
+        "reversal_of_journal_entry_id": "f05590bb-e6f4-47dc-afca-144564169821"
+      }
+    },
+    {
+      "r": {
+        "id": "ed030005-0000-4000-8000-000000000111",
+        "posted_at": "2026-11-18T12:42:31.361+00:00",
+        "source_id": "ed030005-0000-4000-8000-000000000112",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.361+00:00",
+        "created_by": null,
+        "description": "Synthetic payroll",
+        "source_type": "PAYROLL",
+        "posting_date": "2026-09-30",
+        "posting_purpose": "POST",
+        "journal_reference": "PAY-SYN",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "ed030005-0000-4000-8000-000000000123",
+        "posted_at": "2026-11-18T12:42:31.505+00:00",
+        "source_id": "ed030005-0000-4000-8000-000000000124",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.505+00:00",
+        "created_by": null,
+        "description": "Synthetic opening fixture only",
+        "source_type": "HISTORICAL",
+        "posting_date": "2026-08-01",
+        "posting_purpose": "POST",
+        "journal_reference": "SYN-OPEN",
+        "reversal_of_journal_entry_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "f05590bb-e6f4-47dc-afca-144564169821",
+        "posted_at": "2026-11-18T12:42:31.39+00:00",
+        "source_id": "5b01e4d6-61d5-4eac-9ac8-57ff4fd8ed0b",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.39+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "description": "Salary payment",
+        "source_type": "SALARY_PAYMENT",
+        "posting_date": "2026-10-20",
+        "posting_purpose": "POST",
+        "journal_reference": "ed030005-0000-4000-8000-000000000010-JE-2026-000014",
+        "reversal_of_journal_entry_id": null
+      }
+    }
+  ],
+  "lines": [
+    {
+      "r": {
+        "id": "eb0dda90-76fe-4c4b-81e4-d35cd3f50bf9",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "ed030005-0000-4000-8000-000000000043",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.279+00:00",
+        "project_id": null,
+        "debit_minor": 100000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "021e031e-bdd6-4255-9714-806ed3cc244d",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "169c9ecd-0216-4f2e-9d44-bb3c9cf03c61",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "ed030005-0000-4000-8000-000000000043",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.279+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 100000,
+        "subcontract_id": null,
+        "journal_entry_id": "021e031e-bdd6-4255-9714-806ed3cc244d",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "87d4e3e4-e79f-468e-b707-3f2a540b7474",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "43d97af9-2356-431c-b1b4-9a041c379d42",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.969+00:00",
+        "project_id": null,
+        "debit_minor": 500000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "023405c3-3e31-4544-960c-0ea6ae032970",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "e5ff2e6d-1587-4309-852b-71962d9a06ce",
+        "memo": null,
+        "party_id": null,
+        "account_id": "ed030005-0000-4000-8000-000000000042",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.969+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 500000,
+        "subcontract_id": null,
+        "journal_entry_id": "023405c3-3e31-4544-960c-0ea6ae032970",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "dba0e1f7-4c07-42b0-b110-a3a7b3fc3f0d",
+        "memo": "Released retention payable settlement",
+        "party_id": "ed030005-0000-4000-8000-000000000021",
+        "account_id": "ed030005-0000-4000-8000-000000000045",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.245+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000030",
+        "debit_minor": 200,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": "382f591c-b96e-4c71-be9b-533b80c229c4",
+        "journal_entry_id": "06cbbb16-aa4c-4b83-8004-838f8999fd9f",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "f449ee2f-0074-468a-957e-cc8f82ffe8d6",
+        "memo": "Retention Payment treasury settlement",
+        "party_id": null,
+        "account_id": "ed030005-0000-4000-8000-000000000040",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.245+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000030",
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 200,
+        "subcontract_id": "382f591c-b96e-4c71-be9b-533b80c229c4",
+        "journal_entry_id": "06cbbb16-aa4c-4b83-8004-838f8999fd9f",
+        "treasury_account_id": "ed030005-0000-4000-8000-000000000031"
+      }
+    },
+    {
+      "r": {
+        "id": "48077c7b-b5a6-4f2c-b584-443d0b1f1fc8",
+        "memo": null,
+        "party_id": null,
+        "account_id": "ed030005-0000-4000-8000-000000000042",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.359+00:00",
+        "project_id": null,
+        "debit_minor": 500000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "0b2561d4-3a0b-4208-af24-28a6b4130ad4",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "8e619adf-4c2f-4720-b5cb-95d747d661cc",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "ed030005-0000-4000-8000-000000000043",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.359+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 500000,
+        "subcontract_id": null,
+        "journal_entry_id": "0b2561d4-3a0b-4208-af24-28a6b4130ad4",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "e4f34d75-8712-4880-9317-94c064a0d84f",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "43d97af9-2356-431c-b1b4-9a041c379d42",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.875+00:00",
+        "project_id": null,
+        "debit_minor": 700000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "0b933500-3cf5-4e65-8073-cf274e122574",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "a48ed304-460b-4b85-9046-8253b8df5534",
+        "memo": null,
+        "party_id": null,
+        "account_id": "ed030005-0000-4000-8000-000000000042",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.875+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 700000,
+        "subcontract_id": null,
+        "journal_entry_id": "0b933500-3cf5-4e65-8073-cf274e122574",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "558d788f-dfe7-464d-bde8-9b58e0f4021d",
+        "memo": null,
+        "party_id": null,
+        "account_id": "ed030005-0000-4000-8000-000000000042",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.541+00:00",
+        "project_id": null,
+        "debit_minor": 500000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "0bd32d57-af55-4f19-a3eb-2d5fd490df71",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "d9f303a0-808c-4516-b4e9-59d3a090f3ae",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "ed030005-0000-4000-8000-000000000043",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.541+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 500000,
+        "subcontract_id": null,
+        "journal_entry_id": "0bd32d57-af55-4f19-a3eb-2d5fd490df71",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "284b6461-c693-44a7-af68-5b1de84cfea5",
+        "memo": null,
+        "party_id": null,
+        "account_id": "ed030005-0000-4000-8000-000000000042",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.969+00:00",
+        "project_id": null,
+        "debit_minor": 500000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "1041775a-f44d-4823-a076-d9cd846f0f87",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "8155542e-5532-43ce-bd15-2b584b667c5b",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "ed030005-0000-4000-8000-000000000043",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.969+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 500000,
+        "subcontract_id": null,
+        "journal_entry_id": "1041775a-f44d-4823-a076-d9cd846f0f87",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "beca7645-6c79-410e-968c-73be0e509003",
+        "memo": "Supplier payable allocation",
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "ed030005-0000-4000-8000-000000000043",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:30.995+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000030",
+        "debit_minor": 2500,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "109167bc-2a95-4a28-8071-c9d9da40ee70",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "df99d511-5fb2-410c-b69a-b88bb55ded3c",
+        "memo": "Supplier payable allocation",
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "ed030005-0000-4000-8000-000000000043",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:30.995+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000100",
+        "debit_minor": 1500,
+        "line_number": 2,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "109167bc-2a95-4a28-8071-c9d9da40ee70",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "de9e7c77-40d2-43a3-9c60-0b1626a6ae9d",
+        "memo": "Supplier Payment treasury settlement",
+        "party_id": null,
+        "account_id": "ed030005-0000-4000-8000-000000000040",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:30.995+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 3,
+        "credit_minor": 4000,
+        "subcontract_id": null,
+        "journal_entry_id": "109167bc-2a95-4a28-8071-c9d9da40ee70",
+        "treasury_account_id": "ed030005-0000-4000-8000-000000000031"
+      }
+    },
+    {
+      "r": {
+        "id": "90043590-7b51-41c3-9486-320f7512d0d1",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "ed030005-0000-4000-8000-000000000043",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.874+00:00",
+        "project_id": null,
+        "debit_minor": 400000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "1093b521-b278-48fc-b23e-c1a8dd6b4ca9",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "00a16ba1-513c-4e29-b64e-0d7e06b98196",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "43d97af9-2356-431c-b1b4-9a041c379d42",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.874+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 400000,
+        "subcontract_id": null,
+        "journal_entry_id": "1093b521-b278-48fc-b23e-c1a8dd6b4ca9",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "bfeaa8a9-93a3-499d-b49d-39085d66dd27",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "43d97af9-2356-431c-b1b4-9a041c379d42",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.068+00:00",
+        "project_id": null,
+        "debit_minor": 100000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "1bca0076-5cd0-4e81-84ed-9a9c2cdabe59",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "2e0fa18c-b346-4a19-bf03-91de949ed862",
+        "memo": null,
+        "party_id": null,
+        "account_id": "fa3c0121-563f-45d2-8c91-7c06295b50d1",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.068+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 100000,
+        "subcontract_id": null,
+        "journal_entry_id": "1bca0076-5cd0-4e81-84ed-9a9c2cdabe59",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "002d5fab-c124-453c-b62c-f031e8896574",
+        "memo": null,
+        "party_id": null,
+        "account_id": "ed030005-0000-4000-8000-000000000041",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:30.974+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000100",
+        "debit_minor": 3000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "20fa2bc2-5dc2-4771-b64a-121187683145",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "55d32936-2792-43f3-8427-f3f408aa4eb0",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "ed030005-0000-4000-8000-000000000043",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:30.974+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000100",
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 3000,
+        "subcontract_id": null,
+        "journal_entry_id": "20fa2bc2-5dc2-4771-b64a-121187683145",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "ffe28ce4-22a6-40d4-b1d5-bf56777f0067",
+        "memo": null,
+        "party_id": null,
+        "account_id": "fa3c0121-563f-45d2-8c91-7c06295b50d1",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.955+00:00",
+        "project_id": null,
+        "debit_minor": 500000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "22cd9542-acfb-4036-8418-61601ef71755",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "365d72b0-af4f-4235-8d57-e9fd002e27fe",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "43d97af9-2356-431c-b1b4-9a041c379d42",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.955+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 500000,
+        "subcontract_id": null,
+        "journal_entry_id": "22cd9542-acfb-4036-8418-61601ef71755",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "e13eaac2-3cc5-41d1-b7f0-47f8fe7477a9",
+        "memo": "Subcontractor Advance funded",
+        "party_id": "ed030005-0000-4000-8000-000000000021",
+        "account_id": "ed030005-0000-4000-8000-000000000047",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.095+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000030",
+        "debit_minor": 2000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": "382f591c-b96e-4c71-be9b-533b80c229c4",
+        "journal_entry_id": "2c46466a-5d29-4541-933f-42fcfb3e0b1e",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "66f95671-176f-432a-a791-300115399742",
+        "memo": "Subcontractor Advance treasury funding",
+        "party_id": null,
+        "account_id": "ed030005-0000-4000-8000-000000000040",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.095+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000030",
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 2000,
+        "subcontract_id": "382f591c-b96e-4c71-be9b-533b80c229c4",
+        "journal_entry_id": "2c46466a-5d29-4541-933f-42fcfb3e0b1e",
+        "treasury_account_id": "ed030005-0000-4000-8000-000000000031"
+      }
+    },
+    {
+      "r": {
+        "id": "dbd087ae-c031-4b88-bd07-cc55b25b67a3",
+        "memo": "Reversal: Supplier payable allocation",
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "ed030005-0000-4000-8000-000000000043",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.046+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000030",
+        "debit_minor": 0,
+        "line_number": 1,
+        "credit_minor": 2500,
+        "subcontract_id": null,
+        "journal_entry_id": "33ff253e-173b-4f79-bdb6-3eaa64bcf3c8",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "c77157b6-fc46-4473-a265-f7bdc06e129d",
+        "memo": "Reversal: Supplier payable allocation",
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "ed030005-0000-4000-8000-000000000043",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.046+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000100",
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 1500,
+        "subcontract_id": null,
+        "journal_entry_id": "33ff253e-173b-4f79-bdb6-3eaa64bcf3c8",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "69d9eee4-0341-458d-a1d6-8b66db3faef6",
+        "memo": "Reversal: Supplier Payment treasury settlement",
+        "party_id": null,
+        "account_id": "ed030005-0000-4000-8000-000000000040",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.046+00:00",
+        "project_id": null,
+        "debit_minor": 4000,
+        "line_number": 3,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "33ff253e-173b-4f79-bdb6-3eaa64bcf3c8",
+        "treasury_account_id": "ed030005-0000-4000-8000-000000000031"
+      }
+    },
+    {
+      "r": {
+        "id": "0ebeb489-bd35-452a-bcd3-18a6a72729aa",
+        "memo": null,
+        "party_id": null,
+        "account_id": "ed030005-0000-4000-8000-000000000041",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.296+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000030",
+        "debit_minor": 300,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "3bd423bf-539e-4286-a2e7-3cf529698287",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "a465c20a-4439-4ecb-be29-ae4fb52e65e7",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000101",
+        "account_id": "ed030005-0000-4000-8000-000000000102",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.296+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000030",
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 300,
+        "subcontract_id": null,
+        "journal_entry_id": "3bd423bf-539e-4286-a2e7-3cf529698287",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "a5362960-d499-4aed-a929-dc0350bfa415",
+        "memo": null,
+        "party_id": null,
+        "account_id": "ed030005-0000-4000-8000-000000000121",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:32.489+00:00",
+        "project_id": null,
+        "debit_minor": 2000000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "40479bce-7e30-47fd-8203-84f50d17e15e",
+        "treasury_account_id": "ed030005-0000-4000-8000-000000000120"
+      }
+    },
+    {
+      "r": {
+        "id": "90c11679-3aca-4abd-a6fb-c4a040ef2342",
+        "memo": null,
+        "party_id": null,
+        "account_id": "ed030005-0000-4000-8000-000000000122",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:32.489+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 2000000,
+        "subcontract_id": null,
+        "journal_entry_id": "40479bce-7e30-47fd-8203-84f50d17e15e",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "8489eefd-0fbf-49e2-9944-eef357d3c69c",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "ed030005-0000-4000-8000-000000000043",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.46+00:00",
+        "project_id": null,
+        "debit_minor": 100000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "4a38c056-940a-4264-bd43-2863f246b286",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "cf6373b5-2038-4a31-a66b-84999c38ff1e",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "43d97af9-2356-431c-b1b4-9a041c379d42",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.46+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 100000,
+        "subcontract_id": null,
+        "journal_entry_id": "4a38c056-940a-4264-bd43-2863f246b286",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "bc35c3c9-cffe-4ac8-a6db-482d201b3ad3",
+        "memo": "Custody cash returned to Treasury",
+        "party_id": null,
+        "account_id": "ed030005-0000-4000-8000-000000000040",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.336+00:00",
+        "project_id": null,
+        "debit_minor": 200,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "513991f8-007d-47b8-8811-fe8bef738e38",
+        "treasury_account_id": "ed030005-0000-4000-8000-000000000031"
+      }
+    },
+    {
+      "r": {
+        "id": "e976f38a-0220-486b-8460-c1d112808ae4",
+        "memo": "Custody Cash Return",
+        "party_id": "ed030005-0000-4000-8000-000000000101",
+        "account_id": "ed030005-0000-4000-8000-000000000102",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.336+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 200,
+        "subcontract_id": null,
+        "journal_entry_id": "513991f8-007d-47b8-8811-fe8bef738e38",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "5a338e3d-b452-4bfe-a563-248cf3be0e8f",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "43d97af9-2356-431c-b1b4-9a041c379d42",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.751+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 1,
+        "credit_minor": 5000,
+        "subcontract_id": null,
+        "journal_entry_id": "5265970c-3e1c-40b9-98b9-2635284865a1",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "7fbe7538-8533-48e6-ba94-badb2ac5d904",
+        "memo": null,
+        "party_id": null,
+        "account_id": "fa3c0121-563f-45d2-8c91-7c06295b50d1",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.751+00:00",
+        "project_id": null,
+        "debit_minor": 5000,
+        "line_number": 2,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "5265970c-3e1c-40b9-98b9-2635284865a1",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "3ee05f0e-9c7f-4700-8401-6c14a6168377",
+        "memo": null,
+        "party_id": null,
+        "account_id": "fa3c0121-563f-45d2-8c91-7c06295b50d1",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.512+00:00",
+        "project_id": null,
+        "debit_minor": 500000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "6275ea79-8045-4af4-bd22-c446bd4b12e6",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "43781bf0-198c-40ab-b1b6-32691e38955c",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "43d97af9-2356-431c-b1b4-9a041c379d42",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.512+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 500000,
+        "subcontract_id": null,
+        "journal_entry_id": "6275ea79-8045-4af4-bd22-c446bd4b12e6",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "1dacf3ff-9259-4a6d-aaea-072213a8b10c",
+        "memo": "Subcontract work certified",
+        "party_id": "ed030005-0000-4000-8000-000000000021",
+        "account_id": "ed030005-0000-4000-8000-000000000044",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.138+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000030",
+        "debit_minor": 10000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": "382f591c-b96e-4c71-be9b-533b80c229c4",
+        "journal_entry_id": "6ce28f64-d502-4ae8-95ae-a0dd24a53bbe",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "920eb6ae-d155-4d6c-ae44-36bfbdece47a",
+        "memo": "Subcontract retention withheld",
+        "party_id": "ed030005-0000-4000-8000-000000000021",
+        "account_id": "ed030005-0000-4000-8000-000000000046",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.138+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000030",
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 500,
+        "subcontract_id": "382f591c-b96e-4c71-be9b-533b80c229c4",
+        "journal_entry_id": "6ce28f64-d502-4ae8-95ae-a0dd24a53bbe",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "d1db4004-d06b-4782-a51e-7cbc2c057490",
+        "memo": "Subcontract Advance recovered",
+        "party_id": "ed030005-0000-4000-8000-000000000021",
+        "account_id": "ed030005-0000-4000-8000-000000000047",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.138+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000030",
+        "debit_minor": 0,
+        "line_number": 3,
+        "credit_minor": 500,
+        "subcontract_id": "382f591c-b96e-4c71-be9b-533b80c229c4",
+        "journal_entry_id": "6ce28f64-d502-4ae8-95ae-a0dd24a53bbe",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "7a36c33e-f8ed-4744-b475-5ee6892afce5",
+        "memo": "Subcontractor payable recognized",
+        "party_id": "ed030005-0000-4000-8000-000000000021",
+        "account_id": "ed030005-0000-4000-8000-000000000045",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.138+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000030",
+        "debit_minor": 0,
+        "line_number": 4,
+        "credit_minor": 9000,
+        "subcontract_id": "382f591c-b96e-4c71-be9b-533b80c229c4",
+        "journal_entry_id": "6ce28f64-d502-4ae8-95ae-a0dd24a53bbe",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "b1fc9d13-864f-4b90-add1-bd8fb0567c13",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "43d97af9-2356-431c-b1b4-9a041c379d42",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.359+00:00",
+        "project_id": null,
+        "debit_minor": 500000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "7bfa8b28-aa97-43a2-b8c5-314b42becb10",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "760f1b2a-0554-44a8-9ec8-90aad91f09be",
+        "memo": null,
+        "party_id": null,
+        "account_id": "ed030005-0000-4000-8000-000000000042",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.359+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 500000,
+        "subcontract_id": null,
+        "journal_entry_id": "7bfa8b28-aa97-43a2-b8c5-314b42becb10",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "63861d77-6d6e-4b00-85dd-c8b5f9c16fc6",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "43d97af9-2356-431c-b1b4-9a041c379d42",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.532+00:00",
+        "project_id": null,
+        "debit_minor": 500000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "7d9d12a4-2cb5-4250-b03a-7e3f56d19398",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "e3f8f3d2-5e63-43c9-a57e-d3243235a3db",
+        "memo": null,
+        "party_id": null,
+        "account_id": "ed030005-0000-4000-8000-000000000042",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.532+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 500000,
+        "subcontract_id": null,
+        "journal_entry_id": "7d9d12a4-2cb5-4250-b03a-7e3f56d19398",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "a8b56640-07cd-46e3-a467-3f863d1957dd",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "43d97af9-2356-431c-b1b4-9a041c379d42",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.667+00:00",
+        "project_id": null,
+        "debit_minor": 100000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "83da5c2d-340b-4d0f-9370-71ca456f6c83",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "be50b67b-26f5-4007-9da7-fc56fa70edc7",
+        "memo": null,
+        "party_id": null,
+        "account_id": "fa3c0121-563f-45d2-8c91-7c06295b50d1",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.667+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 100000,
+        "subcontract_id": null,
+        "journal_entry_id": "83da5c2d-340b-4d0f-9370-71ca456f6c83",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "39af8cd2-d30f-4d85-a7de-8b0f9995f39c",
+        "memo": null,
+        "party_id": null,
+        "account_id": "ed030005-0000-4000-8000-000000000042",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.875+00:00",
+        "project_id": null,
+        "debit_minor": 700000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "844ad0a3-a876-40d2-a88d-4a1671f086df",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "5e6f198b-13b8-4063-8a70-684a446789de",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "ed030005-0000-4000-8000-000000000043",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.875+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 700000,
+        "subcontract_id": null,
+        "journal_entry_id": "844ad0a3-a876-40d2-a88d-4a1671f086df",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "848ee53e-543e-45e3-9472-1542fcb86aa4",
+        "memo": "Subcontractor payable settlement",
+        "party_id": "ed030005-0000-4000-8000-000000000021",
+        "account_id": "ed030005-0000-4000-8000-000000000045",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.189+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000030",
+        "debit_minor": 2000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": "382f591c-b96e-4c71-be9b-533b80c229c4",
+        "journal_entry_id": "84d252e0-2a32-44d2-8ec1-f0f0c1d75cb2",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "6932988c-15d8-4205-b68e-a223822aa960",
+        "memo": "Subcontractor Payment treasury settlement",
+        "party_id": null,
+        "account_id": "ed030005-0000-4000-8000-000000000040",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.189+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000030",
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 2000,
+        "subcontract_id": "382f591c-b96e-4c71-be9b-533b80c229c4",
+        "journal_entry_id": "84d252e0-2a32-44d2-8ec1-f0f0c1d75cb2",
+        "treasury_account_id": "ed030005-0000-4000-8000-000000000031"
+      }
+    },
+    {
+      "r": {
+        "id": "55ea06ba-9f33-4ea8-8584-8822c4666c14",
+        "memo": null,
+        "party_id": null,
+        "account_id": "ed030005-0000-4000-8000-000000000041",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.711+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000100",
+        "debit_minor": 0,
+        "line_number": 1,
+        "credit_minor": 1200000,
+        "subcontract_id": null,
+        "journal_entry_id": "858c4f09-6fd1-4ea3-bd38-3b587a2654bf",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "3eb8d5f9-d8d1-405a-a91b-415bb5e6d269",
+        "memo": null,
+        "party_id": null,
+        "account_id": "fa3c0121-563f-45d2-8c91-7c06295b50d1",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.711+00:00",
+        "project_id": null,
+        "debit_minor": 1200000,
+        "line_number": 2,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "858c4f09-6fd1-4ea3-bd38-3b587a2654bf",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "5a04a213-d9ba-4e2b-9edc-b070d7479e99",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "43d97af9-2356-431c-b1b4-9a041c379d42",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.739+00:00",
+        "project_id": null,
+        "debit_minor": 5000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "8619b849-333e-483a-ab0b-4e9d7cd26c52",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "69249a11-7e78-4ace-84f6-3528e1f8b0dc",
+        "memo": null,
+        "party_id": null,
+        "account_id": "fa3c0121-563f-45d2-8c91-7c06295b50d1",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.739+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 5000,
+        "subcontract_id": null,
+        "journal_entry_id": "8619b849-333e-483a-ab0b-4e9d7cd26c52",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "0d6c0303-45be-4f49-8481-6bba68ac0078",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "43d97af9-2356-431c-b1b4-9a041c379d42",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.859+00:00",
+        "project_id": null,
+        "debit_minor": 400000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "866fa49e-a773-4f6e-9a3a-ef2cc2464326",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "af1cb8a9-a0d3-4670-aaf7-0776be69cd06",
+        "memo": null,
+        "party_id": null,
+        "account_id": "fa3c0121-563f-45d2-8c91-7c06295b50d1",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.859+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 400000,
+        "subcontract_id": null,
+        "journal_entry_id": "866fa49e-a773-4f6e-9a3a-ef2cc2464326",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "f1592ccf-1755-46d8-a912-154e73322514",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "ed030005-0000-4000-8000-000000000043",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.615+00:00",
+        "project_id": null,
+        "debit_minor": 105000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "89f601c5-24cc-48a7-868c-690c33c03640",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "095d8a18-6732-44ad-8c80-775a3ed52deb",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "43d97af9-2356-431c-b1b4-9a041c379d42",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.615+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 100000,
+        "subcontract_id": null,
+        "journal_entry_id": "89f601c5-24cc-48a7-868c-690c33c03640",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "dd8ca462-a6a1-4953-af90-ee11264c3291",
+        "memo": null,
+        "party_id": null,
+        "account_id": "ed030005-0000-4000-8000-000000000125",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.615+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 3,
+        "credit_minor": 5000,
+        "subcontract_id": null,
+        "journal_entry_id": "89f601c5-24cc-48a7-868c-690c33c03640",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "c760952a-bf0d-43e0-8906-bb5c8aa8e62d",
+        "memo": null,
+        "party_id": null,
+        "account_id": "fa3c0121-563f-45d2-8c91-7c06295b50d1",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.52+00:00",
+        "project_id": null,
+        "debit_minor": 500000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "8d135b9f-6756-4ad6-b714-218a53235331",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "f1761599-6e96-419c-a283-7d5421529443",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "43d97af9-2356-431c-b1b4-9a041c379d42",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.52+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 500000,
+        "subcontract_id": null,
+        "journal_entry_id": "8d135b9f-6756-4ad6-b714-218a53235331",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "2d87362f-302f-4cfa-beb5-07af672171e4",
+        "memo": "Custody funded",
+        "party_id": "ed030005-0000-4000-8000-000000000101",
+        "account_id": "ed030005-0000-4000-8000-000000000102",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.023+00:00",
+        "project_id": null,
+        "debit_minor": 2000000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "8dba39e6-0017-41f5-a1c7-9ea1e774e999",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "3d638149-00cc-4fea-9568-ebcd2945ea5f",
+        "memo": "Custody Advance treasury funding",
+        "party_id": null,
+        "account_id": "ed030005-0000-4000-8000-000000000121",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.023+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 2000000,
+        "subcontract_id": null,
+        "journal_entry_id": "8dba39e6-0017-41f5-a1c7-9ea1e774e999",
+        "treasury_account_id": "ed030005-0000-4000-8000-000000000120"
+      }
+    },
+    {
+      "r": {
+        "id": "c698403b-115b-435e-b3b9-23c12e60c9d4",
+        "memo": "Subcontract work certified",
+        "party_id": "ed030005-0000-4000-8000-000000000021",
+        "account_id": "ed030005-0000-4000-8000-000000000044",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:32.531+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000100",
+        "debit_minor": 1000000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": "36797f76-603e-473f-b3a2-6ac6a7832f6e",
+        "journal_entry_id": "93a41cda-e10b-4828-8c74-599a4db19a9f",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "7baf30ae-3e97-4492-858a-f643a3794c7b",
+        "memo": "Subcontractor payable recognized",
+        "party_id": "ed030005-0000-4000-8000-000000000021",
+        "account_id": "ed030005-0000-4000-8000-000000000045",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:32.531+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000100",
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 1000000,
+        "subcontract_id": "36797f76-603e-473f-b3a2-6ac6a7832f6e",
+        "journal_entry_id": "93a41cda-e10b-4828-8c74-599a4db19a9f",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "cf1b2752-1774-4771-9069-53c779d1da21",
+        "memo": null,
+        "party_id": null,
+        "account_id": "ed030005-0000-4000-8000-000000000041",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:30.893+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000030",
+        "debit_minor": 10000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "95321455-3708-441f-89e9-29be4c937bdd",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "977ba8ac-2468-472a-93a3-ae3370baef00",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "ed030005-0000-4000-8000-000000000043",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:30.893+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000030",
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 10000,
+        "subcontract_id": null,
+        "journal_entry_id": "95321455-3708-441f-89e9-29be4c937bdd",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "f4594ece-802d-471f-85f5-c3ceeaf15c7a",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "ed030005-0000-4000-8000-000000000043",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.08+00:00",
+        "project_id": null,
+        "debit_minor": 100000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "95c1bcbb-9897-4cd0-bd27-e783e4f7051e",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "9475ad51-c73e-49e1-b80e-b752064e94e2",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "43d97af9-2356-431c-b1b4-9a041c379d42",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.08+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 100000,
+        "subcontract_id": null,
+        "journal_entry_id": "95c1bcbb-9897-4cd0-bd27-e783e4f7051e",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "b31bc8f8-1acf-45f4-b5b7-5a45e42f5eca",
+        "memo": null,
+        "party_id": null,
+        "account_id": "ed030005-0000-4000-8000-000000000042",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.532+00:00",
+        "project_id": null,
+        "debit_minor": 500000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "98951352-36c7-4e32-843d-84095fa878c0",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "bbab9d9c-b022-4727-8a45-41ee858d7404",
+        "memo": null,
+        "party_id": null,
+        "account_id": "ed030005-0000-4000-8000-000000000125",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.532+00:00",
+        "project_id": null,
+        "debit_minor": 25000,
+        "line_number": 2,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "98951352-36c7-4e32-843d-84095fa878c0",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "8fe36898-5646-4424-afd7-0ef6df3472b7",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "ed030005-0000-4000-8000-000000000043",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.532+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 3,
+        "credit_minor": 525000,
+        "subcontract_id": null,
+        "journal_entry_id": "98951352-36c7-4e32-843d-84095fa878c0",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "d7dda228-e31e-47e5-b6b3-09adb7d67058",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "43d97af9-2356-431c-b1b4-9a041c379d42",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.928+00:00",
+        "project_id": null,
+        "debit_minor": 111765,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "a078a18b-2d19-4663-8cbf-0fb864286a12",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "d28871ad-0c8e-45b9-956d-12e5f552ca17",
+        "memo": null,
+        "party_id": null,
+        "account_id": "fa3c0121-563f-45d2-8c91-7c06295b50d1",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.928+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 111765,
+        "subcontract_id": null,
+        "journal_entry_id": "a078a18b-2d19-4663-8cbf-0fb864286a12",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "472a88f9-2488-47dd-be66-4356d09d8431",
+        "memo": "Supplier payable allocation",
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "ed030005-0000-4000-8000-000000000043",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.41+00:00",
+        "project_id": null,
+        "debit_minor": 450000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "a78d1ccf-16c8-4dba-9351-d29c7f49e5c4",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "ea4f987f-9f5a-4cfe-9089-15b3e8b2eaca",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000101",
+        "account_id": "ed030005-0000-4000-8000-000000000102",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.41+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 450000,
+        "subcontract_id": null,
+        "journal_entry_id": "a78d1ccf-16c8-4dba-9351-d29c7f49e5c4",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "3abca9a3-e48b-4e4b-9de1-3fc3217ce938",
+        "memo": null,
+        "party_id": null,
+        "account_id": "ed030005-0000-4000-8000-000000000041",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.675+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000100",
+        "debit_minor": 1200000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "a9957c5c-ffb9-4be2-8a97-0d02ced25c98",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "cbfca013-4c3c-4609-ba20-336c7a448c9b",
+        "memo": null,
+        "party_id": null,
+        "account_id": "fa3c0121-563f-45d2-8c91-7c06295b50d1",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.675+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 1200000,
+        "subcontract_id": null,
+        "journal_entry_id": "a9957c5c-ffb9-4be2-8a97-0d02ced25c98",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "1bcbbd6e-3d85-41fb-bcd2-003c6f4f9846",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "43d97af9-2356-431c-b1b4-9a041c379d42",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.448+00:00",
+        "project_id": null,
+        "debit_minor": 100000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "ab3cf5b0-293c-4517-97e2-4c11bd1fa206",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "e1c71573-4917-422c-9f1c-0742f8f3746b",
+        "memo": null,
+        "party_id": null,
+        "account_id": "fa3c0121-563f-45d2-8c91-7c06295b50d1",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.448+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 100000,
+        "subcontract_id": null,
+        "journal_entry_id": "ab3cf5b0-293c-4517-97e2-4c11bd1fa206",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "37a4e54b-d0a9-4b76-9c7f-4f4728aeacb5",
+        "memo": "Supplier payable allocation",
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "ed030005-0000-4000-8000-000000000043",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.018+00:00",
+        "project_id": null,
+        "debit_minor": 500000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "ad4c6216-e858-48fd-9378-d534c1aedcbc",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "0ff05756-b1fd-4c42-b165-51e4228e6daf",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000101",
+        "account_id": "ed030005-0000-4000-8000-000000000102",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.018+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 500000,
+        "subcontract_id": null,
+        "journal_entry_id": "ad4c6216-e858-48fd-9378-d534c1aedcbc",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "41421a43-1570-4d58-834b-d3726a5e7c5b",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "ed030005-0000-4000-8000-000000000043",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.979+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 1,
+        "credit_minor": 140000,
+        "subcontract_id": null,
+        "journal_entry_id": "bc91f988-2a73-48db-b17b-bf90f827060d",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "36b91fa5-e405-4300-9fee-a105b82efb80",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "43d97af9-2356-431c-b1b4-9a041c379d42",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.979+00:00",
+        "project_id": null,
+        "debit_minor": 111765,
+        "line_number": 2,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "bc91f988-2a73-48db-b17b-bf90f827060d",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "d00f80cb-786c-48af-b1e4-cf59ed7b0b4f",
+        "memo": null,
+        "party_id": null,
+        "account_id": "60cb5fd0-2bf5-4fc5-a966-10baa88e2a19",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.979+00:00",
+        "project_id": null,
+        "debit_minor": 28235,
+        "line_number": 3,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "bc91f988-2a73-48db-b17b-bf90f827060d",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "490e78e1-c4f9-435a-9e86-3f721e0d4c90",
+        "memo": null,
+        "party_id": null,
+        "account_id": "ed030005-0000-4000-8000-000000000042",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.251+00:00",
+        "project_id": null,
+        "debit_minor": 150000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "bdccdf26-403c-4758-8f99-240b9609b43e",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "bb534687-5dba-42ba-9a3b-a38604ed5e7a",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "ed030005-0000-4000-8000-000000000043",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.251+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 150000,
+        "subcontract_id": null,
+        "journal_entry_id": "bdccdf26-403c-4758-8f99-240b9609b43e",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "0c990e6c-4c2d-4726-bdcd-2bd57b27a0d7",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "43d97af9-2356-431c-b1b4-9a041c379d42",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.994+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 1,
+        "credit_minor": 111765,
+        "subcontract_id": null,
+        "journal_entry_id": "be062d87-42a7-4cca-9425-22c17513c8cb",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "30629fcf-328b-47a5-b2ae-b37c73114f77",
+        "memo": null,
+        "party_id": null,
+        "account_id": "fa3c0121-563f-45d2-8c91-7c06295b50d1",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.994+00:00",
+        "project_id": null,
+        "debit_minor": 111765,
+        "line_number": 2,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "be062d87-42a7-4cca-9425-22c17513c8cb",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "23c04c5d-2280-4222-bc8a-6c8c219d4d61",
+        "memo": null,
+        "party_id": null,
+        "account_id": "ed030005-0000-4000-8000-000000000121",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.221+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 1,
+        "credit_minor": 100000,
+        "subcontract_id": null,
+        "journal_entry_id": "c23fe5b5-fe8a-43b3-8987-a84d983a0f41",
+        "treasury_account_id": "ed030005-0000-4000-8000-000000000120"
+      }
+    },
+    {
+      "r": {
+        "id": "82b946ff-05a9-4443-ada7-c873961b0644",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "ed030005-0000-4000-8000-000000000043",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.221+00:00",
+        "project_id": null,
+        "debit_minor": 100000,
+        "line_number": 2,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "c23fe5b5-fe8a-43b3-8987-a84d983a0f41",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "146417d6-530e-4b10-8ba2-7a12d14f19ed",
+        "memo": null,
+        "party_id": null,
+        "account_id": "ed030005-0000-4000-8000-000000000121",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.123+00:00",
+        "project_id": null,
+        "debit_minor": 100000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "c395ebc7-f227-4b2b-b05c-6c42b383edc5",
+        "treasury_account_id": "ed030005-0000-4000-8000-000000000120"
+      }
+    },
+    {
+      "r": {
+        "id": "7869cecc-e2b3-42b5-922c-8d775aee2a43",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "ed030005-0000-4000-8000-000000000043",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.123+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 100000,
+        "subcontract_id": null,
+        "journal_entry_id": "c395ebc7-f227-4b2b-b05c-6c42b383edc5",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "e44bb5fb-f884-4f22-a5b8-fe5a90de57d8",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "ed030005-0000-4000-8000-000000000043",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.687+00:00",
+        "project_id": null,
+        "debit_minor": 100000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "c74c4796-571f-4111-8245-f8c1e3adf419",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "67d1bea8-1a32-4050-b547-c9d83e535276",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "43d97af9-2356-431c-b1b4-9a041c379d42",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.687+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 100000,
+        "subcontract_id": null,
+        "journal_entry_id": "c74c4796-571f-4111-8245-f8c1e3adf419",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "18b2b959-ff36-4848-b839-fda4d337f01f",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "43d97af9-2356-431c-b1b4-9a041c379d42",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.541+00:00",
+        "project_id": null,
+        "debit_minor": 500000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "cad8a8ba-62af-40ed-85b5-72d39cc64886",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "2606399b-0d8d-42d3-afff-3c2376661243",
+        "memo": null,
+        "party_id": null,
+        "account_id": "ed030005-0000-4000-8000-000000000042",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:33.541+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 500000,
+        "subcontract_id": null,
+        "journal_entry_id": "cad8a8ba-62af-40ed-85b5-72d39cc64886",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "e9bf1e79-bcd9-48be-a998-194005403fdb",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "43d97af9-2356-431c-b1b4-9a041c379d42",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.592+00:00",
+        "project_id": null,
+        "debit_minor": 100000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "d8b5a7ed-5250-4928-866d-cdf8ef7ea94d",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "4c007337-5679-4da4-ade0-2e4ea73868a2",
+        "memo": null,
+        "party_id": null,
+        "account_id": "fa3c0121-563f-45d2-8c91-7c06295b50d1",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.592+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 100000,
+        "subcontract_id": null,
+        "journal_entry_id": "d8b5a7ed-5250-4928-866d-cdf8ef7ea94d",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "26073ef7-0081-46ae-89a4-cf4dd6b5291f",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "ed030005-0000-4000-8000-000000000043",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.94+00:00",
+        "project_id": null,
+        "debit_minor": 140000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "d8f0f5f2-603d-405d-984d-d7d1eacda6f3",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "b3c93829-4cdb-432b-baf8-2069cad6e512",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "43d97af9-2356-431c-b1b4-9a041c379d42",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.94+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 111765,
+        "subcontract_id": null,
+        "journal_entry_id": "d8f0f5f2-603d-405d-984d-d7d1eacda6f3",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "23b531ef-3d99-4844-8e75-3f243afe4886",
+        "memo": null,
+        "party_id": null,
+        "account_id": "60cb5fd0-2bf5-4fc5-a966-10baa88e2a19",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.94+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 3,
+        "credit_minor": 28235,
+        "subcontract_id": null,
+        "journal_entry_id": "d8f0f5f2-603d-405d-984d-d7d1eacda6f3",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "f60245ad-aa75-4942-9976-3b82cc75d319",
+        "memo": "Subcontract retention released",
+        "party_id": "ed030005-0000-4000-8000-000000000021",
+        "account_id": "ed030005-0000-4000-8000-000000000046",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.218+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000030",
+        "debit_minor": 200,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": "382f591c-b96e-4c71-be9b-533b80c229c4",
+        "journal_entry_id": "da1b6b90-ac0f-40ef-b5f3-575659011a16",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "dd214d8c-c0cc-41f3-900e-fc6a38293cf0",
+        "memo": "Released subcontractor payable",
+        "party_id": "ed030005-0000-4000-8000-000000000021",
+        "account_id": "ed030005-0000-4000-8000-000000000045",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.218+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000030",
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 200,
+        "subcontract_id": "382f591c-b96e-4c71-be9b-533b80c229c4",
+        "journal_entry_id": "da1b6b90-ac0f-40ef-b5f3-575659011a16",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "bd1f6594-3a6d-4372-9883-09d2e92c51bc",
+        "memo": "Subcontract work certified",
+        "party_id": "ed030005-0000-4000-8000-000000000021",
+        "account_id": "ed030005-0000-4000-8000-000000000044",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.175+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000100",
+        "debit_minor": 20000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": "5dc8c147-c95a-4c75-9e67-739ad7cda875",
+        "journal_entry_id": "db50fc24-34ab-4a8a-855b-83b44a8b51f0",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "1235fbd3-a17a-4a7d-9c39-2921c99be4cb",
+        "memo": "Subcontract retention withheld",
+        "party_id": "ed030005-0000-4000-8000-000000000021",
+        "account_id": "ed030005-0000-4000-8000-000000000046",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.175+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000100",
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 1000,
+        "subcontract_id": "5dc8c147-c95a-4c75-9e67-739ad7cda875",
+        "journal_entry_id": "db50fc24-34ab-4a8a-855b-83b44a8b51f0",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "5ba9b6ca-705d-407c-b290-b3f30dc712c7",
+        "memo": "Subcontractor payable recognized",
+        "party_id": "ed030005-0000-4000-8000-000000000021",
+        "account_id": "ed030005-0000-4000-8000-000000000045",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.175+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000100",
+        "debit_minor": 0,
+        "line_number": 3,
+        "credit_minor": 19000,
+        "subcontract_id": "5dc8c147-c95a-4c75-9e67-739ad7cda875",
+        "journal_entry_id": "db50fc24-34ab-4a8a-855b-83b44a8b51f0",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "ae0fb69b-c20a-4e0d-a9b4-ad42d8852fb8",
+        "memo": null,
+        "party_id": null,
+        "account_id": "fa3c0121-563f-45d2-8c91-7c06295b50d1",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.346+00:00",
+        "project_id": null,
+        "debit_minor": 500000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "e43ad090-b34b-4b13-934c-1bd8252a3f3a",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "05cfa2a6-5f51-4b4e-85b1-3f4fa826c166",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "43d97af9-2356-431c-b1b4-9a041c379d42",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.346+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 500000,
+        "subcontract_id": null,
+        "journal_entry_id": "e43ad090-b34b-4b13-934c-1bd8252a3f3a",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "b1743944-350c-4bb6-be97-cc646ca2ec66",
+        "memo": null,
+        "party_id": null,
+        "account_id": "fa3c0121-563f-45d2-8c91-7c06295b50d1",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.864+00:00",
+        "project_id": null,
+        "debit_minor": 700000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "e4cc40d7-abab-4ff8-ba7d-e13e9991b024",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "9ba26d61-b67d-474f-8255-4e21772c1c9b",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000020",
+        "account_id": "43d97af9-2356-431c-b1b4-9a041c379d42",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:34.864+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 700000,
+        "subcontract_id": null,
+        "journal_entry_id": "e4cc40d7-abab-4ff8-ba7d-e13e9991b024",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "340fef52-51d8-4751-b915-003c638641d3",
+        "memo": "Custody funded",
+        "party_id": "ed030005-0000-4000-8000-000000000101",
+        "account_id": "ed030005-0000-4000-8000-000000000102",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.273+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000030",
+        "debit_minor": 1000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "e837df1f-eda8-4f7a-ba87-a57cfd0198e7",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "f726aa57-2430-40a3-b58d-ec4bfc43ac53",
+        "memo": "Custody Advance treasury funding",
+        "party_id": null,
+        "account_id": "ed030005-0000-4000-8000-000000000040",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.273+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000030",
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 1000,
+        "subcontract_id": null,
+        "journal_entry_id": "e837df1f-eda8-4f7a-ba87-a57cfd0198e7",
+        "treasury_account_id": "ed030005-0000-4000-8000-000000000031"
+      }
+    },
+    {
+      "r": {
+        "id": "adcd7487-66a5-4c0b-887a-08e9b7782822",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000022",
+        "account_id": "ed030005-0000-4000-8000-000000000103",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.41+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000030",
+        "debit_minor": 0,
+        "line_number": 1,
+        "credit_minor": 2000,
+        "subcontract_id": null,
+        "journal_entry_id": "ecaec40e-2836-45c9-aed8-201ee12bcf03",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "49ec3f36-4e84-4a94-b1d3-cd87736ccc0c",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000022",
+        "account_id": "ed030005-0000-4000-8000-000000000040",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.41+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000030",
+        "debit_minor": 2000,
+        "line_number": 2,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "ecaec40e-2836-45c9-aed8-201ee12bcf03",
+        "treasury_account_id": "ed030005-0000-4000-8000-000000000031"
+      }
+    },
+    {
+      "r": {
+        "id": "146c1f35-c7ae-4227-99be-69536b32c82a",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000022",
+        "account_id": "ed030005-0000-4000-8000-000000000041",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.361+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000030",
+        "debit_minor": 5000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "ed030005-0000-4000-8000-000000000111",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "d027dbd1-4200-46c7-b144-14906ffd3c45",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000022",
+        "account_id": "ed030005-0000-4000-8000-000000000103",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.361+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000030",
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 5000,
+        "subcontract_id": null,
+        "journal_entry_id": "ed030005-0000-4000-8000-000000000111",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "74f5fb15-321b-4efd-8e08-06d04784fa62",
+        "memo": null,
+        "party_id": null,
+        "account_id": "ed030005-0000-4000-8000-000000000121",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.505+00:00",
+        "project_id": null,
+        "debit_minor": 100000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "ed030005-0000-4000-8000-000000000123",
+        "treasury_account_id": "ed030005-0000-4000-8000-000000000120"
+      }
+    },
+    {
+      "r": {
+        "id": "dcda7c80-9363-407c-b611-fe0390702a19",
+        "memo": null,
+        "party_id": null,
+        "account_id": "ed030005-0000-4000-8000-000000000122",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.505+00:00",
+        "project_id": null,
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 100000,
+        "subcontract_id": null,
+        "journal_entry_id": "ed030005-0000-4000-8000-000000000123",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "e66b7350-d777-4e55-bac7-5c67f4367f43",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000022",
+        "account_id": "ed030005-0000-4000-8000-000000000103",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.39+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000030",
+        "debit_minor": 2000,
+        "line_number": 1,
+        "credit_minor": 0,
+        "subcontract_id": null,
+        "journal_entry_id": "f05590bb-e6f4-47dc-afca-144564169821",
+        "treasury_account_id": null
+      }
+    },
+    {
+      "r": {
+        "id": "de371673-f210-40ad-8026-5b10dae357e2",
+        "memo": null,
+        "party_id": "ed030005-0000-4000-8000-000000000022",
+        "account_id": "ed030005-0000-4000-8000-000000000040",
+        "company_id": "ed030005-0000-4000-8000-000000000010",
+        "created_at": "2026-11-18T12:42:31.39+00:00",
+        "project_id": "ed030005-0000-4000-8000-000000000030",
+        "debit_minor": 0,
+        "line_number": 2,
+        "credit_minor": 2000,
+        "subcontract_id": null,
+        "journal_entry_id": "f05590bb-e6f4-47dc-afca-144564169821",
+        "treasury_account_id": "ed030005-0000-4000-8000-000000000031"
+      }
+    }
+  ],
+  "hostedWrites": 0
+}

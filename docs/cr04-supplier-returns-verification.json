@@ -1,0 +1,216 @@
+{
+  "milestone": "CR-04 Supplier Purchase Returns & Inventory Accounting",
+  "status": "VERIFIED LOCALLY / MIGRATION102 PREPARED / NOT PUBLISHED",
+  "baseline": {
+    "publishedCommit": "1ff0ad4fce8e101d432652c9e50361fe98a5cd50",
+    "githubMainReadOnlyVerified": true,
+    "hostedThrough": 101,
+    "original65ScenarioEvidence": "Preserved; never opened for writes"
+  },
+  "migration": {
+    "number": 102,
+    "file": "supabase/migrations/20261120120000_supplier_purchase_returns.sql",
+    "sha256": "8ed1cc34a8da82279656d335ca5048f9a40c78fbf51c8eefb6af57f01582f140",
+    "status": "PREPARED / NOT APPLIED",
+    "linkedDryRunOnlyPending": [
+      "20261120120000_supplier_purchase_returns.sql"
+    ],
+    "scope": "Two empty forced-RLS link/refund tables; dispatch uniqueness; typed canonical commands; forward function wrappers and dependency triggers. No seed/backfill/financial DML on activation.",
+    "target": "eqnzueginpkskbnqvgoc"
+  },
+  "verification": {
+    "scenarioGroups": [
+      "Unpaid partial physical return and credit",
+      "Cumulative full return",
+      "Fully paid invoice return creates Supplier credit",
+      "Actual Supplier bank refund",
+      "Refund reversal restores credit",
+      "Credit allocated against another invoice",
+      "Part-paid invoice with excess credit",
+      "Documented proportional input VAT credit",
+      "Over-return original quantity blocked",
+      "Project-issued goods unavailable until canonical recovery",
+      "Physical-return reversal and duplicate reversal",
+      "Unauthorized/cross-Company operations",
+      "Closed accounting period",
+      "Moving-average carrying versus invoice-price variance",
+      "Credit then physical return reversal",
+      "Transfer to another warehouse and actual recovery",
+      "Concurrent physical returns",
+      "Concurrent credit recognition",
+      "Dispatch identity, request replay and changed intent",
+      "Lost browser response recovery and bilingual operational flows",
+      "Supplier return against an existing paid Expense already capitalized to inventory",
+      "Procurement inventory access excludes confidential Supplier financial events"
+    ],
+    "scenarioGroupCount": 22,
+    "focusedChecks": 84,
+    "checks": {
+      "accounting": [
+        "Unpaid partial return: AP4000",
+        "Unpaid partial return:80 units/value4000",
+        "Supplier subledger equals AP GL 413000",
+        "Inventory movements equal GL 400000",
+        "Duplicate credit rejected",
+        "Generic inventory reversal cannot bypass Supplier credit dependencies",
+        "Credit must reverse before physical return",
+        "Full cumulative return clears AP and all stock",
+        "Supplier subledger equals AP GL 13000",
+        "Inventory movements equal GL 0",
+        "Fully paid invoice return creates Supplier credit1000 without revenue",
+        "Refund Dr actual Bank1000 Cr AP1000",
+        "Refund exact retry idempotent",
+        "Refund duplicate/reference or overrefund blocked",
+        "Refund consumes Supplier credit to zero",
+        "Supplier subledger equals AP GL 13000",
+        "Inventory movements equal GL 400000",
+        "Refund must reverse before Supplier credit",
+        "Refund reversal restores Supplier credit",
+        "Supplier credit allocated to another invoice; no cash/cost duplication",
+        "Supplier subledger equals AP GL 63000",
+        "Inventory movements equal GL 400000",
+        "Partial payment4500 then return1000 leaves Supplier credit500",
+        "Existing payment workflow rejects over-settling returned invoice",
+        "VAT-bearing return cannot silently skip documented VAT credit",
+        "Tax credit reverses1000 inventory cost and50 recoverable VAT; AP4200",
+        "Over-return original receipt rejected",
+        "Physical Project issue uses existing cost command",
+        "Insufficient pooled stock after Project issue rejected",
+        "Existing issue-return recovers warehouse stock and Project cost",
+        "Physical return reversal restores quantity/value once",
+        "Duplicate physical reversal rejected",
+        "Management Viewer cannot mutate purchase returns",
+        "Foreign Company read denied",
+        "Closed accounting period rejects Supplier return",
+        "Moving-average return carries1117.65; original invoice credit1400",
+        "Price/carrying variance282.35 uses existing variance control without restating stock",
+        "Actual refund journal equals independent Bank debit/AP credit expectation",
+        "Credit then physical reversal restores original AP7000 and stock19000",
+        "Supplier subledger equals AP GL 1133000",
+        "Inventory movements equal GL 1900000",
+        "Pre-existing fixture posted journals preserved byte-for-byte",
+        "All actual journals balanced"
+      ],
+      "dispatch": [
+        "Draft request replay reuses exact event",
+        "Changed draft replay intent rejected",
+        "Physical post retry returns original event without duplicate stock",
+        "Same dispatch reference under a new draft cannot reduce stock twice",
+        "Stock moved to another warehouse cannot be returned from original location",
+        "Actual reverse transfer restores original warehouse availability",
+        "Later stock movement blocks historical reversal without partial financial effects",
+        "Private and legacy helpers unavailable directly to browser/anonymous actors",
+        "Previously paid capitalized Expense receipt appears with authoritative Supplier invoice",
+        "Return against existing paid capitalization creates Supplier credit1000 without new cash outflow",
+        "Capitalized historical-cost route uses original net and existing moving-average carrying value once",
+        "Procurement inventory read cannot expose Supplier credit or cash refund events",
+        "Procurement cannot read actual refund records through table RLS",
+        "Procurement cannot invoke the financial Supplier returns reader",
+        "Supplier credit journal source points to canonical AP credit document",
+        "Refund journal source points to canonical receipt document"
+      ],
+      "native": [
+        "Migration102 preserves populated existing journals, sources, parties, drafts and memberships",
+        "Independent simultaneous60-unit returns serialize; second over-return rolls back without duplicate stock or journal",
+        "Independent concurrent Supplier credits recognize AP exactly once",
+        "Native expected40units / inventory2000 / AP2000 independently reconcile",
+        "Both new tenant tables force RLS and deny direct browser mutations",
+        "Native Management Viewer command denied"
+      ],
+      "browser": [
+        "Browser preview creates neither stock nor GL records",
+        "English UI executes Save → Review → Post physical return",
+        "English credit UI updates AP to4000",
+        "Arabic UI posts distinct return and recovers identical draft after lost response",
+        "Arabic actual refund UI posts one typed Treasury receipt",
+        "Arabic refund reversal UI uses audited canonical reversal",
+        "RTL workspace stays within desktop viewport",
+        "Arabic return history remains rendered on mobile",
+        "Mobile tables scroll within the workspace without page overflow",
+        "Mobile return IDs and financial columns remain readable without character wrapping",
+        "No browser runtime errors"
+      ],
+      "reports": [
+        "Report model Supplier subledger/control reconciliation zero",
+        "Report does not offer allocated/refunded credit again",
+        "Bilingual en statement contains original refund and reversal with numeric calendar dates",
+        "en report excludes unrelated Supplier refund",
+        "Bilingual ar statement contains original refund and reversal with numeric calendar dates",
+        "ar report excludes unrelated Supplier refund"
+      ],
+      "receiptReplay": [
+        "Lost refund response retry returns the same canonical receipt and journal with one cash movement",
+        "Lost refund reversal response retry returns its exact reversal receipt and journal without duplicate effects"
+      ]
+    },
+    "TypeScript": "PASS",
+    "ProductionBuild": "PASS; validation-only browser-safe build configuration, no deployment artifact published",
+    "scopedLint": "PASS, no errors; two advisory React recovery-effect/ref warnings retained",
+    "browser": "Actual1366x768 English/Arabic and390px Arabic screenshots inspected; tables contain horizontal scrolling",
+    "financialEvidence": "docs/cr04/accounting.json",
+    "nativeEvidence": "docs/cr04/native.json",
+    "browserEvidence": "docs/cr04/browser.json",
+    "dispatchEvidence": "docs/cr04/dispatch.json",
+    "reportEvidence": "docs/cr04/reports.json",
+    "securityCorrection": "Financial credit/refund requests use the existing private canonical command registry, never inventory_events visible to Procurement. AP/refund documents remain financial authorities; source IDs point to the real canonical business documents.",
+    "receiptReplayEvidence": "docs/cr04/receipt-replay.json"
+  },
+  "accounting": {
+    "unpaidPartial": {
+      "originalUnits": 100,
+      "returnedUnits": 20,
+      "expectedAndActualRemainingUnits": 80,
+      "expectedAndActualInventoryAED": "4000.00",
+      "expectedAndActualPayableAED": "4000.00"
+    },
+    "nativeConcurrent": {
+      "expectedAndActualUnits": 40,
+      "expectedAndActualInventoryAED": "2000.00",
+      "expectedAndActualPayableAED": "2000.00"
+    },
+    "movingAverageVariance": {
+      "carryingAED": "1117.65",
+      "invoiceCreditNetAED": "1400.00",
+      "varianceCreditAED": "282.35"
+    },
+    "refund": "Actual Dr Bank1000 / Cr Supplier AP1000; canonical reversal exactly restores the credit; no revenue or second payment",
+    "VAT": "Original5% invoice credit1000net +50VAT; tax evidence/proportion required; no automatic unsupported recovery",
+    "finalFixtureInventory": {
+      "expectedAndActualQtyUnits": 340,
+      "expectedAndActualValueAED": "19000.00"
+    },
+    "supplierSubledgerControlDifference": "0",
+    "allJournalsBalanced": true
+  },
+  "reuse": [
+    "Canonical inventory_events/inventory_movements and moving-average location balances",
+    "ACW-01 supplier_ap_documents, credit allocations, invoices, payments, AP control and statements",
+    "private.create_journal/private.reverse_journal, fiscal/annual and finalized-bank guards",
+    "Existing Company actor/permissions, Company finance locks, report exports, shared master data and premium UI"
+  ],
+  "limitations": [
+    "One material/receipt per return, consistent with existing receipt architecture; repeat for separate receipts. Receipt must reference its live original invoice through GRNI matching or existing paid-Expense capitalization.",
+    "Quantity-proportional original invoice credit/VAT; independently negotiated discounts or other non-proportional tax cases require separately evidenced canonical treatment.",
+    "Physical reversal requires no subsequent stock movements; use existing project issue-return/warehouse recovery and controlled dependency order.",
+    "Existing location moving-average pooling is retained; no new lot/serial tracking.",
+    "Migration102 activation requires explicit authorization, followed by compatible release publication and Production runtime acceptance."
+  ],
+  "definitionOfDone": {
+    "businessAccounting": "VERIFIED local fictional scenarios; approved existing moving-average/AP controls reused",
+    "securityAuthorization": "VERIFIED focused native RLS/grants, actor/Company isolation, concurrency and denied bypass; no broad audit",
+    "database": "VERIFIED local native/PGlite; prepared additive102, linked history aligned through101",
+    "deployment": "DEFERRED hosted102 activation and compatible frontend publication; existing deployed client preserved",
+    "testing": "VERIFIED74 focused assertions, actual screenshots, TypeScript and Production build",
+    "documentation": "VERIFIED canonical roadmap, requirements, handoff and exact evidence reconciled"
+  },
+  "preservation": {
+    "realCompanyFinancialWrites": 0,
+    "hostedMigrationsApplied": [],
+    "automaticPush": false,
+    "automaticDeploy": false,
+    "original65ScenariosUntouched": true,
+    "unrelatedRootChangesPreserved": true
+  },
+  "next": "CR-05 Construction Accounting and WIP; not started",
+  "recordedAt": "2026-11-18T12:38:08.927800+00:00"
+}

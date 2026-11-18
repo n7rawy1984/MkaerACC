@@ -1,0 +1,7 @@
+{
+  "checks": [
+    "Lost refund response retry returns the same canonical receipt and journal with one cash movement",
+    "Lost refund reversal response retry returns its exact reversal receipt and journal without duplicate effects"
+  ],
+  "hostedWrites": 0
+}
