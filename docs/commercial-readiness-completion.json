@@ -1,16 +1,13 @@
 {
   "program": "Approved ROADMAP V3 Commercial Readiness Program",
   "date": "2026-11-18",
-  "overall": "SUPPORTED CORE VERIFIED LOCALLY — COMMERCIAL ROADMAP PARTIAL",
+  "overall": "SUPPORTED CORE VERIFIED LOCALLY \u2014 COMMERCIAL ROADMAP PARTIAL",
   "scope": "Bounded implementation evidence; not a new roadmap or a general architecture audit",
   "authority": "Local implementation and disposable test execution only; no real Company mutations, hosted migrations, push or deployment",
   "publishedBaseline": {
-    "sha": "a5793111454b6493abe49c485f4cc479fada191a",
-    "githubMain": "VERIFIED by git ls-remote",
-    "production": "VERIFIED Production deployment success at a5793111454b6493abe49c485f4cc479fada191a, status2026-11-18T10:50:48Z",
-    "deploymentUrl": "https://maker-kjy27xlqe-n7rawy1984-8059s-projects.vercel.app",
-    "runtimeAcceptance": "Not repeated; deployment metadata does not imply new end-user acceptance",
-    "migration": "95–100 applied; linked dry-run only101 pending"
+    "sha": "99305ef4ec79b441f8014308d23d52e43f53675d",
+    "production": "Ready/deployed per Product Owner",
+    "migration": "Through102 applied; read-only linked dry-run only103 pending"
   },
   "modules": [
     {
@@ -54,7 +51,7 @@
     {
       "module": "Fiscal periods, close and reopening",
       "status": "PARTIAL",
-      "scope": "95–100 locally implement period controls plus retained-earnings year finalization, immutable audited reopen/reclose and lock; subsequent-year correction/restatement policy deferred.",
+      "scope": "95\u2013100 locally implement period controls plus retained-earnings year finalization, immutable audited reopen/reclose and lock; subsequent-year correction/restatement policy deferred.",
       "evidence": [
         "docs/commercial-completion-verification.json",
         "docs/COMMERCIAL_ACCOUNTING_SIMULATION.md"
@@ -109,12 +106,14 @@
     },
     {
       "module": "Projects and Subcontractors",
-      "status": "PARTIAL",
-      "scope": "Project analytic costs, contract-scoped advances, certificates, recovery, retention, payment and reporting supported. Complete construction revenue, contract assets/liabilities and WIP await approved recognition policy",
+      "status": "SUPPORTED CONSTRUCTION CORE VERIFIED LOCALLY",
+      "scope": "Existing Project/subcontract accounting plus CR05 customer contract policy, earned/billed/cash separation, retention, selective WIP and controlled closeout/reversals. Single integrated obligation; limits explicitly documented.",
       "evidence": [
         "src/financial/OperationalContracts.tsx",
         "src/reports/ProjectCostLedger.tsx",
-        "NARVO_ERP_ACCOUNTING_REQUIREMENTS_REGISTER.md#fin-05--client-contracts-ar-and-revenue-recognition"
+        "NARVO_ERP_ACCOUNTING_REQUIREMENTS_REGISTER.md#fin-05--client-contracts-ar-and-revenue-recognition",
+        "docs/cr05-construction-verification.json",
+        "docs/CR05_CONSTRUCTION_ACCOUNTING.md"
       ]
     },
     {
@@ -200,11 +199,12 @@
     "Full original Procurement/Inventory/AR/AP/construction/HR/WPS/subscriptions/security/operations requirements",
     "Final restoration rehearsal and deferred USB work"
   ],
-  "nextDependency": "Explicitly authorize hosted102 activation/preservation, then publish compatible CR04 release; CR05 Construction/WIP remains next and is not started.",
+  "nextDependency": "Explicit hosted103 approval/activation and compatible frontend publication; then CR06 remaining essential accounting scenarios, CR07 final integrated fictional-company acceptance.",
   "continuationEvidence": "docs/commercial-completion-verification.json",
   "hostedActivation": {
-    "status": "95–101 APPLIED;102 PREPARED / NOT APPLIED",
+    "status": "95\u2013101 APPLIED;102 PREPARED / NOT APPLIED",
     "evidence": "docs/cr03-migration101-hosted-activation.json"
   },
-  "cr04Evidence": "docs/cr04-supplier-returns-verification.json"
+  "cr04Evidence": "docs/cr04-supplier-returns-verification.json",
+  "cr05Evidence": "docs/cr05-construction-verification.json"
 }

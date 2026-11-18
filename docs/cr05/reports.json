@@ -1,0 +1,11 @@
+{
+  "checks": [
+    "en summary revenue equals independent100000",
+    "en exact document/journal trace and numeric calendar dates",
+    "en restricted cost metrics omitted from export",
+    "ar summary revenue equals independent100000",
+    "ar exact document/journal trace and numeric calendar dates",
+    "ar restricted cost metrics omitted from export"
+  ],
+  "hostedWrites": 0
+}

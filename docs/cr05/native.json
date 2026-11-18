@@ -1,0 +1,10 @@
+{
+  "checks": [
+    "Migration103 preserves populated existing journals, sources, parties, drafts and memberships",
+    "Independent concurrent identical requests wait and replay one certificate",
+    "Concurrent separate requests cannot overrecognize the same certified progress",
+    "Native new tables force RLS and forbid direct financial mutations"
+  ],
+  "hostedWrites": 0,
+  "engine": "Disposable native PostgreSQL; two independent sessions with observed lock waits"
+}

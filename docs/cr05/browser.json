@@ -1,0 +1,19 @@
+{
+  "checks": [
+    "English certificate approval saves metadata without financial journal",
+    "Invoice preview does not post",
+    "Lost accepted reply recovers one immutable invoice without duplicate posting",
+    "English shared Excel export downloads exact construction report",
+    "English PDF preview contains canonical invoice trace",
+    "Arabic earned revenue posts through canonical command",
+    "Arabic controlled reversal preserves original and restores revenue balance",
+    "Arabic PDF preview preserves RTL construction report",
+    "Arabic shared Excel export generated",
+    "Arabic mobile workspace has no page overflow",
+    "Mobile financial columns and references retain readable row height with contained scrolling",
+    "Viewer has no financial or setup actions",
+    "Viewer restricted cost fields stay redacted",
+    "No browser runtime errors"
+  ],
+  "hostedWrites": 0
+}

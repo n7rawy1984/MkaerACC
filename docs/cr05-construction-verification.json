@@ -1,0 +1,83 @@
+{
+  "milestone": "CR05 Construction Accounting / WIP",
+  "status": "SUPPORTED SCOPE VERIFIED LOCALLY; HOSTED ACTIVATION AND PUBLICATION DEFERRED",
+  "date": "2026-11-18",
+  "baseline": {
+    "release": "99305ef4ec79b441f8014308d23d52e43f53675d",
+    "production": "Ready/deployed per Product Owner",
+    "hostedThrough": 102,
+    "alignment": "Read-only linked dry-run lists ONLY103"
+  },
+  "migration": {
+    "number": 103,
+    "file": "20261121120000_construction_contracts_wip.sql",
+    "sha256": "bf0b5313893d99e362a390ec8f678712d5aec1ea0bd7638d5b918cd948d34ddd",
+    "status": "PREPARED / NOT APPLIED",
+    "scope": "Additive contract policy/events/links, typed control mapping, canonical business commands/readers, scoped cost privacy, source-dependency and closed-Project settlement integration; no financial seeds/backfill"
+  },
+  "focusedChecks": {
+    "construction": 65,
+    "controls": 38,
+    "native": 4,
+    "browser": 14,
+    "reports": 6
+  },
+  "totalFocusedChecks": 127,
+  "coherentSimulation": {
+    "events": 33,
+    "newJournals": 29,
+    "certifiedOpeningJournals": 1,
+    "totalCompanyJournals": 30,
+    "revenueAED": "100000.00",
+    "billingsAED": "100000.00",
+    "cashReceivedAED": "100000.00",
+    "recognizedCostsAED": "30500.00",
+    "profitAED": "69500.00",
+    "endingBankAED": "168000.00",
+    "inventoryAED": "2000.00",
+    "assetsAED": "170000.00",
+    "liabilitiesAED": "0.00",
+    "openingEquityAED": "100500.00",
+    "trialBalanceDebitAED": "413000.00",
+    "trialBalanceCreditAED": "413000.00",
+    "wipInterimExpectedActualAED": "4500.00",
+    "wipFinalExpectedActualAED": "0.00",
+    "unsettledControlsAED": "0.00"
+  },
+  "verification": {
+    "accounting": "VERIFIED independent expected entries vs actual canonical journals, subledgers, Project Cost Ledger, TB/IS/BS/CF",
+    "security": "VERIFIED focused local roles/tenant/direct-write/privacy and native observed lock schedules",
+    "database": "VERIFIED locally; forced RLS/read-only table grants/private primitives/fixed privileged search paths",
+    "deployment": "DEFERRED hosted103 / frontend / Production acceptance",
+    "testing": "127 focused checks; TypeScript via tsc -b and Production build PASS; focused lint PASS",
+    "documentation": "VERIFIED bounded status, exact evidence and limitations",
+    "realCompanyWrites": "NOT APPLICABLE / ZERO"
+  },
+  "browser": "Actual canonical fictional EN/AR certificate/invoice/revenue/reversal/retry, PDF/Excel, Viewer and390px layout;1366x768 and390px screenshots visually inspected",
+  "build": "PASS; existing nonblocking large-bundle advisory",
+  "hostedBusinessWrites": 0,
+  "realCompanyFinancialWrites": 0,
+  "push": false,
+  "deploy": false,
+  "limitations": [
+    "Single integrated performance obligation per Project; separate-obligation allocation/modification needs its own assessed workflow.",
+    "Taxable customer advances and nonstandard invoice VAT need their supported tax-point workflow; no invented tax.",
+    "Direct reversal requires LIFO construction dependencies and unsettled billing; settled-bill credit/rebill requires separate controlled resolution.",
+    "Existing Project customer financial history cannot be silently adopted; a scoped opening/migration assessment is required.",
+    "WIP valuation/recoverability is manual and evidenced; overdue warnings and closeout controls do not constitute automated fiscal-period valuation.",
+    "Contract closeout does not bypass existing administrative Project closure, bank reconciliation, Payroll-assignment or subcontract-completion guards.",
+    "Hosted103 activation, frontend publication and Production runtime acceptance remain deferred; no commercial go-live claim."
+  ],
+  "original65Archive": {
+    "docs/commercial-integrated-scenarios.json": "abadcb04ccbc31751d19291d252063b769999a79a8a577d1404f2cbf497cced6",
+    "docs/commercial-integrated-journals.csv": "a93af83f3276993953b30525123332181925edd19d3db72536a66ea0916c9373",
+    "docs/commercial-integrated-snapshot.json": "b44cb4cf3c46bc53dc8a2b447db2de072b3fa2f30ea8c8efdd9f6b706c655b3d",
+    "docs/commercial-completion-verification.json": "f969dcdf7aad8be6338bea8259a119c911437e50254271f39a897fa682e156b2"
+  },
+  "release": {
+    "branch": "release/cr05-construction-wip",
+    "baseIncludes": "99305ef4ec79b441f8014308d23d52e43f53675d",
+    "pushCommand": "git push origin release/cr05-construction-wip:main"
+  },
+  "next": "CR06 remaining essential accounting scenarios, then CR07 final integrated fictional-company acceptance; preserve entire original roadmap"
+}

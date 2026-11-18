@@ -1,0 +1,20 @@
+import{randomUUID}from'node:crypto';
+export async function constructionPayroll(f,run){const{ids,company,date}=f;
+ const hr=(action,input)=>f.call('command_hr',{cid:company,request_id:randomUUID(),action,input:{evidence:'Approved fictional employment policy',...input}});
+ const employee=await f.call('command_employee_master',{cid:company,request_id:randomUUID(),employee:null,expected_updated_at:null,input:{name:'Demo salaried employee',code:'DEMO-EMP',status:'ACTIVE'},reason:'Fictional employee identity'});
+ await hr('POLICY',{effective_month:f.month,method:'SCHEDULED_MINUTES',timezone:'Asia/Dubai',approved:true,version:0});
+ await hr('SETUP',{version:0,advance_account_id:ids.EMPLOYEE_ADVANCE,SALARY_PAYABLE:ids.SALARY_PAYABLE,PROJECT_COST:ids.PROJECT_COST,COMPANY_EXPENSE:ids.COMPANY_EXPENSE});
+ await hr('TERMS',{employee_id:employee.id,effective_on:f.month,employed_from:f.month,basic_minor:'200000',allowances:[],weekdays:[1,2,3,4,5,6,7],start_minute:480,end_minute:1020,break_minutes:60,project_id:ids.project,status:'ACTIVE',version:0});
+ await f.sql("select public.save_payroll_profile($1,$2,0,'DEMO-EMP','STAFF','Demo operator','Demo site',$3,200000,'BANK','ACTIVE')",[company,employee.id,ids.project]);
+ const hrRead=()=>f.call('read_hr_workspace',{cid:company,m:f.month});let h=await hrRead();
+ await f.call('bulk_hr_attendance',{cid:company,request_id:randomUUID(),entries:h.days.filter(d=>d.employee_id===employee.id).map(d=>({employee_id:employee.id,day:d.day,version:0,status:'PRESENT',project_id:ids.project,start_minute:480,end_minute:1020,break_minutes:60,paid_leave_minutes:0,overtime_earned_minor:'0',evidence:'Fictional scheduled full-period attendance'}))});
+ h=await hrRead();await hr('REVIEW',{month:f.month,version:h.period.revision});
+ const payrollPeriod=await f.call('refresh_payroll_draft',{target_company_id:company,target_month:f.month,target_version:0});
+ let payroll=await f.call('read_payroll_draft',{target_company_id:company,target_month:f.month});
+ await f.call('prepare_payroll_accounting',{target_company_id:company,target_period_id:payrollPeriod,target_version:payroll.period.version,target_allocations:{[payroll.rows[0].id]:ids.project},target_classifications:{}});
+ payroll=await f.call('read_payroll_draft',{target_company_id:company,target_month:f.month});await f.call('review_payroll_draft',{target_company_id:company,target_period_id:payrollPeriod,target_version:payroll.period.version});
+ payroll=await f.call('read_payroll_draft',{target_company_id:company,target_month:f.month});
+ const accrued=await run('Project labor payroll accrual',()=>f.call('post_payroll',{target_company_id:company,target_period_id:payrollPeriod,target_version:payroll.period.version,target_idempotency_key:randomUUID()}));
+ const entitlement=(await f.db.query('select id from public.payroll_entitlements where company_id=$1 and payroll_id=$2',[company,accrued])).rows[0].id;
+ await run('Payroll liability payment',()=>f.sql("select public.pay_salary($1,$2,$3,$4,200000,'DEMO-SALARY',$5)",[company,entitlement,ids.treasury,date,randomUUID()]));
+}

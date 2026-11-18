@@ -1,3 +1,4 @@
+import{ConstructionAccountingWorkspace}from'../commercial/ConstructionAccountingWorkspace';
 import{DataWorkspace,TextCell}from'../workspace/data/DataWorkspace';
 import {ProjectClosure} from './ProjectClosure';
 import {ProjectLifecycle} from './ProjectLifecycle';
@@ -64,7 +65,7 @@ export function ProjectsList() {
         <ProjectActivation key={`${state.profile.userId}:${state.activeTenant.companyId}:${project.id}`} project={project} disabled={blocked || !!editing} onRefresh={master.refreshProjects}/>
         <ProjectLifecycle project={project} disabled={blocked || !!editing} onRefresh={master.refreshProjects}/>
         <ProjectClosure project={project} disabled={blocked || !!editing} onRefresh={master.refreshProjects}/>
-        {actionId === project.id && message}
+        <ConstructionAccountingWorkspace projectId={project.id}/>{actionId === project.id && message}
 </>}/>
   </div>;
 }
