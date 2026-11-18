@@ -1,7 +1,7 @@
 {
   "program": "Approved ROADMAP V3 Commercial Readiness Program",
   "date": "2026-11-18",
-  "overall": "PARTIAL — NOT COMMERCIALLY READY",
+  "overall": "SUPPORTED CORE VERIFIED LOCALLY — COMMERCIAL ROADMAP PARTIAL",
   "scope": "Bounded implementation evidence; not a new roadmap or a general architecture audit",
   "authority": "Local implementation and disposable test execution only; no real Company mutations, hosted migrations, push or deployment",
   "publishedBaseline": {
@@ -10,7 +10,7 @@
     "production": "VERIFIED GitHub Production deployment status success, created 2026-11-17T19:19:02Z",
     "deploymentUrl": "https://maker-bzw9tv5t0-n7rawy1984-8059s-projects.vercel.app",
     "runtimeAcceptance": "Not repeated; deployment metadata does not imply new end-user acceptance",
-    "migration": "Local canonical history ends at 94; prior hosted 94 activation evidence reused, not freshly queried"
+    "migration": "Fresh read-only alignment: latest hosted94;95–100 prepared/not applied"
   },
   "modules": [
     {
@@ -54,11 +54,10 @@
     {
       "module": "Fiscal periods, close and reopening",
       "status": "PARTIAL",
-      "scope": "Owner policy confirmed: Accounting Admin audited close/reopen, Accountants post only to open periods. Migration95 and bilingual operational UI verified locally with universal journal gate, opt-in fiscal dates, version/idempotency, preservation and native races. No annual profit-transfer/closing-entry workflow yet. Hosted activation remains unapproved.",
+      "scope": "95–100 locally implement period controls plus retained-earnings year finalization, immutable audited reopen/reclose and lock; subsequent-year correction/restatement policy deferred.",
       "evidence": [
-        "supabase/migrations/20261117120000_fiscal_period_controls.sql",
-        "src/reports/AccountingPeriodsWorkspace.tsx",
-        "docs/commercial-foundation-verification.json"
+        "docs/commercial-completion-verification.json",
+        "docs/COMMERCIAL_ACCOUNTING_SIMULATION.md"
       ]
     },
     {
@@ -73,11 +72,11 @@
     },
     {
       "module": "Customer AR",
-      "status": "MISSING",
-      "scope": "No accounting Customer master, sales invoice/receipt/credit/advance subledger or AR aging UI/commands established. Platform commercial Customer is not an accounting debtor. FIN-05 construction revenue policy remains a dependency",
+      "status": "PARTIAL",
+      "scope": "Locally operational earned-service and delivered-goods invoices/cash sales, receipts, deposits/application, credits/refunds, aging and GL reconciliation; construction progress/retention and taxable advance policy remain deferred.",
       "evidence": [
-        "src/workspace/moduleRegistry.ts",
-        "NARVO_ERP_ACCOUNTING_REQUIREMENTS_REGISTER.md#fin-05--client-contracts-ar-and-revenue-recognition"
+        "docs/commercial-completion-verification.json",
+        "docs/COMMERCIAL_ACCOUNTING_SIMULATION.md"
       ]
     },
     {
@@ -131,19 +130,20 @@
     },
     {
       "module": "Fixed assets",
-      "status": "MISSING",
-      "scope": "FIN-06 asset register/capitalization/depreciation/disposal operational lifecycle not established. Configurable asset classes, lives, residual/method and transition policy required",
+      "status": "PARTIAL",
+      "scope": "Locally operational paid capitalization, explicit straight-line calendar-month life/residual, sequential depreciation, disposal and GL; specialist acquisition/impairment/tax policy deferred.",
       "evidence": [
-        "NARVO_ERP_ACCOUNTING_REQUIREMENTS_REGISTER.md#fin-06--fixed-assets-depreciation-and-related-schedules"
+        "docs/commercial-completion-verification.json",
+        "docs/COMMERCIAL_ACCOUNTING_SIMULATION.md"
       ]
     },
     {
       "module": "Accruals and prepayments",
-      "status": "MISSING",
-      "scope": "No operational schedules, allocation/accrual/release commands or UI established; generic private journal primitive is not an accountant-facing workflow",
+      "status": "COMPLETE FOR SUPPORTED POLICY",
+      "scope": "Local recognition, partial settlement and explicit month-end service amortization with cutoff and GL; continuous daily prorating not implemented.",
       "evidence": [
-        "src/financial",
-        "NARVO_ERP_ACCOUNTING_REQUIREMENTS_REGISTER.md"
+        "docs/commercial-completion-verification.json",
+        "docs/COMMERCIAL_ACCOUNTING_SIMULATION.md"
       ]
     },
     {
@@ -168,19 +168,19 @@
     },
     {
       "module": "Cash Flow Statement",
-      "status": "BLOCKED BY DEPENDENCY",
-      "scope": "No full statement implementation. Cash-equivalent scope and operating/investing/financing classifications require explicit configurable policy, including Custody treatment; Treasury movement report is not a Cash Flow Statement",
+      "status": "COMPLETE FOR SUPPORTED POLICY",
+      "scope": "GL-derived exact direct cash flow, real Treasury/explicit physical Custody, source classification, transfers/cutover handling, reconciliation and EN/AR exports; bank statement matching remains separate.",
       "evidence": [
-        "src/reports/TreasuryMovements.tsx",
-        "NARVO_ERP_ACCOUNTING_REQUIREMENTS_REGISTER.md"
+        "docs/commercial-completion-verification.json",
+        "docs/COMMERCIAL_ACCOUNTING_SIMULATION.md"
       ]
     },
     {
       "module": "Complete fictional accounting cycle",
       "status": "PARTIAL",
-      "scope": "Executed canonical supported-cycle scenarios with independent answer key and reconciled statements; missing AR/assets/accruals/cash flow/formal close and remaining specialized/negative UI scenarios are BLOCKED or NOT EXECUTED, not PASS",
+      "scope": "Actual primary65 operation scenarios /63 journals /3 reversals and reconciled five statements, plus auxiliary Payroll; unsupported specialist cycles explicitly recorded. Original24 evidence preserved.",
       "evidence": [
-        "docs/commercial-foundation-verification.json",
+        "docs/commercial-completion-verification.json",
         "docs/COMMERCIAL_ACCOUNTING_SIMULATION.md"
       ]
     },
@@ -201,5 +201,6 @@
     "Full original Procurement/Inventory/AR/AP/construction/HR/WPS/subscriptions/security/operations requirements",
     "Final restoration rehearsal and deferred USB work"
   ],
-  "nextDependency": "Continue existing FIN-05 AR/customer cycle and remaining approved foundational accounting gaps; retained-earnings closing entries, Cash Flow and complete period-end simulation remain outstanding. Hosted95 activation needs separate exact authorization; local independent development does not require that activation."
+  "nextDependency": "Explicit separate hosted authorization for exact95–100 checksums/order/preservation, then compatible application publication and scoped Company policy/setup; continue specialist gaps without claiming full roadmap complete.",
+  "continuationEvidence": "docs/commercial-completion-verification.json"
 }

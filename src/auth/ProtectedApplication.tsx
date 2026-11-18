@@ -1,3 +1,4 @@
+import{CommercialWorkspace}from'../commercial/CommercialWorkspace';
 import {EmployeeManagement} from '../hr/EmployeeManagement';
 import { CompanyWorkspaceShell } from "../workspace/CompanyWorkspaceShell";
 import { AccountingCycle } from "../workspace/AccountingCycle";
@@ -51,6 +52,9 @@ function RoutedApplication() {
           <Route path="/employees" element={<EmployeeManagement />} />
           <Route path="/attendance" element={<AttendanceApplication embedded />} />
           <Route path="/accounting-cycle" element={<AccountingCycle />} />
+          <Route path="/customer-accounts" element={<CommercialWorkspace module="customers"/>}/>
+          <Route path="/fixed-assets" element={<CommercialWorkspace module="assets"/>}/>
+          <Route path="/accruals-prepayments" element={<CommercialWorkspace module="recognition"/>}/>
           <Route path="/accounting-reports" element={<WorkspaceReports />} />
           <Route path="/login" element={<Navigate to="/" replace />} />
           <Route path="/no-company" element={<Navigate to="/" replace />} />

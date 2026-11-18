@@ -1,3 +1,49 @@
+# Integrated Accounting Learning Report — 18 November 2026
+
+**Actual local canonical execution**, not hypothetical journals or Production postings. The same fictional Company `35866f1d-2888-40f2-9690-015802ec13a8`, NARVO DEMO — Trading & Contracting LLC, covers 01/10/2026–17/11/2026 (explicit fictional short fiscal year). Original in-memory database had closed: its24 canonical events were restored once as fixture initialization, not the142-check foundation suite. Original evidence below remains unchanged; [ID restoration map](commercial-foundation-restoration-map.json) connects original and restored journals.
+
+**65 distinct operation scenarios,63 journals,3 reversals** in the primary dataset. Four physical counts/transfers create no journal; some settlement/payment events produce paired canonical journals. Journal counts are not scenario counts. Auxiliary Payroll variants use a separate fictional Company (4journals); race/browser/precision clones are not included in these balances.
+
+| Final independent answer key | AED |
+|---|---:|
+| Closing Trial Balance debit = credit |104,011.00|
+| Assets |97,111.00|
+| Liabilities |3,011.00|
+| Net equity (101,000 contributed less6,900 retained loss) |94,100.00|
+| Sales / COGS / gross profit |1,020.00 /60.00 /960.00|
+| Total expenses including COGS / net loss |7,920.00 /6,900.00|
+| Bank / physical Custody |84,550.00 /9,700.00|
+| AR / AP |421.00 /1,300.00|
+| Inventory74units / prepaid balance |740.00 /1,100.00|
+| Contract advance / payable / retention |400.00 /1,000.00 /150.00|
+| Employee advance / salary payable |100.00 /400.00|
+| Input VAT / output VAT / accrued liability |100.00 /51.00 /110.00|
+
+Direct cash flow: opening100,000 −operating6,550 −investing200 +actual owner financing1,000 = **94,250**. Certified opening balances are opening cash, never financing receipts. Custody is included only because this fictional fixture explicitly establishes controlled physical cash; an employee receivable is not automatically cash. Bank external-statement reconciliation remains unimplemented; the physical-count command correctly rejects Bank.
+
+[Learning workbook English](commercial-learning-en.xlsx) / [العربية](commercial-learning-ar.xlsx).
+
+[All63 exact journals and every line/dimension](commercial-integrated-journals.csv); [actual statements/GL snapshot](commercial-integrated-snapshot.json); [actual inputs, expected debits/credits and receipts](commercial-integrated-scenarios.json); [focused checks and specialist limits](commercial-completion-verification.json). The original foundation report follows after this current continuation.
+
+## What the new transactions teach
+
+- Earned service invoice1,000 +VAT50: Dr AR1,050 /Cr earned revenue1,000 /Cr VAT50. Receipt400 reduces AR without revenue; deposit200 is a liability until applied; net100/VAT5 credit leaves AR345. A fully paid200 invoice is credited to customer-credit liability and refunded exactly once. Further cash sales/credits are recorded in the exact scenario evidence.
+- Goods: ten units delivered cost100 using existing Inventory ISSUE →Dr COGS100 /Cr Inventory100; invoice200+VAT10 →Dr AR210 /Cr revenue200 /Cr VAT10; receipt50 leaves160; four-unit physical return reverses cost40; credit80+VAT4 leaves goods AR76. Ending total AR421, stock74units/value740. No repeated stock cost in the sales invoice.
+- Fixed asset1,200 paid →Dr cost /Cr Bank; monthly depreciation100 →Dr depreciation /Cr accumulated depreciation; disposal proceeds1,000 remove cost1,200 and accumulation100, recognize loss100. No asset or accumulation remains.
+- Prepayment1,200 covers12 discrete month-end inspection services (not continuous daily insurance); one delivered visit amortizes100, leaving1,100. Accrual300 recognized,200 settled;10 late cutoff cost leaves110 payable. Explicit calendar-month policy is fictional, not silently imposed on real Companies.
+- Transfers/counts, shortage/surplus and Project return/reissue reuse Inventory commands; released retention50 is paid without new cost. Original Project cost remains5,300 after annual closing.
+- A genuine later-identified owner cash contribution1,000 uses the existing owner/Custody command →Dr physical Custody /Cr Owner Contributions Equity. It does not create Treasury turnover or revenue. Audited year reopening and refinalization incorporate this receipt.
+- Annual close transfers the final6,900 loss into retained earnings; two audited reopening reversals preserve every original journal. Final lock rejects backdating; Income Statement retains actual income/cost activity rather than annual clearing transfers. Payroll-derived closing lines remain confidential.
+- Auxiliary Payroll scenarios actually verify absence, paid leave, partial hours and overtime: gross5,864.84; paid3,903.23; remaining payable1,961.61. These are auxiliary balances, never added to the main Company.
+
+## Scope and preservation
+
+Hosted financial data, Company configuration, RLS and migration history were not mutated. Maker's370sources/55journals/AED364,365.77 checkpoint is reused historical evidence, not freshly queried. Local native activation verifies preservation of populated accounting and memberships; read-only hosted dry-run lists95–100 only, with latest applied94. All six migrations remain **PREPARED / NOT APPLIED**.
+
+The five requested core modules are operationally implemented locally, but the **entire approved commercial roadmap is NOT complete**. Remaining gaps: external bank reconciliation, supplier physical returns, construction certification/progress/WIP policy, taxable customer advances, specialist asset/prepayment policies, and correction after later-year activity. Full statutory/WPS, operational/security acceptance, onboarding and deferred DR remain separate requirements. No commercial go-live claim.
+
+## Original foundation report — preserved historical evidence
+
 # Fictional accounting learning report — executed foundation cycle
 
 **Commercial readiness: PARTIAL.** This report records actual disposable canonical SQL execution, not Maker transactions and not a complete commercial ERP certification.

@@ -1,0 +1,477 @@
+{
+  "reason": "Original disposable in-memory database was closed; restored exact business inputs via canonical commands once as continuation fixture initialization. Original evidence unchanged. IDs of new local documents differ.",
+  "original_company": "35866f1d-2888-40f2-9690-015802ec13a8",
+  "restored_company": "35866f1d-2888-40f2-9690-015802ec13a8",
+  "scenarios": [
+    {
+      "id": "OPEN",
+      "receipt": {
+        "id": "cfe72265-83a2-43b6-91ae-98d9909559b9",
+        "journal": "340d63bd-6979-404b-b315-db357a57ad57",
+        "replayed": false
+      },
+      "restored_journals": [
+        "340d63bd-6979-404b-b315-db357a57ad57"
+      ],
+      "original_journals": [
+        "3f7edc03-0208-4319-9fdd-2bcc6a1e15aa"
+      ]
+    },
+    {
+      "id": "FUND",
+      "receipt": [
+        {
+          "custody_advance_id": "b6ef49ba-6e0b-4011-ba9b-8f7c4839b429",
+          "advance_reference": "NARVO-DEMO-COMMERCIAL-CADV-2026-000001",
+          "journal_entry_id": "ffa73281-2dc3-437b-9318-71f8d7488597",
+          "replayed": false
+        }
+      ],
+      "restored_journals": [
+        "ffa73281-2dc3-437b-9318-71f8d7488597"
+      ],
+      "original_journals": [
+        "5465937c-2d1c-4484-835f-97ea6420e8f5"
+      ]
+    },
+    {
+      "id": "CASH",
+      "receipt": [
+        {
+          "expense_id": "25e45753-7339-4bd5-8ee0-cdbf7cc0a95e",
+          "expense_reference": "NARVO-DEMO-COMMERCIAL-EXP-2026-000001",
+          "journal_entry_id": "e3eaa1e8-370a-42ca-aa6d-f2cf25a8194e",
+          "replayed": false
+        }
+      ],
+      "restored_journals": [
+        "e3eaa1e8-370a-42ca-aa6d-f2cf25a8194e"
+      ],
+      "original_journals": [
+        "d7d39386-b7bc-40b5-81b1-a1f335063eb8"
+      ]
+    },
+    {
+      "id": "BILL1",
+      "receipt": {
+        "id": "6d78ebee-9023-43cf-bbd2-3184a8d4e039",
+        "journal": "c893bd52-3569-41ec-9aff-4674a0a27315",
+        "replayed": false,
+        "reference": "NARVO-DEMO-COMMERCIAL-EXP-2026-000002",
+        "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+        "inventory_document": null
+      },
+      "restored_journals": [
+        "c893bd52-3569-41ec-9aff-4674a0a27315"
+      ],
+      "original_journals": [
+        "4682af9e-d06b-4d79-9299-0b5c25914d77"
+      ]
+    },
+    {
+      "id": "BILL2",
+      "receipt": {
+        "id": "6927bcda-af6a-4a41-8f4e-2dc89423807b",
+        "journal": "fad7d180-7810-4b82-893d-37b1c49095a2",
+        "replayed": false,
+        "reference": "NARVO-DEMO-COMMERCIAL-EXP-2026-000003",
+        "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+        "inventory_document": null
+      },
+      "restored_journals": [
+        "fad7d180-7810-4b82-893d-37b1c49095a2"
+      ],
+      "original_journals": [
+        "82bf1d1f-af81-4e9c-b415-ab2dd26758b2"
+      ]
+    },
+    {
+      "id": "PARTIAL",
+      "receipt": [
+        {
+          "supplier_payment_id": "f7220dd5-81d8-41b7-834f-ea984caec804",
+          "payment_reference": "NARVO-DEMO-COMMERCIAL-SPAY-2026-000001",
+          "journal_entry_id": "3dc95413-af86-4e85-bcb2-11e6959ea8c7",
+          "replayed": false
+        }
+      ],
+      "restored_journals": [
+        "3dc95413-af86-4e85-bcb2-11e6959ea8c7"
+      ],
+      "original_journals": [
+        "29c30720-b4fd-4f73-a2e2-a744d57ed74e"
+      ]
+    },
+    {
+      "id": "MULTI",
+      "receipt": [
+        {
+          "supplier_payment_id": "a734a2de-09dd-4d16-b22b-dbbea82fbf7f",
+          "payment_reference": "NARVO-DEMO-COMMERCIAL-SPAY-2026-000002",
+          "journal_entry_id": "d6cd730e-390d-4c56-a34f-5e49627f07d8",
+          "replayed": false
+        }
+      ],
+      "restored_journals": [
+        "d6cd730e-390d-4c56-a34f-5e49627f07d8"
+      ],
+      "original_journals": [
+        "fa9984e0-179b-490c-b06f-9a9b9d225d6c"
+      ]
+    },
+    {
+      "id": "FINAL",
+      "receipt": [
+        {
+          "supplier_payment_id": "5aec3a68-1c22-4797-8de3-5b57838386d2",
+          "payment_reference": "NARVO-DEMO-COMMERCIAL-SPAY-2026-000003",
+          "journal_entry_id": "3c9082a6-2d77-4393-b3c4-4bf30ea58354",
+          "replayed": false
+        }
+      ],
+      "restored_journals": [
+        "3c9082a6-2d77-4393-b3c4-4bf30ea58354"
+      ],
+      "original_journals": [
+        "e272462d-1b2c-4033-9d55-56184f7579af"
+      ]
+    },
+    {
+      "id": "ADV",
+      "receipt": {
+        "id": "66ccf83b-bfe3-4fa8-be50-d421ecf1fa3e",
+        "journal": "34f9390a-dd7e-4a40-911b-0b23567a67ae",
+        "replayed": false,
+        "reference": "NARVO-DEMO-COMMERCIAL-SAP-2026-000001",
+        "company_id": "35866f1d-2888-40f2-9690-015802ec13a8"
+      },
+      "restored_journals": [
+        "34f9390a-dd7e-4a40-911b-0b23567a67ae"
+      ],
+      "original_journals": [
+        "aa6bd2ea-9814-48e8-bdce-9dee4355f4f2"
+      ]
+    },
+    {
+      "id": "BILL3",
+      "receipt": {
+        "id": "f63a92f6-6dff-45ba-b8bb-7d29a0c4413a",
+        "journal": "123daad0-6695-43f9-9a27-e1bf570bf57d",
+        "replayed": false,
+        "reference": "NARVO-DEMO-COMMERCIAL-EXP-2026-000004",
+        "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+        "inventory_document": null
+      },
+      "restored_journals": [
+        "123daad0-6695-43f9-9a27-e1bf570bf57d"
+      ],
+      "original_journals": [
+        "0503f70d-2a16-4a76-bc62-d8c23d9967e9"
+      ]
+    },
+    {
+      "id": "APPLY",
+      "receipt": {
+        "id": "f675195b-db60-44b0-9b74-9966bc05fe64",
+        "journal": "d9967c00-0f77-4606-be8a-fd81c1ea3cac",
+        "replayed": false,
+        "reference": "NARVO-DEMO-COMMERCIAL-SAP-2026-000002",
+        "company_id": "35866f1d-2888-40f2-9690-015802ec13a8"
+      },
+      "restored_journals": [
+        "d9967c00-0f77-4606-be8a-fd81c1ea3cac"
+      ],
+      "original_journals": [
+        "24a2655e-9cf0-421a-b746-456bdbffb107"
+      ]
+    },
+    {
+      "id": "CREDIT",
+      "receipt": {
+        "id": "b87316b0-a129-400b-8ab9-e1564bfc7681",
+        "journal": "fb11ce0d-6c70-4f6e-b3fc-88978f2a6849",
+        "replayed": false,
+        "reference": "NARVO-DEMO-COMMERCIAL-SAP-2026-000003",
+        "company_id": "35866f1d-2888-40f2-9690-015802ec13a8"
+      },
+      "restored_journals": [
+        "fb11ce0d-6c70-4f6e-b3fc-88978f2a6849"
+      ],
+      "original_journals": [
+        "72c1a1a6-3c13-473d-8820-23ede111142d"
+      ]
+    },
+    {
+      "id": "STOCK",
+      "receipt": {
+        "id": "b1fc716d-c5e9-4579-8670-9df7dbb0f287",
+        "state": "POSTED",
+        "action": "POST",
+        "version": 3,
+        "replayed": false,
+        "snapshot": {
+          "date": "2026-11-17",
+          "kind": "RECEIPT",
+          "unit": "UNIT",
+          "computed": {
+            "qty": "100000000",
+            "cost": null,
+            "value": "100000",
+            "balance": {
+              "qty": "0",
+              "value": "0",
+              "revision": 0,
+              "last_date": null
+            },
+            "project": null,
+            "cost_project": null,
+            "location_version": 1,
+            "material_version": 1,
+            "destination_balance": null,
+            "destination_version": null
+          },
+          "evidence": "Fictional 100 units received at AED10 each",
+          "qty_micros": "100000000",
+          "location_id": "2658a6df-12a5-410a-b537-70c70d2b04ba",
+          "material_id": "3e2c43ba-5531-42a1-af6a-4a5bf30aad69",
+          "recognition": "GRNI",
+          "supplier_id": "82765d4a-62d2-4bcd-b019-00f309bb3eba",
+          "value_minor": "100000",
+          "source_reference": "DEMO-RECEIPT",
+          "not_previously_recognized": true
+        },
+        "reference": "NARVO-DEMO-COMMERCIAL-INV-2026-000001",
+        "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+        "created_at": "2026-11-18T06:44:05.06+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "journal_id": "d6482ef1-993e-4244-a7f8-0b3edfac289c",
+        "request_id": "2d563e66-e2a6-4c90-a70d-85dd8e0e6a6b",
+        "document_id": "ecf35113-1951-46f7-8ef2-19140184cf7c",
+        "request_hash": "754c96465e71ab7e79cb00e3a203a3b64bed2c4b472487a5917e78ba97a68bc3"
+      },
+      "restored_journals": [
+        "d6482ef1-993e-4244-a7f8-0b3edfac289c"
+      ],
+      "original_journals": [
+        "da59418a-28c9-4749-9646-16077ec5a8ab"
+      ]
+    },
+    {
+      "id": "STOCKBILL",
+      "receipt": {
+        "id": "9081b2b6-2819-4ffe-869f-d9656d0ae2d2",
+        "journal": "d112fa8e-faaf-4006-ad14-a375056e0921",
+        "replayed": false,
+        "reference": "NARVO-DEMO-COMMERCIAL-EXP-2026-000005",
+        "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+        "inventory_document": "c3b4bd40-ae63-4f6a-a1d6-ed5f2ab6387d"
+      },
+      "restored_journals": [
+        "d112fa8e-faaf-4006-ad14-a375056e0921",
+        "6f2f555d-0898-48f4-aad2-8de573cd52f1"
+      ],
+      "original_journals": [
+        "60145bd9-1ba6-4946-9ebc-692e0cfcec06",
+        "80b1bb18-3335-4ab3-8741-27c3e3e18df7"
+      ]
+    },
+    {
+      "id": "ISSUE",
+      "receipt": {
+        "id": "c6a9947e-a333-47c0-9eef-702a7564081a",
+        "state": "POSTED",
+        "action": "POST",
+        "version": 3,
+        "replayed": false,
+        "snapshot": {
+          "date": "2026-11-17",
+          "kind": "ISSUE",
+          "unit": "UNIT",
+          "computed": {
+            "qty": "20000000",
+            "cost": "daa372a1-c0ce-4a8a-9a91-47b38e66a266",
+            "value": "20000",
+            "balance": {
+              "qty": "100000000",
+              "value": "100000",
+              "revision": 1,
+              "last_date": "2026-11-17"
+            },
+            "project": "1c61681c-25ef-496e-b9a8-5c68376d8e8f",
+            "cost_project": null,
+            "location_version": 1,
+            "material_version": 1,
+            "destination_balance": null,
+            "destination_version": null
+          },
+          "evidence": "Fictional 100 units received at AED10 each",
+          "project_id": "1c61681c-25ef-496e-b9a8-5c68376d8e8f",
+          "qty_micros": "20000000",
+          "location_id": "2658a6df-12a5-410a-b537-70c70d2b04ba",
+          "material_id": "3e2c43ba-5531-42a1-af6a-4a5bf30aad69",
+          "recognition": "GRNI",
+          "supplier_id": "82765d4a-62d2-4bcd-b019-00f309bb3eba",
+          "value_minor": "100000",
+          "recipient_id": "6b2b8d77-965f-4932-9581-8c9bad4801e1",
+          "source_reference": "DEMO-PROJECT-ISSUE",
+          "not_previously_recognized": true
+        },
+        "reference": "NARVO-DEMO-COMMERCIAL-INV-2026-000003",
+        "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+        "created_at": "2026-11-18T06:44:05.204+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "journal_id": "8c142f47-f300-43bd-ac66-b0f9a8aec020",
+        "request_id": "98bf2899-70a5-4936-948f-08e78242beca",
+        "document_id": "690ddac6-8455-4dab-84a0-ac1696cbea27",
+        "request_hash": "dfdd26128294f0630f63ddc5190b02403c31523b15047e66caaaee9040c43e47"
+      },
+      "restored_journals": [
+        "8c142f47-f300-43bd-ac66-b0f9a8aec020"
+      ],
+      "original_journals": [
+        "2565b8ce-f09e-4e4b-a746-03b593885d4d"
+      ]
+    },
+    {
+      "id": "CONTRACTADV",
+      "receipt": [
+        {
+          "subcontractor_advance_id": "fb2377a8-3dc2-4c80-8b3e-fe070b657f86",
+          "advance_reference": "NARVO-DEMO-COMMERCIAL-SADV-2026-000001",
+          "journal_entry_id": "ff96f5bc-83a9-44ca-9827-b7ff49c6c49c",
+          "replayed": false
+        }
+      ],
+      "restored_journals": [
+        "ff96f5bc-83a9-44ca-9827-b7ff49c6c49c"
+      ],
+      "original_journals": [
+        "e7a1c70c-2587-44e7-9121-658d733e2c15"
+      ]
+    },
+    {
+      "id": "CERT",
+      "receipt": [
+        {
+          "subcontractor_certificate_id": "e17ded8d-001f-467c-8f25-45cbf1c6a744",
+          "certificate_reference": "NARVO-DEMO-COMMERCIAL-SCERT-2026-000001",
+          "journal_entry_id": "8420a569-de44-4ced-bec8-ee9c6c5d4d34",
+          "replayed": false
+        }
+      ],
+      "restored_journals": [
+        "8420a569-de44-4ced-bec8-ee9c6c5d4d34"
+      ],
+      "original_journals": [
+        "de5310b5-451a-4232-b47b-53e1b2467d55"
+      ]
+    },
+    {
+      "id": "CONTRACTPAY",
+      "receipt": [
+        {
+          "subcontractor_payment_id": "c03a1a98-f614-464d-a920-5797b5445f8c",
+          "payment_reference": "NARVO-DEMO-COMMERCIAL-SCPAY-2026-000001",
+          "journal_entry_id": "994da519-9414-437b-9fec-247d4b5d3998",
+          "replayed": false
+        }
+      ],
+      "restored_journals": [
+        "994da519-9414-437b-9fec-247d4b5d3998"
+      ],
+      "original_journals": [
+        "c60ea8f3-4dc3-4211-8fd2-e522a680a1fa"
+      ]
+    },
+    {
+      "id": "PROJECT",
+      "receipt": [
+        {
+          "expense_id": "c34d5bb7-7c00-45f0-a635-68c626ba3928",
+          "expense_reference": "NARVO-DEMO-COMMERCIAL-EXP-2026-000006",
+          "journal_entry_id": "a0a20ef3-d3e1-47a7-9ce6-255589894b02",
+          "replayed": false
+        }
+      ],
+      "restored_journals": [
+        "a0a20ef3-d3e1-47a7-9ce6-255589894b02"
+      ],
+      "original_journals": [
+        "6ee13c87-c274-4392-8049-f6c6ce4a29d2"
+      ]
+    },
+    {
+      "id": "RETURN",
+      "receipt": [
+        {
+          "custody_cash_return_id": "bc4f8fe0-6838-4669-9eb1-66269d4332c8",
+          "return_reference": "NARVO-DEMO-COMMERCIAL-CRET-2026-000001",
+          "journal_entry_id": "0876cf8f-372f-4d09-9edf-30f88ed8bf00",
+          "replayed": false
+        }
+      ],
+      "restored_journals": [
+        "0876cf8f-372f-4d09-9edf-30f88ed8bf00"
+      ],
+      "original_journals": [
+        "3e073d2e-812f-4050-99a0-148553cbccac"
+      ]
+    },
+    {
+      "id": "EMPADV",
+      "receipt": {
+        "id": "264032c7-350b-42fc-b9b2-d7c21b576e2b",
+        "action": "ADVANCE"
+      },
+      "restored_journals": [
+        "0967cba0-0fd5-46bc-90a6-f232566ce8a9"
+      ],
+      "original_journals": [
+        "12e4e9d2-1f3b-4d51-bb84-ff3fc757e1a0"
+      ]
+    },
+    {
+      "id": "PAYROLL",
+      "receipt": "bb75ff2c-7b77-4263-b196-c6662a93e9ae",
+      "restored_journals": [
+        "866274fd-b378-4c54-936f-5c5c617aa3f8",
+        "358c7bd0-7275-4a30-ba4c-331300c4a118"
+      ],
+      "original_journals": [
+        "404cddaf-6b8c-4314-b258-9b96315d92ac",
+        "db9a86a2-0bfb-473f-a83f-331123f2929d"
+      ]
+    },
+    {
+      "id": "SALARY",
+      "receipt": [
+        {
+          "pay_salary": "66e65781-8bb2-47bd-af02-996e52ca02c9"
+        }
+      ],
+      "restored_journals": [
+        "260af4f4-c243-461e-97cb-b4518c203e45"
+      ],
+      "original_journals": [
+        "9580b665-8e4f-4495-963d-eedda07477ab"
+      ]
+    },
+    {
+      "id": "REVERSE",
+      "receipt": [
+        {
+          "expense_id": "25e45753-7339-4bd5-8ee0-cdbf7cc0a95e",
+          "expense_reference": "NARVO-DEMO-COMMERCIAL-EXP-2026-000001",
+          "reversal_journal_entry_id": "634f62d8-f8d3-49f1-aa58-df7245c81497",
+          "replayed": false
+        }
+      ],
+      "restored_journals": [
+        "634f62d8-f8d3-49f1-aa58-df7245c81497"
+      ],
+      "original_journals": [
+        "a1e80f19-8544-42b4-ac9b-dc78c1c33136"
+      ]
+    }
+  ]
+}

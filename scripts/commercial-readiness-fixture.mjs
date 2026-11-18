@@ -1,15 +1,15 @@
 // Disposable, in-process PostgreSQL only. No URL/credential input or hosted access.
 import {acw01Fixture} from './acw01-fixture.mjs';
 import {randomUUID} from 'node:crypto';
-export async function commercialFixture(){
- const base=await acw01Fixture(),db=base.db,company=randomUUID(),ids={};
+export async function commercialFixture(options={}){
+ const base=await acw01Fixture(),db=base.db,company=options.company??randomUUID(),ids={};
  const setup=async(sql,args=[])=>(await db.query(sql,args)).rows;
  await setup("insert into public.companies(id,code,name)values($1,'NARVO-DEMO-COMMERCIAL','NARVO DEMO — Trading & Contracting LLC')",[company]);
  await setup("insert into private.company_legacy_eligibility(company_id,reason)values($1,'Disposable fictional commercial fixture bootstrap only')",[company]);
  for(const [actor,role]of [[base.admin,'ACCOUNTING_ADMIN'],[base.accountant,'ACCOUNTANT'],[base.viewer,'MANAGEMENT_VIEWER']])await setup('insert into public.company_memberships(company_id,user_id,role)values($1,$2,$3)',[company,actor,role]);
  const call=async(name,args,actor=base.admin)=>{if(!/^[a-z_]+$/.test(name)||Object.keys(args).some(k=>!/^[a-z_]+$/.test(k)))throw Error('Invalid command identifier');return(await base.as(actor,'select public.'+name+'('+Object.keys(args).map((k,i)=>k+'=> $'+(i+1)).join(',')+')r',Object.values(args)))[0].r;};
  const sql=async(query,args=[],actor=base.admin)=>base.as(actor,query,args);
- const date=base.today,month=new Date(Date.UTC(Number(date.slice(0,4)),Number(date.slice(5,7))-2,1)).toISOString().slice(0,10);
+ const date=options.date??base.today,month=new Date(Date.UTC(Number(date.slice(0,4)),Number(date.slice(5,7))-2,1)).toISOString().slice(0,10);
  const control=async(key,code)=>{const r=await call('configure_company_accounting',{target_company_id:company,target_request_id:randomUUID(),target_action:'CONTROL',business_input:{key,code,name:'Fictional '+key,approval:'Disposable test chart policy'}});ids[key]=r.account_id;};
  for(const[key,code]of[['INPUT_VAT','120000'],['CUSTODY_ADVANCE','130000'],['SUBCONTRACTOR_ADVANCE','131000'],['SUPPLIER_PAYABLE','210000'],['SUBCONTRACTOR_PAYABLE','220000'],['SUBCONTRACTOR_RETENTION_PAYABLE','221000'],['SALARY_PAYABLE','230000'],['COMPANY_EXPENSE','510000'],['PROJECT_COST','520000'],['PROJECT_COST_SUBCONTRACTORS','521000']])await control(key,code);
  const bank=await call('configure_company_accounting',{target_company_id:company,target_request_id:randomUUID(),target_action:'TREASURY',business_input:{type:'BANK',code:'BANK',name:'Demo Bank',gl_code:'110000',gl_name:'Demo Bank GL',bank_name:'Fictional Bank',account_reference:'TEST-ONLY',approval:'Fictional treasury setup'}});ids.BANK=bank.account_id;ids.treasury=bank.treasury_id;

@@ -1,0 +1,2110 @@
+{
+  "remaining-results": {
+    "scenarios": [
+      {
+        "kind": "AR_INVOICE",
+        "input": {
+          "date": "2026-11-17",
+          "evidence": "Fictional approved independent business evidence",
+          "reference": "AR-SERVICE-1",
+          "party_id": "3c982c5f-c5e5-41b2-a9ab-9f7a17d348dd",
+          "amount_minor": "100000",
+          "vat_minor": "5000",
+          "economic_kind": "EARNED_SERVICE",
+          "due_date": "2026-11-17",
+          "recognition_confirmed": true,
+          "vat_rate_bps": 500,
+          "tax_evidence": "Fictional taxable earned service policy"
+        },
+        "expected": [
+          [
+            "AR",
+            105000,
+            0
+          ],
+          [
+            "REVENUE",
+            0,
+            100000
+          ],
+          [
+            "OUTPUT_VAT",
+            0,
+            5000
+          ]
+        ],
+        "receipt": {
+          "id": "337b40c9-0e6a-4355-82e8-e77445b3634a",
+          "journal_id": "8d4d134b-5947-4141-9c27-a4fed50ce1c0"
+        },
+        "actual": [
+          {
+            "id": "8d4d134b-5947-4141-9c27-a4fed50ce1c0",
+            "source_type": "AR_INVOICE",
+            "posting_date": "2026-11-17",
+            "account_id": "00e7a1ea-1959-404d-b421-443c785e6784",
+            "debit_minor": "105000",
+            "credit_minor": "0",
+            "party_id": "3c982c5f-c5e5-41b2-a9ab-9f7a17d348dd",
+            "project_id": null,
+            "treasury_account_id": null
+          },
+          {
+            "id": "8d4d134b-5947-4141-9c27-a4fed50ce1c0",
+            "source_type": "AR_INVOICE",
+            "posting_date": "2026-11-17",
+            "account_id": "5cd94054-56b0-4353-a6c6-acf43b0ed8a6",
+            "debit_minor": "0",
+            "credit_minor": "100000",
+            "party_id": null,
+            "project_id": null,
+            "treasury_account_id": null
+          },
+          {
+            "id": "8d4d134b-5947-4141-9c27-a4fed50ce1c0",
+            "source_type": "AR_INVOICE",
+            "posting_date": "2026-11-17",
+            "account_id": "3ba255fd-cff8-4e9b-accc-d34f4d1d8d51",
+            "debit_minor": "0",
+            "credit_minor": "5000",
+            "party_id": null,
+            "project_id": null,
+            "treasury_account_id": null
+          }
+        ]
+      },
+      {
+        "kind": "AR_RECEIPT",
+        "input": {
+          "date": "2026-11-17",
+          "evidence": "Fictional approved independent business evidence",
+          "reference": "AR-RECEIPT-1",
+          "party_id": "3c982c5f-c5e5-41b2-a9ab-9f7a17d348dd",
+          "amount_minor": "40000",
+          "vat_minor": "0",
+          "parent_id": "337b40c9-0e6a-4355-82e8-e77445b3634a",
+          "treasury_id": "f6ce2f03-e3ab-463a-b941-89f9b38de516"
+        },
+        "expected": [
+          [
+            "BANK",
+            40000,
+            0
+          ],
+          [
+            "AR",
+            0,
+            40000
+          ]
+        ],
+        "receipt": {
+          "id": "0f6e8b2b-3983-4dc0-8a15-2887bdc8ad3f",
+          "journal_id": "7f2ee205-fd7a-460c-8ff5-47c9df41808f"
+        },
+        "actual": [
+          {
+            "id": "7f2ee205-fd7a-460c-8ff5-47c9df41808f",
+            "source_type": "AR_RECEIPT",
+            "posting_date": "2026-11-17",
+            "account_id": "4c6e4fed-09e7-4569-94ca-a37506b376d6",
+            "debit_minor": "40000",
+            "credit_minor": "0",
+            "party_id": null,
+            "project_id": null,
+            "treasury_account_id": "f6ce2f03-e3ab-463a-b941-89f9b38de516"
+          },
+          {
+            "id": "7f2ee205-fd7a-460c-8ff5-47c9df41808f",
+            "source_type": "AR_RECEIPT",
+            "posting_date": "2026-11-17",
+            "account_id": "00e7a1ea-1959-404d-b421-443c785e6784",
+            "debit_minor": "0",
+            "credit_minor": "40000",
+            "party_id": "3c982c5f-c5e5-41b2-a9ab-9f7a17d348dd",
+            "project_id": null,
+            "treasury_account_id": null
+          }
+        ]
+      },
+      {
+        "kind": "AR_ADVANCE",
+        "input": {
+          "date": "2026-11-17",
+          "evidence": "Fictional non-taxable security deposit; no tax point",
+          "reference": "AR-DEPOSIT-1",
+          "party_id": "3c982c5f-c5e5-41b2-a9ab-9f7a17d348dd",
+          "amount_minor": "20000",
+          "vat_minor": "0",
+          "treasury_id": "f6ce2f03-e3ab-463a-b941-89f9b38de516"
+        },
+        "expected": [
+          [
+            "BANK",
+            20000,
+            0
+          ],
+          [
+            "CUSTOMER_ADVANCE",
+            0,
+            20000
+          ]
+        ],
+        "receipt": {
+          "id": "d0f67707-a2ba-4496-87ef-fb98f2500710",
+          "journal_id": "dd5a4c1b-9730-4ae0-bf4d-9f9c796b1553"
+        },
+        "actual": [
+          {
+            "id": "dd5a4c1b-9730-4ae0-bf4d-9f9c796b1553",
+            "source_type": "AR_ADVANCE",
+            "posting_date": "2026-11-17",
+            "account_id": "4c6e4fed-09e7-4569-94ca-a37506b376d6",
+            "debit_minor": "20000",
+            "credit_minor": "0",
+            "party_id": null,
+            "project_id": null,
+            "treasury_account_id": "f6ce2f03-e3ab-463a-b941-89f9b38de516"
+          },
+          {
+            "id": "dd5a4c1b-9730-4ae0-bf4d-9f9c796b1553",
+            "source_type": "AR_ADVANCE",
+            "posting_date": "2026-11-17",
+            "account_id": "7c9df55b-4f0a-4f2b-b504-a06a59d0817c",
+            "debit_minor": "0",
+            "credit_minor": "20000",
+            "party_id": "3c982c5f-c5e5-41b2-a9ab-9f7a17d348dd",
+            "project_id": null,
+            "treasury_account_id": null
+          }
+        ]
+      },
+      {
+        "kind": "AR_APPLY",
+        "input": {
+          "date": "2026-11-17",
+          "evidence": "Fictional approved independent business evidence",
+          "reference": "AR-APPLY-1",
+          "party_id": "3c982c5f-c5e5-41b2-a9ab-9f7a17d348dd",
+          "amount_minor": "20000",
+          "vat_minor": "0",
+          "parent_id": "337b40c9-0e6a-4355-82e8-e77445b3634a",
+          "related_id": "d0f67707-a2ba-4496-87ef-fb98f2500710"
+        },
+        "expected": [
+          [
+            "CUSTOMER_ADVANCE",
+            20000,
+            0
+          ],
+          [
+            "AR",
+            0,
+            20000
+          ]
+        ],
+        "receipt": {
+          "id": "6cc9ab1d-04f0-47dc-88ab-1945a530c053",
+          "journal_id": "cc2a09c1-ce18-4c0b-b42e-1adadf9aea4e"
+        },
+        "actual": [
+          {
+            "id": "cc2a09c1-ce18-4c0b-b42e-1adadf9aea4e",
+            "source_type": "AR_APPLY",
+            "posting_date": "2026-11-17",
+            "account_id": "7c9df55b-4f0a-4f2b-b504-a06a59d0817c",
+            "debit_minor": "20000",
+            "credit_minor": "0",
+            "party_id": "3c982c5f-c5e5-41b2-a9ab-9f7a17d348dd",
+            "project_id": null,
+            "treasury_account_id": null
+          },
+          {
+            "id": "cc2a09c1-ce18-4c0b-b42e-1adadf9aea4e",
+            "source_type": "AR_APPLY",
+            "posting_date": "2026-11-17",
+            "account_id": "00e7a1ea-1959-404d-b421-443c785e6784",
+            "debit_minor": "0",
+            "credit_minor": "20000",
+            "party_id": "3c982c5f-c5e5-41b2-a9ab-9f7a17d348dd",
+            "project_id": null,
+            "treasury_account_id": null
+          }
+        ]
+      },
+      {
+        "kind": "AR_CREDIT",
+        "input": {
+          "date": "2026-11-17",
+          "evidence": "Fictional approved independent business evidence",
+          "reference": "AR-CREDIT-1",
+          "party_id": "3c982c5f-c5e5-41b2-a9ab-9f7a17d348dd",
+          "amount_minor": "10000",
+          "vat_minor": "500",
+          "parent_id": "337b40c9-0e6a-4355-82e8-e77445b3634a"
+        },
+        "expected": [
+          [
+            "REVENUE",
+            10000,
+            0
+          ],
+          [
+            "OUTPUT_VAT",
+            500,
+            0
+          ],
+          [
+            "AR",
+            0,
+            10500
+          ]
+        ],
+        "receipt": {
+          "id": "5858c6b0-d625-4c0f-9451-d68dede10309",
+          "journal_id": "962efef2-e687-4105-b272-1b0e5665bcf0"
+        },
+        "actual": [
+          {
+            "id": "962efef2-e687-4105-b272-1b0e5665bcf0",
+            "source_type": "AR_CREDIT",
+            "posting_date": "2026-11-17",
+            "account_id": "5cd94054-56b0-4353-a6c6-acf43b0ed8a6",
+            "debit_minor": "10000",
+            "credit_minor": "0",
+            "party_id": null,
+            "project_id": null,
+            "treasury_account_id": null
+          },
+          {
+            "id": "962efef2-e687-4105-b272-1b0e5665bcf0",
+            "source_type": "AR_CREDIT",
+            "posting_date": "2026-11-17",
+            "account_id": "00e7a1ea-1959-404d-b421-443c785e6784",
+            "debit_minor": "0",
+            "credit_minor": "10500",
+            "party_id": "3c982c5f-c5e5-41b2-a9ab-9f7a17d348dd",
+            "project_id": null,
+            "treasury_account_id": null
+          },
+          {
+            "id": "962efef2-e687-4105-b272-1b0e5665bcf0",
+            "source_type": "AR_CREDIT",
+            "posting_date": "2026-11-17",
+            "account_id": "3ba255fd-cff8-4e9b-accc-d34f4d1d8d51",
+            "debit_minor": "500",
+            "credit_minor": "0",
+            "party_id": null,
+            "project_id": null,
+            "treasury_account_id": null
+          }
+        ]
+      },
+      {
+        "kind": "AR_INVOICE",
+        "input": {
+          "date": "2026-11-17",
+          "evidence": "Fictional approved independent business evidence",
+          "reference": "PAID-CREDIT-INVOICE",
+          "party_id": "3c982c5f-c5e5-41b2-a9ab-9f7a17d348dd",
+          "amount_minor": "20000",
+          "vat_minor": "0",
+          "economic_kind": "EARNED_SERVICE",
+          "due_date": "2026-11-17",
+          "recognition_confirmed": true
+        },
+        "expected": [
+          [
+            "AR",
+            20000,
+            0
+          ],
+          [
+            "REVENUE",
+            0,
+            20000
+          ]
+        ],
+        "receipt": {
+          "id": "e3aa7a6c-4ee3-4a83-a00b-ed25af0fbedf",
+          "journal_id": "b78623e0-ea33-4bd7-b5c0-5a66357dbbbe"
+        },
+        "actual": [
+          {
+            "id": "b78623e0-ea33-4bd7-b5c0-5a66357dbbbe",
+            "source_type": "AR_INVOICE",
+            "posting_date": "2026-11-17",
+            "account_id": "00e7a1ea-1959-404d-b421-443c785e6784",
+            "debit_minor": "20000",
+            "credit_minor": "0",
+            "party_id": "3c982c5f-c5e5-41b2-a9ab-9f7a17d348dd",
+            "project_id": null,
+            "treasury_account_id": null
+          },
+          {
+            "id": "b78623e0-ea33-4bd7-b5c0-5a66357dbbbe",
+            "source_type": "AR_INVOICE",
+            "posting_date": "2026-11-17",
+            "account_id": "5cd94054-56b0-4353-a6c6-acf43b0ed8a6",
+            "debit_minor": "0",
+            "credit_minor": "20000",
+            "party_id": null,
+            "project_id": null,
+            "treasury_account_id": null
+          }
+        ]
+      },
+      {
+        "kind": "AR_RECEIPT",
+        "input": {
+          "date": "2026-11-17",
+          "evidence": "Fictional approved independent business evidence",
+          "reference": "PAID-CREDIT-RECEIPT",
+          "party_id": "3c982c5f-c5e5-41b2-a9ab-9f7a17d348dd",
+          "amount_minor": "20000",
+          "vat_minor": "0",
+          "parent_id": "e3aa7a6c-4ee3-4a83-a00b-ed25af0fbedf",
+          "treasury_id": "f6ce2f03-e3ab-463a-b941-89f9b38de516"
+        },
+        "expected": [
+          [
+            "BANK",
+            20000,
+            0
+          ],
+          [
+            "AR",
+            0,
+            20000
+          ]
+        ],
+        "receipt": {
+          "id": "788973c3-7bf4-401a-9799-d47d4b1b7a4a",
+          "journal_id": "c32a1211-2836-4ff6-848f-d30597abd3fa"
+        },
+        "actual": [
+          {
+            "id": "c32a1211-2836-4ff6-848f-d30597abd3fa",
+            "source_type": "AR_RECEIPT",
+            "posting_date": "2026-11-17",
+            "account_id": "4c6e4fed-09e7-4569-94ca-a37506b376d6",
+            "debit_minor": "20000",
+            "credit_minor": "0",
+            "party_id": null,
+            "project_id": null,
+            "treasury_account_id": "f6ce2f03-e3ab-463a-b941-89f9b38de516"
+          },
+          {
+            "id": "c32a1211-2836-4ff6-848f-d30597abd3fa",
+            "source_type": "AR_RECEIPT",
+            "posting_date": "2026-11-17",
+            "account_id": "00e7a1ea-1959-404d-b421-443c785e6784",
+            "debit_minor": "0",
+            "credit_minor": "20000",
+            "party_id": "3c982c5f-c5e5-41b2-a9ab-9f7a17d348dd",
+            "project_id": null,
+            "treasury_account_id": null
+          }
+        ]
+      },
+      {
+        "kind": "AR_CREDIT",
+        "input": {
+          "date": "2026-11-17",
+          "evidence": "Fictional approved independent business evidence",
+          "reference": "PAID-CREDIT-NOTE",
+          "party_id": "3c982c5f-c5e5-41b2-a9ab-9f7a17d348dd",
+          "amount_minor": "20000",
+          "vat_minor": "0",
+          "parent_id": "e3aa7a6c-4ee3-4a83-a00b-ed25af0fbedf"
+        },
+        "expected": [
+          [
+            "REVENUE",
+            20000,
+            0
+          ],
+          [
+            "CUSTOMER_ADVANCE",
+            0,
+            20000
+          ]
+        ],
+        "receipt": {
+          "id": "e434c29c-dca2-45f9-b04d-f4d25a47ea73",
+          "journal_id": "ceaf6652-fffa-440f-ae06-ba10e9be9b64"
+        },
+        "actual": [
+          {
+            "id": "ceaf6652-fffa-440f-ae06-ba10e9be9b64",
+            "source_type": "AR_CREDIT",
+            "posting_date": "2026-11-17",
+            "account_id": "5cd94054-56b0-4353-a6c6-acf43b0ed8a6",
+            "debit_minor": "20000",
+            "credit_minor": "0",
+            "party_id": null,
+            "project_id": null,
+            "treasury_account_id": null
+          },
+          {
+            "id": "ceaf6652-fffa-440f-ae06-ba10e9be9b64",
+            "source_type": "AR_CREDIT",
+            "posting_date": "2026-11-17",
+            "account_id": "7c9df55b-4f0a-4f2b-b504-a06a59d0817c",
+            "debit_minor": "0",
+            "credit_minor": "20000",
+            "party_id": "3c982c5f-c5e5-41b2-a9ab-9f7a17d348dd",
+            "project_id": null,
+            "treasury_account_id": null
+          }
+        ]
+      },
+      {
+        "kind": "AR_REFUND",
+        "input": {
+          "date": "2026-11-17",
+          "evidence": "Fictional approved independent business evidence",
+          "reference": "PAID-CREDIT-REFUND",
+          "party_id": "3c982c5f-c5e5-41b2-a9ab-9f7a17d348dd",
+          "amount_minor": "20000",
+          "vat_minor": "0",
+          "parent_id": "e434c29c-dca2-45f9-b04d-f4d25a47ea73",
+          "treasury_id": "f6ce2f03-e3ab-463a-b941-89f9b38de516"
+        },
+        "expected": [
+          [
+            "CUSTOMER_ADVANCE",
+            20000,
+            0
+          ],
+          [
+            "BANK",
+            0,
+            20000
+          ]
+        ],
+        "receipt": {
+          "id": "ff7391e7-0e53-40e7-b812-b8a7440f877c",
+          "journal_id": "132bb3b8-7481-4089-ae50-a536741231bf"
+        },
+        "actual": [
+          {
+            "id": "132bb3b8-7481-4089-ae50-a536741231bf",
+            "source_type": "AR_REFUND",
+            "posting_date": "2026-11-17",
+            "account_id": "7c9df55b-4f0a-4f2b-b504-a06a59d0817c",
+            "debit_minor": "20000",
+            "credit_minor": "0",
+            "party_id": "3c982c5f-c5e5-41b2-a9ab-9f7a17d348dd",
+            "project_id": null,
+            "treasury_account_id": null
+          },
+          {
+            "id": "132bb3b8-7481-4089-ae50-a536741231bf",
+            "source_type": "AR_REFUND",
+            "posting_date": "2026-11-17",
+            "account_id": "4c6e4fed-09e7-4569-94ca-a37506b376d6",
+            "debit_minor": "0",
+            "credit_minor": "20000",
+            "party_id": null,
+            "project_id": null,
+            "treasury_account_id": "f6ce2f03-e3ab-463a-b941-89f9b38de516"
+          }
+        ]
+      },
+      {
+        "kind": "AR_CASH_SALE",
+        "input": {
+          "date": "2026-11-17",
+          "evidence": "Fictional approved independent business evidence",
+          "reference": "CASH-SERVICE-SALE",
+          "party_id": "3c982c5f-c5e5-41b2-a9ab-9f7a17d348dd",
+          "amount_minor": "1000",
+          "vat_minor": "50",
+          "economic_kind": "EARNED_SERVICE",
+          "vat_rate_bps": 500,
+          "tax_evidence": "Fictional supported service output tax",
+          "due_date": "2026-11-17",
+          "recognition_confirmed": true,
+          "treasury_id": "f6ce2f03-e3ab-463a-b941-89f9b38de516"
+        },
+        "expected": [
+          [
+            "BANK",
+            1050,
+            0
+          ],
+          [
+            "REVENUE",
+            0,
+            1000
+          ],
+          [
+            "OUTPUT_VAT",
+            0,
+            50
+          ]
+        ],
+        "receipt": {
+          "id": "5e105a24-0753-4c49-ab63-43287cdcea6c",
+          "journal_id": "2cf8e1d9-bf04-43d6-a255-ff1f4c26897b"
+        },
+        "actual": [
+          {
+            "id": "2cf8e1d9-bf04-43d6-a255-ff1f4c26897b",
+            "source_type": "AR_CASH_SALE",
+            "posting_date": "2026-11-17",
+            "account_id": "4c6e4fed-09e7-4569-94ca-a37506b376d6",
+            "debit_minor": "1050",
+            "credit_minor": "0",
+            "party_id": null,
+            "project_id": null,
+            "treasury_account_id": "f6ce2f03-e3ab-463a-b941-89f9b38de516"
+          },
+          {
+            "id": "2cf8e1d9-bf04-43d6-a255-ff1f4c26897b",
+            "source_type": "AR_CASH_SALE",
+            "posting_date": "2026-11-17",
+            "account_id": "5cd94054-56b0-4353-a6c6-acf43b0ed8a6",
+            "debit_minor": "0",
+            "credit_minor": "1000",
+            "party_id": null,
+            "project_id": null,
+            "treasury_account_id": null
+          },
+          {
+            "id": "2cf8e1d9-bf04-43d6-a255-ff1f4c26897b",
+            "source_type": "AR_CASH_SALE",
+            "posting_date": "2026-11-17",
+            "account_id": "3ba255fd-cff8-4e9b-accc-d34f4d1d8d51",
+            "debit_minor": "0",
+            "credit_minor": "50",
+            "party_id": null,
+            "project_id": null,
+            "treasury_account_id": null
+          }
+        ]
+      },
+      {
+        "kind": "AR_CREDIT",
+        "input": {
+          "date": "2026-11-17",
+          "evidence": "Fictional approved independent business evidence",
+          "reference": "CASH-SERVICE-RETURN",
+          "party_id": "3c982c5f-c5e5-41b2-a9ab-9f7a17d348dd",
+          "amount_minor": "1000",
+          "vat_minor": "50",
+          "parent_id": "5e105a24-0753-4c49-ab63-43287cdcea6c"
+        },
+        "expected": [
+          [
+            "REVENUE",
+            1000,
+            0
+          ],
+          [
+            "OUTPUT_VAT",
+            50,
+            0
+          ],
+          [
+            "CUSTOMER_ADVANCE",
+            0,
+            1050
+          ]
+        ],
+        "receipt": {
+          "id": "7cf79d18-a0d9-4719-a5e3-224ff4bda32b",
+          "journal_id": "27ded2b5-273c-4432-84a5-2809616dc29d"
+        },
+        "actual": [
+          {
+            "id": "27ded2b5-273c-4432-84a5-2809616dc29d",
+            "source_type": "AR_CREDIT",
+            "posting_date": "2026-11-17",
+            "account_id": "5cd94054-56b0-4353-a6c6-acf43b0ed8a6",
+            "debit_minor": "1000",
+            "credit_minor": "0",
+            "party_id": null,
+            "project_id": null,
+            "treasury_account_id": null
+          },
+          {
+            "id": "27ded2b5-273c-4432-84a5-2809616dc29d",
+            "source_type": "AR_CREDIT",
+            "posting_date": "2026-11-17",
+            "account_id": "7c9df55b-4f0a-4f2b-b504-a06a59d0817c",
+            "debit_minor": "0",
+            "credit_minor": "1050",
+            "party_id": "3c982c5f-c5e5-41b2-a9ab-9f7a17d348dd",
+            "project_id": null,
+            "treasury_account_id": null
+          },
+          {
+            "id": "27ded2b5-273c-4432-84a5-2809616dc29d",
+            "source_type": "AR_CREDIT",
+            "posting_date": "2026-11-17",
+            "account_id": "3ba255fd-cff8-4e9b-accc-d34f4d1d8d51",
+            "debit_minor": "50",
+            "credit_minor": "0",
+            "party_id": null,
+            "project_id": null,
+            "treasury_account_id": null
+          }
+        ]
+      },
+      {
+        "kind": "AR_REFUND",
+        "input": {
+          "date": "2026-11-17",
+          "evidence": "Fictional approved independent business evidence",
+          "reference": "CASH-SERVICE-REFUND",
+          "party_id": "3c982c5f-c5e5-41b2-a9ab-9f7a17d348dd",
+          "amount_minor": "1050",
+          "vat_minor": "0",
+          "parent_id": "7cf79d18-a0d9-4719-a5e3-224ff4bda32b",
+          "treasury_id": "f6ce2f03-e3ab-463a-b941-89f9b38de516"
+        },
+        "expected": [
+          [
+            "CUSTOMER_ADVANCE",
+            1050,
+            0
+          ],
+          [
+            "BANK",
+            0,
+            1050
+          ]
+        ],
+        "receipt": {
+          "id": "fbbb4be1-2c7d-4d9f-bb84-eda46245d10e",
+          "journal_id": "4f8e9298-1bdf-4045-a292-a9c2e81f1775"
+        },
+        "actual": [
+          {
+            "id": "4f8e9298-1bdf-4045-a292-a9c2e81f1775",
+            "source_type": "AR_REFUND",
+            "posting_date": "2026-11-17",
+            "account_id": "7c9df55b-4f0a-4f2b-b504-a06a59d0817c",
+            "debit_minor": "1050",
+            "credit_minor": "0",
+            "party_id": "3c982c5f-c5e5-41b2-a9ab-9f7a17d348dd",
+            "project_id": null,
+            "treasury_account_id": null
+          },
+          {
+            "id": "4f8e9298-1bdf-4045-a292-a9c2e81f1775",
+            "source_type": "AR_REFUND",
+            "posting_date": "2026-11-17",
+            "account_id": "4c6e4fed-09e7-4569-94ca-a37506b376d6",
+            "debit_minor": "0",
+            "credit_minor": "1050",
+            "party_id": null,
+            "project_id": null,
+            "treasury_account_id": "f6ce2f03-e3ab-463a-b941-89f9b38de516"
+          }
+        ]
+      },
+      {
+        "kind": "ASSET_CAPITALIZE",
+        "input": {
+          "date": "2026-10-02",
+          "evidence": "Fictional approved independent business evidence",
+          "reference": "ASSET-1",
+          "amount_minor": "120000",
+          "treasury_id": "f6ce2f03-e3ab-463a-b941-89f9b38de516",
+          "life_months": 12,
+          "residual_minor": "0",
+          "service_date": "2026-10-02",
+          "convention": "COMPLETED_MONTHS"
+        },
+        "expected": [
+          [
+            "ASSET_COST",
+            120000,
+            0
+          ],
+          [
+            "BANK",
+            0,
+            120000
+          ]
+        ],
+        "receipt": {
+          "id": "e053b82e-dcd7-4dc0-a88b-27ad6ab84142",
+          "journal_id": "3a34bd25-f596-4f75-a35c-7f689a682c67"
+        },
+        "actual": [
+          {
+            "id": "3a34bd25-f596-4f75-a35c-7f689a682c67",
+            "source_type": "ASSET_CAPITALIZE",
+            "posting_date": "2026-10-02",
+            "account_id": "c3383dc7-7e27-41df-8c21-42776465e819",
+            "debit_minor": "120000",
+            "credit_minor": "0",
+            "party_id": null,
+            "project_id": null,
+            "treasury_account_id": null
+          },
+          {
+            "id": "3a34bd25-f596-4f75-a35c-7f689a682c67",
+            "source_type": "ASSET_CAPITALIZE",
+            "posting_date": "2026-10-02",
+            "account_id": "4c6e4fed-09e7-4569-94ca-a37506b376d6",
+            "debit_minor": "0",
+            "credit_minor": "120000",
+            "party_id": null,
+            "project_id": null,
+            "treasury_account_id": "f6ce2f03-e3ab-463a-b941-89f9b38de516"
+          }
+        ]
+      },
+      {
+        "kind": "ASSET_DEPRECIATE",
+        "input": {
+          "date": "2026-10-31",
+          "evidence": "Fictional approved independent business evidence",
+          "reference": "DEPR-1",
+          "amount_minor": "10000",
+          "parent_id": "e053b82e-dcd7-4dc0-a88b-27ad6ab84142"
+        },
+        "expected": [
+          [
+            "DEPRECIATION_EXPENSE",
+            10000,
+            0
+          ],
+          [
+            "ACCUMULATED_DEPRECIATION",
+            0,
+            10000
+          ]
+        ],
+        "receipt": {
+          "id": "6a0067ae-a83a-47b8-ab8a-f0fe4af63881",
+          "journal_id": "ddda56b8-13fe-470e-a128-a40c9159bff7"
+        },
+        "actual": [
+          {
+            "id": "ddda56b8-13fe-470e-a128-a40c9159bff7",
+            "source_type": "ASSET_DEPRECIATE",
+            "posting_date": "2026-10-31",
+            "account_id": "1cfa992c-146a-45b6-a65c-3af121b8c705",
+            "debit_minor": "10000",
+            "credit_minor": "0",
+            "party_id": null,
+            "project_id": null,
+            "treasury_account_id": null
+          },
+          {
+            "id": "ddda56b8-13fe-470e-a128-a40c9159bff7",
+            "source_type": "ASSET_DEPRECIATE",
+            "posting_date": "2026-10-31",
+            "account_id": "6761cf22-ef49-479b-8231-96f83e5c9916",
+            "debit_minor": "0",
+            "credit_minor": "10000",
+            "party_id": null,
+            "project_id": null,
+            "treasury_account_id": null
+          }
+        ]
+      },
+      {
+        "kind": "ASSET_DISPOSE",
+        "input": {
+          "date": "2026-11-17",
+          "evidence": "Fictional approved independent business evidence",
+          "reference": "DISPOSE-1",
+          "amount_minor": "120000",
+          "parent_id": "e053b82e-dcd7-4dc0-a88b-27ad6ab84142",
+          "treasury_id": "f6ce2f03-e3ab-463a-b941-89f9b38de516",
+          "proceeds_minor": "100000"
+        },
+        "expected": [
+          [
+            "BANK",
+            100000,
+            0
+          ],
+          [
+            "ACCUMULATED_DEPRECIATION",
+            10000,
+            0
+          ],
+          [
+            "ASSET_COST",
+            0,
+            120000
+          ],
+          [
+            "DISPOSAL_LOSS",
+            10000,
+            0
+          ]
+        ],
+        "receipt": {
+          "id": "cbee6c85-6f14-4325-9fc9-b101582e6c96",
+          "journal_id": "dd6f856a-3b7f-488a-a54a-c19177e4dfff"
+        },
+        "actual": [
+          {
+            "id": "dd6f856a-3b7f-488a-a54a-c19177e4dfff",
+            "source_type": "ASSET_DISPOSE",
+            "posting_date": "2026-11-17",
+            "account_id": "c3383dc7-7e27-41df-8c21-42776465e819",
+            "debit_minor": "0",
+            "credit_minor": "120000",
+            "party_id": null,
+            "project_id": null,
+            "treasury_account_id": null
+          },
+          {
+            "id": "dd6f856a-3b7f-488a-a54a-c19177e4dfff",
+            "source_type": "ASSET_DISPOSE",
+            "posting_date": "2026-11-17",
+            "account_id": "6761cf22-ef49-479b-8231-96f83e5c9916",
+            "debit_minor": "10000",
+            "credit_minor": "0",
+            "party_id": null,
+            "project_id": null,
+            "treasury_account_id": null
+          },
+          {
+            "id": "dd6f856a-3b7f-488a-a54a-c19177e4dfff",
+            "source_type": "ASSET_DISPOSE",
+            "posting_date": "2026-11-17",
+            "account_id": "4c6e4fed-09e7-4569-94ca-a37506b376d6",
+            "debit_minor": "100000",
+            "credit_minor": "0",
+            "party_id": null,
+            "project_id": null,
+            "treasury_account_id": "f6ce2f03-e3ab-463a-b941-89f9b38de516"
+          },
+          {
+            "id": "dd6f856a-3b7f-488a-a54a-c19177e4dfff",
+            "source_type": "ASSET_DISPOSE",
+            "posting_date": "2026-11-17",
+            "account_id": "2678d23d-ad46-46f9-9be9-7c75b990c8a8",
+            "debit_minor": "10000",
+            "credit_minor": "0",
+            "party_id": null,
+            "project_id": null,
+            "treasury_account_id": null
+          }
+        ]
+      },
+      {
+        "kind": "PREPAY_RECOGNIZE",
+        "input": {
+          "date": "2026-10-02",
+          "evidence": "Fictional contract: twelve discrete month-end inspection visits; recognition only when each visit is performed, not a continuous daily service",
+          "reference": "PREPAID-1",
+          "amount_minor": "120000",
+          "treasury_id": "f6ce2f03-e3ab-463a-b941-89f9b38de516",
+          "life_months": 12,
+          "residual_minor": "0",
+          "service_date": "2026-10-02",
+          "convention": "COMPLETED_MONTHS"
+        },
+        "expected": [
+          [
+            "PREPAYMENT",
+            120000,
+            0
+          ],
+          [
+            "BANK",
+            0,
+            120000
+          ]
+        ],
+        "receipt": {
+          "id": "b702de4f-3b95-4114-a5e9-977d20836422",
+          "journal_id": "986aa2ed-8480-4735-b375-830db8c93026"
+        },
+        "actual": [
+          {
+            "id": "986aa2ed-8480-4735-b375-830db8c93026",
+            "source_type": "PREPAY_RECOGNIZE",
+            "posting_date": "2026-10-02",
+            "account_id": "6a485288-77b2-4249-9b83-03800ae92e13",
+            "debit_minor": "120000",
+            "credit_minor": "0",
+            "party_id": null,
+            "project_id": null,
+            "treasury_account_id": null
+          },
+          {
+            "id": "986aa2ed-8480-4735-b375-830db8c93026",
+            "source_type": "PREPAY_RECOGNIZE",
+            "posting_date": "2026-10-02",
+            "account_id": "4c6e4fed-09e7-4569-94ca-a37506b376d6",
+            "debit_minor": "0",
+            "credit_minor": "120000",
+            "party_id": null,
+            "project_id": null,
+            "treasury_account_id": "f6ce2f03-e3ab-463a-b941-89f9b38de516"
+          }
+        ]
+      },
+      {
+        "kind": "PREPAY_AMORTIZE",
+        "input": {
+          "date": "2026-10-31",
+          "evidence": "Fictional approved independent business evidence",
+          "reference": "AMORT-1",
+          "amount_minor": "10000",
+          "parent_id": "b702de4f-3b95-4114-a5e9-977d20836422"
+        },
+        "expected": [
+          [
+            "ACCRUAL_EXPENSE",
+            10000,
+            0
+          ],
+          [
+            "PREPAYMENT",
+            0,
+            10000
+          ]
+        ],
+        "receipt": {
+          "id": "ce0c52a3-3d26-453d-b5e9-b1aaa8e10b66",
+          "journal_id": "a026443d-75b6-43dd-8676-a3a2bb09512c"
+        },
+        "actual": [
+          {
+            "id": "a026443d-75b6-43dd-8676-a3a2bb09512c",
+            "source_type": "PREPAY_AMORTIZE",
+            "posting_date": "2026-10-31",
+            "account_id": "6fb6b7a6-f87c-46d1-8a3b-985ed3a7e921",
+            "debit_minor": "10000",
+            "credit_minor": "0",
+            "party_id": null,
+            "project_id": null,
+            "treasury_account_id": null
+          },
+          {
+            "id": "a026443d-75b6-43dd-8676-a3a2bb09512c",
+            "source_type": "PREPAY_AMORTIZE",
+            "posting_date": "2026-10-31",
+            "account_id": "6a485288-77b2-4249-9b83-03800ae92e13",
+            "debit_minor": "0",
+            "credit_minor": "10000",
+            "party_id": null,
+            "project_id": null,
+            "treasury_account_id": null
+          }
+        ]
+      },
+      {
+        "kind": "ACCRUAL_RECOGNIZE",
+        "input": {
+          "date": "2026-10-31",
+          "evidence": "Fictional approved independent business evidence",
+          "reference": "ACCRUED-1",
+          "amount_minor": "30000"
+        },
+        "expected": [
+          [
+            "ACCRUAL_EXPENSE",
+            30000,
+            0
+          ],
+          [
+            "ACCRUED_LIABILITY",
+            0,
+            30000
+          ]
+        ],
+        "receipt": {
+          "id": "99f660f2-127f-4285-b959-0cd45498c7b0",
+          "journal_id": "5b9db1eb-30a5-4d7e-bd9e-d94efe4cbe70"
+        },
+        "actual": [
+          {
+            "id": "5b9db1eb-30a5-4d7e-bd9e-d94efe4cbe70",
+            "source_type": "ACCRUAL_RECOGNIZE",
+            "posting_date": "2026-10-31",
+            "account_id": "6fb6b7a6-f87c-46d1-8a3b-985ed3a7e921",
+            "debit_minor": "30000",
+            "credit_minor": "0",
+            "party_id": null,
+            "project_id": null,
+            "treasury_account_id": null
+          },
+          {
+            "id": "5b9db1eb-30a5-4d7e-bd9e-d94efe4cbe70",
+            "source_type": "ACCRUAL_RECOGNIZE",
+            "posting_date": "2026-10-31",
+            "account_id": "78e09e49-54c6-4a12-b6b7-9f101a3b5026",
+            "debit_minor": "0",
+            "credit_minor": "30000",
+            "party_id": null,
+            "project_id": null,
+            "treasury_account_id": null
+          }
+        ]
+      },
+      {
+        "kind": "ACCRUAL_SETTLE",
+        "input": {
+          "date": "2026-11-17",
+          "evidence": "Fictional approved independent business evidence",
+          "reference": "ACCRUAL-PAY-1",
+          "amount_minor": "20000",
+          "parent_id": "99f660f2-127f-4285-b959-0cd45498c7b0",
+          "treasury_id": "f6ce2f03-e3ab-463a-b941-89f9b38de516"
+        },
+        "expected": [
+          [
+            "ACCRUED_LIABILITY",
+            20000,
+            0
+          ],
+          [
+            "BANK",
+            0,
+            20000
+          ]
+        ],
+        "receipt": {
+          "id": "483a30b8-a1d8-4be6-b847-194fd818ffe6",
+          "journal_id": "e3b23464-db14-4573-b43f-b407e132c03e"
+        },
+        "actual": [
+          {
+            "id": "e3b23464-db14-4573-b43f-b407e132c03e",
+            "source_type": "ACCRUAL_SETTLE",
+            "posting_date": "2026-11-17",
+            "account_id": "78e09e49-54c6-4a12-b6b7-9f101a3b5026",
+            "debit_minor": "20000",
+            "credit_minor": "0",
+            "party_id": null,
+            "project_id": null,
+            "treasury_account_id": null
+          },
+          {
+            "id": "e3b23464-db14-4573-b43f-b407e132c03e",
+            "source_type": "ACCRUAL_SETTLE",
+            "posting_date": "2026-11-17",
+            "account_id": "4c6e4fed-09e7-4569-94ca-a37506b376d6",
+            "debit_minor": "0",
+            "credit_minor": "20000",
+            "party_id": null,
+            "project_id": null,
+            "treasury_account_id": "f6ce2f03-e3ab-463a-b941-89f9b38de516"
+          }
+        ]
+      }
+    ]
+  },
+  "integrated-extensions-results": {
+    "scenarios": [
+      {
+        "id": "TRANSFER-OUT",
+        "expected": [],
+        "receipt": {
+          "id": "0f8a197b-cb7d-49f6-be78-e034029d9130",
+          "state": "POSTED",
+          "action": "POST",
+          "version": 3,
+          "replayed": false,
+          "snapshot": {
+            "date": "2026-11-17",
+            "kind": "TRANSFER",
+            "unit": "UNIT",
+            "computed": {
+              "qty": "10000000",
+              "cost": null,
+              "value": "10000",
+              "balance": {
+                "qty": "80000000",
+                "value": "80000",
+                "revision": 2,
+                "last_date": "2026-11-17"
+              },
+              "project": null,
+              "cost_project": null,
+              "location_version": 1,
+              "material_version": 1,
+              "destination_balance": {
+                "qty": "0",
+                "value": "0",
+                "revision": 0,
+                "last_date": null
+              },
+              "destination_version": 1
+            },
+            "evidence": "Fictional physically verified stock event",
+            "qty_micros": "10000000",
+            "location_id": "2658a6df-12a5-410a-b537-70c70d2b04ba",
+            "material_id": "3e2c43ba-5531-42a1-af6a-4a5bf30aad69",
+            "destination_id": "a93c2eca-3460-4b8d-a50e-28ddc1900db5",
+            "source_reference": "TRANSFER-OUT"
+          },
+          "reference": "NARVO-DEMO-COMMERCIAL-INV-2026-000004",
+          "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+          "created_at": "2026-11-18T06:45:57.507+00:00",
+          "created_by": "ed030005-0000-4000-8000-000000000001",
+          "journal_id": null,
+          "request_id": "3cdaa6ef-e9df-4f2b-b711-e15099e8b2c7",
+          "document_id": "3c34a08b-9786-4323-8dd4-91debfcdfc3e",
+          "request_hash": "606e69bcb747fff80ac63062934ff1d0f31bd2428f5d4884e99add29b4a5b3b3"
+        },
+        "actual": []
+      },
+      {
+        "id": "TRANSFER-BACK",
+        "expected": [],
+        "receipt": {
+          "id": "d00a571b-f585-464e-be61-a936b0598ac7",
+          "state": "POSTED",
+          "action": "POST",
+          "version": 3,
+          "replayed": false,
+          "snapshot": {
+            "date": "2026-11-17",
+            "kind": "TRANSFER",
+            "unit": "UNIT",
+            "computed": {
+              "qty": "10000000",
+              "cost": null,
+              "value": "10000",
+              "balance": {
+                "qty": "10000000",
+                "value": "10000",
+                "revision": 1,
+                "last_date": "2026-11-17"
+              },
+              "project": null,
+              "cost_project": null,
+              "location_version": 1,
+              "material_version": 1,
+              "destination_balance": {
+                "qty": "70000000",
+                "value": "70000",
+                "revision": 3,
+                "last_date": "2026-11-17"
+              },
+              "destination_version": 1
+            },
+            "evidence": "Fictional physically verified stock event",
+            "qty_micros": "10000000",
+            "location_id": "a93c2eca-3460-4b8d-a50e-28ddc1900db5",
+            "material_id": "3e2c43ba-5531-42a1-af6a-4a5bf30aad69",
+            "destination_id": "2658a6df-12a5-410a-b537-70c70d2b04ba",
+            "source_reference": "TRANSFER-BACK"
+          },
+          "reference": "NARVO-DEMO-COMMERCIAL-INV-2026-000005",
+          "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+          "created_at": "2026-11-18T06:45:57.765+00:00",
+          "created_by": "ed030005-0000-4000-8000-000000000001",
+          "journal_id": null,
+          "request_id": "2699ea97-7750-4ded-9ad5-b132317b588f",
+          "document_id": "e588e1f7-e5c4-4f96-b4e7-dd7480b3463c",
+          "request_hash": "a4006c076e867501ead41db930f10325269130114e71e41fa13ab87b30c0bd61"
+        },
+        "actual": []
+      },
+      {
+        "id": "PHYSICAL-COUNT-SHORT",
+        "expected": [],
+        "receipt": {
+          "id": "520e833c-bada-4049-aa1b-9395df58fd59",
+          "state": "POSTED",
+          "action": "POST",
+          "version": 3,
+          "replayed": false,
+          "snapshot": {
+            "date": "2026-11-17",
+            "kind": "COUNT",
+            "unit": "UNIT",
+            "computed": {
+              "qty": "79000000",
+              "cost": null,
+              "value": "0",
+              "balance": {
+                "qty": "80000000",
+                "value": "80000",
+                "revision": 4,
+                "last_date": "2026-11-17"
+              },
+              "project": null,
+              "cost_project": null,
+              "location_version": 1,
+              "material_version": 1,
+              "destination_balance": null,
+              "destination_version": null
+            },
+            "evidence": "Fictional physically verified stock event",
+            "qty_micros": "79000000",
+            "location_id": "2658a6df-12a5-410a-b537-70c70d2b04ba",
+            "material_id": "3e2c43ba-5531-42a1-af6a-4a5bf30aad69",
+            "source_reference": "COUNT-SHORT",
+            "physically_counted": true
+          },
+          "reference": "NARVO-DEMO-COMMERCIAL-INV-2026-000006",
+          "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+          "created_at": "2026-11-18T06:45:57.925+00:00",
+          "created_by": "ed030005-0000-4000-8000-000000000001",
+          "journal_id": null,
+          "request_id": "ef99f342-f3de-4c47-a175-31e2fe9ac164",
+          "document_id": "ae023810-30e9-488c-bba3-b9d0c031b9ef",
+          "request_hash": "724fb16d8c67af743a110a3480dfd85c95280e27e6232f418d781c3c9324e452"
+        },
+        "actual": []
+      },
+      {
+        "id": "SHORTAGE-ADJUSTMENT",
+        "expected": [
+          [
+            "VARIANCE",
+            1000,
+            0
+          ],
+          [
+            "INVENTORY",
+            0,
+            1000
+          ]
+        ],
+        "receipt": {
+          "id": "c8e77b3e-35f1-43e8-afd5-e8c1b1cb3b14",
+          "state": "POSTED",
+          "action": "POST",
+          "version": 3,
+          "replayed": false,
+          "snapshot": {
+            "date": "2026-11-17",
+            "kind": "ADJUSTMENT",
+            "unit": "UNIT",
+            "computed": {
+              "qty": "-1000000",
+              "cost": null,
+              "value": "-1000",
+              "balance": {
+                "qty": "80000000",
+                "value": "80000",
+                "revision": 4,
+                "last_date": "2026-11-17"
+              },
+              "project": null,
+              "cost_project": null,
+              "location_version": 1,
+              "material_version": 1,
+              "destination_balance": null,
+              "destination_version": null
+            },
+            "evidence": "Fictional physically verified stock event",
+            "origin_id": "ae023810-30e9-488c-bba3-b9d0c031b9ef",
+            "qty_micros": "1000000",
+            "location_id": "2658a6df-12a5-410a-b537-70c70d2b04ba",
+            "material_id": "3e2c43ba-5531-42a1-af6a-4a5bf30aad69",
+            "source_reference": "SHORTAGE"
+          },
+          "reference": "NARVO-DEMO-COMMERCIAL-INV-2026-000007",
+          "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+          "created_at": "2026-11-18T06:45:58.186+00:00",
+          "created_by": "ed030005-0000-4000-8000-000000000001",
+          "journal_id": "0387d540-e7e7-4016-9a3e-cf659011de0f",
+          "request_id": "4366dec4-c961-452c-ab64-6990a8d42bda",
+          "document_id": "b5a63d76-cee7-41a7-8ab0-0f6f67cde170",
+          "request_hash": "7f29903cc88e848b133760481af91b163294da35b4f8f0d64145b067a6a9e398"
+        },
+        "actual": [
+          {
+            "id": "0387d540-e7e7-4016-9a3e-cf659011de0f",
+            "source_type": "INVENTORY_ADJUSTMENT",
+            "posting_date": "2026-11-17",
+            "account_id": "17e27f33-70e5-4c34-a57f-f8969b2f75a7",
+            "debit_minor": "0",
+            "credit_minor": "1000"
+          },
+          {
+            "id": "0387d540-e7e7-4016-9a3e-cf659011de0f",
+            "source_type": "INVENTORY_ADJUSTMENT",
+            "posting_date": "2026-11-17",
+            "account_id": "cd5ec54c-d47e-49fa-ae51-b18368b21561",
+            "debit_minor": "1000",
+            "credit_minor": "0"
+          }
+        ]
+      },
+      {
+        "id": "PHYSICAL-COUNT-SURPLUS",
+        "expected": [],
+        "receipt": {
+          "id": "9bd3064c-baac-43fb-a81f-8c38c6bfc02d",
+          "state": "POSTED",
+          "action": "POST",
+          "version": 3,
+          "replayed": false,
+          "snapshot": {
+            "date": "2026-11-17",
+            "kind": "COUNT",
+            "unit": "UNIT",
+            "computed": {
+              "qty": "80000000",
+              "cost": null,
+              "value": "0",
+              "balance": {
+                "qty": "79000000",
+                "value": "79000",
+                "revision": 5,
+                "last_date": "2026-11-17"
+              },
+              "project": null,
+              "cost_project": null,
+              "location_version": 1,
+              "material_version": 1,
+              "destination_balance": null,
+              "destination_version": null
+            },
+            "evidence": "Fictional physically verified stock event",
+            "qty_micros": "80000000",
+            "location_id": "2658a6df-12a5-410a-b537-70c70d2b04ba",
+            "material_id": "3e2c43ba-5531-42a1-af6a-4a5bf30aad69",
+            "source_reference": "COUNT-SURPLUS",
+            "physically_counted": true
+          },
+          "reference": "NARVO-DEMO-COMMERCIAL-INV-2026-000008",
+          "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+          "created_at": "2026-11-18T06:45:58.406+00:00",
+          "created_by": "ed030005-0000-4000-8000-000000000001",
+          "journal_id": null,
+          "request_id": "20c3486f-9874-40ab-90fc-f1fe669711b8",
+          "document_id": "834bd0bf-295e-402a-9917-7728a2ce86b9",
+          "request_hash": "5bb75ec0c8eda4b8f5592e09b89340f2b302ac6ba1bffcbbb48d70c030decf13"
+        },
+        "actual": []
+      },
+      {
+        "id": "SURPLUS-ADJUSTMENT",
+        "expected": [
+          [
+            "INVENTORY",
+            1000,
+            0
+          ],
+          [
+            "VARIANCE",
+            0,
+            1000
+          ]
+        ],
+        "receipt": {
+          "id": "a683bea7-8a52-423e-b241-d3a18bc3a4fd",
+          "state": "POSTED",
+          "action": "POST",
+          "version": 3,
+          "replayed": false,
+          "snapshot": {
+            "date": "2026-11-17",
+            "kind": "ADJUSTMENT",
+            "unit": "UNIT",
+            "computed": {
+              "qty": "1000000",
+              "cost": null,
+              "value": "1000",
+              "balance": {
+                "qty": "79000000",
+                "value": "79000",
+                "revision": 5,
+                "last_date": "2026-11-17"
+              },
+              "project": null,
+              "cost_project": null,
+              "location_version": 1,
+              "material_version": 1,
+              "destination_balance": null,
+              "destination_version": null
+            },
+            "evidence": "Fictional physically verified stock event",
+            "origin_id": "834bd0bf-295e-402a-9917-7728a2ce86b9",
+            "qty_micros": "1000000",
+            "location_id": "2658a6df-12a5-410a-b537-70c70d2b04ba",
+            "material_id": "3e2c43ba-5531-42a1-af6a-4a5bf30aad69",
+            "source_reference": "SURPLUS"
+          },
+          "reference": "NARVO-DEMO-COMMERCIAL-INV-2026-000009",
+          "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+          "created_at": "2026-11-18T06:45:58.55+00:00",
+          "created_by": "ed030005-0000-4000-8000-000000000001",
+          "journal_id": "8970dbb3-38da-4fb7-a29b-081f6425c6d2",
+          "request_id": "25bbab5c-2d99-49c3-a25c-d1a41e4e680b",
+          "document_id": "8ec200d1-de4f-4864-8108-3cd122803383",
+          "request_hash": "2520db57008cddaa9a26e81838977db27db17f6cb69134b95d6687d8c7a23190"
+        },
+        "actual": [
+          {
+            "id": "8970dbb3-38da-4fb7-a29b-081f6425c6d2",
+            "source_type": "INVENTORY_ADJUSTMENT",
+            "posting_date": "2026-11-17",
+            "account_id": "17e27f33-70e5-4c34-a57f-f8969b2f75a7",
+            "debit_minor": "1000",
+            "credit_minor": "0"
+          },
+          {
+            "id": "8970dbb3-38da-4fb7-a29b-081f6425c6d2",
+            "source_type": "INVENTORY_ADJUSTMENT",
+            "posting_date": "2026-11-17",
+            "account_id": "cd5ec54c-d47e-49fa-ae51-b18368b21561",
+            "debit_minor": "0",
+            "credit_minor": "1000"
+          }
+        ]
+      },
+      {
+        "id": "PROJECT-MATERIAL-RETURN",
+        "expected": [
+          [
+            "INVENTORY",
+            5000,
+            0
+          ],
+          [
+            "PROJECT_COST",
+            0,
+            5000
+          ]
+        ],
+        "receipt": {
+          "id": "636cecbb-be0a-4030-af11-b0973887e6b8",
+          "state": "POSTED",
+          "action": "POST",
+          "version": 3,
+          "replayed": false,
+          "snapshot": {
+            "date": "2026-11-17",
+            "kind": "RETURN",
+            "unit": "UNIT",
+            "computed": {
+              "qty": "5000000",
+              "cost": "daa372a1-c0ce-4a8a-9a91-47b38e66a266",
+              "value": "5000",
+              "balance": {
+                "qty": "80000000",
+                "value": "80000",
+                "revision": 6,
+                "last_date": "2026-11-17"
+              },
+              "project": "1c61681c-25ef-496e-b9a8-5c68376d8e8f",
+              "cost_project": null,
+              "location_version": 1,
+              "material_version": 1,
+              "destination_balance": null,
+              "destination_version": null
+            },
+            "evidence": "Fictional physically verified stock event",
+            "origin_id": "690ddac6-8455-4dab-84a0-ac1696cbea27",
+            "qty_micros": "5000000",
+            "location_id": "2658a6df-12a5-410a-b537-70c70d2b04ba",
+            "material_id": "3e2c43ba-5531-42a1-af6a-4a5bf30aad69",
+            "source_reference": "PROJECT-RETURN"
+          },
+          "reference": "NARVO-DEMO-COMMERCIAL-INV-2026-000010",
+          "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+          "created_at": "2026-11-18T06:45:58.754+00:00",
+          "created_by": "ed030005-0000-4000-8000-000000000001",
+          "journal_id": "c717d36a-4d38-4c36-9d3f-5a684bc38fea",
+          "request_id": "68361cbe-343f-4b22-9691-9a6c43a57fe0",
+          "document_id": "fa04d634-7ace-4730-99b5-789018b9b74d",
+          "request_hash": "a63e23b394cf56ce0d1309c9350cd253101e4b5e05bef0bddda4e37d122e1692"
+        },
+        "actual": [
+          {
+            "id": "c717d36a-4d38-4c36-9d3f-5a684bc38fea",
+            "source_type": "INVENTORY_RETURN",
+            "posting_date": "2026-11-17",
+            "account_id": "daa372a1-c0ce-4a8a-9a91-47b38e66a266",
+            "debit_minor": "0",
+            "credit_minor": "5000"
+          },
+          {
+            "id": "c717d36a-4d38-4c36-9d3f-5a684bc38fea",
+            "source_type": "INVENTORY_RETURN",
+            "posting_date": "2026-11-17",
+            "account_id": "17e27f33-70e5-4c34-a57f-f8969b2f75a7",
+            "debit_minor": "5000",
+            "credit_minor": "0"
+          }
+        ]
+      },
+      {
+        "id": "PROJECT-MATERIAL-REISSUE",
+        "expected": [
+          [
+            "PROJECT_COST",
+            5000,
+            0
+          ],
+          [
+            "INVENTORY",
+            0,
+            5000
+          ]
+        ],
+        "receipt": {
+          "id": "128ae780-c852-439d-afe6-262e0a3a8b8f",
+          "state": "POSTED",
+          "action": "POST",
+          "version": 3,
+          "replayed": false,
+          "snapshot": {
+            "date": "2026-11-17",
+            "kind": "ISSUE",
+            "unit": "UNIT",
+            "computed": {
+              "qty": "5000000",
+              "cost": "daa372a1-c0ce-4a8a-9a91-47b38e66a266",
+              "value": "5000",
+              "balance": {
+                "qty": "85000000",
+                "value": "85000",
+                "revision": 7,
+                "last_date": "2026-11-17"
+              },
+              "project": "1c61681c-25ef-496e-b9a8-5c68376d8e8f",
+              "cost_project": null,
+              "location_version": 1,
+              "material_version": 1,
+              "destination_balance": null,
+              "destination_version": null
+            },
+            "evidence": "Fictional physically verified stock event",
+            "project_id": "1c61681c-25ef-496e-b9a8-5c68376d8e8f",
+            "qty_micros": "5000000",
+            "location_id": "2658a6df-12a5-410a-b537-70c70d2b04ba",
+            "material_id": "3e2c43ba-5531-42a1-af6a-4a5bf30aad69",
+            "recipient_id": "6b2b8d77-965f-4932-9581-8c9bad4801e1",
+            "source_reference": "PROJECT-REISSUE"
+          },
+          "reference": "NARVO-DEMO-COMMERCIAL-INV-2026-000011",
+          "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+          "created_at": "2026-11-18T06:45:58.9+00:00",
+          "created_by": "ed030005-0000-4000-8000-000000000001",
+          "journal_id": "a804fcc6-391d-41b1-b555-3998020278aa",
+          "request_id": "8d494cd6-6e5e-4111-8404-390fedf25dce",
+          "document_id": "0a3c35b2-fa14-43cd-a9b2-f831de4be74b",
+          "request_hash": "41bf1cc3647e4e570f085afd3e46bf44e1449394251255e8919060ec33628d41"
+        },
+        "actual": [
+          {
+            "id": "a804fcc6-391d-41b1-b555-3998020278aa",
+            "source_type": "INVENTORY_ISSUE",
+            "posting_date": "2026-11-17",
+            "account_id": "daa372a1-c0ce-4a8a-9a91-47b38e66a266",
+            "debit_minor": "5000",
+            "credit_minor": "0"
+          },
+          {
+            "id": "a804fcc6-391d-41b1-b555-3998020278aa",
+            "source_type": "INVENTORY_ISSUE",
+            "posting_date": "2026-11-17",
+            "account_id": "17e27f33-70e5-4c34-a57f-f8969b2f75a7",
+            "debit_minor": "0",
+            "credit_minor": "5000"
+          }
+        ]
+      },
+      {
+        "id": "RETENTION-RELEASE",
+        "expected": [
+          [
+            "SUBCONTRACTOR_RETENTION_PAYABLE",
+            5000,
+            0
+          ],
+          [
+            "SUBCONTRACTOR_PAYABLE",
+            0,
+            5000
+          ]
+        ],
+        "receipt": [
+          {
+            "retention_release_id": "6fc08341-69ec-4696-8c15-3840fd353642",
+            "release_reference": "NARVO-DEMO-COMMERCIAL-SCREL-2026-000001",
+            "journal_entry_id": "2db8b5f0-7da2-428b-b173-3d742c4961ce",
+            "replayed": false
+          }
+        ],
+        "actual": [
+          {
+            "id": "2db8b5f0-7da2-428b-b173-3d742c4961ce",
+            "source_type": "SUBCONTRACTOR_RETENTION_RELEASE",
+            "posting_date": "2026-11-17",
+            "account_id": "bddca91b-40d0-40e6-9d7a-402f2466bf25",
+            "debit_minor": "5000",
+            "credit_minor": "0"
+          },
+          {
+            "id": "2db8b5f0-7da2-428b-b173-3d742c4961ce",
+            "source_type": "SUBCONTRACTOR_RETENTION_RELEASE",
+            "posting_date": "2026-11-17",
+            "account_id": "e9f87757-22f7-484f-b46a-4f0019d869d2",
+            "debit_minor": "0",
+            "credit_minor": "5000"
+          }
+        ]
+      },
+      {
+        "id": "RETENTION-PAYMENT",
+        "expected": [
+          [
+            "SUBCONTRACTOR_PAYABLE",
+            5000,
+            0
+          ],
+          [
+            "BANK",
+            0,
+            5000
+          ]
+        ],
+        "receipt": [
+          {
+            "retention_payment_id": "48454cfe-3c59-4dfb-a386-965c932b6c62",
+            "payment_reference": "NARVO-DEMO-COMMERCIAL-SRPAY-2026-000001",
+            "journal_entry_id": "47b27ab9-63a3-4ff5-be0d-16e6a2ed40d6",
+            "replayed": false
+          }
+        ],
+        "actual": [
+          {
+            "id": "47b27ab9-63a3-4ff5-be0d-16e6a2ed40d6",
+            "source_type": "SUBCONTRACTOR_RETENTION_PAYMENT",
+            "posting_date": "2026-11-17",
+            "account_id": "e9f87757-22f7-484f-b46a-4f0019d869d2",
+            "debit_minor": "5000",
+            "credit_minor": "0"
+          },
+          {
+            "id": "47b27ab9-63a3-4ff5-be0d-16e6a2ed40d6",
+            "source_type": "SUBCONTRACTOR_RETENTION_PAYMENT",
+            "posting_date": "2026-11-17",
+            "account_id": "4c6e4fed-09e7-4569-94ca-a37506b376d6",
+            "debit_minor": "0",
+            "credit_minor": "5000"
+          }
+        ]
+      }
+    ]
+  },
+  "goods-results": {
+    "scenarios": [
+      {
+        "id": "GOODS-DELIVERY",
+        "expected": [
+          [
+            "COGS",
+            10000,
+            0
+          ],
+          [
+            "INVENTORY",
+            0,
+            10000
+          ]
+        ],
+        "receipt": {
+          "id": "e114b0e9-4a4b-4803-8c6f-221a23e474e8",
+          "state": "POSTED",
+          "action": "POST",
+          "version": 3,
+          "replayed": false,
+          "snapshot": {
+            "date": "2026-11-17",
+            "kind": "ISSUE",
+            "unit": "UNIT",
+            "computed": {
+              "qty": "10000000",
+              "cost": "bb154992-faae-451f-9d34-12c4a8f02cfc",
+              "value": "10000",
+              "balance": {
+                "qty": "80000000",
+                "value": "80000",
+                "revision": 8,
+                "last_date": "2026-11-17"
+              },
+              "project": null,
+              "cost_project": null,
+              "location_version": 1,
+              "material_version": 1,
+              "destination_balance": null,
+              "destination_version": null
+            },
+            "evidence": "Fictional physical delivery of ten units, then actual four-unit customer return",
+            "qty_micros": "10000000",
+            "location_id": "2658a6df-12a5-410a-b537-70c70d2b04ba",
+            "material_id": "3e2c43ba-5531-42a1-af6a-4a5bf30aad69",
+            "cost_purpose": "SALE",
+            "recipient_id": "3c982c5f-c5e5-41b2-a9ab-9f7a17d348dd",
+            "source_reference": "GOODS-DELIVERY"
+          },
+          "reference": "NARVO-DEMO-COMMERCIAL-INV-2026-000012",
+          "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+          "created_at": "2026-11-18T06:46:09.268+00:00",
+          "created_by": "ed030005-0000-4000-8000-000000000001",
+          "journal_id": "06b4fd45-ffe3-4784-a95a-93901b5a0714",
+          "request_id": "cb5ee7f5-74de-4685-8e40-6121835e75b7",
+          "document_id": "2da21825-a842-401c-83c6-172aebde7cac",
+          "request_hash": "5feb18f8a33c31df98bf3613e9cd1bf55a3e10634f85ffaea037cb8eda0f2ae4"
+        },
+        "actual": [
+          {
+            "id": "06b4fd45-ffe3-4784-a95a-93901b5a0714",
+            "source_type": "INVENTORY_ISSUE",
+            "posting_date": "2026-11-17",
+            "account_id": "bb154992-faae-451f-9d34-12c4a8f02cfc",
+            "debit_minor": "10000",
+            "credit_minor": "0"
+          },
+          {
+            "id": "06b4fd45-ffe3-4784-a95a-93901b5a0714",
+            "source_type": "INVENTORY_ISSUE",
+            "posting_date": "2026-11-17",
+            "account_id": "17e27f33-70e5-4c34-a57f-f8969b2f75a7",
+            "debit_minor": "0",
+            "credit_minor": "10000"
+          }
+        ]
+      },
+      {
+        "id": "GOODS-INVOICE",
+        "expected": [
+          [
+            "AR",
+            21000,
+            0
+          ],
+          [
+            "REVENUE",
+            0,
+            20000
+          ],
+          [
+            "OUTPUT_VAT",
+            0,
+            1000
+          ]
+        ],
+        "receipt": {
+          "id": "202ce39b-0d5f-415d-b89d-4e4ce239eb9b",
+          "journal_id": "641e2664-6e3f-47b7-8503-1f4cc6c8adbb"
+        },
+        "actual": [
+          {
+            "id": "641e2664-6e3f-47b7-8503-1f4cc6c8adbb",
+            "source_type": "AR_INVOICE",
+            "posting_date": "2026-11-17",
+            "account_id": "00e7a1ea-1959-404d-b421-443c785e6784",
+            "debit_minor": "21000",
+            "credit_minor": "0"
+          },
+          {
+            "id": "641e2664-6e3f-47b7-8503-1f4cc6c8adbb",
+            "source_type": "AR_INVOICE",
+            "posting_date": "2026-11-17",
+            "account_id": "5cd94054-56b0-4353-a6c6-acf43b0ed8a6",
+            "debit_minor": "0",
+            "credit_minor": "20000"
+          },
+          {
+            "id": "641e2664-6e3f-47b7-8503-1f4cc6c8adbb",
+            "source_type": "AR_INVOICE",
+            "posting_date": "2026-11-17",
+            "account_id": "3ba255fd-cff8-4e9b-accc-d34f4d1d8d51",
+            "debit_minor": "0",
+            "credit_minor": "1000"
+          }
+        ]
+      },
+      {
+        "id": "GOODS-CUSTOMER-PARTIAL-RECEIPT",
+        "expected": [
+          [
+            "BANK",
+            5000,
+            0
+          ],
+          [
+            "AR",
+            0,
+            5000
+          ]
+        ],
+        "receipt": {
+          "id": "4158dd79-bf57-466b-a258-a0aa72656f5e",
+          "journal_id": "08c73b8e-8492-49d2-8303-be556436cc31"
+        },
+        "actual": [
+          {
+            "id": "08c73b8e-8492-49d2-8303-be556436cc31",
+            "source_type": "AR_RECEIPT",
+            "posting_date": "2026-11-17",
+            "account_id": "4c6e4fed-09e7-4569-94ca-a37506b376d6",
+            "debit_minor": "5000",
+            "credit_minor": "0"
+          },
+          {
+            "id": "08c73b8e-8492-49d2-8303-be556436cc31",
+            "source_type": "AR_RECEIPT",
+            "posting_date": "2026-11-17",
+            "account_id": "00e7a1ea-1959-404d-b421-443c785e6784",
+            "debit_minor": "0",
+            "credit_minor": "5000"
+          }
+        ]
+      },
+      {
+        "id": "GOODS-PHYSICAL-RETURN",
+        "expected": [
+          [
+            "INVENTORY",
+            4000,
+            0
+          ],
+          [
+            "COGS",
+            0,
+            4000
+          ]
+        ],
+        "receipt": {
+          "id": "3b69bbff-6ce5-49bb-a0c1-eb3da37f01e5",
+          "state": "POSTED",
+          "action": "POST",
+          "version": 3,
+          "replayed": false,
+          "snapshot": {
+            "date": "2026-11-17",
+            "kind": "RETURN",
+            "unit": "UNIT",
+            "computed": {
+              "qty": "4000000",
+              "cost": "bb154992-faae-451f-9d34-12c4a8f02cfc",
+              "value": "4000",
+              "balance": {
+                "qty": "70000000",
+                "value": "70000",
+                "revision": 9,
+                "last_date": "2026-11-17"
+              },
+              "project": null,
+              "cost_project": null,
+              "location_version": 1,
+              "material_version": 1,
+              "destination_balance": null,
+              "destination_version": null
+            },
+            "evidence": "Fictional physical delivery of ten units, then actual four-unit customer return",
+            "origin_id": "2da21825-a842-401c-83c6-172aebde7cac",
+            "qty_micros": "4000000",
+            "location_id": "2658a6df-12a5-410a-b537-70c70d2b04ba",
+            "material_id": "3e2c43ba-5531-42a1-af6a-4a5bf30aad69",
+            "source_reference": "GOODS-PHYSICAL-RETURN"
+          },
+          "reference": "NARVO-DEMO-COMMERCIAL-INV-2026-000013",
+          "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+          "created_at": "2026-11-18T06:46:10.165+00:00",
+          "created_by": "ed030005-0000-4000-8000-000000000001",
+          "journal_id": "c9a76503-5a1a-4662-af84-207dac306397",
+          "request_id": "c67017dc-8faa-4804-b67b-2781af735353",
+          "document_id": "989f4f45-18bc-4cf8-b37d-e631b4eeb409",
+          "request_hash": "513f088bb649690502ae407607535e5f85461d33205061569a470074d6b92ede"
+        },
+        "actual": [
+          {
+            "id": "c9a76503-5a1a-4662-af84-207dac306397",
+            "source_type": "INVENTORY_RETURN",
+            "posting_date": "2026-11-17",
+            "account_id": "bb154992-faae-451f-9d34-12c4a8f02cfc",
+            "debit_minor": "0",
+            "credit_minor": "4000"
+          },
+          {
+            "id": "c9a76503-5a1a-4662-af84-207dac306397",
+            "source_type": "INVENTORY_RETURN",
+            "posting_date": "2026-11-17",
+            "account_id": "17e27f33-70e5-4c34-a57f-f8969b2f75a7",
+            "debit_minor": "4000",
+            "credit_minor": "0"
+          }
+        ]
+      },
+      {
+        "id": "GOODS-CREDIT",
+        "expected": [
+          [
+            "REVENUE",
+            8000,
+            0
+          ],
+          [
+            "OUTPUT_VAT",
+            400,
+            0
+          ],
+          [
+            "AR",
+            0,
+            8400
+          ]
+        ],
+        "receipt": {
+          "id": "3fb4dab4-929a-4e18-91bd-7621ef54f547",
+          "journal_id": "97839fcf-848e-430e-8a7b-b198da7e7302"
+        },
+        "actual": [
+          {
+            "id": "97839fcf-848e-430e-8a7b-b198da7e7302",
+            "source_type": "AR_CREDIT",
+            "posting_date": "2026-11-17",
+            "account_id": "5cd94054-56b0-4353-a6c6-acf43b0ed8a6",
+            "debit_minor": "8000",
+            "credit_minor": "0"
+          },
+          {
+            "id": "97839fcf-848e-430e-8a7b-b198da7e7302",
+            "source_type": "AR_CREDIT",
+            "posting_date": "2026-11-17",
+            "account_id": "00e7a1ea-1959-404d-b421-443c785e6784",
+            "debit_minor": "0",
+            "credit_minor": "8400"
+          },
+          {
+            "id": "97839fcf-848e-430e-8a7b-b198da7e7302",
+            "source_type": "AR_CREDIT",
+            "posting_date": "2026-11-17",
+            "account_id": "3ba255fd-cff8-4e9b-accc-d34f4d1d8d51",
+            "debit_minor": "400",
+            "credit_minor": "0"
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "salesNet": "12000",
+      "cogs": "6000",
+      "grossProfit": "6000",
+      "receivable": "7600",
+      "outputVAT": "600",
+      "cashReceipt": "5000",
+      "inventory": "74000"
+    }
+  },
+  "closing-cashflow-results": {
+    "final": {
+      "state": "FINAL",
+      "version": 1,
+      "year_id": "dce3480b-065a-4583-9efb-9182b7cec657",
+      "journal_id": "2619b66f-c7bf-4538-ac3a-826dfa17089c"
+    },
+    "reopen": {
+      "state": "OPEN",
+      "version": 2,
+      "year_id": "dce3480b-065a-4583-9efb-9182b7cec657",
+      "journal_id": "af0b0b68-c7ed-4262-973b-c2c27ce23665"
+    },
+    "correction": {
+      "id": "16ec230c-a9cf-4913-a9e3-5670f1dcc906",
+      "journal_id": "9661053e-ec97-4e45-b3c7-888786b50777"
+    },
+    "reclosed": {
+      "state": "FINAL",
+      "version": 3,
+      "year_id": "dce3480b-065a-4583-9efb-9182b7cec657",
+      "journal_id": "a736ce49-ea31-472c-b79a-75ab045a1779"
+    }
+  },
+  "owner-funding-results": {
+    "input": {
+      "funding_mode": "OWNER_CONTRIBUTION",
+      "owner_id": "fa6c3b94-99ae-4543-a9cc-0870c40545d6",
+      "date": "2026-11-17",
+      "amount_minor": "100000",
+      "holder_id": "6b2b8d77-965f-4932-9581-8c9bad4801e1",
+      "source_reference": "DEMO-ACTUAL-OWNER-CONTRIBUTION",
+      "evidence": "Fictional actual permanent non-repayable AED1000 received by custodian from owner, distinct from opening balances",
+      "route_verified": "true",
+      "distinct_verified": "true",
+      "receipt_verified": "true",
+      "funding_verified": "true"
+    },
+    "receipt": {
+      "id": "40c2c50d-6503-4c0b-8a8e-3d443894c591",
+      "state": "POSTED",
+      "reason": "Fictional owner contribution independently approved",
+      "receipt": {
+        "id": "c02feb17-bcae-4058-8826-9ebfe34763d3",
+        "journal": "c13ae18f-bf1b-4ff6-8777-659fe8bae1a9",
+        "replayed": false,
+        "reference": "NARVO-DEMO-COMMERCIAL-FIN-2026-000001",
+        "evidence_id": "c3dc232d-2140-4aef-8fed-d334b1ca5877",
+        "funding_mode": "OWNER_CONTRIBUTION"
+      },
+      "version": 4,
+      "draft_id": "1519b2d8-c9a1-470d-a277-a85ca3d69cbf",
+      "snapshot": {
+        "date": "2026-11-17",
+        "evidence": "Fictional actual permanent non-repayable AED1000 received by custodian from owner, distinct from opening balances",
+        "owner_id": "fa6c3b94-99ae-4543-a9cc-0870c40545d6",
+        "holder_id": "6b2b8d77-965f-4932-9581-8c9bad4801e1",
+        "amount_minor": "100000",
+        "funding_mode": "OWNER_CONTRIBUTION",
+        "route_verified": "true",
+        "funding_verified": "true",
+        "receipt_verified": "true",
+        "source_reference": "DEMO-ACTUAL-OWNER-CONTRIBUTION",
+        "distinct_verified": "true"
+      },
+      "company_id": "35866f1d-2888-40f2-9690-015802ec13a8",
+      "created_at": "2026-11-18T07:12:57.885+00:00",
+      "created_by": "ed030005-0000-4000-8000-000000000001",
+      "request_id": "21a7ac92-af31-453b-8355-e63e581068af",
+      "request_hash": "369e4e7e5507997ac0e9442c8345319a46500fd1dbdb50396a597ec726b00923"
+    },
+    "reopen": {
+      "state": "OPEN",
+      "version": 4,
+      "year_id": "dce3480b-065a-4583-9efb-9182b7cec657",
+      "journal_id": "fd654094-8394-4ded-9d07-6b49f48163f7"
+    },
+    "refinal": {
+      "state": "FINAL",
+      "version": 5,
+      "year_id": "dce3480b-065a-4583-9efb-9182b7cec657",
+      "journal_id": "b2204cb7-6453-4c91-bad9-a94f43d30c37"
+    },
+    "expected": [
+      [
+        "CUSTODY_ADVANCE",
+        "100000",
+        "0"
+      ],
+      [
+        "OWNER_CONTRIBUTIONS",
+        "0",
+        "100000"
+      ]
+    ],
+    "actual": [
+      {
+        "id": "c13ae18f-bf1b-4ff6-8777-659fe8bae1a9",
+        "source_type": "PARTNER_ADDITIONAL_CAPITAL_FUNDING",
+        "account_id": "2998d440-1ad8-49c2-9804-a85dfe058a55",
+        "debit_minor": "100000",
+        "credit_minor": "0"
+      },
+      {
+        "id": "c13ae18f-bf1b-4ff6-8777-659fe8bae1a9",
+        "source_type": "PARTNER_ADDITIONAL_CAPITAL_FUNDING",
+        "account_id": "23dcb3a3-9813-4126-a9cf-f38b961d136a",
+        "debit_minor": "0",
+        "credit_minor": "100000"
+      }
+    ]
+  }
+}

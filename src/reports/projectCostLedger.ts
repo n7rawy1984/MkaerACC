@@ -40,7 +40,7 @@ export function reconcileProjectCosts(scope:CostScope,input:CostInput):CostResul
   if(account.account_type!=='EXPENSE'||scope.project==='COMPANY'&&line.project_id!==null||!['ALL','COMPANY'].includes(scope.project)&&line.project_id!==scope.project)continue;
   const original=entry.reversal_of_journal_entry_id?(entries.get(entry.reversal_of_journal_entry_id)??originals.get(entry.reversal_of_journal_entry_id)):null;
   if(entry.reversal_of_journal_entry_id&&!original)throw Error('integrity');
-  const source=original??entry,doc=docs.get(source.source_id);
+  const source=original??entry,doc=docs.get(source.source_id);if(source.source_type==='ANNUAL_CLOSE')continue;
   if(['EXPENSE','SUBCONTRACTOR_CERTIFICATE','PERSONAL_EXPENSE_RECOGNITION'].includes(source.source_type)&&(!doc||!doc.allocation_plan&&doc.project_id!==line.project_id))throw Error('integrity');
   rows.push({id:line.id,date:entry.posting_date,journal:entry.journal_reference,description:entry.description,sourceType:source.source_type,sourceId:source.source_id,document:doc?.reference??source.journal_reference,category:doc?.categoryLabel,payment:doc?.paymentLabel,sourceReference:doc?.source_reference??doc?.invoice_number??undefined,supportingReference:doc?.supporting_reference??doc?.notes??undefined,subcontract:doc?.subcontract_id??null,reversalOf:original?.journal_reference??null,projectId:line.project_id,project:line.project_id?projects.get(line.project_id)!.code+' · '+projects.get(line.project_id)!.name:'COMPANY',account:account.code+' · '+account.name,debit:line.debit_minor,credit:line.credit_minor,net:(debit-credit).toString()});
  }

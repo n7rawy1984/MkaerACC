@@ -41,7 +41,7 @@ export function summarizeFinancialMonths(data:MonthlyFinancialData,scope:Monthly
  if(!r)continue;const set=journals.get(m)??new Set<string>();set.add(e.id);journals.set(m,set);
  if(t){add(r,net>=0n?'treasuryIn':'treasuryOut',net>=0n?net:-net);add(r,['CASH','PETTY_CASH','PROJECT_CASH_BOX'].includes(t.type)?'cashChange':'bankChange',net);}
  if(custody){const kind=custodyMovementKind(type);if(kind==='FUNDING')add(r,'custodyFunding',net);else if(kind==='SPENDING')add(r,'custodyPayments',-net);else if(kind==='RETURN')add(r,'custodyReturns',-net);else add(r,'custodyOther',net);}
- if(a.account_type==='EXPENSE'){if(l.project_id)add(r,'projectCost',net);else if(type!=='PAYROLL')add(r,'operating',net);if(type==='PAYROLL'&&data.payrollVisible)add(r,'payrollCost',net);}
+ if(a.account_type==='EXPENSE'&&type!=='ANNUAL_CLOSE'){if(l.project_id)add(r,'projectCost',net);else if(type!=='PAYROLL')add(r,'operating',net);if(type==='PAYROLL'&&data.payrollVisible)add(r,'payrollCost',net);}
  if(a.system_key==='SUBCONTRACTOR_ADVANCE')add(r,'contractAdvances',net);
  if(['SUBCONTRACTOR_PAYABLE','SUBCONTRACTOR_RETENTION_PAYABLE'].includes(a.system_key??'')&&['SUBCONTRACTOR_PAYMENT','SUBCONTRACTOR_RETENTION_PAYMENT'].includes(type))add(r,'contractSettlements',net);
  if(type==='HR_EMPLOYEE_ADVANCE'&&a.account_type==='ASSET'&&a.system_key!=='CUSTODY_ADVANCE'&&!t&&data.payrollVisible)add(r,'employeeAdvances',net);
