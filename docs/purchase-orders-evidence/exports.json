@@ -1,0 +1,10 @@
+{
+  "checks": [
+    "en Excel exact quoted unit price, line amount and total",
+    "en printable PDF contains correct Company and amount",
+    "ar Excel exact quoted unit price, line amount and total",
+    "ar printable PDF contains correct Company and amount"
+  ],
+  "count": 4,
+  "hostedWrites": 0
+}

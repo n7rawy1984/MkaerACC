@@ -1,0 +1,10 @@
+{
+  "checks": [
+    "independent approval sessions wait on canonical Company serialization",
+    "concurrent stale approval rejected; one issued commitment only",
+    "native concurrent approval preserves exact GL, Treasury, accounts and memberships"
+  ],
+  "count": 3,
+  "engine": "Independent native PostgreSQL sessions",
+  "hostedWrites": 0
+}

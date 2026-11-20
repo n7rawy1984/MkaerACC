@@ -80,6 +80,7 @@ function RoutedApplication() {
           <Route path="/accounts" element={<TenantReadyApplication view="accounts" />} />
           <Route path="/subcontracts" element={<TenantReadyApplication view="subcontracts" />} />
           <Route path="/financial-evidence" element={<TenantReadyApplication view="financialEvidence" />} />
+          <Route path="/purchase-orders" element={<TenantReadyApplication view="purchaseOrders" />} />
           <Route path="/inventory/:section" element={<TenantReadyApplication view="inventory" />} />
           <Route path="/inventory" element={<Navigate to="/inventory/materials" replace />} />
           <Route path="/custody" element={<TenantReadyApplication view="custody" />} />

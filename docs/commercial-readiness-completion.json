@@ -52,7 +52,7 @@
     {
       "module": "Fiscal periods, close and reopening",
       "status": "PARTIAL",
-      "scope": "95\u2013100 locally implement period controls plus retained-earnings year finalization, immutable audited reopen/reclose and lock; subsequent-year correction/restatement policy deferred.",
+      "scope": "95–100 locally implement period controls plus retained-earnings year finalization, immutable audited reopen/reclose and lock; subsequent-year correction/restatement policy deferred.",
       "evidence": [
         "docs/commercial-completion-verification.json",
         "docs/COMMERCIAL_ACCOUNTING_SIMULATION.md"
@@ -199,6 +199,15 @@
         "NARVO_ERP_ACCOUNTING_REQUIREMENTS_REGISTER.md",
         "PROJECT_ROADMAP.md"
       ]
+    },
+    {
+      "module": "Procurement — Purchase Orders",
+      "status": "COMPLETE FOR NONFINANCIAL PO WORKFLOW; BROADER PROCUREMENT PARTIAL",
+      "scope": "Draft/edit/review/accountant issue/audited cancellation, exact quoted commitments, existing Supplier/Project/materials, bilingual outputs and recovery. No GL, AP or Inventory effects. PR/RFQ, alternate units and PO receipt/invoice fulfillment matching remain outstanding.107 prepared, not applied.",
+      "evidence": [
+        "docs/PURCHASE_ORDER_WORKFLOW.md",
+        "docs/purchase-orders-verification.json"
+      ]
     }
   ],
   "deferredPreserved": [
@@ -207,11 +216,11 @@
     "Full original Procurement/Inventory/AR/AP/construction/HR/WPS/subscriptions/security/operations requirements",
     "Final restoration rehearsal and deferred USB work"
   ],
-  "nextDependency": "Explicit105 activation authorization; full authenticated isolated protected-route operational acceptance; compatible runtime verification before unrestricted go-live",
+  "nextDependency": "Explicit107 activation approval and compatible publication. Continue unfinished Procurement capabilities; do not reopen CR07/V1 remediation or repeat prior acceptance.",
   "continuationEvidence": "docs/commercial-completion-verification.json",
   "hostedActivation": {
-    "status": "Through104 APPLIED;105 PREPARED / NOT APPLIED",
-    "evidence": "docs/cr06-migration104-hosted-activation.json"
+    "status": "Through106 APPLIED per Product Owner;106 aligned by read-only version check;107 PREPARED / NOT APPLIED",
+    "evidence": "docs/purchase-orders-evidence/migration-alignment.json"
   },
   "cr03Evidence": "docs/cr03-bank-reconciliation-verification.json",
   "cr04Evidence": "docs/cr04-supplier-returns-verification.json",
@@ -219,5 +228,7 @@
   "cr05HostedActivation": "docs/cr05-migration103-hosted-activation.json",
   "cr06Evidence": "docs/cr06-gap-verification.json",
   "cr07Evidence": "docs/cr07-integrated-verification.json",
-  "cr07Readiness": "NOT READY"
+  "cr07Readiness": "NOT READY",
+  "productContinuationEvidence": "docs/purchase-orders-verification.json",
+  "baselineProductionRelease": "5689e2aa86b9793d58f405f55b302ee0be578eeb"
 }

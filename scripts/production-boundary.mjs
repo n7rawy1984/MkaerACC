@@ -32,6 +32,7 @@ export function dependencyGraph(entry) {
 }
 // Existing command recovery envelopes only; these files are not local business stores.
 const sessionRecoveryFiles=new Set([
+ 'src/procurement/PurchaseOrdersWorkspace.tsx', // Frozen actor/Company purchase-order command retry; no ledger cache.
  'src/financial/SupplierPurchaseReturns.tsx',
  'src/inventory/InventoryWorkspace.tsx',
  'src/platform/platformRecovery.ts',

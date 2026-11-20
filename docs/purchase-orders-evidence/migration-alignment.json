@@ -1,0 +1,9 @@
+{
+  "hostedCount": 106,
+  "latestHosted": {
+    "name": "existing_foundation_certification",
+    "version": "20261124120000"
+  },
+  "onlyLocalPending": "20261125120000_purchase_order_commitments.sql",
+  "hostedWrites": 0
+}

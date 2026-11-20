@@ -1,0 +1,16 @@
+{
+  "checks": [
+    "approval preview is usable outside the record drawer",
+    "English real UI issues exactAED30 commitment through canonical RPC",
+    "English order/audit and shared Excel/PDF exports render",
+    "lost response recovery creates one Arabic draft, not duplicates",
+    "Arabic workflow preserves exact cumulative commitments",
+    "Arabic shared Excel and printable PDF outputs render",
+    "Arabic mobile layout has no page-wide overflow",
+    "actual bilingual workflow changes no existing financial books or memberships",
+    "no runtime component errors"
+  ],
+  "count": 9,
+  "scope": "Actual production components, local canonical PostgreSQL commands; synthetic Auth only",
+  "hostedWrites": 0
+}
