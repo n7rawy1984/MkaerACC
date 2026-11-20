@@ -1,0 +1,14 @@
+{
+  "checks": [
+    "en final register amounts cannot wrap into misleading decimals",
+    "en final register dates stay on one line",
+    "en final locked equity104470.16 rendered and exported",
+    "en report remains within mobile viewport with table scrolling",
+    "ar final register amounts cannot wrap into misleading decimals",
+    "ar final register dates stay on one line",
+    "ar final locked equity104470.16 rendered and exported",
+    "ar report remains within mobile viewport with table scrolling"
+  ],
+  "hostedWrites": 0,
+  "scope": "Read-only real components against same final locked fictional ledger; synthetic Auth adapter"
+}

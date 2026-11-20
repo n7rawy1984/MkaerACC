@@ -1,0 +1,9 @@
+{
+  "checks": [
+    "en actual rendered Excel: three financial statements and exact independent assets/equity/tax/loss",
+    "en actual rendered PDF contains final independent assets/equity/loss",
+    "ar actual rendered Excel: three financial statements and exact independent assets/equity/tax/loss",
+    "ar actual rendered PDF contains final independent assets/equity/loss"
+  ],
+  "hostedWrites": 0
+}

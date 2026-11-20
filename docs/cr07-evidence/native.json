@@ -1,0 +1,10 @@
+{
+  "checks": [
+    "Migration105 preserves all 149 existing public/private/Auth tables including journals, sources, parties, drafts and memberships",
+    "Native concurrent customer settlements serialize; excess second receipt rejects atomically",
+    "Native AR remaining300 and Bank actual700 independently reconcile after concurrent attempt",
+    "Inventory planner private execution boundary and fixed search_path preserved"
+  ],
+  "hostedWrites": 0,
+  "engine": "Disposable native PostgreSQL; two independent sessions; observed database lock wait"
+}

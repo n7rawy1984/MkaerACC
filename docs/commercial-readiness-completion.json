@@ -1,13 +1,13 @@
 {
   "program": "Approved ROADMAP V3 Commercial Readiness Program",
-  "date": "2026-11-18",
-  "overall": "CR06 SUPPORTED CORE VERIFIED LOCALLY — COMMERCIAL ROADMAP PARTIAL",
+  "date": "2026-11-20",
+  "overall": "CR07 CONNECTED ACCOUNTING VERIFIED LOCALLY; FINAL COMMERCIAL ACCEPTANCE NOT READY",
   "scope": "Bounded implementation evidence; not a new roadmap or a general architecture audit",
   "authority": "Local implementation and disposable test execution only; no real Company mutations, hosted migrations, push or deployment",
   "publishedBaseline": {
-    "release": "be689cdae488f871b337795fb105767079a4156d",
+    "release": "e8d2efb4f93f47f7a77f2e1dc0522dbf9812767a",
     "published": "Confirmed by Product Owner",
-    "hostedMigrations": "Through103 applied; linked history verified"
+    "hostedMigrations": "Through104 applied; read-only linked dry-run only105 pending"
   },
   "modules": [
     {
@@ -52,7 +52,7 @@
     {
       "module": "Fiscal periods, close and reopening",
       "status": "PARTIAL",
-      "scope": "95–100 locally implement period controls plus retained-earnings year finalization, immutable audited reopen/reclose and lock; subsequent-year correction/restatement policy deferred.",
+      "scope": "95\u2013100 locally implement period controls plus retained-earnings year finalization, immutable audited reopen/reclose and lock; subsequent-year correction/restatement policy deferred.",
       "evidence": [
         "docs/commercial-completion-verification.json",
         "docs/COMMERCIAL_ACCOUNTING_SIMULATION.md"
@@ -207,13 +207,17 @@
     "Full original Procurement/Inventory/AR/AP/construction/HR/WPS/subscriptions/security/operations requirements",
     "Final restoration rehearsal and deferred USB work"
   ],
-  "nextDependency": "CR07 final integrated fictional Company acceptance AFTER approved104 activation and compatible release; not started",
+  "nextDependency": "Explicit105 activation authorization; full authenticated isolated protected-route operational acceptance; compatible runtime verification before unrestricted go-live",
   "continuationEvidence": "docs/commercial-completion-verification.json",
   "hostedActivation": {
-    "status": "Through103 APPLIED;104 PREPARED / NOT APPLIED",
-    "evidence": "docs/cr05-migration103-hosted-activation.json"
+    "status": "Through104 APPLIED;105 PREPARED / NOT APPLIED",
+    "evidence": "docs/cr06-migration104-hosted-activation.json"
   },
+  "cr03Evidence": "docs/cr03-bank-reconciliation-verification.json",
   "cr04Evidence": "docs/cr04-supplier-returns-verification.json",
   "cr05Evidence": "docs/cr05-construction-verification.json",
-  "cr06Evidence": "docs/cr06-gap-verification.json"
+  "cr05HostedActivation": "docs/cr05-migration103-hosted-activation.json",
+  "cr06Evidence": "docs/cr06-gap-verification.json",
+  "cr07Evidence": "docs/cr07-integrated-verification.json",
+  "cr07Readiness": "NOT READY"
 }

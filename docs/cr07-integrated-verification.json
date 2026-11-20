@@ -1,0 +1,3195 @@
+{
+  "date": "2026-11-20",
+  "milestone": "CR07 integrated fictional accounting acceptance",
+  "readiness": "NOT READY",
+  "environment": "Isolated persisted PGlite canonical PostgreSQL plus separate native PostgreSQL concurrent-session fixture; no hosted writes",
+  "company": {
+    "id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+    "code": "NARVO-DEMO-COMMERCIAL",
+    "name": "NARVO DEMO — Trading & Contracting LLC"
+  },
+  "period": {
+    "inception": "2026-09-01",
+    "opening": "2026-09-30",
+    "from": "2026-10-01",
+    "through": "2026-10-31",
+    "yearLabel": "Fictional first short fiscal year — September/October 2026"
+  },
+  "scenarios": 85,
+  "journals": 90,
+  "reversals": 3,
+  "documents": {
+    "commercial_documents": 38,
+    "commercial_reversals": 2,
+    "expenses": 10,
+    "supplier_ap_documents": 4,
+    "supplier_payments": 7,
+    "inventory_movements": 9,
+    "construction_contracts": 1,
+    "payroll_entitlements": 2,
+    "bank_statements": 2
+  },
+  "checks": [
+    "OPEN matches independent accounting/date key",
+    "PRE_AR matches independent accounting/date key",
+    "PRE_AP matches independent accounting/date key",
+    "PRE_STOCK matches independent accounting/date key",
+    "PRE_STOCK_BILL matches independent accounting/date key",
+    "PRE_ASSET matches independent accounting/date key",
+    "PRE_DEPR matches independent accounting/date key",
+    "Opening TB and prior-period income reconcile independently",
+    "Opening stock carried by real receipt/invoice subledger, not bare GL",
+    "OPEN_AP_PAY matches independent accounting/date key",
+    "OPEN_AR_PAY matches independent accounting/date key",
+    "PAID_GROSS matches independent accounting/date key",
+    "SERVICE_AP matches independent accounting/date key",
+    "Duplicate Supplier invoice rejected without financial effect",
+    "Unsupported VAT recovery rejected without financial effect",
+    "SERVICE_PART matches independent accounting/date key",
+    "SERVICE_FINAL matches independent accounting/date key",
+    "Supplier overpayment rejected without financial effect",
+    "SUP_ADV matches independent accounting/date key",
+    "ADV_BILL matches independent accounting/date key",
+    "SUP_ALLOC matches independent accounting/date key",
+    "SUP_CREDIT matches independent accounting/date key",
+    "ADV_FINAL matches independent accounting/date key",
+    "STOCK matches independent accounting/date key",
+    "STOCK_BILL matches independent accounting/date key",
+    "STOCK_PAY matches independent accounting/date key",
+    "SUP_RETURN matches independent accounting/date key",
+    "RETURN_CREDIT matches independent accounting/date key",
+    "RETURN_REFUND matches independent accounting/date key",
+    "GOODS_ISSUE matches independent accounting/date key",
+    "GOODS_SALE matches independent accounting/date key",
+    "Duplicate goods revenue / COGS rejected without financial effect",
+    "GOODS_PART matches independent accounting/date key",
+    "GOODS_FINAL matches independent accounting/date key",
+    "GOODS_RETURN matches independent accounting/date key",
+    "GOODS_CREDIT matches independent accounting/date key",
+    "GOODS_REFUND matches independent accounting/date key",
+    "CASH_SALE matches independent accounting/date key",
+    "CUSTOMER_ADV matches independent accounting/date key",
+    "CUSTOMER_BILL matches independent accounting/date key",
+    "CUSTOMER_APPLY matches independent accounting/date key",
+    "CUSTOMER_FINAL matches independent accounting/date key",
+    "Excess physical sales return rejected without financial effect",
+    "PROJECT_MAT matches independent accounting/date key",
+    "TRANSFER_STOCK matches independent accounting/date key",
+    "COUNT matches independent accounting/date key",
+    "SHORTAGE matches independent accounting/date key",
+    "Final Company Inventory84 units /840 reconciles after transfer and count shortage",
+    "CUSTODY_FUND matches independent accounting/date key",
+    "CUSTODY_COST matches independent accounting/date key",
+    "CUSTODY_RETURN matches independent accounting/date key",
+    "OWNER matches independent accounting/date key",
+    "TRANSFER_CASH matches independent accounting/date key",
+    "CR_ADV matches independent accounting/date key",
+    "CON_ADV matches independent accounting/date key",
+    "CON_CERT matches independent accounting/date key",
+    "CON_PAY matches independent accounting/date key",
+    "RET_RELEASE matches independent accounting/date key",
+    "RET_PAY matches independent accounting/date key",
+    "PROJECT_COST matches independent accounting/date key",
+    "WIP_SOURCE matches independent accounting/date key",
+    "WIP_CAP matches independent accounting/date key",
+    "WIP_PAY matches independent accounting/date key",
+    "WIP_RELEASE matches independent accounting/date key",
+    "CR_BILL1 matches independent accounting/date key",
+    "CR_APPLY matches independent accounting/date key",
+    "CR_COLLECT1 matches independent accounting/date key",
+    "CR_EARN matches independent accounting/date key",
+    "Duplicate / excess earned construction revenue rejected without financial effect",
+    "CR_BILL2 matches independent accounting/date key",
+    "CR_COLLECT2 matches independent accounting/date key",
+    "CR_RET matches independent accounting/date key",
+    "CR_RET_PAY matches independent accounting/date key",
+    "EMP_ADV matches independent accounting/date key",
+    "Attendance-derived salaries match independent paid-minute calculations",
+    "PAYROLL matches independent accounting/date key",
+    "SALARY1 matches independent accounting/date key",
+    "SALARY2 matches independent accounting/date key",
+    "Payroll entitlements settled once; recovery100 leaves employee receivable100",
+    "ASSET_BILL matches independent accounting/date key",
+    "ASSET_CAP matches independent accounting/date key",
+    "ASSET_PAY matches independent accounting/date key",
+    "DEPR_OLD matches independent accounting/date key",
+    "DEPR_NEW matches independent accounting/date key",
+    "ASSET_SALE matches independent accounting/date key",
+    "ASSET_RECEIPT matches independent accounting/date key",
+    "PREPAY matches independent accounting/date key",
+    "AMORTIZE matches independent accounting/date key",
+    "ACCRUAL matches independent accounting/date key",
+    "ACCRUAL_REVERSE matches independent accounting/date key",
+    "Double reversal rejected without financial effect",
+    "ACCRUAL_REPLACE matches independent accounting/date key",
+    "ACCRUAL_PAY matches independent accounting/date key",
+    "Independent original bank statement arithmetic includes fees/interest and two genuine timing differences",
+    "Bank statement import is metadata-only with no GL",
+    "Duplicate normalized bank import reused",
+    "BANK_FEE matches independent accounting/date key",
+    "BANK_INTEREST matches independent accounting/date key",
+    "Duplicate bank matching rejected without financial effect",
+    "Bank statement90682.66 plus deposit210 minus unpresented2000 equals GL88892.66",
+    "Exactly two independently specified outstanding bank items",
+    "Independent final assets105232.66 liabilities762.50 year loss1529.84 / October loss1629.84",
+    "Final Balance Sheet profit included exactly once",
+    "BANK GL reconciles to independent ending balance 8889266",
+    "CASH GL reconciles to independent ending balance 1190000",
+    "CUSTODY_ADVANCE GL reconciles to independent ending balance 100000",
+    "INPUT_VAT GL reconciles to independent ending balance 16000",
+    "OUTPUT_VAT GL reconciles to independent ending balance -76250",
+    "INVENTORY GL reconciles to independent ending balance 84000",
+    "ASSET_COST GL reconciles to independent ending balance 240000",
+    "ACCUMULATED_DEPRECIATION GL reconciles to independent ending balance -20000",
+    "PREPAYMENT GL reconciles to independent ending balance 14000",
+    "EMPLOYEE_ADVANCE GL reconciles to independent ending balance 10000",
+    "AR GL reconciles to independent ending balance 0",
+    "SUPPLIER_PAYABLE GL reconciles to independent ending balance 0",
+    "SUPPLIER_ADVANCE GL reconciles to independent ending balance 0",
+    "GRNI GL reconciles to independent ending balance 0",
+    "SALARY_PAYABLE GL reconciles to independent ending balance 0",
+    "SUBCONTRACTOR_ADVANCE GL reconciles to independent ending balance 0",
+    "SUBCONTRACTOR_PAYABLE GL reconciles to independent ending balance 0",
+    "SUBCONTRACTOR_RETENTION_PAYABLE GL reconciles to independent ending balance 0",
+    "CONSTRUCTION_WIP GL reconciles to independent ending balance 0",
+    "CONTRACT_ASSET GL reconciles to independent ending balance 0",
+    "CONTRACT_LIABILITY GL reconciles to independent ending balance 0",
+    "CUSTOMER_RETENTION GL reconciles to independent ending balance 0",
+    "CUSTOMER_ADVANCE GL reconciles to independent ending balance 0",
+    "Supplier invoices/advances/credits/actual refunds and AP aging reconcile to zero GL",
+    "Customer invoice/credit/receipt/advance and AR aging reconcile to GL",
+    "Stock valuation Company total840 equals GL inventory840",
+    "Construction earned12000 and final WIP/asset/liability zero reconcile",
+    "Construction customer contract closeout accepted after actual settlement",
+    "Project cost11864.84 includes wages/material/certification/WIP release once",
+    "Asset/recognition register retains original and current canonical assets",
+    "Independent Cash Flow OP-1762.34 INV-1245 FIN1000 reconciles103800 to101792.66",
+    "BROWSER_ACCRUAL actual journal matches independent answer key",
+    "BROWSER_REVERSE actual journal matches independent answer key",
+    "ar actual Customer selector retains selection",
+    "ar Customer statement Excel and rendered PDF exported",
+    "ar real Supplier AP selector retains canonical party",
+    "ar actual financial statements render independent assets105232.66",
+    "en actual Customer selector retains selection",
+    "en Customer statement Excel and rendered PDF exported",
+    "en real Supplier AP selector retains canonical party",
+    "en actual financial statements render independent assets105232.66",
+    "No rendered component runtime errors",
+    "Cross-Company customer read rejected without financial effect",
+    "Management Viewer posting rejected without financial effect",
+    "Confidential Payroll reader rejected without financial effect",
+    "Immutable posted journal direct edit rejected without financial effect",
+    "Direct command-table write rejected without financial effect",
+    "Invalid control-account type rejected without financial effect",
+    "Annual closing with open periods rejected without financial effect",
+    "Accountant cannot close fiscal period rejected without financial effect",
+    "Closed-period journal-free stock count rejected without financial effect",
+    "Closed-period financial posting rejected without financial effect",
+    "Accountant cannot finalize year rejected without financial effect",
+    "Annual close journal independently clears actual income and loss1529.84 to retained earnings",
+    "Exact annual finalization request replays without duplicate journal",
+    "Admin audited annual reopen exactly reverses original close",
+    "Backdated moving-average stock valuation rejected without financial effect",
+    "Final locked Balance Sheet:105232.66 assets=762.50 liabilities+104470.16 equity; loss included once",
+    "Every pre-closing financial journal and line remains byte-for-byte unchanged",
+    "Migration105 preserves all 149 existing public/private/Auth tables including journals, sources, parties, drafts and memberships",
+    "Native concurrent customer settlements serialize; excess second receipt rejects atomically",
+    "Native AR remaining300 and Bank actual700 independently reconcile after concurrent attempt",
+    "Inventory planner private execution boundary and fixed search_path preserved",
+    "Private kernel rejects independently imbalanced100/99 lines before financial insert",
+    "Authenticated user cannot invoke arbitrary private journal primitive",
+    "Both rejected kernel attempts leave every Company journal unchanged",
+    "en final register amounts cannot wrap into misleading decimals",
+    "en final register dates stay on one line",
+    "en final locked equity104470.16 rendered and exported",
+    "en report remains within mobile viewport with table scrolling",
+    "ar final register amounts cannot wrap into misleading decimals",
+    "ar final register dates stay on one line",
+    "ar final locked equity104470.16 rendered and exported",
+    "ar report remains within mobile viewport with table scrolling",
+    "en actual rendered Excel: three financial statements and exact independent assets/equity/tax/loss",
+    "en actual rendered PDF contains final independent assets/equity/loss",
+    "ar actual rendered Excel: three financial statements and exact independent assets/equity/tax/loss",
+    "ar actual rendered PDF contains final independent assets/equity/loss",
+    "Inventory quantities84 and valuation840 independently match GL",
+    "Full-year Trial Balance movements261504.20 independently include business events and three closing/reopen journals"
+  ],
+  "focusedChecks": 183,
+  "expected": {
+    "opening": {
+      "debits": "10879000",
+      "credits": "10879000",
+      "assets": "10619000",
+      "liabilities": "109000",
+      "equity": "10500000",
+      "unclosedProfit": "10000",
+      "bank": "9880000",
+      "cash": "500000",
+      "AR": "105000",
+      "AP": "104000",
+      "inventoryQty": "20000000",
+      "inventoryValue": "20000",
+      "assetNBV": "110000"
+    },
+    "final": {
+      "assets": "10523266",
+      "liabilities": "76250",
+      "capitalAndContributions": "10600000",
+      "yearProfit": "-152984",
+      "octoberProfit": "-162984",
+      "equityAfterClose": "10447016",
+      "cash": "10179266",
+      "bank": "8889266",
+      "cashTreasury": "1190000",
+      "custody": "100000",
+      "inputVAT": "16000",
+      "outputVAT": "76250",
+      "netVAT": "60250",
+      "inventoryQty": "84000000",
+      "inventoryValue": "84000",
+      "assetCost": "240000",
+      "assetAccumulation": "20000",
+      "assetNBV": "220000",
+      "prepayment": "14000",
+      "employeeAdvance": "10000",
+      "projectCost": "1186484",
+      "projectRevenue": "1200000",
+      "projectMargin": "13516"
+    },
+    "cashFlow": {
+      "opening": "10380000",
+      "closing": "10179266",
+      "operating": "-176234",
+      "investing": "-124500",
+      "financing": "100000",
+      "net": "-200734"
+    },
+    "bankStatement": {
+      "opening": "9880000",
+      "closing": "9068266",
+      "depositInTransit": "21000",
+      "unpresentedPayment": "200000",
+      "adjusted": "8889266"
+    }
+  },
+  "actual": {
+    "statements": {
+      "scope": {
+        "companyId": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+        "from": "2026-09-01",
+        "through": "2026-10-31"
+      },
+      "captured": "2026-11-20T07:57:33.987Z",
+      "rows": [
+        {
+          "account": {
+            "id": "b31ae652-21fe-4786-9f72-62012ed2d8ae",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "110000",
+            "name": "Demo Bank GL",
+            "account_type": "ASSET"
+          },
+          "opening": "0",
+          "debit": "11628500",
+          "credit": "2739234",
+          "closing": "8889266",
+          "incomeMovement": "8889266"
+        },
+        {
+          "account": {
+            "id": "21647537-aada-468d-a7c6-b28bd65f9a3d",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "111000",
+            "name": "Fictional Cash GL",
+            "account_type": "ASSET"
+          },
+          "opening": "0",
+          "debit": "1190000",
+          "credit": "0",
+          "closing": "1190000",
+          "incomeMovement": "1190000"
+        },
+        {
+          "account": {
+            "id": "3b6729f0-4f6a-4680-b978-424623baf104",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "120000",
+            "name": "Fictional INPUT_VAT",
+            "account_type": "ASSET"
+          },
+          "opening": "0",
+          "debit": "17000",
+          "credit": "1000",
+          "closing": "16000",
+          "incomeMovement": "16000"
+        },
+        {
+          "account": {
+            "id": "20a4ff70-f0f2-4181-85cc-6397a7ed0343",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "130000",
+            "name": "Fictional CUSTODY_ADVANCE",
+            "account_type": "ASSET"
+          },
+          "opening": "0",
+          "debit": "600000",
+          "credit": "500000",
+          "closing": "100000",
+          "incomeMovement": "100000"
+        },
+        {
+          "account": {
+            "id": "12dff806-c67d-42a6-93f9-825f222f8214",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "131000",
+            "name": "Fictional SUBCONTRACTOR_ADVANCE",
+            "account_type": "ASSET"
+          },
+          "opening": "0",
+          "debit": "100000",
+          "credit": "100000",
+          "closing": "0",
+          "incomeMovement": "0"
+        },
+        {
+          "account": {
+            "id": "318ec83d-bcc3-4e3a-ba5b-1eb89c9e1b72",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "132000",
+            "name": "Demo SUPPLIER_ADVANCE",
+            "account_type": "ASSET"
+          },
+          "opening": "0",
+          "debit": "30000",
+          "credit": "30000",
+          "closing": "0",
+          "incomeMovement": "0"
+        },
+        {
+          "account": {
+            "id": "a8e6216e-89c1-4b1a-8d35-333b5190c97a",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "133000",
+            "name": "Demo EMPLOYEE_ADVANCE",
+            "account_type": "ASSET"
+          },
+          "opening": "0",
+          "debit": "20000",
+          "credit": "10000",
+          "closing": "10000",
+          "incomeMovement": "10000"
+        },
+        {
+          "account": {
+            "id": "c631b8a8-98a9-4536-a166-4b39366f3c71",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "210000",
+            "name": "Fictional SUPPLIER_PAYABLE",
+            "account_type": "LIABILITY"
+          },
+          "opening": "0",
+          "debit": "687500",
+          "credit": "687500",
+          "closing": "0",
+          "incomeMovement": "0"
+        },
+        {
+          "account": {
+            "id": "f385b251-ba73-4adf-bfd9-b39c5e87db2a",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "220000",
+            "name": "Fictional SUBCONTRACTOR_PAYABLE",
+            "account_type": "LIABILITY"
+          },
+          "opening": "0",
+          "debit": "400000",
+          "credit": "400000",
+          "closing": "0",
+          "incomeMovement": "0"
+        },
+        {
+          "account": {
+            "id": "f7939a2d-1f4f-4ec9-9d3d-5541a8a6617b",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "221000",
+            "name": "Fictional SUBCONTRACTOR_RETENTION_PAYABLE",
+            "account_type": "LIABILITY"
+          },
+          "opening": "0",
+          "debit": "50000",
+          "credit": "50000",
+          "closing": "0",
+          "incomeMovement": "0"
+        },
+        {
+          "account": {
+            "id": "1692560a-ed8a-4e88-80e6-57ea5338d30b",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "230000",
+            "name": "Fictional SALARY_PAYABLE",
+            "account_type": "LIABILITY"
+          },
+          "opening": "0",
+          "debit": "586484",
+          "credit": "586484",
+          "closing": "0",
+          "incomeMovement": "0"
+        },
+        {
+          "account": {
+            "id": "9256de57-777c-4d50-8c1b-16056b3d8758",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "310000",
+            "name": "Demo EQUITY",
+            "account_type": "EQUITY"
+          },
+          "opening": "0",
+          "debit": "0",
+          "credit": "10500000",
+          "closing": "-10500000",
+          "incomeMovement": "-10500000"
+        },
+        {
+          "account": {
+            "id": "9e192a77-b840-4996-b20a-81efa1578076",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "315000",
+            "name": "Fictional owner contributions",
+            "account_type": "EQUITY"
+          },
+          "opening": "0",
+          "debit": "0",
+          "credit": "100000",
+          "closing": "-100000",
+          "incomeMovement": "-100000"
+        },
+        {
+          "account": {
+            "id": "4f4c3a73-44b4-4797-aeaf-0ba4737f2052",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "510000",
+            "name": "Fictional COMPANY_EXPENSE",
+            "account_type": "EXPENSE"
+          },
+          "opening": "0",
+          "debit": "955000",
+          "credit": "955000",
+          "closing": "0",
+          "incomeMovement": "292500"
+        },
+        {
+          "account": {
+            "id": "15041c2b-92d8-4bcb-8c2c-898d9fa611ad",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "520000",
+            "name": "Fictional PROJECT_COST",
+            "account_type": "EXPENSE"
+          },
+          "opening": "0",
+          "debit": "1332968",
+          "credit": "1332968",
+          "closing": "0",
+          "incomeMovement": "646484"
+        },
+        {
+          "account": {
+            "id": "19ab9ba9-101d-4023-93f9-4ebafbbe1e3d",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "521000",
+            "name": "Fictional PROJECT_COST_SUBCONTRACTORS",
+            "account_type": "EXPENSE"
+          },
+          "opening": "0",
+          "debit": "1000000",
+          "credit": "1000000",
+          "closing": "0",
+          "incomeMovement": "500000"
+        },
+        {
+          "account": {
+            "id": "58fea8ff-46de-41c2-b281-be2bffec2a6e",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "CR07-ACCRUAL_EXPENSE",
+            "name": "CR07-ACCRUAL_EXPENSE",
+            "account_type": "EXPENSE"
+          },
+          "opening": "0",
+          "debit": "124000",
+          "credit": "124000",
+          "closing": "0",
+          "incomeMovement": "42000"
+        },
+        {
+          "account": {
+            "id": "ddae2d6b-8296-4568-ba4b-fce37de1d279",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "CR07-ACCRUED_LIABILITY",
+            "name": "CR07-ACCRUED_LIABILITY",
+            "account_type": "LIABILITY"
+          },
+          "opening": "0",
+          "debit": "65000",
+          "credit": "65000",
+          "closing": "0",
+          "incomeMovement": "0"
+        },
+        {
+          "account": {
+            "id": "52d78429-a577-4db5-b01a-b5e0f07e4362",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "CR07-ACCUMULATED_DEPRECIATION",
+            "name": "CR07-ACCUMULATED_DEPRECIATION",
+            "account_type": "ASSET"
+          },
+          "opening": "0",
+          "debit": "20000",
+          "credit": "40000",
+          "closing": "-20000",
+          "incomeMovement": "-20000"
+        },
+        {
+          "account": {
+            "id": "aa95a0d3-44e4-43f4-9935-9c7b6ddb9d6c",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "CR07-AR",
+            "name": "CR07-AR",
+            "account_type": "ASSET"
+          },
+          "opening": "0",
+          "debit": "1596000",
+          "credit": "1596000",
+          "closing": "0",
+          "incomeMovement": "0"
+        },
+        {
+          "account": {
+            "id": "d737adb9-00e2-4190-9ba4-77d0ad4ccc22",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "CR07-ASSET_COST",
+            "name": "CR07-ASSET_COST",
+            "account_type": "ASSET"
+          },
+          "opening": "0",
+          "debit": "360000",
+          "credit": "120000",
+          "closing": "240000",
+          "incomeMovement": "240000"
+        },
+        {
+          "account": {
+            "id": "6e017fb2-9089-4c34-988f-d2ec36186aef",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "CR07-BANK_FEES",
+            "name": "CR07-BANK_FEES",
+            "account_type": "EXPENSE"
+          },
+          "opening": "0",
+          "debit": "4000",
+          "credit": "4000",
+          "closing": "0",
+          "incomeMovement": "2000"
+        },
+        {
+          "account": {
+            "id": "38de4554-9042-4f11-92c3-ecda23ae0282",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "CR07-BANK_INTEREST",
+            "name": "CR07-BANK_INTEREST",
+            "account_type": "REVENUE"
+          },
+          "opening": "0",
+          "debit": "2000",
+          "credit": "2000",
+          "closing": "0",
+          "incomeMovement": "-1000"
+        },
+        {
+          "account": {
+            "id": "2c86aa3a-78d4-4c49-b717-e41e12aa8601",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "CR07-COGS",
+            "name": "CR07-COGS",
+            "account_type": "EXPENSE",
+            "reporting_role": "COGS"
+          },
+          "opening": "0",
+          "debit": "115000",
+          "credit": "115000",
+          "closing": "0",
+          "incomeMovement": "55000"
+        },
+        {
+          "account": {
+            "id": "e56a72dd-1a82-4720-9835-1b77b9393291",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "CR07-CONSTRUCTION_WIP",
+            "name": "CR07-CONSTRUCTION_WIP",
+            "account_type": "ASSET"
+          },
+          "opening": "0",
+          "debit": "40000",
+          "credit": "40000",
+          "closing": "0",
+          "incomeMovement": "0"
+        },
+        {
+          "account": {
+            "id": "0fffa6e0-51df-4464-920b-1ef81d4d6856",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "CR07-CONTRACT_ASSET",
+            "name": "CR07-CONTRACT_ASSET",
+            "account_type": "ASSET"
+          },
+          "opening": "0",
+          "debit": "200000",
+          "credit": "200000",
+          "closing": "0",
+          "incomeMovement": "0"
+        },
+        {
+          "account": {
+            "id": "7cda01e0-eb5a-40ba-a613-e9f96808d933",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "CR07-CONTRACT_LIABILITY",
+            "name": "CR07-CONTRACT_LIABILITY",
+            "account_type": "LIABILITY"
+          },
+          "opening": "0",
+          "debit": "1000000",
+          "credit": "1000000",
+          "closing": "0",
+          "incomeMovement": "0"
+        },
+        {
+          "account": {
+            "id": "05229e82-1200-4c84-a4d5-8f64460fe38a",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "CR07-CUSTOMER_ADVANCE",
+            "name": "CR07-CUSTOMER_ADVANCE",
+            "account_type": "LIABILITY"
+          },
+          "opening": "0",
+          "debit": "245750",
+          "credit": "245750",
+          "closing": "0",
+          "incomeMovement": "0"
+        },
+        {
+          "account": {
+            "id": "6d1b1038-139c-41d0-880b-8efae5fab4de",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "CR07-CUSTOMER_RETENTION",
+            "name": "CR07-CUSTOMER_RETENTION",
+            "account_type": "ASSET"
+          },
+          "opening": "0",
+          "debit": "120000",
+          "credit": "120000",
+          "closing": "0",
+          "incomeMovement": "0"
+        },
+        {
+          "account": {
+            "id": "2252c2f0-dcac-4a63-8513-26fa5ce2d21e",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "CR07-DEPRECIATION_EXPENSE",
+            "name": "CR07-DEPRECIATION_EXPENSE",
+            "account_type": "EXPENSE"
+          },
+          "opening": "0",
+          "debit": "80000",
+          "credit": "80000",
+          "closing": "0",
+          "incomeMovement": "40000"
+        },
+        {
+          "account": {
+            "id": "d3b36cfc-6457-4694-9ab0-fb216af077a8",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "CR07-DISPOSAL_GAIN",
+            "name": "CR07-DISPOSAL_GAIN",
+            "account_type": "REVENUE"
+          },
+          "opening": "0",
+          "debit": "20000",
+          "credit": "20000",
+          "closing": "0",
+          "incomeMovement": "-10000"
+        },
+        {
+          "account": {
+            "id": "242acb10-fb96-4c1a-a157-7e346230cd68",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "CR07-DISPOSAL_LOSS",
+            "name": "CR07-DISPOSAL_LOSS",
+            "account_type": "EXPENSE"
+          },
+          "opening": "0",
+          "debit": "0",
+          "credit": "0",
+          "closing": "0",
+          "incomeMovement": "0"
+        },
+        {
+          "account": {
+            "id": "524a9436-dd29-4b63-8ba8-cc35bdd680b3",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "CR07-OUTPUT_VAT",
+            "name": "CR07-OUTPUT_VAT",
+            "account_type": "LIABILITY"
+          },
+          "opening": "0",
+          "debit": "12250",
+          "credit": "88500",
+          "closing": "-76250",
+          "incomeMovement": "-76250"
+        },
+        {
+          "account": {
+            "id": "552674c9-93bf-4d39-8cb0-990b0c093ac7",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "CR07-PREPAYMENT",
+            "name": "CR07-PREPAYMENT",
+            "account_type": "ASSET"
+          },
+          "opening": "0",
+          "debit": "31000",
+          "credit": "17000",
+          "closing": "14000",
+          "incomeMovement": "14000"
+        },
+        {
+          "account": {
+            "id": "7adb35b7-2a7f-43c1-8a94-a408e3dd836b",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "CR07-RETAINED_EARNINGS",
+            "name": "CR07-RETAINED_EARNINGS",
+            "account_type": "EQUITY"
+          },
+          "opening": "0",
+          "debit": "305968",
+          "credit": "152984",
+          "closing": "152984",
+          "incomeMovement": "0"
+        },
+        {
+          "account": {
+            "id": "c10a1a90-cc55-4b49-9147-7fd9a1509156",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "CR07-REVENUE",
+            "name": "CR07-REVENUE",
+            "account_type": "REVENUE",
+            "reporting_role": "SALES"
+          },
+          "opening": "0",
+          "debit": "2955000",
+          "credit": "2955000",
+          "closing": "0",
+          "incomeMovement": "-1415000"
+        },
+        {
+          "account": {
+            "id": "0177b65a-4841-476b-b2d0-81557d7f5367",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "DEMO-grni",
+            "name": "Demo grni",
+            "account_type": "LIABILITY"
+          },
+          "opening": "0",
+          "debit": "130000",
+          "credit": "130000",
+          "closing": "0",
+          "incomeMovement": "0"
+        },
+        {
+          "account": {
+            "id": "1b281d5e-38f1-44ae-8847-67eeb11abe66",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "DEMO-inventory",
+            "name": "Demo inventory",
+            "account_type": "ASSET"
+          },
+          "opening": "0",
+          "debit": "125000",
+          "credit": "41000",
+          "closing": "84000",
+          "incomeMovement": "84000"
+        },
+        {
+          "account": {
+            "id": "591f21d7-e9f5-4cb0-9087-816b64b474b4",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "DEMO-opening",
+            "name": "Demo opening",
+            "account_type": "EQUITY"
+          },
+          "opening": "0",
+          "debit": "0",
+          "credit": "0",
+          "closing": "0",
+          "incomeMovement": "0"
+        },
+        {
+          "account": {
+            "id": "8e36600a-a138-4e3e-8f04-5b5a08e3fcf2",
+            "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+            "code": "DEMO-variance",
+            "name": "Demo variance",
+            "account_type": "EXPENSE"
+          },
+          "opening": "0",
+          "debit": "2000",
+          "credit": "2000",
+          "closing": "0",
+          "incomeMovement": "1000"
+        }
+      ],
+      "journalCount": 90,
+      "debit": "26150420",
+      "credit": "26150420",
+      "assets": "10523266",
+      "liabilities": "76250",
+      "equity": "10447016",
+      "unclosedResult": "0",
+      "revenue": "1426000",
+      "expenses": "1578984",
+      "profit": "-152984",
+      "salesRevenue": "1415000",
+      "costOfSales": "55000",
+      "grossProfit": "1360000"
+    },
+    "cashFlow": {
+      "scope": {
+        "companyId": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+        "from": "2026-10-01",
+        "through": "2026-10-31"
+      },
+      "policy": {
+        "custodyIsCash": true,
+        "accountIds": [
+          "b31ae652-21fe-4786-9f72-62012ed2d8ae",
+          "21647537-aada-468d-a7c6-b28bd65f9a3d",
+          "20a4ff70-f0f2-4181-85cc-6397a7ed0343"
+        ],
+        "classification": {
+          "BANK_ADJUSTMENT": "OPERATING",
+          "EXPENSE": "OPERATING",
+          "ACCRUAL_SETTLE": "OPERATING",
+          "AR_CASH_SALE": "OPERATING",
+          "AR_RECEIPT": "OPERATING",
+          "AR_INVOICE": "OPERATING",
+          "CUSTODY_ADVANCE": "OPERATING",
+          "SUPPLIER_CREDIT_NOTE": "OPERATING",
+          "ASSET_DEPRECIATE": "OPERATING",
+          "TREASURY_TRANSFER": "OPERATING",
+          "SUBCONTRACTOR_CERTIFICATE": "OPERATING",
+          "SALARY_PAYMENT": "OPERATING",
+          "INVENTORY_MATCH": "OPERATING",
+          "SUPPLIER_PAYMENT": "OPERATING",
+          "PARTNER_ADDITIONAL_CAPITAL_FUNDING": "FINANCING",
+          "INVENTORY_RETURN": "OPERATING",
+          "INVENTORY_RECEIPT": "OPERATING",
+          "SUPPLIER_ADVANCE_ALLOCATION": "OPERATING",
+          "ACCRUAL_RECOGNIZE": "OPERATING",
+          "SUBCONTRACTOR_RETENTION_PAYMENT": "OPERATING",
+          "CR_WIP_CAPITALIZE": "OPERATING",
+          "INVENTORY_ISSUE": "OPERATING",
+          "PREPAY_AMORTIZE": "OPERATING",
+          "CR_WIP_RELEASE": "OPERATING",
+          "AR_ADVANCE": "OPERATING",
+          "SUBCONTRACTOR_PAYMENT": "OPERATING",
+          "CUSTODY_CASH_RETURN": "OPERATING",
+          "AR_APPLY": "OPERATING",
+          "AR_REFUND": "OPERATING",
+          "ASSET_CAPITALIZE": "INVESTING",
+          "PREPAY_RECOGNIZE": "OPERATING",
+          "PAYROLL": "OPERATING",
+          "SUPPLIER_ADVANCE": "OPERATING",
+          "HR_EMPLOYEE_ADVANCE": "OPERATING",
+          "SUBCONTRACTOR_RETENTION_RELEASE": "OPERATING",
+          "HR_PAYROLL_RECOVERY": "OPERATING",
+          "CR_REVENUE": "OPERATING",
+          "ASSET_DISPOSE": "INVESTING",
+          "AR_CREDIT": "OPERATING",
+          "SUPPLIER_PHYSICAL_RETURN": "OPERATING",
+          "SUBCONTRACTOR_ADVANCE": "OPERATING",
+          "SUPPLIER_REFUND": "OPERATING",
+          "CERTIFIED_OPENING": "OPERATING",
+          "JOURNAL_REVERSAL": "OPERATING",
+          "INVENTORY_ADJUSTMENT": "OPERATING"
+        },
+        "evidence": "Fictional bank, cash treasury, controlled physical custody included. Employee advances excluded. Interest Operating."
+      },
+      "opening": "10380000",
+      "closing": "10179266",
+      "net": "-200734",
+      "operating": "-176234",
+      "investing": "-124500",
+      "financing": "100000",
+      "unclassified": [],
+      "complete": true,
+      "movements": [
+        {
+          "journal": "7cffea80-5e98-489a-ac1e-03de57882316",
+          "source": "AR_ADVANCE",
+          "category": "OPERATING",
+          "amount": "210000"
+        },
+        {
+          "journal": "edc01359-9342-4438-9ec0-f902ceca171a",
+          "source": "SUBCONTRACTOR_ADVANCE",
+          "category": "OPERATING",
+          "amount": "-100000"
+        },
+        {
+          "journal": "f09fb0f7-b1b3-46c3-bdac-538f76892018",
+          "source": "SUPPLIER_REFUND",
+          "category": "OPERATING",
+          "amount": "10500"
+        },
+        {
+          "journal": "4728382f-2007-42df-94fe-d161223927dd",
+          "source": "SUPPLIER_PAYMENT",
+          "category": "OPERATING",
+          "amount": "-105000"
+        },
+        {
+          "journal": "0aedb93b-ca8e-486a-a9eb-7fcb0e7bc38b",
+          "source": "ACCRUAL_SETTLE",
+          "category": "OPERATING",
+          "amount": "-25000"
+        },
+        {
+          "journal": "995b26a8-5ea2-42c5-beed-1cebfceb76ac",
+          "source": "AR_RECEIPT",
+          "category": "OPERATING",
+          "amount": "33000"
+        },
+        {
+          "journal": "f3318486-9338-4b0f-96c6-00b06161f9f0",
+          "source": "SUPPLIER_PAYMENT",
+          "category": "OPERATING",
+          "amount": "-40000"
+        },
+        {
+          "journal": "c34b3270-191e-47c4-9e2b-f693e7238bc2",
+          "source": "HR_EMPLOYEE_ADVANCE",
+          "category": "OPERATING",
+          "amount": "-20000"
+        },
+        {
+          "journal": "ebe4089b-ec59-4903-b71b-4cd26bb0b9c0",
+          "source": "SUPPLIER_PAYMENT",
+          "category": "INVESTING",
+          "amount": "-240000"
+        },
+        {
+          "journal": "a2bf8f36-5517-4876-84ad-31e8d63b78e9",
+          "source": "AR_REFUND",
+          "category": "OPERATING",
+          "amount": "-15750"
+        },
+        {
+          "journal": "f7564d11-9522-40a2-930f-468e88672d90",
+          "source": "BANK_ADJUSTMENT",
+          "category": "OPERATING",
+          "amount": "1000"
+        },
+        {
+          "journal": "c6fa0933-7819-46e0-9dd8-4d53e9bd5faf",
+          "source": "AR_ADVANCE",
+          "category": "OPERATING",
+          "amount": "31500"
+        },
+        {
+          "journal": "7ccf7018-b2d9-4d64-a54b-b71e0f47945c",
+          "source": "SUPPLIER_PAYMENT",
+          "category": "OPERATING",
+          "amount": "-22500"
+        },
+        {
+          "journal": "12c1ffd6-8b34-4df2-9c50-3f6982ff53c8",
+          "source": "AR_RECEIPT",
+          "category": "OPERATING",
+          "amount": "21000"
+        },
+        {
+          "journal": "34d99008-b52b-43e7-885d-bac3a2ace396",
+          "source": "SUPPLIER_PAYMENT",
+          "category": "OPERATING",
+          "amount": "-60000"
+        },
+        {
+          "journal": "bac427c4-a0e8-44e9-9010-aaa1950cc7b2",
+          "source": "SUPPLIER_ADVANCE",
+          "category": "OPERATING",
+          "amount": "-30000"
+        },
+        {
+          "journal": "875709f5-e270-4f3b-8390-c5e390bb9941",
+          "source": "EXPENSE",
+          "category": "OPERATING",
+          "amount": "-10000"
+        },
+        {
+          "journal": "bd8c0ba6-c66c-4f79-8292-8cc3185fb37e",
+          "source": "AR_RECEIPT",
+          "category": "OPERATING",
+          "amount": "30000"
+        },
+        {
+          "journal": "399e8149-797d-41d1-85dc-67164c706e03",
+          "source": "PARTNER_ADDITIONAL_CAPITAL_FUNDING",
+          "category": "FINANCING",
+          "amount": "100000"
+        },
+        {
+          "journal": "59a40785-af07-4ce3-84d3-1163c264a854",
+          "source": "AR_RECEIPT",
+          "category": "INVESTING",
+          "amount": "115500"
+        },
+        {
+          "journal": "79a64642-62aa-486d-af87-6becc23356bd",
+          "source": "AR_RECEIPT",
+          "category": "OPERATING",
+          "amount": "190000"
+        },
+        {
+          "journal": "0fbdbd7b-ffdc-43fd-ba9e-0d8792832921",
+          "source": "EXPENSE",
+          "category": "OPERATING",
+          "amount": "-52500"
+        },
+        {
+          "journal": "10429e1c-4d1e-4ad3-af3a-56a6c7e1539c",
+          "source": "AR_CASH_SALE",
+          "category": "OPERATING",
+          "amount": "21000"
+        },
+        {
+          "journal": "328a35e8-3706-4047-bce5-a0aa3876aea7",
+          "source": "SALARY_PAYMENT",
+          "category": "OPERATING",
+          "amount": "-296161"
+        },
+        {
+          "journal": "d5cd72e7-6a07-4165-8557-b843cfcde4b3",
+          "source": "EXPENSE",
+          "category": "OPERATING",
+          "amount": "-30000"
+        },
+        {
+          "journal": "05d93ade-c594-4023-b1c9-ba835aff1df7",
+          "source": "BANK_ADJUSTMENT",
+          "category": "OPERATING",
+          "amount": "-2000"
+        },
+        {
+          "journal": "fa78866c-3fa8-423e-948f-bf5416a3d489",
+          "source": "AR_RECEIPT",
+          "category": "OPERATING",
+          "amount": "105000"
+        },
+        {
+          "journal": "8c1ef3b7-2d4f-4a4c-aff9-9229cc39a410",
+          "source": "SUBCONTRACTOR_PAYMENT",
+          "category": "OPERATING",
+          "amount": "-350000"
+        },
+        {
+          "journal": "58dfe540-1d82-4e37-a593-5b6c1e731194",
+          "source": "AR_RECEIPT",
+          "category": "OPERATING",
+          "amount": "740000"
+        },
+        {
+          "journal": "b558931c-af61-498c-a7e6-9d9428ba5aaa",
+          "source": "PREPAY_RECOGNIZE",
+          "category": "OPERATING",
+          "amount": "-31000"
+        },
+        {
+          "journal": "54c41b3b-60fb-47e4-9a7c-1a1331a0db0e",
+          "source": "SUBCONTRACTOR_RETENTION_PAYMENT",
+          "category": "OPERATING",
+          "amount": "-50000"
+        },
+        {
+          "journal": "fe2c439b-3ca3-45c1-9159-d6d4234aa455",
+          "source": "SUPPLIER_PAYMENT",
+          "category": "OPERATING",
+          "amount": "-104000"
+        },
+        {
+          "journal": "6b926628-9914-49f6-8655-fb7cc01cac8a",
+          "source": "SUPPLIER_PAYMENT",
+          "category": "OPERATING",
+          "amount": "-65000"
+        },
+        {
+          "journal": "e7071e66-2ea4-4f26-a8e1-3513f111c2fc",
+          "source": "SALARY_PAYMENT",
+          "category": "OPERATING",
+          "amount": "-280323"
+        },
+        {
+          "journal": "79e321d1-6dec-41a0-8aad-97d47dc74a71",
+          "source": "AR_RECEIPT",
+          "category": "OPERATING",
+          "amount": "120000"
+        }
+      ]
+    },
+    "bank": {
+      "gl": [
+        {
+          "id": "ca795fee-f66e-44d6-84d9-7f2e08a39074",
+          "date": "2026-09-15",
+          "source": "ASSET_CAPITALIZE",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000007",
+          "journal_id": "daccc709-2154-44d1-8e60-6db7980a1fd9",
+          "description": "CR07-PRE_ASSET Fictional approved recognition source CR07-PRE_ASSET",
+          "reversal_of": null,
+          "amount_minor": "-120000",
+          "remaining_minor": "0",
+          "business_reference": "CR07-PRE_ASSET"
+        },
+        {
+          "id": "4614a513-2673-42b4-85fb-c42ae17cb0f6",
+          "date": "2026-10-02",
+          "source": "HR_EMPLOYEE_ADVANCE",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000065",
+          "journal_id": "c34b3270-191e-47c4-9e2b-f693e7238bc2",
+          "description": "Approved employee advance",
+          "reversal_of": null,
+          "amount_minor": "-20000",
+          "remaining_minor": "0",
+          "business_reference": null
+        },
+        {
+          "id": "b19567fa-5674-430d-9838-24c2690e5b86",
+          "date": "2026-10-02",
+          "source": "AR_RECEIPT",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000010",
+          "journal_id": "fa78866c-3fa8-423e-948f-bf5416a3d489",
+          "description": "CR07-OPEN_AR_PAY Fictional independent source CR07-OPEN_AR_PAY",
+          "reversal_of": null,
+          "amount_minor": "105000",
+          "remaining_minor": "0",
+          "business_reference": "CR07-OPEN_AR_PAY"
+        },
+        {
+          "id": "e6f6974d-0c10-458b-b495-e0d1097e750f",
+          "date": "2026-10-02",
+          "source": "SUPPLIER_PAYMENT",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000009",
+          "journal_id": "fe2c439b-3ca3-45c1-9159-d6d4234aa455",
+          "description": "Supplier Payment NARVO-DEMO-COMMERCIAL-SPAY-2026-000001",
+          "reversal_of": null,
+          "amount_minor": "-104000",
+          "remaining_minor": "0",
+          "business_reference": null
+        },
+        {
+          "id": "47ee1c44-933f-4697-8d43-f6d92fe32437",
+          "date": "2026-10-03",
+          "source": "SUPPLIER_PAYMENT",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000072",
+          "journal_id": "ebe4089b-ec59-4903-b71b-4cd26bb0b9c0",
+          "description": "Supplier Payment NARVO-DEMO-COMMERCIAL-SPAY-2026-000007",
+          "reversal_of": null,
+          "amount_minor": "-240000",
+          "remaining_minor": "0",
+          "business_reference": null
+        },
+        {
+          "id": "82e5e37f-f9ba-4d78-9983-a2e88ff97468",
+          "date": "2026-10-03",
+          "source": "EXPENSE",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000011",
+          "journal_id": "0fbdbd7b-ffdc-43fd-ba9e-0d8792832921",
+          "description": "Fictional gross525; no supported VAT invoice; no input recovery",
+          "reversal_of": null,
+          "amount_minor": "-52500",
+          "remaining_minor": "0",
+          "business_reference": null
+        },
+        {
+          "id": "f348afdb-301c-40ed-bc3c-07dc69e90a86",
+          "date": "2026-10-03",
+          "source": "CUSTODY_ADVANCE",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000041",
+          "journal_id": "1d79da41-b000-4dfd-9984-09504ea09a43",
+          "description": "Custody Advance NARVO-DEMO-COMMERCIAL-CADV-2026-000001",
+          "reversal_of": null,
+          "amount_minor": "-500000",
+          "remaining_minor": "0",
+          "business_reference": null
+        },
+        {
+          "id": "06a2ee36-de92-4c6e-83da-e7961871a3bc",
+          "date": "2026-10-04",
+          "source": "AR_ADVANCE",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000046",
+          "journal_id": "7cffea80-5e98-489a-ac1e-03de57882316",
+          "description": "CR07-CR_ADV Fictional approved construction source CR_ADV",
+          "reversal_of": null,
+          "amount_minor": "210000",
+          "remaining_minor": "0",
+          "business_reference": "CR07-CR_ADV"
+        },
+        {
+          "id": "45df15d0-a202-4f7b-8a79-5f95c91a7aaf",
+          "date": "2026-10-04",
+          "source": "SUPPLIER_PAYMENT",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000013",
+          "journal_id": "f3318486-9338-4b0f-96c6-00b06161f9f0",
+          "description": "Supplier Payment NARVO-DEMO-COMMERCIAL-SPAY-2026-000002",
+          "reversal_of": null,
+          "amount_minor": "-40000",
+          "remaining_minor": "0",
+          "business_reference": null
+        },
+        {
+          "id": "0980543a-b5ec-42bd-afc7-f1881fd21b09",
+          "date": "2026-10-05",
+          "source": "SUBCONTRACTOR_ADVANCE",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000047",
+          "journal_id": "edc01359-9342-4438-9ec0-f902ceca171a",
+          "description": "Subcontractor Advance NARVO-DEMO-COMMERCIAL-SADV-2026-000001",
+          "reversal_of": null,
+          "amount_minor": "-100000",
+          "remaining_minor": "0",
+          "business_reference": null
+        },
+        {
+          "id": "5d318cc4-dc8b-40c4-85f0-ec005ed3266a",
+          "date": "2026-10-05",
+          "source": "SUPPLIER_ADVANCE",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000015",
+          "journal_id": "bac427c4-a0e8-44e9-9010-aaa1950cc7b2",
+          "description": "NARVO-DEMO-COMMERCIAL-SAP-2026-000001 Fictional supported supplier adjustment SUP_ADV",
+          "reversal_of": null,
+          "amount_minor": "-30000",
+          "remaining_minor": "0",
+          "business_reference": null
+        },
+        {
+          "id": "ea0b811d-d854-4db9-b230-d5322037acce",
+          "date": "2026-10-05",
+          "source": "SUPPLIER_PAYMENT",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000014",
+          "journal_id": "6b926628-9914-49f6-8655-fb7cc01cac8a",
+          "description": "Supplier Payment NARVO-DEMO-COMMERCIAL-SPAY-2026-000003",
+          "reversal_of": null,
+          "amount_minor": "-65000",
+          "remaining_minor": "0",
+          "business_reference": null
+        },
+        {
+          "id": "52c5d6c3-5349-4ae4-9f01-46934eaeef4f",
+          "date": "2026-10-07",
+          "source": "SUPPLIER_PAYMENT",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000019",
+          "journal_id": "7ccf7018-b2d9-4d64-a54b-b71e0f47945c",
+          "description": "Supplier Payment NARVO-DEMO-COMMERCIAL-SPAY-2026-000004",
+          "reversal_of": null,
+          "amount_minor": "-22500",
+          "remaining_minor": "0",
+          "business_reference": null
+        },
+        {
+          "id": "d4e8ec66-e2a2-4512-a2b9-781d4f83cde4",
+          "date": "2026-10-07",
+          "source": "TREASURY_TRANSFER",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000045",
+          "journal_id": "313b7a1b-6f71-40d3-b16b-27fc91baeec6",
+          "description": "CR07-TRANSFER_CASH Fictional approved recognition source CR07-TRANSFER_CASH",
+          "reversal_of": null,
+          "amount_minor": "-200000",
+          "remaining_minor": "200000",
+          "business_reference": "CR07-TRANSFER_CASH"
+        },
+        {
+          "id": "0d278640-47fc-4a6d-b4e3-18d3dbfb336a",
+          "date": "2026-10-09",
+          "source": "SUPPLIER_PAYMENT",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000023",
+          "journal_id": "4728382f-2007-42df-94fe-d161223927dd",
+          "description": "Supplier Payment NARVO-DEMO-COMMERCIAL-SPAY-2026-000005",
+          "reversal_of": null,
+          "amount_minor": "-105000",
+          "remaining_minor": "0",
+          "business_reference": null
+        },
+        {
+          "id": "9be723db-5800-4dcd-9bc6-3be76f58bfaa",
+          "date": "2026-10-10",
+          "source": "EXPENSE",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000052",
+          "journal_id": "d5cd72e7-6a07-4165-8557-b843cfcde4b3",
+          "description": "Fictional CR07 verified acquisition",
+          "reversal_of": null,
+          "amount_minor": "-30000",
+          "remaining_minor": "0",
+          "business_reference": null
+        },
+        {
+          "id": "0acc8514-ed26-484f-b736-eae7d340ca62",
+          "date": "2026-10-11",
+          "source": "SUPPLIER_REFUND",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000026",
+          "journal_id": "f09fb0f7-b1b3-46c3-bdac-538f76892018",
+          "description": "NARVO-DEMO-COMMERCIAL-SRET-2026-000003 Actual fictional bank refund against paid return credit",
+          "reversal_of": null,
+          "amount_minor": "10500",
+          "remaining_minor": "0",
+          "business_reference": null
+        },
+        {
+          "id": "5b0198d5-1ed0-49e6-8ddc-b173bf019e28",
+          "date": "2026-10-12",
+          "source": "SUPPLIER_PAYMENT",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000055",
+          "journal_id": "34d99008-b52b-43e7-885d-bac3a2ace396",
+          "description": "Supplier Payment NARVO-DEMO-COMMERCIAL-SPAY-2026-000006",
+          "reversal_of": null,
+          "amount_minor": "-60000",
+          "remaining_minor": "0",
+          "business_reference": null
+        },
+        {
+          "id": "676167bb-00cf-4622-96a2-d4aae646fc90",
+          "date": "2026-10-13",
+          "source": "AR_RECEIPT",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000029",
+          "journal_id": "bd8c0ba6-c66c-4f79-8292-8cc3185fb37e",
+          "description": "CR07-GOODS_PART Fictional independent source CR07-GOODS_PART",
+          "reversal_of": null,
+          "amount_minor": "30000",
+          "remaining_minor": "0",
+          "business_reference": "CR07-GOODS_PART"
+        },
+        {
+          "id": "245a356c-9f59-45a2-a566-9dc015d93604",
+          "date": "2026-10-14",
+          "source": "AR_RECEIPT",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000030",
+          "journal_id": "995b26a8-5ea2-42c5-beed-1cebfceb76ac",
+          "description": "CR07-GOODS_FINAL Fictional independent source CR07-GOODS_FINAL",
+          "reversal_of": null,
+          "amount_minor": "33000",
+          "remaining_minor": "0",
+          "business_reference": "CR07-GOODS_FINAL"
+        },
+        {
+          "id": "de85ea52-d911-4a07-a3b9-15cad8ac9607",
+          "date": "2026-10-15",
+          "source": "PREPAY_RECOGNIZE",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000078",
+          "journal_id": "b558931c-af61-498c-a7e6-9d9428ba5aaa",
+          "description": "CR07-PREPAY Fictional approved recognition source CR07-PREPAY",
+          "reversal_of": null,
+          "amount_minor": "-31000",
+          "remaining_minor": "0",
+          "business_reference": "CR07-PREPAY"
+        },
+        {
+          "id": "4c83edc7-c04e-4cda-82b4-40a3e6d8336a",
+          "date": "2026-10-16",
+          "source": "AR_REFUND",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000033",
+          "journal_id": "a2bf8f36-5517-4876-84ad-31e8d63b78e9",
+          "description": "CR07-GOODS_REFUND Fictional independent source CR07-GOODS_REFUND",
+          "reversal_of": null,
+          "amount_minor": "-15750",
+          "remaining_minor": "0",
+          "business_reference": "CR07-GOODS_REFUND"
+        },
+        {
+          "id": "8dc412a9-3cf3-4635-84b2-ecd0c7981e6a",
+          "date": "2026-10-17",
+          "source": "AR_CASH_SALE",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000034",
+          "journal_id": "10429e1c-4d1e-4ad3-af3a-56a6c7e1539c",
+          "description": "CR07-CASH_SALE Fictional independent source CR07-CASH_SALE",
+          "reversal_of": null,
+          "amount_minor": "21000",
+          "remaining_minor": "21000",
+          "business_reference": "CR07-CASH_SALE"
+        },
+        {
+          "id": "5046b39f-7c9c-4759-a42b-3c7a8e68bf75",
+          "date": "2026-10-18",
+          "source": "AR_ADVANCE",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000035",
+          "journal_id": "c6fa0933-7819-46e0-9dd8-4d53e9bd5faf",
+          "description": "CR07-CUSTOMER_ADV Fictional independent source CR07-CUSTOMER_ADV",
+          "reversal_of": null,
+          "amount_minor": "31500",
+          "remaining_minor": "0",
+          "business_reference": "CR07-CUSTOMER_ADV"
+        },
+        {
+          "id": "554d938b-6fa6-431d-b204-d2885f7f6e0c",
+          "date": "2026-10-20",
+          "source": "AR_RECEIPT",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000038",
+          "journal_id": "12c1ffd6-8b34-4df2-9c50-3f6982ff53c8",
+          "description": "CR07-CUSTOMER_FINAL Fictional independent source CR07-CUSTOMER_FINAL",
+          "reversal_of": null,
+          "amount_minor": "21000",
+          "remaining_minor": "0",
+          "business_reference": "CR07-CUSTOMER_FINAL"
+        },
+        {
+          "id": "c65b2273-58fe-4b25-a976-0b1157f88c66",
+          "date": "2026-10-21",
+          "source": "SUBCONTRACTOR_PAYMENT",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000049",
+          "journal_id": "8c1ef3b7-2d4f-4a4c-aff9-9229cc39a410",
+          "description": "Subcontractor Payment NARVO-DEMO-COMMERCIAL-SCPAY-2026-000001",
+          "reversal_of": null,
+          "amount_minor": "-350000",
+          "remaining_minor": "0",
+          "business_reference": null
+        },
+        {
+          "id": "0fae08ee-c528-4e1e-b86f-428af7e3481b",
+          "date": "2026-10-25",
+          "source": "ACCRUAL_SETTLE",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000083",
+          "journal_id": "0aedb93b-ca8e-486a-a9eb-7fcb0e7bc38b",
+          "description": "CR07-ACCRUAL_PAY Fictional approved recognition source CR07-ACCRUAL_PAY",
+          "reversal_of": null,
+          "amount_minor": "-25000",
+          "remaining_minor": "0",
+          "business_reference": "CR07-ACCRUAL_PAY"
+        },
+        {
+          "id": "e356a457-392e-4af5-8fda-9da452b9e7ca",
+          "date": "2026-10-26",
+          "source": "SUBCONTRACTOR_RETENTION_PAYMENT",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000051",
+          "journal_id": "54c41b3b-60fb-47e4-9a7c-1a1331a0db0e",
+          "description": "Retention Payment NARVO-DEMO-COMMERCIAL-SRPAY-2026-000001",
+          "reversal_of": null,
+          "amount_minor": "-50000",
+          "remaining_minor": "0",
+          "business_reference": null
+        },
+        {
+          "id": "4cb80830-b55a-4263-b613-5307b8e345be",
+          "date": "2026-10-30",
+          "source": "BANK_ADJUSTMENT",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000085",
+          "journal_id": "f7564d11-9522-40a2-930f-468e88672d90",
+          "description": "Fictional bank-only evidenced gross adjustment with no VAT",
+          "reversal_of": null,
+          "amount_minor": "1000",
+          "remaining_minor": "0",
+          "business_reference": null
+        },
+        {
+          "id": "9c7f0a2d-4d2a-478d-864a-e58ebcc27ca3",
+          "date": "2026-10-30",
+          "source": "BANK_ADJUSTMENT",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000084",
+          "journal_id": "05d93ade-c594-4023-b1c9-ba835aff1df7",
+          "description": "Fictional bank-only evidenced gross adjustment with no VAT",
+          "reversal_of": null,
+          "amount_minor": "-2000",
+          "remaining_minor": "0",
+          "business_reference": null
+        },
+        {
+          "id": "7408da80-700a-48ce-84b6-0ef60b2d9b64",
+          "date": "2026-10-31",
+          "source": "AR_RECEIPT",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000077",
+          "journal_id": "59a40785-af07-4ce3-84d3-1163c264a854",
+          "description": "CR07-ASSET_RECEIPT Fictional independent source CR07-ASSET_RECEIPT",
+          "reversal_of": null,
+          "amount_minor": "115500",
+          "remaining_minor": "0",
+          "business_reference": "CR07-ASSET_RECEIPT"
+        },
+        {
+          "id": "80bf5dcf-94c7-4300-881b-d720d046de21",
+          "date": "2026-10-31",
+          "source": "AR_RECEIPT",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000062",
+          "journal_id": "79a64642-62aa-486d-af87-6becc23356bd",
+          "description": "CR07-CR_COLLECT2 Fictional approved construction source CR_COLLECT2",
+          "reversal_of": null,
+          "amount_minor": "190000",
+          "remaining_minor": "0",
+          "business_reference": "CR07-CR_COLLECT2"
+        },
+        {
+          "id": "92c2dc80-b483-4841-a69a-e98a54902c1c",
+          "date": "2026-10-31",
+          "source": "SALARY_PAYMENT",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000069",
+          "journal_id": "328a35e8-3706-4047-bce5-a0aa3876aea7",
+          "description": "Salary payment",
+          "reversal_of": null,
+          "amount_minor": "-296161",
+          "remaining_minor": "0",
+          "business_reference": null
+        },
+        {
+          "id": "d0f1af03-bc62-4693-835e-4568fce86be7",
+          "date": "2026-10-31",
+          "source": "AR_RECEIPT",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000059",
+          "journal_id": "58dfe540-1d82-4e37-a593-5b6c1e731194",
+          "description": "CR07-CR_COLLECT1 Fictional approved construction source CR_COLLECT1",
+          "reversal_of": null,
+          "amount_minor": "740000",
+          "remaining_minor": "0",
+          "business_reference": "CR07-CR_COLLECT1"
+        },
+        {
+          "id": "ecc8513e-8f99-4803-a82a-19084d38d559",
+          "date": "2026-10-31",
+          "source": "SALARY_PAYMENT",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000068",
+          "journal_id": "e7071e66-2ea4-4f26-a8e1-3513f111c2fc",
+          "description": "Salary payment",
+          "reversal_of": null,
+          "amount_minor": "-280323",
+          "remaining_minor": "0",
+          "business_reference": null
+        },
+        {
+          "id": "f503bf4f-dd07-4b02-9576-b2eb971ff8d3",
+          "date": "2026-10-31",
+          "source": "AR_RECEIPT",
+          "reference": "NARVO-DEMO-COMMERCIAL-JE-2026-000064",
+          "journal_id": "79e321d1-6dec-41a0-8aad-97d47dc74a71",
+          "description": "CR07-CR_RET_PAY Fictional approved construction source CR_RET_PAY",
+          "reversal_of": null,
+          "amount_minor": "120000",
+          "remaining_minor": "0",
+          "business_reference": "CR07-CR_RET_PAY"
+        }
+      ],
+      "final": true,
+      "lines": [
+        {
+          "id": "8833b485-2e92-43f7-9ed3-51691e061d77",
+          "raw": {
+            "scenario": "OPEN_AP_PAY"
+          },
+          "date": "2026-10-02",
+          "reference": "CR07-OPEN_AP_PAY",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 1,
+          "description": "Pay September service and stock creditors",
+          "amount_minor": "-104000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        },
+        {
+          "id": "afb8d15b-fed5-420b-9da8-bf1652489fbf",
+          "raw": {
+            "scenario": "OPEN_AR_PAY"
+          },
+          "date": "2026-10-02",
+          "reference": "CR07-OPEN_AR_PAY",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 2,
+          "description": "Collect September debtor",
+          "amount_minor": "105000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        },
+        {
+          "id": "13ac4c67-c7f2-4e5b-9496-b5c52abb4df2",
+          "raw": {
+            "scenario": "PAID_GROSS"
+          },
+          "date": "2026-10-03",
+          "reference": "CR07-PAID_GROSS",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 3,
+          "description": "Ordinary paid purchase with unsupported VAT excluded from recovery",
+          "amount_minor": "-52500",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        },
+        {
+          "id": "82a7b561-e44c-44cf-980b-8d4add91d5de",
+          "raw": {
+            "scenario": "SERVICE_PART"
+          },
+          "date": "2026-10-04",
+          "reference": "CR07-SERVICE_PART",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 4,
+          "description": "Partial Supplier settlement",
+          "amount_minor": "-40000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        },
+        {
+          "id": "5e8097be-560b-4930-91e9-7368042ed87b",
+          "raw": {
+            "scenario": "SERVICE_FINAL"
+          },
+          "date": "2026-10-05",
+          "reference": "CR07-SERVICE_FINAL",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 5,
+          "description": "Final Supplier settlement",
+          "amount_minor": "-65000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        },
+        {
+          "id": "ecb183b1-6f94-4167-9f59-96aa597b3f98",
+          "raw": {
+            "scenario": "SUP_ADV"
+          },
+          "date": "2026-10-05",
+          "reference": "CR07-SUP_ADV",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 6,
+          "description": "Supplier advance, no expense",
+          "amount_minor": "-30000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        },
+        {
+          "id": "d474cb5b-031f-4dee-b9d2-cf6889d7f3f8",
+          "raw": {
+            "scenario": "ADV_FINAL"
+          },
+          "date": "2026-10-07",
+          "reference": "CR07-ADV_FINAL",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 7,
+          "description": "Settle remaining Supplier invoice",
+          "amount_minor": "-22500",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        },
+        {
+          "id": "147dfebb-3a6c-40fd-99e7-fe60d2833b1b",
+          "raw": {
+            "scenario": "STOCK_PAY"
+          },
+          "date": "2026-10-09",
+          "reference": "CR07-STOCK_PAY",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 8,
+          "description": "Pay actual Inventory Supplier invoice",
+          "amount_minor": "-105000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        },
+        {
+          "id": "748acd24-7fd2-4ac2-a016-22f75b2bea50",
+          "raw": {
+            "scenario": "RETURN_REFUND"
+          },
+          "date": "2026-10-11",
+          "reference": "CR07-RETURN_REFUND",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 9,
+          "description": "Receive actual Supplier refund",
+          "amount_minor": "10500",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        },
+        {
+          "id": "b0b4e2d3-adb3-4636-817d-0af73bbb22f8",
+          "raw": {
+            "scenario": "GOODS_PART"
+          },
+          "date": "2026-10-13",
+          "reference": "CR07-GOODS_PART",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 10,
+          "description": "Partial Customer collection",
+          "amount_minor": "30000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        },
+        {
+          "id": "aa5dca36-94b9-4ef2-b644-5533f926944b",
+          "raw": {
+            "scenario": "GOODS_FINAL"
+          },
+          "date": "2026-10-14",
+          "reference": "CR07-GOODS_FINAL",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 11,
+          "description": "Final Customer collection",
+          "amount_minor": "33000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        },
+        {
+          "id": "faf860a5-3acc-4262-af47-414a9fe3bf3c",
+          "raw": {
+            "scenario": "GOODS_REFUND"
+          },
+          "date": "2026-10-16",
+          "reference": "CR07-GOODS_REFUND",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 12,
+          "description": "Refund actual Customer credit",
+          "amount_minor": "-15750",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        },
+        {
+          "id": "ddaaaa06-4617-477b-9389-e50ba3434d2c",
+          "raw": {
+            "scenario": "CUSTOMER_ADV"
+          },
+          "date": "2026-10-18",
+          "reference": "CR07-CUSTOMER_ADV",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 13,
+          "description": "Documented tax-point advance",
+          "amount_minor": "31500",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        },
+        {
+          "id": "8d2f091a-4695-4c32-b66f-aedb0517b1d8",
+          "raw": {
+            "scenario": "CUSTOMER_FINAL"
+          },
+          "date": "2026-10-20",
+          "reference": "CR07-CUSTOMER_FINAL",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 14,
+          "description": "Collect remaining service receivable",
+          "amount_minor": "21000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        },
+        {
+          "id": "04fe7f73-62a0-4004-8032-ecbb1810271d",
+          "raw": {
+            "scenario": "CUSTODY_FUND"
+          },
+          "date": "2026-10-03",
+          "reference": "CR07-CUSTODY_FUND",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 15,
+          "description": "Bank-to-Custodian advance",
+          "amount_minor": "-500000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        },
+        {
+          "id": "4e00916e-96c1-4905-a678-761614918887",
+          "raw": {
+            "scenario": "CON_ADV"
+          },
+          "date": "2026-10-05",
+          "reference": "CR07-CON_ADV",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 16,
+          "description": "Subcontractor advance before work",
+          "amount_minor": "-100000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        },
+        {
+          "id": "f61d4975-2977-41dc-a8a1-cb72b51d374c",
+          "raw": {
+            "scenario": "CON_PAY"
+          },
+          "date": "2026-10-21",
+          "reference": "CR07-CON_PAY",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 17,
+          "description": "Settle certified payable",
+          "amount_minor": "-350000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        },
+        {
+          "id": "768afd02-1e4e-478d-abf9-4252a34d27fc",
+          "raw": {
+            "scenario": "RET_PAY"
+          },
+          "date": "2026-10-26",
+          "reference": "CR07-RET_PAY",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 18,
+          "description": "Pay released retention",
+          "amount_minor": "-50000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        },
+        {
+          "id": "4f7845d0-101c-432b-939d-26bf8df7e790",
+          "raw": {
+            "scenario": "PROJECT_COST"
+          },
+          "date": "2026-10-10",
+          "reference": "CR07-PROJECT_COST",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 19,
+          "description": "Direct Project paid cost",
+          "amount_minor": "-30000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        },
+        {
+          "id": "66975259-4946-4bd7-81e1-b60cfa2b37e1",
+          "raw": {
+            "scenario": "WIP_PAY"
+          },
+          "date": "2026-10-12",
+          "reference": "CR07-WIP_PAY",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 20,
+          "description": "Pay source liability once",
+          "amount_minor": "-60000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        },
+        {
+          "id": "d44670d8-b54a-4210-b414-50b14de32b72",
+          "raw": {
+            "scenario": "CR_ADV"
+          },
+          "date": "2026-10-04",
+          "reference": "CR07-CR_ADV",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 21,
+          "description": "Construction tax-point advance2000",
+          "amount_minor": "210000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        },
+        {
+          "id": "262763fb-7a5a-4ca9-9ff4-6cbf5f84b4a1",
+          "raw": {
+            "scenario": "CR_COLLECT1"
+          },
+          "date": "2026-10-31",
+          "reference": "CR07-CR_COLLECT1",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 22,
+          "description": "Collect first net progress balance",
+          "amount_minor": "740000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        },
+        {
+          "id": "1275e6e0-c3cf-4e42-a8ad-6af10de72a41",
+          "raw": {
+            "scenario": "CR_COLLECT2"
+          },
+          "date": "2026-10-31",
+          "reference": "CR07-CR_COLLECT2",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 23,
+          "description": "Collect second progress receivable",
+          "amount_minor": "190000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        },
+        {
+          "id": "2a15888c-87ff-4c86-aa9c-6f13949d29e3",
+          "raw": {
+            "scenario": "CR_RET_PAY"
+          },
+          "date": "2026-10-31",
+          "reference": "CR07-CR_RET_PAY",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 24,
+          "description": "Collect released Customer retention",
+          "amount_minor": "120000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        },
+        {
+          "id": "e7126c1b-431a-40f8-aaa0-4b0755833179",
+          "raw": {
+            "scenario": "EMP_ADV"
+          },
+          "date": "2026-10-02",
+          "reference": "CR07-EMP_ADV",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 25,
+          "description": "Employee receivable advance200",
+          "amount_minor": "-20000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        },
+        {
+          "id": "9dd9392e-028e-4e42-aa42-82a649603db8",
+          "raw": {
+            "scenario": "SALARY1"
+          },
+          "date": "2026-10-31",
+          "reference": "CR07-SALARY1",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 26,
+          "description": "Pay first employee net2803.23",
+          "amount_minor": "-280323",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        },
+        {
+          "id": "75b6f659-c7e2-4a5f-bc62-6650da446893",
+          "raw": {
+            "scenario": "SALARY2"
+          },
+          "date": "2026-10-31",
+          "reference": "CR07-SALARY2",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 27,
+          "description": "Pay second employee net2961.61",
+          "amount_minor": "-296161",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        },
+        {
+          "id": "d7b4fc93-9fb1-46fb-adb7-543015bf4563",
+          "raw": {
+            "scenario": "ASSET_PAY"
+          },
+          "date": "2026-10-03",
+          "reference": "CR07-ASSET_PAY",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 28,
+          "description": "Settle asset acquisition AP",
+          "amount_minor": "-240000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        },
+        {
+          "id": "ed6012df-3a2f-437e-a916-9bd2860b720a",
+          "raw": {
+            "scenario": "ASSET_RECEIPT"
+          },
+          "date": "2026-10-31",
+          "reference": "CR07-ASSET_RECEIPT",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 29,
+          "description": "Collect actual asset sale proceeds",
+          "amount_minor": "115500",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        },
+        {
+          "id": "24f7bd7e-7562-493b-9e72-55ca7bb12767",
+          "raw": {
+            "scenario": "PREPAY"
+          },
+          "date": "2026-10-15",
+          "reference": "CR07-PREPAY",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 30,
+          "description": "Pay310 for31 actual coverage days Oct15–Nov14",
+          "amount_minor": "-31000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        },
+        {
+          "id": "b7c10e99-eedf-40ab-95aa-621faac04660",
+          "raw": {
+            "scenario": "ACCRUAL_PAY"
+          },
+          "date": "2026-10-25",
+          "reference": "CR07-ACCRUAL_PAY",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 31,
+          "description": "Settle actual accrued service250",
+          "amount_minor": "-25000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        },
+        {
+          "id": "ca30c1dc-3ab3-42be-a3d1-7416aa21739e",
+          "raw": {
+            "scenario": "BANK_FEE"
+          },
+          "date": "2026-10-30",
+          "reference": "CR07-BANK_FEE",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 32,
+          "description": "Actual bank statement charge20",
+          "amount_minor": "-2000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        },
+        {
+          "id": "6a60afc2-71f7-41d4-9d76-a2c4135fa8e5",
+          "raw": {
+            "scenario": "BANK_INTEREST"
+          },
+          "date": "2026-10-30",
+          "reference": "CR07-BANK_INTEREST",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "row_number": 33,
+          "description": "Actual bank statement interest10",
+          "amount_minor": "1000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "remaining_minor": "0"
+        }
+      ],
+      "events": [
+        {
+          "id": "ccdc0bc3-e459-4323-81fd-a1d6429de4db",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "IMPORT",
+          "reason": "",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 1,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:10.889+00:00",
+          "input_hash": "bb2fd87cc95a827d7e541ea10e59f6b07592a914bedd08c8ee41df4ee2f18055",
+          "request_id": "d595d029-fd33-4ed8-86e4-dcbc205a0d8a",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "2a9e7aa3-80d8-47be-b4dd-b160a10fb163",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "IMPORT",
+          "reason": "",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 2,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:11.642+00:00",
+          "input_hash": "3cf40550c416de98a91a3bdcad988193b14ddf6042d928a3360327b8377aaa2b",
+          "request_id": "1899f243-868b-4e7d-9b1a-87749fda9b02",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "bd9fda75-6768-4bad-b17f-722c086b1ec1",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "CONFIGURE",
+          "reason": "Fictional bank adjustment classification approved",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 3,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:12.121+00:00",
+          "input_hash": "2af2492d79a7fa75196d68adbbd0e9527969e08d1b997eb33273a73481bfc843",
+          "request_id": "66974602-16c7-40e3-9fbf-25ee70154635",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "e13719eb-de3a-4b5f-b7b2-887cb13c1d5c",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "CONFIGURE",
+          "reason": "Fictional bank adjustment classification approved",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 4,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:12.155+00:00",
+          "input_hash": "aecb22e88f94d9a31e42daa7c47be2e7835fbc0d3a172c179a41beec8052237a",
+          "request_id": "a6db82a8-87b8-429e-8542-55e752c9faaf",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "ef27891e-c756-4f6c-a6ba-15bbf29f5343",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "ADJUST",
+          "reason": "Fictional bank-only evidenced gross adjustment with no VAT",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 5,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:12.209+00:00",
+          "input_hash": "9962edb5247822f41d0e8e3b08baf9b7315916ee511c26a988e01ac349c948a3",
+          "request_id": "fdcd74ad-e002-4a80-ad0f-93b311229324",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "4d5825b6-b4a4-4518-89c8-fd94d8449ca4",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "ADJUST",
+          "reason": "Fictional bank-only evidenced gross adjustment with no VAT",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 6,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:12.504+00:00",
+          "input_hash": "920651dffbfadae921d6c365e01c05582d66fd4c5857513370d00817f1449915",
+          "request_id": "a21ba62f-e797-4941-b44c-162f64689aa7",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "05b45136-01f7-48a5-9977-846de87cb15f",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 7,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.183+00:00",
+          "input_hash": "a7ffc4c1315627eb4a09ed19ad990a7b99b3eee5802b0176f045c81cecb175e8",
+          "request_id": "8cc9c095-046a-4f54-9cb1-3265f19c54ff",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "87b9ae9a-30cb-4d8d-b5e7-b4b13ec2c949",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "REFERENCE_AMOUNT_DATE_WINDOW",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 8,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.201+00:00",
+          "input_hash": "6db5b011a309124306a09b6e943e327120d0d981301ddc28d4a08d737de72ca9",
+          "request_id": "ad491b57-0b81-40db-b6fc-472fca04bc4a",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "62412a92-9d5f-4475-9fa6-6c0934bdc650",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 9,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.216+00:00",
+          "input_hash": "9d834c3fabe3c7a134a6139adfea5873462c7198713d962683c085eca2382d0b",
+          "request_id": "92e3bfe5-8c3b-4b43-a308-a0428b8f9c9a",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "84ab0c89-a755-4646-ab40-4d63361e7ce0",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 10,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.251+00:00",
+          "input_hash": "fd9e2aa8a88d8af0afa7f52c54230cc5ec126fce6b61c43342e6a5dc8ac7707a",
+          "request_id": "ea329a04-82f5-4207-9a19-a4e8fd72cb05",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "0febef0c-e293-44af-b66f-ba4fbfa8a615",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 11,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.271+00:00",
+          "input_hash": "12f794cf51006e8155ab39568e9b1483d2fdb981878a44720fedb2e1b6a8a9db",
+          "request_id": "bb57e33f-ca89-4557-9ade-df69871328e8",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "9c17fa65-2975-492a-be3f-a06e5755c2c3",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 12,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.296+00:00",
+          "input_hash": "24dc8ea873ebb15ada1c37d5fd45454b68b1dd17c233051a2d14843949b86afd",
+          "request_id": "a1c99fd8-7e9e-4ce1-9d4a-d9b097f5ee20",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "945feb85-3335-4dee-b3a0-6fb7d6640291",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 13,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.317+00:00",
+          "input_hash": "a5a01302f275aa327676ddc64a337bf26194f884e59ba95d40a7bdc3fe85e0be",
+          "request_id": "42285c41-1713-4418-abf4-f3ccd2977e11",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "c4f00b0c-f959-4998-bdff-e573419f15f2",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 14,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.332+00:00",
+          "input_hash": "53432d23857d384f1e30ddfbaaeae66d43cf99fb8a0a8f6837d08d887099a2ab",
+          "request_id": "1f7d376f-1f9a-488c-bff3-85d7c094aa5b",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "a3ec3e67-ce06-4322-ab69-db5c3afd7241",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 15,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.346+00:00",
+          "input_hash": "fefa2e1c016746ba7508a37afb06bbfa9eabea45d4fb21dc140e6634667248b5",
+          "request_id": "bcb7090c-d200-475c-9daf-d11ecdcf5fe4",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "123ea491-c060-4ddb-84e1-8a54c121d907",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "REFERENCE_AMOUNT_DATE_WINDOW",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 16,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.364+00:00",
+          "input_hash": "b535d0f22867cab820f6e8463280505b5c7949342d0fd67a8a4d6233633866da",
+          "request_id": "79f947b1-cec0-4749-aa31-fda09458837e",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "f021528e-c871-47cf-a67e-52f5195622d3",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "REFERENCE_AMOUNT_DATE_WINDOW",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 17,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.38+00:00",
+          "input_hash": "60ee3d7c40533ebc6d8aba83db71f59f7d7c89cf170009196473cc84bfa6d1b0",
+          "request_id": "332885b6-a802-4576-9122-6186e789df3a",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "46cb74d3-e223-4032-b1b4-5b422c104b6e",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "REFERENCE_AMOUNT_DATE_WINDOW",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 18,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.394+00:00",
+          "input_hash": "94ea30cea1e8269f98e1d710443012f141690ed1052500f56475950467ff0ce9",
+          "request_id": "8619bee2-82c3-4896-9768-e4e777d38ddf",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "c20a5338-80b6-418b-86d2-51e9a587a602",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "REFERENCE_AMOUNT_DATE_WINDOW",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 19,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.405+00:00",
+          "input_hash": "ba3dd0a9fc7c70d26a554425c93921e7aadcc6cef11a47eb07ce8333aebe6519",
+          "request_id": "49f0b9be-5ee0-43b0-b07c-c4250ab67186",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "8305d17c-5621-4916-918f-8f962aa6aedc",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "REFERENCE_AMOUNT_DATE_WINDOW",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 20,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.421+00:00",
+          "input_hash": "ccbdde1c31fcd94ca5a0b6dd87b997f12d2008364ed6bcf56dabd5744405bc69",
+          "request_id": "00dcf273-c16f-4ae0-962c-4b900c892826",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "c12076fd-388c-452d-ab27-2a19dc6e73ca",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 21,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.438+00:00",
+          "input_hash": "d4f6979a26e500e0de79a3c22d3db2c44b4bb4790cdd35b8159c5ca144bf7356",
+          "request_id": "2968cdfc-d4a2-4efc-ac07-de71fa5d1779",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "b085b2b9-fad4-4404-8c63-ce05ba6249d2",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 22,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.453+00:00",
+          "input_hash": "0225d1cd6c4810df2d938c6e0e28562f70fafc7fead25892eeaa4ea8657b3458",
+          "request_id": "b4ca1a20-7577-4569-a807-47089ef09900",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "397ab831-cd67-4598-882e-801406bcb6ae",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 23,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.466+00:00",
+          "input_hash": "7588dfc228659dc363a1ff828fcf098b7a0a29833960aca5d2537a33715185e7",
+          "request_id": "9aee8da9-21cb-4655-bfb1-8a874ae396c4",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "5afd87e2-df10-4fa7-9f4c-4330069f743d",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 24,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.482+00:00",
+          "input_hash": "d4ecac03ec58191cca0f208b9a41aa24a6261912d063b3972d090c289842f72f",
+          "request_id": "c037b06c-7629-4652-a0da-53281129dbbb",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "6a750554-d8cf-42e2-8cf9-28024a96e439",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 25,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.498+00:00",
+          "input_hash": "e40349b580b1eab5411654c3ce47b479f2f19466f6b6b5248db8b2109cd3e3ad",
+          "request_id": "ce8cf04b-d9a4-4a68-a53f-c8c74585ea5b",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "18768652-4fe1-483c-8114-eb5438ab6949",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 26,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.514+00:00",
+          "input_hash": "124e36d08eeec7e7c9241a242d57c4ea41d650c6a006d77c836044d5a99e2149",
+          "request_id": "50a49d8c-24b2-438b-9370-bac86141cef6",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "abeaccda-4015-4f32-a59c-2037fe3fc916",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "REFERENCE_AMOUNT_DATE_WINDOW",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 27,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.533+00:00",
+          "input_hash": "afe12fce046c2692d76ba7216bd5c515c2ee5fb834ad6b58b1e9b68472f6d012",
+          "request_id": "66f96495-4ea4-49f6-a35c-cf29393bcbc3",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "78ba53eb-b251-470e-9ac5-4dec8073002c",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "REFERENCE_AMOUNT_DATE_WINDOW",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 28,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.547+00:00",
+          "input_hash": "6316d6bedf83e54aa81171fe49649a99c4684e66fbfb4744c272496f6a448616",
+          "request_id": "826a15bf-e9d9-4b23-a876-ca5a4258b49b",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "27d43954-d513-4de6-a58a-1ca1e3f7f1de",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "REFERENCE_AMOUNT_DATE_WINDOW",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 29,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.561+00:00",
+          "input_hash": "e4913ca2f647603e88999e3cfc4006d8d50d076b20b3110ff4140e4581dfc45d",
+          "request_id": "ddbb2f0e-3bf3-4fd8-b9da-05b40b68cdea",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "baf8380a-a5ad-458d-9499-257f98864e3b",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "REFERENCE_AMOUNT_DATE_WINDOW",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 30,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.572+00:00",
+          "input_hash": "0f5ec6374258f8fb03acba253f90026ad665920206f7e85a15035727e5783b4e",
+          "request_id": "e35f0332-d56d-4fe0-9e90-7c1be7326d52",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "c2299b9d-6838-499e-b5be-189c649f97df",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 31,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.585+00:00",
+          "input_hash": "fcabc68eaab379ddb2719dc233a7b885b1d4e2c4c5ca51e9af883af5bfc61219",
+          "request_id": "f15ae3dd-84b3-4bb5-937d-66ca6fc5dae5",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "0ce13f8a-ec65-41fb-b23c-69db8afed608",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 32,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.598+00:00",
+          "input_hash": "e55c66d0b7a7f74a99476df024a79ccc34956f5eb2b893198c9e474dbf6800e4",
+          "request_id": "f89c51e2-b8d6-440c-9765-f0f2d74e9417",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "82017946-241c-4009-8de5-463398584d7d",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 33,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.61+00:00",
+          "input_hash": "3557e0e7406ec76239af8fa0f60ea2871d37d546dcc33cf52a4d840829232f56",
+          "request_id": "649909af-cc4e-4c93-b975-f0431aa8ce6c",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "0bbc614f-9adf-42e6-bccb-3d2cc55ffbb1",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 34,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.623+00:00",
+          "input_hash": "066e706b5f7dc73e6da1bf7cd44c7e62bde3a4202f7e58ecbd3c190a5ce6e90d",
+          "request_id": "4491392b-dbe3-47c0-828d-a4f5c051d37d",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "d9e82222-42c3-424e-bdcc-f6ddc35cbea3",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "REFERENCE_AMOUNT_DATE_WINDOW",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 35,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.636+00:00",
+          "input_hash": "96858380eceb7719c04397a20d6cf44a250f6814ad6dd2db95e81994ee300733",
+          "request_id": "1a75ddf9-9616-40e5-9f59-4b908152151e",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "bbeb447a-a1fc-4723-9463-b2fbb89356ec",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "REFERENCE_AMOUNT_DATE_WINDOW",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 36,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.65+00:00",
+          "input_hash": "b8f5184339a556f9c2494062f7b9ede66f674b40d901da4ac70cb2bf7c283936",
+          "request_id": "b7723990-b29b-4f41-9f11-c4d1a29260d8",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "dd462b1b-ac0a-4d8c-8e2f-567338250c5a",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "REFERENCE_AMOUNT_DATE_WINDOW",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 37,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.664+00:00",
+          "input_hash": "5cd010497480a63a27d28776c9d5d94aac33e2232323ce339cc23c7c42040411",
+          "request_id": "0818b5cd-da08-4747-8b2d-842f83bfb8c7",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "5e9dd350-c80b-44f1-98b4-71646e3dc41f",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 38,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.678+00:00",
+          "input_hash": "c7fb7afc66e9d5d6f9458bd6534f82d2ec2746a498328b8f2113ecee636aabae",
+          "request_id": "393dbe34-0e03-4a2d-b4f9-9cb000c0b8a3",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "cd4d1411-fbd0-44aa-8a49-d5002ae55147",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 39,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.693+00:00",
+          "input_hash": "335077f0c36837897662f143bfff43fa4bcfb01211f5b553f259275e88c2e00f",
+          "request_id": "b7727f94-fe91-4dfd-bdaa-deb600fa02d5",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "626445e7-ca67-4bfd-b506-6fc8551dc1de",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "UNMATCH",
+          "reason": "Fictional audited matching correction",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 40,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.995+00:00",
+          "input_hash": "f11dbcfc39dc37522079e0cf42fdd4926b8ff064f401ac3e95235cbf71ef6806",
+          "request_id": "17ae2f9c-a1d9-4b8c-9cf0-bfe6de785407",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "c9473c18-5017-4a41-9be5-d0a36598baa1",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "Reconfirmed original exact payment match",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 41,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:14.011+00:00",
+          "input_hash": "0a75169e5727cc268c912ae7c64f1232709c316d898bc56437c65ae56b379ca8",
+          "request_id": "3ff8f115-9b78-4d15-a852-2bba71f76ec9",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "68e3f124-b1be-4df9-997a-06eae6a1a4e8",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "IMPORT",
+          "reason": "",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 70,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:56.057+00:00",
+          "input_hash": "3cf40550c416de98a91a3bdcad988193b14ddf6042d928a3360327b8377aaa2b",
+          "request_id": "36a8a27b-ea31-4fac-8737-0d7d6a495337",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "9d6e5c52-38e7-4847-95a2-f79ad258366c",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "CONFIGURE",
+          "reason": "Fictional bank adjustment classification approved",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 71,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:56.395+00:00",
+          "input_hash": "2af2492d79a7fa75196d68adbbd0e9527969e08d1b997eb33273a73481bfc843",
+          "request_id": "556991ae-f8d3-43e2-ae5e-f2187ee2c6b2",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "5275cbf1-e22b-4e58-897b-2754a8fa7b3d",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "CONFIGURE",
+          "reason": "Fictional bank adjustment classification approved",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 72,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:56.413+00:00",
+          "input_hash": "aecb22e88f94d9a31e42daa7c47be2e7835fbc0d3a172c179a41beec8052237a",
+          "request_id": "544fe384-21ec-4cf8-9a50-f4234e7dd112",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "45d1c319-9007-49d4-93d9-a2c157cae135",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "UNMATCH",
+          "reason": "Fictional audited matching correction",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 73,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:57.153+00:00",
+          "input_hash": "81d9f5aeacf8551800a4965f1133619999bcbd5edb2c9270f7044b2ff01b6fa0",
+          "request_id": "2a3ed788-495f-4fe4-8eb9-e58abbce974c",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "c423c4b9-cb83-4c1c-ac32-88dde561dd2f",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "MATCH",
+          "reason": "Reconfirmed original exact payment match",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 74,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:57.164+00:00",
+          "input_hash": "7b6324ac34a8710dd2b461c60360c0f179f553c17511e133209a586f9fad9ea7",
+          "request_id": "6b605a06-2c9f-4274-8e0e-966609112c31",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        },
+        {
+          "id": "8dbf8403-4820-492c-bdcd-8e38b235499e",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "action": "FINALIZE",
+          "reason": "CR07 independent GL and bank statement reconciliation approved",
+          "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+          "event_no": 75,
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:57.407+00:00",
+          "input_hash": "3d62b14136c7079a035431444f46d92b7c259d7c694cac9ae00c1f5b70ea6089",
+          "request_id": "e1950ced-8ece-4cf7-9d5a-1df7da3840aa",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad"
+        }
+      ],
+      "matches": [
+        {
+          "id": "5ebfbd32-3646-455a-b93d-2ce3090f92c8",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": false,
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.183+00:00",
+          "gl_line_id": "e6f6974d-0c10-458b-b495-e0d1097e750f",
+          "amount_minor": "104000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "8833b485-2e92-43f7-9ed3-51691e061d77"
+        },
+        {
+          "id": "88286677-c138-443b-b53b-60fbdfdff081",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": false,
+          "reason": "REFERENCE_AMOUNT_DATE_WINDOW",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.201+00:00",
+          "gl_line_id": "b19567fa-5674-430d-9838-24c2690e5b86",
+          "amount_minor": "105000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "afb8d15b-fed5-420b-9da8-bf1652489fbf"
+        },
+        {
+          "id": "c4fba653-e90a-4c7c-8e85-d21a9f07994e",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.216+00:00",
+          "gl_line_id": "82e5e37f-f9ba-4d78-9983-a2e88ff97468",
+          "amount_minor": "52500",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "13ac4c67-c7f2-4e5b-9496-b5c52abb4df2"
+        },
+        {
+          "id": "20f412f1-e620-499c-8fd8-3fc00992addf",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.251+00:00",
+          "gl_line_id": "45df15d0-a202-4f7b-8a79-5f95c91a7aaf",
+          "amount_minor": "40000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "82a7b561-e44c-44cf-980b-8d4add91d5de"
+        },
+        {
+          "id": "76d2d600-6eb0-44ba-bbf6-64fa58223d12",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.271+00:00",
+          "gl_line_id": "ea0b811d-d854-4db9-b230-d5322037acce",
+          "amount_minor": "65000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "5e8097be-560b-4930-91e9-7368042ed87b"
+        },
+        {
+          "id": "24dddd2c-05ba-4261-b04a-c56ada6b7c6a",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.296+00:00",
+          "gl_line_id": "5d318cc4-dc8b-40c4-85f0-ec005ed3266a",
+          "amount_minor": "30000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "ecb183b1-6f94-4167-9f59-96aa597b3f98"
+        },
+        {
+          "id": "0e9abb5e-8336-4b3a-85d1-1be3137d70f4",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.317+00:00",
+          "gl_line_id": "52c5d6c3-5349-4ae4-9f01-46934eaeef4f",
+          "amount_minor": "22500",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "d474cb5b-031f-4dee-b9d2-cf6889d7f3f8"
+        },
+        {
+          "id": "9ba9064b-bfd8-4fb4-8759-0f28bfdc948d",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.332+00:00",
+          "gl_line_id": "0d278640-47fc-4a6d-b4e3-18d3dbfb336a",
+          "amount_minor": "105000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "147dfebb-3a6c-40fd-99e7-fe60d2833b1b"
+        },
+        {
+          "id": "b1697224-b64d-4a04-8fdf-70d0f5eca373",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.346+00:00",
+          "gl_line_id": "0acc8514-ed26-484f-b736-eae7d340ca62",
+          "amount_minor": "10500",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "748acd24-7fd2-4ac2-a016-22f75b2bea50"
+        },
+        {
+          "id": "82897bcc-773c-4741-8a9c-1157d0f0412e",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "REFERENCE_AMOUNT_DATE_WINDOW",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.364+00:00",
+          "gl_line_id": "676167bb-00cf-4622-96a2-d4aae646fc90",
+          "amount_minor": "30000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "b0b4e2d3-adb3-4636-817d-0af73bbb22f8"
+        },
+        {
+          "id": "8998fbd6-2d6d-4847-b663-6e641456ea9d",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "REFERENCE_AMOUNT_DATE_WINDOW",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.38+00:00",
+          "gl_line_id": "245a356c-9f59-45a2-a566-9dc015d93604",
+          "amount_minor": "33000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "aa5dca36-94b9-4ef2-b644-5533f926944b"
+        },
+        {
+          "id": "725e2f42-2bcf-4de0-a7a8-92b024def781",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "REFERENCE_AMOUNT_DATE_WINDOW",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.394+00:00",
+          "gl_line_id": "4c83edc7-c04e-4cda-82b4-40a3e6d8336a",
+          "amount_minor": "15750",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "faf860a5-3acc-4262-af47-414a9fe3bf3c"
+        },
+        {
+          "id": "31700c76-4f38-4cf7-956d-6ca945fc1cda",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "REFERENCE_AMOUNT_DATE_WINDOW",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.405+00:00",
+          "gl_line_id": "5046b39f-7c9c-4759-a42b-3c7a8e68bf75",
+          "amount_minor": "31500",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "ddaaaa06-4617-477b-9389-e50ba3434d2c"
+        },
+        {
+          "id": "911d372d-2074-4674-ad19-7e80b5d8a026",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "REFERENCE_AMOUNT_DATE_WINDOW",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.421+00:00",
+          "gl_line_id": "554d938b-6fa6-431d-b204-d2885f7f6e0c",
+          "amount_minor": "21000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "8d2f091a-4695-4c32-b66f-aedb0517b1d8"
+        },
+        {
+          "id": "67e6aa90-aa68-4f7e-8484-87e6a0804dbf",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.438+00:00",
+          "gl_line_id": "f348afdb-301c-40ed-bc3c-07dc69e90a86",
+          "amount_minor": "500000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "04fe7f73-62a0-4004-8032-ecbb1810271d"
+        },
+        {
+          "id": "c58eaf3c-78ca-452b-b223-5167dc6857ee",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.453+00:00",
+          "gl_line_id": "0980543a-b5ec-42bd-afc7-f1881fd21b09",
+          "amount_minor": "100000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "4e00916e-96c1-4905-a678-761614918887"
+        },
+        {
+          "id": "d5161e0d-3b70-48f5-90c6-cbf08033dbff",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.466+00:00",
+          "gl_line_id": "c65b2273-58fe-4b25-a976-0b1157f88c66",
+          "amount_minor": "350000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "f61d4975-2977-41dc-a8a1-cb72b51d374c"
+        },
+        {
+          "id": "ded76bb4-3634-45a0-92bd-ae675e944551",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.482+00:00",
+          "gl_line_id": "e356a457-392e-4af5-8fda-9da452b9e7ca",
+          "amount_minor": "50000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "768afd02-1e4e-478d-abf9-4252a34d27fc"
+        },
+        {
+          "id": "aa57c4f1-879d-4fdd-8d3c-492a0c04397b",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.498+00:00",
+          "gl_line_id": "9be723db-5800-4dcd-9bc6-3be76f58bfaa",
+          "amount_minor": "30000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "4f7845d0-101c-432b-939d-26bf8df7e790"
+        },
+        {
+          "id": "057b1ced-b586-4abd-b5f6-b7b8bc1d18bf",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.514+00:00",
+          "gl_line_id": "5b0198d5-1ed0-49e6-8ddc-b173bf019e28",
+          "amount_minor": "60000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "66975259-4946-4bd7-81e1-b60cfa2b37e1"
+        },
+        {
+          "id": "0e3b40f4-8214-4c67-aaa3-468503ed59be",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "REFERENCE_AMOUNT_DATE_WINDOW",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.533+00:00",
+          "gl_line_id": "06a2ee36-de92-4c6e-83da-e7961871a3bc",
+          "amount_minor": "210000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "d44670d8-b54a-4210-b414-50b14de32b72"
+        },
+        {
+          "id": "93bd7dc8-c738-4b62-966b-28d72308e6d3",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "REFERENCE_AMOUNT_DATE_WINDOW",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.547+00:00",
+          "gl_line_id": "d0f1af03-bc62-4693-835e-4568fce86be7",
+          "amount_minor": "740000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "262763fb-7a5a-4ca9-9ff4-6cbf5f84b4a1"
+        },
+        {
+          "id": "a7348353-8810-4f54-95a3-fbff5e0813ed",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "REFERENCE_AMOUNT_DATE_WINDOW",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.561+00:00",
+          "gl_line_id": "80bf5dcf-94c7-4300-881b-d720d046de21",
+          "amount_minor": "190000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "1275e6e0-c3cf-4e42-a8ad-6af10de72a41"
+        },
+        {
+          "id": "931bd832-fe8b-4a30-80b8-4aa4e1fc67aa",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "REFERENCE_AMOUNT_DATE_WINDOW",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.572+00:00",
+          "gl_line_id": "f503bf4f-dd07-4b02-9576-b2eb971ff8d3",
+          "amount_minor": "120000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "2a15888c-87ff-4c86-aa9c-6f13949d29e3"
+        },
+        {
+          "id": "59f56efb-fb61-447c-97d8-d289815d4cbb",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.585+00:00",
+          "gl_line_id": "4614a513-2673-42b4-85fb-c42ae17cb0f6",
+          "amount_minor": "20000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "e7126c1b-431a-40f8-aaa0-4b0755833179"
+        },
+        {
+          "id": "59c3944c-40a0-4c62-873e-56b4ba7be3e9",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.598+00:00",
+          "gl_line_id": "ecc8513e-8f99-4803-a82a-19084d38d559",
+          "amount_minor": "280323",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "9dd9392e-028e-4e42-aa42-82a649603db8"
+        },
+        {
+          "id": "d6c18970-9f3b-4342-8fb9-1eed6b3e298b",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.61+00:00",
+          "gl_line_id": "92c2dc80-b483-4841-a69a-e98a54902c1c",
+          "amount_minor": "296161",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "75b6f659-c7e2-4a5f-bc62-6650da446893"
+        },
+        {
+          "id": "ba5ee262-3438-4509-819f-39e6be8924e3",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.623+00:00",
+          "gl_line_id": "47ee1c44-933f-4697-8d43-f6d92fe32437",
+          "amount_minor": "240000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "d7b4fc93-9fb1-46fb-adb7-543015bf4563"
+        },
+        {
+          "id": "fa539931-4311-405a-a782-b8d9a2706b9b",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "REFERENCE_AMOUNT_DATE_WINDOW",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.636+00:00",
+          "gl_line_id": "7408da80-700a-48ce-84b6-0ef60b2d9b64",
+          "amount_minor": "115500",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "ed6012df-3a2f-437e-a916-9bd2860b720a"
+        },
+        {
+          "id": "8a0c52d8-aa55-48d0-a295-be558e1e7157",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "REFERENCE_AMOUNT_DATE_WINDOW",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.65+00:00",
+          "gl_line_id": "de85ea52-d911-4a07-a3b9-15cad8ac9607",
+          "amount_minor": "31000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "24f7bd7e-7562-493b-9e72-55ca7bb12767"
+        },
+        {
+          "id": "19a678ce-1a40-4099-aaba-03a9927079a1",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "REFERENCE_AMOUNT_DATE_WINDOW",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.664+00:00",
+          "gl_line_id": "0fae08ee-c528-4e1e-b86f-428af7e3481b",
+          "amount_minor": "25000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "b7c10e99-eedf-40ab-95aa-621faac04660"
+        },
+        {
+          "id": "022db75e-5d09-44c2-a202-c4bbe9b6213e",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "purpose": "ADJUSTMENT",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.678+00:00",
+          "gl_line_id": "9c7f0a2d-4d2a-478d-864a-e58ebcc27ca3",
+          "amount_minor": "2000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "ca30c1dc-3ab3-42be-a3d1-7416aa21739e"
+        },
+        {
+          "id": "c3518fdf-99f4-49d0-9abc-2c8a02e1456a",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "UNIQUE_AMOUNT_DATE",
+          "purpose": "ADJUSTMENT",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:13.693+00:00",
+          "gl_line_id": "4cb80830-b55a-4263-b613-5307b8e345be",
+          "amount_minor": "1000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "6a60afc2-71f7-41d4-9d76-a2c4135fa8e5"
+        },
+        {
+          "id": "3f405232-f93c-4079-885c-740c4fe7b369",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "Reconfirmed original exact payment match",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:14.011+00:00",
+          "gl_line_id": "e6f6974d-0c10-458b-b495-e0d1097e750f",
+          "amount_minor": "104000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "8833b485-2e92-43f7-9ed3-51691e061d77"
+        },
+        {
+          "id": "ab0f7768-9b95-4fc4-be28-546eeda755fa",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "active": true,
+          "reason": "Reconfirmed original exact payment match",
+          "purpose": "MATCH",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:57.164+00:00",
+          "gl_line_id": "b19567fa-5674-430d-9838-24c2690e5b86",
+          "amount_minor": "105000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "afb8d15b-fed5-420b-9da8-bf1652489fbf"
+        }
+      ],
+      "statement": {
+        "id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+        "bank_id": "804f2b84-dad0-4bd4-8bcc-b77b2e2c4b06",
+        "mapping": {
+          "dateFormat": "ISO"
+        },
+        "file_name": "CR07-Fictional-Bank.csv",
+        "from_date": "2026-10-01",
+        "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+        "created_at": "2026-11-20T07:49:10.889+00:00",
+        "created_by": "ed030005-0000-4000-8000-000000000001",
+        "file_sha256": "f6dd8d1baa6a7c5ec60d603e5c3cbbbfa672a47c4a2d76c9145e980ce1a6be16",
+        "through_date": "2026-10-31",
+        "closing_minor": "9068266",
+        "opening_minor": "9880000",
+        "content_sha256": "6963c5001102cd3827c96124b8ae901c1723e68b13a9082e5ad1baaed6e66102"
+      },
+      "adjustments": [
+        {
+          "id": "8007a3ab-becc-4626-a7df-7b6ecd5ee444",
+          "kind": "FEE",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "reason": "Fictional bank-only evidenced gross adjustment with no VAT",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:12.209+00:00",
+          "journal_id": "05d93ade-c594-4023-b1c9-ba835aff1df7",
+          "request_id": "fdcd74ad-e002-4a80-ad0f-93b311229324",
+          "amount_minor": "2000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "ca30c1dc-3ab3-42be-a3d1-7416aa21739e",
+          "reversal_journal_id": null
+        },
+        {
+          "id": "35b433ce-7ea4-4f94-8728-93baa6b44bf6",
+          "kind": "INTEREST",
+          "actor": "ed030005-0000-4000-8000-000000000001",
+          "reason": "Fictional bank-only evidenced gross adjustment with no VAT",
+          "company_id": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+          "created_at": "2026-11-20T07:49:12.504+00:00",
+          "journal_id": "f7564d11-9522-40a2-930f-468e88672d90",
+          "request_id": "a21ba62f-e797-4941-b44c-162f64689aa7",
+          "amount_minor": "1000",
+          "statement_id": "de16a49c-9982-4ed8-aa04-2a49d28a4fad",
+          "statement_line_id": "6a60afc2-71f7-41d4-9d76-a2c4135fa8e5",
+          "reversal_journal_id": null
+        }
+      ],
+      "difference_minor": "0",
+      "gl_balance_minor": "8889266",
+      "outstanding_net_minor": "-179000",
+      "cancelled_bank_journals": [],
+      "adjusted_statement_minor": "8889266",
+      "unmatched_statement_minor": "0"
+    }
+  },
+  "migration": {
+    "number": 105,
+    "file": "20261123120000_integrated_accounting_acceptance_corrections.sql",
+    "sha256": "daebec8d16d3cd3cb40a498d91ca770c6a63004a1ed1a286e6702c3fbbd9af16",
+    "status": "PREPARED / NOT APPLIED",
+    "linkedDryRun": "Only105 pending; hosted through104"
+  },
+  "build": "TypeScript and Production build PASS; existing non-blocking chunk size warning",
+  "hostedWrites": 0,
+  "blockers": [
+    "Complete Supabase Auth → full protected application routes → operational posting acceptance was not executed. The rendered tests use actual components/DB commands with a synthetic Auth/master adapter. This is an essential operational acceptance gap, not a financial pass.",
+    "Migration105 remains PREPARED / NOT APPLIED; its Inventory historical-period correction needs explicit hosted authorization and compatible release validation before unrestricted acceptance."
+  ],
+  "specialistLimitations": [
+    "Single integrated construction obligation; multi-obligation allocation, claims/variable consideration and onerous-contract specialist cases remain outside verified scope.",
+    "Company onboarding/initial masters use synthetic fixture bootstrap; existing canonical Company configuration commands are exercised, but commercial onboarding UI is not certified.",
+    "Dedicated jurisdictional tax-return filing, statutory compliance certification and final DR/restore rehearsal remain deferred.",
+    "Construction customer contract closeout is executed; administrative Project status closure is not claimed."
+  ],
+  "release": {
+    "branch": "release/cr07-integrated-acceptance",
+    "parent": "e8d2efb4f93f47f7a77f2e1dc0522dbf9812767a",
+    "push": "git push origin release/cr07-integrated-acceptance:main",
+    "status": "LOCAL ONLY; commit containing this evidence"
+  },
+  "preservation": "Original65, CR05 and CR06 evidence untouched; no real Company connection for financial writes; native105 preserves149 pre-existing tables"
+}

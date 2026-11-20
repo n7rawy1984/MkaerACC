@@ -1,0 +1,17 @@
+{
+  "checks": [
+    "ar actual Customer selector retains selection",
+    "ar Customer statement Excel and rendered PDF exported",
+    "ar real Supplier AP selector retains canonical party",
+    "ar actual financial statements render independent assets105232.66",
+    "en actual Customer selector retains selection",
+    "en Customer statement Excel and rendered PDF exported",
+    "en real Supplier AP selector retains canonical party",
+    "en actual financial statements render independent assets105232.66",
+    "No rendered component runtime errors"
+  ],
+  "company": "a00fff7a-43d8-4775-9f51-05ccd0c7574b",
+  "hostedWrites": 0,
+  "externalRequestsBlocked": true,
+  "scope": "Actual production components and persisted canonical commands; synthetic Auth/Company/master transport, not complete Supabase Auth route E2E"
+}

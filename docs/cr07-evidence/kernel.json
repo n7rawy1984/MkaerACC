@@ -1,0 +1,8 @@
+{
+  "checks": [
+    "Private kernel rejects independently imbalanced100/99 lines before financial insert",
+    "Authenticated user cannot invoke arbitrary private journal primitive",
+    "Both rejected kernel attempts leave every Company journal unchanged"
+  ],
+  "hostedWrites": 0
+}
