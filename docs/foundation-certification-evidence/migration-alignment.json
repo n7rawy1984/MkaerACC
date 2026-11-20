@@ -1,0 +1,11 @@
+{
+  "hostedAppliedCount": 105,
+  "hostedLatest": {
+    "name": "integrated_accounting_acceptance_corrections",
+    "version": "20261123120000"
+  },
+  "pendingLocal": [
+    "20261124120000_existing_foundation_certification.sql"
+  ],
+  "hostedMutations": 0
+}

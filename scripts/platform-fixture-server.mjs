@@ -16,7 +16,7 @@ await db.query('insert into private.system_administrators(user_id) values($1)',[
 await db.query("insert into auth.mfa_factors(user_id,factor_type,status) values($1,'totp','verified')",[id(1)]);
 await db.query('update auth.sessions set factor_id=(select id from auth.mfa_factors where user_id=$1 limit 1) where user_id=$1',[id(1)]);
 const root=resolve('.');
-const rpcNames=new Set(['get_platform_onboarding','set_company_subscription','list_company_subscriptions','get_my_company_subscription','provision_company_accounting','get_company_accounting_setup','get_platform_context','get_platform_overview','list_platform_entities','platform_directory','list_platform_invitations','platform_admin_command','platform_invitation_command','accept_platform_invitation','get_my_platform_invitation']);
+const rpcNames=new Set(['review_existing_company_foundation','certify_existing_company_foundation','get_platform_onboarding','set_company_subscription','list_company_subscriptions','get_my_company_subscription','provision_company_accounting','get_company_accounting_setup','get_platform_context','get_platform_overview','list_platform_entities','platform_directory','list_platform_invitations','platform_admin_command','platform_invitation_command','accept_platform_invitation','get_my_platform_invitation']);
  const server=await createServer({root,configFile:false,plugins:[{name:'isolated-platform',load(path){if(path===resolve(root,'src/lib/supabase.ts'))return 'export const getSupabaseClient=()=>window.platformFixture.client;';},configureServer(s){s.middlewares.use(async(req,res,next)=>{
   if(req.url==='/__platform_password') {
    let raw='';for await(const chunk of req)raw+=chunk;const {actor}=JSON.parse(raw);

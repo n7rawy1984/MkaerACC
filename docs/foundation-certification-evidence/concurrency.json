@@ -1,0 +1,10 @@
+{
+  "checks": [
+    "independent sessions serialize concurrent certification",
+    "concurrent different requests produce one certificate and one audit event",
+    "native concurrency preserves exact accounts, journals, lines, Treasury and memberships"
+  ],
+  "count": 3,
+  "engine": "Independent native PostgreSQL sessions",
+  "hostedWrites": 0
+}

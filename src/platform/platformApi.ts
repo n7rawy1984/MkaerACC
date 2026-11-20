@@ -10,6 +10,7 @@ export interface Directory { items: PlatformRow[]; has_more: boolean; }
 export interface PlatformContext { user_id: string; role: "PLATFORM_OWNER"; step_up_required: boolean; }
 export interface Receipt { id: string; request_id: string; command: string; status: "CONFIRMED"; }
 export type AdminCommand =
+  | { name: "certify_foundation"; input: { id: string; version: string; reason: string } }
   | { name: "set_subscription"; input: { id: string; version: string; plan_key: string; subscription_state: string; starts_on: string; ends_on: string; billing_method: string; payment_status: string; payment_reference?: string; reason: string } }
   | { name: "provision_accounting"; input: { id: string; version: string; code: string; treasury_name: string; treasury_type: string; bank_name?: string; reason: string } }
   | { name: "create_customer"; input: { code: string; name: string; contact_email?: string } }
@@ -39,7 +40,7 @@ export class PlatformError extends Error {
 export const isUuid = (value: unknown): value is string => typeof value === "string" && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);
 // These functions are provided by the canonical platform migrations. Keep the existing
 // generated financial model intact; this transport accepts only this named RPC set.
-type RpcName = "get_platform_onboarding" | "set_company_subscription" | "list_company_subscriptions" | "get_my_company_subscription" | "provision_company_accounting" | "get_platform_context" | "get_platform_overview" | "list_platform_entities" | "platform_directory" | "list_platform_invitations" | "platform_admin_command" | "platform_invitation_command" | "accept_platform_invitation" | "get_my_platform_invitation";
+type RpcName = "review_existing_company_foundation" | "certify_existing_company_foundation" | "get_platform_onboarding" | "set_company_subscription" | "list_company_subscriptions" | "get_my_company_subscription" | "provision_company_accounting" | "get_platform_context" | "get_platform_overview" | "list_platform_entities" | "platform_directory" | "list_platform_invitations" | "platform_admin_command" | "platform_invitation_command" | "accept_platform_invitation" | "get_my_platform_invitation";
 export interface PlatformTransport { rpc(name: RpcName, args?: Record<string, unknown>, options?: { signal?: AbortSignal }): PromiseLike<{ data: unknown; error: { code?: string; message?: string } | null }>; }
 export function transport(client: SupabaseClient<Database>): PlatformTransport {
   const rpcClient = client as unknown as { rpc: (name: RpcName, args?: Record<string, unknown>) => ReturnType<PlatformTransport["rpc"]> & { abortSignal?: (signal: AbortSignal) => ReturnType<PlatformTransport["rpc"]> } };
@@ -101,7 +102,7 @@ export async function readDirectory(api: PlatformTransport, resource: Resource, 
 export async function sendPlatformCommand(api: PlatformTransport, pending: PendingCommand): Promise<Receipt> {
   if (!isUuid(pending.requestId)) throw new PlatformError("invalid");
   const invitation = ["invite", "resend", "revoke"].includes(pending.command.name);
-  const data = await callPlatform(api, pending.command.name === "set_subscription" ? "set_company_subscription" : pending.command.name === "provision_accounting" ? "provision_company_accounting" : invitation ? "platform_invitation_command" : "platform_admin_command", { ...(["provision_accounting", "set_subscription"].includes(pending.command.name) ? {} : { command_name: pending.command.name }), request_id: pending.requestId, business_input: pending.command.input });
+  const data = await callPlatform(api, pending.command.name === "certify_foundation" ? "certify_existing_company_foundation" : pending.command.name === "set_subscription" ? "set_company_subscription" : pending.command.name === "provision_accounting" ? "provision_company_accounting" : invitation ? "platform_invitation_command" : "platform_admin_command", { ...(["certify_foundation", "provision_accounting", "set_subscription"].includes(pending.command.name) ? {} : { command_name: pending.command.name }), request_id: pending.requestId, business_input: pending.command.input });
   if (!object(data) || !isUuid(data.id) || data.request_id !== pending.requestId || data.status !== "CONFIRMED" || data.command !== (invitation ? `invitation_${pending.command.name}` : pending.command.name)) throw new PlatformError("uncertain");
   return data as unknown as Receipt;
 }

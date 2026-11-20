@@ -1,0 +1,14 @@
+{
+  "checks": [
+    "certification requires explicit audited reason",
+    "English review and canonical certification advance existing onboarding to subscription",
+    "browser certification preserves exact books and memberships",
+    "Arabic missing mapping shows precise warning and prevents certification",
+    "Arabic certification preserves financial history",
+    "Arabic trial UI transitions to ready without financial or membership changes",
+    "Arabic/English production components have no runtime errors"
+  ],
+  "count": 7,
+  "scope": "Production Platform components and canonical local PostgreSQL RPCs; synthetic Auth fixture; genuine Auth acceptance already retained",
+  "hostedWrites": 0
+}

@@ -1,0 +1,63 @@
+{
+  "scope": "Structural controls, journal balance/dimensions, linked openings and configured fiscal coverage only; not historical economic evidence or physical cash verification.",
+  "checks": [
+    "ACTIVE_BUSINESS_ADMIN",
+    "CONTROL_MAPPINGS",
+    "TREASURY_CONFIGURATION_AND_RECORDED_BALANCE",
+    "ACCOUNT_HIERARCHY",
+    "JOURNAL_BALANCE_AND_DIMENSIONS",
+    "OPENING_POSITION_RECONCILIATION",
+    "CONFIGURED_FISCAL_COVERAGE",
+    "JOURNAL_IMMUTABILITY_TRIGGERS"
+  ],
+  "version": "EXISTING_FOUNDATION_V1",
+  "accounts": 12,
+  "eligible": false,
+  "failures": [
+    {
+      "code": "CONTROL_MAPPING",
+      "reference": "CUSTODY_ADVANCE"
+    },
+    {
+      "code": "CONTROL_MAPPING",
+      "reference": "SALARY_PAYABLE"
+    },
+    {
+      "code": "CONTROL_MAPPING",
+      "reference": "SUBCONTRACTOR_ADVANCE"
+    },
+    {
+      "code": "CONTROL_MAPPING",
+      "reference": "SUBCONTRACTOR_PAYABLE"
+    },
+    {
+      "code": "CONTROL_MAPPING",
+      "reference": "SUBCONTRACTOR_RETENTION_PAYABLE"
+    },
+    {
+      "code": "CONTROL_MAPPING",
+      "reference": "SUPPLIER_PAYABLE"
+    },
+    {
+      "code": "ENROLL_BUSINESS",
+      "reference": "d3292026-0929-4000-8000-000000000001"
+    },
+    {
+      "code": "TREASURY_BALANCE",
+      "reference": "DEMO-BANK"
+    },
+    {
+      "code": "TREASURY_MAPPING",
+      "reference": "DEMO-BANK"
+    }
+  ],
+  "journals": 117,
+  "checked_at": "2026-11-20T12:24:42.436539+00:00",
+  "company_id": "d3292026-0929-4000-8000-000000000001",
+  "debit_minor": "1822122",
+  "period_mode": "EXISTING_UNCONFIGURED",
+  "credit_minor": "1822122",
+  "lines_sha256": "dd5a3b0b67677fff17230bcf45a78ddc6ad94a79ad21728641394aab863a8038",
+  "accounts_sha256": "72fbd89d5e3b807743907b8dbc9f396fb22bb6c02745b96730aa8672a3f77827",
+  "journals_sha256": "30d9b403dbae1afe6efe4c917aee3685b19209b1255f4ac233fb0c2fdec461ea"
+}

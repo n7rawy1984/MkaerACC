@@ -38,7 +38,7 @@ export function CommercialOnboarding({customerSelector,api,generation,disabled,o
    const lifecycle=typeof row.lifecycle==="string"?row.lifecycle:"";
    const subscriptionState=typeof r.subscription_state==="string"?r.subscription_state:"";
    const subscriptionLabel=subscriptionState==="UNMANAGED"?(legacy?t.unenrolled:t.missing):(stateLabels[locale][subscriptionState]??t.unknown);
-   const next=r.ready?t.done:!r.active&&lifecycle!=="DRAFT"?t.suspended:!r.customer?t.nextCustomer:!r.administrator?(row.pending_admin_invitations>0?t.nextWaiting:t.nextAdmin):!r.active?t.nextActivate:!r.foundation?t.nextFoundation:!r.subscription?t.nextSubscription:t.blocked;
+   const next=r.ready?t.done:!r.active&&lifecycle!=="DRAFT"&&row.version!==0?t.suspended:!r.customer?t.nextCustomer:!r.administrator?(row.pending_admin_invitations>0?t.nextWaiting:t.nextAdmin):!r.active?t.nextActivate:!r.foundation?t.nextFoundation:!r.subscription?t.nextSubscription:t.blocked;
    const steps=[{label:t.customer,ok:r.customer},{label:t.company,ok:true},{label:t.administrator,ok:r.administrator},{label:t.foundation,ok:r.foundation},{label:t.subscription,ok:r.subscription},{label:t.readiness,ok:r.ready}];
    const edit=()=>open("update_entity",row);
    return <article key={row.id} className="platform-panel commercial-company" data-company-id={row.id}>
@@ -56,11 +56,12 @@ export function CommercialOnboarding({customerSelector,api,generation,disabled,o
      {!legacy&&!r.customer&&<button disabled={disabled} onClick={edit}>{t.associate}</button>}
      {!legacy&&!r.administrator&&(row.pending_admin_invitations>0?<><span>{t.waiting}</span><Link to="/platform/invitations">{t.review}</Link></>:<button disabled={disabled} onClick={()=>open("invite",{company_id:row.id,role:"ACCOUNTING_ADMIN"})}>{t.invite}</button>)}
      {!r.active&&r.administrator&&row.lifecycle==="DRAFT"&&<button disabled={disabled} onClick={()=>open("set_lifecycle",{...row,state:"ACTIVE"})}>{t.activate}</button>}
+     {!legacy&&!r.foundation&&<button disabled={disabled} onClick={()=>open("certify_foundation",row)}>{locale==="ar"?"مراجعة واعتماد التأسيس القائم":"Review / certify existing foundation"}</button>}
      {!legacy&&r.active&&r.administrator&&!r.foundation&&row.accounting_setup==="INCOMPLETE"&&<button disabled={disabled} onClick={()=>open("provision_accounting",row)}>{t.provision}</button>}
      {!legacy&&r.customer&&r.active&&r.administrator&&r.foundation&&!r.subscription&&<button disabled={disabled} onClick={()=>open("set_subscription",{...row,version:row.subscription_version??0})}>{t.subscribe}</button>}
      <Link to={`/platform/entities/${row.id}`}>{t.manage}</Link>
     </div>
-    {!r.active&&row.lifecycle!=="DRAFT"&&<p>{t.suspended}</p>}
+    {!r.active&&row.lifecycle!=="DRAFT"&&row.version!==0&&<p>{t.suspended}</p>}
     {r.ready&&!legacy&&<p>{t.done}</p>}
    </article>;
   })}

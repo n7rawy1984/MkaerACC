@@ -9,7 +9,7 @@ export const platformText = {
     subscription_state: "Recorded state", effective_state: "Current subscription state", starts_on: "Start date", ends_on: "Valid through", renewal_due_on: "Renewal due", billing_method: "Billing method", payment_status: "Recorded payment status", payment_reference: "Manual payment reference", subscription_access: "Subscription access",
     EXPIRED: "Expired", SCHEDULED: "Not started", UNMANAGED: "No subscription", FULL: "Full access within assigned role", LIMITED: "View records and settle existing obligations", NONE: "None", MANUAL_CASH: "Manual cash", MANUAL_BANK_TRANSFER: "Manual bank transfer", MANUAL_OTHER: "Other manual method", NOT_REQUIRED: "Not required", UNPAID: "Unpaid", PAID: "Paid", WAIVED: "Waived",
 
-    provisionAccounting: "Set up accounting", COMPLETE: "Initial accounting setup complete",
+    certifyFoundation: "Review / certify existing foundation", provisionAccounting: "Set up accounting", COMPLETE: "Initial accounting setup complete",
     treasury_name: "Primary treasury account name", treasury_type: "Primary treasury account type", bank_name: "Bank name (required for Bank only)", CASH: "Cash", BANK: "Bank",
     provisionHelp: "For a new, active company with no accounting records. Creates 11 initial accounts and one cash or bank account in AED. Bank accounts require a bank name; cash accounts do not accept one. Opening balances, capital, tax registration, journal entries and the owner current account are not created. Set up operational records and funding separately.",
 
@@ -56,7 +56,7 @@ export const platformText = {
     subscription_state: "الحالة المسجلة", effective_state: "حالة الاشتراك الحالية", starts_on: "تاريخ البدء", ends_on: "صالح حتى", renewal_due_on: "موعد التجديد", billing_method: "وسيلة التحصيل", payment_status: "حالة الدفع المسجلة", payment_reference: "مرجع الدفع اليدوي", subscription_access: "صلاحية الاشتراك",
     EXPIRED: "منتهٍ", SCHEDULED: "لم يبدأ", UNMANAGED: "دون اشتراك", FULL: "صلاحيات كاملة وفق الدور", LIMITED: "عرض السجلات وتسوية الالتزامات القائمة", NONE: "بدون", MANUAL_CASH: "نقدي يدوي", MANUAL_BANK_TRANSFER: "تحويل بنكي يدوي", MANUAL_OTHER: "وسيلة يدوية أخرى", NOT_REQUIRED: "غير مطلوب", UNPAID: "غير مدفوع", PAID: "مدفوع", WAIVED: "معفى",
 
-    provisionAccounting: "إعداد الحسابات", COMPLETE: "اكتمل الإعداد المحاسبي الأولي",
+    certifyFoundation: "مراجعة واعتماد التأسيس القائم", provisionAccounting: "إعداد الحسابات", COMPLETE: "اكتمل الإعداد المحاسبي الأولي",
     treasury_name: "اسم حساب الخزينة الأساسي", treasury_type: "نوع حساب الخزينة الأساسي", bank_name: "اسم البنك (مطلوب للبنك فقط)", CASH: "نقدية", BANK: "بنك",
     provisionHelp: "للشركة الجديدة النشطة التي لا تحتوي على سجلات محاسبية. ينشئ 11 حسابًا أوليًا وحساب خزينة نقديًا أو بنكيًا بالدرهم. يتطلب الحساب البنكي اسم البنك ولا يقبله الحساب النقدي. لا ينشئ أرصدة افتتاحية أو رأس مال أو تسجيلًا ضريبيًا أو قيودًا يومية أو حسابًا جاريًا للمالك. تُستكمل البيانات التشغيلية والتمويل بشكل مستقل.",
 

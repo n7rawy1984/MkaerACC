@@ -1,0 +1,94 @@
+{
+  "controls": [
+    {
+      "code": "INPUT_VAT",
+      "type": "ASSET",
+      "status": "ACTIVE",
+      "system_key": "INPUT_VAT",
+      "requires_party": false
+    },
+    {
+      "code": "CUSTODY_ADVANCE",
+      "type": "ASSET",
+      "status": "ACTIVE",
+      "system_key": "CUSTODY_ADVANCE",
+      "requires_party": false
+    },
+    {
+      "code": "SUPPLIER_PAYABLE",
+      "type": "LIABILITY",
+      "status": "ACTIVE",
+      "system_key": "SUPPLIER_PAYABLE",
+      "requires_party": false
+    },
+    {
+      "code": "OWNER_CURRENT",
+      "type": "LIABILITY",
+      "status": "ACTIVE",
+      "system_key": "OWNER_CURRENT",
+      "requires_party": false
+    },
+    {
+      "code": "SUBCONTRACTOR_ADVANCE",
+      "type": "ASSET",
+      "status": "ACTIVE",
+      "system_key": "SUBCONTRACTOR_ADVANCE",
+      "requires_party": false
+    },
+    {
+      "code": "SUBCONTRACTOR_PAYABLE",
+      "type": "LIABILITY",
+      "status": "ACTIVE",
+      "system_key": "SUBCONTRACTOR_PAYABLE",
+      "requires_party": false
+    },
+    {
+      "code": "SUBCONTRACTOR_RETENTION_PAYABLE",
+      "type": "LIABILITY",
+      "status": "ACTIVE",
+      "system_key": "SUBCONTRACTOR_RETENTION_PAYABLE",
+      "requires_party": false
+    },
+    {
+      "code": "PROJECT_COST",
+      "type": "EXPENSE",
+      "status": "ACTIVE",
+      "system_key": "PROJECT_COST",
+      "requires_party": false
+    },
+    {
+      "code": "PROJECT_COST_SUBCONTRACTORS",
+      "type": "EXPENSE",
+      "status": "ACTIVE",
+      "system_key": "PROJECT_COST_SUBCONTRACTORS",
+      "requires_party": false
+    },
+    {
+      "code": "COMPANY_EXPENSE",
+      "type": "EXPENSE",
+      "status": "ACTIVE",
+      "system_key": "COMPANY_EXPENSE",
+      "requires_party": false
+    },
+    {
+      "code": "SALARY_PAYABLE",
+      "type": "LIABILITY",
+      "status": "ACTIVE",
+      "system_key": "SALARY_PAYABLE",
+      "requires_party": false
+    }
+  ],
+  "treasury": [
+    {
+      "code": "DEMO-BANK",
+      "type": "BANK",
+      "status": "ACTIVE",
+      "bank_name": null,
+      "system_key": null,
+      "account_code": "DEMO-BANK",
+      "account_type": "ASSET",
+      "account_status": "ACTIVE",
+      "requires_party": false
+    }
+  ]
+}
