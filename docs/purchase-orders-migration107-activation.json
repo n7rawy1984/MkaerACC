@@ -1,0 +1,57 @@
+{
+  "preflight": {
+    "status": "PASS",
+    "target": "eqnzueginpkskbnqvgoc",
+    "release": "c61810366f677b9101012a264eadd84df48d78bf",
+    "latestHosted": "20261124120000",
+    "onlyPending": [
+      "20261125120000"
+    ],
+    "checksum": "1dfca5ad1676f6490cffaf013782cb7fc4ee07a28d4dd5253e36c7bdbddc969b",
+    "preservedTableCount": 149,
+    "scope": "One empty forced-RLS purchase order audit table and four constrained functions; no existing function replacement or top-level business DML",
+    "completedAt": "2026-11-20T15:25:55.836454+00:00"
+  },
+  "application": {
+    "status": "APPLIED",
+    "target": "eqnzueginpkskbnqvgoc",
+    "migration": "supabase/migrations/20261125120000_purchase_order_commitments.sql",
+    "sha256": "1dfca5ad1676f6490cffaf013782cb7fc4ee07a28d4dd5253e36c7bdbddc969b",
+    "release": "c61810366f677b9101012a264eadd84df48d78bf",
+    "completedAt": "2026-11-20T15:26:26.525927+00:00"
+  },
+  "postflight": {
+    "status": "PASS",
+    "target": "eqnzueginpkskbnqvgoc",
+    "latestMigration": 107,
+    "latestVersion": "20261125120000",
+    "pending": [],
+    "preservedExistingTables": 149,
+    "existingDataHashesUnchanged": true,
+    "financialAccountAndPartyBalancesUnchanged": true,
+    "allCompanyReadinessUnchanged": true,
+    "existingRLSAndPermissionsUnchanged": true,
+    "existingRoutinesUnchanged": true,
+    "newPurchaseOrderRows": 0,
+    "financialWrites": 0,
+    "releaseCompatible": "c61810366f677b9101012a264eadd84df48d78bf",
+    "migrationSha256": "1dfca5ad1676f6490cffaf013782cb7fc4ee07a28d4dd5253e36c7bdbddc969b",
+    "completedAt": "2026-11-20T15:26:56.777929+00:00"
+  },
+  "guards": {
+    "newRows": 0,
+    "anonSelect": false,
+    "directDelete": false,
+    "directInsert": false,
+    "directSelect": true,
+    "directUpdate": false,
+    "immutableTrigger": true,
+    "allJournalsBalanced": true
+  },
+  "authorization": {
+    "missingIdentityReadDenied": true,
+    "missingIdentityCommandDenied": true,
+    "missingIdentityHistoryDenied": true
+  },
+  "publication": "NOT pushed or deployed by this activation; compatible prepared release unchanged"
+}

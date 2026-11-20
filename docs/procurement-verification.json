@@ -1,0 +1,79 @@
+{
+  "milestone": "Procurement lifecycle continuation",
+  "parentRelease": "c61810366f677b9101012a264eadd84df48d78bf",
+  "githubMainVerified": "c61810366f677b9101012a264eadd84df48d78bf",
+  "vercelDeployment": "Not independently checked",
+  "migration": {
+    "number": 108,
+    "file": "supabase/migrations/20261126120000_procurement_lifecycle.sql",
+    "sha256": "a4b27dd3c554be9e1f888a0d1474e6eab895cb3fdbb5c366d7ade6d37292b026",
+    "status": "PREPARED_NOT_APPLIED",
+    "dependsOn": 107,
+    "onlyPendingInLinkedDryRun": true
+  },
+  "focusedChecks": {
+    "accounting": 42,
+    "concurrency": 5,
+    "browser": 13,
+    "exports": 4,
+    "final-ui": 2,
+    "return-selector": 3
+  },
+  "totalFocusedChecks": 69,
+  "typescript": "PASS (npm run build invokes tsc -b)",
+  "productionBuild": "PASS; validation-only browser-safe environment; existing bundle-size advisory",
+  "productionBoundary": "PASS; new scoped request recovery only, no local ledger fallback",
+  "focusedLint": "PASS; no errors, documented React effect/ref advisories",
+  "visualInspection": "English quotation/receipt preview and corrected390px Arabic scrolling tables inspected",
+  "migrationSafety": "PASS: no top-level business DML, existing table/hash/grant/search-path and legacy-review preservation; forced RLS/new direct writes denied",
+  "secretScan": "PASS on changed/new text artifacts",
+  "hostedBusinessWrites": 0,
+  "published": false,
+  "deployed": false,
+  "accountingResults": {
+    "fullReceiving": {
+      "inventoryMinor": "10000",
+      "grniMinor": "0",
+      "vatMinor": "515",
+      "apCreditMinor": "10815",
+      "varianceDebitMinor": "300",
+      "duplicateProjectCostMinor": "0"
+    },
+    "afterInvoiceReversalReturnCreditAndRemainingInvoice": {
+      "inventoryMinor": "9000",
+      "grniMinor": "0",
+      "vatMinor": "450",
+      "apCreditMinor": "9450",
+      "varianceMinor": "0",
+      "apControlSubledgerDifferenceMinor": "0"
+    },
+    "browserPartial": {
+      "orderedMicros": "10000000",
+      "receivedMicros": "6000000",
+      "invoicedMicros": "3000000",
+      "inventoryMinor": "6000",
+      "grniCreditMinor": "3000",
+      "apCreditMinor": "3150",
+      "vatMinor": "150",
+      "remainingCommitmentMinor": "4000"
+    }
+  },
+  "evidence": "docs/procurement-evidence/",
+  "limitations": [
+    "One material/base-unit line per canonical receipt; one receipt per Supplier invoice document, partial quantities supported",
+    "Consolidated multi-receipt invoices are not implemented; do not split real invoice identities",
+    "Invoice-first and retrospective stock-price revaluation are not enabled",
+    "Alternate-UOM ordering, issued-PO amendments, external RFQ delivery and new receipt attachment uploads remain outside this release",
+    "Local browser transport uses synthetic Auth; authorized hosted108 activation/publication and targeted authenticated route smoke remain required"
+  ],
+  "definitionOfDone": {
+    "businessAccounting": "VERIFIED for documented receipt-first policy",
+    "securityAuthorization": "VERIFIED locally",
+    "database": "VERIFIED locally; hosted108 DEFERRED",
+    "deployment": "DEFERRED to owner authorization",
+    "testing": "VERIFIED focused local; genuine hosted route smoke DEFERRED",
+    "documentation": "VERIFIED",
+    "realCompanyMutation": "NOT APPLICABLE / none performed"
+  },
+  "finalChanges": "Return receipt/invoice context selection and live-only requisition cancellation dependencies verified; final TypeScript/Production build passed."
+}

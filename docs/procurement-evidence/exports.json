@@ -1,0 +1,10 @@
+{
+  "checks": [
+    "en Excel ordered/received/invoiced/remaining quantities and AED40 commitment independently verified",
+    "en printable PDF contains correct Company and AED40 remaining commitment",
+    "ar Excel ordered/received/invoiced/remaining quantities and AED40 commitment independently verified",
+    "ar printable PDF contains correct Company and AED40 remaining commitment"
+  ],
+  "count": 4,
+  "hostedWrites": 0
+}

@@ -1,0 +1,9 @@
+{
+  "checks": [
+    "Two partial invoices on one receipt have distinct selectable identities",
+    "Changing invoice context replaces an incompatible prior receipt/invoice selection",
+    "Supplier selection and invoice context changes create no financial mutations"
+  ],
+  "count": 3,
+  "hostedWrites": 0
+}

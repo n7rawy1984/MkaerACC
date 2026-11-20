@@ -1,3 +1,4 @@
+import {ProcurementWorkspace} from "../procurement/ProcurementWorkspace";
 import {PurchaseOrdersWorkspace} from "../procurement/PurchaseOrdersWorkspace";
 import {SupplierAccountsWorkspace} from '../financial/SupplierAccountsWorkspace';
 import{InventoryWorkspace}from'../inventory/InventoryWorkspace';
@@ -26,13 +27,13 @@ import { useAuth } from "../auth/AuthContext";
 import { useT } from "../i18n/I18nContext";
 import { useProductionMasterData } from "../master/productionMasterDataContext";
 
-export default function TenantReadyApplication({ view, supplierSection }: { supplierSection?: "invoices" | "payments" | "aging"; view: "purchaseOrders" | "inventory" | "financialEvidence" | "custody" | "dashboard" | "expenses" | "supplierPayments" | "subcontractorAdvances" | "subcontractorCertificates" | "subcontractorPayments" | "retentionReleases" | "retentionPayments" | "companyProfile" | "projects" | "parties" | "expenseCategories" | "accounts" | "treasuryAccounts" | "subcontracts" | "deferred" }) {
+export default function TenantReadyApplication({ view, supplierSection }: { supplierSection?: "invoices" | "payments" | "aging"; view: "procurement" | "purchaseOrders" | "inventory" | "financialEvidence" | "custody" | "dashboard" | "expenses" | "supplierPayments" | "subcontractorAdvances" | "subcontractorCertificates" | "subcontractorPayments" | "retentionReleases" | "retentionPayments" | "companyProfile" | "projects" | "parties" | "expenseCategories" | "accounts" | "treasuryAccounts" | "subcontracts" | "deferred" }) {
   const t = useT();
   const { state } = useAuth();
   const masterData = useProductionMasterData();
   if (state.phase !== "TENANT_READY") return null;
   return <div className="workspace-module-content">
-        {view === "purchaseOrders" ? <PurchaseOrdersWorkspace /> : view === "inventory" ? <InventoryWorkspace /> : view === "financialEvidence" ? <FinancialEvidenceWorkspace /> : view === "custody" ? <CustodyWorkspace /> : view === "dashboard" ? <ExecutiveDashboard /> : view === "expenses" ? <ExpenseReadPanel /> : view === "supplierPayments" ? <SupplierAccountsWorkspace section={supplierSection} /> : view === "subcontractorAdvances" ? <SubcontractorAdvancePanel /> : view === "subcontractorCertificates" ? <SubcontractorCertificatePanel /> : view === "subcontractorPayments" ? <SubcontractorPaymentPanel /> : view === "retentionReleases" ? <RetentionReleasePanel /> : view === "retentionPayments" ? <RetentionPaymentPanel /> : view === "deferred" ? (
+        {view === "procurement" ? <ProcurementWorkspace /> : view === "purchaseOrders" ? <PurchaseOrdersWorkspace /> : view === "inventory" ? <InventoryWorkspace /> : view === "financialEvidence" ? <FinancialEvidenceWorkspace /> : view === "custody" ? <CustodyWorkspace /> : view === "dashboard" ? <ExecutiveDashboard /> : view === "expenses" ? <ExpenseReadPanel /> : view === "supplierPayments" ? <SupplierAccountsWorkspace section={supplierSection} /> : view === "subcontractorAdvances" ? <SubcontractorAdvancePanel /> : view === "subcontractorCertificates" ? <SubcontractorCertificatePanel /> : view === "subcontractorPayments" ? <SubcontractorPaymentPanel /> : view === "retentionReleases" ? <RetentionReleasePanel /> : view === "retentionPayments" ? <RetentionPaymentPanel /> : view === "deferred" ? (
           <ContentSection className="workspace-master-module">
             <h2>{t("auth.tenantReadyTitle")}</h2>
             <p className="mt-3 leading-7 text-slate-600">{t("auth.cutoverPending")}</p>

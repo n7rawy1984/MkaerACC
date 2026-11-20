@@ -1,0 +1,11 @@
+{
+  "target": "eqnzueginpkskbnqvgoc",
+  "latestHosted": 107,
+  "onlyPending": [
+    "20261126120000_procurement_lifecycle.sql"
+  ],
+  "dryRun": "PASS; no migration applied",
+  "sha256": "a4b27dd3c554be9e1f888a0d1474e6eab895cb3fdbb5c366d7ade6d37292b026",
+  "githubMain": "c61810366f677b9101012a264eadd84df48d78bf",
+  "deployment": "Not independently checked"
+}

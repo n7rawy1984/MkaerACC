@@ -1,0 +1,12 @@
+{
+  "checks": [
+    "concurrent approvals serialize and reject stale versions",
+    "concurrent receiving cannot exceed order quantity",
+    "concurrent partial invoices cannot reuse received quantity",
+    "one canonical receipt and one AP liability survive competing requests",
+    "native journals balance with no duplicate stock or liability"
+  ],
+  "count": 5,
+  "engine": "Independent native PostgreSQL sessions",
+  "hostedWrites": 0
+}

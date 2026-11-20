@@ -1,3 +1,5 @@
+> Continuation: hosted107 is APPLIED; GitHub main is `c61810366f677b9101012a264eadd84df48d78bf`. Requisition/RFQ/receipt/invoice integration is now locally implemented in prepared108. See [procurement lifecycle](PROCUREMENT_LIFECYCLE.md) for exact policy, evidence and remaining limits. Earlier preparation states below are historical.
+
 # Procurement I1 — Purchase orders and commercial commitments
 
 2026-11-20. Product implementation continues from published release5689e2aa86b9793d58f405f55b302ee0be578eeb, clean `develop/narvo` in the new NARVO repository. Hosted106 is applied, read-only verified. CR-07, V1 remediation, Docker and historical simulations were not reopened.

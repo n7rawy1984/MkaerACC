@@ -1,0 +1,20 @@
+{
+  "checks": [
+    "English requisition enters submits reviews and approves through real components",
+    "quotation comparison and authorized selection create one canonical PO draft",
+    "partial receipt updates inventory and outstanding order through canonical command",
+    "partial invoice posts once without repeating stock or cash",
+    "browser posted results match independent Inventory60 GRNI30 AP31.50 VAT1.50",
+    "English complete quantities and commitments export through existing Excel/PDF infrastructure",
+    "Arabic lost-response recovery preserves one editable incomplete draft",
+    "Arabic over-receipt is actionable and cannot alter stock",
+    "Arabic mobile workspace contains wide operational tables",
+    "Arabic requests and report exports preserve same recorded quantities",
+    "partial-invoice return selector preserves the exact selected invoice, not another invoice on same receipt",
+    "Management Viewer has no procurement editing or posting actions",
+    "no production-component runtime errors"
+  ],
+  "count": 13,
+  "scope": "Actual production components and canonical local PostgreSQL RPCs; synthetic Auth transport, not hosted authentication acceptance",
+  "hostedWrites": 0
+}

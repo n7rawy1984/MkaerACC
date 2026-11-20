@@ -1,6 +1,6 @@
 // Disposable local PostgreSQL only. Reuses retained core fixture, not CR07 simulation.
 import{foundationFixture}from'./foundation-certification-fixture.mjs';import{randomUUID}from'node:crypto';
-export async function purchaseOrderFixture(database){const f=await foundationFixture(database),{db,company}=f;
+export async function purchaseOrderFixture(database,options){const f=await foundationFixture(database,options),{db,company}=f;
  await db.query("insert into private.company_legacy_eligibility(company_id,reason)values($1,'Disposable local purchasing fixture only')",[company]);
  const accountant=randomUUID(),procurement=randomUUID(),viewer=randomUUID(),supplier=randomUUID(),project=randomUUID(),material=randomUUID();
  for(const[u,role]of[[accountant,'ACCOUNTANT'],[procurement,'PROCUREMENT'],[viewer,'MANAGEMENT_VIEWER']]){await db.query('insert into auth.users(id,email)values($1,$2)',[u,u+'@example.invalid']);await db.query('insert into public.company_memberships(company_id,user_id,role)values($1,$2,$3)',[company,u,role]);}

@@ -1,0 +1,23 @@
+import{platformTestDatabase}from'./verify-platform-database.mjs';import{readFileSync}from'node:fs';import assert from'node:assert/strict';
+import{purchaseOrderFixture}from'./purchase-order-fixture.mjs';import{randomUUID}from'node:crypto';
+export async function procurementFixture(database){const loaded=await platformTestDatabase(database,{through:'20261125120000'}),f=await purchaseOrderFixture(loaded.db,{initialized:true}),{db,company}=f;
+ const icall=(action,input,key=randomUUID(),actor=f.admin)=>f.as(actor,'select public.command_inventory($1,$2,$3,$4)r',[company,key,action,input]).then(r=>r[0].r);
+ const setup={evidence:'Explicit fictional receipt-first policy; separate existing variance control'};for(const k of['inventory','grni','variance','opening'])Object.assign(setup,{[k+'_account_id']:'NEW',[k+'_code']:'PROC-'+k,[k+'_name']:'Fictional '+k});
+ await icall('SETUP',setup);const location=(await icall('LOCATION',{code:'PROC-STORE',name:'Fictional project store',project_id:f.project,evidence:'Controlled fictional warehouse'})).document_id;
+ const category=randomUUID();await db.query("insert into public.expense_categories(id,company_id,code,name)values($1,$2,'PROC-CAT','Fictional purchases')",[category,company]);
+ const legacyInput={kind:'RECEIPT',date:f.date,material_id:f.material,location_id:location,qty_micros:'1000000',unit:'UNIT',value_minor:'1000',recognition:'GRNI',supplier_id:f.supplier,project_id:f.project,not_previously_recognized:true,source_reference:'UNCHANGED-REVIEW-SNAPSHOT',evidence:'Populated canonical legacy review preserved'};
+ const legacy=(await db.query('select private.inventory_plan($1,$2)r',[company,legacyInput])).rows[0].r;
+ const tables=(await db.query("select schemaname,tablename from pg_tables where schemaname in('public','private','auth')order by schemaname,tablename")).rows;
+ const snapshot=async()=>{const out={};for(const{schemaname:s,tablename:t}of tables){assert(/^[a-z_0-9]+$/.test(s+t));out[s+'.'+t]=(await db.query(`select count(*)::text n,md5(coalesce(string_agg(to_jsonb(t)::text,','order by to_jsonb(t)::text),''))hash from "${s}"."${t}"t`)).rows[0];}return out;};
+ const grants=async()=> (await db.query("select p.oid::regprocedure::text signature,p.proacl::text acl,p.proconfig,p.prosecdef from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname in('public','private')and p.prokind='f'order by signature")).rows;
+ const before=await snapshot(),oldGrants=await grants();await db.exec(readFileSync('supabase/migrations/20261126120000_procurement_lifecycle.sql','utf8'));assert.deepEqual(await snapshot(),before,'Migration108 preserves every existing populated table');const afterGrants=await grants();for(const g of oldGrants)assert.deepEqual(afterGrants.find(x=>x.signature===g.signature),g,'Existing privileged function grants/search paths preserved');assert.deepEqual((await db.query('select private.inventory_plan($1,$2)r',[company,legacyInput])).rows[0].r,legacy,'Existing reviewed Inventory snapshot remains compatible');
+ await f.as(f.admin,"select public.set_project_correction_period($1,$2,'OPEN','Explicit fictional correction period for reversal tests')",[company,randomUUID()]);
+ const command=(action,input,key=randomUUID(),actor=f.admin,cid=company)=>f.as(actor,'select public.command_procurement($1,$2,$3,$4)r',[cid,key,action,input]).then(r=>r[0].r);
+ const read=(actor=f.admin,offset=0,size=50,cid=company)=>f.as(actor,'select public.read_procurement($1,$2,$3)r',[cid,offset,size]).then(r=>r[0].r);
+ const preview=(kind,input,actor=f.admin)=>f.as(actor,'select public.preview_procurement($1,$2,$3)r',[company,kind,input]).then(r=>r[0].r);
+ const state=r=>({id:r.id,version:String(r.version)});
+ const save=(kind,input,actor=f.admin)=>command('SAVE',{id:randomUUID(),version:'0',kind,...input},randomUUID(),actor);
+ const progress=async(r,actions,actor=f.admin)=>{for(const a of actions)r=await command(a,state(r),randomUUID(),actor);return r;};
+ const req=(patch={})=>({date:f.date,required_on:'',project_id:f.project,notes:'Materials for fictional site',evidence:'Fictional requisition evidence',lines:[{material_id:f.material,description:'Fictional Material',unit:'UNIT',quantity_micros:'10000000'}],...patch});
+ return{...f,preservedTables:tables.length,icall,location,category,command,read,preview,state,save,progress,req};
+}

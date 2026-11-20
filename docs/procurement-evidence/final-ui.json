@@ -1,0 +1,8 @@
+{
+  "checks": [
+    "Unknown quotation tax rate is never silently treated as zero",
+    "Enter submits the visible exact quote price and explicit tax rate with zero financial changes"
+  ],
+  "count": 2,
+  "hostedWrites": 0
+}

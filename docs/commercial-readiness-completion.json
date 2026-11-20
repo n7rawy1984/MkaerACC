@@ -1,13 +1,13 @@
 {
   "program": "Approved ROADMAP V3 Commercial Readiness Program",
   "date": "2026-11-20",
-  "overall": "CR07 CONNECTED ACCOUNTING VERIFIED LOCALLY; FINAL COMMERCIAL ACCEPTANCE NOT READY",
+  "overall": "PRODUCT CONTINUATION: SUPPORTED RECEIPT-FIRST PROCUREMENT IMPLEMENTED LOCALLY; FULL ORIGINAL COMMERCIAL ROADMAP REMAINS PARTIAL",
   "scope": "Bounded implementation evidence; not a new roadmap or a general architecture audit",
   "authority": "Local implementation and disposable test execution only; no real Company mutations, hosted migrations, push or deployment",
   "publishedBaseline": {
-    "release": "e8d2efb4f93f47f7a77f2e1dc0522dbf9812767a",
-    "published": "Confirmed by Product Owner",
-    "hostedMigrations": "Through104 applied; read-only linked dry-run only105 pending"
+    "release": "c61810366f677b9101012a264eadd84df48d78bf",
+    "published": "GitHub main verified read-only; Vercel not independently checked",
+    "hostedMigrations": "Through107 applied; linked dry-run only108 pending"
   },
   "modules": [
     {
@@ -201,12 +201,13 @@
       ]
     },
     {
-      "module": "Procurement — Purchase Orders",
-      "status": "COMPLETE FOR NONFINANCIAL PO WORKFLOW; BROADER PROCUREMENT PARTIAL",
-      "scope": "Draft/edit/review/accountant issue/audited cancellation, exact quoted commitments, existing Supplier/Project/materials, bilingual outputs and recovery. No GL, AP or Inventory effects. PR/RFQ, alternate units and PO receipt/invoice fulfillment matching remain outstanding.107 prepared, not applied.",
+      "module": "Procurement — requisitions, RFQ, PO, receiving and invoice matching",
+      "status": "COMPLETE FOR DOCUMENTED RECEIPT-FIRST SINGLE-RECEIPT CORE; BROADER PROCUREMENT PARTIAL",
+      "scope": "Bilingual PR approval/rejection/cancellation, comparable actual Supplier quotes and authorized selection, duplicate-safe PO conversion, full/partial/multiple line receipts, partial AP invoices, Admin-reviewed price variances, canonical returns/reversals and full quantity/commitment reporting. One material per receipt, one receipt per invoice; consolidated invoices, alternate UOM, issued amendments, invoice-first and external/attachment integration not implemented.108 PREPARED, NOT APPLIED.",
       "evidence": [
-        "docs/PURCHASE_ORDER_WORKFLOW.md",
-        "docs/purchase-orders-verification.json"
+        "docs/PROCUREMENT_LIFECYCLE.md",
+        "docs/procurement-verification.json",
+        "docs/procurement-evidence/"
       ]
     }
   ],
@@ -216,11 +217,11 @@
     "Full original Procurement/Inventory/AR/AP/construction/HR/WPS/subscriptions/security/operations requirements",
     "Final restoration rehearsal and deferred USB work"
   ],
-  "nextDependency": "Explicit107 activation approval and compatible publication. Continue unfinished Procurement capabilities; do not reopen CR07/V1 remediation or repeat prior acceptance.",
+  "nextDependency": "Explicit108 activation, compatible publication and targeted authenticated route smoke; then continue outstanding original product capabilities. Do not restart CR07/V1 remediation.",
   "continuationEvidence": "docs/commercial-completion-verification.json",
   "hostedActivation": {
-    "status": "Through106 APPLIED per Product Owner;106 aligned by read-only version check;107 PREPARED / NOT APPLIED",
-    "evidence": "docs/purchase-orders-evidence/migration-alignment.json"
+    "status": "Through107 APPLIED;108 PREPARED / NOT APPLIED",
+    "evidence": "docs/procurement-evidence/migration-alignment.json"
   },
   "cr03Evidence": "docs/cr03-bank-reconciliation-verification.json",
   "cr04Evidence": "docs/cr04-supplier-returns-verification.json",
@@ -229,6 +230,6 @@
   "cr06Evidence": "docs/cr06-gap-verification.json",
   "cr07Evidence": "docs/cr07-integrated-verification.json",
   "cr07Readiness": "NOT READY",
-  "productContinuationEvidence": "docs/purchase-orders-verification.json",
+  "productContinuationEvidence": "docs/procurement-verification.json",
   "baselineProductionRelease": "5689e2aa86b9793d58f405f55b302ee0be578eeb"
 }

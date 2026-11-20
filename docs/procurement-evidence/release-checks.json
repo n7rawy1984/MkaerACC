@@ -1,0 +1,20 @@
+{
+  "focusedTests": {
+    "accounting": 42,
+    "concurrency": 5,
+    "browser": 13,
+    "exports": 4,
+    "final-ui": 2,
+    "return-selector": 3
+  },
+  "total": 69,
+  "typescript": "PASS",
+  "productionBuild": "PASS; existing bundle-size advisory",
+  "lint": "PASS with non-blocking effect/ref advisories",
+  "diffCheck": "PASS",
+  "secretScan": "PASS changed/new text files",
+  "hostedBusinessWrites": 0,
+  "migrationApplied": false,
+  "push": false,
+  "deployment": false
+}
