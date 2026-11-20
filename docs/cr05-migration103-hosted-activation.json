@@ -1,0 +1,881 @@
+{
+  "migration": 103,
+  "file": "20261121120000_construction_contracts_wip.sql",
+  "sha256": "bf0b5313893d99e362a390ec8f678712d5aec1ea0bd7638d5b918cd948d34ddd",
+  "project": "eqnzueginpkskbnqvgoc",
+  "result": "APPLIED",
+  "applicationResult": "Initialising login role...\nConnecting to remote database...\nDo you want to push these migrations to the remote database?\n • 20261121120000_construction_contracts_wip.sql\n [Y/n] y\nApplying migration 20261121120000_construction_contracts_wip.sql...\n{\"upToDate\":false,\"dryRun\":false,\"migrations\":[\"20261121120000_construction_contracts_wip.sql\"],\"seeds\":[],\"roles\":[],\"message\":\"Finished supabase db push.\"}\nA new version of Supabase CLI is available: v3.2.0 (currently installed v2.115.0)\nWe recommend updating regularly for new features and bug fixes: https://supabase.com/docs/guides/cli/getting-started#updating-the-supabase-cli\n",
+  "release": "be689cdae488f871b337795fb105767079a4156d",
+  "push": false,
+  "deployment": false,
+  "target": {
+    "id": "eqnzueginpkskbnqvgoc",
+    "name": "MakerACC-Development",
+    "status": "ACTIVE_HEALTHY",
+    "region": "ap-northeast-1"
+  },
+  "preflight": {
+    "status": "PASS",
+    "target": "eqnzueginpkskbnqvgoc",
+    "latestHosted": "20261120120000",
+    "onlyPending": [
+      "20261121120000"
+    ],
+    "snapshottedTables": 141,
+    "release": "be689cdae488f871b337795fb105767079a4156d",
+    "completedAt": "2026-11-18T16:17:31.754084+00:00"
+  },
+  "postflight": {
+    "status": "PASS",
+    "latestHosted": "20261121120000",
+    "pending": [],
+    "preservedTables": 141,
+    "newTables": 3,
+    "newTablesEmpty": true,
+    "existingPoliciesAndRLSUnchanged": true,
+    "newFunctionsProtected": true,
+    "realFinancialWrites": 0,
+    "releaseCompatible": "be689cdae488f871b337795fb105767079a4156d",
+    "completedAt": "2026-11-18T16:19:04.064594+00:00"
+  },
+  "scope": [
+    {
+      "file": "supabase/migrations/20261121120000_construction_contracts_wip.sql",
+      "sha256": "bf0b5313893d99e362a390ec8f678712d5aec1ea0bd7638d5b918cd948d34ddd",
+      "topLevelDestructiveDML": false
+    }
+  ],
+  "guards": {
+    "dependencyGuards": true,
+    "legacyPlanPrivate": true,
+    "costPrivacyPolicies": true,
+    "newTenantUniqueConstraints": true
+  },
+  "authorization": {
+    "missingIdentityReadDenied": true,
+    "missingIdentityFinancialPreviewDenied": true
+  },
+  "summary-before": {
+    "sources": 370,
+    "journals": 55,
+    "barqMinor": "36436577",
+    "company_id": "c1ca8b02-0096-4bca-af4c-68331f510103",
+    "debitMinor": "41755463",
+    "creditMinor": "41755463",
+    "draftEvents": 45,
+    "postedExpenses": 41
+  },
+  "summary-after": {
+    "sources": 370,
+    "journals": 55,
+    "barqMinor": "36436577",
+    "company_id": "c1ca8b02-0096-4bca-af4c-68331f510103",
+    "debitMinor": "41755463",
+    "creditMinor": "41755463",
+    "draftEvents": 45,
+    "postedExpenses": 41
+  },
+  "new-structures": {
+    "tables": [
+      {
+        "acl": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}",
+        "rls": true,
+        "table": "construction_contracts",
+        "forced": true,
+        "schema": "public"
+      },
+      {
+        "acl": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}",
+        "rls": true,
+        "table": "construction_document_links",
+        "forced": true,
+        "schema": "public"
+      },
+      {
+        "acl": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}",
+        "rls": true,
+        "table": "construction_events",
+        "forced": true,
+        "schema": "public"
+      }
+    ],
+    "rowCounts": {
+      "public.construction_events": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.construction_contracts": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.construction_document_links": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "permissions": {
+      "noAnonSelect": true,
+      "noBrowserDML": true
+    }
+  },
+  "rpc-permissions": [
+    {
+      "anon": false,
+      "name": "commercial_control_type",
+      "actor": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "signature": "private.commercial_control_type(text)",
+      "securityDefiner": false
+    },
+    {
+      "anon": false,
+      "name": "construction_balance",
+      "actor": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "signature": "private.construction_balance(uuid,uuid,date)",
+      "securityDefiner": false
+    },
+    {
+      "anon": false,
+      "name": "construction_docs",
+      "actor": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "signature": "private.construction_docs(uuid,uuid,date)",
+      "securityDefiner": false
+    },
+    {
+      "anon": false,
+      "name": "construction_link_customer",
+      "actor": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "signature": "private.construction_link_customer()",
+      "securityDefiner": true
+    },
+    {
+      "anon": false,
+      "name": "construction_live",
+      "actor": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "signature": "private.construction_live(uuid,uuid,date)",
+      "securityDefiner": false
+    },
+    {
+      "anon": false,
+      "name": "construction_plan",
+      "actor": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "signature": "private.construction_plan(uuid,text,jsonb)",
+      "securityDefiner": false
+    },
+    {
+      "anon": false,
+      "name": "construction_value",
+      "actor": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "signature": "private.construction_value(uuid,uuid,date)",
+      "securityDefiner": false
+    },
+    {
+      "anon": false,
+      "name": "customer_plan",
+      "actor": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "signature": "private.customer_plan(uuid,text,jsonb)",
+      "securityDefiner": false
+    },
+    {
+      "anon": false,
+      "name": "customer_plan_pre103",
+      "actor": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "signature": "private.customer_plan_pre103(uuid,text,jsonb)",
+      "securityDefiner": false
+    },
+    {
+      "anon": false,
+      "name": "guard_closed_project_journal",
+      "actor": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "signature": "private.guard_closed_project_journal()",
+      "securityDefiner": false
+    },
+    {
+      "anon": false,
+      "name": "guard_construction_cost_reversal",
+      "actor": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "signature": "private.guard_construction_cost_reversal()",
+      "securityDefiner": true
+    },
+    {
+      "anon": false,
+      "name": "normalize_construction",
+      "actor": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "signature": "private.normalize_construction(jsonb)",
+      "securityDefiner": false
+    },
+    {
+      "anon": false,
+      "name": "command_construction",
+      "actor": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "public",
+      "signature": "command_construction(uuid,uuid,text,jsonb)",
+      "securityDefiner": true
+    },
+    {
+      "anon": false,
+      "name": "configure_construction_accounting",
+      "actor": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "public",
+      "signature": "configure_construction_accounting(uuid,uuid,jsonb)",
+      "securityDefiner": true
+    },
+    {
+      "anon": false,
+      "name": "construction_journal_visible",
+      "actor": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "public",
+      "signature": "construction_journal_visible(uuid,uuid)",
+      "securityDefiner": true
+    },
+    {
+      "anon": false,
+      "name": "preview_construction",
+      "actor": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "public",
+      "signature": "preview_construction(uuid,text,jsonb)",
+      "securityDefiner": true
+    },
+    {
+      "anon": false,
+      "name": "read_construction",
+      "actor": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "public",
+      "signature": "read_construction(uuid,uuid,date)",
+      "securityDefiner": true
+    }
+  ],
+  "preservation": {
+    "unchanged": true,
+    "changed": [],
+    "tableCount": 141,
+    "tables": {
+      "public.accounts": {
+        "count": 78,
+        "sha256": "32d67416d7e69879eab509594c4810ce9f9b721818debc435eae0d6c610806d6"
+      },
+      "public.bank_matches": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.bank_unmatches": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.bank_statements": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "private.platform_events": {
+        "count": 13,
+        "sha256": "27237d625b24ce0c90c77679c8b5348099ff8474af5021b33d3e64a59c080d5c"
+      },
+      "public.attendance_audit": {
+        "count": 14,
+        "sha256": "4b420abf67c24372ec8d80dad9ca2c66a0fe7f8846bce76f3c8448c3532e4577"
+      },
+      "public.bank_adjustments": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "private.platform_entities": {
+        "count": 1,
+        "sha256": "6e2a01c7db5e209f6977589fb8885474fe9df1f965f4b11626041817346ce92d"
+      },
+      "private.platform_requests": {
+        "count": 8,
+        "sha256": "0d4267d5005b19944a9a9dcf84f1bcbe0b4080af47e872b099f03557ba7329f5"
+      },
+      "private.platform_settings": {
+        "count": 1,
+        "sha256": "c886927938fad24ad9005c3b773600a4f7626d26e83a5550157a7861714d35ea"
+      },
+      "public.attendance_periods": {
+        "count": 3,
+        "sha256": "882edb651f1ecb480154051d6b472ce2d281b0274d6d7ccc026d2891842f45f1"
+      },
+      "private.platform_customers": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "private.reference_counters": {
+        "count": 30,
+        "sha256": "92618d646d6af085c1ebe55dc563fcfe3bf636ad3cad0fe2667f29b060ae3267"
+      },
+      "public.commercial_controls": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "private.hr_command_receipts": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.bank_statement_lines": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.commercial_documents": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "private.live_payroll_periods": {
+        "count": 1,
+        "sha256": "887b9cf208b04f21c8ec348b8740a7017e2300b78832c1a22f649c179b782fd8"
+      },
+      "private.platform_invitations": {
+        "count": 1,
+        "sha256": "121d85d15cdd1dab673fb170222698e86da9ed21bf2eb6e36f8174a391cc9007"
+      },
+      "public.attendance_exceptions": {
+        "count": 2,
+        "sha256": "db3eefec1d29833ab58afd1ed7ed36f29e74f6062f62e16bdabaae017b22809a"
+      },
+      "private.company_subscriptions": {
+        "count": 1,
+        "sha256": "c6d951e0b2f0ee67550e3e958e0aff9a93de86e3449b6bdc97196710d2d95d4d"
+      },
+      "private.system_administrators": {
+        "count": 2,
+        "sha256": "65c73e3076e1f14b0dc658d7ce6e6f7ee783ee612f53a1de529a0a21addbdd0f"
+      },
+      "public.accounting_year_events": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "private.platform_access_fences": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "private.platform_delivery_jobs": {
+        "count": 1,
+        "sha256": "73acb36d2b1892679eadde006055d5c5ea86acbe01a69a48448b5a4069ae1659"
+      },
+      "public.accounting_fiscal_years": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.accounting_fiscal_events": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.accounting_year_closures": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.bank_adjustment_controls": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.accounting_fiscal_periods": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.bank_reconciliation_events": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.cash_reconciliation_counts": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "private.company_legacy_eligibility": {
+        "count": 1,
+        "sha256": "9fee7c8b74a2a9dd9c504b37326cc7dde702c55dffe5fdc9a1b48b37f2a05d9c"
+      },
+      "private.financial_command_requests": {
+        "count": 580,
+        "sha256": "faae417cf715a7c3de072e024c7cfdc8a08f1de502cdaba6a5a51067edd71fe0"
+      },
+      "public.cash_reconciliation_reviews": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "private.company_initialization_scope": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "private.company_accounting_provisions": {
+        "count": 1,
+        "sha256": "89b3c8addbd701e53c8ec39298b70f8bc6ff2280afefe29a86804a5b85e70fc8"
+      },
+      "private.subcontract_creation_receipts": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "private.operational_finance_serialization": {
+        "count": 2,
+        "sha256": "98300108ac26499f6c7ad57ad503454229e55d9c08264408bb37f5c36a2da425"
+      },
+      "public.certificate_deduction_account_mappings": {
+        "count": 3,
+        "sha256": "5194ed28c33037af6800160d250e50e803492a2c48d39b0dcdfdc649f63042f7"
+      },
+      "public.expenses": {
+        "count": 183,
+        "sha256": "396033e7ee05c08dbaa500f4465afbdc0c4b9230b0c673fa9b398defd55cfe85"
+      },
+      "public.companies": {
+        "count": 18,
+        "sha256": "49ee665931ace2f09f8b061f7bcf1dd3fad9cf6d7527941403a684b45cf698de"
+      },
+      "public.journal_lines": {
+        "count": 1212,
+        "sha256": "23d623e784f605dc123d718dc18771c0d7304df1ddc1845c3a66fb11c63cadcf"
+      },
+      "public.hr_term_events": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.journal_entries": {
+        "count": 583,
+        "sha256": "68f4e312be1c5094e0bf34302d519d3c9c676e5f0260fc355ce834279385b4ad"
+      },
+      "public.company_settings": {
+        "count": 18,
+        "sha256": "c23de6fd0bf414882677f5898141d3b0cd1ea644f878433b5e707c93c792e9f7"
+      },
+      "public.custody_advances": {
+        "count": 71,
+        "sha256": "b3e08fdc278a50846b9610f4642b7b2061976f0a2245880916db7e4fed461931"
+      },
+      "public.hr_policy_events": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.inventory_events": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.customer_accounts": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.hr_recovery_plans": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.expense_categories": {
+        "count": 30,
+        "sha256": "723854e13b28fdfd2becd933a06695c0abd36f7594d1810c5ea55d7a2f7333d8"
+      },
+      "public.hr_calendar_events": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.company_memberships": {
+        "count": 281,
+        "sha256": "bfd26c9d8c24a5bee45fe8054437b599aaae4db203aefc0fb5efa10e3faba4fa"
+      },
+      "public.custody_settlements": {
+        "count": 6,
+        "sha256": "d41da8d1665bb9c3fe7031f78286a8b0042212e47eabd81c3c4518fcf2a040e9"
+      },
+      "public.hr_advance_postings": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.inventory_locations": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.inventory_materials": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.inventory_movements": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.custody_cash_returns": {
+        "count": 28,
+        "sha256": "7dfbeb096be1107878ffe19b68e62000bab5d46937bd4974ff9c6c59fdcae129"
+      },
+      "public.expense_draft_events": {
+        "count": 141,
+        "sha256": "d35b03e880e0ab95713dc7841f404f30806d9263c364021db9e580d92aad0983"
+      },
+      "public.hr_attendance_events": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.hr_recovery_postings": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.employee_master_events": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.hr_financial_reversals": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.commercial_setup_events": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.historical_source_audit": {
+        "count": 988,
+        "sha256": "a4c264467bc205a5ccc457c64eb70c298bf7943930dd2873138a1c44f87dd781"
+      },
+      "public.hr_payroll_setup_events": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.inventory_configuration": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.custody_settlement_items": {
+        "count": 10,
+        "sha256": "9d54af7538399b459c0081870254ef0fac42a4924986cabff142f9db8926e2c9"
+      },
+      "public.inventory_purchase_links": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.employee_site_assignments": {
+        "count": 2,
+        "sha256": "433e4a8b17e8ea98d33e5850aa4bdcbcaa708e22183536e3f48647b72428cf4e"
+      },
+      "public.historical_expense_drafts": {
+        "count": 45,
+        "sha256": "d71a416f0d03840a6de9190d285144d10cef8e37437c68408315e926cbf3888f"
+      },
+      "public.historical_source_records": {
+        "count": 370,
+        "sha256": "848b1923f7293db73fa1242925c7a780d470a7c63ca640c4e1e68776e60a5f22"
+      },
+      "public.expense_correction_reviews": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.historical_expense_reviews": {
+        "count": 41,
+        "sha256": "0724df6f34b318c506538fa15f8bb6b3a113402521153f7216883e707834d03b"
+      },
+      "public.custody_funding_draft_events": {
+        "count": 48,
+        "sha256": "56198d7935ff6288fd58a8e79fc26b62b7795bdcabe538bb6edd8860e33edbd2"
+      },
+      "public.financial_operation_evidence": {
+        "count": 12,
+        "sha256": "893f19988e71f894615c0c7aab281a190bea92c28875f62ca0e7dc456dda1bb0"
+      },
+      "public.company_accounting_setup_events": {
+        "count": 3,
+        "sha256": "5b63944b71a1d7d6db3e15c4903cc2542cdefa126e5876bbed178132b85429f9"
+      },
+      "public.financial_operation_evidence_reviews": {
+        "count": 12,
+        "sha256": "388786b907ea8e2d3bf2b0fb640e973e0e5a717fff0820893f5f9c84a4bc42cf"
+      },
+      "public.parties": {
+        "count": 195,
+        "sha256": "271d9df76c79ef03198c2d6cd9859c97708224e8a1f491613b362e0c7b29dba4"
+      },
+      "public.profiles": {
+        "count": 290,
+        "sha256": "9c04237e708147a59dd09ea872da3577d176f73e807d6168c105112563bc2285"
+      },
+      "public.projects": {
+        "count": 24,
+        "sha256": "de42923f999cba39dbb4027da13c4b98e52fe9739ecbf0792f3f24f273f5afac"
+      },
+      "public.permissions": {
+        "count": 23,
+        "sha256": "a8f4a0f3575c7e8cf0a84a88e6d6ba19af2dbed28078273e6edb792f6642ada2"
+      },
+      "public.salary_payments": {
+        "count": 2,
+        "sha256": "8bb9c00e89ad8ed913ed2432200ea07f622345eabcd503eab7148eab6c630a29"
+      },
+      "public.payroll_postings": {
+        "count": 2,
+        "sha256": "757fde3375d8fdf0791774b925851d8ae6c86b3fcdfc734319088cbe98a7d9b3"
+      },
+      "public.payroll_profiles": {
+        "count": 3,
+        "sha256": "8d5609953029e5d19ef3b9f2577ed90aef3628c42e2a0db63349baac2949f2fe"
+      },
+      "public.role_permissions": {
+        "count": 49,
+        "sha256": "9b18f857223edc38c08aa18df64b0cccc80913029cd506c063012c56953c4f27"
+      },
+      "public.payroll_reversals": {
+        "count": 1,
+        "sha256": "4022191d0c2dd74803da57c6083bdd7118b6912632c04c22c356b4c379a2b848"
+      },
+      "public.party_person_roles": {
+        "count": 1,
+        "sha256": "31bf9f6f225e47a63be2da9d3a17066accda67c545b6a0bebf075670acf2feb2"
+      },
+      "public.payroll_draft_rows": {
+        "count": 3,
+        "sha256": "e2709ae02022dbd5447bca668ceed18e518d31add0dfe73322d8ef0c53c66755"
+      },
+      "public.payroll_draft_audit": {
+        "count": 22,
+        "sha256": "bcf908e3ea66a7df5f0501b448381e760b363fae385a67b166d518693d034da8"
+      },
+      "public.project_assignments": {
+        "count": 11,
+        "sha256": "09268600a1824f415c36111972ef0bb3274c3136adbe8d5d482ada9663088dc3"
+      },
+      "public.payroll_entitlements": {
+        "count": 3,
+        "sha256": "a1d04bb89bb20a03ba24808613231e579f5512a51e8800a6740b48d8865af333"
+      },
+      "public.opening_loan_payments": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.payroll_draft_periods": {
+        "count": 2,
+        "sha256": "a70cef11112cb9548f0881764c8e1836a1db5eaed0304c1cd2e9c2fd20550d24"
+      },
+      "public.opening_balance_drafts": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.party_business_changes": {
+        "count": 69,
+        "sha256": "f4721b23734f14e5e600f14dbe565c9ea269a634e8ac702323a85c54578e1e55"
+      },
+      "public.project_closure_events": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.party_business_requests": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.opening_balance_postings": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.payroll_draft_accounting": {
+        "count": 2,
+        "sha256": "06fcbc52365e7949cc80ea7ae581dfa8709b81b754a06b9e269e4683f69af53b"
+      },
+      "public.project_cost_corrections": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.project_lifecycle_events": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.salary_payment_reversals": {
+        "count": 1,
+        "sha256": "f625815cde71e669c137c9a54c37e80b3575a8c251eced4fb912862fb136b144"
+      },
+      "public.source_settlement_events": {
+        "count": 17,
+        "sha256": "2ccdc9a7ecc52a4e18b6526b9e890c473a526ad5ced9d945469f3c81dc5e71f4"
+      },
+      "public.opening_balance_reversals": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.payroll_draft_adjustments": {
+        "count": 1,
+        "sha256": "fc07189e3d5c284bb42a547ff0c93a5fa5e94bc6c6b4c83b9e1225aed710caa6"
+      },
+      "public.project_activation_events": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.payment_workflow_preferences": {
+        "count": 2,
+        "sha256": "e38f1b33884fde1858f57ee92625e3eb2aa06843071a30297ae6fb9e0c37f26e"
+      },
+      "public.opening_loan_payment_reversals": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.operational_liability_postings": {
+        "count": 12,
+        "sha256": "86952fe0b101ede4371cc400f9b20ec2a3ef8a822c0dd7bdb66856469631e7b6"
+      },
+      "public.source_reclassification_events": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.operational_liability_reversals": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.project_correction_period_events": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.source_expense_allocation_events": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.source_project_assignment_events": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.project_cost_correction_reversals": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.operational_liability_configuration": {
+        "count": 1,
+        "sha256": "3c60687fceb74eb8461a9827837308f2d9354f0823317b1aabcf851fa379bf0f"
+      },
+      "public.subcontract_certificate_withdrawals": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "auth.users": {
+        "count": 290,
+        "sha256": "94fccf479d782653fe42264be380ccf2b86b4e4af737924676fd51751df638a0"
+      },
+      "public.subcontracts": {
+        "count": 69,
+        "sha256": "cf78e826632919809a78004c5a8a8d29455088a9085c8b55391bdc69315a78b8"
+      },
+      "public.supplier_payments": {
+        "count": 33,
+        "sha256": "50301126d2d4fead36d6072fe43f30a7148de02ae49461a53203ec7b81e71bf2"
+      },
+      "public.treasury_accounts": {
+        "count": 22,
+        "sha256": "70e54fd8ddbe0b2905532ac1a40f0c3d9def8b4957a43a3829a35ff8272107b1"
+      },
+      "public.supplier_ap_documents": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.subcontractor_advances": {
+        "count": 14,
+        "sha256": "6d43d484457d146a14a9bc168687db6011ff5fa49ea8fbfcde2a33d5f7351495"
+      },
+      "public.subcontractor_payments": {
+        "count": 24,
+        "sha256": "5f0c817e32b50804bd16b1f548608b9e6135c284079767005d43962a7dd6ad35"
+      },
+      "public.supplier_invoice_terms": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.subcontract_term_events": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.supplier_credit_refunds": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.supplier_return_credits": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.subcontract_measurements": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.subcontractor_certificates": {
+        "count": 49,
+        "sha256": "daeb76158d83f33f4cc00c1457767cd977e845ade8a314caee4e10dbb858411d"
+      },
+      "public.supplier_payment_allocations": {
+        "count": 35,
+        "sha256": "0bf78573b91793aec04094caaa33b767e23c1602911d138cbe26471cd1299c55"
+      },
+      "public.supplier_advance_configuration": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public.subcontractor_retention_payments": {
+        "count": 25,
+        "sha256": "b29750339fa704badb5e22c667358c54d01f87ecc9c6693a05616bd9dcb60a33"
+      },
+      "public.subcontractor_retention_releases": {
+        "count": 22,
+        "sha256": "5343695e13ea0da0520b1d6e1ca5793d9c0d7df889df4450b57396573ce937fd"
+      },
+      "public.subcontractor_payment_allocations": {
+        "count": 26,
+        "sha256": "399e42576879fdade3123e522b91ead02f97655bcd99a056cfb72a990ef07d3e"
+      },
+      "public.subcontractor_certificate_deductions": {
+        "count": 4,
+        "sha256": "997eb85011e1eb7fb7e4e3c30e9a8c408bc5d274c05ec8e44b23ae8ddbab1910"
+      },
+      "public.subcontractor_retention_payment_allocations": {
+        "count": 26,
+        "sha256": "9c850e9130ac7262957603099826a9c6ccf233b65338a057dd1b0d689a2d64b5"
+      },
+      "public.subcontractor_retention_release_allocations": {
+        "count": 22,
+        "sha256": "8d734c6d6ba4721b3ee57b3a0488cd8e74b5573b620f894fc17ff7469a3f642c"
+      }
+    }
+  }
+}

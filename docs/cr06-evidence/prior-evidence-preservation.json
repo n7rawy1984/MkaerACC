@@ -1,0 +1,22 @@
+[
+  {
+    "file": "docs/commercial-integrated-scenarios.json",
+    "sha256": "abadcb04ccbc31751d19291d252063b769999a79a8a577d1404f2cbf497cced6",
+    "unchanged": true
+  },
+  {
+    "file": "docs/commercial-integrated-snapshot.json",
+    "sha256": "b44cb4cf3c46bc53dc8a2b447db2de072b3fa2f30ea8c8efdd9f6b706c655b3d",
+    "unchanged": true
+  },
+  {
+    "file": "docs/commercial-integrated-journals.csv",
+    "sha256": "a93af83f3276993953b30525123332181925edd19d3db72536a66ea0916c9373",
+    "unchanged": true
+  },
+  {
+    "file": "docs/cr05-construction-verification.json",
+    "sha256": "0cc9c6386e79db737239a191bfb75e025bde58790eccf245004876daeb05dd8f",
+    "unchanged": true
+  }
+]

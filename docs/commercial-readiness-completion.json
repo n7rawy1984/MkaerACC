@@ -1,13 +1,13 @@
 {
   "program": "Approved ROADMAP V3 Commercial Readiness Program",
   "date": "2026-11-18",
-  "overall": "SUPPORTED CORE VERIFIED LOCALLY \u2014 COMMERCIAL ROADMAP PARTIAL",
+  "overall": "CR06 SUPPORTED CORE VERIFIED LOCALLY — COMMERCIAL ROADMAP PARTIAL",
   "scope": "Bounded implementation evidence; not a new roadmap or a general architecture audit",
   "authority": "Local implementation and disposable test execution only; no real Company mutations, hosted migrations, push or deployment",
   "publishedBaseline": {
-    "sha": "99305ef4ec79b441f8014308d23d52e43f53675d",
-    "production": "Ready/deployed per Product Owner",
-    "migration": "Through102 applied; read-only linked dry-run only103 pending"
+    "release": "be689cdae488f871b337795fb105767079a4156d",
+    "published": "Confirmed by Product Owner",
+    "hostedMigrations": "Through103 applied; linked history verified"
   },
   "modules": [
     {
@@ -41,17 +41,18 @@
     },
     {
       "module": "Corrections, reversals and adjustments",
-      "status": "PARTIAL",
-      "scope": "Supported Expense/source/Contract/Payroll reversals and source reclassification retained; generic accrual/prepayment adjustments and complete prior-period policy remain outstanding",
+      "status": "COMPLETE FOR SUPPORTED CORE",
+      "scope": "Existing specialized corrections plus typed Admin recognition/transfer reversals, dependencies, immutable originals and single traced replacements. Prior-period restatement policy remains specialist.",
       "evidence": [
         "src/historical/SourceReclassification.tsx",
-        "supabase/migrations/20261106130000_source_transaction_reclassification.sql"
+        "supabase/migrations/20261106130000_source_transaction_reclassification.sql",
+        "docs/cr06-gap-verification.json"
       ]
     },
     {
       "module": "Fiscal periods, close and reopening",
       "status": "PARTIAL",
-      "scope": "95\u2013100 locally implement period controls plus retained-earnings year finalization, immutable audited reopen/reclose and lock; subsequent-year correction/restatement policy deferred.",
+      "scope": "95–100 locally implement period controls plus retained-earnings year finalization, immutable audited reopen/reclose and lock; subsequent-year correction/restatement policy deferred.",
       "evidence": [
         "docs/commercial-completion-verification.json",
         "docs/COMMERCIAL_ACCOUNTING_SIMULATION.md"
@@ -59,29 +60,32 @@
     },
     {
       "module": "Supplier AP",
-      "status": "PARTIAL",
-      "scope": "ACW-01 core service invoices, partial/multiple/final settlement, advances, allocation, credits, statements/aging and GL reconciliation implemented. Inventory return/price credits/refunds retain documented specialist limits",
+      "status": "COMPLETE FOR SUPPORTED CORE",
+      "scope": "Existing AP/CR04 return/refund lifecycle retained. Source price credits now follow fixed assets/WIP/consumed cost; exact AP/GL reconciliation tested. Specialist mixed/shared/uncertain source adoption remains explicit.",
       "evidence": [
         "docs/ACW_01_SUPPLIER_ACCOUNTS_PAYABLE.md",
         "src/financial/SupplierAccountsWorkspace.tsx",
-        "supabase/migrations/20261113140000_supplier_accounts_payable_cycle.sql"
+        "supabase/migrations/20261113140000_supplier_accounts_payable_cycle.sql",
+        "docs/cr06-gap-verification.json"
       ]
     },
     {
       "module": "Customer AR",
-      "status": "PARTIAL",
-      "scope": "Locally operational earned-service and delivered-goods invoices/cash sales, receipts, deposits/application, credits/refunds, aging and GL reconciliation; construction progress/retention and taxable advance policy remain deferred.",
+      "status": "COMPLETE FOR SUPPORTED CORE",
+      "scope": "Existing credit/cash sales, partial settlement, credits/refunds and aging retained; documented taxable advances, proportional application/refund tax relief and construction paid-credit paths verified.",
       "evidence": [
         "docs/commercial-completion-verification.json",
-        "docs/COMMERCIAL_ACCOUNTING_SIMULATION.md"
+        "docs/COMMERCIAL_ACCOUNTING_SIMULATION.md",
+        "docs/cr06-gap-verification.json"
       ]
     },
     {
       "module": "Treasury and Bank",
-      "status": "PARTIAL",
-      "scope": "Existing real Treasury/GL plus CR03 statement CSV/XLSX mapping/import, audited partial matching, fees/interest/reversal, outstanding items, final locks and bilingual report exports VERIFIED LOCALLY.101 awaits authorization/publication; bank feeds/FX remain outside scope.",
+      "status": "COMPLETE FOR SUPPORTED CORE",
+      "scope": "Existing CR03 reconciliation preserved (101 APPLIED); actual canonical bank/Treasury transfers, source funding, idempotency and audited reversal verified. Bank feeds/FX remain outside scope.",
       "evidence": [
-        "docs/cr03-bank-reconciliation-verification.json"
+        "docs/cr03-bank-reconciliation-verification.json",
+        "docs/cr06-gap-verification.json"
       ]
     },
     {
@@ -96,8 +100,8 @@
     },
     {
       "module": "Inventory and Materials",
-      "status": "PARTIAL",
-      "scope": "V1 item/UOM/location, receipt, moving-average valuation, GRNI invoice match, Project issue, transfers, returns/counts/adjustments and reports exist. Sales/COGS integration and documented purchasing/return specialist limitations remain",
+      "status": "COMPLETE FOR SUPPORTED CORE",
+      "scope": "Existing V1 perpetual stock, source/GRNI integration, canonical sales delivery/COGS (100), CR04 supported Supplier physical returns, credits and actual refunds (102) retained. Previously issued stock must use its actual return/recovery before Supplier dispatch; unsupported specialist stock/adoption requirements remain tracked. CR06 did not rebuild or rerun completed Inventory scenarios.",
       "evidence": [
         "docs/INVENTORY_MATERIALS_V1.md",
         "src/inventory/InventoryWorkspace.tsx",
@@ -106,20 +110,21 @@
     },
     {
       "module": "Projects and Subcontractors",
-      "status": "SUPPORTED CONSTRUCTION CORE VERIFIED LOCALLY",
-      "scope": "Existing Project/subcontract accounting plus CR05 customer contract policy, earned/billed/cash separation, retention, selective WIP and controlled closeout/reversals. Single integrated obligation; limits explicitly documented.",
+      "status": "COMPLETE FOR SUPPORTED CONSTRUCTION CORE",
+      "scope": "CR05 retained;103 ambiguous AR settlement fixed, paid progress credits/actual refunds, separate earned correction, source-adjusted WIP release and exact GL reconciliation verified. Single-obligation specialist policy retained.",
       "evidence": [
         "src/financial/OperationalContracts.tsx",
         "src/reports/ProjectCostLedger.tsx",
         "NARVO_ERP_ACCOUNTING_REQUIREMENTS_REGISTER.md#fin-05--client-contracts-ar-and-revenue-recognition",
         "docs/cr05-construction-verification.json",
-        "docs/CR05_CONSTRUCTION_ACCOUNTING.md"
+        "docs/CR05_CONSTRUCTION_ACCOUNTING.md",
+        "docs/cr06-gap-verification.json"
       ]
     },
     {
       "module": "Employee, Attendance and Payroll",
       "status": "PARTIAL",
-      "scope": "Existing master/terms/attendance/calculation/review/accrual/payment/advance recovery/reporting retained. Advanced HR/WPS and complete absence/leave/partial-hours simulation coverage remain separately tracked",
+      "scope": "Existing master/terms, attendance, calculation, approval, accrual, payment, Employee Advance recovery and confidentiality retained. Original simulation and auxiliary Payroll evidence preserved without rerunning; advanced HR/WPS and final integrated acceptance remain separately tracked.",
       "evidence": [
         "docs/HR_OPERATIONAL_FOUNDATION.md",
         "src/payroll/PayrollApplication.tsx",
@@ -128,26 +133,28 @@
     },
     {
       "module": "Fixed assets",
-      "status": "PARTIAL",
-      "scope": "Locally operational paid capitalization, explicit straight-line calendar-month life/residual, sequential depreciation, disposal and GL; specialist acquisition/impairment/tax policy deferred.",
+      "status": "COMPLETE FOR SUPPORTED CORE",
+      "scope": "Paid or existing AP/Expense capitalization, completed-month depreciation, actual source price reductions, atomic AR/VAT sales, gain/loss and settlement, controlled retirement/corrections and GL verified. Component/revaluation/physical return-after-sale specialist limits remain.",
       "evidence": [
         "docs/commercial-completion-verification.json",
-        "docs/COMMERCIAL_ACCOUNTING_SIMULATION.md"
+        "docs/COMMERCIAL_ACCOUNTING_SIMULATION.md",
+        "docs/cr06-gap-verification.json"
       ]
     },
     {
       "module": "Accruals and prepayments",
-      "status": "COMPLETE FOR SUPPORTED POLICY",
-      "scope": "Local recognition, partial settlement and explicit month-end service amortization with cutoff and GL; continuous daily prorating not implemented.",
+      "status": "COMPLETE FOR SUPPORTED CORE",
+      "scope": "Existing accrual recognition/partial settlement and discrete monthly amortization plus explicit actual-day service cutoff, final rounding, Admin reversals and replacements verified.",
       "evidence": [
         "docs/commercial-completion-verification.json",
-        "docs/COMMERCIAL_ACCOUNTING_SIMULATION.md"
+        "docs/COMMERCIAL_ACCOUNTING_SIMULATION.md",
+        "docs/cr06-gap-verification.json"
       ]
     },
     {
       "module": "Tax accounting",
       "status": "PARTIAL",
-      "scope": "Supported input VAT/nonrecoverable gross-cost treatment and Supplier credit controls retained. Output VAT requires AR; dedicated tax return/adjustment reconciliation and jurisdictional configuration remain outstanding",
+      "scope": "Input VAT/nonrecoverable gross costs, actual output VAT, Supplier/Customer tax credits and documented taxable advances with application/refund relief supported. Dedicated tax returns, jurisdictional configuration and specialist statutory reconciliation remain outstanding; no unsupported tax evidence is invented.",
       "evidence": [
         "src/financial/SupplierAccountsWorkspace.tsx",
         "src/financial/ExpenseDraftWorkspace.tsx",
@@ -167,10 +174,11 @@
     {
       "module": "Cash Flow Statement",
       "status": "COMPLETE FOR SUPPORTED POLICY",
-      "scope": "GL-derived exact direct cash flow, real Treasury/explicit physical Custody, source classification, transfers/cutover handling, reconciliation and EN/AR exports; bank statement matching remains separate.",
+      "scope": "Exact GL cash scope retained; source-linked asset proceeds/acquisition payments correctly classified Investing, mixed AP settlements split, internal transfers net zero; tested independent expected cash balances.",
       "evidence": [
         "docs/commercial-completion-verification.json",
-        "docs/COMMERCIAL_ACCOUNTING_SIMULATION.md"
+        "docs/COMMERCIAL_ACCOUNTING_SIMULATION.md",
+        "docs/cr06-gap-verification.json"
       ]
     },
     {
@@ -199,12 +207,13 @@
     "Full original Procurement/Inventory/AR/AP/construction/HR/WPS/subscriptions/security/operations requirements",
     "Final restoration rehearsal and deferred USB work"
   ],
-  "nextDependency": "Explicit hosted103 approval/activation and compatible frontend publication; then CR06 remaining essential accounting scenarios, CR07 final integrated fictional-company acceptance.",
+  "nextDependency": "CR07 final integrated fictional Company acceptance AFTER approved104 activation and compatible release; not started",
   "continuationEvidence": "docs/commercial-completion-verification.json",
   "hostedActivation": {
-    "status": "95\u2013101 APPLIED;102 PREPARED / NOT APPLIED",
-    "evidence": "docs/cr03-migration101-hosted-activation.json"
+    "status": "Through103 APPLIED;104 PREPARED / NOT APPLIED",
+    "evidence": "docs/cr05-migration103-hosted-activation.json"
   },
   "cr04Evidence": "docs/cr04-supplier-returns-verification.json",
-  "cr05Evidence": "docs/cr05-construction-verification.json"
+  "cr05Evidence": "docs/cr05-construction-verification.json",
+  "cr06Evidence": "docs/cr06-gap-verification.json"
 }

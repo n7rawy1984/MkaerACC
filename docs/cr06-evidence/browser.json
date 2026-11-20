@@ -1,0 +1,17 @@
+{
+  "checks": [
+    "Transfer lost reply recovers one canonical transfer",
+    "Audited reversal preview and approval use canonical reversal",
+    "Existing AP acquisition inherits actual cost without Treasury fields",
+    "Asset register Excel uses existing report exporter",
+    "Arabic tax-point Customer deposit posts actual VAT once",
+    "Arabic Customer statement PDF rendered through existing exporter",
+    "Arabic mobile workspace contains financial table scrolling",
+    "Mobile canonical register retains readable financial row heights",
+    "Management Viewer has no posting form",
+    "No browser runtime errors",
+    "Arabic paid construction credit creates Customer credit without reversing actual receipt"
+  ],
+  "hostedWrites": 0,
+  "externalRequestsBlocked": true
+}

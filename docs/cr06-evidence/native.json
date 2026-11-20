@@ -1,0 +1,13 @@
+{
+  "checks": [
+    "Migration104 preserves all 146 existing public/private/Auth tables including journals, sources, parties, drafts and memberships",
+    "Independent concurrent identical requests wait and replay one certificate",
+    "Concurrent separate requests cannot overrecognize the same certified progress",
+    "Concurrent construction credits serialize and reject double allocation beyond original billing",
+    "Private correction and valuation helpers deny authenticated direct execution",
+    "Native new tables force RLS and forbid direct financial mutations",
+    "New privileged public RPCs fix search_path, deny anonymous execution and preserve explicit authenticated entry points"
+  ],
+  "hostedWrites": 0,
+  "engine": "Disposable native PostgreSQL; two independent sessions with observed lock waits"
+}

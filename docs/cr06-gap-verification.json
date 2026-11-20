@@ -1,0 +1,141 @@
+{
+  "date": "2026-11-20",
+  "milestone": "CR06 Essential Accounting Gap Closure",
+  "status": "SUPPORTED CORE VERIFIED LOCALLY; HOSTED ACTIVATION AND PRODUCTION ACCEPTANCE DEFERRED",
+  "recovery": "Isolated implementation recovered from retained file-edit transcript;104 checksum exactly matched; lost focused artifacts regenerated, original65/CR05 scenarios not rerun",
+  "baseline": {
+    "release": "be689cdae488f871b337795fb105767079a4156d",
+    "published": "Confirmed by Product Owner",
+    "hostedMigrations": "Through103 applied; linked history verified"
+  },
+  "migration": {
+    "number": 104,
+    "file": "20261122120000_essential_accounting_gap_closure.sql",
+    "sha256": "a269e962138171fef760a80b991d93597c6a380cbcaaed3cc7cd38db5d177630",
+    "status": "PREPARED / NOT APPLIED",
+    "dryRunPendingOnly": [
+      "20261122120000_essential_accounting_gap_closure.sql"
+    ],
+    "nonDestructive": "New immutable correction/allocation metadata, transaction-private sale context, forward canonical function corrections and source/dependency guards; no financial seeds/backfill or history rewrite"
+  },
+  "verification": {
+    "accountingChecks": 82,
+    "independentJournalScenarios": 43,
+    "nativeChecks": 7,
+    "browserChecks": 11,
+    "totalFocusedChecks": 100,
+    "typescript": "PASS",
+    "productionBuild": "PASS",
+    "lint": "PASS with existing generation-ref cleanup warning",
+    "renderedScreenshots": "English transfer/asset and Arabic deposit/mobile/paid construction credit inspected; mobile table fixed",
+    "hostedWrites": 0,
+    "originalScenariosReplayed": 0,
+    "newJournalCount": 46
+  },
+  "answers": {
+    "debit": "2791500",
+    "credit": "2791500",
+    "assets": "10362500",
+    "liabilities": "211500",
+    "equity": "10050000",
+    "profit": "101000"
+  },
+  "cashFlow": {
+    "opening": "10000000",
+    "closing": "9925000",
+    "net": "-75000",
+    "operating": "28000",
+    "investing": "-103000",
+    "financing": "0",
+    "complete": true
+  },
+  "reconciliations": {
+    "AR": "PASS exact GL/control",
+    "AP": "PASS exact GL/control",
+    "WIP": "After price credit36000minor; final release0, no duplicate cost",
+    "asset": "Cost credits/depreciation/disposal reconcile; correction dependency unwind verified",
+    "originalPostedRows": "146 pre-existing native fixture tables count/hash unchanged across104; existing journals unchanged throughout targeted scenarios",
+    "realCompanies": "No financial/configuration mutations attempted; no hosted104 applied"
+  },
+  "fixed": [
+    {
+      "id": "FA_MONTH_END",
+      "classification": "BLOCKER FIXED",
+      "actual": "Disposal at month end accepted without that completed month depreciation",
+      "expected": "Require10000minor depreciation; disposal loss110000minor instead of120000"
+    },
+    {
+      "id": "TREASURY_TRANSFER",
+      "classification": "BLOCKER FIXED",
+      "actual": "No canonical Treasury-to-Treasury transfer command",
+      "expected": "Dr destination real cash account / Cr source once; no cost or revenue"
+    },
+    {
+      "id": "AP_ASSET",
+      "classification": "BLOCKER FIXED",
+      "actual": "Asset register only supports separate paid capitalization; cannot adopt a genuine canonical AP acquisition without another outflow",
+      "expected": "Capitalize actual invoice cost, retain existing AP/VAT, settle AP once"
+    },
+    {
+      "id": "TAX_ADVANCE",
+      "classification": "BLOCKER FIXED",
+      "actual": "Taxable customer advances rejected; only non-taxable deposits supported",
+      "expected": "Explicit tax-point advance, proportional VAT relief at application/refund, no duplicate VAT"
+    },
+    {
+      "id": "CONTRACT_AR_AMBIGUITY",
+      "classification": "BLOCKER FIXED",
+      "actual": "Migration103 contract-specific AR call fails with ambiguous kind column",
+      "expected": "Canonical existing construction receivable settles without permission/accounting bypass"
+    },
+    {
+      "id": "PAID_CONSTRUCTION_CREDIT",
+      "classification": "BLOCKER FIXED",
+      "actual": "Paid construction bill has no controlled credit-note path",
+      "expected": "Preserve receipts, credit customer liability/AR appropriately; do not automatically reverse earned revenue"
+    },
+    {
+      "id": "RECOGNITION_CORRECTIONS",
+      "classification": "BLOCKER FIXED",
+      "scope": "Typed Admin reversals, dependencies, traced one-to-one corrected replacements"
+    },
+    {
+      "id": "ACTUAL_DAY_PREPAYMENTS",
+      "classification": "BLOCKER FIXED",
+      "scope": "Actual dated continuous service cutoff and exact final remainder"
+    },
+    {
+      "id": "ASSET_SALE",
+      "classification": "BLOCKER FIXED",
+      "scope": "Atomic existing AR/VAT sale plus retirement; credit/cash settlement and price adjustments"
+    },
+    {
+      "id": "ALLOCATED_SUPPLIER_CREDIT",
+      "classification": "BLOCKER FIXED",
+      "scope": "Actual price credits follow asset/WIP/consumed costs; prospective depreciation and reversal dependencies"
+    },
+    {
+      "id": "ASSET_CASH_FLOW",
+      "classification": "BLOCKER FIXED",
+      "scope": "Linked AR collections/acquisition payments are Investing; mixed Supplier payments split without new GL"
+    }
+  ],
+  "remainingSpecialistLimitations": [
+    "Single integrated construction obligation per Project remains the supported policy. Multi-obligation price allocation, foreign currencies and complex legal contract-history adoption remain specialist work.",
+    "Asset cost adoption supports an authoritative single-cost invoice/Expense. Component accounting, revaluation/impairment models and physical return/reacquisition of an already sold asset require separate supported business workflows; source-linked price credits are supported.",
+    "Continuous prepayments use explicit actual service dates; discrete monthly coverage and asset completed-calendar-month depreciation remain explicit supported policies. Zero-journal physical retirement and sub-cent early service installments are not manufactured into postings.",
+    "Tax-point deposits require actual tax evidence and an original supported rate; dedicated jurisdictional tax returns, statutory classification and restatement policy are not asserted by this milestone.",
+    "CR07 full integrated acceptance, advanced HR/WPS, original commercial operations/security gates, real Maker Payroll, onboarding and deferred restoration/USB requirements remain preserved."
+  ],
+  "unresolvedVerifiedCoreBlockers": [],
+  "definitionOfDone": {
+    "businessAccounting": "VERIFIED for stated scope",
+    "securityAuthorization": "VERIFIED locally: actor/Admin, Company, RLS, grants and native races",
+    "database": "VERIFIED locally; hosted104 DEFERRED",
+    "deployment": "DEFERRED: approval104 then frontend publication; no push/deploy performed",
+    "testing": "VERIFIED focused local evidence; Production runtime DEFERRED",
+    "documentation": "VERIFIED canonical register/roadmap/handoff updated"
+  },
+  "next": "CR07 final integrated fictional Company acceptance AFTER approved104 activation and compatible release; not started",
+  "verifiedAgainstFinalMigrationSha256": "a269e962138171fef760a80b991d93597c6a380cbcaaed3cc7cd38db5d177630"
+}

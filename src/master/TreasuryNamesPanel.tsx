@@ -1,3 +1,4 @@
+import{CommercialWorkspace}from'../commercial/CommercialWorkspace';
 import {CompanyAccountingSetup} from "./CompanyAccountingSetup";
 import { TreasuryMasterPanel } from "./TreasuryMasterPanel";
 import { TreasuryAccountsList } from "./AccountMasterLists";
@@ -38,7 +39,7 @@ export function TreasuryNamesPanel() {
     {phase === "REFRESH_ERROR" && <p role="alert">{t("treasuryName.refreshError")}</p>}
     {(phase === "ERROR" || phase === "REFRESH_ERROR") && <button type="button" onClick={refresh} className="underline">{t("treasuryName.refresh")}</button>}
   </div>;
-  return <div>
+  return <div><CommercialWorkspace module="transfers"/>
     <CompanyAccountingSetup mode="TREASURY" />
     <TreasuryMasterPanel />
     <button type="button" disabled={phase === "PENDING"} onClick={refresh} className="mt-4 rounded-lg border px-3 py-2 text-sm">{t("treasuryName.refresh")}</button>

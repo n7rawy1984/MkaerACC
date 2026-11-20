@@ -1,0 +1,7 @@
+{
+  "date": "2026-11-20",
+  "node": "v24.14.1",
+  "disposablePostgresRunner": "18.7.0-beta.19",
+  "networkBoundary": "Browser external requests blocked; accounting tests local-only; hosted CLI limited to history/list and migration dry-run",
+  "recovery": "CR06 source restored from retained file-edit transcript; final104 checksum exactly matches the pre-interruption checkpoint"
+}
