@@ -1,0 +1,14 @@
+{
+  "checks": [
+    "tenant/session boundary change during async check prevents sending command",
+    "read result discarded if context changes while request is in flight",
+    "PDF signature mismatch rejected",
+    "active SVG/HTML types excluded",
+    "unsafe path filename rejected",
+    "supported text preserves exact bytes with stable recovery hash",
+    "signed URL cannot redirect to an untrusted origin",
+    "public object URL rejected"
+  ],
+  "count": 8,
+  "hostedWrites": 0
+}

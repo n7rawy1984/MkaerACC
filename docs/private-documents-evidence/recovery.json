@@ -1,0 +1,11 @@
+{
+  "checks": [
+    "lost completion response retains the one committed canonical document",
+    "explicit recovery detects READY file without duplicate upload or stale completion",
+    "lost reservation response replays same request and completes one new version",
+    "Arabic completion recovery keeps all earlier versions and creates no duplicate",
+    "all upload recovery paths preserve existing financial records and balances"
+  ],
+  "count": 5,
+  "scope": "Production panel with deliberate lost responses after real local canonical commits; no hosted writes"
+}

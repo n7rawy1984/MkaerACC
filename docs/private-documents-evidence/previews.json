@@ -1,0 +1,8 @@
+{
+  "checks": [
+    "valid PDF uploads with sandboxed inline frame and isolated native-viewer fallback",
+    "valid PNG preview decodes its actual image bytes"
+  ],
+  "count": 2,
+  "scope": "Valid PDF and image bytes through production panel and local authorized Storage fixture"
+}

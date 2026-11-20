@@ -1,3 +1,4 @@
+import{DocumentPanel}from'../documents/DocumentPanel';
 import{DataWorkspace,TextCell,MoneyCell}from'../workspace/data/DataWorkspace';
 import type{ContractRegister}from'../financial/operationalContracts';
 import {RecordIdentity} from '../components/ui/RecordIdentity';
@@ -61,7 +62,7 @@ export function SubcontractsList() {
  ]} renderDetails={contract=>{
       const project = master.projects.find(row => row.companyId === contract.companyId && row.id === contract.projectId);
       const party = master.parties.find(row => row.companyId === contract.companyId && row.id === contract.subcontractorId);
-      return <>
+      return <><DocumentPanel kind="SUBCONTRACT" entityId={contract.id}/>
         <RecordIdentity name={contract.contractNumber} status={<StatusBadge status={contract.status}>{t(`productionMaster.subcontractStatus.${contract.status}`)}</StatusBadge>}/>
         <dl className="mt-2 min-w-0 space-y-2 text-sm text-slate-500">
           <div className="min-w-0"><dt className="font-medium">{t("productionMaster.scopeOfWork")}</dt><dd className="min-w-0 whitespace-pre-wrap break-words"><bdi>{contract.scopeOfWork}</bdi></dd></div>

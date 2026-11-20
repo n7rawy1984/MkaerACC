@@ -1,0 +1,25 @@
+{
+  "checks": [
+    "English production panel reserves uploads completes and links one actual canonical metadata document",
+    "PDF preview is sandboxed without script or same-origin permissions",
+    "private download retains original filename through a short-lived signed URL",
+    "actor-attributed history visible in English",
+    "replacement keeps original file and adds a separately readable version",
+    "audited rename preserves original filenames",
+    "Arabic RTL panel retains existing files and readable actions",
+    "Arabic mobile document details do not overflow",
+    "English mobile document details do not overflow",
+    "invalid file content rejected before canonical reservation",
+    "posted evidence offers versions and title changes without destructive detach action",
+    "authorized accountant employee attachment works through existing payroll confidentiality model",
+    "Management Viewer receives no confidential files or upload controls",
+    "authorized signed grant downloads exact locally stored file",
+    "tampered signed grants rejected",
+    "expired signed grant rejected",
+    "browser document operations leave existing journals accounts memberships and balances unchanged",
+    "no production document-component runtime errors"
+  ],
+  "count": 18,
+  "scope": "Actual production panel, canonical local PostgreSQL RPCs and policy-enforced Storage HTTP fixture; synthetic Auth transport; hosted Storage service acceptance deferred",
+  "hostedWrites": 0
+}

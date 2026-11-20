@@ -1,0 +1,108 @@
+{
+  "milestone": "Private Document Management V1",
+  "baselineRelease": "31efd93418b2b3e42de9f90962ffa6a326369085",
+  "environment": "Local isolated PostgreSQL/native sessions/browser only; hosted read-only Storage/history inspection",
+  "migration": {
+    "number": 109,
+    "file": "supabase/migrations/20261127120000_private_documents.sql",
+    "sha256": "cf6da102176020395fdb0bb9ae8fb2a7d82d1cc2ea4a2d580cae9ae00b5aeb2e",
+    "status": "PREPARED_NOT_APPLIED",
+    "storageChanges": "New private narvo-private-documents bucket (10 MB, MIME allowlist), six bucket-specific restrictive/permissive policies; explicit activation approval required"
+  },
+  "checks": {
+    "browser": 18,
+    "concurrency": 5,
+    "associations": 21,
+    "recovery": 5,
+    "layout": 6,
+    "boundary": 8,
+    "database": 58,
+    "previews": 2
+  },
+  "focusedChecksPassed": 123,
+  "typescript": "PASS: final frozen sources, npm run build (tsc -b)",
+  "productionBuild": "PASS: final native PDF-viewer fallback included; production boundary guard PASS; validation-only browser-safe configuration; existing non-blocking chunk-size advisory",
+  "lint": "PASS: new document modules have no warnings;11 pre-existing warnings in unchanged surrounding workflow code remain non-blocking",
+  "financialPreservation": "Existing journals, accounts, Company memberships and exact balances unchanged through document lifecycles; migration preserves152 existing populated local fixture public/private/Auth tables. No hosted writes.",
+  "hostedMigrationAlignment": {
+    "status": "PASS",
+    "target": "eqnzueginpkskbnqvgoc",
+    "latestHosted": 108,
+    "onlyPending": [
+      "20261127120000_private_documents.sql"
+    ],
+    "sha256": "cf6da102176020395fdb0bb9ae8fb2a7d82d1cc2ea4a2d580cae9ae00b5aeb2e",
+    "hostedMutations": 0
+  },
+  "hostedStorageInspection": {
+    "scope": "READ ONLY",
+    "objectRLS": true,
+    "existingBuckets": 0,
+    "existingObjectPolicies": 0,
+    "proposedBucketAbsent": true,
+    "compatibility": {
+      "status": "PASS",
+      "scope": "READ ONLY Storage schema/API authorization compatibility",
+      "checks": {
+        "bucketColumns": [
+          "allowed_mime_types",
+          "file_size_limit",
+          "id",
+          "name",
+          "public"
+        ],
+        "objectColumns": [
+          "bucket_id",
+          "id",
+          "metadata",
+          "name",
+          "owner_id"
+        ],
+        "authenticatedInsert": true,
+        "authenticatedSelect": true
+      }
+    }
+  },
+  "supportedAssociations": [
+    "PROJECT",
+    "EMPLOYEE",
+    "TREASURY_TRANSACTION",
+    "EXPENSE",
+    "SUPPLIER_INVOICE",
+    "PURCHASE_ORDER",
+    "REQUISITION",
+    "RFQ",
+    "GOODS_RECEIPT",
+    "PROCUREMENT_INVOICE",
+    "CUSTOMER_INVOICE",
+    "SUBCONTRACT",
+    "CERTIFICATE",
+    "CONSTRUCTION_CONTRACT",
+    "CUSTODY_TRANSACTION",
+    "CUSTODY_SETTLEMENT"
+  ],
+  "releaseBranch": "release/private-documents-v1",
+  "publication": "NOT pushed or deployed; release SHA is the commit containing this record",
+  "gates": {
+    "businessAccounting": "VERIFIED: evidence-only; no new financial event",
+    "localAuthorization": "VERIFIED: canonical permissions, target privacy, RLS, Storage restrictions and direct-write rejection",
+    "database": "VERIFIED locally;109 hosted activation DEFERRED",
+    "deployment": "DEFERRED: explicit migration/bucket/policy authorization, then compatible release publication",
+    "testing": "VERIFIED for exact local evidence; genuine hosted Auth/Storage service smoke DEFERRED",
+    "documentation": "VERIFIED"
+  },
+  "limitations": [
+    "No genuine hosted Storage/Auth acceptance before authorized109 activation; fixtures are explicitly synthetic transports.",
+    "No antivirus/OCR, inline Office viewer, historical import, public sharing or physical retention cleanup.",
+    "Only original uploader can complete/abandon pending upload; stale reservations need abandonment and new reservation.",
+    "RFQ quotations attach to parent RFQ; unsaved transactions require canonical IDs.",
+    "UI signed URL TTL120 seconds; native Storage API may permit other TTLs and downloaded copies cannot be revoked.",
+    "Client SHA256/basic signatures do not attest server antivirus or exhaustive Office content validation.",
+    "Sandboxed inline PDF rendering is browser-dependent; isolated native viewer and download remain available."
+  ],
+  "realCompanyFinancialWrites": 0,
+  "hostedSchemaOrStorageWrites": 0,
+  "secretScan": "PASS:41 changed text artifacts; no private credential patterns",
+  "finalVisualInspection": "PASS: actual Arabic/English screenshots inspected; filename/action rows corrected and verified at320,390,1366px",
+  "readiness": "DEVELOPMENT COMPLETE; explicit109 schema/Storage activation approval and compatible publication/runtime smoke remain required"
+}

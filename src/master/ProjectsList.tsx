@@ -1,3 +1,4 @@
+import{DocumentPanel}from'../documents/DocumentPanel';
 import{ConstructionAccountingWorkspace}from'../commercial/ConstructionAccountingWorkspace';
 import{DataWorkspace,TextCell}from'../workspace/data/DataWorkspace';
 import {ProjectClosure} from './ProjectClosure';
@@ -56,7 +57,7 @@ export function ProjectsList() {
  {key:'location',label:t('projectMetadata.location'),render:p=><TextCell value={p.location??'—'}/>},
  {key:'contract',label:t('projectMetadata.contract_number'),render:p=><TextCell value={p.contractNumber??'—'}/>},
  {key:'status',label:t('common.status'),render:p=><StatusBadge status={p.status}>{t(`projectStatus.${p.status}`)}</StatusBadge>}
- ]} renderDetails={project=><>        <RecordIdentity code={project.code} name={project.name} status={<StatusBadge status={project.status}>{t(`projectStatus.${project.status}`)}</StatusBadge>}/>
+ ]} renderDetails={project=><><DocumentPanel kind="PROJECT" entityId={project.id}/>        <RecordIdentity code={project.code} name={project.name} status={<StatusBadge status={project.status}>{t(`projectStatus.${project.status}`)}</StatusBadge>}/>
         <dl className="mt-2 space-y-2 text-sm">
           {(["client_name", "location", "contract_number", "notes"] as const).map(field => <div key={field} className={field === "notes" ? "record-detail-wide" : undefined}><dt className="text-slate-500">{t(`projectMetadata.${field}`)}</dt><dd className="whitespace-pre-wrap">{(field === "client_name" ? project.clientName : field === "contract_number" ? project.contractNumber : project[field]) ?? t("projectMetadata.empty")}</dd></div>)}
         </dl>

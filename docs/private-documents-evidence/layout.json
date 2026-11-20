@@ -1,0 +1,12 @@
+{
+  "checks": [
+    "en 320px: filenames and actions readable without horizontal overflow",
+    "ar 320px: filenames and actions readable without horizontal overflow",
+    "en 390px: filenames and actions readable without horizontal overflow",
+    "ar 390px: filenames and actions readable without horizontal overflow",
+    "en 1366px: filenames and actions readable without horizontal overflow",
+    "ar 1366px: filenames and actions readable without horizontal overflow"
+  ],
+  "count": 6,
+  "scope": "Final responsive correction in actual rendered DocumentPanel, local fixtures only"
+}

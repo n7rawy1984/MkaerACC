@@ -1,0 +1,12 @@
+{
+  "checks": [
+    "simultaneous identical reservation serializes to one file and one event",
+    "independent concurrent metadata changes reject stale revision without overwriting evidence",
+    "competing version reservations cannot create two active uploads",
+    "partial unique index and serialized commands retain exactly one pending file",
+    "native concurrent document changes preserve all financial balances and journals"
+  ],
+  "count": 5,
+  "engine": "Independent native PostgreSQL sessions; local Storage catalog fixture",
+  "hostedWrites": 0
+}
