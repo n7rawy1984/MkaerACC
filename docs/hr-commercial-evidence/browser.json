@@ -1,0 +1,24 @@
+{
+  "count": 17,
+  "checks": [
+    "Production component saves Company agent and employee identifiers through permission-checked canonical RPCs",
+    "Lost-response retry reuses the exact key and saves one preparation event",
+    "WPS Excel output explicitly exports review rather than a regulatory bank file",
+    "PDF print preview contains authorized recipient and actual outstanding balance",
+    "Arabic production workflow uses RTL with isolated payment identifiers",
+    "Arabic 390px workflow stays within viewport",
+    "Arabic 320px workflow stays within viewport",
+    "Real gratuity preview validates existing employment dates before exposing draft save",
+    "Bilingual settlement preview saves actual isolated calculation draft without GL posting",
+    "Browser WPS and gratuity preparation preserve every financial journal balance and membership",
+    "Production UI approves and posts isolated gratuity through the canonical journal command",
+    "Production UI partial payment settles the gratuity liability without another expense",
+    "Arabic posted gratuity and protected correction controls remain readable on mobile",
+    "Actual production correction UI preserves payment and accrual history with separate canonical reversals",
+    "Existing fictional journals remain unchanged after new UI posting and reversals",
+    "Management Viewer fails closed without confidential identifiers or financial actions",
+    "No production HR component runtime errors"
+  ],
+  "scope": "Actual React production component and local canonical SQL RPCs; synthetic Auth transport, no hosted requests",
+  "hostedWrites": 0
+}

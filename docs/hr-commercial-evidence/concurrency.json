@@ -1,0 +1,14 @@
+{
+  "checks": [
+    "simultaneous identical accrual requests wait and reuse exactly one balanced journal",
+    "independent concurrent payments serialize and reject stale settlement versions",
+    "concurrent attempts create one cash outflow and no duplicate gratuity expense",
+    "simultaneous identical WPS configuration retries return one audited event",
+    "WPS setup never creates salary or GL postings",
+    "new request key cannot repeat an existing live payment reference",
+    "retained pre-milestone journals remain byte-for-byte unchanged"
+  ],
+  "count": 7,
+  "engine": "Two independent native PostgreSQL sessions; actual lock waits observed",
+  "hostedWrites": 0
+}

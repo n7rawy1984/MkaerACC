@@ -1,0 +1,12 @@
+{
+  "checks": [
+    "en actual PDF preserves recipient and independently expected AED3000",
+    "ar actual PDF preserves recipient and independently expected AED3000",
+    "Authorized bilingual exports produce no financial or access mutations",
+    "en actual Excel XML preserves numeric AED3000, recipient and review-only label",
+    "ar actual Excel XML preserves numeric AED3000, recipient and review-only label"
+  ],
+  "count": 5,
+  "scope": "Actual browser Excel downloads and rendered A4 PDFs; local canonical payroll only",
+  "hostedWrites": 0
+}

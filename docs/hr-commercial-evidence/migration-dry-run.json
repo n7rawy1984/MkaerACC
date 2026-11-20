@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "target": "eqnzueginpkskbnqvgoc",
+  "latestHosted": 109,
+  "onlyPending": [
+    "20261128120000_hr_payroll_commercial.sql"
+  ],
+  "sha256": "0d5a45e6724a2206d1694337b4e19a73c301f4103ecbf70431d8272db011526d",
+  "hostedMutations": 0
+}

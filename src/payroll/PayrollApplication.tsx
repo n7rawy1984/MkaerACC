@@ -1,3 +1,4 @@
+import {HRCommercial} from '../hr/HRCommercial';
 import {ModuleNavigation} from '../components/ui/ModuleNavigation';
 import {FileInput,Users,ClipboardList} from 'lucide-react';
 import {HRWorkspace} from '../hr/HRWorkspace';
@@ -29,11 +30,11 @@ export default function PayrollApplication({embedded=false}:{embedded?:boolean}=
  <PayrollContent key={`${state.profile.userId}:${state.activeTenant.companyId}:${state.activeTenant.role}`} userId={state.profile.userId} companyId={state.activeTenant.companyId} role={state.activeTenant.role} companyName={state.activeTenant.companyName}/></div>;
 }
 export function PayrollContent({userId,companyId,companyName=companyId,role}:{userId:string;companyId:string;companyName?:string;role:string}){
- const {locale}=useI18n();const t=payrollText[locale];const [tab,setTab]=useState<'profiles'|'draft'|'source'>(()=>new URLSearchParams(window.location.search).get('view')==='register'?'draft':'source');const [source,setSource]=useState<SourceRecord|undefined>();
+ const {locale}=useI18n();const t=payrollText[locale];const [tab,setTab]=useState<'profiles'|'draft'|'source'|'commercial'>(()=>new URLSearchParams(window.location.search).get('view')==='register'?'draft':'source');const [source,setSource]=useState<SourceRecord|undefined>();
 
  if(!payrollAllowed(role))return <p role="alert">{t.denied}</p>;
- return <section className="mx-auto max-w-[1600px] space-y-4 rounded-xl border bg-white p-4 sm:p-6"><p>{t.scope}</p><HRWorkspace/><ModuleNavigation label={locale==='ar'?'مساحات الرواتب':'Payroll views'} active={tab} onSelect={id=>setTab(id as typeof tab)} items={[{id:'source',label:locale==='ar'?'رواتب المصدر':'Source Payroll',icon:FileInput},{id:'profiles',label:t.profiles,icon:Users},{id:'draft',label:t.register,icon:ClipboardList}]}/>
- {tab==='source'?<HistoricalImports recordType="PAYROLL" onComplete={r=>{setSource(r);setTab(r.payroll_entitlement_id?'draft':'profiles');}}/>:tab==='profiles'?<Profiles source={source} userId={userId} companyId={companyId} t={t}/>:<Draft initialMonth={source?String(source.completion.salary_month??source.source_month):new URLSearchParams(window.location.search).get("month")??undefined} userId={userId} companyName={companyName} companyId={companyId} role={role} t={t}/>}</section>;
+ return <section className="mx-auto max-w-[1600px] space-y-4 rounded-xl border bg-white p-4 sm:p-6"><p>{t.scope}</p><HRWorkspace/><ModuleNavigation label={locale==='ar'?'مساحات الرواتب':'Payroll views'} active={tab} onSelect={id=>setTab(id as typeof tab)} items={[{id:'source',label:locale==='ar'?'رواتب المصدر':'Source Payroll',icon:FileInput},{id:'profiles',label:t.profiles,icon:Users},{id:'draft',label:t.register,icon:ClipboardList},{id:'commercial',label:locale==='ar'?'حماية الأجور ونهاية الخدمة':'WPS & final settlement',icon:ClipboardList}]}/>
+ {tab==='commercial'?<HRCommercial cid={companyId} user={userId} company={companyName} admin={role==='ACCOUNTING_ADMIN'}/>:tab==='source'?<HistoricalImports recordType="PAYROLL" onComplete={r=>{setSource(r);setTab(r.payroll_entitlement_id?'draft':'profiles');}}/>:tab==='profiles'?<Profiles source={source} userId={userId} companyId={companyId} t={t}/>:<Draft initialMonth={source?String(source.completion.salary_month??source.source_month):new URLSearchParams(window.location.search).get("month")??undefined} userId={userId} companyName={companyName} companyId={companyId} role={role} t={t}/>}</section>;
 }
 function Profiles({userId,companyId,t,source}:{source?:SourceRecord;userId:string;companyId:string;t:PayrollLabels}){
  const [revision,setRevision]=useState(0);const [load,setLoad]=useState<{revision:number;data?:PayrollProfiles;error?:boolean}|null>(null);

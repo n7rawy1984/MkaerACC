@@ -1,0 +1,82 @@
+{
+  "status": "LOCAL_VERIFIED_HOSTED_ACTIVATION_AND_PUBLICATION_DEFERRED",
+  "base": "7edbc6e72b279010756a8f7d140c8ec602c4edc8",
+  "branch": "release/hr-payroll-commercial",
+  "focusedChecks": 82,
+  "suites": {
+    "accounting": {
+      "count": 46,
+      "evidence": "docs/hr-commercial-evidence/accounting.json"
+    },
+    "concurrency": {
+      "count": 7,
+      "evidence": "docs/hr-commercial-evidence/concurrency.json"
+    },
+    "browser": {
+      "count": 17,
+      "evidence": "docs/hr-commercial-evidence/browser.json"
+    },
+    "exports": {
+      "count": 5,
+      "evidence": "docs/hr-commercial-evidence/exports.json"
+    },
+    "responsive": {
+      "count": 7,
+      "evidence": "docs/hr-commercial-evidence/responsive.json"
+    }
+  },
+  "typescript": "PASS: npm run build / tsc -b against final change batch",
+  "productionBuild": "PASS: final bundle inspected for zero-gratuity and readable mobile-table safeguards",
+  "lint": "PASS: changed source and new verification scripts; zero diagnostics",
+  "whitespace": "PASS",
+  "focusedSecretScan": "PASS",
+  "migration": {
+    "number": 110,
+    "file": "supabase/migrations/20261128120000_hr_payroll_commercial.sql",
+    "sha256": "0d5a45e6724a2206d1694337b4e19a73c301f4103ecbf70431d8272db011526d",
+    "applied": false,
+    "hostedHistoryThrough": 109,
+    "onlyPending": [
+      "20261128120000_hr_payroll_commercial.sql"
+    ],
+    "dryRun": "PASS; no mutation"
+  },
+  "financialExpectedActual": {
+    "monthlyEarnedSalaryMinor": "300000",
+    "separateAdvanceRecoveryMinor": "1000",
+    "actualSalaryPaymentMinor": "10000",
+    "remainingSalaryLiabilityMinor": "289000",
+    "gratuity": "Exact independently computed 21/30-day actual365 boundary examples; accrual, partial payment and canonical reversals reconcile dedicated liability to zero"
+  },
+  "preservation": {
+    "hostedWrites": 0,
+    "realEmployeeOrFinancialChanges": 0,
+    "existingSimulationReplayed": false,
+    "localPreExistingJournalPreservation": "PASS",
+    "migrationExistingFinancialAndMembershipFingerprints": "PASS"
+  },
+  "runtimeScope": "Actual React components, actual local canonical PostgreSQL commands; synthetic Auth transport, not genuine hosted Auth acceptance",
+  "sourceHashes": {
+    "src/hr/HRCommercial.tsx": "997b60e22d34d2d2a344a8d504817d5991d8b3f408d3ce323930b67b198930ed",
+    "src/hr/hrCommercial.ts": "9a577c945036104e0797b1f114d847ba97e0dea41c49efdacd11f7b433a57883",
+    "src/payroll/PayrollApplication.tsx": "5f5ecbf17bb2ffc738ccdf59acf544423d3f6b8a1d14675fb01b96fc79fcb295",
+    "supabase/migrations/20261128120000_hr_payroll_commercial.sql": "0d5a45e6724a2206d1694337b4e19a73c301f4103ecbf70431d8272db011526d"
+  },
+  "limitations": [
+    "No bank-file export or direct WPS/bank/MOHRE submission; current applicable agent specification not established",
+    "Traditional foreign full-time monthly-paid gratuity only; disclosed actual365 convention",
+    "No conversion of existing provisions/IAS19 actuarial valuation, pensions/alternative schemes, statutory leave balances/cash-out or aggregate final settlement",
+    "One logical WPS run per payroll; agent refunds/partial re-submissions not automated",
+    "Genuine authenticated hosted fictional-user smoke and authorized110 activation/postflight deferred",
+    "Existing bundle-size advisory remains non-blocking"
+  ],
+  "lifecycle": {
+    "businessAccounting": "VERIFIED within explicit supported scope; broader statutory/provider requirements PARTIAL",
+    "securityAuthorization": "VERIFIED locally",
+    "database": "VERIFIED locally;110 PREPARED NOT APPLIED",
+    "deployment": "DEFERRED owner authorization and publication",
+    "testing": "VERIFIED local focused evidence; hosted acceptance DEFERRED",
+    "documentation": "VERIFIED"
+  },
+  "time": "2026-11-20T19:25:54.867499+00:00"
+}

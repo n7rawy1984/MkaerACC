@@ -1,0 +1,13 @@
+{
+  "checks": [
+    "en 1366px: readable reconciliation columns, local horizontal scroll, no page overflow",
+    "en 390px: readable reconciliation columns, local horizontal scroll, no page overflow",
+    "en 320px: readable reconciliation columns, local horizontal scroll, no page overflow",
+    "ar 1366px: readable reconciliation columns, local horizontal scroll, no page overflow",
+    "ar 390px: readable reconciliation columns, local horizontal scroll, no page overflow",
+    "ar 320px: readable reconciliation columns, local horizontal scroll, no page overflow",
+    "Responsive reads do not mutate accounting or membership"
+  ],
+  "count": 7,
+  "hostedWrites": 0
+}
