@@ -1,0 +1,544 @@
+{
+  "checks": [
+    "115 preserves all167 pre-existing table row counts/content hashes and previous function authorization",
+    "Original114 source/invoice links remain intact and unavailable for duplicate billing",
+    "Project deliveries debit150COGS once, no Project Cost duplication and no revenue",
+    "Read-only consolidated preview independently equals130net+6.50VAT",
+    "Three lines across two deliveries create ONE invoice and ONE canonical AR journal",
+    "Lost-response same-key retry returns the same consolidated document",
+    "Consolidation posts AR/Revenue/VAT while COGS and stock remain unchanged; VAT includes preserved1AED legacy",
+    "Partial quantity billing tracks2billed and2remaining from4delivered",
+    "Cannot bill more than remaining delivered quantity",
+    "Duplicate selected delivery line rejected atomically",
+    "Stale preview quantities reject a concurrent change",
+    "Second partial invoice consumes remaining first-delivery quantities once",
+    "Caller cannot forge trusted grouped billing context",
+    "Old whole-issue invoice cannot bypass partial allocation capacity",
+    "Billed return reverses20revenue+1VAT and10recorded COGS without cash refund",
+    "Credited returned quantity does not become billable again",
+    "Unbilled return restores10stock/COGS only; AR/Revenue/VAT untouched",
+    "Independent Project answer key: revenue300, AR315, COGS130, stock decreases130, gross profit170",
+    "Invoice reversal blocked by existing return-credit dependency",
+    "Audited invoice reversal preserves all stock/COGS and releases only billing capacity",
+    "Reversed invoice allocation remains immutable but is no longer counted as effective billing",
+    "Reversed consolidated invoice cannot receive a new payment",
+    "Replacement reuses same immutable delivery with complete prior invoice/reversal trace",
+    "Existing partial collection correctly settles consolidated invoice without repeating revenue",
+    "Settled invoice cannot be reversed before its receipt dependency",
+    "Consolidated Customer subledger reconciles265AED to Project GL AR",
+    "Mixed Customer/Project consolidation rejected",
+    "Unsupported currency cannot reinterpret Company AED amounts",
+    "Mixed VAT treatments require separate compatible invoices",
+    "Internal Project consumption posts Project Cost10, with no Revenue or extra sales COGS",
+    "Viewer cannot approve consolidated invoices",
+    "Cross-Company sales reads denied",
+    "Direct allocation writes denied",
+    "Every actual fictional original/reversal/replacement/return journal balances"
+  ],
+  "company": "f1060000-0000-4000-8000-000000000010",
+  "scope": "Disposable fictional Company; no hosted writes",
+  "invoices": [
+    "210795dc-ee4d-4072-983c-e0630c6f6192",
+    "e1e606a6-39ad-4b70-a933-865ab4c2d76b",
+    "71d3f418-718b-4421-9f2b-b13bc006beab",
+    "e49994d7-5c08-41de-97a3-071b87b1666f"
+  ],
+  "reversal": "e66d5b94-05d0-4a3a-bf93-6e7aa79d1936",
+  "actual": [
+    {
+      "id": "0b9b2a70-3ab7-4ea2-958e-ceb9e5bec239",
+      "source_type": "INVENTORY_RETURN",
+      "posting_date": "2026-11-21",
+      "account_id": "c5248fa7-474e-41f6-84cd-1b6a0e8f839a",
+      "project_id": "b35bedc6-e463-4353-ba41-07f744e19d9c",
+      "debit_minor": "0",
+      "credit_minor": "1000"
+    },
+    {
+      "id": "0b9b2a70-3ab7-4ea2-958e-ceb9e5bec239",
+      "source_type": "INVENTORY_RETURN",
+      "posting_date": "2026-11-21",
+      "account_id": "571536be-3b01-4474-99dd-2b76a3074865",
+      "project_id": null,
+      "debit_minor": "1000",
+      "credit_minor": "0"
+    },
+    {
+      "id": "108e5997-7ea4-45db-acc4-2f3a17a697af",
+      "source_type": "INVENTORY_ISSUE",
+      "posting_date": "2026-11-21",
+      "account_id": "c5248fa7-474e-41f6-84cd-1b6a0e8f839a",
+      "project_id": "5cf1fa47-845d-4444-9656-bf734f2bc27e",
+      "debit_minor": "1000",
+      "credit_minor": "0"
+    },
+    {
+      "id": "108e5997-7ea4-45db-acc4-2f3a17a697af",
+      "source_type": "INVENTORY_ISSUE",
+      "posting_date": "2026-11-21",
+      "account_id": "571536be-3b01-4474-99dd-2b76a3074865",
+      "project_id": null,
+      "debit_minor": "0",
+      "credit_minor": "1000"
+    },
+    {
+      "id": "1583e728-7eb6-4f2e-97b9-d20df88a3633",
+      "source_type": "AR_INVOICE",
+      "posting_date": "2026-11-21",
+      "account_id": "1a2fd32d-8a62-4202-b91e-96092215ba47",
+      "project_id": null,
+      "debit_minor": "2100",
+      "credit_minor": "0"
+    },
+    {
+      "id": "1583e728-7eb6-4f2e-97b9-d20df88a3633",
+      "source_type": "AR_INVOICE",
+      "posting_date": "2026-11-21",
+      "account_id": "4957ed00-927e-46a0-ac92-b173708c5b19",
+      "project_id": null,
+      "debit_minor": "0",
+      "credit_minor": "2000"
+    },
+    {
+      "id": "1583e728-7eb6-4f2e-97b9-d20df88a3633",
+      "source_type": "AR_INVOICE",
+      "posting_date": "2026-11-21",
+      "account_id": "5877a9df-a57b-42ab-aae7-6531cc1d502d",
+      "project_id": null,
+      "debit_minor": "0",
+      "credit_minor": "100"
+    },
+    {
+      "id": "1f16f6b2-8946-48ca-9ed1-c6487121d1e4",
+      "source_type": "INVENTORY_RETURN",
+      "posting_date": "2026-11-21",
+      "account_id": "c5248fa7-474e-41f6-84cd-1b6a0e8f839a",
+      "project_id": "b35bedc6-e463-4353-ba41-07f744e19d9c",
+      "debit_minor": "0",
+      "credit_minor": "1000"
+    },
+    {
+      "id": "1f16f6b2-8946-48ca-9ed1-c6487121d1e4",
+      "source_type": "INVENTORY_RETURN",
+      "posting_date": "2026-11-21",
+      "account_id": "571536be-3b01-4474-99dd-2b76a3074865",
+      "project_id": null,
+      "debit_minor": "1000",
+      "credit_minor": "0"
+    },
+    {
+      "id": "240eb78a-7d73-49da-a137-4cb8572c39a3",
+      "source_type": "INVENTORY_ISSUE",
+      "posting_date": "2026-11-21",
+      "account_id": "c5248fa7-474e-41f6-84cd-1b6a0e8f839a",
+      "project_id": "b35bedc6-e463-4353-ba41-07f744e19d9c",
+      "debit_minor": "2000",
+      "credit_minor": "0"
+    },
+    {
+      "id": "240eb78a-7d73-49da-a137-4cb8572c39a3",
+      "source_type": "INVENTORY_ISSUE",
+      "posting_date": "2026-11-21",
+      "account_id": "571536be-3b01-4474-99dd-2b76a3074865",
+      "project_id": null,
+      "debit_minor": "0",
+      "credit_minor": "2000"
+    },
+    {
+      "id": "335bbbb1-c4c7-4cf1-8c32-77fcd4c1ff0f",
+      "source_type": "AR_INVOICE",
+      "posting_date": "2026-11-21",
+      "account_id": "1a2fd32d-8a62-4202-b91e-96092215ba47",
+      "project_id": "b35bedc6-e463-4353-ba41-07f744e19d9c",
+      "debit_minor": "12600",
+      "credit_minor": "0"
+    },
+    {
+      "id": "335bbbb1-c4c7-4cf1-8c32-77fcd4c1ff0f",
+      "source_type": "AR_INVOICE",
+      "posting_date": "2026-11-21",
+      "account_id": "4957ed00-927e-46a0-ac92-b173708c5b19",
+      "project_id": "b35bedc6-e463-4353-ba41-07f744e19d9c",
+      "debit_minor": "0",
+      "credit_minor": "12000"
+    },
+    {
+      "id": "335bbbb1-c4c7-4cf1-8c32-77fcd4c1ff0f",
+      "source_type": "AR_INVOICE",
+      "posting_date": "2026-11-21",
+      "account_id": "5877a9df-a57b-42ab-aae7-6531cc1d502d",
+      "project_id": null,
+      "debit_minor": "0",
+      "credit_minor": "600"
+    },
+    {
+      "id": "33d43fc1-25ef-46ce-b340-968e6695b2b1",
+      "source_type": "INVENTORY_RECEIPT",
+      "posting_date": "2026-11-21",
+      "account_id": "571536be-3b01-4474-99dd-2b76a3074865",
+      "project_id": null,
+      "debit_minor": "100000",
+      "credit_minor": "0"
+    },
+    {
+      "id": "33d43fc1-25ef-46ce-b340-968e6695b2b1",
+      "source_type": "INVENTORY_RECEIPT",
+      "posting_date": "2026-11-21",
+      "account_id": "8a217fc7-e720-478f-85a8-e28d3e1cf7b6",
+      "project_id": null,
+      "debit_minor": "0",
+      "credit_minor": "100000"
+    },
+    {
+      "id": "3c12bb0a-5767-486e-bf8f-2b9997fbe76e",
+      "source_type": "AR_INVOICE",
+      "posting_date": "2026-11-21",
+      "account_id": "1a2fd32d-8a62-4202-b91e-96092215ba47",
+      "project_id": "b35bedc6-e463-4353-ba41-07f744e19d9c",
+      "debit_minor": "12600",
+      "credit_minor": "0"
+    },
+    {
+      "id": "3c12bb0a-5767-486e-bf8f-2b9997fbe76e",
+      "source_type": "AR_INVOICE",
+      "posting_date": "2026-11-21",
+      "account_id": "4957ed00-927e-46a0-ac92-b173708c5b19",
+      "project_id": "b35bedc6-e463-4353-ba41-07f744e19d9c",
+      "debit_minor": "0",
+      "credit_minor": "12000"
+    },
+    {
+      "id": "3c12bb0a-5767-486e-bf8f-2b9997fbe76e",
+      "source_type": "AR_INVOICE",
+      "posting_date": "2026-11-21",
+      "account_id": "5877a9df-a57b-42ab-aae7-6531cc1d502d",
+      "project_id": null,
+      "debit_minor": "0",
+      "credit_minor": "600"
+    },
+    {
+      "id": "466f80cb-eb11-4c78-94be-e52b6fcfc672",
+      "source_type": "AR_INVOICE",
+      "posting_date": "2026-11-21",
+      "account_id": "1a2fd32d-8a62-4202-b91e-96092215ba47",
+      "project_id": "b35bedc6-e463-4353-ba41-07f744e19d9c",
+      "debit_minor": "13650",
+      "credit_minor": "0"
+    },
+    {
+      "id": "466f80cb-eb11-4c78-94be-e52b6fcfc672",
+      "source_type": "AR_INVOICE",
+      "posting_date": "2026-11-21",
+      "account_id": "4957ed00-927e-46a0-ac92-b173708c5b19",
+      "project_id": "b35bedc6-e463-4353-ba41-07f744e19d9c",
+      "debit_minor": "0",
+      "credit_minor": "13000"
+    },
+    {
+      "id": "466f80cb-eb11-4c78-94be-e52b6fcfc672",
+      "source_type": "AR_INVOICE",
+      "posting_date": "2026-11-21",
+      "account_id": "5877a9df-a57b-42ab-aae7-6531cc1d502d",
+      "project_id": null,
+      "debit_minor": "0",
+      "credit_minor": "650"
+    },
+    {
+      "id": "62779723-1f6b-4040-8f00-2b7ae1d90ef9",
+      "source_type": "TEST",
+      "posting_date": "2026-11-21",
+      "account_id": "73359f85-5e83-4ca7-8225-637cec687ddf",
+      "project_id": null,
+      "debit_minor": "20000",
+      "credit_minor": "0"
+    },
+    {
+      "id": "62779723-1f6b-4040-8f00-2b7ae1d90ef9",
+      "source_type": "TEST",
+      "posting_date": "2026-11-21",
+      "account_id": "29eb6baf-672c-4699-8149-2f4e506845d8",
+      "project_id": null,
+      "debit_minor": "0",
+      "credit_minor": "20000"
+    },
+    {
+      "id": "7952d8b0-a16c-4ac1-8b68-4964824c7d72",
+      "source_type": "AR_INVOICE",
+      "posting_date": "2026-11-21",
+      "account_id": "1a2fd32d-8a62-4202-b91e-96092215ba47",
+      "project_id": "b35bedc6-e463-4353-ba41-07f744e19d9c",
+      "debit_minor": "7350",
+      "credit_minor": "0"
+    },
+    {
+      "id": "7952d8b0-a16c-4ac1-8b68-4964824c7d72",
+      "source_type": "AR_INVOICE",
+      "posting_date": "2026-11-21",
+      "account_id": "4957ed00-927e-46a0-ac92-b173708c5b19",
+      "project_id": "b35bedc6-e463-4353-ba41-07f744e19d9c",
+      "debit_minor": "0",
+      "credit_minor": "7000"
+    },
+    {
+      "id": "7952d8b0-a16c-4ac1-8b68-4964824c7d72",
+      "source_type": "AR_INVOICE",
+      "posting_date": "2026-11-21",
+      "account_id": "5877a9df-a57b-42ab-aae7-6531cc1d502d",
+      "project_id": null,
+      "debit_minor": "0",
+      "credit_minor": "350"
+    },
+    {
+      "id": "7c8264bf-b1dd-4044-a076-ff7e5338aa29",
+      "source_type": "INVENTORY_ISSUE",
+      "posting_date": "2026-11-21",
+      "account_id": "c5248fa7-474e-41f6-84cd-1b6a0e8f839a",
+      "project_id": null,
+      "debit_minor": "1000",
+      "credit_minor": "0"
+    },
+    {
+      "id": "7c8264bf-b1dd-4044-a076-ff7e5338aa29",
+      "source_type": "INVENTORY_ISSUE",
+      "posting_date": "2026-11-21",
+      "account_id": "571536be-3b01-4474-99dd-2b76a3074865",
+      "project_id": null,
+      "debit_minor": "0",
+      "credit_minor": "1000"
+    },
+    {
+      "id": "7ecdde32-a63f-4e5b-b6b3-0aa76dbf83f2",
+      "source_type": "INVENTORY_ISSUE",
+      "posting_date": "2026-11-21",
+      "account_id": "c5248fa7-474e-41f6-84cd-1b6a0e8f839a",
+      "project_id": "5cf1fa47-845d-4444-9656-bf734f2bc27e",
+      "debit_minor": "1000",
+      "credit_minor": "0"
+    },
+    {
+      "id": "7ecdde32-a63f-4e5b-b6b3-0aa76dbf83f2",
+      "source_type": "INVENTORY_ISSUE",
+      "posting_date": "2026-11-21",
+      "account_id": "571536be-3b01-4474-99dd-2b76a3074865",
+      "project_id": null,
+      "debit_minor": "0",
+      "credit_minor": "1000"
+    },
+    {
+      "id": "8e2911ef-e089-481e-96c5-0fb1615c1e91",
+      "source_type": "INVENTORY_ISSUE",
+      "posting_date": "2026-11-21",
+      "account_id": "c5248fa7-474e-41f6-84cd-1b6a0e8f839a",
+      "project_id": "b35bedc6-e463-4353-ba41-07f744e19d9c",
+      "debit_minor": "1000",
+      "credit_minor": "0"
+    },
+    {
+      "id": "8e2911ef-e089-481e-96c5-0fb1615c1e91",
+      "source_type": "INVENTORY_ISSUE",
+      "posting_date": "2026-11-21",
+      "account_id": "571536be-3b01-4474-99dd-2b76a3074865",
+      "project_id": null,
+      "debit_minor": "0",
+      "credit_minor": "1000"
+    },
+    {
+      "id": "8efcceca-8f9c-4188-9909-726d1d1e9008",
+      "source_type": "INVENTORY_ISSUE",
+      "posting_date": "2026-11-21",
+      "account_id": "c5248fa7-474e-41f6-84cd-1b6a0e8f839a",
+      "project_id": "b35bedc6-e463-4353-ba41-07f744e19d9c",
+      "debit_minor": "4000",
+      "credit_minor": "0"
+    },
+    {
+      "id": "8efcceca-8f9c-4188-9909-726d1d1e9008",
+      "source_type": "INVENTORY_ISSUE",
+      "posting_date": "2026-11-21",
+      "account_id": "571536be-3b01-4474-99dd-2b76a3074865",
+      "project_id": null,
+      "debit_minor": "0",
+      "credit_minor": "4000"
+    },
+    {
+      "id": "a9befbb3-c021-4749-84cb-b619f88d41ef",
+      "source_type": "AR_CREDIT",
+      "posting_date": "2026-11-21",
+      "account_id": "4957ed00-927e-46a0-ac92-b173708c5b19",
+      "project_id": "b35bedc6-e463-4353-ba41-07f744e19d9c",
+      "debit_minor": "2000",
+      "credit_minor": "0"
+    },
+    {
+      "id": "a9befbb3-c021-4749-84cb-b619f88d41ef",
+      "source_type": "AR_CREDIT",
+      "posting_date": "2026-11-21",
+      "account_id": "1a2fd32d-8a62-4202-b91e-96092215ba47",
+      "project_id": "b35bedc6-e463-4353-ba41-07f744e19d9c",
+      "debit_minor": "0",
+      "credit_minor": "2100"
+    },
+    {
+      "id": "a9befbb3-c021-4749-84cb-b619f88d41ef",
+      "source_type": "AR_CREDIT",
+      "posting_date": "2026-11-21",
+      "account_id": "5877a9df-a57b-42ab-aae7-6531cc1d502d",
+      "project_id": null,
+      "debit_minor": "100",
+      "credit_minor": "0"
+    },
+    {
+      "id": "c7feab04-a1ae-4853-9fbc-f4c831c04dde",
+      "source_type": "INVENTORY_ISSUE",
+      "posting_date": "2026-11-21",
+      "account_id": "7ac92eb4-7784-4247-af1e-833b5fc9ce73",
+      "project_id": "b35bedc6-e463-4353-ba41-07f744e19d9c",
+      "debit_minor": "1000",
+      "credit_minor": "0"
+    },
+    {
+      "id": "c7feab04-a1ae-4853-9fbc-f4c831c04dde",
+      "source_type": "INVENTORY_ISSUE",
+      "posting_date": "2026-11-21",
+      "account_id": "571536be-3b01-4474-99dd-2b76a3074865",
+      "project_id": null,
+      "debit_minor": "0",
+      "credit_minor": "1000"
+    },
+    {
+      "id": "cdac0130-73fb-456e-8ba0-dc1533bbf8c3",
+      "source_type": "INVENTORY_ISSUE",
+      "posting_date": "2026-11-21",
+      "account_id": "c5248fa7-474e-41f6-84cd-1b6a0e8f839a",
+      "project_id": "b35bedc6-e463-4353-ba41-07f744e19d9c",
+      "debit_minor": "6000",
+      "credit_minor": "0"
+    },
+    {
+      "id": "cdac0130-73fb-456e-8ba0-dc1533bbf8c3",
+      "source_type": "INVENTORY_ISSUE",
+      "posting_date": "2026-11-21",
+      "account_id": "571536be-3b01-4474-99dd-2b76a3074865",
+      "project_id": null,
+      "debit_minor": "0",
+      "credit_minor": "6000"
+    },
+    {
+      "id": "d4a81fd0-906c-42b7-a54b-21cbdc2ea13a",
+      "source_type": "INVENTORY_ISSUE",
+      "posting_date": "2026-11-21",
+      "account_id": "c5248fa7-474e-41f6-84cd-1b6a0e8f839a",
+      "project_id": "b35bedc6-e463-4353-ba41-07f744e19d9c",
+      "debit_minor": "3000",
+      "credit_minor": "0"
+    },
+    {
+      "id": "d4a81fd0-906c-42b7-a54b-21cbdc2ea13a",
+      "source_type": "INVENTORY_ISSUE",
+      "posting_date": "2026-11-21",
+      "account_id": "571536be-3b01-4474-99dd-2b76a3074865",
+      "project_id": null,
+      "debit_minor": "0",
+      "credit_minor": "3000"
+    },
+    {
+      "id": "e66d5b94-05d0-4a3a-bf93-6e7aa79d1936",
+      "source_type": "JOURNAL_REVERSAL",
+      "posting_date": "2026-11-21",
+      "account_id": "1a2fd32d-8a62-4202-b91e-96092215ba47",
+      "project_id": "b35bedc6-e463-4353-ba41-07f744e19d9c",
+      "debit_minor": "0",
+      "credit_minor": "12600"
+    },
+    {
+      "id": "e66d5b94-05d0-4a3a-bf93-6e7aa79d1936",
+      "source_type": "JOURNAL_REVERSAL",
+      "posting_date": "2026-11-21",
+      "account_id": "4957ed00-927e-46a0-ac92-b173708c5b19",
+      "project_id": "b35bedc6-e463-4353-ba41-07f744e19d9c",
+      "debit_minor": "12000",
+      "credit_minor": "0"
+    },
+    {
+      "id": "e66d5b94-05d0-4a3a-bf93-6e7aa79d1936",
+      "source_type": "JOURNAL_REVERSAL",
+      "posting_date": "2026-11-21",
+      "account_id": "5877a9df-a57b-42ab-aae7-6531cc1d502d",
+      "project_id": null,
+      "debit_minor": "600",
+      "credit_minor": "0"
+    },
+    {
+      "id": "ed366955-731b-4f3e-b591-410deecad0ba",
+      "source_type": "TEST",
+      "posting_date": "2026-11-21",
+      "account_id": "7005ed84-fc25-4936-b425-5150a4af627e",
+      "project_id": null,
+      "debit_minor": "10000",
+      "credit_minor": "0"
+    },
+    {
+      "id": "ed366955-731b-4f3e-b591-410deecad0ba",
+      "source_type": "TEST",
+      "posting_date": "2026-11-21",
+      "account_id": "73359f85-5e83-4ca7-8225-637cec687ddf",
+      "project_id": null,
+      "debit_minor": "0",
+      "credit_minor": "10000"
+    },
+    {
+      "id": "f283f359-23d0-4ddc-b95a-6772292e471a",
+      "source_type": "INVENTORY_RECEIPT",
+      "posting_date": "2026-11-21",
+      "account_id": "571536be-3b01-4474-99dd-2b76a3074865",
+      "project_id": null,
+      "debit_minor": "100000",
+      "credit_minor": "0"
+    },
+    {
+      "id": "f283f359-23d0-4ddc-b95a-6772292e471a",
+      "source_type": "INVENTORY_RECEIPT",
+      "posting_date": "2026-11-21",
+      "account_id": "8a217fc7-e720-478f-85a8-e28d3e1cf7b6",
+      "project_id": null,
+      "debit_minor": "0",
+      "credit_minor": "100000"
+    },
+    {
+      "id": "f91d7667-30f8-46b2-bca9-4ab7f06be503",
+      "source_type": "AR_RECEIPT",
+      "posting_date": "2026-11-21",
+      "account_id": "73359f85-5e83-4ca7-8225-637cec687ddf",
+      "project_id": "b35bedc6-e463-4353-ba41-07f744e19d9c",
+      "debit_minor": "5000",
+      "credit_minor": "0"
+    },
+    {
+      "id": "f91d7667-30f8-46b2-bca9-4ab7f06be503",
+      "source_type": "AR_RECEIPT",
+      "posting_date": "2026-11-21",
+      "account_id": "1a2fd32d-8a62-4202-b91e-96092215ba47",
+      "project_id": "b35bedc6-e463-4353-ba41-07f744e19d9c",
+      "debit_minor": "0",
+      "credit_minor": "5000"
+    }
+  ],
+  "expectedMainCycleCheckpoint": {
+    "revenue": "30000",
+    "vat": "1500",
+    "ar": "26500",
+    "salesCOGS": "13000",
+    "salesGrossMargin": "17000"
+  },
+  "extraProbeEffects": {
+    "unbilledProjectCOGS": "1000",
+    "internalProjectCost": "1000"
+  },
+  "actualFinalProject": {
+    "revenue": "-30000",
+    "ar": "26500",
+    "cogs": "14000",
+    "internalProjectCost": "1000"
+  },
+  "metadataNote": "Checkpoint and later independent probe effects separated after verification; final balances aggregated from the preserved actual journal rows. No scenario rerun or journal alteration."
+}

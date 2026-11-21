@@ -1,0 +1,112 @@
+{
+  "milestone": "Sales fulfillment completion \u2014 consolidated/partial billing and Project goods sales",
+  "baseline": "1bf0ef913b42d586f71792098f7f4bdb85b212f8",
+  "releaseBranch": "release/sales-quantity-projects",
+  "status": "Locally verified; Migration115 activation and compatible publication deferred",
+  "migration": {
+    "number": 115,
+    "file": "20261203120000_sales_quantity_project_fulfillment.sql",
+    "sha256": "bfd779a7f3e064d5fbcc5ac76a344dd00a9c31f1c68c48be2e72f49d8b6f5140",
+    "state": "PREPARED_NOT_APPLIED",
+    "hostedTarget": "eqnzueginpkskbnqvgoc",
+    "linkedDryRun": {
+      "success": true,
+      "historyAlignedThrough": 114,
+      "onlyPending": [
+        "20261203120000_sales_quantity_project_fulfillment.sql"
+      ],
+      "writes": 0
+    }
+  },
+  "verification": {
+    "focusedChecks": {
+      "browser": 23,
+      "concurrency": 6,
+      "accounting": 34,
+      "exports": 4,
+      "controls": 21
+    },
+    "total": 88,
+    "old114ChecksReusedNotCounted": 77,
+    "fixturePreservation": {
+      "existingTablesFingerprintUnchanged": 167,
+      "previousFunctionACLSearchPathSecurityModeUnchanged": true
+    },
+    "concurrency": "Independent native PostgreSQL connections with observed lock waits; no overbilling/duplicate stock/credit",
+    "browser": "Actual EN/AR production components plus canonical SQL in localhost fictional fixture; clearly synthetic Auth adapter, not genuine hosted Auth acceptance",
+    "visual": "Actual screenshots inspected at1366x768 and390px; final text-only addition includes unbilled-return source reference",
+    "exports": "Actual downloaded EN/AR XLSX all worksheets inspected and PDF text verified",
+    "typescript": "PASS through final Production build",
+    "productionBuild": "PASS",
+    "lint": "PASS; no new diagnostics; existing CommercialWorkspace ref-cleanup warning and unrelated repository warnings retained",
+    "productionBoundary": "PASS",
+    "whitespace": "PASS",
+    "secretPatternScan": "PASS for changed/new text; no credentials copied",
+    "broadAccountingReplay": false,
+    "legacyReturns": "Explicit original unit/invoice returns retain legacy request-hash recovery; changed incompatible unit and unrelated invoice rejected"
+  },
+  "accountingAnswerKey": {
+    "mainCycleAED": {
+      "netRevenue": "300.00",
+      "outputVAT": "15.00",
+      "arBeforeCollection": "315.00",
+      "collection": "50.00",
+      "arAfterCollection": "265.00",
+      "netSalesCOGS": "130.00",
+      "stockDecrease": "130.00",
+      "salesGrossMargin": "170.00"
+    },
+    "subsequentIndependentProbesAED": {
+      "unbilledProjectCOGS": "10.00",
+      "internalProjectCost": "10.00"
+    },
+    "finalMainProjectAED": {
+      "revenue": "300.00",
+      "ar": "265.00",
+      "netSalesCOGS": "140.00",
+      "internalProjectCost": "10.00"
+    },
+    "browserInvoiceAED": {
+      "lineQuantities": [
+        "2",
+        "1",
+        "3"
+      ],
+      "net": "130.00",
+      "vat": "6.50",
+      "gross": "136.50"
+    },
+    "allJournalsBalanced": true,
+    "customerSubledgerEqualsGL": true
+  },
+  "preservation": {
+    "hostedBusinessWrites": 0,
+    "realCompanyFinancialMutations": 0,
+    "newCompanies": 0,
+    "hostedMigrationApplied": false,
+    "pushOrDeploy": false,
+    "originalDirtyWorktreeUntouched": true
+  },
+  "limits": [
+    "Same Company, Customer, Project, AED, VAT rate and actual open delivery/recognition date; separate invoices for incompatible deliveries",
+    "Goods delivered first; existing chronological Inventory, positive monetary amount and six-decimal quantity policies retained",
+    "Construction/WIP uses existing Contracts; internal consumption never creates sales revenue",
+    "No FX, service fulfillment, negative stock or automatic cash refund",
+    "Hosted authenticated runtime smoke deferred until explicitly authorized115 activation and compatible release"
+  ],
+  "lifecycle": {
+    "businessAccounting": "VERIFIED locally within stated scope",
+    "securityAuthorization": "VERIFIED local role/RLS/direct-write/cross-Company/concurrency tests",
+    "database": "VERIFIED local forward migration and preservation; hosted activation DEFERRED",
+    "deployment": "DEFERRED authorized115 activation, publication and hosted smoke",
+    "testing": "VERIFIED focused isolated SQL/native/browser/export plus TypeScript/lint/build",
+    "documentation": "VERIFIED canonical records updated; earlier checkpoints preserved as history"
+  },
+  "releaseOrder": [
+    "Authorize only115",
+    "Minimal hosted preflight/activation/preservation",
+    "Explicit compatible frontend publication",
+    "Authorized read-only hosted smoke"
+  ],
+  "remoteMainVerified": "1bf0ef913b42d586f71792098f7f4bdb85b212f8"
+}

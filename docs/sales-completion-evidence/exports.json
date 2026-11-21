@@ -1,0 +1,19 @@
+{
+  "checks": [
+    "en actual Excel: one invoice, three quantities2/1/3, net130/VAT6.50/total136.50, Project and journal",
+    "en actual PDF: rendered consolidated invoice130.00+6.50=136.50 with Company/Project",
+    "ar actual Excel: one invoice, three quantities2/1/3, net130/VAT6.50/total136.50, Project and journal",
+    "ar actual PDF: rendered consolidated invoice130.00+6.50=136.50 with Company/Project"
+  ],
+  "expected": {
+    "netAED": "130.00",
+    "vatAED": "6.50",
+    "grossAED": "136.50",
+    "lineQuantities": [
+      "2",
+      "1",
+      "3"
+    ]
+  },
+  "files": "Actual browser XLSX downloads and Chromium-rendered PDF; every worksheet inspected"
+}

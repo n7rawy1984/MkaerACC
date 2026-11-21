@@ -1,0 +1,27 @@
+{
+  "checks": [
+    "Quarter-box and five-piece partial invoices track exact8base billed /4unbilled",
+    "Mixed-unit returns and billing reconcile10sold pieces,10AED net and10.50AR",
+    "Three one-unit invoices consume exact33/34/33net cents without remainder",
+    "Multi-invoice physical return requires the actual original invoice",
+    "A fully billed delivery cannot be billed again",
+    "Rejected allocation leaves all pre-existing financial/source/master tables unchanged",
+    "Read-only Viewer cannot obtain posting preview authority",
+    "Accountant cannot bypass Accounting Admin reversal approval",
+    "Allocation RLS hides another Company’s invoice quantities",
+    "Project warehouse fulfillment preserves the matching Project dimension",
+    "Company sales cannot consume another Project warehouse’s stock",
+    "Invoice cannot precede actual transfer of goods",
+    "Invalid second line rolls back the whole consolidated invoice",
+    "No partial invoice/journal/allocation remains after a failed group",
+    "Legacy114 return with explicit original unit/invoice recovers the same canonical request",
+    "Legacy retry cannot hide an incompatible changed return unit",
+    "Legacy return cannot silently select an unrelated consolidated invoice",
+    "Consolidated billing cannot bypass a closed accounting period",
+    "Existing annual-close safeguard uses actual effective unbilled quantities",
+    "Private staged context/plan inaccessible; anonymous preview denied",
+    "Trusted billing context never remains after successful or failed operations"
+  ],
+  "vatDelta": "44",
+  "scope": "Isolated fictional only"
+}

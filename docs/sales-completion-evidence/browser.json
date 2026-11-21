@@ -1,0 +1,29 @@
+{
+  "checks": [
+    "EN actual Project delivery draft/review/post through existing Sales components",
+    "EN actual server preview shows one136.50AED invoice for3partial lines",
+    "EN approval creates one canonical invoice/journal with3allocation rows",
+    "EN actual consolidated invoice PDF/Excel contains all3lines",
+    "EN additional partial quantity invoice recovers without duplicate billing",
+    "EN invoice-selected physical return credits the correct source",
+    "EN mobile quantity workspace stays within viewport",
+    "EN collection handoff selects the consolidated invoice",
+    "EN existing audited reversal UI releases quantity without new stock effects",
+    "EN no browser runtime errors",
+    "AR actual Project delivery draft/review/post through existing Sales components",
+    "AR actual server preview shows one136.50AED invoice for3partial lines",
+    "AR approval creates one canonical invoice/journal with3allocation rows",
+    "AR actual consolidated invoice PDF/Excel contains all3lines",
+    "AR additional partial quantity invoice recovers without duplicate billing",
+    "AR invoice-selected physical return credits the correct source",
+    "AR mobile quantity workspace stays within viewport",
+    "AR collection handoff selects the consolidated invoice",
+    "AR existing audited reversal UI releases quantity without new stock effects",
+    "AR no browser runtime errors",
+    "Actual Project cost model reconciles280salesCOGS+10internal consumption and distinguishes both types",
+    "en existing Project report exports retain distinct sales/internal labels",
+    "ar existing Project report exports retain distinct sales/internal labels"
+  ],
+  "auth": "Synthetic local Auth adapter; actual production components and canonical SQL; not hosted Auth acceptance",
+  "hostedWrites": 0
+}

@@ -1,0 +1,12 @@
+{
+  "checks": [
+    "Competing quantity invoices serialize; combined billing cannot exceed delivered goods",
+    "Concurrent same-request recovery returns original consolidated invoice",
+    "Compatible concurrent half-unit invoices both commit exactly one remaining unit",
+    "Actual committed effective allocations total4delivered units exactly",
+    "Concurrent billed return and remaining invoice preserve physical quantities and credit only once",
+    "Concurrent allocations/returns leave no trusted context and every journal balances"
+  ],
+  "engine": "Independent native PostgreSQL sessions with actual observed lock waits",
+  "hostedWrites": 0
+}
