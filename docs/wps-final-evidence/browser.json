@@ -1,0 +1,20 @@
+{
+  "checks": [
+    "Actual production UI validates and downloads canonical SIF without creating any financial event",
+    "Employee-to-preview-to-saved-draft uses real source balances and canonical partial-month salary",
+    "Production approval and posting UI creates the isolated canonical settlement journal",
+    "Production partial payment settles existing final liability without recreating salary/gratuity",
+    "English statement workbook downloads from the authorized current server snapshot",
+    "Actual settlement statement includes source liability and prior provision reconciliation",
+    "Arabic settlement PDF and Excel export actual entitled and paid values",
+    "Arabic RTL keeps financial actions and mixed identifiers readable",
+    "Arabic mobile workflow does not overflow",
+    "Arabic and English 320px forms and settlement actions have no horizontal overflow",
+    "Actual correction UI preserves payment history and reverses settlement through canonical commands",
+    "Management Viewer never receives confidential SIF contents or settlement controls",
+    "No HR completion production-component runtime errors"
+  ],
+  "count": 13,
+  "scope": "Actual production React with local canonical SQL and synthetic Auth harness; no hosted writes",
+  "hostedWrites": 0
+}

@@ -1,0 +1,10 @@
+{
+  "count": 4,
+  "checks": [
+    "en actual Excel numeric cells reconcile to net AED22020.53, paid AED100 and prior provision",
+    "en actual rendered PDF exists; localized body verified in browser",
+    "ar actual Excel numeric cells reconcile to net AED22020.53, paid AED100 and prior provision",
+    "ar actual rendered PDF exists; localized body verified in browser"
+  ],
+  "scope": "Actual authorized-component downloads from isolated canonical SQL"
+}

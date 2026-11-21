@@ -1,0 +1,44 @@
+{
+  "status": "PASS_LOCAL",
+  "baseRelease": "be0e0e55a0350e633b76eadf3978608ac546c985",
+  "migration": {
+    "number": 111,
+    "file": "supabase/migrations/20261129120000_wps_final_settlement.sql",
+    "sha256": "e519c4426f43ab65fd71f110476b90b6d0431363a4cfbe9e4c03500e3ff3bbc4",
+    "status": "PREPARED_NOT_APPLIED",
+    "hostedPrevious": 110,
+    "hostedAlignment": "Owner confirmation and prior110 activation evidence; no fresh hosted query",
+    "hostedDryRun": "Not run: automatic review rejected connection metadata copying; no copy or connection occurred"
+  },
+  "checks": {
+    "accounting": 55,
+    "browser": 13,
+    "concurrency": 7,
+    "exports": 4
+  },
+  "totalFocusedChecks": 79,
+  "preservedPreExistingLocalTables": 158,
+  "accountingExpected": {
+    "partialSalaryMinor": "214286",
+    "netMinor": "2202053"
+  },
+  "nativeConcurrency": "Independent PostgreSQL sessions with actual observed lock waits",
+  "browser": "Real production component, canonical local SQL, synthetic Auth transport; EN/AR1366 desktop,390 and320 mobile, actual SIF/PDF/Excel",
+  "typescript": "PASS (npm run build)",
+  "productionBuild": "PASS; existing chunk-size advisory",
+  "focusedLint": "PASS, zero diagnostics in changed files",
+  "repositoryLint": "PASS with unchanged warnings; no errors",
+  "hostedRequests": 0,
+  "hostedFinancialMutations": 0,
+  "hostedMigrationApplications": 0,
+  "genuineHostedAuthAcceptance": "DEFERRED to authorized release smoke",
+  "bankAcceptanceEncryptionSubmission": "External gate; not implemented or certified",
+  "realCompanyRecords": "Untouched; no hosted requests",
+  "unrelatedWork": "Preserved in original NARVO working tree",
+  "push": "NOT_PERFORMED",
+  "deploy": "NOT_PERFORMED",
+  "remoteMainVerified": "be0e0e55a0350e633b76eadf3978608ac546c985",
+  "secretPatternScan": "PASS changed source",
+  "whitespaceCheck": "PASS",
+  "actualScreenshotReview": "EN320 and AR1366/390 rendered screenshots inspected; both language320 checks passed"
+}

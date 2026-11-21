@@ -1,0 +1,14 @@
+{
+  "checks": [
+    "independent concurrent export retries serialize to one original SIF and audit event",
+    "concurrent authenticated approvals serialize to one immutable approval event",
+    "simultaneous final posting retries reuse exactly one balanced journal and one set of claims",
+    "independent concurrent settlement payments reject stale versions before a duplicate cash effect",
+    "exactly one final settlement cash outflow exists after competing requests",
+    "all existing source payroll/gratuity journals remain immutable through concurrent final posting",
+    "duplicate concurrent exports never create multiple bank payment instructions"
+  ],
+  "count": 7,
+  "engine": "Independent native PostgreSQL connections; actual lock waits observed",
+  "hostedWrites": 0
+}
