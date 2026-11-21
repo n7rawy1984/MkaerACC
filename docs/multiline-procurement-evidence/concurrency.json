@@ -1,0 +1,15 @@
+{
+  "count": 8,
+  "checks": [
+    "independent competing multi-line receipts cannot exceed either approved PO quantity",
+    "independent identical receiving retries reuse the same original parent and stock movements",
+    "independent consolidated invoices cannot bill the same physical quantities twice",
+    "competing requests leave exactly one AP invoice and no duplicate stock",
+    "simultaneous correction reverses the entire consolidated invoice exactly once",
+    "simultaneous physical receipt correction reverses all its lines exactly once",
+    "final physical stock reconciles exactly after dependent invoice and receipt corrections",
+    "all actual concurrent canonical journals remain balanced"
+  ],
+  "engine": "Independent native PostgreSQL connections with actual observed lock waits",
+  "hostedWrites": 0
+}

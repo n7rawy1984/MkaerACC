@@ -1,0 +1,10 @@
+{
+  "count": 4,
+  "checks": [
+    "en actual XLSX reconciles two allocations, quantities6/3, net120,VAT6,GRNI120 and no variance",
+    "en actual PDF contains the legal invoice reference and exact allocation net/VAT values",
+    "ar actual XLSX reconciles two allocations, quantities6/3, net120,VAT6,GRNI120 and no variance",
+    "ar actual PDF contains the legal invoice reference and exact allocation net/VAT values"
+  ],
+  "hostedWrites": 0
+}

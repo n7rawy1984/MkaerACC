@@ -1,0 +1,20 @@
+{
+  "count": 14,
+  "checks": [
+    "Real English UI receives two Materials in one physical document through canonical Inventory",
+    "Real invoice selector matches two receipt lines to one invoice and approved AP posting",
+    "Actual browser journals reconcile independently to AP126.00 and VAT6.00",
+    "en actual three-way fulfillment Excel and PDF export",
+    "en responsive operational tables do not overflow",
+    "ar actual three-way fulfillment Excel and PDF export",
+    "ar responsive operational tables do not overflow",
+    "Arabic320 multi-line receiving form remains usable",
+    "Arabic multi-line receipt review and actual confirmation post both accepted quantities",
+    "Arabic consolidated invoice selector, verified exact manual VAT and Approve/Post workflow execute correctly",
+    "Mixed exact-manual and no-recovery invoice lines reconcile to the final canonical AP balance156.50",
+    "PO receiving deep link preserves the actual selected order and initializes its material lines",
+    "Supplier invoice deep link opens consolidated matching without any financial write",
+    "No production-component browser runtime errors"
+  ],
+  "scope": "Production components with canonical local SQL and synthetic Auth harness; no hosted requests"
+}

@@ -1,0 +1,42 @@
+{
+  "status": "PASS_LOCAL",
+  "baseRelease": "dc0ebd72c70a9280bdf6d590022ee98903cae041",
+  "remoteMainVerified": "dc0ebd72c70a9280bdf6d590022ee98903cae041",
+  "migration": {
+    "number": 112,
+    "file": "supabase/migrations/20261130120000_multiline_procurement.sql",
+    "sha256": "be6402d38c746eca0622e8b8a6b942c96e76bcfd22e11c9605144e1c092098c3",
+    "status": "PREPARED_NOT_APPLIED",
+    "linkedDryRun": "PASS: hosted111 aligned; only20261130120000_multiline_procurement.sql pending; no seed/role/Vault changes"
+  },
+  "checks": {
+    "accounting": 43,
+    "browser": 14,
+    "concurrency": 8,
+    "exports": 4
+  },
+  "totalFocusedChecks": 69,
+  "preservedLocalTables": 160,
+  "independentExpectedFinalBalancesMinor": {
+    "inventoryMinor": "21000",
+    "grniMinor": "0",
+    "apMinor": "22260",
+    "vatMinor": "1060",
+    "varianceMinor": "200"
+  },
+  "nativeConcurrency": "Independent PostgreSQL backends; actual lock waits observed",
+  "browser": "Real production React and canonical local SQL with synthetic Auth transport; both languages post; desktop1366/mobile390/Arabic320; genuine hosted Auth not claimed",
+  "exports": "Actual bilingual XLSX numeric cells and rendered PDF contents inspected; export checkpoint net120,VAT6,GRNI120; actual final mixed-tax browser AP156.50",
+  "lint": "PASS; new files zero diagnostics, unchanged existing hook warnings retained",
+  "typescript": "PASS (final npm run build)",
+  "productionBuild": "PASS; existing non-blocking chunk-size advisory",
+  "secretPatternScan": "PASS changed source",
+  "whitespace": "PASS",
+  "realCompanyFinancialChanges": 0,
+  "hostedMigrationApplications": 0,
+  "hostedAccess": "Only metadata dry-run with existing secure CLI; no copied secrets/connection metadata",
+  "genuineHostedRuntime": "DEFERRED after authorized112 activation and publication",
+  "unrelatedDevelopWork": "Preserved; isolated release worktree",
+  "push": "NOT_PERFORMED",
+  "deploy": "NOT_PERFORMED"
+}
