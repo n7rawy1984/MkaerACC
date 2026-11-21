@@ -1,0 +1,19 @@
+{
+  "count": 13,
+  "checks": [
+    "Lost-response amendment draft retries the identical stored request without duplicate history",
+    "English request/review/approval appends the same-reference issued PO revision",
+    "Updated PO remains receivable and approved amendment history visible",
+    "en actual updated PO Excel/PDF exported with revision summary",
+    "ar actual updated PO Excel/PDF exported with revision summary",
+    "Fractional purchase-unit entry previews exactly6base pieces",
+    "Actual receiving UI posts the converted base quantity without duplicate movement",
+    "Arabic amendment form remains readable at390px without page overflow",
+    "Arabic delivery-date amendment completes review/approval after partial receiving",
+    "Arabic alternative-unit selector preserves decimal quantity and previews15pieces",
+    "Cancel remaining derives retained base quantity without repeated quantity entry",
+    "Arabic cancellation approves only remaining commitment and preserves the posted receipt",
+    "Changed production React components have no browser runtime errors"
+  ],
+  "scope": "Actual production components and canonical local database; synthetic test Auth transport; zero hosted calls"
+}

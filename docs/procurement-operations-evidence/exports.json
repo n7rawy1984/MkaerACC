@@ -1,0 +1,10 @@
+{
+  "count": 4,
+  "checks": [
+    "en actual updated PO XLSX preserves reference, before10/12AED, after12/24AED and288AED commitment",
+    "en actual amended PO PDF contains original reference, changed quantities/prices and exact revised value",
+    "ar actual updated PO XLSX preserves reference, before10/12AED, after12/24AED and288AED commitment",
+    "ar actual amended PO PDF contains original reference, changed quantities/prices and exact revised value"
+  ],
+  "hostedWrites": 0
+}

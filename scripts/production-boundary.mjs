@@ -34,6 +34,7 @@ export function dependencyGraph(entry) {
 const sessionRecoveryFiles=new Set([
  'src/documents/DocumentPanel.tsx', // User/Company/entity-scoped upload request IDs and file fingerprints only; no file bytes, signed URLs, credentials or ledger cache.
  'src/procurement/ProcurementWorkspace.tsx', // Frozen actor/Company procurement request recovery only; never a business ledger.
+ 'src/procurement/PurchaseOrderAmendments.tsx', // Actor/Company-scoped immutable amendment command recovery; no financial cache.
  'src/procurement/PurchaseOrdersWorkspace.tsx', // Frozen actor/Company purchase-order command retry; no ledger cache.
  'src/financial/SupplierPurchaseReturns.tsx',
  'src/inventory/InventoryWorkspace.tsx',

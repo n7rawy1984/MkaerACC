@@ -1,0 +1,33 @@
+# Controlled Purchase Order amendments and purchase/stock units
+
+Continues published `fb7640b1e6ea1abcf4e845e4e6432605d60ebf8f` and hosted112. Migration113 is **PREPARED, NOT APPLIED**. No real Company records, hosted financial commands, push or deployment are part of this milestone.
+
+## Implemented workflow
+
+`/purchase-orders` → issued order details → **Request amendment** → save draft → review → approve. Accounting Admin/Accountant with `accounting.post` approves; Procurement may prepare/review. All require active Company, membership and profile. Management Viewer has read access only. Each draft/review/approval is append-only and keeps actor, reason, timestamp, original reference and issued base version. Approval appends an ISSUED PO version atomically; competing approvals cannot overwrite it. Uncertain command responses recover the same actor/Company/PO-scoped request.
+
+Quantity, purchase price, expected delivery, terms, appended lines and remaining-line cancellation are supported. Existing line positions, Material, units, Supplier, Project and original date remain fixed. To replace a Material/unit, cancel the remaining old line and append a new approved line. No historical approval, posted receipt, invoice, stock movement or journal is updated. Amendments are commitments, not recognition of Inventory, GRNI, AP or VAT.
+
+Quantities cannot fall below live gross received quantities plus independent draft/reviewed deliveries. Reviewed receiving prepared under a superseded issued version must be saved/reviewed again. Reversed receipts do not count as live receipts; physical returns do not silently reopen an order. Cancellation derives exact received base quantities itself, including one Piece received from a twelve-Piece Box. No rounded `1/12 Box` entry is required. Original purchase quantities remain evidence; retained base quantities/value exclude the cancelled remainder. Later reversal does not authorize new receiving on a cancelled line. Unchanged, legacy unposted receiving retains compatibility; new saves bind the issued version explicitly.
+
+PO details, supplier-facing before/after amendment summaries, audit history and updated Arabic/English Excel/PDF use existing workspace/report components. Purchase-unit prices are labelled per purchase unit; base quantities are displayed separately. Revised order value is a commercial commitment, not a restatement of historical acquisition cost. Fulfillment reports calculate the remaining commitment using the current approved future price. Previously recognized costs/liabilities stay at their original amounts; actual invoice differences use the canonical variance workflow.
+
+## Units and accounting
+
+Accounting Admin uses the existing Inventory Material administration workflow to approve positive integer numerator/denominator ratios. Base unit is the stock unit. Existing used or ordered unit definitions cannot be replaced; compatible additional units may be approved without altering old ratios. Count/packaging, metric length, mass and volume aliases are validated. Atomic Piece/Unit aliases are 1:1; packaging ratios are material-specific; metric ratios must agree with physical dimensions. Unknown or incompatible alternative dimensions fail closed. Existing definitions are preserved without backfill or reinterpretation.
+
+Examples supported: Box/Carton → Pieces, Meter → Centimeter, Ton → Kilogram. PO, receiving and receipt-first consolidated invoice selectors reuse the same approved material ratios. Entered purchase units/quantities are retained, while stock, matching and cost arithmetic use exact integer base micro-units. Inputs that cannot convert exactly are rejected, never rounded. Project issues and original-issue returns reuse the existing Inventory engine with a live base-quantity preview. Supplier physical returns retain their entered unit/quantity and post canonical base quantities, with credit notes linked to the original matched allocation.
+
+PO amendment → no GL. Receipt → Dr Inventory / Cr GRNI. Supplier invoice plus canonical matches → clear original GRNI, recognize AP/VAT and approved variance, with no duplicate stock/Project cost. Project issue → moving-average Project cost / Inventory, without cash. Supplier return → remove stock at moving-average carrying value; the original invoice allocation governs net/VAT credit. Any difference uses canonical variance. Existing fiscal/chronological controls, idempotency, source uniqueness, immutable journals, correction dependencies and Company isolation remain authoritative.
+
+Independent focused checkpoint (minor units): Inventory2100 + Project cost700 + variance200 + input VAT150 = Supplier AP3150; GRNI0. All affected journals balance. The separate one-Piece cancellation and its receipt reversal return to this exact checkpoint.
+
+## Scope and release gates
+
+- **VERIFIED locally:** supported business/accounting semantics; relevant tenant/role/direct-write/grant controls; forward migration preservation; independent-session approval races; actual production-component EN/AR browser actions and exports; quantity/valuation reconciliation. Exact results and build/lint status: `procurement-operations-verification.json`.
+- **DEFERRED:** Product Owner authorization to apply only113 with preservation checks; compatible frontend publication; genuine hosted authenticated runtime smoke after activation. Local browser tests use synthetic test Auth transport to real local canonical SQL; they do not claim hosted authentication acceptance. Existing full disaster recovery rehearsal remains deferred.
+- **NOT APPLICABLE:** real-company financial changes; additional migrations; CR07 replay; AI; another inventory/accounting engine.
+
+Existing limits remain: 50 PO/invoice lines, 12 alternative units per Material, six decimal entered/base quantities and integer AED minor units. Unrecognized alternative-unit labels/dimensions are rejected; arbitrary dimensional formulas, density/weight-to-volume conversions and unit-definition changes are unsupported. Same Supplier/Company/Project invoice consolidation, receipt-first, current chronological Inventory periods, no automatic over-receiving and no inspection/quarantine workflow remain unchanged. No retrospective price/quantity restatement or automatic supplier transmission is included. Amendments to completed commercial scope cannot alter accounting history.
+
+All original commercial, statutory HR/WPS, subscription/platform, Maker/entity onboarding, security and operational requirements remain in the existing canonical roadmap and register. Unrelated main-working-tree modifications/untracked activation evidence are preserved; this work is isolated on `release/procurement-amendments-uom`.

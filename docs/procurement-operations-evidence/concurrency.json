@@ -1,0 +1,11 @@
+{
+  "count": 4,
+  "checks": [
+    "Concurrent approvals of competing amendments serialize; exactly one issued revision wins",
+    "Concurrent same-request approval returns the original revision with no duplicate history",
+    "Exactly one approved amendment event extends the issued order",
+    "Concurrent amendments create no GL entries or stock movements"
+  ],
+  "engine": "Independent native PostgreSQL connections with actual observed lock waits",
+  "hostedWrites": 0
+}

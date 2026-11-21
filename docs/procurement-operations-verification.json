@@ -1,0 +1,68 @@
+{
+  "status": "PASS_LOCAL",
+  "baseRelease": "fb7640b1e6ea1abcf4e845e4e6432605d60ebf8f",
+  "migration": {
+    "number": 113,
+    "file": "supabase/migrations/20261201120000_procurement_amendments_units.sql",
+    "sha256": "4682f25cabd8743a26c77bab168584111614c66d4131d61cebd6292792be5ec7",
+    "status": "PREPARED_NOT_APPLIED",
+    "linkedDryRun": {
+      "upToDate": false,
+      "dryRun": true,
+      "migrations": [
+        "20261201120000_procurement_amendments_units.sql"
+      ],
+      "seeds": [],
+      "roles": [],
+      "message": "Finished supabase db push."
+    },
+    "hostedAlignment": "Through112; only113 pending"
+  },
+  "checks": {
+    "accounting": 45,
+    "browser": 13,
+    "concurrency": 4,
+    "exports": 4
+  },
+  "totalFocusedChecks": 66,
+  "preservedLocalTables": 162,
+  "existingFunctionAuthorization": "PASS; ACL/SECURITY DEFINER/search_path for every prior public/private function unchanged",
+  "independentExpectedFinalBalancesMinor": {
+    "stockMinor": "2100",
+    "grniMinor": "0",
+    "apMinor": "3150",
+    "vatMinor": "150",
+    "varianceMinor": "200",
+    "projectMinor": "700"
+  },
+  "typescript": "PASS npm run build",
+  "productionBuild": "PASS; browser-safe synthetic build-only configuration, no hosted runtime; existing non-blocking large-chunk advisory",
+  "lint": "PASS npm run lint; existing unrelated warnings retained; new helpers/amendment/quantity components zero diagnostics",
+  "whitespace": "PASS git diff --check",
+  "secretPatternScan": {
+    "status": "PASS",
+    "files": 24
+  },
+  "visualInspection": "Actual rendered English approved amendment and Arabic390 form inspected; bilingual desktop/mobile browser artifacts retained",
+  "nativeConcurrency": "Independent PostgreSQL backends; real lock waits observed; competing approval and identical retry tested",
+  "browserAuthenticationScope": "Synthetic local test Auth transport with actual production React and canonical SQL. Genuine hosted runtime smoke deferred until approved activation/publication.",
+  "realCompanyMutations": 0,
+  "hostedMigrationApplications": 0,
+  "push": "NOT_PERFORMED",
+  "deploy": "NOT_PERFORMED",
+  "knownLimitations": [
+    "Recognized compatible unit dimensions/aliases only; no density or arbitrary dimensional conversion",
+    "Existing50-line/12-alternative/six-decimal quantity limits preserved",
+    "Existing line identity/units fixed; cancel remainder and append a new line to replace them",
+    "Receipt-first, same Supplier/Company/Project consolidation and existing current chronological Inventory period rules unchanged",
+    "No supplier transmission, inspection/quarantine or automatic over-receiving"
+  ],
+  "readiness": {
+    "businessAccounting": "VERIFIED_LOCAL",
+    "securityAuthorization": "VERIFIED_LOCAL",
+    "database": "VERIFIED_LOCAL;113_NOT_APPLIED_HOSTED",
+    "deployment": "DEFERRED_OWNER_APPROVAL_AND_PUBLICATION",
+    "testing": "VERIFIED_LOCAL;HOSTED_SMOKE_DEFERRED",
+    "documentation": "VERIFIED;canonical files updated in place"
+  }
+}

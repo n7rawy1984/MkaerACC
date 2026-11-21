@@ -1,0 +1,10 @@
+import{multilineFixture}from'./multiline-procurement-fixture.mjs';import{readFileSync}from'node:fs';import assert from'node:assert/strict';import{randomUUID}from'node:crypto';
+export async function operationsFixture(database){
+ const f=await multilineFixture(database),tables=(await f.db.query("select schemaname,tablename from pg_tables where schemaname in('public','private','auth','storage')order by schemaname,tablename")).rows;
+ const snapshot=async()=>{const out={};for(const{schemaname:s,tablename:t}of tables){assert(/^[a-z_0-9]+$/.test(s+t));out[s+'.'+t]=(await f.db.query(`select count(*)::text n,md5(coalesce(string_agg(to_jsonb(x)::text,''order by to_jsonb(x)::text),''))hash from "${s}"."${t}"x`)).rows[0]}return out};
+ const authorization=async()=>(await f.db.query("select p.oid::regprocedure::text signature,p.proacl::text acl,p.proconfig,p.prosecdef from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname in('public','private')and p.prokind='f'order by signature")).rows;
+ const before=await snapshot(),grants=await authorization();await f.db.exec(readFileSync('supabase/migrations/20261201120000_procurement_amendments_units.sql','utf8'));assert.deepEqual(await snapshot(),before,'113 preserves every existing table including112 allocations');const after=await authorization();for(const g of grants)assert.deepEqual(after.find(x=>x.signature===g.signature),g,'113 preserves existing function authorization');
+ const amend=(action,input,key=randomUUID(),actor=f.admin,cid=f.company)=>f.rpc('command_purchase_order_amendment',[key,action,input],actor,cid);
+ const orderInput=async po=>{const r=(await f.db.query('select snapshot from public.purchase_order_events where company_id=$1 and document_id=$2 order by version desc limit 1',[f.company,po.id])).rows[0].snapshot;for(const k of['supplier_name','project_name','total_minor','currency','amount_basis','amendment_id','amendment_reason','previous_version','amendment_summary'])delete r[k];return r;};
+ return{...f,amend,orderInput,preservedTables113:tables.length};
+}
