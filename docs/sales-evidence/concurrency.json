@@ -1,0 +1,11 @@
+{
+  "checks": [
+    "Concurrent order confirmations serialize with one approved version",
+    "Concurrent same-key confirmation recovers original result",
+    "Competing partial deliveries cannot oversubscribe confirmed quantities",
+    "Concurrent invoice attempts cannot duplicate revenue or AR",
+    "Exactly one delivery, one invoice and one COGS event survive competing sessions"
+  ],
+  "engine": "Independent native PostgreSQL sessions; lock waits actually observed",
+  "hostedWrites": 0
+}

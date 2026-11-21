@@ -32,6 +32,7 @@ export function dependencyGraph(entry) {
 }
 // Existing command recovery envelopes only; these files are not local business stores.
 const sessionRecoveryFiles=new Set([
+ 'src/sales/SalesWorkspace.tsx', // Frozen actor/Company command recovery only; canonical DB is authoritative.
  'src/documents/DocumentPanel.tsx', // User/Company/entity-scoped upload request IDs and file fingerprints only; no file bytes, signed URLs, credentials or ledger cache.
  'src/procurement/ProcurementWorkspace.tsx', // Frozen actor/Company procurement request recovery only; never a business ledger.
  'src/procurement/PurchaseOrderAmendments.tsx', // Actor/Company-scoped immutable amendment command recovery; no financial cache.

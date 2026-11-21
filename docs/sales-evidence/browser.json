@@ -1,0 +1,20 @@
+{
+  "checks": [
+    "EN quotation multiline draft/review/approval through actual components",
+    "EN order/partial delivery/billing and same-key lost-response recovery",
+    "EN return/credit actual canonical commit through browser",
+    "EN actual Excel download and rendered PDF report",
+    "EN mobile workspace has no page overflow",
+    "EN collection navigation preserves customer",
+    "EN no browser runtime errors",
+    "AR quotation multiline draft/review/approval through actual components",
+    "AR order/partial delivery/billing and same-key lost-response recovery",
+    "AR return/credit actual canonical commit through browser",
+    "AR actual Excel download and rendered PDF report",
+    "AR mobile workspace has no page overflow",
+    "AR collection navigation preserves customer",
+    "AR no browser runtime errors"
+  ],
+  "auth": "Synthetic local harness, actual production React components and canonical SQL; not genuine hosted Auth acceptance",
+  "hostedWrites": 0
+}

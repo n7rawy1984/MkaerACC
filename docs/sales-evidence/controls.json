@@ -1,0 +1,21 @@
+{
+  "checks": [
+    "2.5 boxes ->30pieces, 10%discount net27AED VAT1.35 exact",
+    "Approved sales units cannot be reinterpreted",
+    "Half-box delivery uses6pieces cost6AED and agreed discounted5.40 revenue",
+    "Direct canonical AR cannot override managed delivery agreed net and VAT",
+    "Alternative-unit invoice matches exact delivery price and does not duplicate COGS",
+    "Two quarter-box returns restore stock/COGS and consume exact final VAT cent remainder",
+    "Expired approved quotation cannot silently convert",
+    "Sales quantity cannot use unapproved incompatible unit",
+    "Three physical returns allocate33/34/33net cents and2/2/1VAT cents; no stranded rounding balances",
+    "Cancellation after partial receiving preserves all delivery, invoice and return journals",
+    "Cancelled order reporting retains actual delivered quantities through stable document identity",
+    "Immutable stock evidence retains entered purchase quantity and unit",
+    "Canonical closed-period protection applies to managed delivery posting",
+    "Canonical commercial readiness blocks new sales after subscription/setup eligibility ends",
+    "Expired readiness still permits authorized cancellation and reporting without new financial business",
+    "Public sales commands have fixed empty search_path and no PUBLIC execute"
+  ],
+  "scope": "Isolated fictional only; no hosted writes"
+}

@@ -1,0 +1,77 @@
+{
+  "status": "PASS_LOCAL_SUPPORTED_SCOPE",
+  "baseRelease": "e5abbcec6500c826f2058dc0b85734a87b64c332",
+  "branch": "release/commercial-sales-fulfillment",
+  "migration": {
+    "number": 114,
+    "file": "supabase/migrations/20261202120000_sales_fulfillment.sql",
+    "sha256": "3858de0cac3df34ab15eaf1b89048418684d6038edb708cecf04b92db10ee7d9",
+    "status": "PREPARED_NOT_APPLIED",
+    "hostedAlignment": "Read-only linked dry-run aligned through113; only114 pending",
+    "dryRun": {
+      "migrations": [
+        "20261202120000_sales_fulfillment.sql"
+      ],
+      "seeds": [],
+      "roles": [],
+      "dryRun": true
+    }
+  },
+  "checks": {
+    "accounting": 30,
+    "controls": 16,
+    "concurrency": 5,
+    "browser": 14,
+    "final-smoke": 8,
+    "exports": 4
+  },
+  "totalFocusedChecks": 77,
+  "preservedExistingLocalTables": 163,
+  "priorFunctionAuthorization": "Every pre-existing function ACL, SECURITY DEFINER mode and search_path unchanged; one private goods-return calculation corrected forward",
+  "expectedFinalMinor": {
+    "revenue": "33000",
+    "vat": "1650",
+    "ar": "30650",
+    "cogs": "14000",
+    "inventory": "186000",
+    "grossMargin": "19000"
+  },
+  "typescript": "PASS final npm run build",
+  "productionBuild": "PASS; existing large-chunk advisory retained",
+  "lint": "PASS npm run lint; existing unrelated diagnostics retained; new sales code and verification scripts zero diagnostics",
+  "productionBoundary": "PASS340 reachable files; scoped request recovery is not a financial data store",
+  "visualInspection": "Actual English desktop and Arabic390 screenshots inspected; final table references stay on one line inside horizontal viewport; both languages actual rendered artifacts retained",
+  "browserAuth": "Synthetic local actor transport with actual production components/canonical SQL; genuine hosted Auth smoke deferred",
+  "realCompanyFinancialMutations": 0,
+  "hostedMigrationApplications": 0,
+  "push": "NOT_PERFORMED",
+  "deploy": "NOT_PERFORMED",
+  "lifecycle": {
+    "businessAccounting": "VERIFIED locally for explicit supported scope",
+    "securityAuthorization": "VERIFIED locally",
+    "database": "VERIFIED locally;114 not hosted",
+    "testing": "VERIFIED focused fictional only",
+    "documentation": "VERIFIED",
+    "deployment": "DEFERRED explicit activation/publication/hosted runtime",
+    "realCompanyBusinessChanges": "NOT APPLICABLE"
+  },
+  "limits": [
+    "One canonical goods invoice per posted issue; no single consolidated invoice or fractional billing within one issue",
+    "Company warehouse/orders only for goods fulfillment; Project association retained but fulfillment blocked by existing policy",
+    "No invoice-before-delivery, service fulfillment, negative stock, automatic refund, external transmission or new document entity categories",
+    "Existing current chronological stock period/six-decimal quantities preserved",
+    "Unbilled returns/reversed invoice replacements and unsupported price-credit combinations require audited resolution"
+  ],
+  "verificationNotRepeated": "Prior CR07/procurement simulations and broad audits; initialization reuses existing fixtures only",
+  "publicationOrder": [
+    "Explicit authorization for ONLY114",
+    "Essential hosted activation/preservation",
+    "Explicit compatible frontend publication",
+    "Genuine hosted Company smoke"
+  ],
+  "whitespace": "PASS git diff --check",
+  "secretPatternScan": {
+    "status": "PASS",
+    "files": 24
+  }
+}

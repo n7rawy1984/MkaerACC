@@ -1,0 +1,13 @@
+{
+  "checks": [
+    "EN delivered original unit/description and human references rendered",
+    "EN final mobile table scroll stays inside viewport",
+    "EN AR handoff preserves exact invoice/customer and receipt event",
+    "EN real Viewer SQL transport and UI stay read-only",
+    "AR delivered original unit/description and human references rendered",
+    "AR final mobile table scroll stays inside viewport",
+    "AR AR handoff preserves exact invoice/customer and receipt event",
+    "AR real Viewer SQL transport and UI stay read-only"
+  ],
+  "scope": "Focused final metadata/rendering/mobile/handoff/Viewer checks; earlier14 browser assertions reused"
+}

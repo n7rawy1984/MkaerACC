@@ -1,0 +1,334 @@
+{
+  "environment": "disposable local fictional Company only",
+  "company": "f1060000-0000-4000-8000-000000000010",
+  "checks": [
+    "114 preserves every existing populated fixture table byte-for-byte",
+    "Quotation approval cannot skip review",
+    "One approved quotation cannot create duplicate orders",
+    "Quotation, reviewed approval, conversion and order confirmation create no GL",
+    "Audited revision preserves approved quotation snapshot",
+    "Direct draft cancellation is nonfinancial",
+    "Partial multiline delivery links two distinct canonical stock issues",
+    "Delivery: Dr COGS60 / Cr Inventory60, no revenue or AR",
+    "Lost invoice response recovers the exact same request without duplicate journals",
+    "Distinct requests cannot invoice the same stock issue twice",
+    "Partial line billing: AR84 / Revenue80 / VAT4, COGS remains60",
+    "Existing canonical receipt reduces AR once without repeating revenue or VAT",
+    "Return: Inventory10/COGS10; Revenue20+VAT1/AR21; idempotent no cash refund",
+    "Return cannot exceed original remaining delivered quantity",
+    "One controlled billing submission creates distinct canonical invoices for eligible lines",
+    "Independent final answer key: revenue330 VAT16.50 AR306.50 COGS140 stock1860",
+    "Overfulfillment beyond confirmed order is rejected",
+    "Unavailable stock is rejected by canonical Inventory",
+    "Failed delivery rolls back status, stock, request and journals atomically",
+    "Stale concurrent version cannot approve the same order again",
+    "Management Viewer cannot create sales events or post",
+    "Management Viewer can read authorized reporting without command access",
+    "Cross-company read is denied",
+    "RLS hides sales events from foreign Company actor",
+    "Direct writes cannot bypass canonical invoice allocation",
+    "Linked delivery cannot be independently reversed",
+    "Reporting recognized revenue and net COGS match actual GL including returns",
+    "Bounded reporting pagination preserves complete distinct document count",
+    "Every actual fictional journal balances independently",
+    "Customer subledger outstanding306.50 reconciles to GL control306.50"
+  ],
+  "expected": {
+    "revenue": "33000",
+    "vat": "1650",
+    "ar": "30650",
+    "cogs": "14000",
+    "inventory": "186000",
+    "grossMargin": "19000"
+  },
+  "actual": {
+    "revenue": "-33000",
+    "vat": "-1650",
+    "ar": "30650",
+    "cogs": "14000",
+    "inventory": "186000"
+  },
+  "journals": [
+    {
+      "id": "12621d1f-6964-4254-9faf-e1db4f93723a",
+      "source_type": "TEST",
+      "posting_date": "2026-11-21",
+      "account_id": "e722e760-c0a3-4264-8257-479a4bbe6aff",
+      "debit_minor": "10000",
+      "credit_minor": "0"
+    },
+    {
+      "id": "12621d1f-6964-4254-9faf-e1db4f93723a",
+      "source_type": "TEST",
+      "posting_date": "2026-11-21",
+      "account_id": "5c5a568e-6dc2-4945-bf72-6f1ed8e03576",
+      "debit_minor": "0",
+      "credit_minor": "10000"
+    },
+    {
+      "id": "179ea2c6-ebff-4dfd-b28b-92dc8b8ddfdb",
+      "source_type": "INVENTORY_RETURN",
+      "posting_date": "2026-11-21",
+      "account_id": "d343bc80-42ad-43eb-9878-4ba78a6ef59c",
+      "debit_minor": "0",
+      "credit_minor": "1000"
+    },
+    {
+      "id": "179ea2c6-ebff-4dfd-b28b-92dc8b8ddfdb",
+      "source_type": "INVENTORY_RETURN",
+      "posting_date": "2026-11-21",
+      "account_id": "45725c10-2466-4443-9ca7-eee04aa5679e",
+      "debit_minor": "1000",
+      "credit_minor": "0"
+    },
+    {
+      "id": "23cd441c-aafa-4078-a3c4-9a37350ed1c3",
+      "source_type": "AR_INVOICE",
+      "posting_date": "2026-11-21",
+      "account_id": "0e93d617-16af-40eb-86f5-9574089005a7",
+      "debit_minor": "8400",
+      "credit_minor": "0"
+    },
+    {
+      "id": "23cd441c-aafa-4078-a3c4-9a37350ed1c3",
+      "source_type": "AR_INVOICE",
+      "posting_date": "2026-11-21",
+      "account_id": "ddab32c9-383d-4051-a6fd-114500cc4cb5",
+      "debit_minor": "0",
+      "credit_minor": "8000"
+    },
+    {
+      "id": "23cd441c-aafa-4078-a3c4-9a37350ed1c3",
+      "source_type": "AR_INVOICE",
+      "posting_date": "2026-11-21",
+      "account_id": "8f81bb27-46e4-44c6-a088-e87e27718aa7",
+      "debit_minor": "0",
+      "credit_minor": "400"
+    },
+    {
+      "id": "26249334-416e-4053-8002-f08b0ed095f5",
+      "source_type": "INVENTORY_ISSUE",
+      "posting_date": "2026-11-21",
+      "account_id": "d343bc80-42ad-43eb-9878-4ba78a6ef59c",
+      "debit_minor": "6000",
+      "credit_minor": "0"
+    },
+    {
+      "id": "26249334-416e-4053-8002-f08b0ed095f5",
+      "source_type": "INVENTORY_ISSUE",
+      "posting_date": "2026-11-21",
+      "account_id": "45725c10-2466-4443-9ca7-eee04aa5679e",
+      "debit_minor": "0",
+      "credit_minor": "6000"
+    },
+    {
+      "id": "4572cdb8-37ff-4cc2-a321-00968e9ceb20",
+      "source_type": "INVENTORY_ISSUE",
+      "posting_date": "2026-11-21",
+      "account_id": "d343bc80-42ad-43eb-9878-4ba78a6ef59c",
+      "debit_minor": "3000",
+      "credit_minor": "0"
+    },
+    {
+      "id": "4572cdb8-37ff-4cc2-a321-00968e9ceb20",
+      "source_type": "INVENTORY_ISSUE",
+      "posting_date": "2026-11-21",
+      "account_id": "45725c10-2466-4443-9ca7-eee04aa5679e",
+      "debit_minor": "0",
+      "credit_minor": "3000"
+    },
+    {
+      "id": "45f90725-4b60-41f8-b5f3-bde8e5672443",
+      "source_type": "AR_INVOICE",
+      "posting_date": "2026-11-21",
+      "account_id": "0e93d617-16af-40eb-86f5-9574089005a7",
+      "debit_minor": "9450",
+      "credit_minor": "0"
+    },
+    {
+      "id": "45f90725-4b60-41f8-b5f3-bde8e5672443",
+      "source_type": "AR_INVOICE",
+      "posting_date": "2026-11-21",
+      "account_id": "ddab32c9-383d-4051-a6fd-114500cc4cb5",
+      "debit_minor": "0",
+      "credit_minor": "9000"
+    },
+    {
+      "id": "45f90725-4b60-41f8-b5f3-bde8e5672443",
+      "source_type": "AR_INVOICE",
+      "posting_date": "2026-11-21",
+      "account_id": "8f81bb27-46e4-44c6-a088-e87e27718aa7",
+      "debit_minor": "0",
+      "credit_minor": "450"
+    },
+    {
+      "id": "4a70260d-d1ca-4e31-904b-c08da1e82f10",
+      "source_type": "AR_RECEIPT",
+      "posting_date": "2026-11-21",
+      "account_id": "5c5a568e-6dc2-4945-bf72-6f1ed8e03576",
+      "debit_minor": "4000",
+      "credit_minor": "0"
+    },
+    {
+      "id": "4a70260d-d1ca-4e31-904b-c08da1e82f10",
+      "source_type": "AR_RECEIPT",
+      "posting_date": "2026-11-21",
+      "account_id": "0e93d617-16af-40eb-86f5-9574089005a7",
+      "debit_minor": "0",
+      "credit_minor": "4000"
+    },
+    {
+      "id": "5d78a297-6305-47d2-8e0c-9d76fee6d68b",
+      "source_type": "AR_CREDIT",
+      "posting_date": "2026-11-21",
+      "account_id": "ddab32c9-383d-4051-a6fd-114500cc4cb5",
+      "debit_minor": "2000",
+      "credit_minor": "0"
+    },
+    {
+      "id": "5d78a297-6305-47d2-8e0c-9d76fee6d68b",
+      "source_type": "AR_CREDIT",
+      "posting_date": "2026-11-21",
+      "account_id": "0e93d617-16af-40eb-86f5-9574089005a7",
+      "debit_minor": "0",
+      "credit_minor": "2100"
+    },
+    {
+      "id": "5d78a297-6305-47d2-8e0c-9d76fee6d68b",
+      "source_type": "AR_CREDIT",
+      "posting_date": "2026-11-21",
+      "account_id": "8f81bb27-46e4-44c6-a088-e87e27718aa7",
+      "debit_minor": "100",
+      "credit_minor": "0"
+    },
+    {
+      "id": "a7c9f265-a8a7-4071-82bb-68e00beb6a07",
+      "source_type": "AR_INVOICE",
+      "posting_date": "2026-11-21",
+      "account_id": "0e93d617-16af-40eb-86f5-9574089005a7",
+      "debit_minor": "12600",
+      "credit_minor": "0"
+    },
+    {
+      "id": "a7c9f265-a8a7-4071-82bb-68e00beb6a07",
+      "source_type": "AR_INVOICE",
+      "posting_date": "2026-11-21",
+      "account_id": "ddab32c9-383d-4051-a6fd-114500cc4cb5",
+      "debit_minor": "0",
+      "credit_minor": "12000"
+    },
+    {
+      "id": "a7c9f265-a8a7-4071-82bb-68e00beb6a07",
+      "source_type": "AR_INVOICE",
+      "posting_date": "2026-11-21",
+      "account_id": "8f81bb27-46e4-44c6-a088-e87e27718aa7",
+      "debit_minor": "0",
+      "credit_minor": "600"
+    },
+    {
+      "id": "cd010dce-b734-4f85-92c2-b25eae118eae",
+      "source_type": "INVENTORY_RECEIPT",
+      "posting_date": "2026-11-21",
+      "account_id": "45725c10-2466-4443-9ca7-eee04aa5679e",
+      "debit_minor": "100000",
+      "credit_minor": "0"
+    },
+    {
+      "id": "cd010dce-b734-4f85-92c2-b25eae118eae",
+      "source_type": "INVENTORY_RECEIPT",
+      "posting_date": "2026-11-21",
+      "account_id": "79c11385-bfe6-40ab-b820-3f9408f69595",
+      "debit_minor": "0",
+      "credit_minor": "100000"
+    },
+    {
+      "id": "ce085102-0b76-448f-944b-38af2360531b",
+      "source_type": "INVENTORY_RECEIPT",
+      "posting_date": "2026-11-21",
+      "account_id": "45725c10-2466-4443-9ca7-eee04aa5679e",
+      "debit_minor": "100000",
+      "credit_minor": "0"
+    },
+    {
+      "id": "ce085102-0b76-448f-944b-38af2360531b",
+      "source_type": "INVENTORY_RECEIPT",
+      "posting_date": "2026-11-21",
+      "account_id": "79c11385-bfe6-40ab-b820-3f9408f69595",
+      "debit_minor": "0",
+      "credit_minor": "100000"
+    },
+    {
+      "id": "ce8c6db5-e296-4fed-8f01-5db34c64eb73",
+      "source_type": "AR_INVOICE",
+      "posting_date": "2026-11-21",
+      "account_id": "0e93d617-16af-40eb-86f5-9574089005a7",
+      "debit_minor": "6300",
+      "credit_minor": "0"
+    },
+    {
+      "id": "ce8c6db5-e296-4fed-8f01-5db34c64eb73",
+      "source_type": "AR_INVOICE",
+      "posting_date": "2026-11-21",
+      "account_id": "ddab32c9-383d-4051-a6fd-114500cc4cb5",
+      "debit_minor": "0",
+      "credit_minor": "6000"
+    },
+    {
+      "id": "ce8c6db5-e296-4fed-8f01-5db34c64eb73",
+      "source_type": "AR_INVOICE",
+      "posting_date": "2026-11-21",
+      "account_id": "8f81bb27-46e4-44c6-a088-e87e27718aa7",
+      "debit_minor": "0",
+      "credit_minor": "300"
+    },
+    {
+      "id": "d1e92941-712c-44b2-ae76-8156f97523ce",
+      "source_type": "INVENTORY_ISSUE",
+      "posting_date": "2026-11-21",
+      "account_id": "d343bc80-42ad-43eb-9878-4ba78a6ef59c",
+      "debit_minor": "4000",
+      "credit_minor": "0"
+    },
+    {
+      "id": "d1e92941-712c-44b2-ae76-8156f97523ce",
+      "source_type": "INVENTORY_ISSUE",
+      "posting_date": "2026-11-21",
+      "account_id": "45725c10-2466-4443-9ca7-eee04aa5679e",
+      "debit_minor": "0",
+      "credit_minor": "4000"
+    },
+    {
+      "id": "d52353c7-6f6b-4444-b04a-b9996f6f565f",
+      "source_type": "TEST",
+      "posting_date": "2026-11-21",
+      "account_id": "5c5a568e-6dc2-4945-bf72-6f1ed8e03576",
+      "debit_minor": "20000",
+      "credit_minor": "0"
+    },
+    {
+      "id": "d52353c7-6f6b-4444-b04a-b9996f6f565f",
+      "source_type": "TEST",
+      "posting_date": "2026-11-21",
+      "account_id": "e4964ccf-144f-4da8-ab90-142f9839f587",
+      "debit_minor": "0",
+      "credit_minor": "20000"
+    },
+    {
+      "id": "db8a5a5f-50f3-4e5d-8351-9032ca90ad5b",
+      "source_type": "INVENTORY_ISSUE",
+      "posting_date": "2026-11-21",
+      "account_id": "d343bc80-42ad-43eb-9878-4ba78a6ef59c",
+      "debit_minor": "2000",
+      "credit_minor": "0"
+    },
+    {
+      "id": "db8a5a5f-50f3-4e5d-8351-9032ca90ad5b",
+      "source_type": "INVENTORY_ISSUE",
+      "posting_date": "2026-11-21",
+      "account_id": "45725c10-2466-4443-9ca7-eee04aa5679e",
+      "debit_minor": "0",
+      "credit_minor": "2000"
+    }
+  ],
+  "scenarios": []
+}

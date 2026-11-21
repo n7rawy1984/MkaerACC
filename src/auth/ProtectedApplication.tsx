@@ -1,3 +1,4 @@
+import {SalesWorkspace} from '../sales/SalesWorkspace';
 import{BankReconciliationWorkspace}from'../banking/BankReconciliationWorkspace';
 import{CommercialWorkspace}from'../commercial/CommercialWorkspace';
 import {EmployeeManagement} from '../hr/EmployeeManagement';
@@ -53,6 +54,7 @@ function RoutedApplication() {
           <Route path="/employees" element={<EmployeeManagement />} />
           <Route path="/attendance" element={<AttendanceApplication embedded />} />
           <Route path="/accounting-cycle" element={<AccountingCycle />} />
+          <Route path="/sales" element={<SalesWorkspace/>}/>
           <Route path="/customer-accounts" element={<CommercialWorkspace module="customers"/>}/>
           <Route path="/fixed-assets" element={<CommercialWorkspace module="assets"/>}/>
           <Route path="/accruals-prepayments" element={<CommercialWorkspace module="recognition"/>}/>

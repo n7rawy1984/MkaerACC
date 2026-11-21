@@ -1,0 +1,18 @@
+{
+  "checks": [
+    "en actual Excel: four sections, billed revenue80/cost40/margin40 and remaining6+3 units",
+    "en actual PDF: rendered Company report with exact80.00 revenue and40.00 cost/margin",
+    "ar actual Excel: four sections, billed revenue80/cost40/margin40 and remaining6+3 units",
+    "ar actual PDF: rendered Company report with exact80.00 revenue and40.00 cost/margin"
+  ],
+  "expected": {
+    "revenueAED": 80,
+    "costAED": 40,
+    "marginAED": 40,
+    "remainingUnits": [
+      6,
+      3
+    ]
+  },
+  "files": "Actual Chromium downloads/PDF artifacts under /tmp; all worksheets inspected"
+}
